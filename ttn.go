@@ -30,6 +30,9 @@ func PostTtnV2(w http.ResponseWriter, r *http.Request) {
 	response := make(map[string]interface{})
 	defer render.JSON(w, r, response)
 
+	email := r.Header.Get("Authorization")
+	log.Print(email)
+
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		//panic(err)
