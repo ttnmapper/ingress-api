@@ -30,7 +30,7 @@ _testmain.go
 *.out
 
 ### Go Patch ###
-/vendor/
-/Godeps/
+vendor/
+Godeps/
 
 # End of https://www.gitignore.io/api/go

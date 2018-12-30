@@ -6,10 +6,11 @@ import (
 	"github.com/streadway/amqp"
 	"log"
 	"net/http"
+	"ttnmapper-ingress-api/types"
 )
 import "github.com/go-chi/chi"
 
-var publish_channel = make(chan map[string]interface{}, 100)
+var publish_channel = make(chan types.TtnMapperUplinkMessage, 100)
 
 func main() {
 	router := Routes()

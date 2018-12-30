@@ -7,6 +7,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"ttnmapper-ingress-api/types"
 )
 
 func TtnRoutes() *chi.Mux {
@@ -40,31 +41,40 @@ func PostTtnV2(w http.ResponseWriter, r *http.Request) {
 	}
 	log.Println(string(body))
 
-	data := make(map[string]interface{})
-	if err := json.Unmarshal(body, &data); err != nil {
+	//packet := make(map[string]interface{})
+	var packet types.TtnMapperUplinkMessage
+	if err := json.Unmarshal(body, &packet); err != nil {
 		response["success"] = false
 		response["message"] = "Can not parse json body"
 		return
 	}
 
-	log.Println(data)
-
-	num, success := data["num"].(float64)
-	if success != true {
-		log.Printf("num doesn't exist")
-	} else {
-		log.Println(num)
+	if err := ParsePayloadFields(&packet); err != nil {
+		response["success"] = false
+		response["message"] = err.Error()
+		return
 	}
+
+	if err := CheckData(packet); err != nil {
+		response["success"] = false
+		response["message"] = err.Error()
+		return
+	}
+
+	SanitizeData(packet)
+
+	publish_channel <- packet
 
 	response["success"] = true
 	response["message"] = "Created entry"
+	response["packet"] = packet
 
 }
 
 func GetTtnV2(w http.ResponseWriter, r *http.Request) {
 	response := make(map[string]interface{})
 	response["message"] = "GET test success"
-	publish_channel <- response
+	//publish_channel <- response
 	render.JSON(w, r, response)
 }
 
