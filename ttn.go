@@ -25,8 +25,6 @@ func PostTtnV2(w http.ResponseWriter, r *http.Request) {
 	/*
 		TODO
 		Authorization header should contain a valid email address
-		Fix SCG frequency
-
 	*/
 
 	response := make(map[string]interface{})
@@ -39,7 +37,7 @@ func PostTtnV2(w http.ResponseWriter, r *http.Request) {
 		response["message"] = "Can not read POST body"
 		return
 	}
-	log.Println(string(body))
+	//log.Println(string(body))
 
 	//packet := make(map[string]interface{})
 	var packet types.TtnMapperUplinkMessage
@@ -61,12 +59,15 @@ func PostTtnV2(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	SanitizeData(packet)
+	SanitizeData(&packet)
+
+	packet.TtnMUserAgent = "ttn-v2-integration"
+	//TODO packet.TtnMUserId = //email address
 
 	publish_channel <- packet
 
 	response["success"] = true
-	response["message"] = "Created entry"
+	response["message"] = "New packet accepted into queue"
 	response["packet"] = packet
 
 }
@@ -74,18 +75,19 @@ func PostTtnV2(w http.ResponseWriter, r *http.Request) {
 func GetTtnV2(w http.ResponseWriter, r *http.Request) {
 	response := make(map[string]interface{})
 	response["message"] = "GET test success"
-	//publish_channel <- response
 	render.JSON(w, r, response)
 }
 
 func PostTtnV3(w http.ResponseWriter, r *http.Request) {
-	response := make(map[string]string)
+	response := make(map[string]interface{})
+	response["success"] = false
 	response["message"] = "Not implemented"
 	render.JSON(w, r, response)
 }
 
 func GetTtnV3(w http.ResponseWriter, r *http.Request) {
-	response := make(map[string]string)
+	response := make(map[string]interface{})
+	response["success"] = true
 	response["message"] = "GET test success"
 	render.JSON(w, r, response)
 }

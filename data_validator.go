@@ -56,7 +56,7 @@ func CheckData(packet types.TtnMapperUplinkMessage) error {
 	return nil
 }
 
-func SanitizeData(packet types.TtnMapperUplinkMessage) {
+func SanitizeData(packet *types.TtnMapperUplinkMessage) {
 	// clamp altitude to ground if not set
 	if IsZeroOfUnderlyingType(packet.TtnMAltitude) {
 		packet.TtnMAltitude = 0
@@ -69,4 +69,9 @@ func SanitizeData(packet types.TtnMapperUplinkMessage) {
 
 	// round lat to 6 decimal places
 	// round lon to 6 decimal places
+
+	// Fix single channel gateway frequency
+	if packet.Metadata.Frequency > 1000000 {
+		packet.Metadata.Frequency = packet.Metadata.Frequency / 1000000
+	}
 }
