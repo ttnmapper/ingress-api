@@ -32,6 +32,11 @@ func PostTtnV2(w http.ResponseWriter, r *http.Request) {
 
 	email := r.Header.Get("Authorization")
 	log.Print(email)
+	if err := validateEmail(email); err != nil {
+		response["success"] = false
+		response["message"] = err.Error()
+		return
+	}
 
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {

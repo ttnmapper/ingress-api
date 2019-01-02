@@ -2,6 +2,9 @@ package main
 
 import (
 	"github.com/pkg/errors"
+	"golang.org/x/net/context"
+	"log"
+	"net"
 	"strings"
 )
 
@@ -15,7 +18,33 @@ import (
 //address format and the domain exists.
 //*/
 
-func validateEmail(email string) error {
+var emailCache = make(map[string]bool)
+
+func GoogleDNSDialer(ctx context.Context, network, address string) (net.Conn, error) {
+	d := net.Dialer{}
+	return d.DialContext(ctx, "udp", "8.8.8.8:53")
+}
+
+func CloudflareDNSDialer(ctx context.Context, network, address string) (net.Conn, error) {
+	d := net.Dialer{}
+	return d.DialContext(ctx, "udp", "1.1.1.1:53")
+}
+
+func validateEmail(email string) (err error) {
+
+	// Try to respond from the cache first
+	value, ok := emailCache[email]
+	if ok && value == true {
+		return nil
+	}
+	if ok && value == false {
+		return errors.New("email previously declined")
+	}
+	defer func() {
+		if err != nil {
+			emailCache[email] = false
+		}
+	}()
 
 	if email == "" {
 		return errors.New("email address is empty")
@@ -44,7 +73,8 @@ func validateEmail(email string) error {
 	//// local part length exceeded
 	//$isValid = false;
 	//}
-	split := strings.SplitN(email, "@", 1)
+	split := strings.SplitN(email, "@", 2)
+	log.Print(split)
 	domain := split[1]
 	local := split[0]
 	domainLen := len(domain)
@@ -70,6 +100,43 @@ func validateEmail(email string) error {
 		return errors.New("email domain part exceeds max length")
 	}
 
+	// 1. try local dns
+	ips, err := net.LookupMX(domain)
+	if err != nil {
+
+		r := net.Resolver{
+			PreferGo: true,
+			Dial:     CloudflareDNSDialer,
+		}
+		ctx := context.Background()
+		ips, err := r.LookupIPAddr(ctx, domain)
+		if err != nil {
+			r := net.Resolver{
+				PreferGo: true,
+				Dial:     GoogleDNSDialer,
+			}
+			ctx := context.Background()
+			ips, err := r.LookupIPAddr(ctx, domain)
+			if err != nil {
+				log.Print(err.Error())
+				return errors.New("could not find email domain")
+			}
+
+			for _, ip := range ips {
+				log.Printf("(Google) mail server: %s", ip)
+			}
+		}
+
+		for _, ip := range ips {
+			log.Printf("(Cloudflare) mail server: %s", ip)
+		}
+	}
+
+	for _, ip := range ips {
+		log.Printf("(Local) mail server: %s", ip)
+	}
+
+	emailCache[email] = true
 	return nil
 }
 

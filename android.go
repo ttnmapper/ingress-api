@@ -47,6 +47,7 @@ func PostAndroidV3(w http.ResponseWriter, r *http.Request) {
 	if err := json.Unmarshal(body, &receivedPacket); err != nil {
 		response["success"] = false
 		response["message"] = "Can not parse json body"
+		log.Print(err.Error())
 		return
 	}
 
@@ -56,6 +57,7 @@ func PostAndroidV3(w http.ResponseWriter, r *http.Request) {
 	if err := CheckData(resultPacket); err != nil {
 		response["success"] = false
 		response["message"] = err.Error()
+		log.Print(err.Error())
 		return
 	}
 
@@ -73,7 +75,7 @@ func CopyAndroidToTtnMapper(source types.TtnMapperAndroidMessage, destination *t
 	destination.TtnMLongitude = source.PhoneLon
 	destination.TtnMAltitude = source.PhoneAlt
 	destination.TtnMAccuracy = source.PhoneLocAccuracy
-	destination.TtnMProvider = source.PhoneLocprovider
+	destination.TtnMProvider = source.PhoneLocProvider
 	destination.TtnMUserId = source.Iid
 	destination.TtnMUserAgent = source.UserAgent
 	destination.TtnMExperiment = source.Experiment

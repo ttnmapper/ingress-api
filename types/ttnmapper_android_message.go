@@ -21,7 +21,7 @@ type TtnMapperAndroidMessage struct {
 
 	//@field:Json(name = "phone_loc_provider")
 	//var phoneLocProvider: String?, // fused
-	PhoneLocprovider string `json:"phone_loc_provider,omitempty"`
+	PhoneLocProvider string `json:"phone_loc_provider,omitempty"`
 
 	//@field:Json(name = "phone_time")
 	//var phoneTime: String?, // 2018-03-18T10:05:44Z
@@ -38,4 +38,6 @@ type TtnMapperAndroidMessage struct {
 	//@field:Json(name = "experiment")
 	//var experiment: String? // experiment name
 	Experiment string `json:"experiment,omitempty"`
+
+	//MqttTopic string `json:"mqtt_topic,omitempty"`
 }
