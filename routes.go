@@ -25,6 +25,7 @@ func Routes() *chi.Mux {
 	router.Route("/v1", func(r chi.Router) {
 		r.Mount("/ttn", TtnRoutes())
 		r.Mount("/android", AndroidRoutes())
+		r.Mount("/ios", IosRoutes())
 	})
 
 	return router
