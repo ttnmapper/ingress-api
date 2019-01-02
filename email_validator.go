@@ -32,6 +32,10 @@ func CloudflareDNSDialer(ctx context.Context, network, address string) (net.Conn
 
 func validateEmail(email string) (err error) {
 
+	if email == "" {
+		return errors.New("email address is empty")
+	}
+
 	// Try to respond from the cache first
 	value, ok := emailCache[email]
 	if ok && value == true {
@@ -45,10 +49,6 @@ func validateEmail(email string) (err error) {
 			emailCache[email] = false
 		}
 	}()
-
-	if email == "" {
-		return errors.New("email address is empty")
-	}
 
 	//function validateEmail($email)
 	//{

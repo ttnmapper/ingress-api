@@ -22,11 +22,6 @@ func TtnRoutes() *chi.Mux {
 
 func PostTtnV2(w http.ResponseWriter, r *http.Request) {
 
-	/*
-		TODO
-		Authorization header should contain a valid email address
-	*/
-
 	response := make(map[string]interface{})
 	defer render.JSON(w, r, response)
 
