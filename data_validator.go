@@ -2,7 +2,6 @@ package main
 
 import (
 	"errors"
-	"log"
 	"ttnmapper-ingress-api/types"
 )
 
@@ -31,7 +30,6 @@ func CheckData(packet types.TtnMapperUplinkMessage) error {
 
 	// Latitude
 	if IsZeroOfUnderlyingType(packet.TtnMLatitude) {
-		log.Print(packet.TtnMLatitude)
 		return errors.New("latitude not set")
 	}
 

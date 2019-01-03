@@ -61,6 +61,7 @@ func PostTtnV2(w http.ResponseWriter, r *http.Request) {
 		response["success"] = false
 		response["message"] = err.Error()
 		log.Print(err.Error())
+		log.Print(body)
 		return
 	}
 
