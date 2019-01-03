@@ -60,7 +60,6 @@ func validateEmail(email string) (err error) {
 	//$isValid = false;
 	//}
 	split := strings.SplitN(email, "@", 2)
-	log.Print(split)
 	domain := split[1]
 	local := split[0]
 	domainLen := len(domain)
