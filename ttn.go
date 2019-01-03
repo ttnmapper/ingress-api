@@ -61,7 +61,8 @@ func PostTtnV2(w http.ResponseWriter, r *http.Request) {
 		response["success"] = false
 		response["message"] = err.Error()
 		log.Print(err.Error())
-		log.Print(body)
+		_ = AppendToFile("errors.log", email+"\n")
+		_ = AppendToFile("errors.log", string(body)+"\n\n")
 		return
 	}
 
