@@ -30,42 +30,44 @@ func PostTtnV2(w http.ResponseWriter, r *http.Request) {
 	if err := validateEmail(email); err != nil {
 		response["success"] = false
 		response["message"] = err.Error()
+		log.Print(err.Error())
 		return
 	}
 
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
-		//panic(err)
 		response["success"] = false
 		response["message"] = "Can not read POST body"
+		log.Print(err.Error())
 		return
 	}
-	//log.Println(string(body))
 
-	//packet := make(map[string]interface{})
 	var packet types.TtnMapperUplinkMessage
 	if err := json.Unmarshal(body, &packet); err != nil {
 		response["success"] = false
 		response["message"] = "Can not parse json body"
+		log.Print(err.Error())
 		return
 	}
 
 	if err := ParsePayloadFields(&packet); err != nil {
 		response["success"] = false
 		response["message"] = err.Error()
+		log.Print(err.Error())
 		return
 	}
 
 	if err := CheckData(packet); err != nil {
 		response["success"] = false
 		response["message"] = err.Error()
+		log.Print(err.Error())
 		return
 	}
 
 	SanitizeData(&packet)
 
 	packet.TtnMUserAgent = "ttn-v2-integration"
-	//TODO packet.TtnMUserId = //email address
+	packet.TtnMUserId = email
 
 	publish_channel <- packet
 

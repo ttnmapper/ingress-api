@@ -36,20 +36,6 @@ func validateEmail(email string) (err error) {
 		return errors.New("email address is empty")
 	}
 
-	// Try to respond from the cache first
-	value, ok := emailCache[email]
-	if ok && value == true {
-		return nil
-	}
-	if ok && value == false {
-		return errors.New("email previously declined")
-	}
-	defer func() {
-		if err != nil {
-			emailCache[email] = false
-		}
-	}()
-
 	//function validateEmail($email)
 	//{
 	//$isValid = true;
@@ -100,6 +86,20 @@ func validateEmail(email string) (err error) {
 		return errors.New("email domain part exceeds max length")
 	}
 
+	// Try to respond from the cache first
+	value, ok := emailCache[domain]
+	if ok && value == true {
+		return nil
+	}
+	if ok && value == false {
+		return errors.New("email previously declined")
+	}
+	//defer func() {
+	//	if err != nil {
+	//		emailCache[domain] = false
+	//	}
+	//}()
+
 	// 1. try local dns
 	ips, err := net.LookupMX(domain)
 	if err != nil {
@@ -118,7 +118,7 @@ func validateEmail(email string) (err error) {
 			ctx := context.Background()
 			ips, err := r.LookupIPAddr(ctx, domain)
 			if err != nil {
-				log.Print(err.Error())
+				emailCache[domain] = false
 				return errors.New("could not find email domain")
 			}
 
@@ -136,7 +136,7 @@ func validateEmail(email string) (err error) {
 		log.Printf("(Local) mail server: %s", ip)
 	}
 
-	emailCache[email] = true
+	emailCache[domain] = true
 	return nil
 }
 
