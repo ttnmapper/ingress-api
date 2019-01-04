@@ -6,15 +6,46 @@ import (
 	"github.com/streadway/amqp"
 	"log"
 	"net/http"
+	"os"
 	"ttnmapper-ingress-api/types"
 )
 import "github.com/go-chi/chi"
 
 var publish_channel = make(chan types.TtnMapperUplinkMessage, 100)
 
+type Configuration struct {
+	AmqpHost     string
+	AmqpPort     string
+	AmqpUser     string
+	AmqpPassword string
+}
+
+var myConfiguration = Configuration{
+	AmqpHost:     "localhost",
+	AmqpPort:     "5672",
+	AmqpUser:     "user",
+	AmqpPassword: "password",
+}
+
 func main() {
+
+	file, err := os.Open("conf.json")
+	if err != nil {
+		log.Print(err.Error())
+	}
+	defer file.Close()
+
+	decoder := json.NewDecoder(file)
+
+	err = decoder.Decode(&myConfiguration)
+	if err != nil {
+		log.Println("json error:", err)
+	}
+	log.Printf("[Configuration]\n%+v\n", myConfiguration) // output: [UserA, UserB]
+
 	router := Routes()
 
+	log.Print("[Routes]")
 	walkFunc := func(method string, route string, handler http.Handler, middlewares ...func(http.Handler) http.Handler) error {
 		log.Printf("%s %s\n", method, route)
 		return nil
@@ -31,7 +62,7 @@ func main() {
 }
 
 func publish_from_channel() {
-	conn, err := amqp.Dial("amqp://guest:guest@localhost:5672/")
+	conn, err := amqp.Dial("amqp://" + myConfiguration.AmqpUser + ":" + myConfiguration.AmqpPassword + "@" + myConfiguration.AmqpHost + ":" + myConfiguration.AmqpPort + "/")
 	//if err != nil {
 	//	log.Print("Error connecting to RabbitMQ")
 	//	return
