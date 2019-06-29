@@ -70,6 +70,7 @@ func PostTtnV2(w http.ResponseWriter, r *http.Request) {
 
 	packet.TtnMUserAgent = "ttn-v2-integration"
 	packet.TtnMUserId = email
+	packet.TtnMExperiment = packet.Experiment
 
 	publish_channel <- packet
 

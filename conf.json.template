@@ -1,0 +1,6 @@
+{
+  "AmqpHost": "localhost",
+  "AmqpPort": "5672",
+  "AmqpUser": "guest",
+  "AmqpPassword": "guest"
+}

@@ -16,4 +16,5 @@ type UplinkMessage struct {
 	PayloadFields  map[string]interface{} `json:"payload_fields,omitempty"`
 	Metadata       Metadata               `json:"metadata,omitempty"`
 	Attributes     map[string]string      `json:"attributes,omitempty"`
+	Experiment     string                 `json:"experiment,omitempty"`
 }
