@@ -72,7 +72,7 @@ func PostTtnV2(w http.ResponseWriter, r *http.Request) {
 	packet.TtnMUserId = email
 	packet.TtnMExperiment = packet.Experiment
 
-	publish_channel <- packet
+	publishChannel <- packet
 
 	response["success"] = true
 	response["message"] = "New packet accepted into queue"

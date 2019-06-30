@@ -4,24 +4,24 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/streadway/amqp"
+	"github.com/tkanos/gonfig"
 	"log"
 	"net/http"
-	"os"
 	"ttnmapper-ingress-api/types"
 )
 import "github.com/go-chi/chi"
 
-var publish_channel = make(chan types.TtnMapperUplinkMessage, 100)
+var publishChannel = make(chan types.TtnMapperUplinkMessage, 100)
 
 type Configuration struct {
-	AmqpHost     string
-	AmqpPort     string
-	AmqpUser     string
-	AmqpPassword string
+	AmqpHost     string `env:"AMQP_HOST"`
+	AmqpPort     string `env:"AMQP_PORT"`
+	AmqpUser     string `env:"AMQP_USER"`
+	AmqpPassword string `env:"AMQP_PASSWORD"`
 }
 
 var myConfiguration = Configuration{
-	AmqpHost:     "localhost",
+	AmqpHost:     "default.host",
 	AmqpPort:     "5672",
 	AmqpUser:     "user",
 	AmqpPassword: "password",
@@ -29,19 +29,12 @@ var myConfiguration = Configuration{
 
 func main() {
 
-	file, err := os.Open("conf.json")
+	err := gonfig.GetConf("conf.json", &myConfiguration)
 	if err != nil {
-		log.Print(err.Error())
+		panic(err)
 	}
-	defer file.Close()
 
-	decoder := json.NewDecoder(file)
-
-	err = decoder.Decode(&myConfiguration)
-	if err != nil {
-		log.Println("json error:", err)
-	}
-	log.Printf("[Configuration]\n%+v\n", myConfiguration) // output: [UserA, UserB]
+	log.Printf("[Configuration]\n%s\n", prettyPrint(myConfiguration)) // output: [UserA, UserB]
 
 	router := Routes()
 
@@ -55,13 +48,13 @@ func main() {
 	}
 
 	// Start the thread that process the queue
-	go publish_from_channel()
+	go publishFromChannel()
 
 	// Start the http endpoint
 	log.Fatal(http.ListenAndServe(":8080", router))
 }
 
-func publish_from_channel() {
+func publishFromChannel() {
 	conn, err := amqp.Dial("amqp://" + myConfiguration.AmqpUser + ":" + myConfiguration.AmqpPassword + "@" + myConfiguration.AmqpHost + ":" + myConfiguration.AmqpPort + "/")
 	//if err != nil {
 	//	log.Print("Error connecting to RabbitMQ")
@@ -86,7 +79,7 @@ func publish_from_channel() {
 
 	//var message map[string]interface{}
 	for {
-		message := <-publish_channel
+		message := <-publishChannel
 		log.Printf("Publishing message")
 
 		data, err := json.Marshal(message)

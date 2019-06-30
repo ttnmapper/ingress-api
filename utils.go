@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"log"
 	"os"
 	"reflect"
@@ -29,4 +30,9 @@ func AppendToFile(filename string, line string) error {
 	}
 
 	return nil
+}
+
+func prettyPrint(i interface{}) string {
+	s, _ := json.MarshalIndent(i, "", "\t")
+	return string(s)
 }

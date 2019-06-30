@@ -53,7 +53,7 @@ func PostAndroidV2(w http.ResponseWriter, r *http.Request) {
 
 	SanitizeData(&resultPacket)
 
-	publish_channel <- resultPacket
+	publishChannel <- resultPacket
 
 	response["success"] = true
 	response["message"] = "New packet accepted into queue"
@@ -95,7 +95,7 @@ func PostAndroidV3(w http.ResponseWriter, r *http.Request) {
 
 	SanitizeData(&resultPacket)
 
-	publish_channel <- resultPacket
+	publishChannel <- resultPacket
 
 	response["success"] = true
 	response["message"] = "New packet accepted into queue"
