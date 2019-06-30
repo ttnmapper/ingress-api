@@ -32,4 +32,4 @@ _testmain.go
 # End of https://www.gitignore.io/api/go
 
 # Don't add our secrets to git
-conf.json
+#conf.json

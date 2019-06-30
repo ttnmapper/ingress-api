@@ -31,7 +31,7 @@ func main() {
 
 	err := gonfig.GetConf("conf.json", &myConfiguration)
 	if err != nil {
-		panic(err)
+		fmt.Println(err)
 	}
 
 	log.Printf("[Configuration]\n%s\n", prettyPrint(myConfiguration)) // output: [UserA, UserB]
