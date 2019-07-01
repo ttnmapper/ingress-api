@@ -16,6 +16,7 @@ func TtnRoutes() *chi.Mux {
 	router.Post("/v2", PostTtnV2)
 	router.Get("/v2", GetTtnV2)
 	router.Post("/v3", PostTtnV3)
+	router.Get("/v3", GetTtnV3)
 
 	return router
 }

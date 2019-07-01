@@ -13,6 +13,7 @@ func Routes() *chi.Mux {
 
 	router.Use(
 		render.SetContentType(render.ContentTypeJSON),
+		middleware.RealIP,
 		middleware.Logger,
 		middleware.DefaultCompress,
 		middleware.RedirectSlashes,
