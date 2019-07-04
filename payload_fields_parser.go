@@ -197,6 +197,24 @@ func extractFromRoot(packet *types.TtnMapperUplinkMessage, data map[string]inter
 		}
 	}
 
+	// Digital Matter Oyster and Yabby reports a "FixFailed" flag to indicate that the provided coordinates are cached
+	// ones and not valid for mapping purposes.
+	fixFailedKeys := [...]string{"fixFailed"}
+	for _, v := range fixFailedKeys {
+		if val, ok := data[v]; ok {
+
+			switch val.(type) {
+			case bool:
+				if val == true {
+					return errors.New("fixFailed is true - ignoring measurement")
+				}
+
+			default:
+				// type can not be handled
+			}
+		}
+	}
+
 	if val, ok := data["provider"]; ok {
 		packet.TtnMProvider = val.(string)
 	}
