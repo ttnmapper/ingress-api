@@ -134,7 +134,7 @@ func extractFromRoot(packet *types.TtnMapperUplinkMessage, data map[string]inter
 	satelliteKeys := [...]string{"sats", "satellites", "numsat", "numsats"}
 	for _, v := range satelliteKeys {
 		if val, ok := data[v]; ok {
-			packet.TtnMSatellites = int32(val.(float64))
+			
 			packet.TtnMProvider = v
 
 			switch val.(type) {
