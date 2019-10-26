@@ -215,6 +215,25 @@ func extractFromRoot(packet *types.TtnMapperUplinkMessage, data map[string]inter
 		}
 	}
 
+	// Tabs Tracker provides a gnss_fix flag to indicate that the provided coordinates are cached and not valid for
+	// mapping purposes.
+	// https://github.com/SensationalSystems/smart_building_sensors_decoder/blob/master/gps.js
+	gnssFixKeys := [...]string{"gnss_fix"}
+	for _, v := range gnssFixKeys {
+		if val, ok := data[v]; ok {
+
+			switch val.(type) {
+			case bool:
+				if val == false {
+					return errors.New("gnss_fix is false - ignoring measurement")
+				}
+
+			default:
+				// type can not be handled
+			}
+		}
+	}
+
 	if val, ok := data["provider"]; ok {
 		packet.TtnMProvider = val.(string)
 	}
