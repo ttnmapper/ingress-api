@@ -1,0 +1,48 @@
+{
+	"end_device_ids": {
+		"device_id": "cricket-001",
+		"application_ids": {
+			"application_id": "jpm-crickets"
+		},
+		"dev_addr": "26011CE4"
+	},
+	"correlation_ids": ["as:up:01E557S5PR9Q67HV4EB4EXRYEG", "gs:conn:01E4ZZXTEFZS8MXJE1ER61DJKR", "gs:uplink:01E557S5FVX3KY1KJ64TM4ZBHK", "ns:uplink:01E557S5FWCS4P227TFJFPXXB0", "rpc:/ttn.lorawan.v3.GsNs/HandleUplink:01E557S5FW8B3KZK924YPHDJQS"],
+	"received_at": "2020-04-05T13:16:51.288823708Z",
+	"uplink_message": {
+		"f_port": 1,
+		"f_cnt": 29754,
+		"frm_payload": "AIj60loC4SYALJw=",
+		"decoded_payload": {
+			"gps_0": {
+				"altitude": 114.19999694824219,
+				"latitude": -33.93659973144531,
+				"longitude": 18.871000289916992
+			}
+		},
+		"rx_metadata": [{
+			"gateway_ids": {
+				"gateway_id": "pisupply-shield",
+				"eui": "B827EBFFFED88375"
+			},
+			"timestamp": 4212208507,
+			"rssi": -59,
+			"channel_rssi": -59,
+			"snr": 10.2,
+			"uplink_token": "Ch0KGwoPcGlzdXBwbHktc2hpZWxkEgi4J+v//tiDdRD75sTYDw==",
+			"channel_index": 1
+		}],
+		"settings": {
+			"data_rate": {
+				"lora": {
+					"bandwidth": 125000,
+					"spreading_factor": 7
+				}
+			},
+			"data_rate_index": 5,
+			"coding_rate": "4/5",
+			"frequency": "868300000",
+			"timestamp": 4212208507
+		},
+		"received_at": "2020-04-05T13:16:51.068591500Z"
+	}
+}

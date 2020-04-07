@@ -1,0 +1,89 @@
+{"app_id":"jpm_crickets","dev_id":"cricket_001","hardware_serial":"00E150E95369A0B0","port":1,"counter":29932,"payload_raw":"AIj60loC4SUALuY=","payload_fields":{"gps_0":{"altitude":120.06,"latitude":-33.9366,"longitude":18.8709}},"metadata":{"time":"2020-04-05T13:26:44.519096325Z","frequency":868.1,"modulation":"LORA","data_rate":"SF7BW125","coding_rate":"4/5","gateways":[{"gtw_id":"eui-7276ff00080e0176","timestamp":3590545203,"time":"2020-04-05T13:26:44Z","channel":0,"rssi":-64,"snr":10,"rf_chain":0},{"gtw_id":"eui-b827ebfffed88375","gtw_trusted":true,"timestamp":510723987,"time":"2020-04-05T13:26:44Z","channel":0,"rssi":-60,"snr":9.75,"rf_chain":1,"latitude":-33.93597,"longitude":18.870806},{"gtw_id":"eui-647fdafffe007a1a","timestamp":587147324,"time":"","channel":5,"rssi":-54,"snr":10.2,"rf_chain":0},{"gtw_id":"eui-60c5a8fffe71a964","timestamp":2492163779,"time":"","channel":0,"rssi":-43,"snr":9,"rf_chain":0}]},"downlink_url":"https://integrations.thethingsnetwork.org/ttn-eu/api/v2/down/jpm_crickets/test-post-to-ttnmapper?key=ttn-account-v2.G7VmPspZFw8TGRJFk7bcSFM4hBCJrm00P-JQuOcG1TQ"}
+
+array (
+  'Host' => 'private.ttnmapper.org',
+  'User-Agent' => 'http-ttn/2.6.0',
+  'Content-Length' => '1105',
+  'Authorization' => 'test@jpmeijers.com',
+  'Content-Type' => 'application/json',
+  'Experiment' => 'test-experiment',
+  'Accept-Encoding' => 'gzip',
+)
+
+
+
+{
+  "app_id": "jpm_mapping_nodes",
+  "dev_id": "rfm_teensy3_b",
+  "hardware_serial": "00F26916ED6E43B4",
+  "port": 1,
+  "counter": 388,
+  "payload_raw": "T7wEjWtXAH0h",
+  "payload_fields": {
+    "alt": 125,
+    "hdop": 3.3,
+    "lat": -33.93672132114895,
+    "lon": 18.870897225791055
+  },
+  "metadata": {
+    "time": "2018-01-16T15:35:09.315649867Z",
+    "frequency": 868.3,
+    "modulation": "LORA",
+    "data_rate": "SF7BW125",
+    "coding_rate": "4/5",
+    "gateways": [
+      {
+        "gtw_id": "stellenbosch-technopark",
+        "gtw_trusted": true,
+        "timestamp": 3221941195,
+        "time": "2018-01-16T15:35:09Z",
+        "channel": 1,
+        "rssi": -120,
+        "snr": -6.5,
+        "rf_chain": 1,
+        "latitude": -33.96445,
+        "longitude": 18.836777,
+        "altitude": 150
+      }
+    ]
+  },
+  "downlink_url": "https://integrations.thethingsnetwork.org/ttn-eu/api/v2/down/jpm_mapping_nodes/to-ttnmapper?key=ttn-account-v2..."
+}
+
+{
+  "app_id": "jpm_mapping_nodes",
+  "dev_id": "rfm_teensy3_b",
+  "hardware_serial": "00F26916ED6E43B4",
+  "port": 1,
+  "counter": 391,
+  "payload_raw": "T7wFjWtXAH0U",
+  "payload_fields": {
+    "alt": 125,
+    "hdop": 2,
+    "lat": -33.93671059231225,
+    "lon": 18.870897225791055
+  },
+  "metadata": {
+    "time": "2018-01-16T15:35:29.317950145Z",
+    "frequency": 868.3,
+    "modulation": "LORA",
+    "data_rate": "SF7BW125",
+    "coding_rate": "4/5",
+    "gateways": [
+      {
+        "gtw_id": "stellenbosch-technopark",
+        "gtw_trusted": true,
+        "timestamp": 3241943515,
+        "time": "2018-01-16T15:35:29Z",
+        "channel": 1,
+        "rssi": -120,
+        "snr": -9.25,
+        "rf_chain": 1,
+        "latitude": -33.96445,
+        "longitude": 18.836777,
+        "altitude": 150
+      }
+    ]
+  },
+  "downlink_url": "https://integrations.thethingsnetwork.org/ttn-eu/api/v2/down/jpm_mapping_nodes/to-ttnmapper?key=ttn-account-v2..."
+}

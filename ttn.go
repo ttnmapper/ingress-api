@@ -7,6 +7,9 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	_ "time"
+	"ttnmapper-ingress-api/ttnV2"
+	"ttnmapper-ingress-api/ttnV3/models"
 	"ttnmapper-ingress-api/types"
 )
 
@@ -21,6 +24,11 @@ func TtnRoutes() *chi.Mux {
 	return router
 }
 
+/*
+TTN V2 HTTP integration
+Authorization header contains email address
+There is an extra Experiment field added to the model
+*/
 func PostTtnV2(w http.ResponseWriter, r *http.Request) {
 
 	response := make(map[string]interface{})
@@ -43,41 +51,48 @@ func PostTtnV2(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var packet types.TtnMapperUplinkMessage
-	if err := json.Unmarshal(body, &packet); err != nil {
+	var packetIn ttnV2.UplinkMessage
+	if err := json.Unmarshal(body, &packetIn); err != nil {
 		response["success"] = false
 		response["message"] = "Can not parse json body"
 		log.Print(err.Error())
 		return
 	}
 
-	if err := ParsePayloadFields(&packet); err != nil {
+	if packetIn.PayloadFields == nil {
+		response["success"] = false
+		response["message"] = "payload_fields not set"
+		log.Print("payload_fields not set")
+		return
+	}
+
+	var packetOut types.TtnMapperUplinkMessage
+	if err := ParsePayloadFields(int64(packetIn.FPort), packetIn.PayloadFields, &packetOut); err != nil {
 		response["success"] = false
 		response["message"] = err.Error()
 		log.Print(err.Error())
 		return
 	}
 
-	if err := CheckData(packet); err != nil {
+	if err := CheckData(packetOut); err != nil {
 		response["success"] = false
 		response["message"] = err.Error()
 		log.Print(err.Error())
-		//_ = AppendToFile("errors.log", email+"\n")
-		//_ = AppendToFile("errors.log", string(body)+"\n\n")
 		return
 	}
 
-	SanitizeData(&packet)
+	SanitizeData(&packetOut)
 
-	packet.TtnMUserAgent = "ttn-v2-integration"
-	packet.TtnMUserId = email
-	packet.TtnMExperiment = packet.Experiment
+	CopyTtnV2Fields(packetIn, &packetOut)
 
-	publishChannel <- packet
+	packetOut.UserAgent = "ttn-v2-integration"
+	packetOut.UserId = email
+	packetOut.Experiment = packetIn.Experiment
+
+	publishChannel <- packetOut
 
 	response["success"] = true
 	response["message"] = "New packet accepted into queue"
-	response["packet"] = packet
 
 }
 
@@ -87,11 +102,81 @@ func GetTtnV2(w http.ResponseWriter, r *http.Request) {
 	render.JSON(w, r, response)
 }
 
+/*
+TTN and TTI V3 stacks Webhook
+*/
 func PostTtnV3(w http.ResponseWriter, r *http.Request) {
+
+	// Read data
 	response := make(map[string]interface{})
-	response["success"] = false
-	response["message"] = "Not implemented"
-	render.JSON(w, r, response)
+	defer render.JSON(w, r, response)
+
+	email := r.Header.Get("Authorization")
+	log.Print(email)
+	if err := validateEmail(email); err != nil {
+		response["success"] = false
+		response["message"] = err.Error()
+		log.Print(err.Error())
+		return
+	}
+
+	body, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		response["success"] = false
+		response["message"] = "Can not read POST body"
+		log.Print(err.Error())
+		return
+	}
+
+	var packetIn models.V3ApplicationUp
+	if err := json.Unmarshal(body, &packetIn); err != nil {
+		response["success"] = false
+		response["message"] = "Can not parse json body"
+		log.Print(err.Error())
+		return
+	}
+
+	if packetIn.UplinkMessage.DecodedPayload == nil {
+		response["success"] = false
+		response["message"] = "payload_fields not set"
+		log.Print("payload_fields not set")
+		return
+	}
+
+	// Parse payload fields and check validity
+	var packetOut types.TtnMapperUplinkMessage
+	if err := ParsePayloadFields(packetIn.UplinkMessage.FPort, packetIn.UplinkMessage.DecodedPayload, &packetOut); err != nil {
+		response["success"] = false
+		response["message"] = err.Error()
+		log.Print(err.Error())
+		return
+	}
+
+	if err := CheckData(packetOut); err != nil {
+		response["success"] = false
+		response["message"] = err.Error()
+		log.Print(err.Error())
+		return
+	}
+
+	SanitizeData(&packetOut)
+
+	// Add metadata fields
+	CopyTtnV3Fields(packetIn, &packetOut)
+
+	packetOut.UserAgent = "ttn-v3-integration"
+	packetOut.UserId = email
+
+	// For V3 assume the experiment is passed via header so that we do not need a custom model
+	experiment := r.Header.Get("Experiment")
+	if experiment != "" {
+		packetOut.Experiment = experiment
+	}
+
+	publishChannel <- packetOut
+
+	response["success"] = true
+	response["message"] = "New packet accepted into queue"
 }
 
 func GetTtnV3(w http.ResponseWriter, r *http.Request) {

@@ -6,34 +6,32 @@ import (
 	"ttnmapper-ingress-api/types"
 )
 
-func ParsePayloadFields(packet *types.TtnMapperUplinkMessage) error {
+func ParsePayloadFields(port int64, payloadFieldsIn interface{}, packetOut *types.TtnMapperUplinkMessage) error {
 
-	if packet.PayloadFields == nil {
-		return errors.New("payload_fields not set")
-	}
+	payloadFields := payloadFieldsIn.(map[string]interface{})
 
-	if err := parseCayenneLpp(packet, packet.PayloadFields); err != nil {
+	if err := parseCayenneLpp(packetOut, payloadFields); err != nil {
 		return err
 	}
 
 	locationKeys := [...]string{"location", "gps"}
 	for _, v := range locationKeys {
-		if val, ok := packet.PayloadFields[v]; ok {
+		if val, ok := payloadFields[v]; ok {
 			if locationObject, ok := val.(map[string]interface{}); ok {
-				if err := extractFromRoot(packet, locationObject); err != nil {
+				if err := extractFromRoot(packetOut, locationObject); err != nil {
 					return err
 				}
 			}
 		}
 	}
-	//if val, ok := packet.PayloadFields["location"]; ok {
+	//if val, ok := payloadFields["location"]; ok {
 	//	locationObject := val.(map[string]interface{})
-	//	if err := extractFromRoot(packet, locationObject); err != nil {
+	//	if err := extractFromRoot(packetOut, locationObject); err != nil {
 	//		return err
 	//	}
 	//}
 
-	if err := extractFromRoot(packet, packet.PayloadFields); err != nil {
+	if err := extractFromRoot(packetOut, payloadFields); err != nil {
 		return err
 	}
 
@@ -53,7 +51,7 @@ func parseCayenneLpp(packet *types.TtnMapperUplinkMessage, data map[string]inter
 				return err
 			}
 
-			packet.TtnMProvider = "Cayenne LPP"
+			packet.AccuracySource = "Cayenne LPP"
 
 		}
 	}
@@ -69,12 +67,12 @@ func extractFromRoot(packet *types.TtnMapperUplinkMessage, data map[string]inter
 
 			switch val.(type) {
 			case float64:
-				packet.TtnMLatitude = val.(float64)
+				packet.Latitude = val.(float64)
 
 			case string:
 				// value was sent as a string not as a number
 				if f, err := strconv.ParseFloat(val.(string), 64); err == nil {
-					packet.TtnMLatitude = f
+					packet.Latitude = f
 				}
 
 			default:
@@ -89,12 +87,12 @@ func extractFromRoot(packet *types.TtnMapperUplinkMessage, data map[string]inter
 
 			switch val.(type) {
 			case float64:
-				packet.TtnMLongitude = val.(float64)
+				packet.Longitude = val.(float64)
 
 			case string:
 				// value was sent as a string not as a number
 				if f, err := strconv.ParseFloat(val.(string), 64); err == nil {
-					packet.TtnMLongitude = f
+					packet.Longitude = f
 				}
 
 			default:
@@ -109,12 +107,12 @@ func extractFromRoot(packet *types.TtnMapperUplinkMessage, data map[string]inter
 
 			switch val.(type) {
 			case float64:
-				packet.TtnMAltitude = val.(float64)
+				packet.Altitude = val.(float64)
 
 			case string:
 				// value was sent as a string not as a number
 				if f, err := strconv.ParseFloat(val.(string), 64); err == nil {
-					packet.TtnMAltitude = f
+					packet.Altitude = f
 				}
 
 			default:
@@ -134,17 +132,17 @@ func extractFromRoot(packet *types.TtnMapperUplinkMessage, data map[string]inter
 	satelliteKeys := [...]string{"sats", "satellites", "numsat", "numsats"}
 	for _, v := range satelliteKeys {
 		if val, ok := data[v]; ok {
-			
-			packet.TtnMProvider = v
+
+			packet.AccuracySource = v
 
 			switch val.(type) {
 			case float64:
-				packet.TtnMSatellites = int32(val.(float64))
+				packet.Satellites = int32(val.(float64))
 
 			case string:
 				// value was sent as a string not as a number
 				if i, err := strconv.ParseInt(val.(string), 10, 32); err == nil {
-					packet.TtnMSatellites = int32(i)
+					packet.Satellites = int32(i)
 				}
 
 			default:
@@ -157,16 +155,16 @@ func extractFromRoot(packet *types.TtnMapperUplinkMessage, data map[string]inter
 	for _, v := range accuracyKeys {
 		if val, ok := data[v]; ok {
 
-			packet.TtnMProvider = v
+			packet.AccuracySource = v
 
 			switch val.(type) {
 			case float64:
-				packet.TtnMAccuracy = val.(float64)
+				packet.AccuracyMeters = val.(float64)
 
 			case string:
 				// value was sent as a string not as a number
 				if f, err := strconv.ParseFloat(val.(string), 64); err == nil {
-					packet.TtnMAccuracy = f
+					packet.AccuracyMeters = f
 				}
 
 			default:
@@ -179,16 +177,16 @@ func extractFromRoot(packet *types.TtnMapperUplinkMessage, data map[string]inter
 	for _, v := range hdopKeys {
 		if val, ok := data[v]; ok {
 
-			packet.TtnMProvider = v
+			packet.AccuracySource = v
 
 			switch val.(type) {
 			case float64:
-				packet.TtnMHdop = val.(float64)
+				packet.Hdop = val.(float64)
 
 			case string:
 				// value was sent as a string not as a number
 				if f, err := strconv.ParseFloat(val.(string), 64); err == nil {
-					packet.TtnMHdop = f
+					packet.Hdop = f
 				}
 
 			default:
@@ -235,7 +233,7 @@ func extractFromRoot(packet *types.TtnMapperUplinkMessage, data map[string]inter
 	}
 
 	if val, ok := data["provider"]; ok {
-		packet.TtnMProvider = val.(string)
+		packet.AccuracySource = val.(string)
 	}
 
 	return nil

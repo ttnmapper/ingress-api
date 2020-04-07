@@ -1,0 +1,53 @@
+{
+	"app_id": "jpm_crickets",
+	"dev_id": "cricket_001",
+	"dev_eui": "00E150E95369A0B0",
+	"time": 1586093204519096325,
+	"port": 1,
+	"counter": 29932,
+	"frequency": 868099968,
+	"modulation": "LORA",
+	"bandwidth": 125000,
+	"spreading_factor": 7,
+	"coding_rate": "4/5",
+	"gateways": [{
+		"gtw_id": "eui-7276ff00080e0176",
+		"gtw_eui": "7276FF00080E0176",
+		"antenna_index": 0,
+		"time": 1586093204000000000,
+		"timestamp": 3590545203,
+		"rssi": -64,
+		"snr": 10
+	}, {
+		"gtw_id": "eui-b827ebfffed88375",
+		"gtw_eui": "B827EBFFFED88375",
+		"antenna_index": 0,
+		"time": 1586093204000000000,
+		"timestamp": 510723987,
+		"rssi": -60,
+		"snr": 9.75,
+		"latitude": -33.935970306396484,
+		"longitude": 18.870805740356445
+	}, {
+		"gtw_id": "eui-647fdafffe007a1a",
+		"gtw_eui": "647FDAFFFE007A1A",
+		"antenna_index": 0,
+		"timestamp": 587147324,
+		"channel": 5,
+		"rssi": -54,
+		"snr": 10.2
+	}, {
+		"gtw_id": "eui-60c5a8fffe71a964",
+		"gtw_eui": "60C5A8FFFE71A964",
+		"antenna_index": 0,
+		"timestamp": 2492163779,
+		"rssi": -43,
+		"snr": 9
+	}],
+	"latitude": -33.9366,
+	"longitude": 18.8709,
+	"altitude": 120.06,
+	"accuracy_source": "Cayenne LPP",
+	"userid": "test@jpmeijers.com",
+	"useragent": "ttn-v2-integration"
+}

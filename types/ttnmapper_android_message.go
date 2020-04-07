@@ -1,7 +1,9 @@
 package types
 
+import "ttnmapper-ingress-api/ttnV2"
+
 type TtnMapperAndroidMessage struct {
-	UplinkMessage
+	ttnV2.UplinkMessage
 
 	//@field:Json(name = "phone_lat")
 	//var phoneLat: Double?, // -34.0484124

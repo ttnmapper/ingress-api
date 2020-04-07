@@ -1,0 +1,27 @@
+{
+	"app_id": "jpm-crickets",
+	"dev_id": "cricket-001",
+	"time": 1586092611288823708,
+	"port": 1,
+	"counter": 29754,
+	"frequency": 868300000,
+	"modulation": "LORA",
+	"bandwidth": 125000,
+	"spreading_factor": 7,
+	"coding_rate": "4/5",
+	"gateways": [{
+		"gtw_id": "pisupply-shield",
+		"gtw_eui": "B827EBFFFED88375",
+		"antenna_index": 0,
+		"timestamp": 4212208507,
+		"channel": 1,
+		"rssi": -59,
+		"snr": 10.2
+	}],
+	"latitude": -33.93659973144531,
+	"longitude": 18.871000289916992,
+	"altitude": 114.19999694824219,
+	"accuracy_source": "Cayenne LPP",
+	"userid": "test@jpmeijers.com",
+	"useragent": "ttn-v3-integration"
+}
