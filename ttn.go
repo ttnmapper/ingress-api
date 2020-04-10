@@ -74,14 +74,16 @@ func PostTtnV2(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err := CheckData(packetOut); err != nil {
-		response["success"] = false
-		response["message"] = err.Error()
-		log.Print(err.Error())
-		return
-	}
+	if packetOut.Experiment == "" {
+		if err := CheckData(packetOut); err != nil {
+			response["success"] = false
+			response["message"] = err.Error()
+			log.Print(err.Error())
+			return
+		}
 
-	SanitizeData(&packetOut)
+		SanitizeData(&packetOut)
+	}
 
 	CopyTtnV2Fields(packetIn, &packetOut)
 
