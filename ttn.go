@@ -154,18 +154,6 @@ func PostTtnV3(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err := CheckData(packetOut); err != nil {
-		response["success"] = false
-		response["message"] = err.Error()
-		log.Print(err.Error())
-		return
-	}
-
-	SanitizeData(&packetOut)
-
-	// Add metadata fields
-	CopyTtnV3Fields(packetIn, &packetOut)
-
 	packetOut.UserAgent = "ttn-v3-integration"
 	packetOut.UserId = email
 
@@ -174,6 +162,20 @@ func PostTtnV3(w http.ResponseWriter, r *http.Request) {
 	if experiment != "" {
 		packetOut.Experiment = experiment
 	}
+
+	if packetOut.Experiment == "" {
+		if err := CheckData(packetOut); err != nil {
+			response["success"] = false
+			response["message"] = err.Error()
+			log.Print(err.Error())
+			return
+		}
+
+		SanitizeData(&packetOut)
+	}
+
+	// Add metadata fields
+	CopyTtnV3Fields(packetIn, &packetOut)
 
 	publishChannel <- packetOut
 

@@ -49,14 +49,16 @@ func PostAndroidV2(w http.ResponseWriter, r *http.Request) {
 	var resultPacket = types.TtnMapperUplinkMessage{}
 	CopyAndroidV2ToTtnMapper(receivedPacket, &resultPacket)
 
-	if err := CheckData(resultPacket); err != nil {
-		response["success"] = false
-		response["message"] = err.Error()
-		log.Print(err.Error())
-		return
-	}
+	if resultPacket.Experiment == "" {
+		if err := CheckData(resultPacket); err != nil {
+			response["success"] = false
+			response["message"] = err.Error()
+			log.Print(err.Error())
+			return
+		}
 
-	SanitizeData(&resultPacket)
+		SanitizeData(&resultPacket)
+	}
 
 	publishChannel <- resultPacket
 
