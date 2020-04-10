@@ -74,6 +74,10 @@ func PostTtnV2(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	packetOut.UserAgent = "ttn-v2-integration"
+	packetOut.UserId = email
+	packetOut.Experiment = packetIn.Experiment
+
 	if packetOut.Experiment == "" {
 		if err := CheckData(packetOut); err != nil {
 			response["success"] = false
@@ -86,10 +90,6 @@ func PostTtnV2(w http.ResponseWriter, r *http.Request) {
 	}
 
 	CopyTtnV2Fields(packetIn, &packetOut)
-
-	packetOut.UserAgent = "ttn-v2-integration"
-	packetOut.UserId = email
-	packetOut.Experiment = packetIn.Experiment
 
 	publishChannel <- packetOut
 
