@@ -21,10 +21,10 @@ type Configuration struct {
 }
 
 var myConfiguration = Configuration{
-	AmqpHost:     "default.host",
+	AmqpHost:     "localhost",
 	AmqpPort:     "5672",
-	AmqpUser:     "user",
-	AmqpPassword: "password",
+	AmqpUser:     "guest",
+	AmqpPassword: "guest",
 }
 
 func main() {
