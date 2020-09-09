@@ -56,6 +56,25 @@ func parseCayenneLpp(packet *types.TtnMapperUplinkMessage, data map[string]inter
 		}
 	}
 
+	// allow to set sats ad hdop via Cayenne LPP
+	// setting AnalogIn to 3.03 enables the checking for both values
+	// digitalInput7 is an integer and sets sats
+	// analogInput7 is a float and sets the hdop
+	if val, ok := data["analog_in_6"]; ok {
+		if val.(float64) == 3.03 {
+			if val, ok := data["digital_in_7"]; ok {
+				packet.AccuracySource = "sats"
+				packet.Satellites = val.(int32)
+			}
+
+			if val, ok := data["analog_in_7"]; ok {
+				packet.AccuracySource = "hdop"
+				packet.Hdop = val.(float64)
+			}
+		}
+
+	}
+
 	return nil
 }
 
