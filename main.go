@@ -18,6 +18,8 @@ type Configuration struct {
 	AmqpPort     string `env:"AMQP_PORT"`
 	AmqpUser     string `env:"AMQP_USER"`
 	AmqpPassword string `env:"AMQP_PASSWORD"`
+
+	HttpListenAddress string `env:"HTTP_LISTEN_ADDRESS"`
 }
 
 var myConfiguration = Configuration{
@@ -25,6 +27,8 @@ var myConfiguration = Configuration{
 	AmqpPort:     "5672",
 	AmqpUser:     "guest",
 	AmqpPassword: "guest",
+
+	HttpListenAddress: ":8080",
 }
 
 func main() {
@@ -51,7 +55,7 @@ func main() {
 	go publishFromChannel()
 
 	// Start the http endpoint
-	log.Fatal(http.ListenAndServe(":8080", router))
+	log.Fatal(http.ListenAndServe(myConfiguration.HttpListenAddress, router))
 }
 
 func publishFromChannel() {

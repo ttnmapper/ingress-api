@@ -8,7 +8,7 @@ services:
   - rabbitmq
 
 env:
-  - AMQP_URL=amqp://guest:guest@127.0.0.1:5672/
+ - AMQP_URL=amqp://guest:guest@127.0.0.1:5672/
 
 before_install:
   - go get -v golang.org/x/lint/golint

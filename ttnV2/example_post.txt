@@ -87,3 +87,76 @@ array (
   },
   "downlink_url": "https://integrations.thethingsnetwork.org/ttn-eu/api/v2/down/jpm_mapping_nodes/to-ttnmapper?key=ttn-account-v2..."
 }
+
+
+
+
+{
+   "app_id":"homebug-qalcosonic-w1",
+   "dev_id":"05332403",
+   "hardware_serial":"0007090000515DB3",
+   "port":100,
+   "counter":30,
+   "payload_raw":"CsajXxABAAAAIOyiXwEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
+   "metadata":{
+      "time":"2020-11-05T09:31:50.742526241Z",
+      "frequency":868.3,
+      "modulation":"LORA",
+      "data_rate":"SF7BW125",
+      "airtime":112896000,
+      "coding_rate":"4/5",
+      "gateways":[
+         {
+            "gtw_id":"eui-647fdafffe007a1a",
+            "timestamp":2079146396,
+            "time":"",
+            "channel":6,
+            "rssi":-47,
+            "snr":8,
+            "rf_chain":0
+         },
+         {
+            "gtw_id":"eui-60c5a8fffe761551",
+            "timestamp":28410708,
+            "time":"",
+            "channel":6,
+            "rssi":-68,
+            "snr":9.8,
+            "rf_chain":0
+         },
+         {
+            "gtw_id":"eui-58a0cbfffe80049a",
+            "timestamp":1526860595,
+            "time":"2020-11-05T09:31:50.487390995Z",
+            "channel":0,
+            "rssi":-61,
+            "snr":10,
+            "rf_chain":0
+         },
+         {
+            "gtw_id":"eui-647fdafffe007a1f",
+            "timestamp":2815033635,
+            "time":"",
+            "channel":1,
+            "rssi":-85,
+            "snr":10,
+            "rf_chain":0
+         },
+         {
+            "gtw_id":"eui-60c5a8fffe71a964",
+            "timestamp":48949428,
+            "time":"",
+            "channel":6,
+            "rssi":-87,
+            "snr":10.3,
+            "rf_chain":0,
+            "latitude":34,
+            "longitude":19,
+            "altitude":1000
+         }
+      ],
+      "latitude":-33.93664,
+      "longitude":18.870983,
+      "location_source":"registry"
+   }
+}

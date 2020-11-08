@@ -35,7 +35,6 @@ func PostTtnV2(w http.ResponseWriter, r *http.Request) {
 	defer render.JSON(w, r, response)
 
 	email := r.Header.Get("Authorization")
-	log.Print(email)
 	if err := validateEmail(email); err != nil {
 		response["success"] = false
 		response["message"] = err.Error()
@@ -59,24 +58,33 @@ func PostTtnV2(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if packetIn.PayloadFields == nil {
-		response["success"] = false
-		response["message"] = "payload_fields not set"
-		log.Print("payload_fields not set")
-		return
-	}
+	log.Println(email, " ", packetIn.AppID, " ", packetIn.DevID)
 
 	var packetOut types.TtnMapperUplinkMessage
-	if err := ParsePayloadFields(int64(packetIn.FPort), packetIn.PayloadFields, &packetOut); err != nil {
-		response["success"] = false
-		response["message"] = err.Error()
-		log.Print(err.Error())
-		return
+
+	// Try to use the location from the metadata first. This is likely the location set on the console.
+	if packetIn.Metadata.Latitude != 0 && packetIn.Metadata.Longitude != 0 {
+		packetOut.AccuracySource = packetIn.Metadata.Source
+		packetOut.Latitude = float64(packetIn.Metadata.Latitude)
+		packetOut.Longitude = float64(packetIn.Metadata.Longitude)
+		packetOut.Altitude = float64(packetIn.Metadata.Altitude)
+		packetOut.Experiment = "registry-location" // TODO remove after verified to work
+	}
+
+	if packetIn.PayloadFields != nil {
+		if err := ParsePayloadFields(int64(packetIn.FPort), packetIn.PayloadFields, &packetOut); err != nil {
+			response["success"] = false
+			response["message"] = err.Error()
+			log.Print(err.Error())
+			return
+		}
 	}
 
 	packetOut.UserAgent = "ttn-v2-integration"
 	packetOut.UserId = email
-	packetOut.Experiment = packetIn.Experiment
+	if packetOut.Experiment == "" {
+		packetOut.Experiment = packetIn.Experiment
+	}
 
 	if packetOut.Experiment == "" {
 		if err := CheckData(packetOut); err != nil {
