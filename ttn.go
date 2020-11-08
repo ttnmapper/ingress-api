@@ -68,7 +68,6 @@ func PostTtnV2(w http.ResponseWriter, r *http.Request) {
 		packetOut.Latitude = float64(packetIn.Metadata.Latitude)
 		packetOut.Longitude = float64(packetIn.Metadata.Longitude)
 		packetOut.Altitude = float64(packetIn.Metadata.Altitude)
-		packetOut.Experiment = "registry-location" // TODO remove after verified to work
 	}
 
 	if packetIn.PayloadFields != nil {
@@ -82,8 +81,11 @@ func PostTtnV2(w http.ResponseWriter, r *http.Request) {
 
 	packetOut.UserAgent = "ttn-v2-integration"
 	packetOut.UserId = email
-	if packetOut.Experiment == "" {
-		packetOut.Experiment = packetIn.Experiment
+	packetOut.Experiment = packetIn.Experiment
+
+	// If we got the location from the metadata, store under an experiment
+	if packetOut.AccuracySource == packetIn.Metadata.Source {
+		packetOut.Experiment = "registry-location" // TODO remove after verified to work
 	}
 
 	if packetOut.Experiment == "" {
