@@ -86,6 +86,16 @@ func PostTtnV2(w http.ResponseWriter, r *http.Request) {
 	// If we got the location from the metadata, store under an experiment
 	if packetOut.AccuracySource == packetIn.Metadata.Source {
 		packetOut.Experiment = "registry-location" // TODO remove after verified to work
+
+		// Also check and sanitize registry data
+		if err := CheckData(packetOut); err != nil {
+			response["success"] = false
+			response["message"] = err.Error()
+			log.Print(err.Error())
+			return
+		}
+
+		SanitizeData(&packetOut)
 	}
 
 	if packetOut.Experiment == "" {
