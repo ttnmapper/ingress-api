@@ -68,37 +68,24 @@ func PostTtnV2(w http.ResponseWriter, r *http.Request) {
 		packetOut.Latitude = float64(packetIn.Metadata.Latitude)
 		packetOut.Longitude = float64(packetIn.Metadata.Longitude)
 		packetOut.Altitude = float64(packetIn.Metadata.Altitude)
-	}
 
-	if packetIn.PayloadFields != nil {
+		packetOut.Experiment = "registry-location" // TODO remove after verified to work
+
+	} else if packetIn.PayloadFields != nil {
 		if err := ParsePayloadFields(int64(packetIn.FPort), packetIn.PayloadFields, &packetOut); err != nil {
 			response["success"] = false
 			response["message"] = err.Error()
 			log.Print(err.Error())
 			return
 		}
+
+		packetOut.Experiment = packetIn.Experiment
 	}
 
 	packetOut.UserAgent = "ttn-v2-integration"
 	packetOut.UserId = email
-	packetOut.Experiment = packetIn.Experiment
 
-	// If we got the location from the metadata, store under an experiment
-	if packetOut.AccuracySource == packetIn.Metadata.Source {
-		packetOut.Experiment = "registry-location" // TODO remove after verified to work
-
-		// Also check and sanitize registry data
-		if err := CheckData(packetOut); err != nil {
-			response["success"] = false
-			response["message"] = err.Error()
-			log.Print(err.Error())
-			return
-		}
-
-		SanitizeData(&packetOut)
-	}
-
-	if packetOut.Experiment == "" {
+	if packetOut.Experiment == "" || packetOut.Experiment == "registry-location" {
 		if err := CheckData(packetOut); err != nil {
 			response["success"] = false
 			response["message"] = err.Error()
