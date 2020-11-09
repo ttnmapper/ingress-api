@@ -61,6 +61,9 @@ func PostTtnV2(w http.ResponseWriter, r *http.Request) {
 	log.Println(email, " ", packetIn.AppID, " ", packetIn.DevID)
 
 	var packetOut types.TtnMapperUplinkMessage
+	packetOut.UserAgent = "ttn-v2-integration"
+	packetOut.UserId = email
+	packetOut.Experiment = packetIn.Experiment
 
 	// Try to use the location from the metadata first. This is likely the location set on the console.
 	if packetIn.Metadata.Latitude != 0 && packetIn.Metadata.Longitude != 0 {
@@ -68,41 +71,36 @@ func PostTtnV2(w http.ResponseWriter, r *http.Request) {
 		packetOut.Latitude = float64(packetIn.Metadata.Latitude)
 		packetOut.Longitude = float64(packetIn.Metadata.Longitude)
 		packetOut.Altitude = float64(packetIn.Metadata.Altitude)
+	}
 
-		packetOut.Experiment = "registry-location" // TODO remove after verified to work
-
-	} else if packetIn.PayloadFields != nil {
+	// If payload fields are available, try getting coordinates from there
+	if packetIn.PayloadFields != nil {
 		if err := ParsePayloadFields(int64(packetIn.FPort), packetIn.PayloadFields, &packetOut); err != nil {
 			response["success"] = false
 			response["message"] = err.Error()
 			log.Print(err.Error())
 			return
 		}
-
-		packetOut.Experiment = packetIn.Experiment
 	}
 
-	packetOut.UserAgent = "ttn-v2-integration"
-	packetOut.UserId = email
-
-	if packetOut.Experiment == "" || packetOut.Experiment == "registry-location" {
+	// Ignore data validity checks for experiments
+	if packetOut.Experiment == "" {
 		if err := CheckData(packetOut); err != nil {
 			response["success"] = false
 			response["message"] = err.Error()
 			log.Print(err.Error())
 			return
 		}
-
 		SanitizeData(&packetOut)
 	}
 
+	// Copy metadata fields
 	CopyTtnV2Fields(packetIn, &packetOut)
 
 	publishChannel <- packetOut
 
 	response["success"] = true
 	response["message"] = "New packet accepted into queue"
-
 }
 
 func GetTtnV2(w http.ResponseWriter, r *http.Request) {

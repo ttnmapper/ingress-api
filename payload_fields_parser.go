@@ -9,6 +9,7 @@ import (
 func ParsePayloadFields(port int64, payloadFieldsIn interface{}, packetOut *types.TtnMapperUplinkMessage) error {
 
 	payloadFields := payloadFieldsIn.(map[string]interface{})
+	packetOut.AccuracySource = "payload_fields" // reset in case it was set by metadata location
 
 	if err := parseCayenneLpp(packetOut, payloadFields); err != nil {
 		return err
