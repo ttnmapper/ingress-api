@@ -64,7 +64,7 @@ func PostAndroidV2(w http.ResponseWriter, r *http.Request) {
 
 	response["success"] = true
 	response["message"] = "New packet accepted into queue"
-	response["packet"] = resultPacket
+	//response["packet"] = resultPacket
 
 }
 
@@ -106,7 +106,7 @@ func PostAndroidV3(w http.ResponseWriter, r *http.Request) {
 
 	response["success"] = true
 	response["message"] = "New packet accepted into queue"
-	response["packet"] = resultPacket
+	//response["packet"] = resultPacket
 }
 
 func CopyAndroidV3ToTtnMapper(source types.TtnMapperAndroidMessage, destination *types.TtnMapperUplinkMessage) {
