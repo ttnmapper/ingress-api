@@ -49,6 +49,8 @@ func PostAndroidV2(w http.ResponseWriter, r *http.Request) {
 
 	var resultPacket = types.TtnMapperUplinkMessage{}
 	CopyAndroidV2ToTtnMapper(receivedPacket, &resultPacket)
+	resultPacket.NetworkType = types.NS_TTN_V2
+	resultPacket.NetworkAddress = ""
 
 	if resultPacket.Experiment == "" {
 		if err := CheckData(resultPacket); err != nil {
@@ -93,6 +95,8 @@ func PostAndroidV3(w http.ResponseWriter, r *http.Request) {
 
 	var resultPacket = types.TtnMapperUplinkMessage{}
 	CopyAndroidV3ToTtnMapper(receivedPacket, &resultPacket)
+	resultPacket.NetworkType = types.NS_TTN_V2
+	resultPacket.NetworkAddress = ""
 
 	if err := CheckData(resultPacket); err != nil {
 		response["success"] = false
