@@ -63,7 +63,7 @@ func PostTtnV2(w http.ResponseWriter, r *http.Request) {
 	var packetOut types.TtnMapperUplinkMessage
 	packetOut.NetworkType = "NS_TTN_V2"
 
-	log.Println("DownURL: ", packetIn.DownlinkUrl)
+	log.Println(prettyPrint(packetIn))
 	//if strings.HasPrefix(packetIn.DownlinkUrl, "https://integrations.thethingsnetwork.org/ttn-eu") {
 	//	packetOut.NetworkAddress = "eu.thethings.network"
 	//}
