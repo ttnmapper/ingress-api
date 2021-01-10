@@ -61,7 +61,7 @@ func PostTtnV2(w http.ResponseWriter, r *http.Request) {
 	log.Println(email, " ", packetIn.AppID, " ", packetIn.DevID)
 
 	var packetOut types.TtnMapperUplinkMessage
-	packetOut.NetworkType = "NS_TTN_V2"
+	packetOut.NetworkType = types.NS_TTN_V2
 	packetOut.NetworkAddress = r.RemoteAddr
 
 	packetOut.UserAgent = "ttn-v2-integration"
@@ -154,7 +154,7 @@ func PostTtnV3(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var packetOut types.TtnMapperUplinkMessage
-	packetOut.NetworkType = "NS_TTS_V3"
+	packetOut.NetworkType = types.NS_TTS_V3
 	packetOut.NetworkAddress = r.RemoteAddr
 
 	// TODO Try to use the location from the metadata first. This is likely the location set on the console.
