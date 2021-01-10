@@ -20,6 +20,7 @@ func AndroidRoutes() *chi.Mux {
 
 	router.Post("/v2", PostAndroidV2)
 	router.Post("/v3", PostAndroidV3)
+	router.Post("/v4", PostAndroidV4)
 
 	return router
 }
@@ -82,7 +83,7 @@ func PostAndroidV3(w http.ResponseWriter, r *http.Request) {
 	}
 	log.Println(string(body))
 
-	var receivedPacket types.TtnMapperAndroidMessage
+	var receivedPacket types.TtnMapperAndroidMessageV3
 	if err := json.Unmarshal(body, &receivedPacket); err != nil {
 		response["success"] = false
 		response["message"] = "Can not parse json body"
@@ -109,7 +110,47 @@ func PostAndroidV3(w http.ResponseWriter, r *http.Request) {
 	//response["packet"] = resultPacket
 }
 
-func CopyAndroidV3ToTtnMapper(source types.TtnMapperAndroidMessage, destination *types.TtnMapperUplinkMessage) {
+func PostAndroidV4(w http.ResponseWriter, r *http.Request) {
+
+	response := make(map[string]interface{})
+	defer render.JSON(w, r, response)
+
+	body, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		//panic(err)
+		response["success"] = false
+		response["message"] = "Can not read POST body"
+		return
+	}
+	log.Println(string(body))
+
+	var receivedPacket types.TtnMapperAndroidMessageV4
+	if err := json.Unmarshal(body, &receivedPacket); err != nil {
+		response["success"] = false
+		response["message"] = "Can not parse json body"
+		log.Print(err.Error())
+		return
+	}
+
+	// Only filter and sanitize if it is not an experiment
+	if receivedPacket.Experiment == "" {
+		if err := CheckData(receivedPacket); err != nil {
+			response["success"] = false
+			response["message"] = err.Error()
+			log.Print(err.Error())
+			return
+		}
+		SanitizeData(&receivedPacket)
+	}
+
+	log.Println(prettyPrint(receivedPacket))
+
+	publishChannel <- receivedPacket
+	response["success"] = true
+	response["message"] = "New packet accepted into queue"
+}
+
+func CopyAndroidV3ToTtnMapper(source types.TtnMapperAndroidMessageV3, destination *types.TtnMapperUplinkMessage) {
 
 	destination.Latitude = source.PhoneLat
 	destination.Longitude = source.PhoneLon
@@ -122,7 +163,7 @@ func CopyAndroidV3ToTtnMapper(source types.TtnMapperAndroidMessage, destination 
 
 	packetIn := ttnV2.UplinkMessage{}
 
-	// Copy the matching fields in TtnMapperAndroidMessage to ttnV2.UplinkMessage
+	// Copy the matching fields in TtnMapperAndroidMessageV3 to ttnV2.UplinkMessage
 	deepcopier.Copy(source).To(&packetIn)
 	// Copy and format the ttnV2.UplinkMessage fields we are interested in into destination
 	CopyTtnV2Fields(packetIn, destination)

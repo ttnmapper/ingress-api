@@ -1,16 +1,19 @@
 package types
 
+const (
+	NS_TTN_V2 = "NS_TTN_V2"
+	NS_TTS_V3 = "NS_TTS_V3"
+	NS_CHIRP  = "NS_CHIRP"
+)
+
 type TtnMapperUplinkMessage struct {
 	/*
-	   <!--NS types-->
-	   <string name="NS_TTN_V2">NS_TTN_V2</string>
-	   <string name="NS_TTS_V3">NS_TTS_V3</string>
-	   <string name="NS_CHIRP">NS_CHIRP</string>
+		One of the constant network type strings from the above const()
 	*/
 	NetworkType string `json:"network_type,omitempty"`
 	/*
-
-	 */
+		A hostname or IP address to uniquely identify the network server
+	*/
 	NetworkAddress string `json:"network_address,omitempty"`
 
 	AppID  string `json:"app_id"`

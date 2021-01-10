@@ -2,7 +2,7 @@ package types
 
 import "ttnmapper-ingress-api/ttnV2"
 
-type TtnMapperAndroidMessage struct {
+type TtnMapperAndroidMessageV3 struct {
 	ttnV2.UplinkMessage
 
 	//@field:Json(name = "phone_lat")

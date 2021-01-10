@@ -62,12 +62,7 @@ func PostTtnV2(w http.ResponseWriter, r *http.Request) {
 
 	var packetOut types.TtnMapperUplinkMessage
 	packetOut.NetworkType = "NS_TTN_V2"
-
-	log.Println("RemoteAddr:  ", r.RemoteAddr)
-	log.Println("X-Forwarded: ", r.Header.Get("X-FORWARDED-FOR"))
-	//if strings.HasPrefix(packetIn.DownlinkUrl, "https://integrations.thethingsnetwork.org/ttn-eu") {
-	//	packetOut.NetworkAddress = "eu.thethings.network"
-	//}
+	packetOut.NetworkAddress = r.RemoteAddr
 
 	packetOut.UserAgent = "ttn-v2-integration"
 	packetOut.UserId = email
@@ -158,13 +153,27 @@ func PostTtnV3(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Parse payload fields and check validity
 	var packetOut types.TtnMapperUplinkMessage
-	if err := ParsePayloadFields(packetIn.UplinkMessage.FPort, packetIn.UplinkMessage.DecodedPayload, &packetOut); err != nil {
-		response["success"] = false
-		response["message"] = err.Error()
-		log.Print(err.Error())
-		return
+	packetOut.NetworkType = "NS_TTS_V3"
+	packetOut.NetworkAddress = r.RemoteAddr
+
+	// TODO Try to use the location from the metadata first. This is likely the location set on the console.
+	// TODO Need to update the ttnV3 models to include this data
+	//if packetIn.UplinkMessage. != 0 && packetIn.Metadata.Longitude != 0 {
+	//	packetOut.AccuracySource = packetIn.Metadata.Source
+	//	packetOut.Latitude = float64(packetIn.Metadata.Latitude)
+	//	packetOut.Longitude = float64(packetIn.Metadata.Longitude)
+	//	packetOut.Altitude = float64(packetIn.Metadata.Altitude)
+	//}
+
+	// If payload fields are available, try getting coordinates from there
+	if packetIn.UplinkMessage.DecodedPayload != nil {
+		if err := ParsePayloadFields(packetIn.UplinkMessage.FPort, packetIn.UplinkMessage.DecodedPayload, &packetOut); err != nil {
+			response["success"] = false
+			response["message"] = err.Error()
+			log.Print(err.Error())
+			return
+		}
 	}
 
 	packetOut.UserAgent = "ttn-v3-integration"

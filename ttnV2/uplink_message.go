@@ -15,7 +15,6 @@ type UplinkMessage struct {
 	PayloadRaw     []byte                 `json:"payload_raw"`
 	PayloadFields  map[string]interface{} `json:"payload_fields,omitempty"`
 	Metadata       Metadata               `json:"metadata,omitempty"`
-	DownlinkUrl    string                 `json:"downlink_url,omitempty"`
 	Attributes     map[string]string      `json:"attributes,omitempty"`
 	Experiment     string                 `json:"experiment,omitempty"`
 }
