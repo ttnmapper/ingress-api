@@ -160,3 +160,48 @@ array (
       "location_source":"registry"
    }
 }
+
+
+
+ingress-api_1               | 2021/01/10 12:41:57 {
+ingress-api_1               | 	"app_id": "",
+ingress-api_1               | 	"dev_id": "",
+ingress-api_1               | 	"hardware_serial": "",
+ingress-api_1               | 	"port": 1,
+ingress-api_1               | 	"counter": 4579661,
+ingress-api_1               | 	"confirmed": true,
+ingress-api_1               | 	"payload_raw": "nx1TE3GQAECWETjPyRBrb/8=",
+ingress-api_1               | 	"payload_fields": {
+ingress-api_1               | 		"altitude": 0,
+ingress-api_1               | 		"battery": 4203,
+ingress-api_1               | 		"downlink": 201,
+ingress-api_1               | 		"latitude": 53.,
+ingress-api_1               | 		"longitude": -4.,
+ingress-api_1               | 		"rssi": -111,
+ingress-api_1               | 		"sats": 8,
+ingress-api_1               | 		"snr": -1,
+ingress-api_1               | 		"temperature": 29,
+ingress-api_1               | 		"uplink": 207
+ingress-api_1               | 	},
+ingress-api_1               | 	"metadata": {
+ingress-api_1               | 		"time": "2021-01-10T12:41:57.648444096Z",
+ingress-api_1               | 		"frequency": 867.7,
+ingress-api_1               | 		"modulation": "LORA",
+ingress-api_1               | 		"data_rate": "SF9BW125",
+ingress-api_1               | 		"coding_rate": "4/5",
+ingress-api_1               | 		"gateways": [
+ingress-api_1               | 			{
+ingress-api_1               | 				"gtw_id": "eui-b827ebfffe55074f",
+ingress-api_1               | 				"timestamp": 2206691436,
+ingress-api_1               | 				"time": "2021-01-10T12:41:56.62394Z",
+ingress-api_1               | 				"channel": 6,
+ingress-api_1               | 				"rssi": -121,
+ingress-api_1               | 				"snr": -3.8,
+ingress-api_1               | 				"rf_chain": 0,
+ingress-api_1               | 				"latitude": 53.22864,
+ingress-api_1               | 				"longitude": -4.16332,
+ingress-api_1               | 				"altitude": 37
+ingress-api_1               | 			}
+ingress-api_1               | 		]
+ingress-api_1               | 	}
+ingress-api_1               | }
