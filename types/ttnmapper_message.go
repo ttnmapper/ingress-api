@@ -48,6 +48,7 @@ type TtnMapperUplinkMessage struct {
 }
 
 type TtnMapperGateway struct {
+	NetworkId                   string
 	GatewayId                   string  `json:"gtw_id"`
 	GatewayEui                  string  `json:"gtw_eui,omitempty"`
 	AntennaIndex                uint8   `json:"antenna_index"`
@@ -69,4 +70,7 @@ type TtnMapperGateway struct {
 	// The source can be: gps, config, registry, ip_geolocation or unknown (unknown may be left out)
 	// See proto definition for more info
 	LocationSource string `json:"location_source,omitempty"`
+
+	// Some sources of statuses provide the description
+	Description string `json:"description,omitempty"`
 }

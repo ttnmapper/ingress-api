@@ -14,7 +14,7 @@ func Routes() *chi.Mux {
 	router.Use(
 		render.SetContentType(render.ContentTypeJSON),
 		middleware.RealIP,
-		middleware.Logger,
+		//middleware.Logger,
 		middleware.Compress(5),
 		middleware.StripSlashes,
 		middleware.Recoverer,
@@ -23,11 +23,10 @@ func Routes() *chi.Mux {
 
 	router.Handle("/metrics", promhttp.Handler())
 
-	router.Route("/v1", func(r chi.Router) {
-		r.Mount("/ttn", TtnRoutes())
-		r.Mount("/android", AndroidRoutes())
-		r.Mount("/ios", IosRoutes())
-	})
+	router.Mount("/ttn", TtnRoutes())
+	router.Mount("/tts", TtsRoutes())
+	router.Mount("/android", AndroidRoutes())
+	router.Mount("/ios", IosRoutes())
 
 	return router
 }

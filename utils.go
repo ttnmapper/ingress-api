@@ -10,7 +10,7 @@ import (
 	"strings"
 	"time"
 	"ttnmapper-ingress-api/ttnV2"
-	"ttnmapper-ingress-api/ttnV3/models"
+	"ttnmapper-ingress-api/ttsV3/models"
 	"ttnmapper-ingress-api/types"
 )
 
@@ -224,13 +224,13 @@ func CopyTtnV3Fields(packetIn models.V3ApplicationUp, packetOut *types.TtnMapper
 	}
 
 	if packetIn.UplinkMessage.Settings.DataRate.Lora != nil {
-		log.Println("Is LORA")
+		//log.Println("Is LORA")
 		packetOut.Modulation = "LORA"
 		packetOut.SpreadingFactor = uint8(packetIn.UplinkMessage.Settings.DataRate.Lora.SpreadingFactor)
 		packetOut.Bandwidth = uint64(packetIn.UplinkMessage.Settings.DataRate.Lora.Bandwidth)
 	}
 	if packetIn.UplinkMessage.Settings.DataRate.Fsk != nil {
-		log.Println("Is FSK")
+		//log.Println("Is FSK")
 		packetOut.Modulation = "FSK"
 		packetOut.Bitrate = uint64(packetIn.UplinkMessage.Settings.DataRate.Fsk.BitRate)
 	}

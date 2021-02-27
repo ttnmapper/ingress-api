@@ -9,7 +9,6 @@ import (
 	"net/http"
 	_ "time"
 	"ttnmapper-ingress-api/ttnV2"
-	"ttnmapper-ingress-api/ttnV3/models"
 	"ttnmapper-ingress-api/types"
 )
 
@@ -18,8 +17,6 @@ func TtnRoutes() *chi.Mux {
 
 	router.Post("/v2", PostTtnV2)
 	router.Get("/v2", GetTtnV2)
-	router.Post("/v3", PostTtnV3)
-	router.Get("/v3", GetTtnV3)
 
 	return router
 }
@@ -108,106 +105,6 @@ func PostTtnV2(w http.ResponseWriter, r *http.Request) {
 
 func GetTtnV2(w http.ResponseWriter, r *http.Request) {
 	response := make(map[string]interface{})
-	response["message"] = "GET test success"
-	render.JSON(w, r, response)
-}
-
-/*
-TTN and TTI V3 stacks Webhook
-*/
-func PostTtnV3(w http.ResponseWriter, r *http.Request) {
-
-	// Read data
-	response := make(map[string]interface{})
-	defer render.JSON(w, r, response)
-
-	email := r.Header.Get("Authorization")
-	log.Print(email)
-	if err := validateEmail(email); err != nil {
-		response["success"] = false
-		response["message"] = err.Error()
-		log.Print(err.Error())
-		return
-	}
-
-	body, err := ioutil.ReadAll(r.Body)
-	if err != nil {
-		response["success"] = false
-		response["message"] = "Can not read POST body"
-		log.Print(err.Error())
-		return
-	}
-
-	var packetIn models.V3ApplicationUp
-	if err := json.Unmarshal(body, &packetIn); err != nil {
-		response["success"] = false
-		response["message"] = "Can not parse json body"
-		log.Print(err.Error())
-		return
-	}
-
-	if packetIn.UplinkMessage.DecodedPayload == nil {
-		response["success"] = false
-		response["message"] = "payload_fields not set"
-		log.Print("payload_fields not set")
-		return
-	}
-
-	var packetOut types.TtnMapperUplinkMessage
-	packetOut.NetworkType = types.NS_TTS_V3
-	packetOut.NetworkAddress = r.RemoteAddr
-
-	// TODO Try to use the location from the metadata first. This is likely the location set on the console.
-	// TODO Need to update the ttnV3 models to include this data
-	//if packetIn.UplinkMessage. != 0 && packetIn.Metadata.Longitude != 0 {
-	//	packetOut.AccuracySource = packetIn.Metadata.Source
-	//	packetOut.Latitude = float64(packetIn.Metadata.Latitude)
-	//	packetOut.Longitude = float64(packetIn.Metadata.Longitude)
-	//	packetOut.Altitude = float64(packetIn.Metadata.Altitude)
-	//}
-
-	// If payload fields are available, try getting coordinates from there
-	if packetIn.UplinkMessage.DecodedPayload != nil {
-		if err := ParsePayloadFields(packetIn.UplinkMessage.FPort, packetIn.UplinkMessage.DecodedPayload, &packetOut); err != nil {
-			response["success"] = false
-			response["message"] = err.Error()
-			log.Print(err.Error())
-			return
-		}
-	}
-
-	packetOut.UserAgent = "ttn-v3-integration"
-	packetOut.UserId = email
-
-	// For V3 assume the experiment is passed via header so that we do not need a custom model
-	experiment := r.Header.Get("Experiment")
-	if experiment != "" {
-		packetOut.Experiment = experiment
-	}
-
-	if packetOut.Experiment == "" {
-		if err := CheckData(packetOut); err != nil {
-			response["success"] = false
-			response["message"] = err.Error()
-			log.Print(err.Error())
-			return
-		}
-
-		SanitizeData(&packetOut)
-	}
-
-	// Add metadata fields
-	CopyTtnV3Fields(packetIn, &packetOut)
-
-	publishChannel <- packetOut
-
-	response["success"] = true
-	response["message"] = "New packet accepted into queue"
-}
-
-func GetTtnV3(w http.ResponseWriter, r *http.Request) {
-	response := make(map[string]interface{})
-	response["success"] = true
 	response["message"] = "GET test success"
 	render.JSON(w, r, response)
 }
