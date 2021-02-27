@@ -6,7 +6,9 @@ import (
 	"github.com/go-chi/render"
 	"io/ioutil"
 	"log"
+	"math/rand"
 	"net/http"
+	"strconv"
 	_ "time"
 	"ttnmapper-ingress-api/ttnV2"
 	"ttnmapper-ingress-api/types"
@@ -27,15 +29,17 @@ Authorization header contains email address
 There is an extra Experiment field added to the model
 */
 func PostTtnV2(w http.ResponseWriter, r *http.Request) {
+	i := strconv.Itoa(rand.Intn(100))
 
 	response := make(map[string]interface{})
 	defer render.JSON(w, r, response)
 
 	email := r.Header.Get("Authorization")
+	log.Print("["+i+"] User: ", email)
 	if err := validateEmail(email); err != nil {
 		response["success"] = false
 		response["message"] = err.Error()
-		log.Print(err.Error())
+		log.Print("[" + i + "] " + err.Error())
 		return
 	}
 
@@ -43,7 +47,7 @@ func PostTtnV2(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		response["success"] = false
 		response["message"] = "Can not read POST body"
-		log.Print(err.Error())
+		log.Print("[" + i + "] " + err.Error())
 		return
 	}
 
@@ -51,17 +55,15 @@ func PostTtnV2(w http.ResponseWriter, r *http.Request) {
 	if err := json.Unmarshal(body, &packetIn); err != nil {
 		response["success"] = false
 		response["message"] = "Can not parse json body"
-		log.Print(err.Error())
+		log.Print("[" + i + "] " + err.Error())
 		return
 	}
-
-	log.Println(email, " ", packetIn.AppID, " ", packetIn.DevID)
 
 	var packetOut types.TtnMapperUplinkMessage
 	packetOut.NetworkType = types.NS_TTN_V2
 	packetOut.NetworkAddress = r.RemoteAddr
 
-	packetOut.UserAgent = "ttn-v2-integration"
+	packetOut.UserAgent = r.Header.Get("USER-AGENT")
 	packetOut.UserId = email
 	packetOut.Experiment = packetIn.Experiment
 
@@ -78,7 +80,7 @@ func PostTtnV2(w http.ResponseWriter, r *http.Request) {
 		if err := ParsePayloadFields(int64(packetIn.FPort), packetIn.PayloadFields, &packetOut); err != nil {
 			response["success"] = false
 			response["message"] = err.Error()
-			log.Print(err.Error())
+			log.Print("[" + i + "] " + err.Error())
 			return
 		}
 	}
@@ -88,7 +90,7 @@ func PostTtnV2(w http.ResponseWriter, r *http.Request) {
 		if err := CheckData(packetOut); err != nil {
 			response["success"] = false
 			response["message"] = err.Error()
-			log.Print(err.Error())
+			log.Print("["+i+"] Data invalid: ", err.Error())
 			return
 		}
 		SanitizeData(&packetOut)
@@ -96,6 +98,9 @@ func PostTtnV2(w http.ResponseWriter, r *http.Request) {
 
 	// Copy metadata fields
 	CopyTtnV2Fields(packetIn, &packetOut)
+
+	log.Print("["+i+"] Network: ", packetOut.NetworkType, "://", packetOut.NetworkAddress)
+	log.Print("["+i+"] Device: ", packetOut.AppID, " - ", packetOut.DevID)
 
 	publishChannel <- packetOut
 

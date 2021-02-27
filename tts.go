@@ -126,9 +126,7 @@ func PostTtsV3Uplink(w http.ResponseWriter, r *http.Request) {
 
 	// For V3 assume the experiment is passed via header so that we do not need a custom model
 	experiment := r.Header.Get("TTNMAPPERORG-EXPERIMENT")
-	if experiment != "" {
-		packetOut.Experiment = experiment
-	}
+	packetOut.Experiment = experiment // Default header is empty
 
 	// TODO move the sanity check to where we insert the data into the db, as invalid data is still used to update gateway last seen
 	if packetOut.Experiment == "" {
