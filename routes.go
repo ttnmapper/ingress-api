@@ -14,7 +14,7 @@ func Routes() *chi.Mux {
 	router.Use(
 		render.SetContentType(render.ContentTypeJSON),
 		middleware.RealIP,
-		middleware.Logger,
+		//middleware.Logger,
 		middleware.Compress(5),
 		middleware.StripSlashes,
 		middleware.Recoverer,
