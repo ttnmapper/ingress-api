@@ -132,6 +132,8 @@ func CopyTtnV2Fields(packetIn ttnV2.UplinkMessage, packetOut *types.TtnMapperUpl
 		*/
 		gatewayOut := types.TtnMapperGateway{}
 
+		// TODO use network reported by packetbroker
+		gatewayOut.NetworkId = packetOut.NetworkType + "://" + packetOut.NetworkAddress
 		gatewayOut.GatewayId = gatewayIn.GtwID
 
 		// If the id is eui-deadbeef, strip the prefix, capitalize and use as EUI
@@ -283,6 +285,8 @@ func CopyTtnV3Fields(packetIn models.V3ApplicationUp, packetOut *types.TtnMapper
 		*/
 		gatewayOut := types.TtnMapperGateway{}
 
+		// TODO use network reported by packetbroker
+		gatewayOut.NetworkId = packetOut.NetworkType + "://" + packetOut.NetworkAddress
 		gatewayOut.GatewayId = gatewayIn.GatewayIds.GatewayID
 		gatewayOut.GatewayEui = gatewayIn.GatewayIds.Eui
 
