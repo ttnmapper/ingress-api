@@ -147,6 +147,9 @@ func PostAndroidV4(w http.ResponseWriter, r *http.Request) {
 		SanitizeData(&receivedPacket)
 	}
 
+	// If the V3 server tenant is ttn, strip tenant part
+	receivedPacket.NetworkAddress = strings.TrimPrefix(receivedPacket.NetworkAddress, "ttn.")
+
 	log.Println(prettyPrint(receivedPacket))
 
 	publishChannel <- receivedPacket
