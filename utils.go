@@ -12,6 +12,8 @@ import (
 	"ttnmapper-ingress-api/ttnV2"
 	"ttnmapper-ingress-api/ttsV3/models"
 	"ttnmapper-ingress-api/types"
+
+	chirpstack "github.com/brocaar/chirpstack-api/go/v3/as/integration"
 )
 
 func failOnError(err error, msg string) {
@@ -336,5 +338,58 @@ func CopyTtnV3Fields(packetIn models.V3ApplicationUp, packetOut *types.TtnMapper
 
 		packetOut.Gateways = append(packetOut.Gateways, gatewayOut)
 
+	}
+}
+
+func CopyChirpV3Fields(packetIn chirpstack.UplinkEvent, packetOut *types.TtnMapperUplinkMessage) {
+	packetOut.Time = time.Now().UnixNano()
+
+	packetOut.AppID = packetIn.ApplicationName
+	packetOut.DevID = packetIn.DeviceName
+	packetOut.DevEui = strings.ToUpper(string(packetIn.DevEui))
+
+	packetOut.FPort = uint8(packetIn.FPort)
+	packetOut.FCnt = int64(packetIn.FCnt)
+
+	packetOut.Frequency = uint64(packetIn.TxInfo.Frequency)
+	packetOut.Modulation = packetIn.TxInfo.Modulation.String()
+
+	if packetOut.Modulation == "LORA" {
+		modInfo := packetIn.TxInfo.GetLoraModulationInfo()
+		packetOut.SpreadingFactor = uint8(modInfo.SpreadingFactor)
+		packetOut.Bandwidth = uint64(modInfo.Bandwidth * 1000) // kHz to Hz
+		packetOut.CodingRate = modInfo.CodeRate
+	} else { // FSK
+		modInfo := packetIn.TxInfo.GetFskModulationInfo()
+		packetOut.Bitrate = uint64(modInfo.Datarate)
+	}
+
+	for _, gatewayIn := range packetIn.RxInfo {
+		gatewayOut := types.TtnMapperGateway{}
+
+		// gatewayOut.NetworkId = ... // TODO: Get NetworkID
+		gwEUI := string(gatewayIn.GatewayId)
+		gatewayOut.GatewayId = "eui-" + strings.ToLower(gwEUI)
+		gatewayOut.GatewayEui = strings.ToUpper(gwEUI)
+		// gatewayOut.Description = ... // TODO: Get Gateway Name
+
+		if gatewayIn.Time != nil {
+			// gatewayOut.Time = ... // TODO: Convert to Mapper.TIME
+			gatewayOut.Timestamp = uint32(gatewayIn.Time.Nanos)
+		}
+		gatewayOut.AntennaIndex = uint8(gatewayIn.Antenna)
+		gatewayOut.ChannelIndex = gatewayIn.Channel
+		gatewayOut.Rssi = float32(gatewayIn.Rssi)
+		// Missing Channel/Signal RSSI
+		gatewayOut.Snr = float32(gatewayIn.LoraSnr)
+		if gatewayIn.Location != nil {
+			gatewayOut.Latitude = gatewayIn.Location.Latitude
+			gatewayOut.Longitude = gatewayIn.Location.Longitude
+			gatewayOut.Altitude = int32(gatewayIn.Location.Altitude)
+			gatewayOut.LocationAccuracy = int32(gatewayIn.Location.Accuracy)
+			gatewayOut.LocationSource = gatewayIn.Location.Source.String()
+		}
+
+		packetOut.Gateways = append(packetOut.Gateways, gatewayOut)
 	}
 }
