@@ -68,6 +68,13 @@ func PostChirpV3Event(w http.ResponseWriter, r *http.Request) {
 	CopyChirpV3Fields(packetIn, &packetOut)
 	packetOut.NetworkAddress = r.RemoteAddr //Might not work if behind a load-balancer
 
+	if err := ParseChirpV3Payload(packetIn, &packetOut); err != nil {
+		response["success"] = false
+		response["message"] = err.Error()
+		log.Print("[" + i + "] " + err.Error())
+		return
+	}
+
 	log.Print("["+i+"] Network: ", packetOut.NetworkType, "://", packetOut.NetworkAddress)
 	log.Print("["+i+"] Device: ", packetOut.AppID, " - ", packetOut.DevID)
 

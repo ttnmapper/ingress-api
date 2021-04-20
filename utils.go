@@ -393,3 +393,16 @@ func CopyChirpV3Fields(packetIn chirpstack.UplinkEvent, packetOut *types.TtnMapp
 		packetOut.Gateways = append(packetOut.Gateways, gatewayOut)
 	}
 }
+
+func ParseChirpV3Payload(packetIn chirpstack.UplinkEvent, packetOut *types.TtnMapperUplinkMessage) error {
+	var payloadFieldsIn map[string]interface{}
+	if err := json.Unmarshal([]byte(packetIn.ObjectJson), &payloadFieldsIn); err != nil {
+		return err
+	}
+
+	if err := ParsePayloadFields(int64(packetOut.FPort), payloadFieldsIn, packetOut); err != nil {
+		return err
+	}
+
+	return nil
+}
