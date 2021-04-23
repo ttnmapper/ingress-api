@@ -15,6 +15,9 @@ type TtnMapperUplinkMessage struct {
 		A hostname or IP address to uniquely identify the network server
 	*/
 	NetworkAddress string `json:"network_address,omitempty"`
+	// NetworkId string `json:"network_id,omitempty"`
+	// TODO: Combine network type and network address into a single networkid field which is globally unique.
+	// We will start using a combination of the LoRaWAN NetID and a TenantID soon.
 
 	AppID  string `json:"app_id"`
 	DevID  string `json:"dev_id"`
@@ -48,20 +51,38 @@ type TtnMapperUplinkMessage struct {
 }
 
 type TtnMapperGateway struct {
-	NetworkId                   string
-	GatewayId                   string  `json:"gtw_id"`
-	GatewayEui                  string  `json:"gtw_eui,omitempty"`
-	AntennaIndex                uint8   `json:"antenna_index"`
-	Time                        int64   `json:"time,omitempty"`
-	Timestamp                   uint32  `json:"timestamp,omitempty"`
-	FineTimestamp               uint64  `json:"fine_timestamp,omitempty"`
-	FineTimestampEncrypted      []byte  `json:"fine_timestamp_encrypted,omitempty"`
-	FineTimestampEncryptedKeyId string  `json:"encrypted_fine_timestamp_key_id,omitempty"`
-	ChannelIndex                uint32  `json:"channel,omitempty"`
-	Rssi                        float32 `json:"rssi,omitempty"` // same as channel rssi
-	SignalRssi                  float32 `json:"signal_rssi,omitempty"`
-	Snr                         float32 `json:"snr,omitempty"`
+	// Globally unique identifier for the specific network instance.
+	// Normally `packetOut.NetworkType + "://" + packetOut.NetworkAddress` unless the data is forwarded via the packet broker (ie peering/roaming)
+	// TODO: See comment in TtnMapperUplinkMessage
+	NetworkId string
+	// Unique ID for this gateway for the respective network server
+	// Use `"eui-" + strings.ToLower(gatewayEui)` if not available
+	GatewayId string `json:"gtw_id"`
+	// Globally unique identifier for the gateway. EUI64 as an upper case hex string, with 0 prefixes, thus always 16 characters long.
+	GatewayEui string `json:"gtw_eui,omitempty"`
+	// Some gateways have more than one concentrator and more than one antenna. They could be on different frequency plans.
+	AntennaIndex uint8 `json:"antenna_index"`
+	// Time info
+	// see https://github.com/Lora-net/packet_forwarder/blob/master/PROTOCOL.TXT section 4
+	// Wall clock time
+	Time int64 `json:"time,omitempty"`
+	// Gateway concentrator internal clock counter value
+	Timestamp uint32 `json:"timestamp,omitempty"`
+	// Fine timestamp if not encrypted
+	FineTimestamp uint64 `json:"fine_timestamp,omitempty"`
+	// Fine timestamp if encrypted
+	FineTimestampEncrypted []byte `json:"fine_timestamp_encrypted,omitempty"`
+	// Fine timestamp AES key ID if encrypted
+	FineTimestampEncryptedKeyId string `json:"encrypted_fine_timestamp_key_id,omitempty"`
+	// Gateway concentrator channel index
+	ChannelIndex uint32 `json:"channel,omitempty"`
+	// RSSI / Channel RSSI
+	Rssi float32 `json:"rssi,omitempty"`
+	// Only new gateway architectures provide Signal RSSI values.
+	SignalRssi float32 `json:"signal_rssi,omitempty"`
+	Snr        float32 `json:"snr,omitempty"`
 
+	// Location of the gateway. Actually it should be antenna location, but we assume they are very close together.
 	Latitude         float64 `json:"latitude,omitempty"`
 	Longitude        float64 `json:"longitude,omitempty"`
 	Altitude         int32   `json:"altitude,omitempty"`

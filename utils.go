@@ -1,7 +1,9 @@
 package main
 
 import (
+	"encoding/hex"
 	"encoding/json"
+	"github.com/brocaar/chirpstack-api/go/v3/gw"
 	"log"
 	"math"
 	"os"
@@ -346,7 +348,7 @@ func CopyChirpV3Fields(packetIn chirpstack.UplinkEvent, packetOut *types.TtnMapp
 
 	packetOut.AppID = packetIn.ApplicationName
 	packetOut.DevID = packetIn.DeviceName
-	packetOut.DevEui = strings.ToUpper(string(packetIn.DevEui))
+	packetOut.DevEui = strings.ToUpper(hex.EncodeToString(packetIn.DevEui))
 
 	packetOut.FPort = uint8(packetIn.FPort)
 	packetOut.FCnt = int64(packetIn.FCnt)
@@ -367,21 +369,36 @@ func CopyChirpV3Fields(packetIn chirpstack.UplinkEvent, packetOut *types.TtnMapp
 	for _, gatewayIn := range packetIn.RxInfo {
 		gatewayOut := types.TtnMapperGateway{}
 
-		// gatewayOut.NetworkId = ... // TODO: Get NetworkID
-		gwEUI := string(gatewayIn.GatewayId)
-		gatewayOut.GatewayId = "eui-" + strings.ToLower(gwEUI)
-		gatewayOut.GatewayEui = strings.ToUpper(gwEUI)
+		gatewayOut.NetworkId = packetOut.NetworkType + "://" + packetOut.NetworkAddress
+		gatewayEui := hex.EncodeToString(gatewayIn.GatewayId)
+		gatewayOut.GatewayId = "eui-" + strings.ToLower(gatewayEui)
+		gatewayOut.GatewayEui = strings.ToUpper(gatewayEui)
 		// gatewayOut.Description = ... // TODO: Get Gateway Name
 
+		// gateway Time is the wall clock time
 		if gatewayIn.Time != nil {
-			// gatewayOut.Time = ... // TODO: Convert to Mapper.TIME
-			gatewayOut.Timestamp = uint32(gatewayIn.Time.Nanos)
+			gatewayOut.Time = int64(gatewayIn.Time.Nanos)
 		}
+
+		// gateway Timestamp is the internal clock counter of the concentrator
+		// not provided by ChirpStack
+
+		// Fine timestamp - not encrypted
+		if gatewayIn.FineTimestampType == gw.FineTimestampType_PLAIN {
+			gatewayOut.FineTimestamp = uint64(gatewayIn.GetPlainFineTimestamp().Time.Nanos)
+		}
+		// Fine timestamp - encrypted
+		if gatewayIn.FineTimestampType == gw.FineTimestampType_ENCRYPTED {
+			gatewayOut.FineTimestampEncrypted = gatewayIn.GetEncryptedFineTimestamp().EncryptedNs
+			gatewayOut.FineTimestampEncryptedKeyId = strconv.Itoa(int(gatewayIn.GetEncryptedFineTimestamp().AesKeyIndex))
+		}
+
 		gatewayOut.AntennaIndex = uint8(gatewayIn.Antenna)
 		gatewayOut.ChannelIndex = gatewayIn.Channel
 		gatewayOut.Rssi = float32(gatewayIn.Rssi)
 		// Missing Channel/Signal RSSI
 		gatewayOut.Snr = float32(gatewayIn.LoraSnr)
+
 		if gatewayIn.Location != nil {
 			gatewayOut.Latitude = gatewayIn.Location.Latitude
 			gatewayOut.Longitude = gatewayIn.Location.Longitude

@@ -100,7 +100,7 @@ func validateEmail(email string) (err error) {
 	//}()
 
 	// 1. try local dns
-	ips, err := net.LookupMX(domain)
+	mxs, err := net.LookupMX(domain)
 	if err != nil {
 
 		r := net.Resolver{
@@ -131,8 +131,8 @@ func validateEmail(email string) (err error) {
 		}
 	}
 
-	for _, ip := range ips {
-		log.Printf("(Local) mail server: %s", ip)
+	for _, mx := range mxs {
+		log.Printf("(Local) mail server: %s", mx.Host)
 	}
 
 	emailCache[domain] = true
