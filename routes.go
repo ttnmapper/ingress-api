@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/766b/chi-prometheus"
+	chiprometheus "github.com/766b/chi-prometheus"
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
 	"github.com/go-chi/render"
@@ -27,6 +27,7 @@ func Routes() *chi.Mux {
 	router.Mount("/tts", TtsRoutes())
 	router.Mount("/android", AndroidRoutes())
 	router.Mount("/ios", IosRoutes())
+	router.Mount("/chirp", ChirpRoutes())
 
 	return router
 }
