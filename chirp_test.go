@@ -1,6 +1,7 @@
 package main
 
 import (
+	"log"
 	"os"
 	"testing"
 	"ttnmapper-ingress-api/types"
@@ -42,6 +43,9 @@ func TestChirpV3(t *testing.T) {
 	//   }
 	CopyChirpV3Fields(packetIn, &packetOut)
 	gw := packetOut.Gateways[0]
+
+	log.Println(prettyPrint(packetIn))
+	log.Println(prettyPrint(packetOut))
 
 	gatewayCheck := gw.Latitude == 52.445313166666665 && gw.Longitude == 10.8140175 &&
 		gw.Altitude == 100 && gw.LocationSource == "UNKNOWN" && gw.LocationAccuracy == 0
