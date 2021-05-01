@@ -8,8 +8,8 @@ import (
 	"log"
 	"math/rand"
 	"net/http"
-	"net/url"
 	"strconv"
+	"strings"
 	_ "time"
 	"ttnmapper-ingress-api/ttsV3/models"
 	"ttnmapper-ingress-api/types"
@@ -28,6 +28,8 @@ func TtsRoutes() *chi.Mux {
 
 /*
 TTS V3 Webhook
+Header TTNMAPPERORG-USER contains the email address of the user for identification of the source of the data
+Header TTNMAPPERORG-EXPERIMENT indicates if mapping is done to an experiment, and the experiment name
 */
 func PostTtsV3Uplink(w http.ResponseWriter, r *http.Request) {
 	i := strconv.Itoa(rand.Intn(100))
@@ -82,25 +84,36 @@ func PostTtsV3Uplink(w http.ResponseWriter, r *http.Request) {
 	var packetOut types.TtnMapperUplinkMessage
 	packetOut.NetworkType = types.NS_TTS_V3
 
-	// Use X-DOWNLINK-PUSH header to determine tenant and cluster
-	pushUrlHeader := r.Header.Get("X-DOWNLINK-PUSH")
-	if pushUrlHeader == "" {
+	// Use X-TTS-DOMAIN header to determine tenant and cluster
+	ttsDomain := r.Header.Get("X-TTS-DOMAIN")
+	if ttsDomain == "" {
 		w.WriteHeader(http.StatusBadRequest)
 		response["success"] = false
 		response["message"] = "Originating network server header not set"
-		log.Print("[" + i + "] X-DOWNLINK-PUSH header not set")
+		log.Print("[" + i + "] X-TTS-DOMAIN header not set")
 		return
 	}
 
-	pushUrl, err := url.Parse(pushUrlHeader)
-	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		response["success"] = false
-		response["message"] = "Can't determine originating network server instance"
-		log.Print("[" + i + "] " + err.Error())
-		return
+	/*
+		Determine the network
+		X-Tts-Domain suffix .cloud.thethings.network is The Things Stack Community Edition (The Things Network)
+		X-Tts-Domain suffix .cloud.thethings.industries is The Things Stack Cloud (The Things Industries)
+		home_network_net_id 000013 and home_network_tenant_id ttn is The Things Network
+		home_network_net_id 000013 with any other home_network_tenant_id can be anything: The Things Stack Cloud, The Things Stack Enterprise, The Things Stack Open Source, even ChirpStack using Passive Roaming and using address space of TTN
+
+		Packet Broker will combine tenant ID and cluster ID in the NSID (tenant-id@cluster-id) when it gets LoRaWAN Backend Interfaces 1.1 support.
+		TODO: Follow what happens on https://github.com/TheThingsNetwork/lorawan-stack/issues/4076
+	*/
+	if strings.HasSuffix(ttsDomain, ".cloud.thethings.network") {
+		ttsDomain = "ttn@000013"
 	}
-	packetOut.NetworkAddress = pushUrl.Hostname()
+	if strings.HasSuffix(ttsDomain, ".cloud.thethings.industries") {
+		tenantId := strings.Split(ttsDomain, ".")[0]
+		ttsDomain = tenantId + "@000013"
+	}
+
+	packetOut.NetworkAddress = ttsDomain                                           // ttn@000013
+	packetOut.NetworkId = packetOut.NetworkType + "://" + packetOut.NetworkAddress // NS_TTS_V3://ttn@000013
 
 	// TODO Try to use the location from the metadata first. This is likely the location set on the console.
 	// TODO Need to update the ttsV3 models to include this data
@@ -147,8 +160,8 @@ func PostTtsV3Uplink(w http.ResponseWriter, r *http.Request) {
 	log.Print("["+i+"] Device: ", packetOut.AppID, " - ", packetOut.DevID)
 
 	// Push this new packet into the stack
-	publishChannel <- packetOut
-	//log.Println("["+i+"] "+prettyPrint(packetOut))
+	//publishChannel <- packetOut
+	log.Println("[" + i + "] " + prettyPrint(packetOut))
 
 	// TODO check if habhub header is set and true
 	// TODO check if aprs header is set and true

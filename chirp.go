@@ -26,6 +26,7 @@ func ChirpRoutes() *chi.Mux {
 
 /*
 Chirpstack V3 (Event) Webhook
+No authorization is done as it is assumed that a ChirpStack instance is a private network
 */
 func PostChirpV3Event(w http.ResponseWriter, r *http.Request) {
 	i := strconv.Itoa(rand.Intn(100))

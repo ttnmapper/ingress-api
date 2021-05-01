@@ -290,7 +290,36 @@ func CopyTtnV3Fields(packetIn models.V3ApplicationUp, packetOut *types.TtnMapper
 		gatewayOut := types.TtnMapperGateway{}
 
 		// TODO use network reported by packetbroker
+		/*
+			Determine the network
+			X-Tts-Domain suffix .cloud.thethings.network is The Things Stack Community Edition (The Things Network)
+			X-Tts-Domain suffix .cloud.thethings.industries is The Things Stack Cloud (The Things Industries)
+			home_network_net_id 000013 and home_network_tenant_id ttn is The Things Network
+			home_network_net_id 000013 with any other home_network_tenant_id can be anything: The Things Stack Cloud, The Things Stack Enterprise, The Things Stack Open Source, even ChirpStack using Passive Roaming and using address space of TTN
+		*/
+		/*
+		   "gateway_ids":{
+		      "gateway_id":"packetbroker"
+		   },
+		   "packet_broker":{
+		      "message_id":"01EZF0NS39X53JDXJGF8AC2R1Z",
+		      "forwarder_net_id":"000013",
+		      "forwarder_tenant_id":"ttn",
+		      "forwarder_cluster_id":"ttn-v2-eu-3",
+		      "home_network_net_id":"000013",
+		      "home_network_tenant_id":"ttn",
+		      "home_network_cluster_id":"ttn-eu1",
+		*/
+		if gatewayIn.GatewayIds.GatewayID == "packetbroker" {
+			// TODO: update types if gatewayIn.PacketBroker
+			/*
+				ttsDomain = forwrder_tenant_id@forwarder_net_id // "ttn@000013"
+			*/
+		}
+
 		gatewayOut.NetworkId = packetOut.NetworkType + "://" + packetOut.NetworkAddress
+
+		// The gateway's ID - unique per network
 		gatewayOut.GatewayId = gatewayIn.GatewayIds.GatewayID
 		gatewayOut.GatewayEui = gatewayIn.GatewayIds.Eui
 

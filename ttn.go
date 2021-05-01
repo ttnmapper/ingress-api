@@ -32,7 +32,7 @@ func PostTtnV2(w http.ResponseWriter, r *http.Request) {
 	i := strconv.Itoa(rand.Intn(100))
 
 	response := make(map[string]interface{})
-	defer render.JSON(w, r, response)
+	defer render.JSON(w, r, response) // TODO: this defer makes a copy of the response object, so it is always empty
 
 	email := r.Header.Get("Authorization")
 	log.Print("["+i+"] User: ", email)

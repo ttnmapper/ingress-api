@@ -15,9 +15,10 @@ type TtnMapperUplinkMessage struct {
 		A hostname or IP address to uniquely identify the network server
 	*/
 	NetworkAddress string `json:"network_address,omitempty"`
-	// NetworkId string `json:"network_id,omitempty"`
-	// TODO: Combine network type and network address into a single networkid field which is globally unique.
+
+	// Combine network type and network address into a single networkid field which is globally unique.
 	// We will start using a combination of the LoRaWAN NetID and a TenantID soon.
+	NetworkId string `json:"network_id,omitempty"`
 
 	AppID  string `json:"app_id"`
 	DevID  string `json:"dev_id"`
