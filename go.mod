@@ -9,10 +9,6 @@ require (
 	github.com/brocaar/chirpstack-api/go/v3 v3.9.7
 	github.com/go-chi/chi v3.3.3+incompatible
 	github.com/go-chi/render v1.0.1
-	github.com/go-openapi/errors v0.19.4 // indirect
-	github.com/go-openapi/strfmt v0.19.5 // indirect
-	github.com/go-openapi/swag v0.19.8 // indirect
-	github.com/go-openapi/validate v0.19.7 // indirect
 	github.com/gogo/protobuf v1.3.1
 	github.com/golang/protobuf v1.4.2
 	github.com/grpc-ecosystem/grpc-gateway v1.16.0 // indirect
