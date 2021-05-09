@@ -1,12 +1,6 @@
 # github.com/766b/chi-prometheus v0.0.0-20180509160047-46ac2b31aa30
 ## explicit
 github.com/766b/chi-prometheus
-# github.com/PuerkitoBio/purell v1.1.1
-github.com/PuerkitoBio/purell
-# github.com/PuerkitoBio/urlesc v0.0.0-20170810143723-de5bf2ad4578
-github.com/PuerkitoBio/urlesc
-# github.com/asaskevich/govalidator v0.0.0-20190424111038-f61b66f89f4a
-github.com/asaskevich/govalidator
 # github.com/beorn7/perks v1.0.1
 github.com/beorn7/perks/quantile
 # github.com/blang/semver v3.5.1+incompatible
@@ -29,34 +23,16 @@ github.com/go-chi/chi/middleware
 # github.com/go-chi/render v1.0.1
 ## explicit
 github.com/go-chi/render
-# github.com/go-openapi/analysis v0.19.5
-github.com/go-openapi/analysis
-github.com/go-openapi/analysis/internal
 # github.com/go-openapi/errors v0.19.4
 ## explicit
-github.com/go-openapi/errors
-# github.com/go-openapi/jsonpointer v0.19.3
-github.com/go-openapi/jsonpointer
-# github.com/go-openapi/jsonreference v0.19.3
-github.com/go-openapi/jsonreference
-# github.com/go-openapi/loads v0.19.4
-github.com/go-openapi/loads
-# github.com/go-openapi/runtime v0.19.4
-github.com/go-openapi/runtime
-# github.com/go-openapi/spec v0.19.3
-github.com/go-openapi/spec
 # github.com/go-openapi/strfmt v0.19.5
 ## explicit
-github.com/go-openapi/strfmt
 # github.com/go-openapi/swag v0.19.8
 ## explicit
-github.com/go-openapi/swag
 # github.com/go-openapi/validate v0.19.7
 ## explicit
-github.com/go-openapi/validate
-# github.com/go-stack/stack v1.8.0
-github.com/go-stack/stack
 # github.com/gogo/protobuf v1.3.1
+## explicit
 github.com/gogo/protobuf/gogoproto
 github.com/gogo/protobuf/jsonpb
 github.com/gogo/protobuf/proto
@@ -83,16 +59,10 @@ github.com/gotnospirit/messageformat
 github.com/grpc-ecosystem/grpc-gateway/internal
 github.com/grpc-ecosystem/grpc-gateway/runtime
 github.com/grpc-ecosystem/grpc-gateway/utilities
-# github.com/mailru/easyjson v0.7.0
-github.com/mailru/easyjson/buffer
-github.com/mailru/easyjson/jlexer
-github.com/mailru/easyjson/jwriter
 # github.com/mattn/go-isatty v0.0.12
 github.com/mattn/go-isatty
 # github.com/matttproud/golang_protobuf_extensions v1.0.1
 github.com/matttproud/golang_protobuf_extensions/pbutil
-# github.com/mitchellh/mapstructure v1.3.0
-github.com/mitchellh/mapstructure
 # github.com/pkg/errors v0.9.1
 ## explicit
 github.com/pkg/errors
@@ -129,13 +99,6 @@ github.com/vmihailenco/msgpack/v5/codes
 github.com/vmihailenco/tagparser
 github.com/vmihailenco/tagparser/internal
 github.com/vmihailenco/tagparser/internal/parser
-# go.mongodb.org/mongo-driver v1.1.2
-go.mongodb.org/mongo-driver/bson
-go.mongodb.org/mongo-driver/bson/bsoncodec
-go.mongodb.org/mongo-driver/bson/bsonrw
-go.mongodb.org/mongo-driver/bson/bsontype
-go.mongodb.org/mongo-driver/bson/primitive
-go.mongodb.org/mongo-driver/x/bsonx/bsoncore
 # go.thethings.network/lorawan-stack/v3 v3.12.3
 ## explicit
 go.thethings.network/lorawan-stack/v3/pkg/errors
@@ -164,7 +127,6 @@ golang.org/x/text/secure/bidirule
 golang.org/x/text/transform
 golang.org/x/text/unicode/bidi
 golang.org/x/text/unicode/norm
-golang.org/x/text/width
 # google.golang.org/appengine v1.6.6
 google.golang.org/appengine
 google.golang.org/appengine/datastore
