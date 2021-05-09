@@ -6,9 +6,13 @@ import (
 	"github.com/go-chi/chi/middleware"
 	"github.com/go-chi/render"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
+	"ttnmapper-ingress-api/chirpstack"
+	"ttnmapper-ingress-api/ttn"
+	"ttnmapper-ingress-api/tts"
+	"ttnmapper-ingress-api/types"
 )
 
-func Routes() *chi.Mux {
+func Routes(publishChannel chan types.TtnMapperUplinkMessage) *chi.Mux {
 	router := chi.NewRouter()
 
 	router.Use(
@@ -23,11 +27,11 @@ func Routes() *chi.Mux {
 
 	router.Handle("/metrics", promhttp.Handler())
 
-	router.Mount("/ttn", TtnRoutes())
-	router.Mount("/tts", TtsRoutes())
+	router.Mount("/ttn", ttn.TtnRoutes(publishChannel))
+	router.Mount("/tts", tts.Routes(publishChannel))
 	router.Mount("/android", AndroidRoutes())
 	router.Mount("/ios", IosRoutes())
-	router.Mount("/chirp", ChirpRoutes())
+	router.Mount("/chirp", chirpstack.ChirpRoutes(publishChannel))
 
 	return router
 }

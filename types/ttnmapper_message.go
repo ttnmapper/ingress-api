@@ -55,7 +55,7 @@ type TtnMapperGateway struct {
 	// Globally unique identifier for the specific network instance.
 	// Normally `packetOut.NetworkType + "://" + packetOut.NetworkAddress` unless the data is forwarded via the packet broker (ie peering/roaming)
 	// TODO: See comment in TtnMapperUplinkMessage
-	NetworkId string
+	NetworkId string `json:"network_id,omitempty"`
 	// Unique ID for this gateway for the respective network server
 	// Use `"eui-" + strings.ToLower(gatewayEui)` if not available
 	GatewayId string `json:"gtw_id"`

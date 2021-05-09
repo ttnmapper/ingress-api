@@ -11,8 +11,10 @@ import (
 	"strconv"
 	"strings"
 	"time"
-	"ttnmapper-ingress-api/ttnV2"
+	"ttnmapper-ingress-api/ttn"
+	types2 "ttnmapper-ingress-api/ttn/ttn_types"
 	"ttnmapper-ingress-api/types"
+	"ttnmapper-ingress-api/utils"
 )
 
 func AndroidRoutes() *chi.Mux {
@@ -53,14 +55,14 @@ func PostAndroidV2(w http.ResponseWriter, r *http.Request) {
 	resultPacket.NetworkAddress = ""
 
 	if resultPacket.Experiment == "" {
-		if err := CheckData(resultPacket); err != nil {
+		if err := utils.CheckData(resultPacket); err != nil {
 			response["success"] = false
 			response["message"] = err.Error()
 			log.Print(err.Error())
 			return
 		}
 
-		SanitizeData(&resultPacket)
+		utils.SanitizeData(&resultPacket)
 	}
 
 	publishChannel <- resultPacket
@@ -98,14 +100,14 @@ func PostAndroidV3(w http.ResponseWriter, r *http.Request) {
 	resultPacket.NetworkType = types.NS_TTN_V2
 	resultPacket.NetworkAddress = ""
 
-	if err := CheckData(resultPacket); err != nil {
+	if err := utils.CheckData(resultPacket); err != nil {
 		response["success"] = false
 		response["message"] = err.Error()
 		log.Print(err.Error())
 		return
 	}
 
-	SanitizeData(&resultPacket)
+	utils.SanitizeData(&resultPacket)
 
 	publishChannel <- resultPacket
 
@@ -138,19 +140,19 @@ func PostAndroidV4(w http.ResponseWriter, r *http.Request) {
 
 	// Only filter and sanitize if it is not an experiment
 	if receivedPacket.Experiment == "" {
-		if err := CheckData(receivedPacket); err != nil {
+		if err := utils.CheckData(receivedPacket); err != nil {
 			response["success"] = false
 			response["message"] = err.Error()
 			log.Print(err.Error())
 			return
 		}
-		SanitizeData(&receivedPacket)
+		utils.SanitizeData(&receivedPacket)
 	}
 
 	// If the V3 server tenant is ttn, strip tenant part
 	receivedPacket.NetworkAddress = strings.TrimPrefix(receivedPacket.NetworkAddress, "ttn.")
 
-	log.Println(prettyPrint(receivedPacket))
+	log.Println(utils.PrettyPrint(receivedPacket))
 
 	publishChannel <- receivedPacket
 	response["success"] = true
@@ -168,12 +170,12 @@ func CopyAndroidV3ToTtnMapper(source types.TtnMapperAndroidMessageV3, destinatio
 	destination.UserAgent = source.UserAgent
 	destination.Experiment = source.Experiment
 
-	packetIn := ttnV2.UplinkMessage{}
+	packetIn := types2.UplinkMessage{}
 
-	// Copy the matching fields in TtnMapperAndroidMessageV3 to ttnV2.UplinkMessage
+	// Copy the matching fields in TtnMapperAndroidMessageV3 to ttn.UplinkMessage
 	deepcopier.Copy(source).To(&packetIn)
-	// Copy and format the ttnV2.UplinkMessage fields we are interested in into destination
-	CopyTtnV2Fields(packetIn, destination)
+	// Copy and format the ttn.UplinkMessage fields we are interested in into destination
+	ttn.CopyTtnV2Fields(packetIn, destination)
 }
 
 func CopyAndroidV2ToTtnMapper(source types.TtnMapperAndroidV2Message, destination *types.TtnMapperUplinkMessage) {

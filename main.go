@@ -8,6 +8,7 @@ import (
 	"log"
 	"net/http"
 	"ttnmapper-ingress-api/types"
+	"ttnmapper-ingress-api/utils"
 )
 import "github.com/go-chi/chi"
 
@@ -38,9 +39,9 @@ func main() {
 		fmt.Println(err)
 	}
 
-	log.Printf("[Configuration]\n%s\n", prettyPrint(myConfiguration)) // output: [UserA, UserB]
+	log.Printf("[Configuration]\n%s\n", utils.PrettyPrint(myConfiguration)) // output: [UserA, UserB]
 
-	router := Routes()
+	router := Routes(publishChannel)
 
 	log.Print("[Routes]")
 	walkFunc := func(method string, route string, handler http.Handler, middlewares ...func(http.Handler) http.Handler) error {
@@ -64,11 +65,11 @@ func publishFromChannel() {
 	//	log.Print("Error connecting to RabbitMQ")
 	//	return
 	//}
-	failOnError(err, "Failed to connect to RabbitMQ")
+	utils.FailOnError(err, "Failed to connect to RabbitMQ")
 	defer conn.Close()
 
 	ch, err := conn.Channel()
-	failOnError(err, "Failed to open a channel")
+	utils.FailOnError(err, "Failed to open a channel")
 	defer ch.Close()
 
 	err = ch.ExchangeDeclare(
@@ -101,6 +102,6 @@ func publishFromChannel() {
 				ContentType: "text/plain",
 				Body:        []byte(data),
 			})
-		failOnError(err, "Failed to publish a message")
+		utils.FailOnError(err, "Failed to publish a message")
 	}
 }
