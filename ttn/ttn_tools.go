@@ -97,8 +97,8 @@ func CopyTtnV2Fields(packetIn types2.UplinkMessage, packetOut *types.TtnMapperUp
 		*/
 		gatewayOut := types.TtnMapperGateway{}
 
-		// TODO use network reported by packetbroker
-		gatewayOut.NetworkId = packetOut.NetworkType + "://" + packetOut.NetworkAddress
+		// Always assume device network and gateway network is the same, as v2 does not get data from the packetbroker
+		gatewayOut.NetworkId = packetOut.NetworkId
 		gatewayOut.GatewayId = gatewayIn.GtwID
 
 		// If the id is eui-deadbeef, strip the prefix, capitalize and use as EUI

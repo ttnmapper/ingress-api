@@ -2,10 +2,9 @@ package chirpstack
 
 import (
 	"bytes"
-	"fmt"
 	chirpstack "github.com/brocaar/chirpstack-api/go/v3/as/integration"
 	"github.com/go-chi/render"
-	"github.com/gogo/protobuf/jsonpb"
+	"github.com/golang/protobuf/jsonpb"
 	"io/ioutil"
 	"log"
 	"math/rand"
@@ -26,21 +25,34 @@ func (handlerContext *Context) PostChirpV3Event(w http.ResponseWriter, r *http.R
 
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
 		response["success"] = false
 		response["message"] = "Can not read POST body"
 		log.Print("[" + i + "] " + err.Error())
+		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
 
 	var packetOut types.TtnMapperUplinkMessage
 	packetOut.NetworkType = types.NS_CHIRP
+	// TODO ChirpStack should also provide us some unique identifier, along with the NetID, then we can do UUID@NetID to provide as a unique networkid
+	packetOut.NetworkAddress = r.RemoteAddr //Might not work if behind a load-balancer
+	packetOut.NetworkId = packetOut.NetworkType + "://" + packetOut.NetworkAddress
+
 	event := r.URL.Query().Get("event")
 
-	if event != "up" { // We handle ONLY Uplink Events
+	if event == "" {
 		response["success"] = false
-		response["message"], _ = fmt.Printf("Handler for event %s is not implemented", event)
-		log.Print("[" + i + "] " + err.Error())
+		response["message"] = "event parameter not specified"
+		log.Print("[" + i + "] event parameter not specified")
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+	// We handle ONLY Uplink Events
+	if event != "up" {
+		response["success"] = false
+		response["message"] = "Handler for event \"" + event + "\" is not implemented"
+		log.Print("[" + i + "] Handler for event \"" + event + "\" is not implemented")
+		w.WriteHeader(http.StatusNotImplemented)
 		return
 	}
 
@@ -48,24 +60,32 @@ func (handlerContext *Context) PostChirpV3Event(w http.ResponseWriter, r *http.R
 		AllowUnknownFields: true, // we don't want to fail on unknown fields
 	}
 
+	log.Printf("%+v", string(body))
 	var packetIn chirpstack.UplinkEvent
 	if err := unmarshaler.Unmarshal(bytes.NewReader(body), &packetIn); err != nil {
 		response["success"] = false
 		response["message"] = "Can not parse json body"
 		log.Print("[" + i + "] " + err.Error())
+		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
 
 	CopyChirpV3Fields(packetIn, &packetOut)
-	// TODO ChirpStack should also provide us some unique identifier, along with the NetID, then we can do UUID@NetID to provide as a unique networkid
-	packetOut.NetworkAddress = r.RemoteAddr //Might not work if behind a load-balancer
 
 	if err := ParseChirpV3Payload(packetIn, &packetOut); err != nil {
 		response["success"] = false
 		response["message"] = err.Error()
 		log.Print("[" + i + "] " + err.Error())
+		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
+
+	// If the experiment header is set, mark this packetOut as experiment
+	experiment := r.Header.Get("TTNMAPPERORG-EXPERIMENT")
+	packetOut.Experiment = experiment // Default header is empty
+	// If the user header is set, add it to packetOut. For ChirpStack we do not authenticate users.
+	user := r.Header.Get("TTNMAPPERORG-USER")
+	packetOut.UserId = user // Default header is empty
 
 	log.Print("["+i+"] Network: ", packetOut.NetworkType, "://", packetOut.NetworkAddress)
 	log.Print("["+i+"] Device: ", packetOut.AppID, " - ", packetOut.DevID)

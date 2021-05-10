@@ -1,10 +1,9 @@
 package tts
 
 import (
-	"bytes"
 	"github.com/go-chi/render"
-	"github.com/gogo/protobuf/jsonpb"
 	"github.com/gogo/protobuf/proto"
+	"go.thethings.network/lorawan-stack/v3/pkg/jsonpb"
 	"go.thethings.network/lorawan-stack/v3/pkg/ttnpb"
 	"io/ioutil"
 	"log"
@@ -50,10 +49,8 @@ func (handlerContext *Context) PostV3Uplink(w http.ResponseWriter, r *http.Reque
 
 	contentType := r.Header.Get("Content-Type")
 	if contentType == "application/json" {
-		unmarshaler := &jsonpb.Unmarshaler{
-			AllowUnknownFields: true, // we don't want to fail on unknown fields
-		}
-		if err := unmarshaler.Unmarshal(bytes.NewReader(body), &packetIn); err != nil {
+		marshaler := jsonpb.TTN()
+		if err := marshaler.Unmarshal(body, &packetIn); err != nil {
 			w.WriteHeader(http.StatusBadRequest)
 			response["success"] = false
 			response["message"] = "Can not parse json body"
@@ -144,14 +141,7 @@ func (handlerContext *Context) PostV3Uplink(w http.ResponseWriter, r *http.Reque
 
 	// 3. If payload fields are available, try getting coordinates from there
 	if packetIn.GetUplinkMessage().DecodedPayload != nil {
-		// DecodedPayload is &Struct{Fields:map[string]*Value{},XXX_unrecognized:[],}.
-		// Convert to a more standard map[string]interface{}
-		parsedPayload := make(map[string]interface{})
-		for k, v := range packetIn.GetUplinkMessage().DecodedPayload.Fields {
-			parsedPayload[k] = v
-		}
-
-		if err := utils.ParsePayloadFields(int64(packetIn.GetUplinkMessage().FPort), parsedPayload, &packetOut); err != nil {
+		if err := DecodeV3Payload(int64(packetIn.GetUplinkMessage().FPort), packetIn, &packetOut); err != nil {
 			response["success"] = false
 			response["message"] = err.Error()
 			log.Print("[" + i + "] " + err.Error())

@@ -13,7 +13,7 @@ import (
 
 func TestChirpV3(t *testing.T) {
 	// Open our jsonFile
-	body, err := os.Open("tests/chirp_v3_output.json")
+	body, err := os.Open("chirp_v3_output.json")
 
 	// if we os.Open returns an error then handle it
 	if err != nil {

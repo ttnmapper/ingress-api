@@ -6,7 +6,10 @@ import (
 	"ttnmapper-ingress-api/types"
 )
 
-func ParsePayloadFields(port int64, payloadFields map[string]interface{}, packetOut *types.TtnMapperUplinkMessage) error {
+func ParsePayloadFields(port int64, payloadFieldsInterface interface{}, packetOut *types.TtnMapperUplinkMessage) error {
+
+	// Assume the decoded payload is a map[string]interface{}. This might fail.
+	payloadFields := payloadFieldsInterface.(map[string]interface{})
 
 	packetOut.AccuracySource = "payload_fields" // reset in case it was set by metadata location
 

@@ -51,7 +51,7 @@ func CopyChirpV3Fields(packetIn chirpstack.UplinkEvent, packetOut *types.TtnMapp
 	for _, gatewayIn := range packetIn.RxInfo {
 		gatewayOut := types.TtnMapperGateway{}
 
-		gatewayOut.NetworkId = packetOut.NetworkType + "://" + packetOut.NetworkAddress
+		gatewayOut.NetworkId = packetOut.NetworkId
 		gatewayEui := hex.EncodeToString(gatewayIn.GatewayId)
 		gatewayOut.GatewayId = "eui-" + strings.ToLower(gatewayEui)
 		gatewayOut.GatewayEui = strings.ToUpper(gatewayEui)

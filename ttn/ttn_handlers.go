@@ -27,6 +27,7 @@ func (handlerContext *Context) PostTtnV2(w http.ResponseWriter, r *http.Request)
 	email := r.Header.Get("Authorization")
 	log.Print("["+i+"] User: ", email)
 	if err := utils.ValidateEmail(email); err != nil {
+		w.WriteHeader(http.StatusForbidden)
 		response["success"] = false
 		response["message"] = err.Error()
 		log.Print("[" + i + "] " + err.Error())
@@ -35,6 +36,7 @@ func (handlerContext *Context) PostTtnV2(w http.ResponseWriter, r *http.Request)
 
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
 		response["success"] = false
 		response["message"] = "Can not read POST body"
 		log.Print("[" + i + "] " + err.Error())
@@ -43,6 +45,7 @@ func (handlerContext *Context) PostTtnV2(w http.ResponseWriter, r *http.Request)
 
 	var packetIn ttn_types.UplinkMessage
 	if err := json.Unmarshal(body, &packetIn); err != nil {
+		w.WriteHeader(http.StatusBadRequest)
 		response["success"] = false
 		response["message"] = "Can not parse json body"
 		log.Print("[" + i + "] " + err.Error())
@@ -50,14 +53,17 @@ func (handlerContext *Context) PostTtnV2(w http.ResponseWriter, r *http.Request)
 	}
 
 	var packetOut types.TtnMapperUplinkMessage
+
+	// For ttnv2 we use the ip address of the originating stack to id the network
 	packetOut.NetworkType = types.NS_TTN_V2
 	packetOut.NetworkAddress = r.RemoteAddr
+	packetOut.NetworkId = packetOut.NetworkType + "://" + packetOut.NetworkAddress
 
 	packetOut.UserAgent = r.Header.Get("USER-AGENT")
 	packetOut.UserId = email
 	packetOut.Experiment = packetIn.Experiment
 
-	// Try to use the location from the metadata first. This is likely the location set on the console.
+	// 1. Try to use the location from the metadata first. This is likely the location set on the console.
 	if packetIn.Metadata.Latitude != 0 && packetIn.Metadata.Longitude != 0 {
 		packetOut.AccuracySource = packetIn.Metadata.Source
 		packetOut.Latitude = float64(packetIn.Metadata.Latitude)
@@ -65,13 +71,13 @@ func (handlerContext *Context) PostTtnV2(w http.ResponseWriter, r *http.Request)
 		packetOut.Altitude = float64(packetIn.Metadata.Altitude)
 	}
 
-	// If payload fields are available, try getting coordinates from there
+	// 2. If payload fields are available, try getting coordinates from there
 	if packetIn.PayloadFields != nil {
 		if err := utils.ParsePayloadFields(int64(packetIn.FPort), packetIn.PayloadFields, &packetOut); err != nil {
 			response["success"] = false
 			response["message"] = err.Error()
 			log.Print("[" + i + "] " + err.Error())
-			return
+			//return // also accept invalid payload_fields, as the metadata is still useful
 		}
 	}
 
@@ -94,6 +100,7 @@ func (handlerContext *Context) PostTtnV2(w http.ResponseWriter, r *http.Request)
 
 	handlerContext.PublishChannel <- packetOut
 
+	w.WriteHeader(http.StatusAccepted)
 	response["success"] = true
 	response["message"] = "New packet accepted into queue"
 }
@@ -101,5 +108,6 @@ func (handlerContext *Context) PostTtnV2(w http.ResponseWriter, r *http.Request)
 func (handlerContext *Context) GetTtnV2(w http.ResponseWriter, r *http.Request) {
 	response := make(map[string]interface{})
 	response["message"] = "GET test success"
+	w.WriteHeader(http.StatusOK)
 	render.JSON(w, r, response)
 }

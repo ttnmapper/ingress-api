@@ -1,10 +1,40 @@
 package tts
 
 import (
+	"encoding/json"
+	"go.thethings.network/lorawan-stack/v3/pkg/jsonpb"
 	"go.thethings.network/lorawan-stack/v3/pkg/ttnpb"
 	"strings"
 	"ttnmapper-ingress-api/types"
+	"ttnmapper-ingress-api/utils"
 )
+
+func DecodeV3Payload(port int64, packetIn ttnpb.ApplicationUp, packetOut *types.TtnMapperUplinkMessage) error {
+	// DecodedPayload is &Struct{Fields:map[string]*Value{},XXX_unrecognized:[],}.
+	// Convert to a more standard map[string]interface{}
+
+	// Marshal struct to json
+	marshaler := jsonpb.TTN()
+	decodedJson, err := marshaler.Marshal(packetIn.GetUplinkMessage().DecodedPayload)
+	if err != nil {
+		return err
+	}
+
+	// Unmarshal json to interface{}
+	var decodedInterface interface{}
+	err = json.Unmarshal(decodedJson, &decodedInterface)
+	if err != nil {
+		return err
+	}
+
+	// Parse fields from interface
+	err = utils.ParsePayloadFields(port, decodedInterface, packetOut)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
 
 func CopyV3Fields(packetIn ttnpb.ApplicationUp, packetOut *types.TtnMapperUplinkMessage) {
 	/*
