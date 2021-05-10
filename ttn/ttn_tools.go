@@ -1,12 +1,12 @@
 package ttn
 
 import (
-	"math"
 	"strconv"
 	"strings"
 	"time"
 	types2 "ttnmapper-ingress-api/ttn/ttn_types"
 	"ttnmapper-ingress-api/types"
+	"ttnmapper-ingress-api/utils"
 )
 
 func CopyTtnV2Fields(packetIn types2.UplinkMessage, packetOut *types.TtnMapperUplinkMessage) {
@@ -47,9 +47,8 @@ func CopyTtnV2Fields(packetIn types2.UplinkMessage, packetOut *types.TtnMapperUp
 	          "data_rate": "SF7BW125",
 	          "coding_rate": "4/5",
 	*/
-	// We need to round the frequency as the floating point type otherwise gives us strange decimals
-	frequency := math.Round(float64(packetIn.Metadata.Frequency) * 1000000) // MHz to Hz
-	packetOut.Frequency = uint64(frequency)
+	frequency := float64(packetIn.Metadata.Frequency) * 1000000 // MHz to Hz
+	packetOut.Frequency = utils.SanitizeFrequency(frequency)
 
 	packetOut.Modulation = packetIn.Metadata.Modulation
 

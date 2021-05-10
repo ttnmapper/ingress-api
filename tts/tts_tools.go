@@ -93,7 +93,7 @@ func CopyV3Fields(packetIn ttnpb.ApplicationUp, packetOut *types.TtnMapperUplink
 	          "frequency": "868300000",              // Frequency (Hz)
 	        },
 	*/
-	packetOut.Frequency = packetIn.GetUplinkMessage().Settings.Frequency
+	packetOut.Frequency = utils.SanitizeFrequency(float64(packetIn.GetUplinkMessage().Settings.Frequency))
 
 	if packetIn.GetUplinkMessage().Settings.DataRate.GetLoRa() != nil {
 		//log.Println("Is LORA")

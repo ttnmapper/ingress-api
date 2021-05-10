@@ -2,6 +2,7 @@ package utils
 
 import (
 	"errors"
+	"math"
 	"ttnmapper-ingress-api/types"
 )
 
@@ -72,4 +73,22 @@ func SanitizeData(packet *types.TtnMapperUplinkMessage) {
 	if packet.Frequency < 1000000 {
 		packet.Frequency = packet.Frequency * 1000000
 	}
+}
+
+func SanitizeFrequency(frequency float64) uint64 {
+	// 868.1 to 868100000 - but we will lose the decimals
+	if frequency < 1000.0 {
+		frequency = frequency * 1000000
+	}
+
+	// 868400000000000 to 868400000
+	if frequency > 1000000000 {
+		frequency = frequency / 1000000
+	}
+
+	// 869099976 to 869100000
+	frequency = math.Round(frequency/1000) * 1000
+	frequencyInt := uint64(frequency)
+
+	return frequencyInt
 }

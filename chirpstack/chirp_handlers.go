@@ -52,7 +52,7 @@ func (handlerContext *Context) PostChirpV3Event(w http.ResponseWriter, r *http.R
 		response["success"] = false
 		response["message"] = "Handler for event \"" + event + "\" is not implemented"
 		log.Print("[" + i + "] Handler for event \"" + event + "\" is not implemented")
-		w.WriteHeader(http.StatusNotImplemented)
+		w.WriteHeader(http.StatusOK) // We just do OK here to keep the other end happy. We've had StatusNotImplemented before
 		return
 	}
 
