@@ -32,6 +32,7 @@ func TestHandlerJson(t *testing.T) {
 		req.Header.Set("Ttnmapperorg-user", "test@jpmeijers.com")
 		req.Header.Set("Content-Type", "application/json")
 		req.Header.Set("Ttnmapperorg-Experiment", "test-experiment")
+		req.Header.Set("Ttnmapperorg-Network", "test-network")
 
 		// We create a ResponseRecorder (which satisfies http.ResponseWriter) to record the response.
 		rr := httptest.NewRecorder()
