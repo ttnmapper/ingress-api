@@ -73,3 +73,11 @@ func SanitizeData(packet *types.TtnMapperUplinkMessage) {
 		packet.Frequency = packet.Frequency * 1000000
 	}
 }
+
+func ValidateChirpNetworkAddress(address string) (err error) {
+	if address == "" {
+		return errors.New("network address is empty")
+	}
+
+	return
+}

@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"strconv"
 	"ttnmapper-ingress-api/types"
+	"ttnmapper-ingress-api/utils"
 
 	chirpstack "github.com/brocaar/chirpstack-api/go/v3/as/integration"
 	"github.com/go-chi/render"
@@ -88,14 +89,19 @@ func (handlerContext *Context) PostChirpV3Event(w http.ResponseWriter, r *http.R
 	user := r.Header.Get("TTNMAPPERORG-USER")
 	packetOut.UserId = user // Default header is empty
 
-	networkID := r.Header.Get("TTNMAPPERORG-NETWORK")
-	if networkID == "" {
-		networkID = "UNKNOWN"
+	networkAddress := r.Header.Get("TTNMAPPERORG-NETWORK")
+	if err := utils.ValidateChirpNetworkAddress(networkAddress); err != nil {
+		response["success"] = false
+		response["message"] = "Header TTNMAPPERORG-NETWORK is empty"
+		log.Print("[" + i + "] " + err.Error())
+		w.WriteHeader(http.StatusBadRequest)
+		return
 	}
 
-	packetOut.NetworkId = networkID
+	packetOut.NetworkAddress = networkAddress                                      // my.network.name
+	packetOut.NetworkId = packetOut.NetworkType + "://" + packetOut.NetworkAddress // NS_CHIRP://my.network.name
 
-	log.Print("["+i+"] Network: ", packetOut.NetworkType, "://", networkID)
+	log.Print("["+i+"] Network: ", packetOut.NetworkType, "://", networkAddress)
 	log.Print("["+i+"] Device: ", packetOut.AppID, " - ", packetOut.DevID)
 
 	// Push this new packet into the stack
