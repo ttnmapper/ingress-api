@@ -92,3 +92,11 @@ func SanitizeFrequency(frequency float64) uint64 {
 
 	return frequencyInt
 }
+
+func ValidateChirpNetworkAddress(address string) (err error) {
+	if address == "" {
+		return errors.New("network address is empty")
+	}
+
+	return
+}
