@@ -150,7 +150,11 @@ func PostAndroidV4(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// If the V3 server tenant is ttn, strip tenant part
+	// TODO follow same tenant@netid format
 	receivedPacket.NetworkAddress = strings.TrimPrefix(receivedPacket.NetworkAddress, "ttn.")
+
+	// Make sure frequency is sanitized
+	receivedPacket.Frequency = utils.SanitizeFrequency(float64(receivedPacket.Frequency))
 
 	log.Println(utils.PrettyPrint(receivedPacket))
 
@@ -203,7 +207,7 @@ func CopyAndroidV2ToTtnMapper(source types.TtnMapperAndroidV2Message, destinatio
 	sf, _ := strconv.Atoi(strings.TrimPrefix(drParts[0], "SF"))
 	destination.SpreadingFactor = uint8(sf)
 
-	destination.Frequency = uint64(source.Freq)
+	destination.Frequency = utils.SanitizeFrequency(float64(source.Freq * 1000000)) // MHz to Hz
 
 	// Append gateway
 	gatewayOut := types.TtnMapperGateway{}

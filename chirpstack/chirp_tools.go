@@ -35,7 +35,7 @@ func CopyChirpV3Fields(packetIn chirpstack.UplinkEvent, packetOut *types.TtnMapp
 	packetOut.FPort = uint8(packetIn.FPort)
 	packetOut.FCnt = int64(packetIn.FCnt)
 
-	packetOut.Frequency = uint64(packetIn.TxInfo.Frequency)
+	packetOut.Frequency = utils.SanitizeFrequency(float64(packetIn.TxInfo.Frequency))
 	packetOut.Modulation = packetIn.TxInfo.Modulation.String()
 
 	if packetOut.Modulation == "LORA" {
