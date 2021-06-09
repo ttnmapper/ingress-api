@@ -36,9 +36,18 @@ func (handlerContext *Context) PostChirpV3Event(w http.ResponseWriter, r *http.R
 
 	var packetOut types.TtnMapperUplinkMessage
 	packetOut.NetworkType = types.NS_CHIRP
+	
 	// TODO ChirpStack should also provide us some unique identifier, along with the NetID, then we can do UUID@NetID to provide as a unique networkid
-	packetOut.NetworkAddress = r.RemoteAddr //Might not work if behind a load-balancer
-	packetOut.NetworkId = packetOut.NetworkType + "://" + packetOut.NetworkAddress
+	networkAddress := r.Header.Get("TTNMAPPERORG-NETWORK")
+	if err := utils.ValidateChirpNetworkAddress(networkAddress); err != nil {
+		response["success"] = false
+		response["message"] = "Header TTNMAPPERORG-NETWORK is empty"
+		log.Print("[" + i + "] " + err.Error())
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+	packetOut.NetworkAddress = networkAddress                                      // my.network.name
+	packetOut.NetworkId = packetOut.NetworkType + "://" + packetOut.NetworkAddress // NS_CHIRP://my.network.name
 
 	event := r.URL.Query().Get("event")
 
@@ -88,18 +97,6 @@ func (handlerContext *Context) PostChirpV3Event(w http.ResponseWriter, r *http.R
 	// If the user header is set, add it to packetOut. For ChirpStack we do not authenticate users.
 	user := r.Header.Get("TTNMAPPERORG-USER")
 	packetOut.UserId = user // Default header is empty
-
-	networkAddress := r.Header.Get("TTNMAPPERORG-NETWORK")
-	if err := utils.ValidateChirpNetworkAddress(networkAddress); err != nil {
-		response["success"] = false
-		response["message"] = "Header TTNMAPPERORG-NETWORK is empty"
-		log.Print("[" + i + "] " + err.Error())
-		w.WriteHeader(http.StatusBadRequest)
-		return
-	}
-
-	packetOut.NetworkAddress = networkAddress                                      // my.network.name
-	packetOut.NetworkId = packetOut.NetworkType + "://" + packetOut.NetworkAddress // NS_CHIRP://my.network.name
 
 	log.Print("["+i+"] Network: ", packetOut.NetworkType, "://", networkAddress)
 	log.Print("["+i+"] Device: ", packetOut.AppID, " - ", packetOut.DevID)
