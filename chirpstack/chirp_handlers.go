@@ -2,15 +2,16 @@ package chirpstack
 
 import (
 	"bytes"
-	chirpstack "github.com/brocaar/chirpstack-api/go/v3/as/integration"
-	"github.com/go-chi/render"
-	"github.com/golang/protobuf/jsonpb"
 	"io/ioutil"
 	"log"
 	"math/rand"
 	"net/http"
 	"strconv"
 	"ttnmapper-ingress-api/types"
+
+	chirpstack "github.com/brocaar/chirpstack-api/go/v3/as/integration"
+	"github.com/go-chi/render"
+	"github.com/golang/protobuf/jsonpb"
 )
 
 /*
@@ -87,7 +88,14 @@ func (handlerContext *Context) PostChirpV3Event(w http.ResponseWriter, r *http.R
 	user := r.Header.Get("TTNMAPPERORG-USER")
 	packetOut.UserId = user // Default header is empty
 
-	log.Print("["+i+"] Network: ", packetOut.NetworkType, "://", packetOut.NetworkAddress)
+	networkID := r.Header.Get("TTNMAPPERORG-NETWORK")
+	if networkID == "" {
+		networkID = "UNKNOWN"
+	}
+
+	packetOut.NetworkId = networkID
+
+	log.Print("["+i+"] Network: ", packetOut.NetworkType, "://", networkID)
 	log.Print("["+i+"] Device: ", packetOut.AppID, " - ", packetOut.DevID)
 
 	// Push this new packet into the stack
