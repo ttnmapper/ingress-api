@@ -4,8 +4,6 @@ package ttnpb
 
 import (
 	fmt "fmt"
-
-	types "github.com/gogo/protobuf/types"
 	go_thethings_network_lorawan_stack_v3_pkg_types "go.thethings.network/lorawan-stack/v3/pkg/types"
 )
 
@@ -17,29 +15,29 @@ func (dst *SessionKeyRequest) SetFields(src *SessionKeyRequest, paths ...string)
 				return fmt.Errorf("'session_key_id' has no subfields, but %s were specified", subs)
 			}
 			if src != nil {
-				dst.SessionKeyID = src.SessionKeyID
+				dst.SessionKeyId = src.SessionKeyId
 			} else {
-				dst.SessionKeyID = nil
+				dst.SessionKeyId = nil
 			}
 		case "dev_eui":
 			if len(subs) > 0 {
 				return fmt.Errorf("'dev_eui' has no subfields, but %s were specified", subs)
 			}
 			if src != nil {
-				dst.DevEUI = src.DevEUI
+				dst.DevEui = src.DevEui
 			} else {
 				var zero go_thethings_network_lorawan_stack_v3_pkg_types.EUI64
-				dst.DevEUI = zero
+				dst.DevEui = zero
 			}
 		case "join_eui":
 			if len(subs) > 0 {
 				return fmt.Errorf("'join_eui' has no subfields, but %s were specified", subs)
 			}
 			if src != nil {
-				dst.JoinEUI = src.JoinEUI
+				dst.JoinEui = src.JoinEui
 			} else {
 				var zero go_thethings_network_lorawan_stack_v3_pkg_types.EUI64
-				dst.JoinEUI = zero
+				dst.JoinEui = zero
 			}
 
 		default:
@@ -169,10 +167,10 @@ func (dst *CryptoServicePayloadRequest) SetFields(src *CryptoServicePayloadReque
 				return fmt.Errorf("'lorawan_version' has no subfields, but %s were specified", subs)
 			}
 			if src != nil {
-				dst.LoRaWANVersion = src.LoRaWANVersion
+				dst.LorawanVersion = src.LorawanVersion
 			} else {
 				var zero MACVersion
-				dst.LoRaWANVersion = zero
+				dst.LorawanVersion = zero
 			}
 		case "payload":
 			if len(subs) > 0 {
@@ -188,10 +186,10 @@ func (dst *CryptoServicePayloadRequest) SetFields(src *CryptoServicePayloadReque
 				return fmt.Errorf("'provisioner_id' has no subfields, but %s were specified", subs)
 			}
 			if src != nil {
-				dst.ProvisionerID = src.ProvisionerID
+				dst.ProvisionerId = src.ProvisionerId
 			} else {
 				var zero string
-				dst.ProvisionerID = zero
+				dst.ProvisionerId = zero
 			}
 		case "provisioning_data":
 			if len(subs) > 0 {
@@ -305,10 +303,10 @@ func (dst *DeriveSessionKeysRequest) SetFields(src *DeriveSessionKeysRequest, pa
 				return fmt.Errorf("'lorawan_version' has no subfields, but %s were specified", subs)
 			}
 			if src != nil {
-				dst.LoRaWANVersion = src.LoRaWANVersion
+				dst.LorawanVersion = src.LorawanVersion
 			} else {
 				var zero MACVersion
-				dst.LoRaWANVersion = zero
+				dst.LorawanVersion = zero
 			}
 		case "join_nonce":
 			if len(subs) > 0 {
@@ -335,20 +333,20 @@ func (dst *DeriveSessionKeysRequest) SetFields(src *DeriveSessionKeysRequest, pa
 				return fmt.Errorf("'net_id' has no subfields, but %s were specified", subs)
 			}
 			if src != nil {
-				dst.NetID = src.NetID
+				dst.NetId = src.NetId
 			} else {
 				var zero go_thethings_network_lorawan_stack_v3_pkg_types.NetID
-				dst.NetID = zero
+				dst.NetId = zero
 			}
 		case "provisioner_id":
 			if len(subs) > 0 {
 				return fmt.Errorf("'provisioner_id' has no subfields, but %s were specified", subs)
 			}
 			if src != nil {
-				dst.ProvisionerID = src.ProvisionerID
+				dst.ProvisionerId = src.ProvisionerId
 			} else {
 				var zero string
-				dst.ProvisionerID = zero
+				dst.ProvisionerId = zero
 			}
 		case "provisioning_data":
 			if len(subs) > 0 {
@@ -393,10 +391,10 @@ func (dst *GetRootKeysRequest) SetFields(src *GetRootKeysRequest, paths ...strin
 				return fmt.Errorf("'provisioner_id' has no subfields, but %s were specified", subs)
 			}
 			if src != nil {
-				dst.ProvisionerID = src.ProvisionerID
+				dst.ProvisionerId = src.ProvisionerId
 			} else {
 				var zero string
-				dst.ProvisionerID = zero
+				dst.ProvisionerId = zero
 			}
 		case "provisioning_data":
 			if len(subs) > 0 {
@@ -441,10 +439,10 @@ func (dst *ProvisionEndDevicesRequest) SetFields(src *ProvisionEndDevicesRequest
 				return fmt.Errorf("'provisioner_id' has no subfields, but %s were specified", subs)
 			}
 			if src != nil {
-				dst.ProvisionerID = src.ProvisionerID
+				dst.ProvisionerId = src.ProvisionerId
 			} else {
 				var zero string
-				dst.ProvisionerID = zero
+				dst.ProvisionerId = zero
 			}
 		case "provisioning_data":
 			if len(subs) > 0 {
@@ -591,34 +589,34 @@ func (dst *ApplicationActivationSettings) SetFields(src *ApplicationActivationSe
 				return fmt.Errorf("'kek_label' has no subfields, but %s were specified", subs)
 			}
 			if src != nil {
-				dst.KEKLabel = src.KEKLabel
+				dst.KekLabel = src.KekLabel
 			} else {
 				var zero string
-				dst.KEKLabel = zero
+				dst.KekLabel = zero
 			}
 		case "kek":
 			if len(subs) > 0 {
 				var newDst, newSrc *KeyEnvelope
-				if (src == nil || src.KEK == nil) && dst.KEK == nil {
+				if (src == nil || src.Kek == nil) && dst.Kek == nil {
 					continue
 				}
 				if src != nil {
-					newSrc = src.KEK
+					newSrc = src.Kek
 				}
-				if dst.KEK != nil {
-					newDst = dst.KEK
+				if dst.Kek != nil {
+					newDst = dst.Kek
 				} else {
 					newDst = &KeyEnvelope{}
-					dst.KEK = newDst
+					dst.Kek = newDst
 				}
 				if err := newDst.SetFields(newSrc, subs...); err != nil {
 					return err
 				}
 			} else {
 				if src != nil {
-					dst.KEK = src.KEK
+					dst.Kek = src.Kek
 				} else {
-					dst.KEK = nil
+					dst.Kek = nil
 				}
 			}
 		case "home_net_id":
@@ -626,19 +624,19 @@ func (dst *ApplicationActivationSettings) SetFields(src *ApplicationActivationSe
 				return fmt.Errorf("'home_net_id' has no subfields, but %s were specified", subs)
 			}
 			if src != nil {
-				dst.HomeNetID = src.HomeNetID
+				dst.HomeNetId = src.HomeNetId
 			} else {
-				dst.HomeNetID = nil
+				dst.HomeNetId = nil
 			}
 		case "application_server_id":
 			if len(subs) > 0 {
 				return fmt.Errorf("'application_server_id' has no subfields, but %s were specified", subs)
 			}
 			if src != nil {
-				dst.ApplicationServerID = src.ApplicationServerID
+				dst.ApplicationServerId = src.ApplicationServerId
 			} else {
 				var zero string
-				dst.ApplicationServerID = zero
+				dst.ApplicationServerId = zero
 			}
 
 		default:
@@ -676,8 +674,7 @@ func (dst *GetApplicationActivationSettingsRequest) SetFields(src *GetApplicatio
 			if src != nil {
 				dst.FieldMask = src.FieldMask
 			} else {
-				var zero types.FieldMask
-				dst.FieldMask = zero
+				dst.FieldMask = nil
 			}
 
 		default:
@@ -733,8 +730,7 @@ func (dst *SetApplicationActivationSettingsRequest) SetFields(src *SetApplicatio
 			if src != nil {
 				dst.FieldMask = src.FieldMask
 			} else {
-				var zero types.FieldMask
-				dst.FieldMask = zero
+				dst.FieldMask = nil
 			}
 
 		default:
@@ -781,10 +777,10 @@ func (dst *JoinEUIPrefix) SetFields(src *JoinEUIPrefix, paths ...string) error {
 				return fmt.Errorf("'join_eui' has no subfields, but %s were specified", subs)
 			}
 			if src != nil {
-				dst.JoinEUI = src.JoinEUI
+				dst.JoinEui = src.JoinEui
 			} else {
 				var zero go_thethings_network_lorawan_stack_v3_pkg_types.EUI64
-				dst.JoinEUI = zero
+				dst.JoinEui = zero
 			}
 		case "length":
 			if len(subs) > 0 {
@@ -832,18 +828,18 @@ func (dst *ProvisionEndDevicesRequest_IdentifiersList) SetFields(src *ProvisionE
 				return fmt.Errorf("'join_eui' has no subfields, but %s were specified", subs)
 			}
 			if src != nil {
-				dst.JoinEUI = src.JoinEUI
+				dst.JoinEui = src.JoinEui
 			} else {
-				dst.JoinEUI = nil
+				dst.JoinEui = nil
 			}
 		case "end_device_ids":
 			if len(subs) > 0 {
 				return fmt.Errorf("'end_device_ids' has no subfields, but %s were specified", subs)
 			}
 			if src != nil {
-				dst.EndDeviceIDs = src.EndDeviceIDs
+				dst.EndDeviceIds = src.EndDeviceIds
 			} else {
-				dst.EndDeviceIDs = nil
+				dst.EndDeviceIds = nil
 			}
 
 		default:
@@ -861,19 +857,19 @@ func (dst *ProvisionEndDevicesRequest_IdentifiersRange) SetFields(src *Provision
 				return fmt.Errorf("'join_eui' has no subfields, but %s were specified", subs)
 			}
 			if src != nil {
-				dst.JoinEUI = src.JoinEUI
+				dst.JoinEui = src.JoinEui
 			} else {
-				dst.JoinEUI = nil
+				dst.JoinEui = nil
 			}
 		case "start_dev_eui":
 			if len(subs) > 0 {
 				return fmt.Errorf("'start_dev_eui' has no subfields, but %s were specified", subs)
 			}
 			if src != nil {
-				dst.StartDevEUI = src.StartDevEUI
+				dst.StartDevEui = src.StartDevEui
 			} else {
 				var zero go_thethings_network_lorawan_stack_v3_pkg_types.EUI64
-				dst.StartDevEUI = zero
+				dst.StartDevEui = zero
 			}
 
 		default:
@@ -891,9 +887,9 @@ func (dst *ProvisionEndDevicesRequest_IdentifiersFromData) SetFields(src *Provis
 				return fmt.Errorf("'join_eui' has no subfields, but %s were specified", subs)
 			}
 			if src != nil {
-				dst.JoinEUI = src.JoinEUI
+				dst.JoinEui = src.JoinEui
 			} else {
-				dst.JoinEUI = nil
+				dst.JoinEui = nil
 			}
 
 		default:

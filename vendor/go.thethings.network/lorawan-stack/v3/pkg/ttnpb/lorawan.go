@@ -27,14 +27,35 @@ import (
 	"go.thethings.network/lorawan-stack/v3/pkg/types"
 )
 
+var PHYVersionCompatibleName = map[int32]string{}
+
 func init() {
 	for i := range PHYVersion_name {
 		PHYVersion_value[PHYVersion(i).String()] = i
 	}
-	PHYVersion_value["1.0"] = int32(PHY_V1_0)           // 1.0 is the official version number
-	PHYVersion_value["1.0.2"] = int32(PHY_V1_0_2_REV_A) // Revisions were added from 1.0.2-b
-	PHYVersion_value["1.1-a"] = int32(PHY_V1_1_REV_A)   // 1.1 is the official version number
-	PHYVersion_value["1.1-b"] = int32(PHY_V1_1_REV_B)   // 1.1 is the official version number
+	for name, version := range map[string]PHYVersion{
+		"1.0":   TS001_V1_0,       // 1.0 is the official version number
+		"1.0.2": RP001_V1_0_2,     // Revisions were added from 1.0.2-b
+		"1.1-a": RP001_V1_1_REV_A, // 1.1 is the official version number
+		"1.1-b": RP001_V1_1_REV_B, // 1.1 is the official version number
+	} {
+		PHYVersion_value[name] = int32(version)
+	}
+	for version, name := range PHYVersion_name {
+		PHYVersionCompatibleName[version] = name
+	}
+	for name, version := range map[string]PHYVersion{
+		"PHY_V1_0":         TS001_V1_0,
+		"PHY_V1_0_1":       TS001_V1_0_1,
+		"PHY_V1_0_2_REV_A": RP001_V1_0_2,
+		"PHY_V1_0_2_REV_B": RP001_V1_0_2_REV_B,
+		"PHY_V1_1_REV_A":   RP001_V1_1_REV_A,
+		"PHY_V1_1_REV_B":   RP001_V1_1_REV_B,
+		"PHY_V1_0_3_REV_A": RP001_V1_0_3_REV_A,
+	} {
+		PHYVersion_value[name] = int32(version)
+		PHYVersionCompatibleName[int32(version)] = name
+	}
 }
 
 // MarshalBinary implements encoding.BinaryMarshaler interface.
@@ -211,7 +232,7 @@ func (v PHYVersion) MarshalText() ([]byte, error) {
 
 // MarshalJSON implements json.Marshaler interface.
 func (v PHYVersion) MarshalJSON() ([]byte, error) {
-	return marshalJSONEnum(PHYVersion_name, int32(v))
+	return marshalJSONEnum(PHYVersionCompatibleName, int32(v))
 }
 
 // UnmarshalBinary implements encoding.BinaryUnmarshaler interface.
@@ -1336,6 +1357,12 @@ func (v *DeviceEIRP) UnmarshalText(b []byte) error {
 	return nil
 }
 
+// MarshalJSONPB implements jsonpb.JSONPBMarshaler interface.
+func (v DeviceEIRP) MarshalJSONPB(*jsonpb.Marshaler) ([]byte, error) {
+	// NOTE: This ignores m.EnumsAsInts and always marshals as int.
+	return v.MarshalJSON()
+}
+
 // UnmarshalJSON implements json.Unmarshaler interface.
 func (v *DeviceEIRP) UnmarshalJSON(b []byte) error {
 	if bt, ok := unmarshalJSONString(b); ok {
@@ -1347,6 +1374,11 @@ func (v *DeviceEIRP) UnmarshalJSON(b []byte) error {
 	}
 	*v = DeviceEIRP(i)
 	return nil
+}
+
+// UnmarshalJSONPB implements jsonpb.JSONPBUnmarshaler interface.
+func (v *DeviceEIRP) UnmarshalJSONPB(_ *jsonpb.Unmarshaler, b []byte) error {
+	return v.UnmarshalJSON(b)
 }
 
 // MarshalBinary implements encoding.BinaryMarshaler interface.
@@ -1928,44 +1960,33 @@ func (v PHYVersion) Validate() error {
 	if v < 1 || v >= PHYVersion(len(PHYVersion_name)) {
 		return errExpectedBetween("PHYVersion", 1, len(PHYVersion_name)-1)(v)
 	}
-
-	_, err := semver.Parse(v.String())
-	if err != nil {
-		return errParsingSemanticVersion(v.String()).WithCause(err)
-	}
 	return nil
 }
 
 // String implements fmt.Stringer.
 func (v PHYVersion) String() string {
 	switch v {
-	case PHY_V1_0:
+	case TS001_V1_0:
 		return "1.0.0"
-	case PHY_V1_0_1:
+	case TS001_V1_0_1:
 		return "1.0.1"
-	case PHY_V1_0_2_REV_A:
+	case RP001_V1_0_2:
 		return "1.0.2-a"
-	case PHY_V1_0_2_REV_B:
+	case RP001_V1_0_2_REV_B:
 		return "1.0.2-b"
-	case PHY_V1_0_3_REV_A:
+	case RP001_V1_0_3_REV_A:
 		return "1.0.3-a"
-	case PHY_V1_1_REV_A:
+	case RP001_V1_1_REV_A:
 		return "1.1.0-a"
-	case PHY_V1_1_REV_B:
+	case RP001_V1_1_REV_B:
 		return "1.1.0-b"
+	case PHY_UNKNOWN:
+		return "unknown"
+	}
+	if name, exists := PHYVersion_name[int32(v)]; exists {
+		return name
 	}
 	return "unknown"
-}
-
-// Compare compares PHYVersions v to o:
-// -1 == v is less than o
-// 0 == v is equal to o
-// 1 == v is greater than o
-// Compare panics, if v.Validate() returns non-nil error.
-func (v PHYVersion) Compare(o PHYVersion) int {
-	return semver.MustParse(v.String()).Compare(
-		semver.MustParse(o.String()),
-	)
 }
 
 // Duration returns v as time.Duration.
@@ -1993,16 +2014,16 @@ func (v RxDelay) String() string {
 
 func (v LoRaDataRate) DataRate() DataRate {
 	return DataRate{
-		Modulation: &DataRate_LoRa{
-			LoRa: &v,
+		Modulation: &DataRate_Lora{
+			Lora: &v,
 		},
 	}
 }
 
 func (v FSKDataRate) DataRate() DataRate {
 	return DataRate{
-		Modulation: &DataRate_FSK{
-			FSK: &v,
+		Modulation: &DataRate_Fsk{
+			Fsk: &v,
 		},
 	}
 }
@@ -2032,9 +2053,9 @@ func (v *DLSettings) FieldIsZero(p string) bool {
 	case "opt_neg":
 		return !v.OptNeg
 	case "rx1_dr_offset":
-		return v.Rx1DROffset == 0
+		return v.Rx1DrOffset == 0
 	case "rx2_dr":
-		return v.Rx2DR == 0
+		return v.Rx2Dr == 0
 	}
 	panic(fmt.Sprintf("unknown path '%s'", p))
 }
@@ -2060,13 +2081,13 @@ func (v *JoinAcceptPayload) FieldIsZero(p string) bool {
 	}
 	switch p {
 	case "cf_list":
-		return v.CFList == nil
+		return v.CfList == nil
 	case "cf_list.ch_masks":
-		return v.CFList.FieldIsZero("ch_masks")
+		return v.CfList.FieldIsZero("ch_masks")
 	case "cf_list.freq":
-		return v.CFList.FieldIsZero("freq")
+		return v.CfList.FieldIsZero("freq")
 	case "cf_list.type":
-		return v.CFList.FieldIsZero("type")
+		return v.CfList.FieldIsZero("type")
 	case "dev_addr":
 		return v.DevAddr == types.DevAddr{}
 	case "dl_settings":
@@ -2082,7 +2103,7 @@ func (v *JoinAcceptPayload) FieldIsZero(p string) bool {
 	case "join_nonce":
 		return v.JoinNonce == types.JoinNonce{}
 	case "net_id":
-		return v.NetID == types.NetID{}
+		return v.NetId == types.NetID{}
 	case "rx_delay":
 		return v.RxDelay == 0
 	}
@@ -2096,11 +2117,11 @@ func (v *JoinRequestPayload) FieldIsZero(p string) bool {
 	}
 	switch p {
 	case "dev_eui":
-		return v.DevEUI == types.EUI64{}
+		return v.DevEui == types.EUI64{}
 	case "dev_nonce":
 		return v.DevNonce == types.DevNonce{}
 	case "join_eui":
-		return v.JoinEUI == types.EUI64{}
+		return v.JoinEui == types.EUI64{}
 	}
 	panic(fmt.Sprintf("unknown path '%s'", p))
 }
@@ -2114,9 +2135,9 @@ func (v *FCtrl) FieldIsZero(p string) bool {
 	case "ack":
 		return !v.Ack
 	case "adr":
-		return !v.ADR
+		return !v.Adr
 	case "adr_ack_req":
-		return !v.ADRAckReq
+		return !v.AdrAckReq
 	case "class_b":
 		return !v.ClassB
 	case "f_pending":
@@ -2184,7 +2205,7 @@ func (v *MACPayload) FieldIsZero(p string) bool {
 	case "f_port":
 		return v.FPort == 0
 	case "frm_payload":
-		return v.FRMPayload == nil
+		return v.FrmPayload == nil
 	case "full_f_cnt":
 		return v.FullFCnt == 0
 	}
@@ -2198,11 +2219,11 @@ func (v *RejoinRequestPayload) FieldIsZero(p string) bool {
 	}
 	switch p {
 	case "dev_eui":
-		return v.DevEUI == types.EUI64{}
+		return v.DevEui == types.EUI64{}
 	case "join_eui":
-		return v.JoinEUI == types.EUI64{}
+		return v.JoinEui == types.EUI64{}
 	case "net_id":
-		return v.NetID == types.NetID{}
+		return v.NetId == types.NetID{}
 	case "rejoin_cnt":
 		return v.RejoinCnt == 0
 	case "rejoin_type":
@@ -2256,35 +2277,35 @@ func (v *Message) FieldIsZero(p string) bool {
 	case "Payload.join_request_payload.join_eui":
 		return v.GetJoinRequestPayload().FieldIsZero("join_eui")
 	case "Payload.mac_payload":
-		return v.GetMACPayload() == nil
+		return v.GetMacPayload() == nil
 	case "Payload.mac_payload.decoded_payload":
-		return v.GetMACPayload().FieldIsZero("decoded_payload")
+		return v.GetMacPayload().FieldIsZero("decoded_payload")
 	case "Payload.mac_payload.f_hdr":
-		return v.GetMACPayload().FieldIsZero("f_hdr")
+		return v.GetMacPayload().FieldIsZero("f_hdr")
 	case "Payload.mac_payload.f_hdr.dev_addr":
-		return v.GetMACPayload().FieldIsZero("f_hdr.dev_addr")
+		return v.GetMacPayload().FieldIsZero("f_hdr.dev_addr")
 	case "Payload.mac_payload.f_hdr.f_cnt":
-		return v.GetMACPayload().FieldIsZero("f_hdr.f_cnt")
+		return v.GetMacPayload().FieldIsZero("f_hdr.f_cnt")
 	case "Payload.mac_payload.f_hdr.f_ctrl":
-		return v.GetMACPayload().FieldIsZero("f_hdr.f_ctrl")
+		return v.GetMacPayload().FieldIsZero("f_hdr.f_ctrl")
 	case "Payload.mac_payload.f_hdr.f_ctrl.ack":
-		return v.GetMACPayload().FieldIsZero("f_hdr.f_ctrl.ack")
+		return v.GetMacPayload().FieldIsZero("f_hdr.f_ctrl.ack")
 	case "Payload.mac_payload.f_hdr.f_ctrl.adr":
-		return v.GetMACPayload().FieldIsZero("f_hdr.f_ctrl.adr")
+		return v.GetMacPayload().FieldIsZero("f_hdr.f_ctrl.adr")
 	case "Payload.mac_payload.f_hdr.f_ctrl.adr_ack_req":
-		return v.GetMACPayload().FieldIsZero("f_hdr.f_ctrl.adr_ack_req")
+		return v.GetMacPayload().FieldIsZero("f_hdr.f_ctrl.adr_ack_req")
 	case "Payload.mac_payload.f_hdr.f_ctrl.class_b":
-		return v.GetMACPayload().FieldIsZero("f_hdr.f_ctrl.class_b")
+		return v.GetMacPayload().FieldIsZero("f_hdr.f_ctrl.class_b")
 	case "Payload.mac_payload.f_hdr.f_ctrl.f_pending":
-		return v.GetMACPayload().FieldIsZero("f_hdr.f_ctrl.f_pending")
+		return v.GetMacPayload().FieldIsZero("f_hdr.f_ctrl.f_pending")
 	case "Payload.mac_payload.f_hdr.f_opts":
-		return v.GetMACPayload().FieldIsZero("f_hdr.f_opts")
+		return v.GetMacPayload().FieldIsZero("f_hdr.f_opts")
 	case "Payload.mac_payload.f_port":
-		return v.GetMACPayload().FieldIsZero("f_port")
+		return v.GetMacPayload().FieldIsZero("f_port")
 	case "Payload.mac_payload.frm_payload":
-		return v.GetMACPayload().FieldIsZero("frm_payload")
+		return v.GetMacPayload().FieldIsZero("frm_payload")
 	case "Payload.mac_payload.full_f_cnt":
-		return v.GetMACPayload().FieldIsZero("full_f_cnt")
+		return v.GetMacPayload().FieldIsZero("full_f_cnt")
 	case "Payload.rejoin_request_payload":
 		return v.GetRejoinRequestPayload() == nil
 	case "Payload.rejoin_request_payload.dev_eui":
@@ -2304,7 +2325,87 @@ func (v *Message) FieldIsZero(p string) bool {
 	case "m_hdr.major":
 		return v.MHDR.FieldIsZero("major")
 	case "mic":
-		return v.MIC == nil
+		return v.Mic == nil
+	}
+	panic(fmt.Sprintf("unknown path '%s'", p))
+}
+
+// MarshalBinary implements encoding.BinaryMarshaler interface.
+func (v DeviceEIRPValue) MarshalBinary() ([]byte, error) {
+	return v.Value.MarshalBinary()
+}
+
+// MarshalText implements encoding.TextMarshaler interface.
+func (v DeviceEIRPValue) MarshalText() ([]byte, error) {
+	return v.Value.MarshalText()
+}
+
+// MarshalJSON implements json.Marshaler interface.
+func (v DeviceEIRPValue) MarshalJSON() ([]byte, error) {
+	return v.Value.MarshalJSON()
+}
+
+// MarshalJSONPB implements jsonpb.JSONPBMarshaler interface.
+func (v DeviceEIRPValue) MarshalJSONPB(m *jsonpb.Marshaler) ([]byte, error) {
+	return v.Value.MarshalJSONPB(m)
+}
+
+// UnmarshalBinary implements encoding.BinaryUnmarshaler interface.
+func (v *DeviceEIRPValue) UnmarshalBinary(b []byte) error {
+	var vv DeviceEIRP
+	if err := vv.UnmarshalBinary(b); err != nil {
+		return err
+	}
+	*v = DeviceEIRPValue{
+		Value: vv,
+	}
+	return nil
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler interface.
+func (v *DeviceEIRPValue) UnmarshalText(b []byte) error {
+	var vv DeviceEIRP
+	if err := vv.UnmarshalText(b); err != nil {
+		return err
+	}
+	*v = DeviceEIRPValue{
+		Value: vv,
+	}
+	return nil
+}
+
+// UnmarshalJSON implements json.Unmarshaler interface.
+func (v *DeviceEIRPValue) UnmarshalJSON(b []byte) error {
+	var vv DeviceEIRP
+	if err := vv.UnmarshalJSON(b); err != nil {
+		return err
+	}
+	*v = DeviceEIRPValue{
+		Value: vv,
+	}
+	return nil
+}
+
+// UnmarshalJSONPB implements jsonpb.JSONPBUnmarshaler interface.
+func (v *DeviceEIRPValue) UnmarshalJSONPB(u *jsonpb.Unmarshaler, b []byte) error {
+	var vv DeviceEIRP
+	if err := vv.UnmarshalJSONPB(u, b); err != nil {
+		return err
+	}
+	*v = DeviceEIRPValue{
+		Value: vv,
+	}
+	return nil
+}
+
+// FieldIsZero returns whether path p is zero.
+func (v *DeviceEIRPValue) FieldIsZero(p string) bool {
+	if v == nil {
+		return true
+	}
+	switch p {
+	case "value":
+		return v.Value == 0
 	}
 	panic(fmt.Sprintf("unknown path '%s'", p))
 }

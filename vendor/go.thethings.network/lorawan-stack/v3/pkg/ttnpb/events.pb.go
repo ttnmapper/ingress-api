@@ -7,24 +7,20 @@ import (
 	bytes "bytes"
 	context "context"
 	fmt "fmt"
-	io "io"
-	math "math"
-	math_bits "math/bits"
-	reflect "reflect"
-	strings "strings"
-	time "time"
-
 	_ "github.com/envoyproxy/protoc-gen-validate/validate"
 	_ "github.com/gogo/protobuf/gogoproto"
 	proto "github.com/gogo/protobuf/proto"
 	github_com_gogo_protobuf_sortkeys "github.com/gogo/protobuf/sortkeys"
-	github_com_gogo_protobuf_types "github.com/gogo/protobuf/types"
 	types "github.com/gogo/protobuf/types"
 	golang_proto "github.com/golang/protobuf/proto"
 	_ "google.golang.org/genproto/googleapis/api/annotations"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
+	math "math"
+	reflect "reflect"
+	strings "strings"
+	time "time"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -50,7 +46,7 @@ type Event struct {
 	// Optional data attached to the event.
 	Data *types.Any `protobuf:"bytes,4,opt,name=data,proto3" json:"data,omitempty"`
 	// Correlation IDs can be used to find related events and actions such as API calls.
-	CorrelationIDs []string `protobuf:"bytes,5,rep,name=correlation_ids,json=correlationIds,proto3" json:"correlation_ids,omitempty"`
+	CorrelationIds []string `protobuf:"bytes,5,rep,name=correlation_ids,json=correlationIds,proto3" json:"correlation_ids,omitempty"`
 	// The origin of the event. Typically the hostname of the server that created it.
 	Origin string `protobuf:"bytes,6,opt,name=origin,proto3" json:"origin,omitempty"`
 	// Event context, internal use only.
@@ -60,11 +56,11 @@ type Event struct {
 	// Details on the authentication provided by the caller that triggered this event.
 	Authentication *Event_Authentication `protobuf:"bytes,9,opt,name=authentication,proto3" json:"authentication,omitempty"`
 	// The IP address of the caller that triggered this event.
-	RemoteIP string `protobuf:"bytes,10,opt,name=remote_ip,json=remoteIp,proto3" json:"remote_ip,omitempty"`
+	RemoteIp string `protobuf:"bytes,10,opt,name=remote_ip,json=remoteIp,proto3" json:"remote_ip,omitempty"`
 	// The IP address of the caller that triggered this event.
 	UserAgent string `protobuf:"bytes,11,opt,name=user_agent,json=userAgent,proto3" json:"user_agent,omitempty"`
 	// The unique identifier of the event, assigned on creation.
-	UniqueID             string   `protobuf:"bytes,12,opt,name=unique_id,json=uniqueId,proto3" json:"unique_id,omitempty"`
+	UniqueId             string   `protobuf:"bytes,12,opt,name=unique_id,json=uniqueId,proto3" json:"unique_id,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
@@ -75,25 +71,16 @@ func (*Event) Descriptor() ([]byte, []int) {
 	return fileDescriptor_4fd8551d68f51e44, []int{0}
 }
 func (m *Event) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	return xxx_messageInfo_Event.Unmarshal(m, b)
 }
 func (m *Event) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_Event.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	return xxx_messageInfo_Event.Marshal(b, m, deterministic)
 }
 func (m *Event) XXX_Merge(src proto.Message) {
 	xxx_messageInfo_Event.Merge(m, src)
 }
 func (m *Event) XXX_Size() int {
-	return m.Size()
+	return xxx_messageInfo_Event.Size(m)
 }
 func (m *Event) XXX_DiscardUnknown() {
 	xxx_messageInfo_Event.DiscardUnknown(m)
@@ -129,9 +116,9 @@ func (m *Event) GetData() *types.Any {
 	return nil
 }
 
-func (m *Event) GetCorrelationIDs() []string {
+func (m *Event) GetCorrelationIds() []string {
 	if m != nil {
-		return m.CorrelationIDs
+		return m.CorrelationIds
 	}
 	return nil
 }
@@ -164,9 +151,9 @@ func (m *Event) GetAuthentication() *Event_Authentication {
 	return nil
 }
 
-func (m *Event) GetRemoteIP() string {
+func (m *Event) GetRemoteIp() string {
 	if m != nil {
-		return m.RemoteIP
+		return m.RemoteIp
 	}
 	return ""
 }
@@ -178,9 +165,9 @@ func (m *Event) GetUserAgent() string {
 	return ""
 }
 
-func (m *Event) GetUniqueID() string {
+func (m *Event) GetUniqueId() string {
 	if m != nil {
-		return m.UniqueID
+		return m.UniqueId
 	}
 	return ""
 }
@@ -191,7 +178,7 @@ type Event_Authentication struct {
 	// The type of token that was used. Common types are APIKey, AccessToken and SessionToken.
 	TokenType string `protobuf:"bytes,2,opt,name=token_type,json=tokenType,proto3" json:"token_type,omitempty"`
 	// The ID of the token that was used.
-	TokenID              string   `protobuf:"bytes,3,opt,name=token_id,json=tokenId,proto3" json:"token_id,omitempty"`
+	TokenId              string   `protobuf:"bytes,3,opt,name=token_id,json=tokenId,proto3" json:"token_id,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
@@ -202,25 +189,16 @@ func (*Event_Authentication) Descriptor() ([]byte, []int) {
 	return fileDescriptor_4fd8551d68f51e44, []int{0, 1}
 }
 func (m *Event_Authentication) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	return xxx_messageInfo_Event_Authentication.Unmarshal(m, b)
 }
 func (m *Event_Authentication) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_Event_Authentication.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	return xxx_messageInfo_Event_Authentication.Marshal(b, m, deterministic)
 }
 func (m *Event_Authentication) XXX_Merge(src proto.Message) {
 	xxx_messageInfo_Event_Authentication.Merge(m, src)
 }
 func (m *Event_Authentication) XXX_Size() int {
-	return m.Size()
+	return xxx_messageInfo_Event_Authentication.Size(m)
 }
 func (m *Event_Authentication) XXX_DiscardUnknown() {
 	xxx_messageInfo_Event_Authentication.DiscardUnknown(m)
@@ -242,9 +220,9 @@ func (m *Event_Authentication) GetTokenType() string {
 	return ""
 }
 
-func (m *Event_Authentication) GetTokenID() string {
+func (m *Event_Authentication) GetTokenId() string {
 	if m != nil {
-		return m.TokenID
+		return m.TokenId
 	}
 	return ""
 }
@@ -269,25 +247,16 @@ func (*StreamEventsRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_4fd8551d68f51e44, []int{1}
 }
 func (m *StreamEventsRequest) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	return xxx_messageInfo_StreamEventsRequest.Unmarshal(m, b)
 }
 func (m *StreamEventsRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_StreamEventsRequest.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	return xxx_messageInfo_StreamEventsRequest.Marshal(b, m, deterministic)
 }
 func (m *StreamEventsRequest) XXX_Merge(src proto.Message) {
 	xxx_messageInfo_StreamEventsRequest.Merge(m, src)
 }
 func (m *StreamEventsRequest) XXX_Size() int {
-	return m.Size()
+	return xxx_messageInfo_StreamEventsRequest.Size(m)
 }
 func (m *StreamEventsRequest) XXX_DiscardUnknown() {
 	xxx_messageInfo_StreamEventsRequest.DiscardUnknown(m)
@@ -316,6 +285,78 @@ func (m *StreamEventsRequest) GetAfter() *time.Time {
 	return nil
 }
 
+type FindRelatedEventsRequest struct {
+	CorrelationId        string   `protobuf:"bytes,1,opt,name=correlation_id,json=correlationId,proto3" json:"correlation_id,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *FindRelatedEventsRequest) Reset()      { *m = FindRelatedEventsRequest{} }
+func (*FindRelatedEventsRequest) ProtoMessage() {}
+func (*FindRelatedEventsRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_4fd8551d68f51e44, []int{2}
+}
+func (m *FindRelatedEventsRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_FindRelatedEventsRequest.Unmarshal(m, b)
+}
+func (m *FindRelatedEventsRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_FindRelatedEventsRequest.Marshal(b, m, deterministic)
+}
+func (m *FindRelatedEventsRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_FindRelatedEventsRequest.Merge(m, src)
+}
+func (m *FindRelatedEventsRequest) XXX_Size() int {
+	return xxx_messageInfo_FindRelatedEventsRequest.Size(m)
+}
+func (m *FindRelatedEventsRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_FindRelatedEventsRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_FindRelatedEventsRequest proto.InternalMessageInfo
+
+func (m *FindRelatedEventsRequest) GetCorrelationId() string {
+	if m != nil {
+		return m.CorrelationId
+	}
+	return ""
+}
+
+type FindRelatedEventsResponse struct {
+	Events               []*Event `protobuf:"bytes,1,rep,name=events,proto3" json:"events,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *FindRelatedEventsResponse) Reset()      { *m = FindRelatedEventsResponse{} }
+func (*FindRelatedEventsResponse) ProtoMessage() {}
+func (*FindRelatedEventsResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_4fd8551d68f51e44, []int{3}
+}
+func (m *FindRelatedEventsResponse) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_FindRelatedEventsResponse.Unmarshal(m, b)
+}
+func (m *FindRelatedEventsResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_FindRelatedEventsResponse.Marshal(b, m, deterministic)
+}
+func (m *FindRelatedEventsResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_FindRelatedEventsResponse.Merge(m, src)
+}
+func (m *FindRelatedEventsResponse) XXX_Size() int {
+	return xxx_messageInfo_FindRelatedEventsResponse.Size(m)
+}
+func (m *FindRelatedEventsResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_FindRelatedEventsResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_FindRelatedEventsResponse proto.InternalMessageInfo
+
+func (m *FindRelatedEventsResponse) GetEvents() []*Event {
+	if m != nil {
+		return m.Events
+	}
+	return nil
+}
+
 func init() {
 	proto.RegisterType((*Event)(nil), "ttn.lorawan.v3.Event")
 	golang_proto.RegisterType((*Event)(nil), "ttn.lorawan.v3.Event")
@@ -325,6 +366,10 @@ func init() {
 	golang_proto.RegisterType((*Event_Authentication)(nil), "ttn.lorawan.v3.Event.Authentication")
 	proto.RegisterType((*StreamEventsRequest)(nil), "ttn.lorawan.v3.StreamEventsRequest")
 	golang_proto.RegisterType((*StreamEventsRequest)(nil), "ttn.lorawan.v3.StreamEventsRequest")
+	proto.RegisterType((*FindRelatedEventsRequest)(nil), "ttn.lorawan.v3.FindRelatedEventsRequest")
+	golang_proto.RegisterType((*FindRelatedEventsRequest)(nil), "ttn.lorawan.v3.FindRelatedEventsRequest")
+	proto.RegisterType((*FindRelatedEventsResponse)(nil), "ttn.lorawan.v3.FindRelatedEventsResponse")
+	golang_proto.RegisterType((*FindRelatedEventsResponse)(nil), "ttn.lorawan.v3.FindRelatedEventsResponse")
 }
 
 func init() { proto.RegisterFile("lorawan-stack/api/events.proto", fileDescriptor_4fd8551d68f51e44) }
@@ -333,61 +378,59 @@ func init() {
 }
 
 var fileDescriptor_4fd8551d68f51e44 = []byte{
-	// 858 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x9c, 0x54, 0x3d, 0x8c, 0x1b, 0x45,
-	0x14, 0xde, 0xf1, 0xbf, 0xc7, 0xc6, 0x44, 0x43, 0x88, 0x16, 0x0b, 0xc6, 0x87, 0x83, 0x90, 0x41,
-	0xba, 0x5d, 0x74, 0x27, 0x45, 0xe8, 0x44, 0xc1, 0xf9, 0xee, 0x84, 0x56, 0xa2, 0x40, 0xcb, 0xd1,
-	0xa4, 0xb1, 0xc6, 0xde, 0xb9, 0xf5, 0xc8, 0xf6, 0xcc, 0x66, 0x77, 0xec, 0x64, 0xbb, 0x88, 0x2a,
-	0x1d, 0x11, 0x34, 0x94, 0x34, 0xa0, 0x94, 0x11, 0x55, 0xca, 0x94, 0x57, 0x46, 0xa2, 0x49, 0x75,
-	0xc4, 0xb3, 0x14, 0x29, 0x53, 0x46, 0xa9, 0xd0, 0xce, 0xae, 0x73, 0x3e, 0xdf, 0x89, 0x82, 0xee,
-	0xcd, 0xfb, 0xbe, 0xf7, 0xe6, 0x7b, 0xdf, 0xbe, 0x1d, 0x88, 0xa7, 0x22, 0x24, 0x77, 0x09, 0xdf,
-	0x8e, 0x24, 0x19, 0x4d, 0x6c, 0x12, 0x30, 0x9b, 0x2e, 0x28, 0x97, 0x91, 0x15, 0x84, 0x42, 0x0a,
-	0xd4, 0x92, 0x92, 0x5b, 0x39, 0xc7, 0x5a, 0xec, 0xb6, 0xf7, 0x7d, 0x26, 0xc7, 0xf3, 0xa1, 0x35,
-	0x12, 0x33, 0x9b, 0xf2, 0x85, 0x88, 0x83, 0x50, 0xdc, 0x8b, 0x6d, 0x4d, 0x1e, 0x6d, 0xfb, 0x94,
-	0x6f, 0x2f, 0xc8, 0x94, 0x79, 0x44, 0x52, 0xfb, 0x52, 0x90, 0xb5, 0x6c, 0x6f, 0xaf, 0xb5, 0xf0,
-	0x85, 0x2f, 0xb2, 0xe2, 0xe1, 0xfc, 0x44, 0x9f, 0xf4, 0x41, 0x47, 0x39, 0xfd, 0x43, 0x5f, 0x08,
-	0x7f, 0x4a, 0xb5, 0x34, 0xc2, 0xb9, 0x90, 0x44, 0x32, 0xc1, 0x73, 0x7d, 0xed, 0x0f, 0x72, 0xf4,
-	0x6d, 0x0f, 0xc2, 0xe3, 0x1c, 0xea, 0x6c, 0x42, 0x92, 0xcd, 0x68, 0x24, 0xc9, 0x2c, 0xc8, 0x09,
-	0x37, 0x2f, 0xcf, 0xce, 0x3c, 0xca, 0x25, 0x3b, 0x61, 0x34, 0x5c, 0x5d, 0x70, 0x85, 0x41, 0x21,
-	0xf3, 0xc7, 0x2b, 0x83, 0xba, 0x3f, 0x55, 0x60, 0xf9, 0x28, 0x75, 0x0c, 0x21, 0x58, 0xe2, 0x64,
-	0x46, 0x4d, 0xb0, 0x05, 0x7a, 0x75, 0x57, 0xc7, 0xe8, 0x6b, 0x58, 0x4a, 0x6f, 0x35, 0x0b, 0x5b,
-	0xa0, 0xd7, 0xd8, 0x69, 0x5b, 0x99, 0x24, 0x6b, 0x25, 0xc9, 0x3a, 0x5e, 0x49, 0xea, 0x5f, 0x7b,
-	0xd3, 0x2f, 0xff, 0x09, 0x0a, 0x35, 0x70, 0x7a, 0xd6, 0x31, 0x1e, 0xfe, 0xdd, 0x01, 0xae, 0xae,
-	0x44, 0x07, 0xb0, 0xb1, 0x26, 0xca, 0x2c, 0x6e, 0x15, 0x7b, 0x8d, 0x9d, 0x8f, 0xad, 0x8b, 0x9f,
-	0xc5, 0x3a, 0xe2, 0x92, 0xc9, 0xd8, 0x39, 0x27, 0xba, 0xeb, 0x55, 0xa8, 0x07, 0x4b, 0x1e, 0x91,
-	0xc4, 0x2c, 0x69, 0x19, 0xd7, 0x2f, 0xc9, 0xd8, 0xe7, 0xb1, 0xab, 0x19, 0xe8, 0x1b, 0xf8, 0xee,
-	0x48, 0x84, 0x21, 0x9d, 0x6a, 0x97, 0x07, 0xcc, 0x8b, 0xcc, 0xf2, 0x56, 0xb1, 0x57, 0xef, 0xe3,
-	0x37, 0xfd, 0xfa, 0xcf, 0xa0, 0xd2, 0x2d, 0x85, 0x05, 0xd3, 0x53, 0x67, 0x9d, 0xd6, 0xc1, 0x39,
-	0xcd, 0x39, 0x8c, 0xdc, 0xd6, 0x5a, 0x99, 0xe3, 0x45, 0xe8, 0x06, 0xac, 0x88, 0x90, 0xf9, 0x8c,
-	0x9b, 0x15, 0xed, 0x47, 0x7e, 0x42, 0x5f, 0xc1, 0xea, 0x48, 0x70, 0x49, 0xef, 0x49, 0xb3, 0xaa,
-	0x67, 0xe9, 0x5e, 0x9a, 0x25, 0x75, 0xd3, 0x3a, 0xc8, 0x48, 0x47, 0x5c, 0x86, 0xb1, 0xbb, 0x2a,
-	0x41, 0xb7, 0x20, 0x5c, 0xb0, 0x88, 0x0d, 0xd9, 0x94, 0xc9, 0xd8, 0xac, 0xe9, 0x71, 0x6e, 0x6c,
-	0x36, 0x70, 0xf5, 0xf7, 0x71, 0xd7, 0x98, 0xe8, 0x5b, 0xd8, 0x22, 0x73, 0x39, 0x4e, 0x1d, 0x19,
-	0x69, 0x89, 0x66, 0x5d, 0xd7, 0x7e, 0x72, 0xf5, 0xe5, 0xfb, 0x17, 0xb8, 0xee, 0x46, 0x2d, 0xfa,
-	0x0c, 0xd6, 0x43, 0x3a, 0x13, 0x92, 0x0e, 0x58, 0x60, 0xc2, 0x74, 0xbc, 0x7e, 0x53, 0x9d, 0x75,
-	0x6a, 0xae, 0x4e, 0x3a, 0xdf, 0xb9, 0xb5, 0x0c, 0x76, 0x02, 0xf4, 0x11, 0x84, 0xf3, 0x88, 0x86,
-	0x03, 0xe2, 0x53, 0x2e, 0xcd, 0x86, 0xb6, 0xa2, 0x9e, 0x66, 0xf6, 0xd3, 0x44, 0xda, 0x69, 0xce,
-	0xd9, 0x9d, 0x39, 0x1d, 0x30, 0xcf, 0x6c, 0x9e, 0x77, 0xfa, 0x41, 0x27, 0x9d, 0x43, 0xb7, 0x96,
-	0xc1, 0x8e, 0xd7, 0xde, 0x83, 0xcd, 0x75, 0x4f, 0xd0, 0x35, 0x58, 0x9c, 0xd0, 0x38, 0xdf, 0xb6,
-	0x34, 0x44, 0xd7, 0x61, 0x79, 0x41, 0xa6, 0xf3, 0x6c, 0xdb, 0x9a, 0x6e, 0x76, 0xd8, 0x2b, 0x7c,
-	0x09, 0xda, 0x13, 0xd8, 0xba, 0x38, 0x52, 0xba, 0xac, 0x32, 0x0e, 0xde, 0x2e, 0x6b, 0x1a, 0xa7,
-	0x5a, 0xa5, 0x98, 0x50, 0x3e, 0xd0, 0x48, 0x21, 0xd3, 0xaa, 0x33, 0xc7, 0x29, 0xfc, 0x29, 0xac,
-	0x65, 0x30, 0xf3, 0xcc, 0xa2, 0x96, 0xda, 0x50, 0x67, 0x9d, 0xea, 0x71, 0x9a, 0x73, 0x0e, 0xdd,
-	0xaa, 0x06, 0x1d, 0xaf, 0xfb, 0x07, 0x80, 0xef, 0x7d, 0x2f, 0x43, 0x4a, 0x66, 0xda, 0xcc, 0xc8,
-	0xa5, 0x77, 0xe6, 0x34, 0x92, 0x9b, 0x9b, 0x0c, 0xfe, 0xd7, 0x26, 0xa7, 0xba, 0x09, 0x9b, 0x6a,
-	0x75, 0xef, 0xb8, 0x3a, 0x46, 0xb7, 0x60, 0x99, 0x9c, 0x48, 0x1a, 0x6a, 0x55, 0xff, 0xfd, 0x97,
-	0x95, 0xf4, 0x9f, 0x95, 0xd1, 0x77, 0x3c, 0x58, 0xc9, 0x14, 0xa2, 0xdb, 0xb0, 0x92, 0x29, 0x46,
-	0x37, 0x37, 0xf5, 0x5c, 0x31, 0x49, 0xfb, 0xfd, 0x2b, 0xb7, 0xa6, 0x8b, 0x7e, 0xfc, 0xeb, 0x9f,
-	0x5f, 0x0a, 0xcd, 0x6e, 0x35, 0x7f, 0x42, 0xf7, 0xc0, 0xe7, 0x5f, 0x80, 0xfe, 0xef, 0xe0, 0x74,
-	0x89, 0xc1, 0xb3, 0x25, 0x06, 0xcf, 0x97, 0xd8, 0x78, 0xb1, 0xc4, 0xc6, 0xcb, 0x25, 0x36, 0x5e,
-	0x2d, 0xb1, 0xf1, 0x7a, 0x89, 0xc1, 0x7d, 0x85, 0xc1, 0x03, 0x85, 0x8d, 0x47, 0x0a, 0x83, 0xc7,
-	0x0a, 0x1b, 0x4f, 0x14, 0x36, 0x9e, 0x2a, 0x6c, 0x9c, 0x2a, 0x0c, 0x9e, 0x29, 0x0c, 0x9e, 0x2b,
-	0x6c, 0xbc, 0x50, 0x18, 0xbc, 0x54, 0xd8, 0x78, 0xa5, 0x30, 0x78, 0xad, 0xb0, 0x71, 0x3f, 0xc1,
-	0xc6, 0x83, 0x04, 0x83, 0x87, 0x09, 0x36, 0x7e, 0x4d, 0x30, 0xf8, 0x2d, 0xc1, 0xc6, 0xa3, 0x04,
-	0x1b, 0x8f, 0x13, 0x0c, 0x9e, 0x24, 0x18, 0x3c, 0x4d, 0x30, 0xb8, 0x6d, 0xfb, 0xc2, 0x92, 0x63,
-	0x2a, 0xc7, 0x8c, 0xfb, 0x91, 0xc5, 0xa9, 0xbc, 0x2b, 0xc2, 0x89, 0x7d, 0xf1, 0x31, 0x5b, 0xec,
-	0xda, 0xc1, 0xc4, 0xb7, 0xa5, 0xe4, 0xc1, 0x70, 0x58, 0xd1, 0x76, 0xed, 0xfe, 0x1b, 0x00, 0x00,
-	0xff, 0xff, 0x7a, 0x22, 0xd6, 0xa7, 0x12, 0x06, 0x00, 0x00,
+	// 828 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x9c, 0x94, 0xbf, 0x8f, 0x1b, 0x45,
+	0x14, 0xc7, 0x6f, 0xfc, 0xeb, 0xce, 0x63, 0xc7, 0x39, 0x86, 0x10, 0xe6, 0x16, 0xd8, 0x3b, 0x36,
+	0x14, 0x06, 0xc9, 0xbb, 0xd1, 0x9d, 0x88, 0xd0, 0x89, 0x82, 0x73, 0x74, 0x48, 0x46, 0xa1, 0x59,
+	0x52, 0xa5, 0xc0, 0x1a, 0x7b, 0xe7, 0xd6, 0x23, 0xdb, 0x33, 0x9b, 0xd9, 0xb7, 0x4e, 0x56, 0x34,
+	0x88, 0xbf, 0x20, 0x82, 0xff, 0x01, 0x51, 0xf3, 0x17, 0x50, 0xd2, 0x43, 0x41, 0x05, 0xca, 0x85,
+	0x82, 0x92, 0xfa, 0x2a, 0xb4, 0x33, 0xeb, 0x60, 0xfb, 0x0c, 0x42, 0x74, 0x6f, 0xe6, 0x7d, 0xdf,
+	0x7b, 0x9f, 0xf7, 0xf6, 0xed, 0x60, 0x77, 0xa6, 0x34, 0x7b, 0xc2, 0x64, 0x2f, 0x05, 0x36, 0x9e,
+	0x06, 0x2c, 0x11, 0x01, 0x5f, 0x70, 0x09, 0xa9, 0x9f, 0x68, 0x05, 0x8a, 0x74, 0x00, 0xa4, 0x5f,
+	0x6a, 0xfc, 0xc5, 0x89, 0x73, 0x16, 0x0b, 0x98, 0x64, 0x23, 0x7f, 0xac, 0xe6, 0x01, 0x97, 0x0b,
+	0x95, 0x27, 0x5a, 0x3d, 0xcd, 0x03, 0x23, 0x1e, 0xf7, 0x62, 0x2e, 0x7b, 0x0b, 0x36, 0x13, 0x11,
+	0x03, 0x1e, 0x5c, 0x33, 0x6c, 0x4a, 0xa7, 0xb7, 0x92, 0x22, 0x56, 0xb1, 0xb2, 0xc1, 0xa3, 0xec,
+	0xc2, 0x9c, 0xcc, 0xc1, 0x58, 0xa5, 0xfc, 0xcd, 0x58, 0xa9, 0x78, 0xc6, 0x0d, 0x1a, 0x93, 0x52,
+	0x01, 0x03, 0xa1, 0x64, 0xc9, 0xe7, 0x1c, 0x94, 0xde, 0x97, 0x39, 0x98, 0xcc, 0x4b, 0xd7, 0xe1,
+	0xa6, 0x0b, 0xc4, 0x9c, 0xa7, 0xc0, 0xe6, 0x49, 0x29, 0xb8, 0x73, 0xbd, 0x77, 0x11, 0x71, 0x09,
+	0xe2, 0x42, 0x70, 0xbd, 0x2c, 0xb0, 0x65, 0x40, 0x5a, 0xc4, 0x93, 0xe5, 0x80, 0xbc, 0x9f, 0xeb,
+	0xb8, 0x7e, 0x5e, 0x4c, 0x8c, 0x10, 0x5c, 0x93, 0x6c, 0xce, 0x29, 0x3a, 0x42, 0xdd, 0x66, 0x68,
+	0x6c, 0xf2, 0x11, 0xae, 0x15, 0x55, 0x69, 0xe5, 0x08, 0x75, 0x5b, 0xc7, 0x8e, 0x6f, 0x91, 0xfc,
+	0x25, 0x92, 0xff, 0x70, 0x89, 0xd4, 0xdf, 0xbf, 0xea, 0xd7, 0xbf, 0x47, 0x95, 0x3d, 0xf4, 0xe3,
+	0xaf, 0x87, 0x3b, 0xcf, 0x7e, 0x3b, 0x44, 0xa1, 0x89, 0x24, 0xf7, 0x71, 0x6b, 0x05, 0x8a, 0x56,
+	0x8f, 0xaa, 0xdd, 0xd6, 0xf1, 0xdb, 0xfe, 0xfa, 0x67, 0xf1, 0xcf, 0x25, 0x08, 0xc8, 0x07, 0x7f,
+	0x0b, 0xc3, 0xd5, 0x28, 0xd2, 0xc5, 0xb5, 0x88, 0x01, 0xa3, 0x35, 0x83, 0x71, 0xeb, 0x1a, 0xc6,
+	0x99, 0xcc, 0x43, 0xa3, 0x20, 0xef, 0xe3, 0x9b, 0x63, 0xa5, 0x35, 0x9f, 0x99, 0x29, 0x0f, 0x45,
+	0x94, 0xd2, 0xfa, 0x51, 0xb5, 0xdb, 0xec, 0xb7, 0xaf, 0xfa, 0xcd, 0xaf, 0x51, 0xc3, 0xab, 0xe9,
+	0x0a, 0x8d, 0xc2, 0xce, 0x8a, 0x68, 0x10, 0xa5, 0xe4, 0x36, 0x6e, 0x28, 0x2d, 0x62, 0x21, 0x69,
+	0xc3, 0x74, 0x5f, 0x9e, 0xc8, 0x87, 0x78, 0x77, 0xac, 0x24, 0xf0, 0xa7, 0x40, 0x77, 0x0d, 0xb9,
+	0x77, 0x8d, 0xbc, 0x98, 0x9d, 0x7f, 0xdf, 0x8a, 0xce, 0x25, 0xe8, 0x3c, 0x5c, 0x86, 0x90, 0x7b,
+	0x18, 0x2f, 0x44, 0x2a, 0x46, 0x62, 0x26, 0x20, 0xa7, 0x7b, 0x06, 0xfe, 0xf6, 0x66, 0x82, 0xd0,
+	0x7c, 0x8d, 0x70, 0x45, 0x49, 0x1e, 0xe0, 0x0e, 0xcb, 0x60, 0x52, 0xf4, 0x3f, 0x36, 0x88, 0xb4,
+	0x69, 0x62, 0xdf, 0xd9, 0x5e, 0xfc, 0x6c, 0x4d, 0x1b, 0x6e, 0xc4, 0x92, 0x37, 0x70, 0x53, 0xf3,
+	0xb9, 0x02, 0x3e, 0x14, 0x09, 0xc5, 0xa6, 0xbd, 0x3d, 0x7b, 0x31, 0x48, 0xc8, 0x5b, 0x18, 0x67,
+	0x29, 0xd7, 0x43, 0x16, 0x73, 0x09, 0xb4, 0x65, 0xbc, 0xcd, 0xe2, 0xe6, 0xac, 0xb8, 0x28, 0x62,
+	0x33, 0x29, 0x1e, 0x67, 0x7c, 0x28, 0x22, 0xda, 0xb6, 0xb1, 0xf6, 0x62, 0x10, 0x39, 0xa7, 0xb8,
+	0xbd, 0xda, 0x37, 0xd9, 0xc7, 0xd5, 0x29, 0xcf, 0xcb, 0xfd, 0x29, 0x4c, 0x72, 0x0b, 0xd7, 0x17,
+	0x6c, 0x96, 0xd9, 0xfd, 0x69, 0x87, 0xf6, 0x70, 0x5a, 0xf9, 0x00, 0x39, 0x9f, 0xe3, 0xce, 0x3a,
+	0x76, 0xb1, 0x7e, 0x90, 0x27, 0x2f, 0xd7, 0xaf, 0xb0, 0x0b, 0x3a, 0x50, 0x53, 0x2e, 0x87, 0xc6,
+	0x53, 0xb1, 0x74, 0xe6, 0xe6, 0x61, 0xe1, 0x3e, 0xc0, 0x7b, 0xd6, 0x2d, 0x22, 0x5a, 0x35, 0xce,
+	0x5d, 0x73, 0x1e, 0x44, 0xde, 0xb7, 0x08, 0xbf, 0xfa, 0x19, 0x68, 0xce, 0xe6, 0x66, 0x46, 0x69,
+	0xc8, 0x1f, 0x67, 0x3c, 0x85, 0xcd, 0x75, 0x44, 0xff, 0x6b, 0x1d, 0x0b, 0x54, 0x26, 0x66, 0x06,
+	0xe8, 0x46, 0x68, 0x6c, 0x72, 0x0f, 0xd7, 0xd9, 0x05, 0x70, 0x6d, 0x40, 0xfe, 0xfd, 0x57, 0xa9,
+	0x99, 0xdf, 0xc3, 0xca, 0xbd, 0x07, 0x98, 0x7e, 0x2c, 0x64, 0x14, 0x16, 0xcb, 0xc8, 0xa3, 0x75,
+	0xd8, 0xbb, 0xb8, 0xb3, 0xbe, 0xcc, 0x76, 0x38, 0xfd, 0xe6, 0x55, 0xbf, 0xa1, 0x6b, 0xfb, 0x88,
+	0x46, 0xe1, 0x8d, 0xb5, 0x45, 0xf6, 0x3e, 0xc1, 0x07, 0x5b, 0xb2, 0xa5, 0x89, 0x92, 0x29, 0x27,
+	0x3d, 0xdc, 0xb0, 0x6f, 0x63, 0xd9, 0xf6, 0x6b, 0x5b, 0xd7, 0x29, 0x2c, 0x45, 0xc7, 0xcf, 0x11,
+	0x6e, 0xd8, 0x0c, 0xe4, 0x11, 0x6e, 0xd8, 0x61, 0x92, 0x3b, 0x9b, 0x31, 0x5b, 0x86, 0xec, 0x6c,
+	0x4f, 0xec, 0x91, 0xaf, 0x7e, 0xfa, 0xfd, 0x9b, 0x4a, 0xdb, 0xdb, 0x2d, 0x9f, 0xe8, 0x53, 0xf4,
+	0xde, 0x5d, 0x44, 0xbe, 0xc0, 0xad, 0x15, 0x64, 0xd2, 0xdd, 0x8c, 0xfd, 0xa7, 0xe9, 0x38, 0xef,
+	0xfe, 0x07, 0xa5, 0xed, 0xdc, 0x7b, 0xdd, 0x54, 0x7e, 0x85, 0xdc, 0x2c, 0x2b, 0x07, 0xda, 0xca,
+	0xfa, 0x9f, 0xfe, 0xf2, 0xdc, 0xdd, 0xf9, 0xf2, 0xd2, 0x45, 0xdf, 0x5d, 0xba, 0xe8, 0x8f, 0x4b,
+	0x77, 0xe7, 0xcf, 0x4b, 0x17, 0x3d, 0x7b, 0xe1, 0xee, 0xfc, 0xf0, 0xc2, 0x45, 0x8f, 0x82, 0x58,
+	0xf9, 0x30, 0xe1, 0x30, 0x11, 0x32, 0x4e, 0x7d, 0xc9, 0xe1, 0x89, 0xd2, 0xd3, 0x60, 0xfd, 0x41,
+	0x5d, 0x9c, 0x04, 0xc9, 0x34, 0x0e, 0x00, 0x64, 0x32, 0x1a, 0x35, 0xcc, 0xd7, 0x3e, 0xf9, 0x2b,
+	0x00, 0x00, 0xff, 0xff, 0x6d, 0xae, 0x78, 0xc1, 0x96, 0x06, 0x00, 0x00,
 }
 
 func (this *Event) Equal(that interface{}) bool {
@@ -426,11 +469,11 @@ func (this *Event) Equal(that interface{}) bool {
 	if !this.Data.Equal(that1.Data) {
 		return false
 	}
-	if len(this.CorrelationIDs) != len(that1.CorrelationIDs) {
+	if len(this.CorrelationIds) != len(that1.CorrelationIds) {
 		return false
 	}
-	for i := range this.CorrelationIDs {
-		if this.CorrelationIDs[i] != that1.CorrelationIDs[i] {
+	for i := range this.CorrelationIds {
+		if this.CorrelationIds[i] != that1.CorrelationIds[i] {
 			return false
 		}
 	}
@@ -451,13 +494,13 @@ func (this *Event) Equal(that interface{}) bool {
 	if !this.Authentication.Equal(that1.Authentication) {
 		return false
 	}
-	if this.RemoteIP != that1.RemoteIP {
+	if this.RemoteIp != that1.RemoteIp {
 		return false
 	}
 	if this.UserAgent != that1.UserAgent {
 		return false
 	}
-	if this.UniqueID != that1.UniqueID {
+	if this.UniqueId != that1.UniqueId {
 		return false
 	}
 	return true
@@ -487,7 +530,7 @@ func (this *Event_Authentication) Equal(that interface{}) bool {
 	if this.TokenType != that1.TokenType {
 		return false
 	}
-	if this.TokenID != that1.TokenID {
+	if this.TokenId != that1.TokenId {
 		return false
 	}
 	return true
@@ -531,6 +574,59 @@ func (this *StreamEventsRequest) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *FindRelatedEventsRequest) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*FindRelatedEventsRequest)
+	if !ok {
+		that2, ok := that.(FindRelatedEventsRequest)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.CorrelationId != that1.CorrelationId {
+		return false
+	}
+	return true
+}
+func (this *FindRelatedEventsResponse) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*FindRelatedEventsResponse)
+	if !ok {
+		that2, ok := that.(FindRelatedEventsResponse)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if len(this.Events) != len(that1.Events) {
+		return false
+	}
+	for i := range this.Events {
+		if !this.Events[i].Equal(that1.Events[i]) {
+			return false
+		}
+	}
+	return true
+}
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ context.Context
@@ -547,6 +643,7 @@ type EventsClient interface {
 	// Stream live events, optionally with a tail of historical events (depending on server support and retention policy).
 	// Events may arrive out-of-order.
 	Stream(ctx context.Context, in *StreamEventsRequest, opts ...grpc.CallOption) (Events_StreamClient, error)
+	FindRelated(ctx context.Context, in *FindRelatedEventsRequest, opts ...grpc.CallOption) (*FindRelatedEventsResponse, error)
 }
 
 type eventsClient struct {
@@ -589,11 +686,21 @@ func (x *eventsStreamClient) Recv() (*Event, error) {
 	return m, nil
 }
 
+func (c *eventsClient) FindRelated(ctx context.Context, in *FindRelatedEventsRequest, opts ...grpc.CallOption) (*FindRelatedEventsResponse, error) {
+	out := new(FindRelatedEventsResponse)
+	err := c.cc.Invoke(ctx, "/ttn.lorawan.v3.Events/FindRelated", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // EventsServer is the server API for Events service.
 type EventsServer interface {
 	// Stream live events, optionally with a tail of historical events (depending on server support and retention policy).
 	// Events may arrive out-of-order.
 	Stream(*StreamEventsRequest, Events_StreamServer) error
+	FindRelated(context.Context, *FindRelatedEventsRequest) (*FindRelatedEventsResponse, error)
 }
 
 // UnimplementedEventsServer can be embedded to have forward compatible implementations.
@@ -602,6 +709,9 @@ type UnimplementedEventsServer struct {
 
 func (*UnimplementedEventsServer) Stream(req *StreamEventsRequest, srv Events_StreamServer) error {
 	return status.Errorf(codes.Unimplemented, "method Stream not implemented")
+}
+func (*UnimplementedEventsServer) FindRelated(ctx context.Context, req *FindRelatedEventsRequest) (*FindRelatedEventsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method FindRelated not implemented")
 }
 
 func RegisterEventsServer(s *grpc.Server, srv EventsServer) {
@@ -629,10 +739,33 @@ func (x *eventsStreamServer) Send(m *Event) error {
 	return x.ServerStream.SendMsg(m)
 }
 
+func _Events_FindRelated_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(FindRelatedEventsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(EventsServer).FindRelated(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/ttn.lorawan.v3.Events/FindRelated",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(EventsServer).FindRelated(ctx, req.(*FindRelatedEventsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var _Events_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "ttn.lorawan.v3.Events",
 	HandlerType: (*EventsServer)(nil),
-	Methods:     []grpc.MethodDesc{},
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "FindRelated",
+			Handler:    _Events_FindRelated_Handler,
+		},
+	},
 	Streams: []grpc.StreamDesc{
 		{
 			StreamName:    "Stream",
@@ -643,522 +776,6 @@ var _Events_serviceDesc = grpc.ServiceDesc{
 	Metadata: "lorawan-stack/api/events.proto",
 }
 
-func (m *Event) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *Event) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *Event) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.UniqueID) > 0 {
-		i -= len(m.UniqueID)
-		copy(dAtA[i:], m.UniqueID)
-		i = encodeVarintEvents(dAtA, i, uint64(len(m.UniqueID)))
-		i--
-		dAtA[i] = 0x62
-	}
-	if len(m.UserAgent) > 0 {
-		i -= len(m.UserAgent)
-		copy(dAtA[i:], m.UserAgent)
-		i = encodeVarintEvents(dAtA, i, uint64(len(m.UserAgent)))
-		i--
-		dAtA[i] = 0x5a
-	}
-	if len(m.RemoteIP) > 0 {
-		i -= len(m.RemoteIP)
-		copy(dAtA[i:], m.RemoteIP)
-		i = encodeVarintEvents(dAtA, i, uint64(len(m.RemoteIP)))
-		i--
-		dAtA[i] = 0x52
-	}
-	if m.Authentication != nil {
-		{
-			size, err := m.Authentication.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintEvents(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x4a
-	}
-	if m.Visibility != nil {
-		{
-			size, err := m.Visibility.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintEvents(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x42
-	}
-	if len(m.Context) > 0 {
-		for k := range m.Context {
-			v := m.Context[k]
-			baseI := i
-			if len(v) > 0 {
-				i -= len(v)
-				copy(dAtA[i:], v)
-				i = encodeVarintEvents(dAtA, i, uint64(len(v)))
-				i--
-				dAtA[i] = 0x12
-			}
-			i -= len(k)
-			copy(dAtA[i:], k)
-			i = encodeVarintEvents(dAtA, i, uint64(len(k)))
-			i--
-			dAtA[i] = 0xa
-			i = encodeVarintEvents(dAtA, i, uint64(baseI-i))
-			i--
-			dAtA[i] = 0x3a
-		}
-	}
-	if len(m.Origin) > 0 {
-		i -= len(m.Origin)
-		copy(dAtA[i:], m.Origin)
-		i = encodeVarintEvents(dAtA, i, uint64(len(m.Origin)))
-		i--
-		dAtA[i] = 0x32
-	}
-	if len(m.CorrelationIDs) > 0 {
-		for iNdEx := len(m.CorrelationIDs) - 1; iNdEx >= 0; iNdEx-- {
-			i -= len(m.CorrelationIDs[iNdEx])
-			copy(dAtA[i:], m.CorrelationIDs[iNdEx])
-			i = encodeVarintEvents(dAtA, i, uint64(len(m.CorrelationIDs[iNdEx])))
-			i--
-			dAtA[i] = 0x2a
-		}
-	}
-	if m.Data != nil {
-		{
-			size, err := m.Data.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintEvents(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x22
-	}
-	if len(m.Identifiers) > 0 {
-		for iNdEx := len(m.Identifiers) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.Identifiers[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintEvents(dAtA, i, uint64(size))
-			}
-			i--
-			dAtA[i] = 0x1a
-		}
-	}
-	n4, err4 := github_com_gogo_protobuf_types.StdTimeMarshalTo(m.Time, dAtA[i-github_com_gogo_protobuf_types.SizeOfStdTime(m.Time):])
-	if err4 != nil {
-		return 0, err4
-	}
-	i -= n4
-	i = encodeVarintEvents(dAtA, i, uint64(n4))
-	i--
-	dAtA[i] = 0x12
-	if len(m.Name) > 0 {
-		i -= len(m.Name)
-		copy(dAtA[i:], m.Name)
-		i = encodeVarintEvents(dAtA, i, uint64(len(m.Name)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *Event_Authentication) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *Event_Authentication) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *Event_Authentication) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.TokenID) > 0 {
-		i -= len(m.TokenID)
-		copy(dAtA[i:], m.TokenID)
-		i = encodeVarintEvents(dAtA, i, uint64(len(m.TokenID)))
-		i--
-		dAtA[i] = 0x1a
-	}
-	if len(m.TokenType) > 0 {
-		i -= len(m.TokenType)
-		copy(dAtA[i:], m.TokenType)
-		i = encodeVarintEvents(dAtA, i, uint64(len(m.TokenType)))
-		i--
-		dAtA[i] = 0x12
-	}
-	if len(m.Type) > 0 {
-		i -= len(m.Type)
-		copy(dAtA[i:], m.Type)
-		i = encodeVarintEvents(dAtA, i, uint64(len(m.Type)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *StreamEventsRequest) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *StreamEventsRequest) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *StreamEventsRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.After != nil {
-		n5, err5 := github_com_gogo_protobuf_types.StdTimeMarshalTo(*m.After, dAtA[i-github_com_gogo_protobuf_types.SizeOfStdTime(*m.After):])
-		if err5 != nil {
-			return 0, err5
-		}
-		i -= n5
-		i = encodeVarintEvents(dAtA, i, uint64(n5))
-		i--
-		dAtA[i] = 0x1a
-	}
-	if m.Tail != 0 {
-		i = encodeVarintEvents(dAtA, i, uint64(m.Tail))
-		i--
-		dAtA[i] = 0x10
-	}
-	if len(m.Identifiers) > 0 {
-		for iNdEx := len(m.Identifiers) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.Identifiers[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintEvents(dAtA, i, uint64(size))
-			}
-			i--
-			dAtA[i] = 0xa
-		}
-	}
-	return len(dAtA) - i, nil
-}
-
-func encodeVarintEvents(dAtA []byte, offset int, v uint64) int {
-	offset -= sovEvents(v)
-	base := offset
-	for v >= 1<<7 {
-		dAtA[offset] = uint8(v&0x7f | 0x80)
-		v >>= 7
-		offset++
-	}
-	dAtA[offset] = uint8(v)
-	return base
-}
-func NewPopulatedEvent(r randyEvents, easy bool) *Event {
-	this := &Event{}
-	this.Name = randStringEvents(r)
-	v1 := github_com_gogo_protobuf_types.NewPopulatedStdTime(r, easy)
-	this.Time = *v1
-	if r.Intn(5) != 0 {
-		v2 := r.Intn(5)
-		this.Identifiers = make([]*EntityIdentifiers, v2)
-		for i := 0; i < v2; i++ {
-			this.Identifiers[i] = NewPopulatedEntityIdentifiers(r, easy)
-		}
-	}
-	if r.Intn(5) != 0 {
-		this.Data = types.NewPopulatedAny(r, easy)
-	}
-	v3 := r.Intn(10)
-	this.CorrelationIDs = make([]string, v3)
-	for i := 0; i < v3; i++ {
-		this.CorrelationIDs[i] = randStringEvents(r)
-	}
-	this.Origin = randStringEvents(r)
-	if r.Intn(5) != 0 {
-		v4 := r.Intn(10)
-		this.Context = make(map[string][]byte)
-		for i := 0; i < v4; i++ {
-			v5 := r.Intn(100)
-			v6 := randStringEvents(r)
-			this.Context[v6] = make([]byte, v5)
-			for i := 0; i < v5; i++ {
-				this.Context[v6][i] = byte(r.Intn(256))
-			}
-		}
-	}
-	if r.Intn(5) != 0 {
-		this.Visibility = NewPopulatedRights(r, easy)
-	}
-	if r.Intn(5) != 0 {
-		this.Authentication = NewPopulatedEvent_Authentication(r, easy)
-	}
-	this.RemoteIP = randStringEvents(r)
-	this.UserAgent = randStringEvents(r)
-	this.UniqueID = randStringEvents(r)
-	if !easy && r.Intn(10) != 0 {
-	}
-	return this
-}
-
-func NewPopulatedEvent_Authentication(r randyEvents, easy bool) *Event_Authentication {
-	this := &Event_Authentication{}
-	this.Type = randStringEvents(r)
-	this.TokenType = randStringEvents(r)
-	this.TokenID = randStringEvents(r)
-	if !easy && r.Intn(10) != 0 {
-	}
-	return this
-}
-
-func NewPopulatedStreamEventsRequest(r randyEvents, easy bool) *StreamEventsRequest {
-	this := &StreamEventsRequest{}
-	if r.Intn(5) != 0 {
-		v7 := r.Intn(5)
-		this.Identifiers = make([]*EntityIdentifiers, v7)
-		for i := 0; i < v7; i++ {
-			this.Identifiers[i] = NewPopulatedEntityIdentifiers(r, easy)
-		}
-	}
-	this.Tail = r.Uint32()
-	if r.Intn(5) != 0 {
-		this.After = github_com_gogo_protobuf_types.NewPopulatedStdTime(r, easy)
-	}
-	if !easy && r.Intn(10) != 0 {
-	}
-	return this
-}
-
-type randyEvents interface {
-	Float32() float32
-	Float64() float64
-	Int63() int64
-	Int31() int32
-	Uint32() uint32
-	Intn(n int) int
-}
-
-func randUTF8RuneEvents(r randyEvents) rune {
-	ru := r.Intn(62)
-	if ru < 10 {
-		return rune(ru + 48)
-	} else if ru < 36 {
-		return rune(ru + 55)
-	}
-	return rune(ru + 61)
-}
-func randStringEvents(r randyEvents) string {
-	v8 := r.Intn(100)
-	tmps := make([]rune, v8)
-	for i := 0; i < v8; i++ {
-		tmps[i] = randUTF8RuneEvents(r)
-	}
-	return string(tmps)
-}
-func randUnrecognizedEvents(r randyEvents, maxFieldNumber int) (dAtA []byte) {
-	l := r.Intn(5)
-	for i := 0; i < l; i++ {
-		wire := r.Intn(4)
-		if wire == 3 {
-			wire = 5
-		}
-		fieldNumber := maxFieldNumber + r.Intn(100)
-		dAtA = randFieldEvents(dAtA, r, fieldNumber, wire)
-	}
-	return dAtA
-}
-func randFieldEvents(dAtA []byte, r randyEvents, fieldNumber int, wire int) []byte {
-	key := uint32(fieldNumber)<<3 | uint32(wire)
-	switch wire {
-	case 0:
-		dAtA = encodeVarintPopulateEvents(dAtA, uint64(key))
-		v9 := r.Int63()
-		if r.Intn(2) == 0 {
-			v9 *= -1
-		}
-		dAtA = encodeVarintPopulateEvents(dAtA, uint64(v9))
-	case 1:
-		dAtA = encodeVarintPopulateEvents(dAtA, uint64(key))
-		dAtA = append(dAtA, byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)))
-	case 2:
-		dAtA = encodeVarintPopulateEvents(dAtA, uint64(key))
-		ll := r.Intn(100)
-		dAtA = encodeVarintPopulateEvents(dAtA, uint64(ll))
-		for j := 0; j < ll; j++ {
-			dAtA = append(dAtA, byte(r.Intn(256)))
-		}
-	default:
-		dAtA = encodeVarintPopulateEvents(dAtA, uint64(key))
-		dAtA = append(dAtA, byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)))
-	}
-	return dAtA
-}
-func encodeVarintPopulateEvents(dAtA []byte, v uint64) []byte {
-	for v >= 1<<7 {
-		dAtA = append(dAtA, uint8(v&0x7f|0x80))
-		v >>= 7
-	}
-	dAtA = append(dAtA, uint8(v))
-	return dAtA
-}
-func (m *Event) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.Name)
-	if l > 0 {
-		n += 1 + l + sovEvents(uint64(l))
-	}
-	l = github_com_gogo_protobuf_types.SizeOfStdTime(m.Time)
-	n += 1 + l + sovEvents(uint64(l))
-	if len(m.Identifiers) > 0 {
-		for _, e := range m.Identifiers {
-			l = e.Size()
-			n += 1 + l + sovEvents(uint64(l))
-		}
-	}
-	if m.Data != nil {
-		l = m.Data.Size()
-		n += 1 + l + sovEvents(uint64(l))
-	}
-	if len(m.CorrelationIDs) > 0 {
-		for _, s := range m.CorrelationIDs {
-			l = len(s)
-			n += 1 + l + sovEvents(uint64(l))
-		}
-	}
-	l = len(m.Origin)
-	if l > 0 {
-		n += 1 + l + sovEvents(uint64(l))
-	}
-	if len(m.Context) > 0 {
-		for k, v := range m.Context {
-			_ = k
-			_ = v
-			l = 0
-			if len(v) > 0 {
-				l = 1 + len(v) + sovEvents(uint64(len(v)))
-			}
-			mapEntrySize := 1 + len(k) + sovEvents(uint64(len(k))) + l
-			n += mapEntrySize + 1 + sovEvents(uint64(mapEntrySize))
-		}
-	}
-	if m.Visibility != nil {
-		l = m.Visibility.Size()
-		n += 1 + l + sovEvents(uint64(l))
-	}
-	if m.Authentication != nil {
-		l = m.Authentication.Size()
-		n += 1 + l + sovEvents(uint64(l))
-	}
-	l = len(m.RemoteIP)
-	if l > 0 {
-		n += 1 + l + sovEvents(uint64(l))
-	}
-	l = len(m.UserAgent)
-	if l > 0 {
-		n += 1 + l + sovEvents(uint64(l))
-	}
-	l = len(m.UniqueID)
-	if l > 0 {
-		n += 1 + l + sovEvents(uint64(l))
-	}
-	return n
-}
-
-func (m *Event_Authentication) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.Type)
-	if l > 0 {
-		n += 1 + l + sovEvents(uint64(l))
-	}
-	l = len(m.TokenType)
-	if l > 0 {
-		n += 1 + l + sovEvents(uint64(l))
-	}
-	l = len(m.TokenID)
-	if l > 0 {
-		n += 1 + l + sovEvents(uint64(l))
-	}
-	return n
-}
-
-func (m *StreamEventsRequest) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if len(m.Identifiers) > 0 {
-		for _, e := range m.Identifiers {
-			l = e.Size()
-			n += 1 + l + sovEvents(uint64(l))
-		}
-	}
-	if m.Tail != 0 {
-		n += 1 + sovEvents(uint64(m.Tail))
-	}
-	if m.After != nil {
-		l = github_com_gogo_protobuf_types.SizeOfStdTime(*m.After)
-		n += 1 + l + sovEvents(uint64(l))
-	}
-	return n
-}
-
-func sovEvents(x uint64) (n int) {
-	return (math_bits.Len64(x|1) + 6) / 7
-}
-func sozEvents(x uint64) (n int) {
-	return sovEvents((x << 1) ^ uint64((int64(x) >> 63)))
-}
 func (this *Event) String() string {
 	if this == nil {
 		return "nil"
@@ -1183,14 +800,14 @@ func (this *Event) String() string {
 		`Time:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.Time), "Timestamp", "types.Timestamp", 1), `&`, ``, 1) + `,`,
 		`Identifiers:` + repeatedStringForIdentifiers + `,`,
 		`Data:` + strings.Replace(fmt.Sprintf("%v", this.Data), "Any", "types.Any", 1) + `,`,
-		`CorrelationIDs:` + fmt.Sprintf("%v", this.CorrelationIDs) + `,`,
+		`CorrelationIds:` + fmt.Sprintf("%v", this.CorrelationIds) + `,`,
 		`Origin:` + fmt.Sprintf("%v", this.Origin) + `,`,
 		`Context:` + mapStringForContext + `,`,
 		`Visibility:` + strings.Replace(fmt.Sprintf("%v", this.Visibility), "Rights", "Rights", 1) + `,`,
 		`Authentication:` + strings.Replace(fmt.Sprintf("%v", this.Authentication), "Event_Authentication", "Event_Authentication", 1) + `,`,
-		`RemoteIP:` + fmt.Sprintf("%v", this.RemoteIP) + `,`,
+		`RemoteIp:` + fmt.Sprintf("%v", this.RemoteIp) + `,`,
 		`UserAgent:` + fmt.Sprintf("%v", this.UserAgent) + `,`,
-		`UniqueID:` + fmt.Sprintf("%v", this.UniqueID) + `,`,
+		`UniqueId:` + fmt.Sprintf("%v", this.UniqueId) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1202,7 +819,7 @@ func (this *Event_Authentication) String() string {
 	s := strings.Join([]string{`&Event_Authentication{`,
 		`Type:` + fmt.Sprintf("%v", this.Type) + `,`,
 		`TokenType:` + fmt.Sprintf("%v", this.TokenType) + `,`,
-		`TokenID:` + fmt.Sprintf("%v", this.TokenID) + `,`,
+		`TokenId:` + fmt.Sprintf("%v", this.TokenId) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1224,6 +841,31 @@ func (this *StreamEventsRequest) String() string {
 	}, "")
 	return s
 }
+func (this *FindRelatedEventsRequest) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&FindRelatedEventsRequest{`,
+		`CorrelationId:` + fmt.Sprintf("%v", this.CorrelationId) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *FindRelatedEventsResponse) String() string {
+	if this == nil {
+		return "nil"
+	}
+	repeatedStringForEvents := "[]*Event{"
+	for _, f := range this.Events {
+		repeatedStringForEvents += strings.Replace(f.String(), "Event", "Event", 1) + ","
+	}
+	repeatedStringForEvents += "}"
+	s := strings.Join([]string{`&FindRelatedEventsResponse{`,
+		`Events:` + repeatedStringForEvents + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func valueToStringEvents(v interface{}) string {
 	rv := reflect.ValueOf(v)
 	if rv.IsNil() {
@@ -1232,926 +874,3 @@ func valueToStringEvents(v interface{}) string {
 	pv := reflect.Indirect(rv).Interface()
 	return fmt.Sprintf("*%v", pv)
 }
-func (m *Event) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowEvents
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: Event: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: Event: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Name", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowEvents
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthEvents
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthEvents
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Name = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Time", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowEvents
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthEvents
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthEvents
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := github_com_gogo_protobuf_types.StdTimeUnmarshal(&m.Time, dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Identifiers", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowEvents
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthEvents
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthEvents
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Identifiers = append(m.Identifiers, &EntityIdentifiers{})
-			if err := m.Identifiers[len(m.Identifiers)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 4:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Data", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowEvents
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthEvents
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthEvents
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Data == nil {
-				m.Data = &types.Any{}
-			}
-			if err := m.Data.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 5:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field CorrelationIDs", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowEvents
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthEvents
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthEvents
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.CorrelationIDs = append(m.CorrelationIDs, string(dAtA[iNdEx:postIndex]))
-			iNdEx = postIndex
-		case 6:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Origin", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowEvents
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthEvents
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthEvents
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Origin = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 7:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Context", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowEvents
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthEvents
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthEvents
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Context == nil {
-				m.Context = make(map[string][]byte)
-			}
-			var mapkey string
-			mapvalue := []byte{}
-			for iNdEx < postIndex {
-				entryPreIndex := iNdEx
-				var wire uint64
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return ErrIntOverflowEvents
-					}
-					if iNdEx >= l {
-						return io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					wire |= uint64(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				fieldNum := int32(wire >> 3)
-				if fieldNum == 1 {
-					var stringLenmapkey uint64
-					for shift := uint(0); ; shift += 7 {
-						if shift >= 64 {
-							return ErrIntOverflowEvents
-						}
-						if iNdEx >= l {
-							return io.ErrUnexpectedEOF
-						}
-						b := dAtA[iNdEx]
-						iNdEx++
-						stringLenmapkey |= uint64(b&0x7F) << shift
-						if b < 0x80 {
-							break
-						}
-					}
-					intStringLenmapkey := int(stringLenmapkey)
-					if intStringLenmapkey < 0 {
-						return ErrInvalidLengthEvents
-					}
-					postStringIndexmapkey := iNdEx + intStringLenmapkey
-					if postStringIndexmapkey < 0 {
-						return ErrInvalidLengthEvents
-					}
-					if postStringIndexmapkey > l {
-						return io.ErrUnexpectedEOF
-					}
-					mapkey = string(dAtA[iNdEx:postStringIndexmapkey])
-					iNdEx = postStringIndexmapkey
-				} else if fieldNum == 2 {
-					var mapbyteLen uint64
-					for shift := uint(0); ; shift += 7 {
-						if shift >= 64 {
-							return ErrIntOverflowEvents
-						}
-						if iNdEx >= l {
-							return io.ErrUnexpectedEOF
-						}
-						b := dAtA[iNdEx]
-						iNdEx++
-						mapbyteLen |= uint64(b&0x7F) << shift
-						if b < 0x80 {
-							break
-						}
-					}
-					intMapbyteLen := int(mapbyteLen)
-					if intMapbyteLen < 0 {
-						return ErrInvalidLengthEvents
-					}
-					postbytesIndex := iNdEx + intMapbyteLen
-					if postbytesIndex < 0 {
-						return ErrInvalidLengthEvents
-					}
-					if postbytesIndex > l {
-						return io.ErrUnexpectedEOF
-					}
-					mapvalue = make([]byte, mapbyteLen)
-					copy(mapvalue, dAtA[iNdEx:postbytesIndex])
-					iNdEx = postbytesIndex
-				} else {
-					iNdEx = entryPreIndex
-					skippy, err := skipEvents(dAtA[iNdEx:])
-					if err != nil {
-						return err
-					}
-					if skippy < 0 {
-						return ErrInvalidLengthEvents
-					}
-					if (iNdEx + skippy) > postIndex {
-						return io.ErrUnexpectedEOF
-					}
-					iNdEx += skippy
-				}
-			}
-			m.Context[mapkey] = mapvalue
-			iNdEx = postIndex
-		case 8:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Visibility", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowEvents
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthEvents
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthEvents
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Visibility == nil {
-				m.Visibility = &Rights{}
-			}
-			if err := m.Visibility.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 9:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Authentication", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowEvents
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthEvents
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthEvents
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Authentication == nil {
-				m.Authentication = &Event_Authentication{}
-			}
-			if err := m.Authentication.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 10:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field RemoteIP", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowEvents
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthEvents
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthEvents
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.RemoteIP = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 11:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field UserAgent", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowEvents
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthEvents
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthEvents
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.UserAgent = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 12:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field UniqueID", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowEvents
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthEvents
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthEvents
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.UniqueID = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipEvents(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthEvents
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthEvents
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *Event_Authentication) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowEvents
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: Authentication: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: Authentication: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Type", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowEvents
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthEvents
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthEvents
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Type = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field TokenType", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowEvents
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthEvents
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthEvents
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.TokenType = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field TokenID", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowEvents
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthEvents
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthEvents
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.TokenID = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipEvents(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthEvents
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthEvents
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *StreamEventsRequest) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowEvents
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: StreamEventsRequest: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: StreamEventsRequest: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Identifiers", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowEvents
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthEvents
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthEvents
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Identifiers = append(m.Identifiers, &EntityIdentifiers{})
-			if err := m.Identifiers[len(m.Identifiers)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Tail", wireType)
-			}
-			m.Tail = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowEvents
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.Tail |= uint32(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field After", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowEvents
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthEvents
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthEvents
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.After == nil {
-				m.After = new(time.Time)
-			}
-			if err := github_com_gogo_protobuf_types.StdTimeUnmarshal(m.After, dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipEvents(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthEvents
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthEvents
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func skipEvents(dAtA []byte) (n int, err error) {
-	l := len(dAtA)
-	iNdEx := 0
-	depth := 0
-	for iNdEx < l {
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return 0, ErrIntOverflowEvents
-			}
-			if iNdEx >= l {
-				return 0, io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		wireType := int(wire & 0x7)
-		switch wireType {
-		case 0:
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return 0, ErrIntOverflowEvents
-				}
-				if iNdEx >= l {
-					return 0, io.ErrUnexpectedEOF
-				}
-				iNdEx++
-				if dAtA[iNdEx-1] < 0x80 {
-					break
-				}
-			}
-		case 1:
-			iNdEx += 8
-		case 2:
-			var length int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return 0, ErrIntOverflowEvents
-				}
-				if iNdEx >= l {
-					return 0, io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				length |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if length < 0 {
-				return 0, ErrInvalidLengthEvents
-			}
-			iNdEx += length
-		case 3:
-			depth++
-		case 4:
-			if depth == 0 {
-				return 0, ErrUnexpectedEndOfGroupEvents
-			}
-			depth--
-		case 5:
-			iNdEx += 4
-		default:
-			return 0, fmt.Errorf("proto: illegal wireType %d", wireType)
-		}
-		if iNdEx < 0 {
-			return 0, ErrInvalidLengthEvents
-		}
-		if depth == 0 {
-			return iNdEx, nil
-		}
-	}
-	return 0, io.ErrUnexpectedEOF
-}
-
-var (
-	ErrInvalidLengthEvents        = fmt.Errorf("proto: negative length found during unmarshaling")
-	ErrIntOverflowEvents          = fmt.Errorf("proto: integer overflow")
-	ErrUnexpectedEndOfGroupEvents = fmt.Errorf("proto: unexpected end of group")
-)

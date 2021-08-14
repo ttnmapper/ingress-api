@@ -107,7 +107,7 @@ func (m *UplinkMessage) ValidateFields(paths ...string) error {
 
 		case "correlation_ids":
 
-			for idx, item := range m.GetCorrelationIDs() {
+			for idx, item := range m.GetCorrelationIds() {
 				_, _ = idx, item
 
 				if utf8.RuneCountInString(item) > 100 {
@@ -235,7 +235,7 @@ func (m *DownlinkMessage) ValidateFields(paths ...string) error {
 
 		case "end_device_ids":
 
-			if v, ok := interface{}(m.GetEndDeviceIDs()).(interface{ ValidateFields(...string) error }); ok {
+			if v, ok := interface{}(m.GetEndDeviceIds()).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return DownlinkMessageValidationError{
 						field:  "end_device_ids",
@@ -247,7 +247,7 @@ func (m *DownlinkMessage) ValidateFields(paths ...string) error {
 
 		case "correlation_ids":
 
-			for idx, item := range m.GetCorrelationIDs() {
+			for idx, item := range m.GetCorrelationIds() {
 				_, _ = idx, item
 
 				if utf8.RuneCountInString(item) > 100 {
@@ -257,6 +257,15 @@ func (m *DownlinkMessage) ValidateFields(paths ...string) error {
 					}
 				}
 
+			}
+
+		case "session_key_id":
+
+			if len(m.GetSessionKeyId()) > 2048 {
+				return DownlinkMessageValidationError{
+					field:  "session_key_id",
+					reason: "value length must be at most 2048 bytes",
+				}
 			}
 
 		case "settings":
@@ -389,7 +398,7 @@ func (m *TxAcknowledgment) ValidateFields(paths ...string) error {
 		switch name {
 		case "correlation_ids":
 
-			for idx, item := range m.GetCorrelationIDs() {
+			for idx, item := range m.GetCorrelationIds() {
 				_, _ = idx, item
 
 				if utf8.RuneCountInString(item) > 100 {
@@ -503,7 +512,7 @@ func (m *GatewayTxAcknowledgment) ValidateFields(paths ...string) error {
 		switch name {
 		case "gateway_ids":
 
-			if v, ok := interface{}(m.GetGatewayIDs()).(interface{ ValidateFields(...string) error }); ok {
+			if v, ok := interface{}(m.GetGatewayIds()).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return GatewayTxAcknowledgmentValidationError{
 						field:  "gateway_ids",
@@ -626,7 +635,7 @@ func (m *GatewayUplinkMessage) ValidateFields(paths ...string) error {
 			}
 
 		case "band_id":
-			// no validation rules for BandID
+			// no validation rules for BandId
 		default:
 			return GatewayUplinkMessageValidationError{
 				field:  name,
@@ -710,7 +719,7 @@ func (m *ApplicationUplink) ValidateFields(paths ...string) error {
 		switch name {
 		case "session_key_id":
 
-			if len(m.GetSessionKeyID()) > 2048 {
+			if len(m.GetSessionKeyId()) > 2048 {
 				return ApplicationUplinkValidationError{
 					field:  "session_key_id",
 					reason: "value length must be at most 2048 bytes",
@@ -736,7 +745,7 @@ func (m *ApplicationUplink) ValidateFields(paths ...string) error {
 		case "f_cnt":
 			// no validation rules for FCnt
 		case "frm_payload":
-			// no validation rules for FRMPayload
+			// no validation rules for FrmPayload
 		case "decoded_payload":
 
 			if v, ok := interface{}(m.GetDecodedPayload()).(interface{ ValidateFields(...string) error }); ok {
@@ -752,13 +761,6 @@ func (m *ApplicationUplink) ValidateFields(paths ...string) error {
 		case "decoded_payload_warnings":
 
 		case "rx_metadata":
-
-			if len(m.GetRxMetadata()) < 1 {
-				return ApplicationUplinkValidationError{
-					field:  "rx_metadata",
-					reason: "value must contain at least 1 item(s)",
-				}
-			}
 
 			for idx, item := range m.GetRxMetadata() {
 				_, _ = idx, item
@@ -844,6 +846,30 @@ func (m *ApplicationUplink) ValidateFields(paths ...string) error {
 					}
 				}
 
+			}
+
+		case "version_ids":
+
+			if v, ok := interface{}(m.GetVersionIds()).(interface{ ValidateFields(...string) error }); ok {
+				if err := v.ValidateFields(subs...); err != nil {
+					return ApplicationUplinkValidationError{
+						field:  "version_ids",
+						reason: "embedded message failed validation",
+						cause:  err,
+					}
+				}
+			}
+
+		case "network_ids":
+
+			if v, ok := interface{}(m.GetNetworkIds()).(interface{ ValidateFields(...string) error }); ok {
+				if err := v.ValidateFields(subs...); err != nil {
+					return ApplicationUplinkValidationError{
+						field:  "network_ids",
+						reason: "embedded message failed validation",
+						cause:  err,
+					}
+				}
 			}
 
 		default:
@@ -1065,7 +1091,7 @@ func (m *ApplicationJoinAccept) ValidateFields(paths ...string) error {
 		switch name {
 		case "session_key_id":
 
-			if len(m.GetSessionKeyID()) > 2048 {
+			if len(m.GetSessionKeyId()) > 2048 {
 				return ApplicationJoinAcceptValidationError{
 					field:  "session_key_id",
 					reason: "value length must be at most 2048 bytes",
@@ -1198,7 +1224,7 @@ func (m *ApplicationDownlink) ValidateFields(paths ...string) error {
 		switch name {
 		case "session_key_id":
 
-			if len(m.GetSessionKeyID()) > 2048 {
+			if len(m.GetSessionKeyId()) > 2048 {
 				return ApplicationDownlinkValidationError{
 					field:  "session_key_id",
 					reason: "value length must be at most 2048 bytes",
@@ -1224,7 +1250,7 @@ func (m *ApplicationDownlink) ValidateFields(paths ...string) error {
 		case "f_cnt":
 			// no validation rules for FCnt
 		case "frm_payload":
-			// no validation rules for FRMPayload
+			// no validation rules for FrmPayload
 		case "decoded_payload":
 
 			if v, ok := interface{}(m.GetDecodedPayload()).(interface{ ValidateFields(...string) error }); ok {
@@ -1264,7 +1290,7 @@ func (m *ApplicationDownlink) ValidateFields(paths ...string) error {
 
 		case "correlation_ids":
 
-			for idx, item := range m.GetCorrelationIDs() {
+			for idx, item := range m.GetCorrelationIds() {
 				_, _ = idx, item
 
 				if utf8.RuneCountInString(item) > 100 {
@@ -1586,7 +1612,7 @@ func (m *ApplicationInvalidatedDownlinks) ValidateFields(paths ...string) error 
 			// no validation rules for LastFCntDown
 		case "session_key_id":
 
-			if len(m.GetSessionKeyID()) > 2048 {
+			if len(m.GetSessionKeyId()) > 2048 {
 				return ApplicationInvalidatedDownlinksValidationError{
 					field:  "session_key_id",
 					reason: "value length must be at most 2048 bytes",
@@ -1679,7 +1705,7 @@ func (m *DownlinkQueueOperationErrorDetails) ValidateFields(paths ...string) err
 			// no validation rules for DevAddr
 		case "session_key_id":
 
-			if len(m.GetSessionKeyID()) > 2048 {
+			if len(m.GetSessionKeyId()) > 2048 {
 				return DownlinkQueueOperationErrorDetailsValidationError{
 					field:  "session_key_id",
 					reason: "value length must be at most 2048 bytes",
@@ -1692,7 +1718,7 @@ func (m *DownlinkQueueOperationErrorDetails) ValidateFields(paths ...string) err
 			// no validation rules for PendingDevAddr
 		case "pending_session_key_id":
 
-			if len(m.GetPendingSessionKeyID()) > 2048 {
+			if len(m.GetPendingSessionKeyId()) > 2048 {
 				return DownlinkQueueOperationErrorDetailsValidationError{
 					field:  "pending_session_key_id",
 					reason: "value length must be at most 2048 bytes",
@@ -1892,7 +1918,7 @@ func (m *ApplicationUp) ValidateFields(paths ...string) error {
 
 		case "correlation_ids":
 
-			for idx, item := range m.GetCorrelationIDs() {
+			for idx, item := range m.GetCorrelationIds() {
 				_, _ = idx, item
 
 				if utf8.RuneCountInString(item) > 100 {
@@ -2184,7 +2210,14 @@ func (m *MessagePayloadFormatters) ValidateFields(paths ...string) error {
 			}
 
 		case "up_formatter_parameter":
-			// no validation rules for UpFormatterParameter
+
+			if utf8.RuneCountInString(m.GetUpFormatterParameter()) > 40960 {
+				return MessagePayloadFormattersValidationError{
+					field:  "up_formatter_parameter",
+					reason: "value length must be at most 40960 runes",
+				}
+			}
+
 		case "down_formatter":
 
 			if _, ok := PayloadFormatter_name[int32(m.GetDownFormatter())]; !ok {
@@ -2195,7 +2228,14 @@ func (m *MessagePayloadFormatters) ValidateFields(paths ...string) error {
 			}
 
 		case "down_formatter_parameter":
-			// no validation rules for DownFormatterParameter
+
+			if utf8.RuneCountInString(m.GetDownFormatterParameter()) > 40960 {
+				return MessagePayloadFormattersValidationError{
+					field:  "down_formatter_parameter",
+					reason: "value length must be at most 40960 runes",
+				}
+			}
+
 		default:
 			return MessagePayloadFormattersValidationError{
 				field:  name,

@@ -2,11 +2,7 @@
 
 package ttnpb
 
-import (
-	fmt "fmt"
-
-	types "github.com/gogo/protobuf/types"
-)
+import fmt "fmt"
 
 func (dst *QRCodeFormat) SetFields(src *QRCodeFormat, paths ...string) error {
 	for name, subs := range _processPaths(paths) {
@@ -38,8 +34,7 @@ func (dst *QRCodeFormat) SetFields(src *QRCodeFormat, paths ...string) error {
 			if src != nil {
 				dst.FieldMask = src.FieldMask
 			} else {
-				var zero types.FieldMask
-				dst.FieldMask = zero
+				dst.FieldMask = nil
 			}
 
 		default:
@@ -77,10 +72,10 @@ func (dst *GetQRCodeFormatRequest) SetFields(src *GetQRCodeFormatRequest, paths 
 				return fmt.Errorf("'format_id' has no subfields, but %s were specified", subs)
 			}
 			if src != nil {
-				dst.FormatID = src.FormatID
+				dst.FormatId = src.FormatId
 			} else {
 				var zero string
-				dst.FormatID = zero
+				dst.FormatId = zero
 			}
 
 		default:
@@ -98,10 +93,10 @@ func (dst *GenerateEndDeviceQRCodeRequest) SetFields(src *GenerateEndDeviceQRCod
 				return fmt.Errorf("'format_id' has no subfields, but %s were specified", subs)
 			}
 			if src != nil {
-				dst.FormatID = src.FormatID
+				dst.FormatId = src.FormatId
 			} else {
 				var zero string
-				dst.FormatID = zero
+				dst.FormatId = zero
 			}
 		case "end_device":
 			if len(subs) > 0 {

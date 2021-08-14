@@ -30,7 +30,7 @@ func (m *KeyEnvelope) GetKey() *types.AES128Key {
 }
 
 func (m *KeyEnvelope) IsZero() bool {
-	return m == nil || m.Key.IsZero() && m.KEKLabel == "" && len(m.EncryptedKey) == 0
+	return m == nil || m.Key.IsZero() && m.KekLabel == "" && len(m.EncryptedKey) == 0
 }
 
 // FieldIsZero returns whether path p is zero.
@@ -42,7 +42,7 @@ func (v *KeyEnvelope) FieldIsZero(p string) bool {
 	case "encrypted_key":
 		return v.EncryptedKey == nil
 	case "kek_label":
-		return v.KEKLabel == ""
+		return v.KekLabel == ""
 	case "key":
 		return v.Key == nil
 	}
@@ -55,7 +55,7 @@ func (v KeyEnvelope) EncodeMsgpack(enc *msgpack.Encoder) error {
 	if v.Key != nil {
 		n++
 	}
-	if v.KEKLabel != "" {
+	if v.KekLabel != "" {
 		n++
 	}
 	if len(v.EncryptedKey) > 0 {
@@ -73,11 +73,11 @@ func (v KeyEnvelope) EncodeMsgpack(enc *msgpack.Encoder) error {
 			return err
 		}
 	}
-	if v.KEKLabel != "" {
+	if v.KekLabel != "" {
 		if err := enc.EncodeString("kek_label"); err != nil {
 			return err
 		}
-		if err := enc.EncodeString(v.KEKLabel); err != nil {
+		if err := enc.EncodeString(v.KekLabel); err != nil {
 			return err
 		}
 	}
@@ -117,7 +117,7 @@ func (v *KeyEnvelope) DecodeMsgpack(dec *msgpack.Decoder) error {
 			if err != nil {
 				return err
 			}
-			v.KEKLabel = fv
+			v.KekLabel = fv
 
 		case "encrypted_key":
 			s, err := dec.DecodeString()
@@ -176,7 +176,7 @@ func (v *SessionKeys) FieldIsZero(p string) bool {
 	case "s_nwk_s_int_key.key":
 		return v.SNwkSIntKey.FieldIsZero("key")
 	case "session_key_id":
-		return v.SessionKeyID == nil
+		return v.SessionKeyId == nil
 	}
 	panic(fmt.Sprintf("unknown path '%s'", p))
 }
@@ -204,7 +204,7 @@ func (v *RootKeys) FieldIsZero(p string) bool {
 	case "nwk_key.key":
 		return v.NwkKey.FieldIsZero("key")
 	case "root_key_id":
-		return v.RootKeyID == ""
+		return v.RootKeyId == ""
 	}
 	panic(fmt.Sprintf("unknown path '%s'", p))
 }

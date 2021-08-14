@@ -6,23 +6,19 @@ package ttnpb
 import (
 	context "context"
 	fmt "fmt"
-	io "io"
-	math "math"
-	math_bits "math/bits"
-	reflect "reflect"
-	strings "strings"
-	time "time"
-
 	_ "github.com/envoyproxy/protoc-gen-validate/validate"
 	_ "github.com/gogo/protobuf/gogoproto"
 	proto "github.com/gogo/protobuf/proto"
-	github_com_gogo_protobuf_types "github.com/gogo/protobuf/types"
 	types "github.com/gogo/protobuf/types"
 	golang_proto "github.com/golang/protobuf/proto"
 	_ "google.golang.org/genproto/googleapis/api/annotations"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
+	math "math"
+	reflect "reflect"
+	strings "strings"
+	time "time"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -51,25 +47,16 @@ func (*ApplicationPackage) Descriptor() ([]byte, []int) {
 	return fileDescriptor_aa4ce58e965b6ca0, []int{0}
 }
 func (m *ApplicationPackage) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	return xxx_messageInfo_ApplicationPackage.Unmarshal(m, b)
 }
 func (m *ApplicationPackage) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_ApplicationPackage.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	return xxx_messageInfo_ApplicationPackage.Marshal(b, m, deterministic)
 }
 func (m *ApplicationPackage) XXX_Merge(src proto.Message) {
 	xxx_messageInfo_ApplicationPackage.Merge(m, src)
 }
 func (m *ApplicationPackage) XXX_Size() int {
-	return m.Size()
+	return xxx_messageInfo_ApplicationPackage.Size(m)
 }
 func (m *ApplicationPackage) XXX_DiscardUnknown() {
 	xxx_messageInfo_ApplicationPackage.DiscardUnknown(m)
@@ -103,25 +90,16 @@ func (*ApplicationPackages) Descriptor() ([]byte, []int) {
 	return fileDescriptor_aa4ce58e965b6ca0, []int{1}
 }
 func (m *ApplicationPackages) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	return xxx_messageInfo_ApplicationPackages.Unmarshal(m, b)
 }
 func (m *ApplicationPackages) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_ApplicationPackages.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	return xxx_messageInfo_ApplicationPackages.Marshal(b, m, deterministic)
 }
 func (m *ApplicationPackages) XXX_Merge(src proto.Message) {
 	xxx_messageInfo_ApplicationPackages.Merge(m, src)
 }
 func (m *ApplicationPackages) XXX_Size() int {
-	return m.Size()
+	return xxx_messageInfo_ApplicationPackages.Size(m)
 }
 func (m *ApplicationPackages) XXX_DiscardUnknown() {
 	xxx_messageInfo_ApplicationPackages.DiscardUnknown(m)
@@ -151,25 +129,16 @@ func (*ApplicationPackageAssociationIdentifiers) Descriptor() ([]byte, []int) {
 	return fileDescriptor_aa4ce58e965b6ca0, []int{2}
 }
 func (m *ApplicationPackageAssociationIdentifiers) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	return xxx_messageInfo_ApplicationPackageAssociationIdentifiers.Unmarshal(m, b)
 }
 func (m *ApplicationPackageAssociationIdentifiers) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_ApplicationPackageAssociationIdentifiers.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	return xxx_messageInfo_ApplicationPackageAssociationIdentifiers.Marshal(b, m, deterministic)
 }
 func (m *ApplicationPackageAssociationIdentifiers) XXX_Merge(src proto.Message) {
 	xxx_messageInfo_ApplicationPackageAssociationIdentifiers.Merge(m, src)
 }
 func (m *ApplicationPackageAssociationIdentifiers) XXX_Size() int {
-	return m.Size()
+	return xxx_messageInfo_ApplicationPackageAssociationIdentifiers.Size(m)
 }
 func (m *ApplicationPackageAssociationIdentifiers) XXX_DiscardUnknown() {
 	xxx_messageInfo_ApplicationPackageAssociationIdentifiers.DiscardUnknown(m)
@@ -200,25 +169,16 @@ func (*ApplicationPackageAssociation) Descriptor() ([]byte, []int) {
 	return fileDescriptor_aa4ce58e965b6ca0, []int{3}
 }
 func (m *ApplicationPackageAssociation) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	return xxx_messageInfo_ApplicationPackageAssociation.Unmarshal(m, b)
 }
 func (m *ApplicationPackageAssociation) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_ApplicationPackageAssociation.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	return xxx_messageInfo_ApplicationPackageAssociation.Marshal(b, m, deterministic)
 }
 func (m *ApplicationPackageAssociation) XXX_Merge(src proto.Message) {
 	xxx_messageInfo_ApplicationPackageAssociation.Merge(m, src)
 }
 func (m *ApplicationPackageAssociation) XXX_Size() int {
-	return m.Size()
+	return xxx_messageInfo_ApplicationPackageAssociation.Size(m)
 }
 func (m *ApplicationPackageAssociation) XXX_DiscardUnknown() {
 	xxx_messageInfo_ApplicationPackageAssociation.DiscardUnknown(m)
@@ -266,25 +226,16 @@ func (*ApplicationPackageAssociations) Descriptor() ([]byte, []int) {
 	return fileDescriptor_aa4ce58e965b6ca0, []int{4}
 }
 func (m *ApplicationPackageAssociations) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	return xxx_messageInfo_ApplicationPackageAssociations.Unmarshal(m, b)
 }
 func (m *ApplicationPackageAssociations) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_ApplicationPackageAssociations.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	return xxx_messageInfo_ApplicationPackageAssociations.Marshal(b, m, deterministic)
 }
 func (m *ApplicationPackageAssociations) XXX_Merge(src proto.Message) {
 	xxx_messageInfo_ApplicationPackageAssociations.Merge(m, src)
 }
 func (m *ApplicationPackageAssociations) XXX_Size() int {
-	return m.Size()
+	return xxx_messageInfo_ApplicationPackageAssociations.Size(m)
 }
 func (m *ApplicationPackageAssociations) XXX_DiscardUnknown() {
 	xxx_messageInfo_ApplicationPackageAssociations.DiscardUnknown(m)
@@ -301,9 +252,9 @@ func (m *ApplicationPackageAssociations) GetAssociations() []*ApplicationPackage
 
 type GetApplicationPackageAssociationRequest struct {
 	ApplicationPackageAssociationIdentifiers `protobuf:"bytes,1,opt,name=ids,proto3,embedded=ids" json:"ids"`
-	FieldMask                                types.FieldMask `protobuf:"bytes,2,opt,name=field_mask,json=fieldMask,proto3" json:"field_mask"`
-	XXX_NoUnkeyedLiteral                     struct{}        `json:"-"`
-	XXX_sizecache                            int32           `json:"-"`
+	FieldMask                                *types.FieldMask `protobuf:"bytes,2,opt,name=field_mask,json=fieldMask,proto3" json:"field_mask,omitempty"`
+	XXX_NoUnkeyedLiteral                     struct{}         `json:"-"`
+	XXX_sizecache                            int32            `json:"-"`
 }
 
 func (m *GetApplicationPackageAssociationRequest) Reset() {
@@ -314,25 +265,16 @@ func (*GetApplicationPackageAssociationRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_aa4ce58e965b6ca0, []int{5}
 }
 func (m *GetApplicationPackageAssociationRequest) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	return xxx_messageInfo_GetApplicationPackageAssociationRequest.Unmarshal(m, b)
 }
 func (m *GetApplicationPackageAssociationRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_GetApplicationPackageAssociationRequest.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	return xxx_messageInfo_GetApplicationPackageAssociationRequest.Marshal(b, m, deterministic)
 }
 func (m *GetApplicationPackageAssociationRequest) XXX_Merge(src proto.Message) {
 	xxx_messageInfo_GetApplicationPackageAssociationRequest.Merge(m, src)
 }
 func (m *GetApplicationPackageAssociationRequest) XXX_Size() int {
-	return m.Size()
+	return xxx_messageInfo_GetApplicationPackageAssociationRequest.Size(m)
 }
 func (m *GetApplicationPackageAssociationRequest) XXX_DiscardUnknown() {
 	xxx_messageInfo_GetApplicationPackageAssociationRequest.DiscardUnknown(m)
@@ -340,11 +282,11 @@ func (m *GetApplicationPackageAssociationRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_GetApplicationPackageAssociationRequest proto.InternalMessageInfo
 
-func (m *GetApplicationPackageAssociationRequest) GetFieldMask() types.FieldMask {
+func (m *GetApplicationPackageAssociationRequest) GetFieldMask() *types.FieldMask {
 	if m != nil {
 		return m.FieldMask
 	}
-	return types.FieldMask{}
+	return nil
 }
 
 type ListApplicationPackageAssociationRequest struct {
@@ -353,10 +295,10 @@ type ListApplicationPackageAssociationRequest struct {
 	// Each page is ordered by the FPort.
 	Limit uint32 `protobuf:"varint,2,opt,name=limit,proto3" json:"limit,omitempty"`
 	// Page number for pagination. 0 is interpreted as 1.
-	Page                 uint32          `protobuf:"varint,3,opt,name=page,proto3" json:"page,omitempty"`
-	FieldMask            types.FieldMask `protobuf:"bytes,4,opt,name=field_mask,json=fieldMask,proto3" json:"field_mask"`
-	XXX_NoUnkeyedLiteral struct{}        `json:"-"`
-	XXX_sizecache        int32           `json:"-"`
+	Page                 uint32           `protobuf:"varint,3,opt,name=page,proto3" json:"page,omitempty"`
+	FieldMask            *types.FieldMask `protobuf:"bytes,4,opt,name=field_mask,json=fieldMask,proto3" json:"field_mask,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}         `json:"-"`
+	XXX_sizecache        int32            `json:"-"`
 }
 
 func (m *ListApplicationPackageAssociationRequest) Reset() {
@@ -367,25 +309,16 @@ func (*ListApplicationPackageAssociationRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_aa4ce58e965b6ca0, []int{6}
 }
 func (m *ListApplicationPackageAssociationRequest) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	return xxx_messageInfo_ListApplicationPackageAssociationRequest.Unmarshal(m, b)
 }
 func (m *ListApplicationPackageAssociationRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_ListApplicationPackageAssociationRequest.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	return xxx_messageInfo_ListApplicationPackageAssociationRequest.Marshal(b, m, deterministic)
 }
 func (m *ListApplicationPackageAssociationRequest) XXX_Merge(src proto.Message) {
 	xxx_messageInfo_ListApplicationPackageAssociationRequest.Merge(m, src)
 }
 func (m *ListApplicationPackageAssociationRequest) XXX_Size() int {
-	return m.Size()
+	return xxx_messageInfo_ListApplicationPackageAssociationRequest.Size(m)
 }
 func (m *ListApplicationPackageAssociationRequest) XXX_DiscardUnknown() {
 	xxx_messageInfo_ListApplicationPackageAssociationRequest.DiscardUnknown(m)
@@ -407,18 +340,18 @@ func (m *ListApplicationPackageAssociationRequest) GetPage() uint32 {
 	return 0
 }
 
-func (m *ListApplicationPackageAssociationRequest) GetFieldMask() types.FieldMask {
+func (m *ListApplicationPackageAssociationRequest) GetFieldMask() *types.FieldMask {
 	if m != nil {
 		return m.FieldMask
 	}
-	return types.FieldMask{}
+	return nil
 }
 
 type SetApplicationPackageAssociationRequest struct {
 	ApplicationPackageAssociation `protobuf:"bytes,1,opt,name=association,proto3,embedded=association" json:"association"`
-	FieldMask                     types.FieldMask `protobuf:"bytes,2,opt,name=field_mask,json=fieldMask,proto3" json:"field_mask"`
-	XXX_NoUnkeyedLiteral          struct{}        `json:"-"`
-	XXX_sizecache                 int32           `json:"-"`
+	FieldMask                     *types.FieldMask `protobuf:"bytes,2,opt,name=field_mask,json=fieldMask,proto3" json:"field_mask,omitempty"`
+	XXX_NoUnkeyedLiteral          struct{}         `json:"-"`
+	XXX_sizecache                 int32            `json:"-"`
 }
 
 func (m *SetApplicationPackageAssociationRequest) Reset() {
@@ -429,25 +362,16 @@ func (*SetApplicationPackageAssociationRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_aa4ce58e965b6ca0, []int{7}
 }
 func (m *SetApplicationPackageAssociationRequest) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	return xxx_messageInfo_SetApplicationPackageAssociationRequest.Unmarshal(m, b)
 }
 func (m *SetApplicationPackageAssociationRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_SetApplicationPackageAssociationRequest.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	return xxx_messageInfo_SetApplicationPackageAssociationRequest.Marshal(b, m, deterministic)
 }
 func (m *SetApplicationPackageAssociationRequest) XXX_Merge(src proto.Message) {
 	xxx_messageInfo_SetApplicationPackageAssociationRequest.Merge(m, src)
 }
 func (m *SetApplicationPackageAssociationRequest) XXX_Size() int {
-	return m.Size()
+	return xxx_messageInfo_SetApplicationPackageAssociationRequest.Size(m)
 }
 func (m *SetApplicationPackageAssociationRequest) XXX_DiscardUnknown() {
 	xxx_messageInfo_SetApplicationPackageAssociationRequest.DiscardUnknown(m)
@@ -455,11 +379,11 @@ func (m *SetApplicationPackageAssociationRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_SetApplicationPackageAssociationRequest proto.InternalMessageInfo
 
-func (m *SetApplicationPackageAssociationRequest) GetFieldMask() types.FieldMask {
+func (m *SetApplicationPackageAssociationRequest) GetFieldMask() *types.FieldMask {
 	if m != nil {
 		return m.FieldMask
 	}
-	return types.FieldMask{}
+	return nil
 }
 
 type ApplicationPackageDefaultAssociationIdentifiers struct {
@@ -477,25 +401,16 @@ func (*ApplicationPackageDefaultAssociationIdentifiers) Descriptor() ([]byte, []
 	return fileDescriptor_aa4ce58e965b6ca0, []int{8}
 }
 func (m *ApplicationPackageDefaultAssociationIdentifiers) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	return xxx_messageInfo_ApplicationPackageDefaultAssociationIdentifiers.Unmarshal(m, b)
 }
 func (m *ApplicationPackageDefaultAssociationIdentifiers) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_ApplicationPackageDefaultAssociationIdentifiers.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	return xxx_messageInfo_ApplicationPackageDefaultAssociationIdentifiers.Marshal(b, m, deterministic)
 }
 func (m *ApplicationPackageDefaultAssociationIdentifiers) XXX_Merge(src proto.Message) {
 	xxx_messageInfo_ApplicationPackageDefaultAssociationIdentifiers.Merge(m, src)
 }
 func (m *ApplicationPackageDefaultAssociationIdentifiers) XXX_Size() int {
-	return m.Size()
+	return xxx_messageInfo_ApplicationPackageDefaultAssociationIdentifiers.Size(m)
 }
 func (m *ApplicationPackageDefaultAssociationIdentifiers) XXX_DiscardUnknown() {
 	xxx_messageInfo_ApplicationPackageDefaultAssociationIdentifiers.DiscardUnknown(m)
@@ -526,25 +441,16 @@ func (*ApplicationPackageDefaultAssociation) Descriptor() ([]byte, []int) {
 	return fileDescriptor_aa4ce58e965b6ca0, []int{9}
 }
 func (m *ApplicationPackageDefaultAssociation) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	return xxx_messageInfo_ApplicationPackageDefaultAssociation.Unmarshal(m, b)
 }
 func (m *ApplicationPackageDefaultAssociation) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_ApplicationPackageDefaultAssociation.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	return xxx_messageInfo_ApplicationPackageDefaultAssociation.Marshal(b, m, deterministic)
 }
 func (m *ApplicationPackageDefaultAssociation) XXX_Merge(src proto.Message) {
 	xxx_messageInfo_ApplicationPackageDefaultAssociation.Merge(m, src)
 }
 func (m *ApplicationPackageDefaultAssociation) XXX_Size() int {
-	return m.Size()
+	return xxx_messageInfo_ApplicationPackageDefaultAssociation.Size(m)
 }
 func (m *ApplicationPackageDefaultAssociation) XXX_DiscardUnknown() {
 	xxx_messageInfo_ApplicationPackageDefaultAssociation.DiscardUnknown(m)
@@ -592,25 +498,16 @@ func (*ApplicationPackageDefaultAssociations) Descriptor() ([]byte, []int) {
 	return fileDescriptor_aa4ce58e965b6ca0, []int{10}
 }
 func (m *ApplicationPackageDefaultAssociations) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	return xxx_messageInfo_ApplicationPackageDefaultAssociations.Unmarshal(m, b)
 }
 func (m *ApplicationPackageDefaultAssociations) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_ApplicationPackageDefaultAssociations.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	return xxx_messageInfo_ApplicationPackageDefaultAssociations.Marshal(b, m, deterministic)
 }
 func (m *ApplicationPackageDefaultAssociations) XXX_Merge(src proto.Message) {
 	xxx_messageInfo_ApplicationPackageDefaultAssociations.Merge(m, src)
 }
 func (m *ApplicationPackageDefaultAssociations) XXX_Size() int {
-	return m.Size()
+	return xxx_messageInfo_ApplicationPackageDefaultAssociations.Size(m)
 }
 func (m *ApplicationPackageDefaultAssociations) XXX_DiscardUnknown() {
 	xxx_messageInfo_ApplicationPackageDefaultAssociations.DiscardUnknown(m)
@@ -627,9 +524,9 @@ func (m *ApplicationPackageDefaultAssociations) GetDefaults() []*ApplicationPack
 
 type GetApplicationPackageDefaultAssociationRequest struct {
 	ApplicationPackageDefaultAssociationIdentifiers `protobuf:"bytes,1,opt,name=ids,proto3,embedded=ids" json:"ids"`
-	FieldMask                                       types.FieldMask `protobuf:"bytes,2,opt,name=field_mask,json=fieldMask,proto3" json:"field_mask"`
-	XXX_NoUnkeyedLiteral                            struct{}        `json:"-"`
-	XXX_sizecache                                   int32           `json:"-"`
+	FieldMask                                       *types.FieldMask `protobuf:"bytes,2,opt,name=field_mask,json=fieldMask,proto3" json:"field_mask,omitempty"`
+	XXX_NoUnkeyedLiteral                            struct{}         `json:"-"`
+	XXX_sizecache                                   int32            `json:"-"`
 }
 
 func (m *GetApplicationPackageDefaultAssociationRequest) Reset() {
@@ -640,25 +537,16 @@ func (*GetApplicationPackageDefaultAssociationRequest) Descriptor() ([]byte, []i
 	return fileDescriptor_aa4ce58e965b6ca0, []int{11}
 }
 func (m *GetApplicationPackageDefaultAssociationRequest) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	return xxx_messageInfo_GetApplicationPackageDefaultAssociationRequest.Unmarshal(m, b)
 }
 func (m *GetApplicationPackageDefaultAssociationRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_GetApplicationPackageDefaultAssociationRequest.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	return xxx_messageInfo_GetApplicationPackageDefaultAssociationRequest.Marshal(b, m, deterministic)
 }
 func (m *GetApplicationPackageDefaultAssociationRequest) XXX_Merge(src proto.Message) {
 	xxx_messageInfo_GetApplicationPackageDefaultAssociationRequest.Merge(m, src)
 }
 func (m *GetApplicationPackageDefaultAssociationRequest) XXX_Size() int {
-	return m.Size()
+	return xxx_messageInfo_GetApplicationPackageDefaultAssociationRequest.Size(m)
 }
 func (m *GetApplicationPackageDefaultAssociationRequest) XXX_DiscardUnknown() {
 	xxx_messageInfo_GetApplicationPackageDefaultAssociationRequest.DiscardUnknown(m)
@@ -666,11 +554,11 @@ func (m *GetApplicationPackageDefaultAssociationRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_GetApplicationPackageDefaultAssociationRequest proto.InternalMessageInfo
 
-func (m *GetApplicationPackageDefaultAssociationRequest) GetFieldMask() types.FieldMask {
+func (m *GetApplicationPackageDefaultAssociationRequest) GetFieldMask() *types.FieldMask {
 	if m != nil {
 		return m.FieldMask
 	}
-	return types.FieldMask{}
+	return nil
 }
 
 type ListApplicationPackageDefaultAssociationRequest struct {
@@ -679,10 +567,10 @@ type ListApplicationPackageDefaultAssociationRequest struct {
 	// Each page is ordered by the FPort.
 	Limit uint32 `protobuf:"varint,2,opt,name=limit,proto3" json:"limit,omitempty"`
 	// Page number for pagination. 0 is interpreted as 1.
-	Page                 uint32          `protobuf:"varint,3,opt,name=page,proto3" json:"page,omitempty"`
-	FieldMask            types.FieldMask `protobuf:"bytes,4,opt,name=field_mask,json=fieldMask,proto3" json:"field_mask"`
-	XXX_NoUnkeyedLiteral struct{}        `json:"-"`
-	XXX_sizecache        int32           `json:"-"`
+	Page                 uint32           `protobuf:"varint,3,opt,name=page,proto3" json:"page,omitempty"`
+	FieldMask            *types.FieldMask `protobuf:"bytes,4,opt,name=field_mask,json=fieldMask,proto3" json:"field_mask,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}         `json:"-"`
+	XXX_sizecache        int32            `json:"-"`
 }
 
 func (m *ListApplicationPackageDefaultAssociationRequest) Reset() {
@@ -693,25 +581,16 @@ func (*ListApplicationPackageDefaultAssociationRequest) Descriptor() ([]byte, []
 	return fileDescriptor_aa4ce58e965b6ca0, []int{12}
 }
 func (m *ListApplicationPackageDefaultAssociationRequest) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	return xxx_messageInfo_ListApplicationPackageDefaultAssociationRequest.Unmarshal(m, b)
 }
 func (m *ListApplicationPackageDefaultAssociationRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_ListApplicationPackageDefaultAssociationRequest.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	return xxx_messageInfo_ListApplicationPackageDefaultAssociationRequest.Marshal(b, m, deterministic)
 }
 func (m *ListApplicationPackageDefaultAssociationRequest) XXX_Merge(src proto.Message) {
 	xxx_messageInfo_ListApplicationPackageDefaultAssociationRequest.Merge(m, src)
 }
 func (m *ListApplicationPackageDefaultAssociationRequest) XXX_Size() int {
-	return m.Size()
+	return xxx_messageInfo_ListApplicationPackageDefaultAssociationRequest.Size(m)
 }
 func (m *ListApplicationPackageDefaultAssociationRequest) XXX_DiscardUnknown() {
 	xxx_messageInfo_ListApplicationPackageDefaultAssociationRequest.DiscardUnknown(m)
@@ -733,18 +612,18 @@ func (m *ListApplicationPackageDefaultAssociationRequest) GetPage() uint32 {
 	return 0
 }
 
-func (m *ListApplicationPackageDefaultAssociationRequest) GetFieldMask() types.FieldMask {
+func (m *ListApplicationPackageDefaultAssociationRequest) GetFieldMask() *types.FieldMask {
 	if m != nil {
 		return m.FieldMask
 	}
-	return types.FieldMask{}
+	return nil
 }
 
 type SetApplicationPackageDefaultAssociationRequest struct {
 	ApplicationPackageDefaultAssociation `protobuf:"bytes,1,opt,name=default,proto3,embedded=default" json:"default"`
-	FieldMask                            types.FieldMask `protobuf:"bytes,2,opt,name=field_mask,json=fieldMask,proto3" json:"field_mask"`
-	XXX_NoUnkeyedLiteral                 struct{}        `json:"-"`
-	XXX_sizecache                        int32           `json:"-"`
+	FieldMask                            *types.FieldMask `protobuf:"bytes,2,opt,name=field_mask,json=fieldMask,proto3" json:"field_mask,omitempty"`
+	XXX_NoUnkeyedLiteral                 struct{}         `json:"-"`
+	XXX_sizecache                        int32            `json:"-"`
 }
 
 func (m *SetApplicationPackageDefaultAssociationRequest) Reset() {
@@ -755,25 +634,16 @@ func (*SetApplicationPackageDefaultAssociationRequest) Descriptor() ([]byte, []i
 	return fileDescriptor_aa4ce58e965b6ca0, []int{13}
 }
 func (m *SetApplicationPackageDefaultAssociationRequest) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	return xxx_messageInfo_SetApplicationPackageDefaultAssociationRequest.Unmarshal(m, b)
 }
 func (m *SetApplicationPackageDefaultAssociationRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_SetApplicationPackageDefaultAssociationRequest.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	return xxx_messageInfo_SetApplicationPackageDefaultAssociationRequest.Marshal(b, m, deterministic)
 }
 func (m *SetApplicationPackageDefaultAssociationRequest) XXX_Merge(src proto.Message) {
 	xxx_messageInfo_SetApplicationPackageDefaultAssociationRequest.Merge(m, src)
 }
 func (m *SetApplicationPackageDefaultAssociationRequest) XXX_Size() int {
-	return m.Size()
+	return xxx_messageInfo_SetApplicationPackageDefaultAssociationRequest.Size(m)
 }
 func (m *SetApplicationPackageDefaultAssociationRequest) XXX_DiscardUnknown() {
 	xxx_messageInfo_SetApplicationPackageDefaultAssociationRequest.DiscardUnknown(m)
@@ -781,11 +651,11 @@ func (m *SetApplicationPackageDefaultAssociationRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_SetApplicationPackageDefaultAssociationRequest proto.InternalMessageInfo
 
-func (m *SetApplicationPackageDefaultAssociationRequest) GetFieldMask() types.FieldMask {
+func (m *SetApplicationPackageDefaultAssociationRequest) GetFieldMask() *types.FieldMask {
 	if m != nil {
 		return m.FieldMask
 	}
-	return types.FieldMask{}
+	return nil
 }
 
 func init() {
@@ -827,93 +697,87 @@ func init() {
 }
 
 var fileDescriptor_aa4ce58e965b6ca0 = []byte{
-	// 1363 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x58, 0x4f, 0x6c, 0x1b, 0xc5,
-	0x17, 0xde, 0x49, 0x9c, 0x36, 0x9d, 0xa4, 0xf9, 0xb5, 0xf3, 0x53, 0xa9, 0x65, 0x60, 0x12, 0xb6,
-	0x81, 0x9a, 0x80, 0x77, 0x2b, 0x17, 0x04, 0xb4, 0xa2, 0x51, 0xdc, 0x7f, 0x50, 0x41, 0x15, 0x6c,
-	0x40, 0x55, 0xff, 0xe0, 0x4e, 0xec, 0xb1, 0xb3, 0xb2, 0xbd, 0xbb, 0xec, 0x4c, 0x52, 0x42, 0x15,
-	0xa9, 0x2a, 0x42, 0xaa, 0x10, 0xaa, 0x8a, 0x7a, 0xe9, 0x09, 0x71, 0x41, 0x2a, 0xe2, 0x52, 0x71,
-	0xa1, 0xe2, 0x42, 0x8f, 0xb9, 0x54, 0xaa, 0x54, 0xa9, 0xea, 0xa9, 0xd4, 0x6b, 0x0e, 0xed, 0x89,
-	0x0a, 0x71, 0xa8, 0x72, 0x01, 0x79, 0x76, 0x9d, 0xac, 0xed, 0xb5, 0xbd, 0xb6, 0xd5, 0x72, 0xe1,
-	0xb6, 0xbb, 0xf3, 0xde, 0xcb, 0xfb, 0xbe, 0xf7, 0xbd, 0x37, 0xcf, 0x81, 0xf1, 0xa2, 0x61, 0x91,
-	0x33, 0x44, 0x8f, 0x31, 0x4e, 0x32, 0x05, 0x95, 0x98, 0x9a, 0x4a, 0x4c, 0xb3, 0xa8, 0x65, 0x08,
-	0xd7, 0x0c, 0x9d, 0x51, 0x6b, 0x91, 0x5a, 0x69, 0x93, 0x64, 0x0a, 0x24, 0x4f, 0x99, 0x62, 0x5a,
-	0x06, 0x37, 0xd0, 0x18, 0xe7, 0xba, 0xe2, 0xfa, 0x29, 0x8b, 0xbb, 0x23, 0x33, 0x79, 0x8d, 0xcf,
-	0x2f, 0xcc, 0x29, 0x19, 0xa3, 0xa4, 0x52, 0x7d, 0xd1, 0x58, 0x32, 0x2d, 0xe3, 0xb3, 0x25, 0x55,
-	0x18, 0x67, 0x62, 0x79, 0xaa, 0xc7, 0x16, 0x49, 0x51, 0xcb, 0x12, 0x4e, 0xd5, 0xa6, 0x07, 0x27,
-	0x64, 0x24, 0xe6, 0x09, 0x91, 0x37, 0xf2, 0x86, 0xe3, 0x3c, 0xb7, 0x90, 0x13, 0x6f, 0xe2, 0x45,
-	0x3c, 0xb9, 0xe6, 0xcf, 0xe5, 0x0d, 0x23, 0x5f, 0xa4, 0x4e, 0xba, 0xba, 0x6e, 0x70, 0x27, 0x5b,
-	0xf7, 0xf4, 0x59, 0xf7, 0x74, 0x2d, 0x06, 0x2d, 0x99, 0x7c, 0xc9, 0x3d, 0x9c, 0x68, 0x3c, 0xcc,
-	0x69, 0xb4, 0x98, 0x4d, 0x97, 0x08, 0x2b, 0xb8, 0x16, 0xe3, 0x8d, 0x16, 0x5c, 0x2b, 0x51, 0xc6,
-	0x49, 0xc9, 0x6c, 0xf8, 0xeb, 0x6b, 0x06, 0x8c, 0x5b, 0x0b, 0x19, 0xee, 0x9e, 0xee, 0x68, 0x66,
-	0x54, 0xcb, 0x52, 0x9d, 0x6b, 0x39, 0x8d, 0x5a, 0x6e, 0x8a, 0xf2, 0x17, 0x00, 0xa2, 0x99, 0x75,
-	0x9e, 0x67, 0x1d, 0x82, 0xd1, 0x5e, 0x18, 0xd2, 0x49, 0x89, 0x86, 0xc1, 0x04, 0x88, 0x6e, 0x4a,
-	0xec, 0x5c, 0x4d, 0x4c, 0x5a, 0x72, 0x78, 0x32, 0x8e, 0x3f, 0x39, 0x41, 0x62, 0x9f, 0xef, 0x8a,
-	0xbd, 0x75, 0x2a, 0x3a, 0xbd, 0xe7, 0x44, 0xec, 0xd4, 0x74, 0xed, 0xf5, 0xe5, 0xb3, 0xf1, 0x57,
-	0x97, 0x27, 0x93, 0xc2, 0x09, 0xed, 0x82, 0x63, 0x59, 0x9a, 0x23, 0x0b, 0x45, 0x9e, 0xce, 0xa5,
-	0x4d, 0xc3, 0xe2, 0xe1, 0x81, 0x09, 0x10, 0xdd, 0x9c, 0x80, 0xab, 0x89, 0x8d, 0x53, 0x43, 0xe1,
-	0xbf, 0x41, 0x14, 0x24, 0x47, 0x5d, 0x8b, 0x43, 0xb3, 0x86, 0xc5, 0xe5, 0x8f, 0xe0, 0xff, 0x9b,
-	0x93, 0x60, 0x68, 0x1f, 0x1c, 0xae, 0x55, 0x3c, 0x0c, 0x26, 0x06, 0xa3, 0x23, 0x71, 0x59, 0xa9,
-	0x2f, 0xb9, 0xd2, 0xec, 0x96, 0x5c, 0xf3, 0x91, 0x7f, 0x04, 0x30, 0xda, 0x6c, 0x30, 0xc3, 0x98,
-	0x91, 0xd1, 0xc4, 0x97, 0x77, 0xd7, 0xf9, 0x40, 0x27, 0xe1, 0x18, 0xd5, 0xb3, 0xe9, 0x2c, 0x5d,
-	0xd4, 0x32, 0x34, 0xad, 0x65, 0x99, 0x00, 0x3f, 0x12, 0x9f, 0x6c, 0xfc, 0x93, 0x07, 0xf5, 0xec,
-	0x01, 0x61, 0xe4, 0xf1, 0x4e, 0x6c, 0x59, 0x4d, 0x0c, 0x7d, 0x05, 0x06, 0xb6, 0x80, 0x95, 0x7b,
-	0xe3, 0xd2, 0xad, 0x7b, 0xe3, 0x20, 0x39, 0x4a, 0xd7, 0xed, 0x18, 0x7a, 0x01, 0x6e, 0x68, 0xc9,
-	0xc5, 0x50, 0x4e, 0x90, 0x70, 0x6e, 0x10, 0x3e, 0xdf, 0x36, 0x5b, 0x74, 0x12, 0x0e, 0xae, 0xe7,
-	0xf5, 0x66, 0x67, 0x2a, 0xfc, 0x91, 0xfa, 0xe4, 0x5a, 0x0d, 0x8b, 0xf6, 0x43, 0x98, 0xb1, 0x28,
-	0xe1, 0x34, 0x9b, 0x26, 0x4e, 0x9a, 0x23, 0xf1, 0x88, 0xe2, 0x48, 0x4c, 0xa9, 0x49, 0x4c, 0xf9,
-	0xb0, 0xa6, 0xc1, 0xc4, 0x70, 0xd5, 0xfd, 0xd2, 0x6f, 0xe3, 0x20, 0xb9, 0xc9, 0xf5, 0x9b, 0xe1,
-	0xd5, 0x20, 0x0b, 0x66, 0xb6, 0x16, 0x64, 0xb0, 0x9b, 0x20, 0xae, 0xdf, 0x0c, 0x47, 0x47, 0xe0,
-	0xa8, 0x5b, 0xc3, 0xb4, 0x50, 0x61, 0xa8, 0x3b, 0x15, 0x8e, 0xb8, 0xce, 0x47, 0xab, 0x62, 0x7c,
-	0x05, 0x86, 0xb2, 0x84, 0x93, 0xf0, 0x90, 0x48, 0x65, 0x7b, 0x53, 0x2a, 0x29, 0xd1, 0x32, 0x49,
-	0x61, 0x24, 0x33, 0x88, 0xdb, 0xb2, 0xc8, 0xd0, 0x07, 0x70, 0x94, 0x78, 0xde, 0x5d, 0x59, 0xc6,
-	0xba, 0xaa, 0x45, 0xb2, 0x2e, 0x84, 0xbc, 0x02, 0xe0, 0xce, 0xc3, 0x94, 0xb7, 0x77, 0xa1, 0x9f,
-	0x2e, 0x50, 0xc6, 0x9f, 0xb0, 0x02, 0xa6, 0x21, 0x5c, 0x1f, 0x42, 0x2d, 0x15, 0x70, 0xa8, 0x6a,
-	0xf2, 0x3e, 0x61, 0x85, 0x44, 0xa8, 0xea, 0x9e, 0xdc, 0x94, 0xab, 0x7d, 0x90, 0x1f, 0x02, 0x18,
-	0x7d, 0x4f, 0x63, 0xc1, 0xb0, 0xbc, 0xe3, 0xc5, 0xd2, 0x6b, 0x97, 0x89, 0xbc, 0x31, 0x1c, 0x2a,
-	0x6a, 0x25, 0xad, 0xd6, 0x5b, 0xc3, 0xab, 0x89, 0xa1, 0xa9, 0xc1, 0xf0, 0x83, 0x8d, 0x49, 0xe7,
-	0x33, 0x42, 0x30, 0x64, 0x92, 0x3c, 0x15, 0x72, 0xdc, 0x9c, 0x14, 0xcf, 0x0d, 0x58, 0x43, 0xdd,
-	0x63, 0xbd, 0x09, 0xe0, 0xce, 0x54, 0xc0, 0xb2, 0x11, 0x38, 0xe2, 0x29, 0xb9, 0x0b, 0xb9, 0x3b,
-	0xd1, 0xf8, 0x60, 0xf7, 0xc6, 0xec, 0xbf, 0x76, 0x3f, 0x03, 0xa8, 0x36, 0x67, 0x70, 0xc0, 0x19,
-	0xd3, 0x2d, 0x66, 0x26, 0x81, 0xff, 0xf3, 0x5c, 0xd2, 0x9e, 0xa1, 0xf9, 0x52, 0x1b, 0x6c, 0xed,
-	0x0b, 0x3a, 0x46, 0xbc, 0x96, 0x81, 0x06, 0xe7, 0xc5, 0x41, 0x38, 0x19, 0x24, 0x73, 0x94, 0xf1,
-	0x2a, 0x6e, 0xba, 0x33, 0xfd, 0x6d, 0xc1, 0xff, 0x37, 0x46, 0x5b, 0x8e, 0xd1, 0x25, 0xf8, 0x62,
-	0x10, 0x32, 0x19, 0x9a, 0x85, 0xc3, 0xee, 0x1e, 0x50, 0x9b, 0xa4, 0xaf, 0xf5, 0x52, 0x95, 0xe4,
-	0x5a, 0x14, 0xf9, 0x0e, 0x80, 0x8a, 0xef, 0x30, 0xf5, 0xf1, 0x72, 0x9b, 0xf3, 0xa9, 0xa8, 0xa2,
-	0xef, 0xf6, 0xfc, 0x13, 0x40, 0xd5, 0x7f, 0xb4, 0xb6, 0x46, 0x76, 0xc4, 0x8b, 0xac, 0xf7, 0x96,
-	0xfc, 0xf7, 0x66, 0xec, 0x6d, 0x00, 0x95, 0x54, 0x77, 0xd5, 0x3c, 0x0d, 0x37, 0xba, 0x62, 0x70,
-	0x71, 0xf7, 0xa4, 0x28, 0x1f, 0x16, 0x6a, 0x61, 0xfb, 0x2e, 0x65, 0xfc, 0xdb, 0xad, 0x30, 0xe2,
-	0xb3, 0xb7, 0xd2, 0xbc, 0xc6, 0xb8, 0xb5, 0x84, 0x7e, 0x00, 0x30, 0x54, 0xad, 0x34, 0x0a, 0x74,
-	0x27, 0x46, 0x76, 0x74, 0xc6, 0xc7, 0xe4, 0x8f, 0xcf, 0xdf, 0xfe, 0xfd, 0xf2, 0xc0, 0x2c, 0x3a,
-	0xaa, 0x12, 0x56, 0xf7, 0xbb, 0x4a, 0x3d, 0xdb, 0x30, 0xc0, 0x95, 0xfa, 0xf7, 0x65, 0xd5, 0x59,
-	0x88, 0x99, 0x7a, 0x76, 0x6d, 0x33, 0x5e, 0x56, 0x6b, 0x1b, 0x36, 0xba, 0x3c, 0x00, 0xc7, 0xaa,
-	0xed, 0xe6, 0x19, 0xb2, 0x6f, 0x34, 0xe6, 0x13, 0x70, 0xb7, 0x89, 0x74, 0x77, 0x1f, 0xca, 0x57,
-	0x80, 0xc0, 0xf4, 0x0d, 0x40, 0x17, 0x41, 0x33, 0xaa, 0x2a, 0x92, 0xfa, 0x75, 0x5e, 0x09, 0x0c,
-	0xd4, 0xc7, 0xd7, 0x07, 0xbb, 0xea, 0x5d, 0xe2, 0x1c, 0x27, 0xe7, 0xa2, 0x5a, 0x46, 0x0f, 0x01,
-	0xdc, 0x22, 0x7a, 0xd5, 0x3b, 0xeb, 0x9a, 0xb6, 0xb5, 0xa0, 0x8b, 0x52, 0x44, 0xe9, 0x8a, 0x18,
-	0x26, 0x17, 0x04, 0x31, 0x14, 0x65, 0xfc, 0x69, 0xe9, 0x8a, 0x87, 0x4e, 0xc0, 0xd1, 0x2f, 0x03,
-	0x70, 0x2c, 0xd5, 0x41, 0x01, 0xa9, 0x27, 0xa3, 0x80, 0x5f, 0x1d, 0x05, 0x5c, 0x07, 0x91, 0x9f,
-	0x7c, 0x14, 0xe0, 0xc9, 0x52, 0xe9, 0x47, 0x0d, 0x1d, 0xe2, 0x74, 0x56, 0x46, 0x63, 0x00, 0x57,
-	0x25, 0x7b, 0xc0, 0x14, 0xfa, 0x0b, 0xc0, 0xad, 0x07, 0x68, 0x91, 0xf2, 0xba, 0x9f, 0x79, 0x3d,
-	0xef, 0xf5, 0x91, 0x67, 0x9a, 0xc6, 0xd0, 0xc1, 0x92, 0xc9, 0x97, 0xe4, 0xaf, 0x1d, 0xa6, 0xbe,
-	0x04, 0x53, 0xe7, 0x7d, 0x98, 0xea, 0x95, 0x99, 0xae, 0x99, 0xa8, 0xf5, 0xc7, 0x1f, 0x00, 0x6e,
-	0x3b, 0x4c, 0xb9, 0xcf, 0x86, 0xb6, 0x2f, 0xd0, 0xf0, 0x68, 0x39, 0xfd, 0x23, 0x3d, 0x0d, 0x7b,
-	0xf9, 0xb4, 0x60, 0xe7, 0x38, 0x3a, 0xd6, 0x5b, 0xc3, 0x04, 0x98, 0x08, 0x77, 0x00, 0xdc, 0x5e,
-	0xed, 0x77, 0xbf, 0x25, 0x68, 0x3a, 0xd8, 0x60, 0x68, 0x0d, 0xfa, 0xf5, 0x5e, 0x40, 0x33, 0x79,
-	0xbf, 0x40, 0xfd, 0x36, 0xda, 0x1b, 0x04, 0x75, 0xab, 0xf6, 0x3f, 0x3f, 0x00, 0xb7, 0xa5, 0x82,
-	0x95, 0x32, 0xf5, 0x34, 0x4a, 0xc9, 0x04, 0xa8, 0x52, 0x64, 0xbe, 0x19, 0x94, 0x7b, 0x7f, 0x2b,
-	0x7d, 0x94, 0xd4, 0x1b, 0xc2, 0xd3, 0xc6, 0x37, 0x01, 0x0c, 0x3b, 0x6d, 0xec, 0xc3, 0x43, 0xbf,
-	0x1b, 0x65, 0xcb, 0xa6, 0x3e, 0x26, 0xa0, 0x26, 0xa7, 0x66, 0xbb, 0xbf, 0xd3, 0xdb, 0xf7, 0x67,
-	0xe2, 0x7b, 0xb0, 0x52, 0xc6, 0xe0, 0x56, 0x19, 0x83, 0xbb, 0x65, 0x2c, 0xdd, 0x2f, 0x63, 0xe9,
-	0x41, 0x19, 0x4b, 0x8f, 0xca, 0x58, 0x7a, 0x5c, 0xc6, 0xe0, 0x9c, 0x8d, 0xc1, 0x05, 0x1b, 0x4b,
-	0x57, 0x6d, 0x0c, 0xae, 0xd9, 0x58, 0xba, 0x6e, 0x63, 0xe9, 0x86, 0x8d, 0xa5, 0x15, 0x1b, 0x83,
-	0x5b, 0x36, 0x06, 0x77, 0x6d, 0x2c, 0xdd, 0xb7, 0x31, 0x78, 0x60, 0x63, 0xe9, 0x91, 0x8d, 0xc1,
-	0x63, 0x1b, 0x4b, 0xe7, 0x2a, 0x58, 0xba, 0x50, 0xc1, 0xe0, 0x52, 0x05, 0x4b, 0x57, 0x2a, 0x18,
-	0x7c, 0x57, 0xc1, 0xd2, 0xd5, 0x0a, 0x96, 0xae, 0x55, 0x30, 0xb8, 0x5e, 0xc1, 0xe0, 0x46, 0x05,
-	0x83, 0xe3, 0x6a, 0xde, 0x50, 0xf8, 0x3c, 0xe5, 0xf3, 0x9a, 0x9e, 0x67, 0x8a, 0x4e, 0xf9, 0x19,
-	0xc3, 0x2a, 0xa8, 0xf5, 0xff, 0xc5, 0x5c, 0xdc, 0xad, 0x9a, 0x85, 0xbc, 0xca, 0xb9, 0x6e, 0xce,
-	0xcd, 0x6d, 0x10, 0x8c, 0xec, 0xfe, 0x27, 0x00, 0x00, 0xff, 0xff, 0x24, 0x11, 0xaa, 0xb7, 0x3c,
-	0x16, 0x00, 0x00,
+	// 1275 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x58, 0x4d, 0x6c, 0x1b, 0x45,
+	0x14, 0xce, 0xf8, 0xa7, 0x49, 0x26, 0xa9, 0x49, 0x07, 0x95, 0x5a, 0x06, 0x9c, 0xb0, 0x0d, 0xc4,
+	0x04, 0xbc, 0x5b, 0x39, 0x20, 0x68, 0x2b, 0x1a, 0xc5, 0x4d, 0x5b, 0xa8, 0x68, 0x15, 0xd6, 0x80,
+	0xaa, 0xfe, 0xe0, 0x4e, 0xec, 0xf1, 0x66, 0x65, 0x7b, 0x77, 0xd9, 0x19, 0xbb, 0x98, 0x28, 0x52,
+	0x15, 0xc4, 0x05, 0xa1, 0xaa, 0xa8, 0x17, 0x4e, 0x9c, 0x41, 0xdc, 0xb8, 0x80, 0xb8, 0x80, 0xb8,
+	0xc0, 0xa5, 0x52, 0x25, 0x24, 0xc4, 0xa9, 0x88, 0x84, 0x43, 0x91, 0x90, 0xe0, 0xc0, 0x29, 0x17,
+	0x90, 0x67, 0xd7, 0xc9, 0xda, 0xbb, 0xb6, 0x77, 0x6d, 0xb5, 0x5c, 0xb8, 0xed, 0x66, 0xde, 0x7b,
+	0xfb, 0xbe, 0xf7, 0xbe, 0xf7, 0xcd, 0x73, 0x60, 0xa6, 0xa2, 0x9b, 0xf8, 0x1a, 0xd6, 0xd2, 0x94,
+	0xe1, 0x42, 0x59, 0xc2, 0x86, 0x2a, 0x61, 0xc3, 0xa8, 0xa8, 0x05, 0xcc, 0x54, 0x5d, 0xa3, 0xc4,
+	0xac, 0x13, 0x33, 0x6f, 0xe0, 0x42, 0x19, 0x2b, 0x84, 0x8a, 0x86, 0xa9, 0x33, 0x1d, 0xc5, 0x18,
+	0xd3, 0x44, 0xdb, 0x4f, 0xac, 0x2f, 0x24, 0x96, 0x14, 0x95, 0xad, 0xd5, 0x56, 0xc5, 0x82, 0x5e,
+	0x95, 0x88, 0x56, 0xd7, 0x1b, 0x86, 0xa9, 0xbf, 0xd3, 0x90, 0xb8, 0x71, 0x21, 0xad, 0x10, 0x2d,
+	0x5d, 0xc7, 0x15, 0xb5, 0x88, 0x19, 0x91, 0x5c, 0x0f, 0x56, 0xc8, 0x44, 0xda, 0x11, 0x42, 0xd1,
+	0x15, 0xdd, 0x72, 0x5e, 0xad, 0x95, 0xf8, 0x1b, 0x7f, 0xe1, 0x4f, 0xb6, 0xf9, 0x63, 0x8a, 0xae,
+	0x2b, 0x15, 0x62, 0xa5, 0xab, 0x69, 0x3a, 0xb3, 0xb2, 0xb5, 0x4f, 0x1f, 0xb5, 0x4f, 0x77, 0x63,
+	0x90, 0xaa, 0xc1, 0x1a, 0xf6, 0xe1, 0x4c, 0xe7, 0x61, 0x49, 0x25, 0x95, 0x62, 0xbe, 0x8a, 0x69,
+	0xd9, 0xb6, 0x98, 0xee, 0xb4, 0x60, 0x6a, 0x95, 0x50, 0x86, 0xab, 0x46, 0xc7, 0xd7, 0x77, 0x0d,
+	0x28, 0x33, 0x6b, 0x05, 0x66, 0x9f, 0x1e, 0x76, 0x57, 0x54, 0x2d, 0x12, 0x8d, 0xa9, 0x25, 0x95,
+	0x98, 0x76, 0x8a, 0xc2, 0x7b, 0x00, 0xa2, 0xa5, 0xbd, 0x3a, 0xaf, 0x58, 0x05, 0x46, 0xc7, 0x61,
+	0x44, 0xc3, 0x55, 0x12, 0x07, 0x33, 0x20, 0x35, 0x9e, 0x9d, 0xdb, 0xc9, 0xce, 0x9a, 0x42, 0x7c,
+	0x36, 0x93, 0x7c, 0xeb, 0x12, 0x4e, 0xbf, 0x7b, 0x24, 0x7d, 0xf4, 0x4a, 0x6a, 0xf1, 0xd8, 0xa5,
+	0xf4, 0x95, 0xc5, 0xd6, 0xeb, 0xd3, 0xeb, 0x99, 0x67, 0x37, 0x66, 0x65, 0xee, 0x84, 0x8e, 0xc0,
+	0x58, 0x91, 0x94, 0x70, 0xad, 0xc2, 0xf2, 0xa5, 0xbc, 0xa1, 0x9b, 0x2c, 0x1e, 0x9a, 0x01, 0xa9,
+	0xfd, 0x59, 0xb8, 0x93, 0x1d, 0x9d, 0x8f, 0xc6, 0xff, 0x01, 0x29, 0x20, 0x4f, 0xda, 0x16, 0xa7,
+	0x57, 0x74, 0x93, 0x09, 0x6f, 0xc0, 0x87, 0xdd, 0x49, 0x50, 0x74, 0x02, 0x8e, 0xb5, 0x3a, 0x1e,
+	0x07, 0x33, 0xe1, 0xd4, 0x44, 0x46, 0x10, 0xdb, 0x5b, 0x2e, 0xba, 0xdd, 0xe4, 0x5d, 0x1f, 0xe1,
+	0x73, 0x00, 0x53, 0x6e, 0x83, 0x25, 0x4a, 0xf5, 0x82, 0xca, 0xff, 0xf2, 0xca, 0x5e, 0x3d, 0xd0,
+	0x65, 0x18, 0x23, 0x5a, 0x31, 0x5f, 0x24, 0x75, 0xb5, 0x40, 0xf2, 0x6a, 0x91, 0x72, 0xf0, 0x13,
+	0x99, 0xd9, 0xce, 0x4f, 0x9e, 0xd2, 0x8a, 0xcb, 0xdc, 0xc8, 0xe1, 0x9d, 0x9d, 0xda, 0xc9, 0x46,
+	0x3f, 0x00, 0xa1, 0x29, 0xf0, 0xc3, 0xdd, 0xe9, 0x91, 0x3b, 0x77, 0xa7, 0x81, 0x3c, 0x49, 0xf6,
+	0xec, 0x28, 0x7a, 0x02, 0xee, 0xeb, 0x5a, 0x8b, 0x68, 0x89, 0x17, 0xe1, 0x7a, 0x18, 0x3e, 0xde,
+	0x33, 0x5b, 0x74, 0x19, 0x86, 0xf7, 0xf2, 0x7a, 0xb1, 0x7f, 0x29, 0xbc, 0x91, 0x7a, 0xe4, 0xda,
+	0x0c, 0x8b, 0x4e, 0x42, 0x58, 0x30, 0x09, 0x66, 0xa4, 0x98, 0xc7, 0x56, 0x9a, 0x13, 0x99, 0x84,
+	0x68, 0x51, 0x4c, 0x6c, 0x51, 0x4c, 0x7c, 0xbd, 0xc5, 0xc1, 0xec, 0x58, 0xd3, 0xfd, 0xe6, 0x2f,
+	0xd3, 0x40, 0x1e, 0xb7, 0xfd, 0x96, 0x58, 0x33, 0x48, 0xcd, 0x28, 0xb6, 0x82, 0x84, 0x83, 0x04,
+	0xb1, 0xfd, 0x96, 0x18, 0x3a, 0x0b, 0x27, 0xed, 0x1e, 0xe6, 0x39, 0x0b, 0x23, 0xc1, 0x58, 0x38,
+	0x61, 0x3b, 0x9f, 0x6f, 0x92, 0xf1, 0x19, 0x18, 0x29, 0x62, 0x86, 0xe3, 0x51, 0x9e, 0xca, 0x21,
+	0x57, 0x2a, 0x39, 0x3e, 0x32, 0x32, 0x37, 0x12, 0x28, 0x4c, 0xf6, 0xac, 0x22, 0x45, 0xaf, 0xc1,
+	0x49, 0xec, 0x78, 0xb7, 0x69, 0x99, 0x0e, 0xd4, 0x0b, 0xb9, 0x2d, 0x84, 0xf0, 0x1d, 0x80, 0x73,
+	0x67, 0x08, 0xeb, 0xed, 0x42, 0xde, 0xae, 0x11, 0xca, 0xee, 0x33, 0x03, 0x8e, 0x42, 0xb8, 0x27,
+	0x42, 0x5d, 0x19, 0x70, 0xba, 0x69, 0x72, 0x0e, 0xd3, 0xb2, 0x3c, 0x5e, 0x6a, 0x3d, 0x0a, 0xdb,
+	0x00, 0xa6, 0x5e, 0x55, 0xa9, 0x3f, 0x14, 0x2f, 0x3b, 0x51, 0x0c, 0x3a, 0x5f, 0x3c, 0xe3, 0x24,
+	0x8c, 0x56, 0xd4, 0xaa, 0xda, 0x9a, 0xaa, 0xb1, 0x9d, 0x6c, 0x74, 0x3e, 0x1c, 0xbf, 0x37, 0x2a,
+	0x5b, 0x7f, 0x46, 0x08, 0x46, 0x0c, 0xac, 0x10, 0x4e, 0xc4, 0xfd, 0x32, 0x7f, 0xee, 0x40, 0x19,
+	0x09, 0x82, 0xf2, 0x7b, 0x00, 0xe7, 0x72, 0x3e, 0x5b, 0x85, 0xe1, 0x84, 0xa3, 0xcd, 0x36, 0xd8,
+	0x60, 0x44, 0xf1, 0x40, 0xed, 0x8c, 0x39, 0x4c, 0xbf, 0xbe, 0x04, 0x50, 0x72, 0x7f, 0x7b, 0xd9,
+	0x12, 0xe5, 0x2e, 0x0a, 0x89, 0xe1, 0x43, 0x8e, 0x2b, 0xd9, 0x21, 0x91, 0x4f, 0xf5, 0x40, 0xd5,
+	0xbb, 0x89, 0x31, 0xec, 0xb4, 0xf4, 0x25, 0x93, 0x37, 0xc2, 0x70, 0xd6, 0x4f, 0xe6, 0xa8, 0xe0,
+	0x64, 0xd9, 0x62, 0xff, 0xc2, 0xf7, 0x04, 0xff, 0xbf, 0x68, 0x76, 0x15, 0xcd, 0x06, 0x7c, 0xd2,
+	0x4f, 0x31, 0x29, 0x5a, 0x81, 0x63, 0xf6, 0xad, 0xdf, 0xd2, 0xcd, 0xe7, 0x06, 0xe9, 0x8a, 0xbc,
+	0x1b, 0x45, 0xb8, 0x03, 0xa0, 0xe8, 0x29, 0x9d, 0x1e, 0x5e, 0xf6, 0x58, 0x3e, 0x10, 0x56, 0x0c,
+	0x31, 0x98, 0x7f, 0x00, 0x28, 0x79, 0x0b, 0x69, 0x77, 0x4c, 0x67, 0x9d, 0x98, 0x06, 0x1f, 0xc6,
+	0xff, 0x42, 0x51, 0x6f, 0x03, 0x28, 0xe6, 0x82, 0x75, 0xf0, 0x2a, 0x1c, 0xb5, 0x09, 0x60, 0x23,
+	0x1e, 0x88, 0x45, 0x1e, 0xf8, 0x5b, 0x61, 0x87, 0x68, 0x5f, 0xe6, 0x93, 0x03, 0x30, 0xe1, 0xb1,
+	0x93, 0x12, 0x45, 0xa5, 0xcc, 0x6c, 0xa0, 0xcf, 0x00, 0x8c, 0x34, 0xbb, 0x8b, 0x7c, 0xdd, 0x7a,
+	0x89, 0xc3, 0xfd, 0x91, 0x51, 0xe1, 0xcd, 0xcd, 0x1f, 0x7f, 0xbb, 0x15, 0x5a, 0x41, 0xe7, 0x25,
+	0x4c, 0xdb, 0x7e, 0x33, 0x49, 0xeb, 0x1d, 0x72, 0x2d, 0xb6, 0xbf, 0x6f, 0x48, 0xd6, 0xb2, 0x4b,
+	0xa5, 0xf5, 0xdd, 0xad, 0x77, 0x43, 0x6a, 0x6d, 0xcf, 0xe8, 0x56, 0x08, 0xc6, 0x9a, 0xc3, 0xe5,
+	0x90, 0xd4, 0x17, 0x3a, 0xf3, 0xf1, 0xb9, 0xb7, 0x24, 0x82, 0xdd, 0x7b, 0xc2, 0xc7, 0x80, 0x63,
+	0xfa, 0x08, 0xa0, 0x1b, 0xc0, 0x8d, 0xaa, 0x89, 0xa4, 0x7d, 0x55, 0x17, 0x7d, 0x03, 0xf5, 0xf0,
+	0xf5, 0xc0, 0x2e, 0x39, 0x17, 0x34, 0xcb, 0xc9, 0xba, 0x96, 0x36, 0xd0, 0xef, 0x00, 0x4e, 0xf1,
+	0xf9, 0x74, 0x2a, 0x9b, 0x6b, 0x13, 0xf3, 0xbb, 0x0a, 0x25, 0xc4, 0x40, 0x85, 0xa1, 0x42, 0x99,
+	0x17, 0x86, 0xa0, 0x82, 0x77, 0x59, 0x02, 0xd5, 0xa1, 0x1f, 0x70, 0xf4, 0x75, 0x08, 0xc6, 0x72,
+	0x7d, 0x18, 0x90, 0xbb, 0x3f, 0x0c, 0xf8, 0xc6, 0x62, 0xc0, 0x57, 0x20, 0xf1, 0x85, 0x07, 0x03,
+	0x1c, 0x59, 0x8a, 0xc3, 0xb0, 0xa1, 0x4f, 0x9c, 0xfe, 0xcc, 0xe8, 0x0c, 0x60, 0xb3, 0xe4, 0x18,
+	0x98, 0x47, 0x7f, 0x03, 0x78, 0x60, 0x99, 0x54, 0x08, 0x6b, 0xfb, 0x09, 0x37, 0xf0, 0xce, 0x9e,
+	0x78, 0xc4, 0x25, 0x40, 0xa7, 0xaa, 0x06, 0x6b, 0x08, 0x1f, 0x5a, 0x95, 0x7a, 0x1f, 0xcc, 0x6f,
+	0x7a, 0x54, 0x6a, 0xd0, 0xca, 0x04, 0xae, 0x44, 0x6b, 0x3e, 0xfe, 0x04, 0xf0, 0xe0, 0x19, 0xc2,
+	0x3c, 0xf6, 0xb1, 0x13, 0xbe, 0xc4, 0xa3, 0xab, 0xee, 0x27, 0x06, 0x92, 0x79, 0xe1, 0x2a, 0xaf,
+	0xce, 0x45, 0x74, 0x61, 0xb0, 0x81, 0xf1, 0xa1, 0x08, 0x3f, 0x01, 0x78, 0xa8, 0x39, 0xef, 0x5e,
+	0x2b, 0xcf, 0xa2, 0x3f, 0x61, 0xe8, 0x0e, 0xfa, 0xf9, 0x41, 0x40, 0x53, 0xe1, 0x24, 0x47, 0xfd,
+	0x12, 0x3a, 0xee, 0x07, 0x75, 0xb7, 0xf1, 0xdf, 0x0c, 0xc1, 0x83, 0x39, 0x7f, 0xad, 0xcc, 0x3d,
+	0x88, 0x56, 0x52, 0x0e, 0xaa, 0x9a, 0x58, 0x73, 0x83, 0xb2, 0x6f, 0x6e, 0x71, 0x88, 0x96, 0x3a,
+	0x43, 0x38, 0xc6, 0xf8, 0x36, 0x80, 0x71, 0x6b, 0x8c, 0x3d, 0xea, 0x30, 0xec, 0xfe, 0xd8, 0x75,
+	0xa8, 0x2f, 0x70, 0xa8, 0xf2, 0xfc, 0x4a, 0xf0, 0x3b, 0xbd, 0xf7, 0x7c, 0x66, 0xcf, 0xfd, 0xfc,
+	0x6b, 0x72, 0xe4, 0xfa, 0x56, 0x12, 0x7c, 0xba, 0x95, 0x04, 0xf7, 0xb6, 0x92, 0x23, 0x7f, 0x6d,
+	0x25, 0xc1, 0xcd, 0xed, 0xe4, 0xc8, 0xb7, 0xdb, 0x49, 0x70, 0x51, 0x52, 0x74, 0x91, 0xad, 0x11,
+	0xb6, 0xa6, 0x6a, 0x0a, 0x15, 0x35, 0xc2, 0xae, 0xe9, 0x66, 0x59, 0x6a, 0xff, 0x47, 0x62, 0x7d,
+	0x41, 0x32, 0xca, 0x8a, 0xc4, 0x98, 0x66, 0xac, 0xae, 0xee, 0xe3, 0x89, 0x2f, 0xfc, 0x1b, 0x00,
+	0x00, 0xff, 0xff, 0xab, 0x85, 0xf7, 0xc8, 0xbf, 0x15, 0x00, 0x00,
 }
 
 func (this *ApplicationPackage) Equal(that interface{}) bool {
@@ -1086,7 +950,7 @@ func (this *GetApplicationPackageAssociationRequest) Equal(that interface{}) boo
 	if !this.ApplicationPackageAssociationIdentifiers.Equal(&that1.ApplicationPackageAssociationIdentifiers) {
 		return false
 	}
-	if !this.FieldMask.Equal(&that1.FieldMask) {
+	if !this.FieldMask.Equal(that1.FieldMask) {
 		return false
 	}
 	return true
@@ -1119,7 +983,7 @@ func (this *ListApplicationPackageAssociationRequest) Equal(that interface{}) bo
 	if this.Page != that1.Page {
 		return false
 	}
-	if !this.FieldMask.Equal(&that1.FieldMask) {
+	if !this.FieldMask.Equal(that1.FieldMask) {
 		return false
 	}
 	return true
@@ -1146,7 +1010,7 @@ func (this *SetApplicationPackageAssociationRequest) Equal(that interface{}) boo
 	if !this.ApplicationPackageAssociation.Equal(&that1.ApplicationPackageAssociation) {
 		return false
 	}
-	if !this.FieldMask.Equal(&that1.FieldMask) {
+	if !this.FieldMask.Equal(that1.FieldMask) {
 		return false
 	}
 	return true
@@ -1265,7 +1129,7 @@ func (this *GetApplicationPackageDefaultAssociationRequest) Equal(that interface
 	if !this.ApplicationPackageDefaultAssociationIdentifiers.Equal(&that1.ApplicationPackageDefaultAssociationIdentifiers) {
 		return false
 	}
-	if !this.FieldMask.Equal(&that1.FieldMask) {
+	if !this.FieldMask.Equal(that1.FieldMask) {
 		return false
 	}
 	return true
@@ -1298,7 +1162,7 @@ func (this *ListApplicationPackageDefaultAssociationRequest) Equal(that interfac
 	if this.Page != that1.Page {
 		return false
 	}
-	if !this.FieldMask.Equal(&that1.FieldMask) {
+	if !this.FieldMask.Equal(that1.FieldMask) {
 		return false
 	}
 	return true
@@ -1325,7 +1189,7 @@ func (this *SetApplicationPackageDefaultAssociationRequest) Equal(that interface
 	if !this.ApplicationPackageDefaultAssociation.Equal(&that1.ApplicationPackageDefaultAssociation) {
 		return false
 	}
-	if !this.FieldMask.Equal(&that1.FieldMask) {
+	if !this.FieldMask.Equal(that1.FieldMask) {
 		return false
 	}
 	return true
@@ -1717,1131 +1581,6 @@ var _ApplicationPackageRegistry_serviceDesc = grpc.ServiceDesc{
 	Metadata: "lorawan-stack/api/applicationserver_packages.proto",
 }
 
-func (m *ApplicationPackage) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *ApplicationPackage) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *ApplicationPackage) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.DefaultFPort != 0 {
-		i = encodeVarintApplicationserverPackages(dAtA, i, uint64(m.DefaultFPort))
-		i--
-		dAtA[i] = 0x10
-	}
-	if len(m.Name) > 0 {
-		i -= len(m.Name)
-		copy(dAtA[i:], m.Name)
-		i = encodeVarintApplicationserverPackages(dAtA, i, uint64(len(m.Name)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *ApplicationPackages) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *ApplicationPackages) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *ApplicationPackages) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.Packages) > 0 {
-		for iNdEx := len(m.Packages) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.Packages[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintApplicationserverPackages(dAtA, i, uint64(size))
-			}
-			i--
-			dAtA[i] = 0xa
-		}
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *ApplicationPackageAssociationIdentifiers) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *ApplicationPackageAssociationIdentifiers) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *ApplicationPackageAssociationIdentifiers) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.FPort != 0 {
-		i = encodeVarintApplicationserverPackages(dAtA, i, uint64(m.FPort))
-		i--
-		dAtA[i] = 0x10
-	}
-	{
-		size, err := m.EndDeviceIdentifiers.MarshalToSizedBuffer(dAtA[:i])
-		if err != nil {
-			return 0, err
-		}
-		i -= size
-		i = encodeVarintApplicationserverPackages(dAtA, i, uint64(size))
-	}
-	i--
-	dAtA[i] = 0xa
-	return len(dAtA) - i, nil
-}
-
-func (m *ApplicationPackageAssociation) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *ApplicationPackageAssociation) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *ApplicationPackageAssociation) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.Data != nil {
-		{
-			size, err := m.Data.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintApplicationserverPackages(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x2a
-	}
-	if len(m.PackageName) > 0 {
-		i -= len(m.PackageName)
-		copy(dAtA[i:], m.PackageName)
-		i = encodeVarintApplicationserverPackages(dAtA, i, uint64(len(m.PackageName)))
-		i--
-		dAtA[i] = 0x22
-	}
-	n3, err3 := github_com_gogo_protobuf_types.StdTimeMarshalTo(m.UpdatedAt, dAtA[i-github_com_gogo_protobuf_types.SizeOfStdTime(m.UpdatedAt):])
-	if err3 != nil {
-		return 0, err3
-	}
-	i -= n3
-	i = encodeVarintApplicationserverPackages(dAtA, i, uint64(n3))
-	i--
-	dAtA[i] = 0x1a
-	n4, err4 := github_com_gogo_protobuf_types.StdTimeMarshalTo(m.CreatedAt, dAtA[i-github_com_gogo_protobuf_types.SizeOfStdTime(m.CreatedAt):])
-	if err4 != nil {
-		return 0, err4
-	}
-	i -= n4
-	i = encodeVarintApplicationserverPackages(dAtA, i, uint64(n4))
-	i--
-	dAtA[i] = 0x12
-	{
-		size, err := m.ApplicationPackageAssociationIdentifiers.MarshalToSizedBuffer(dAtA[:i])
-		if err != nil {
-			return 0, err
-		}
-		i -= size
-		i = encodeVarintApplicationserverPackages(dAtA, i, uint64(size))
-	}
-	i--
-	dAtA[i] = 0xa
-	return len(dAtA) - i, nil
-}
-
-func (m *ApplicationPackageAssociations) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *ApplicationPackageAssociations) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *ApplicationPackageAssociations) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.Associations) > 0 {
-		for iNdEx := len(m.Associations) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.Associations[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintApplicationserverPackages(dAtA, i, uint64(size))
-			}
-			i--
-			dAtA[i] = 0xa
-		}
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *GetApplicationPackageAssociationRequest) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *GetApplicationPackageAssociationRequest) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *GetApplicationPackageAssociationRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	{
-		size, err := m.FieldMask.MarshalToSizedBuffer(dAtA[:i])
-		if err != nil {
-			return 0, err
-		}
-		i -= size
-		i = encodeVarintApplicationserverPackages(dAtA, i, uint64(size))
-	}
-	i--
-	dAtA[i] = 0x12
-	{
-		size, err := m.ApplicationPackageAssociationIdentifiers.MarshalToSizedBuffer(dAtA[:i])
-		if err != nil {
-			return 0, err
-		}
-		i -= size
-		i = encodeVarintApplicationserverPackages(dAtA, i, uint64(size))
-	}
-	i--
-	dAtA[i] = 0xa
-	return len(dAtA) - i, nil
-}
-
-func (m *ListApplicationPackageAssociationRequest) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *ListApplicationPackageAssociationRequest) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *ListApplicationPackageAssociationRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	{
-		size, err := m.FieldMask.MarshalToSizedBuffer(dAtA[:i])
-		if err != nil {
-			return 0, err
-		}
-		i -= size
-		i = encodeVarintApplicationserverPackages(dAtA, i, uint64(size))
-	}
-	i--
-	dAtA[i] = 0x22
-	if m.Page != 0 {
-		i = encodeVarintApplicationserverPackages(dAtA, i, uint64(m.Page))
-		i--
-		dAtA[i] = 0x18
-	}
-	if m.Limit != 0 {
-		i = encodeVarintApplicationserverPackages(dAtA, i, uint64(m.Limit))
-		i--
-		dAtA[i] = 0x10
-	}
-	{
-		size, err := m.EndDeviceIdentifiers.MarshalToSizedBuffer(dAtA[:i])
-		if err != nil {
-			return 0, err
-		}
-		i -= size
-		i = encodeVarintApplicationserverPackages(dAtA, i, uint64(size))
-	}
-	i--
-	dAtA[i] = 0xa
-	return len(dAtA) - i, nil
-}
-
-func (m *SetApplicationPackageAssociationRequest) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *SetApplicationPackageAssociationRequest) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *SetApplicationPackageAssociationRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	{
-		size, err := m.FieldMask.MarshalToSizedBuffer(dAtA[:i])
-		if err != nil {
-			return 0, err
-		}
-		i -= size
-		i = encodeVarintApplicationserverPackages(dAtA, i, uint64(size))
-	}
-	i--
-	dAtA[i] = 0x12
-	{
-		size, err := m.ApplicationPackageAssociation.MarshalToSizedBuffer(dAtA[:i])
-		if err != nil {
-			return 0, err
-		}
-		i -= size
-		i = encodeVarintApplicationserverPackages(dAtA, i, uint64(size))
-	}
-	i--
-	dAtA[i] = 0xa
-	return len(dAtA) - i, nil
-}
-
-func (m *ApplicationPackageDefaultAssociationIdentifiers) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *ApplicationPackageDefaultAssociationIdentifiers) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *ApplicationPackageDefaultAssociationIdentifiers) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.FPort != 0 {
-		i = encodeVarintApplicationserverPackages(dAtA, i, uint64(m.FPort))
-		i--
-		dAtA[i] = 0x10
-	}
-	{
-		size, err := m.ApplicationIdentifiers.MarshalToSizedBuffer(dAtA[:i])
-		if err != nil {
-			return 0, err
-		}
-		i -= size
-		i = encodeVarintApplicationserverPackages(dAtA, i, uint64(size))
-	}
-	i--
-	dAtA[i] = 0xa
-	return len(dAtA) - i, nil
-}
-
-func (m *ApplicationPackageDefaultAssociation) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *ApplicationPackageDefaultAssociation) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *ApplicationPackageDefaultAssociation) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.Data != nil {
-		{
-			size, err := m.Data.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintApplicationserverPackages(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x2a
-	}
-	if len(m.PackageName) > 0 {
-		i -= len(m.PackageName)
-		copy(dAtA[i:], m.PackageName)
-		i = encodeVarintApplicationserverPackages(dAtA, i, uint64(len(m.PackageName)))
-		i--
-		dAtA[i] = 0x22
-	}
-	n14, err14 := github_com_gogo_protobuf_types.StdTimeMarshalTo(m.UpdatedAt, dAtA[i-github_com_gogo_protobuf_types.SizeOfStdTime(m.UpdatedAt):])
-	if err14 != nil {
-		return 0, err14
-	}
-	i -= n14
-	i = encodeVarintApplicationserverPackages(dAtA, i, uint64(n14))
-	i--
-	dAtA[i] = 0x1a
-	n15, err15 := github_com_gogo_protobuf_types.StdTimeMarshalTo(m.CreatedAt, dAtA[i-github_com_gogo_protobuf_types.SizeOfStdTime(m.CreatedAt):])
-	if err15 != nil {
-		return 0, err15
-	}
-	i -= n15
-	i = encodeVarintApplicationserverPackages(dAtA, i, uint64(n15))
-	i--
-	dAtA[i] = 0x12
-	{
-		size, err := m.ApplicationPackageDefaultAssociationIdentifiers.MarshalToSizedBuffer(dAtA[:i])
-		if err != nil {
-			return 0, err
-		}
-		i -= size
-		i = encodeVarintApplicationserverPackages(dAtA, i, uint64(size))
-	}
-	i--
-	dAtA[i] = 0xa
-	return len(dAtA) - i, nil
-}
-
-func (m *ApplicationPackageDefaultAssociations) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *ApplicationPackageDefaultAssociations) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *ApplicationPackageDefaultAssociations) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.Defaults) > 0 {
-		for iNdEx := len(m.Defaults) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.Defaults[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintApplicationserverPackages(dAtA, i, uint64(size))
-			}
-			i--
-			dAtA[i] = 0xa
-		}
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *GetApplicationPackageDefaultAssociationRequest) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *GetApplicationPackageDefaultAssociationRequest) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *GetApplicationPackageDefaultAssociationRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	{
-		size, err := m.FieldMask.MarshalToSizedBuffer(dAtA[:i])
-		if err != nil {
-			return 0, err
-		}
-		i -= size
-		i = encodeVarintApplicationserverPackages(dAtA, i, uint64(size))
-	}
-	i--
-	dAtA[i] = 0x12
-	{
-		size, err := m.ApplicationPackageDefaultAssociationIdentifiers.MarshalToSizedBuffer(dAtA[:i])
-		if err != nil {
-			return 0, err
-		}
-		i -= size
-		i = encodeVarintApplicationserverPackages(dAtA, i, uint64(size))
-	}
-	i--
-	dAtA[i] = 0xa
-	return len(dAtA) - i, nil
-}
-
-func (m *ListApplicationPackageDefaultAssociationRequest) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *ListApplicationPackageDefaultAssociationRequest) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *ListApplicationPackageDefaultAssociationRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	{
-		size, err := m.FieldMask.MarshalToSizedBuffer(dAtA[:i])
-		if err != nil {
-			return 0, err
-		}
-		i -= size
-		i = encodeVarintApplicationserverPackages(dAtA, i, uint64(size))
-	}
-	i--
-	dAtA[i] = 0x22
-	if m.Page != 0 {
-		i = encodeVarintApplicationserverPackages(dAtA, i, uint64(m.Page))
-		i--
-		dAtA[i] = 0x18
-	}
-	if m.Limit != 0 {
-		i = encodeVarintApplicationserverPackages(dAtA, i, uint64(m.Limit))
-		i--
-		dAtA[i] = 0x10
-	}
-	{
-		size, err := m.ApplicationIdentifiers.MarshalToSizedBuffer(dAtA[:i])
-		if err != nil {
-			return 0, err
-		}
-		i -= size
-		i = encodeVarintApplicationserverPackages(dAtA, i, uint64(size))
-	}
-	i--
-	dAtA[i] = 0xa
-	return len(dAtA) - i, nil
-}
-
-func (m *SetApplicationPackageDefaultAssociationRequest) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *SetApplicationPackageDefaultAssociationRequest) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *SetApplicationPackageDefaultAssociationRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	{
-		size, err := m.FieldMask.MarshalToSizedBuffer(dAtA[:i])
-		if err != nil {
-			return 0, err
-		}
-		i -= size
-		i = encodeVarintApplicationserverPackages(dAtA, i, uint64(size))
-	}
-	i--
-	dAtA[i] = 0x12
-	{
-		size, err := m.ApplicationPackageDefaultAssociation.MarshalToSizedBuffer(dAtA[:i])
-		if err != nil {
-			return 0, err
-		}
-		i -= size
-		i = encodeVarintApplicationserverPackages(dAtA, i, uint64(size))
-	}
-	i--
-	dAtA[i] = 0xa
-	return len(dAtA) - i, nil
-}
-
-func encodeVarintApplicationserverPackages(dAtA []byte, offset int, v uint64) int {
-	offset -= sovApplicationserverPackages(v)
-	base := offset
-	for v >= 1<<7 {
-		dAtA[offset] = uint8(v&0x7f | 0x80)
-		v >>= 7
-		offset++
-	}
-	dAtA[offset] = uint8(v)
-	return base
-}
-func NewPopulatedApplicationPackage(r randyApplicationserverPackages, easy bool) *ApplicationPackage {
-	this := &ApplicationPackage{}
-	this.Name = randStringApplicationserverPackages(r)
-	this.DefaultFPort = r.Uint32()
-	if !easy && r.Intn(10) != 0 {
-	}
-	return this
-}
-
-func NewPopulatedApplicationPackages(r randyApplicationserverPackages, easy bool) *ApplicationPackages {
-	this := &ApplicationPackages{}
-	if r.Intn(5) != 0 {
-		v1 := r.Intn(5)
-		this.Packages = make([]*ApplicationPackage, v1)
-		for i := 0; i < v1; i++ {
-			this.Packages[i] = NewPopulatedApplicationPackage(r, easy)
-		}
-	}
-	if !easy && r.Intn(10) != 0 {
-	}
-	return this
-}
-
-func NewPopulatedApplicationPackageAssociationIdentifiers(r randyApplicationserverPackages, easy bool) *ApplicationPackageAssociationIdentifiers {
-	this := &ApplicationPackageAssociationIdentifiers{}
-	v2 := NewPopulatedEndDeviceIdentifiers(r, easy)
-	this.EndDeviceIdentifiers = *v2
-	this.FPort = r.Uint32()
-	if !easy && r.Intn(10) != 0 {
-	}
-	return this
-}
-
-func NewPopulatedApplicationPackageAssociation(r randyApplicationserverPackages, easy bool) *ApplicationPackageAssociation {
-	this := &ApplicationPackageAssociation{}
-	v3 := NewPopulatedApplicationPackageAssociationIdentifiers(r, easy)
-	this.ApplicationPackageAssociationIdentifiers = *v3
-	v4 := github_com_gogo_protobuf_types.NewPopulatedStdTime(r, easy)
-	this.CreatedAt = *v4
-	v5 := github_com_gogo_protobuf_types.NewPopulatedStdTime(r, easy)
-	this.UpdatedAt = *v5
-	this.PackageName = randStringApplicationserverPackages(r)
-	if r.Intn(5) != 0 {
-		this.Data = types.NewPopulatedStruct(r, easy)
-	}
-	if !easy && r.Intn(10) != 0 {
-	}
-	return this
-}
-
-func NewPopulatedApplicationPackageAssociations(r randyApplicationserverPackages, easy bool) *ApplicationPackageAssociations {
-	this := &ApplicationPackageAssociations{}
-	if r.Intn(5) != 0 {
-		v6 := r.Intn(5)
-		this.Associations = make([]*ApplicationPackageAssociation, v6)
-		for i := 0; i < v6; i++ {
-			this.Associations[i] = NewPopulatedApplicationPackageAssociation(r, easy)
-		}
-	}
-	if !easy && r.Intn(10) != 0 {
-	}
-	return this
-}
-
-func NewPopulatedGetApplicationPackageAssociationRequest(r randyApplicationserverPackages, easy bool) *GetApplicationPackageAssociationRequest {
-	this := &GetApplicationPackageAssociationRequest{}
-	v7 := NewPopulatedApplicationPackageAssociationIdentifiers(r, easy)
-	this.ApplicationPackageAssociationIdentifiers = *v7
-	v8 := types.NewPopulatedFieldMask(r, easy)
-	this.FieldMask = *v8
-	if !easy && r.Intn(10) != 0 {
-	}
-	return this
-}
-
-func NewPopulatedListApplicationPackageAssociationRequest(r randyApplicationserverPackages, easy bool) *ListApplicationPackageAssociationRequest {
-	this := &ListApplicationPackageAssociationRequest{}
-	v9 := NewPopulatedEndDeviceIdentifiers(r, easy)
-	this.EndDeviceIdentifiers = *v9
-	this.Limit = r.Uint32()
-	this.Page = r.Uint32()
-	v10 := types.NewPopulatedFieldMask(r, easy)
-	this.FieldMask = *v10
-	if !easy && r.Intn(10) != 0 {
-	}
-	return this
-}
-
-func NewPopulatedSetApplicationPackageAssociationRequest(r randyApplicationserverPackages, easy bool) *SetApplicationPackageAssociationRequest {
-	this := &SetApplicationPackageAssociationRequest{}
-	v11 := NewPopulatedApplicationPackageAssociation(r, easy)
-	this.ApplicationPackageAssociation = *v11
-	v12 := types.NewPopulatedFieldMask(r, easy)
-	this.FieldMask = *v12
-	if !easy && r.Intn(10) != 0 {
-	}
-	return this
-}
-
-func NewPopulatedApplicationPackageDefaultAssociationIdentifiers(r randyApplicationserverPackages, easy bool) *ApplicationPackageDefaultAssociationIdentifiers {
-	this := &ApplicationPackageDefaultAssociationIdentifiers{}
-	v13 := NewPopulatedApplicationIdentifiers(r, easy)
-	this.ApplicationIdentifiers = *v13
-	this.FPort = r.Uint32()
-	if !easy && r.Intn(10) != 0 {
-	}
-	return this
-}
-
-func NewPopulatedApplicationPackageDefaultAssociation(r randyApplicationserverPackages, easy bool) *ApplicationPackageDefaultAssociation {
-	this := &ApplicationPackageDefaultAssociation{}
-	v14 := NewPopulatedApplicationPackageDefaultAssociationIdentifiers(r, easy)
-	this.ApplicationPackageDefaultAssociationIdentifiers = *v14
-	v15 := github_com_gogo_protobuf_types.NewPopulatedStdTime(r, easy)
-	this.CreatedAt = *v15
-	v16 := github_com_gogo_protobuf_types.NewPopulatedStdTime(r, easy)
-	this.UpdatedAt = *v16
-	this.PackageName = randStringApplicationserverPackages(r)
-	if r.Intn(5) != 0 {
-		this.Data = types.NewPopulatedStruct(r, easy)
-	}
-	if !easy && r.Intn(10) != 0 {
-	}
-	return this
-}
-
-func NewPopulatedApplicationPackageDefaultAssociations(r randyApplicationserverPackages, easy bool) *ApplicationPackageDefaultAssociations {
-	this := &ApplicationPackageDefaultAssociations{}
-	if r.Intn(5) != 0 {
-		v17 := r.Intn(5)
-		this.Defaults = make([]*ApplicationPackageDefaultAssociation, v17)
-		for i := 0; i < v17; i++ {
-			this.Defaults[i] = NewPopulatedApplicationPackageDefaultAssociation(r, easy)
-		}
-	}
-	if !easy && r.Intn(10) != 0 {
-	}
-	return this
-}
-
-func NewPopulatedGetApplicationPackageDefaultAssociationRequest(r randyApplicationserverPackages, easy bool) *GetApplicationPackageDefaultAssociationRequest {
-	this := &GetApplicationPackageDefaultAssociationRequest{}
-	v18 := NewPopulatedApplicationPackageDefaultAssociationIdentifiers(r, easy)
-	this.ApplicationPackageDefaultAssociationIdentifiers = *v18
-	v19 := types.NewPopulatedFieldMask(r, easy)
-	this.FieldMask = *v19
-	if !easy && r.Intn(10) != 0 {
-	}
-	return this
-}
-
-func NewPopulatedListApplicationPackageDefaultAssociationRequest(r randyApplicationserverPackages, easy bool) *ListApplicationPackageDefaultAssociationRequest {
-	this := &ListApplicationPackageDefaultAssociationRequest{}
-	v20 := NewPopulatedApplicationIdentifiers(r, easy)
-	this.ApplicationIdentifiers = *v20
-	this.Limit = r.Uint32()
-	this.Page = r.Uint32()
-	v21 := types.NewPopulatedFieldMask(r, easy)
-	this.FieldMask = *v21
-	if !easy && r.Intn(10) != 0 {
-	}
-	return this
-}
-
-func NewPopulatedSetApplicationPackageDefaultAssociationRequest(r randyApplicationserverPackages, easy bool) *SetApplicationPackageDefaultAssociationRequest {
-	this := &SetApplicationPackageDefaultAssociationRequest{}
-	v22 := NewPopulatedApplicationPackageDefaultAssociation(r, easy)
-	this.ApplicationPackageDefaultAssociation = *v22
-	v23 := types.NewPopulatedFieldMask(r, easy)
-	this.FieldMask = *v23
-	if !easy && r.Intn(10) != 0 {
-	}
-	return this
-}
-
-type randyApplicationserverPackages interface {
-	Float32() float32
-	Float64() float64
-	Int63() int64
-	Int31() int32
-	Uint32() uint32
-	Intn(n int) int
-}
-
-func randUTF8RuneApplicationserverPackages(r randyApplicationserverPackages) rune {
-	ru := r.Intn(62)
-	if ru < 10 {
-		return rune(ru + 48)
-	} else if ru < 36 {
-		return rune(ru + 55)
-	}
-	return rune(ru + 61)
-}
-func randStringApplicationserverPackages(r randyApplicationserverPackages) string {
-	v24 := r.Intn(100)
-	tmps := make([]rune, v24)
-	for i := 0; i < v24; i++ {
-		tmps[i] = randUTF8RuneApplicationserverPackages(r)
-	}
-	return string(tmps)
-}
-func randUnrecognizedApplicationserverPackages(r randyApplicationserverPackages, maxFieldNumber int) (dAtA []byte) {
-	l := r.Intn(5)
-	for i := 0; i < l; i++ {
-		wire := r.Intn(4)
-		if wire == 3 {
-			wire = 5
-		}
-		fieldNumber := maxFieldNumber + r.Intn(100)
-		dAtA = randFieldApplicationserverPackages(dAtA, r, fieldNumber, wire)
-	}
-	return dAtA
-}
-func randFieldApplicationserverPackages(dAtA []byte, r randyApplicationserverPackages, fieldNumber int, wire int) []byte {
-	key := uint32(fieldNumber)<<3 | uint32(wire)
-	switch wire {
-	case 0:
-		dAtA = encodeVarintPopulateApplicationserverPackages(dAtA, uint64(key))
-		v25 := r.Int63()
-		if r.Intn(2) == 0 {
-			v25 *= -1
-		}
-		dAtA = encodeVarintPopulateApplicationserverPackages(dAtA, uint64(v25))
-	case 1:
-		dAtA = encodeVarintPopulateApplicationserverPackages(dAtA, uint64(key))
-		dAtA = append(dAtA, byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)))
-	case 2:
-		dAtA = encodeVarintPopulateApplicationserverPackages(dAtA, uint64(key))
-		ll := r.Intn(100)
-		dAtA = encodeVarintPopulateApplicationserverPackages(dAtA, uint64(ll))
-		for j := 0; j < ll; j++ {
-			dAtA = append(dAtA, byte(r.Intn(256)))
-		}
-	default:
-		dAtA = encodeVarintPopulateApplicationserverPackages(dAtA, uint64(key))
-		dAtA = append(dAtA, byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)))
-	}
-	return dAtA
-}
-func encodeVarintPopulateApplicationserverPackages(dAtA []byte, v uint64) []byte {
-	for v >= 1<<7 {
-		dAtA = append(dAtA, uint8(v&0x7f|0x80))
-		v >>= 7
-	}
-	dAtA = append(dAtA, uint8(v))
-	return dAtA
-}
-func (m *ApplicationPackage) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.Name)
-	if l > 0 {
-		n += 1 + l + sovApplicationserverPackages(uint64(l))
-	}
-	if m.DefaultFPort != 0 {
-		n += 1 + sovApplicationserverPackages(uint64(m.DefaultFPort))
-	}
-	return n
-}
-
-func (m *ApplicationPackages) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if len(m.Packages) > 0 {
-		for _, e := range m.Packages {
-			l = e.Size()
-			n += 1 + l + sovApplicationserverPackages(uint64(l))
-		}
-	}
-	return n
-}
-
-func (m *ApplicationPackageAssociationIdentifiers) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = m.EndDeviceIdentifiers.Size()
-	n += 1 + l + sovApplicationserverPackages(uint64(l))
-	if m.FPort != 0 {
-		n += 1 + sovApplicationserverPackages(uint64(m.FPort))
-	}
-	return n
-}
-
-func (m *ApplicationPackageAssociation) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = m.ApplicationPackageAssociationIdentifiers.Size()
-	n += 1 + l + sovApplicationserverPackages(uint64(l))
-	l = github_com_gogo_protobuf_types.SizeOfStdTime(m.CreatedAt)
-	n += 1 + l + sovApplicationserverPackages(uint64(l))
-	l = github_com_gogo_protobuf_types.SizeOfStdTime(m.UpdatedAt)
-	n += 1 + l + sovApplicationserverPackages(uint64(l))
-	l = len(m.PackageName)
-	if l > 0 {
-		n += 1 + l + sovApplicationserverPackages(uint64(l))
-	}
-	if m.Data != nil {
-		l = m.Data.Size()
-		n += 1 + l + sovApplicationserverPackages(uint64(l))
-	}
-	return n
-}
-
-func (m *ApplicationPackageAssociations) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if len(m.Associations) > 0 {
-		for _, e := range m.Associations {
-			l = e.Size()
-			n += 1 + l + sovApplicationserverPackages(uint64(l))
-		}
-	}
-	return n
-}
-
-func (m *GetApplicationPackageAssociationRequest) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = m.ApplicationPackageAssociationIdentifiers.Size()
-	n += 1 + l + sovApplicationserverPackages(uint64(l))
-	l = m.FieldMask.Size()
-	n += 1 + l + sovApplicationserverPackages(uint64(l))
-	return n
-}
-
-func (m *ListApplicationPackageAssociationRequest) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = m.EndDeviceIdentifiers.Size()
-	n += 1 + l + sovApplicationserverPackages(uint64(l))
-	if m.Limit != 0 {
-		n += 1 + sovApplicationserverPackages(uint64(m.Limit))
-	}
-	if m.Page != 0 {
-		n += 1 + sovApplicationserverPackages(uint64(m.Page))
-	}
-	l = m.FieldMask.Size()
-	n += 1 + l + sovApplicationserverPackages(uint64(l))
-	return n
-}
-
-func (m *SetApplicationPackageAssociationRequest) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = m.ApplicationPackageAssociation.Size()
-	n += 1 + l + sovApplicationserverPackages(uint64(l))
-	l = m.FieldMask.Size()
-	n += 1 + l + sovApplicationserverPackages(uint64(l))
-	return n
-}
-
-func (m *ApplicationPackageDefaultAssociationIdentifiers) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = m.ApplicationIdentifiers.Size()
-	n += 1 + l + sovApplicationserverPackages(uint64(l))
-	if m.FPort != 0 {
-		n += 1 + sovApplicationserverPackages(uint64(m.FPort))
-	}
-	return n
-}
-
-func (m *ApplicationPackageDefaultAssociation) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = m.ApplicationPackageDefaultAssociationIdentifiers.Size()
-	n += 1 + l + sovApplicationserverPackages(uint64(l))
-	l = github_com_gogo_protobuf_types.SizeOfStdTime(m.CreatedAt)
-	n += 1 + l + sovApplicationserverPackages(uint64(l))
-	l = github_com_gogo_protobuf_types.SizeOfStdTime(m.UpdatedAt)
-	n += 1 + l + sovApplicationserverPackages(uint64(l))
-	l = len(m.PackageName)
-	if l > 0 {
-		n += 1 + l + sovApplicationserverPackages(uint64(l))
-	}
-	if m.Data != nil {
-		l = m.Data.Size()
-		n += 1 + l + sovApplicationserverPackages(uint64(l))
-	}
-	return n
-}
-
-func (m *ApplicationPackageDefaultAssociations) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if len(m.Defaults) > 0 {
-		for _, e := range m.Defaults {
-			l = e.Size()
-			n += 1 + l + sovApplicationserverPackages(uint64(l))
-		}
-	}
-	return n
-}
-
-func (m *GetApplicationPackageDefaultAssociationRequest) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = m.ApplicationPackageDefaultAssociationIdentifiers.Size()
-	n += 1 + l + sovApplicationserverPackages(uint64(l))
-	l = m.FieldMask.Size()
-	n += 1 + l + sovApplicationserverPackages(uint64(l))
-	return n
-}
-
-func (m *ListApplicationPackageDefaultAssociationRequest) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = m.ApplicationIdentifiers.Size()
-	n += 1 + l + sovApplicationserverPackages(uint64(l))
-	if m.Limit != 0 {
-		n += 1 + sovApplicationserverPackages(uint64(m.Limit))
-	}
-	if m.Page != 0 {
-		n += 1 + sovApplicationserverPackages(uint64(m.Page))
-	}
-	l = m.FieldMask.Size()
-	n += 1 + l + sovApplicationserverPackages(uint64(l))
-	return n
-}
-
-func (m *SetApplicationPackageDefaultAssociationRequest) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = m.ApplicationPackageDefaultAssociation.Size()
-	n += 1 + l + sovApplicationserverPackages(uint64(l))
-	l = m.FieldMask.Size()
-	n += 1 + l + sovApplicationserverPackages(uint64(l))
-	return n
-}
-
-func sovApplicationserverPackages(x uint64) (n int) {
-	return (math_bits.Len64(x|1) + 6) / 7
-}
-func sozApplicationserverPackages(x uint64) (n int) {
-	return sovApplicationserverPackages((x << 1) ^ uint64((int64(x) >> 63)))
-}
 func (this *ApplicationPackage) String() string {
 	if this == nil {
 		return "nil"
@@ -2914,7 +1653,7 @@ func (this *GetApplicationPackageAssociationRequest) String() string {
 	}
 	s := strings.Join([]string{`&GetApplicationPackageAssociationRequest{`,
 		`ApplicationPackageAssociationIdentifiers:` + strings.Replace(strings.Replace(this.ApplicationPackageAssociationIdentifiers.String(), "ApplicationPackageAssociationIdentifiers", "ApplicationPackageAssociationIdentifiers", 1), `&`, ``, 1) + `,`,
-		`FieldMask:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.FieldMask), "FieldMask", "types.FieldMask", 1), `&`, ``, 1) + `,`,
+		`FieldMask:` + strings.Replace(fmt.Sprintf("%v", this.FieldMask), "FieldMask", "types.FieldMask", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2927,7 +1666,7 @@ func (this *ListApplicationPackageAssociationRequest) String() string {
 		`EndDeviceIdentifiers:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.EndDeviceIdentifiers), "EndDeviceIdentifiers", "EndDeviceIdentifiers", 1), `&`, ``, 1) + `,`,
 		`Limit:` + fmt.Sprintf("%v", this.Limit) + `,`,
 		`Page:` + fmt.Sprintf("%v", this.Page) + `,`,
-		`FieldMask:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.FieldMask), "FieldMask", "types.FieldMask", 1), `&`, ``, 1) + `,`,
+		`FieldMask:` + strings.Replace(fmt.Sprintf("%v", this.FieldMask), "FieldMask", "types.FieldMask", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2938,7 +1677,7 @@ func (this *SetApplicationPackageAssociationRequest) String() string {
 	}
 	s := strings.Join([]string{`&SetApplicationPackageAssociationRequest{`,
 		`ApplicationPackageAssociation:` + strings.Replace(strings.Replace(this.ApplicationPackageAssociation.String(), "ApplicationPackageAssociation", "ApplicationPackageAssociation", 1), `&`, ``, 1) + `,`,
-		`FieldMask:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.FieldMask), "FieldMask", "types.FieldMask", 1), `&`, ``, 1) + `,`,
+		`FieldMask:` + strings.Replace(fmt.Sprintf("%v", this.FieldMask), "FieldMask", "types.FieldMask", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2989,7 +1728,7 @@ func (this *GetApplicationPackageDefaultAssociationRequest) String() string {
 	}
 	s := strings.Join([]string{`&GetApplicationPackageDefaultAssociationRequest{`,
 		`ApplicationPackageDefaultAssociationIdentifiers:` + strings.Replace(strings.Replace(this.ApplicationPackageDefaultAssociationIdentifiers.String(), "ApplicationPackageDefaultAssociationIdentifiers", "ApplicationPackageDefaultAssociationIdentifiers", 1), `&`, ``, 1) + `,`,
-		`FieldMask:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.FieldMask), "FieldMask", "types.FieldMask", 1), `&`, ``, 1) + `,`,
+		`FieldMask:` + strings.Replace(fmt.Sprintf("%v", this.FieldMask), "FieldMask", "types.FieldMask", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -3002,7 +1741,7 @@ func (this *ListApplicationPackageDefaultAssociationRequest) String() string {
 		`ApplicationIdentifiers:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.ApplicationIdentifiers), "ApplicationIdentifiers", "ApplicationIdentifiers", 1), `&`, ``, 1) + `,`,
 		`Limit:` + fmt.Sprintf("%v", this.Limit) + `,`,
 		`Page:` + fmt.Sprintf("%v", this.Page) + `,`,
-		`FieldMask:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.FieldMask), "FieldMask", "types.FieldMask", 1), `&`, ``, 1) + `,`,
+		`FieldMask:` + strings.Replace(fmt.Sprintf("%v", this.FieldMask), "FieldMask", "types.FieldMask", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -3013,7 +1752,7 @@ func (this *SetApplicationPackageDefaultAssociationRequest) String() string {
 	}
 	s := strings.Join([]string{`&SetApplicationPackageDefaultAssociationRequest{`,
 		`ApplicationPackageDefaultAssociation:` + strings.Replace(strings.Replace(this.ApplicationPackageDefaultAssociation.String(), "ApplicationPackageDefaultAssociation", "ApplicationPackageDefaultAssociation", 1), `&`, ``, 1) + `,`,
-		`FieldMask:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.FieldMask), "FieldMask", "types.FieldMask", 1), `&`, ``, 1) + `,`,
+		`FieldMask:` + strings.Replace(fmt.Sprintf("%v", this.FieldMask), "FieldMask", "types.FieldMask", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -3026,1892 +1765,3 @@ func valueToStringApplicationserverPackages(v interface{}) string {
 	pv := reflect.Indirect(rv).Interface()
 	return fmt.Sprintf("*%v", pv)
 }
-func (m *ApplicationPackage) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowApplicationserverPackages
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: ApplicationPackage: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: ApplicationPackage: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Name", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApplicationserverPackages
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthApplicationserverPackages
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthApplicationserverPackages
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Name = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 2:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field DefaultFPort", wireType)
-			}
-			m.DefaultFPort = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApplicationserverPackages
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.DefaultFPort |= uint32(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		default:
-			iNdEx = preIndex
-			skippy, err := skipApplicationserverPackages(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthApplicationserverPackages
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthApplicationserverPackages
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *ApplicationPackages) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowApplicationserverPackages
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: ApplicationPackages: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: ApplicationPackages: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Packages", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApplicationserverPackages
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthApplicationserverPackages
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthApplicationserverPackages
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Packages = append(m.Packages, &ApplicationPackage{})
-			if err := m.Packages[len(m.Packages)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipApplicationserverPackages(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthApplicationserverPackages
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthApplicationserverPackages
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *ApplicationPackageAssociationIdentifiers) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowApplicationserverPackages
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: ApplicationPackageAssociationIdentifiers: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: ApplicationPackageAssociationIdentifiers: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field EndDeviceIdentifiers", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApplicationserverPackages
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthApplicationserverPackages
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthApplicationserverPackages
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := m.EndDeviceIdentifiers.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field FPort", wireType)
-			}
-			m.FPort = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApplicationserverPackages
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.FPort |= uint32(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		default:
-			iNdEx = preIndex
-			skippy, err := skipApplicationserverPackages(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthApplicationserverPackages
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthApplicationserverPackages
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *ApplicationPackageAssociation) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowApplicationserverPackages
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: ApplicationPackageAssociation: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: ApplicationPackageAssociation: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ApplicationPackageAssociationIdentifiers", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApplicationserverPackages
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthApplicationserverPackages
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthApplicationserverPackages
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := m.ApplicationPackageAssociationIdentifiers.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field CreatedAt", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApplicationserverPackages
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthApplicationserverPackages
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthApplicationserverPackages
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := github_com_gogo_protobuf_types.StdTimeUnmarshal(&m.CreatedAt, dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field UpdatedAt", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApplicationserverPackages
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthApplicationserverPackages
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthApplicationserverPackages
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := github_com_gogo_protobuf_types.StdTimeUnmarshal(&m.UpdatedAt, dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 4:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field PackageName", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApplicationserverPackages
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthApplicationserverPackages
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthApplicationserverPackages
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.PackageName = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 5:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Data", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApplicationserverPackages
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthApplicationserverPackages
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthApplicationserverPackages
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Data == nil {
-				m.Data = &types.Struct{}
-			}
-			if err := m.Data.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipApplicationserverPackages(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthApplicationserverPackages
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthApplicationserverPackages
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *ApplicationPackageAssociations) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowApplicationserverPackages
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: ApplicationPackageAssociations: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: ApplicationPackageAssociations: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Associations", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApplicationserverPackages
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthApplicationserverPackages
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthApplicationserverPackages
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Associations = append(m.Associations, &ApplicationPackageAssociation{})
-			if err := m.Associations[len(m.Associations)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipApplicationserverPackages(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthApplicationserverPackages
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthApplicationserverPackages
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *GetApplicationPackageAssociationRequest) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowApplicationserverPackages
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: GetApplicationPackageAssociationRequest: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: GetApplicationPackageAssociationRequest: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ApplicationPackageAssociationIdentifiers", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApplicationserverPackages
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthApplicationserverPackages
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthApplicationserverPackages
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := m.ApplicationPackageAssociationIdentifiers.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field FieldMask", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApplicationserverPackages
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthApplicationserverPackages
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthApplicationserverPackages
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := m.FieldMask.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipApplicationserverPackages(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthApplicationserverPackages
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthApplicationserverPackages
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *ListApplicationPackageAssociationRequest) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowApplicationserverPackages
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: ListApplicationPackageAssociationRequest: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: ListApplicationPackageAssociationRequest: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field EndDeviceIdentifiers", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApplicationserverPackages
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthApplicationserverPackages
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthApplicationserverPackages
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := m.EndDeviceIdentifiers.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Limit", wireType)
-			}
-			m.Limit = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApplicationserverPackages
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.Limit |= uint32(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 3:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Page", wireType)
-			}
-			m.Page = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApplicationserverPackages
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.Page |= uint32(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 4:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field FieldMask", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApplicationserverPackages
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthApplicationserverPackages
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthApplicationserverPackages
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := m.FieldMask.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipApplicationserverPackages(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthApplicationserverPackages
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthApplicationserverPackages
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *SetApplicationPackageAssociationRequest) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowApplicationserverPackages
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: SetApplicationPackageAssociationRequest: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: SetApplicationPackageAssociationRequest: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ApplicationPackageAssociation", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApplicationserverPackages
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthApplicationserverPackages
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthApplicationserverPackages
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := m.ApplicationPackageAssociation.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field FieldMask", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApplicationserverPackages
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthApplicationserverPackages
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthApplicationserverPackages
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := m.FieldMask.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipApplicationserverPackages(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthApplicationserverPackages
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthApplicationserverPackages
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *ApplicationPackageDefaultAssociationIdentifiers) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowApplicationserverPackages
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: ApplicationPackageDefaultAssociationIdentifiers: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: ApplicationPackageDefaultAssociationIdentifiers: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ApplicationIdentifiers", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApplicationserverPackages
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthApplicationserverPackages
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthApplicationserverPackages
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := m.ApplicationIdentifiers.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field FPort", wireType)
-			}
-			m.FPort = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApplicationserverPackages
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.FPort |= uint32(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		default:
-			iNdEx = preIndex
-			skippy, err := skipApplicationserverPackages(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthApplicationserverPackages
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthApplicationserverPackages
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *ApplicationPackageDefaultAssociation) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowApplicationserverPackages
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: ApplicationPackageDefaultAssociation: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: ApplicationPackageDefaultAssociation: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ApplicationPackageDefaultAssociationIdentifiers", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApplicationserverPackages
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthApplicationserverPackages
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthApplicationserverPackages
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := m.ApplicationPackageDefaultAssociationIdentifiers.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field CreatedAt", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApplicationserverPackages
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthApplicationserverPackages
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthApplicationserverPackages
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := github_com_gogo_protobuf_types.StdTimeUnmarshal(&m.CreatedAt, dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field UpdatedAt", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApplicationserverPackages
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthApplicationserverPackages
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthApplicationserverPackages
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := github_com_gogo_protobuf_types.StdTimeUnmarshal(&m.UpdatedAt, dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 4:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field PackageName", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApplicationserverPackages
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthApplicationserverPackages
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthApplicationserverPackages
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.PackageName = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 5:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Data", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApplicationserverPackages
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthApplicationserverPackages
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthApplicationserverPackages
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Data == nil {
-				m.Data = &types.Struct{}
-			}
-			if err := m.Data.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipApplicationserverPackages(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthApplicationserverPackages
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthApplicationserverPackages
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *ApplicationPackageDefaultAssociations) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowApplicationserverPackages
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: ApplicationPackageDefaultAssociations: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: ApplicationPackageDefaultAssociations: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Defaults", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApplicationserverPackages
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthApplicationserverPackages
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthApplicationserverPackages
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Defaults = append(m.Defaults, &ApplicationPackageDefaultAssociation{})
-			if err := m.Defaults[len(m.Defaults)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipApplicationserverPackages(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthApplicationserverPackages
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthApplicationserverPackages
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *GetApplicationPackageDefaultAssociationRequest) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowApplicationserverPackages
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: GetApplicationPackageDefaultAssociationRequest: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: GetApplicationPackageDefaultAssociationRequest: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ApplicationPackageDefaultAssociationIdentifiers", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApplicationserverPackages
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthApplicationserverPackages
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthApplicationserverPackages
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := m.ApplicationPackageDefaultAssociationIdentifiers.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field FieldMask", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApplicationserverPackages
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthApplicationserverPackages
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthApplicationserverPackages
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := m.FieldMask.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipApplicationserverPackages(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthApplicationserverPackages
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthApplicationserverPackages
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *ListApplicationPackageDefaultAssociationRequest) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowApplicationserverPackages
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: ListApplicationPackageDefaultAssociationRequest: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: ListApplicationPackageDefaultAssociationRequest: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ApplicationIdentifiers", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApplicationserverPackages
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthApplicationserverPackages
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthApplicationserverPackages
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := m.ApplicationIdentifiers.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Limit", wireType)
-			}
-			m.Limit = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApplicationserverPackages
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.Limit |= uint32(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 3:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Page", wireType)
-			}
-			m.Page = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApplicationserverPackages
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.Page |= uint32(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 4:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field FieldMask", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApplicationserverPackages
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthApplicationserverPackages
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthApplicationserverPackages
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := m.FieldMask.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipApplicationserverPackages(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthApplicationserverPackages
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthApplicationserverPackages
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *SetApplicationPackageDefaultAssociationRequest) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowApplicationserverPackages
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: SetApplicationPackageDefaultAssociationRequest: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: SetApplicationPackageDefaultAssociationRequest: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ApplicationPackageDefaultAssociation", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApplicationserverPackages
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthApplicationserverPackages
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthApplicationserverPackages
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := m.ApplicationPackageDefaultAssociation.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field FieldMask", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApplicationserverPackages
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthApplicationserverPackages
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthApplicationserverPackages
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := m.FieldMask.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipApplicationserverPackages(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthApplicationserverPackages
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthApplicationserverPackages
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func skipApplicationserverPackages(dAtA []byte) (n int, err error) {
-	l := len(dAtA)
-	iNdEx := 0
-	depth := 0
-	for iNdEx < l {
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return 0, ErrIntOverflowApplicationserverPackages
-			}
-			if iNdEx >= l {
-				return 0, io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		wireType := int(wire & 0x7)
-		switch wireType {
-		case 0:
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return 0, ErrIntOverflowApplicationserverPackages
-				}
-				if iNdEx >= l {
-					return 0, io.ErrUnexpectedEOF
-				}
-				iNdEx++
-				if dAtA[iNdEx-1] < 0x80 {
-					break
-				}
-			}
-		case 1:
-			iNdEx += 8
-		case 2:
-			var length int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return 0, ErrIntOverflowApplicationserverPackages
-				}
-				if iNdEx >= l {
-					return 0, io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				length |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if length < 0 {
-				return 0, ErrInvalidLengthApplicationserverPackages
-			}
-			iNdEx += length
-		case 3:
-			depth++
-		case 4:
-			if depth == 0 {
-				return 0, ErrUnexpectedEndOfGroupApplicationserverPackages
-			}
-			depth--
-		case 5:
-			iNdEx += 4
-		default:
-			return 0, fmt.Errorf("proto: illegal wireType %d", wireType)
-		}
-		if iNdEx < 0 {
-			return 0, ErrInvalidLengthApplicationserverPackages
-		}
-		if depth == 0 {
-			return iNdEx, nil
-		}
-	}
-	return 0, io.ErrUnexpectedEOF
-}
-
-var (
-	ErrInvalidLengthApplicationserverPackages        = fmt.Errorf("proto: negative length found during unmarshaling")
-	ErrIntOverflowApplicationserverPackages          = fmt.Errorf("proto: integer overflow")
-	ErrUnexpectedEndOfGroupApplicationserverPackages = fmt.Errorf("proto: unexpected end of group")
-)

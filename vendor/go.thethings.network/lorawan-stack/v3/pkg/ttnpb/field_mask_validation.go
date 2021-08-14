@@ -27,6 +27,7 @@ var asApplicationLinkFieldPaths = append(
 )
 
 var isEndDeviceReadFieldPaths = []string{
+	"activated_at",
 	"application_server_address",
 	"attributes",
 	"created_at",
@@ -53,6 +54,7 @@ var isEndDeviceReadFieldPaths = []string{
 }
 
 var isEndDeviceWriteFieldPaths = []string{
+	"activated_at",
 	"application_server_address",
 	"attributes",
 	"description",
@@ -102,6 +104,8 @@ var nsEndDeviceReadFieldPaths = [...]string{
 	"mac_settings.desired_beacon_frequency.value",
 	"mac_settings.desired_max_duty_cycle",
 	"mac_settings.desired_max_duty_cycle.value",
+	"mac_settings.desired_max_eirp",
+	"mac_settings.desired_max_eirp.value",
 	"mac_settings.desired_ping_slot_data_rate_index",
 	"mac_settings.desired_ping_slot_data_rate_index.value",
 	"mac_settings.desired_ping_slot_frequency",
@@ -374,7 +378,7 @@ var RPCFieldMaskPaths = map[string]RPCFieldMaskPathValue{
 	// Applications:
 	"/ttn.lorawan.v3.ApplicationRegistry/Get":                 {All: ApplicationFieldPathsNested, Allowed: ApplicationFieldPathsNested},
 	"/ttn.lorawan.v3.ApplicationRegistry/List":                {All: ApplicationFieldPathsNested, Allowed: ApplicationFieldPathsNested},
-	"/ttn.lorawan.v3.ApplicationRegistry/Update":              {All: ApplicationFieldPathsNested, Allowed: ApplicationFieldPathsNested, Set: true},
+	"/ttn.lorawan.v3.ApplicationRegistry/Update":              {All: ApplicationFieldPathsNested, Allowed: omitFields(ApplicationFieldPathsNested, "dev_eui_counter"), Set: true},
 	"/ttn.lorawan.v3.EntityRegistrySearch/SearchApplications": {All: ApplicationFieldPathsNested, Allowed: ApplicationFieldPathsNested},
 
 	// Application Activation Settings:
@@ -407,6 +411,9 @@ var RPCFieldMaskPaths = map[string]RPCFieldMaskPathValue{
 	// Application Links:
 	"/ttn.lorawan.v3.As/GetLink": {All: asApplicationLinkFieldPaths, Allowed: asApplicationLinkFieldPaths},
 	"/ttn.lorawan.v3.As/SetLink": {All: asApplicationLinkFieldPaths, Allowed: asApplicationLinkFieldPaths, Set: true},
+
+	// Application API Keys:
+	"/ttn.lorawan.v3.ApplicationAccess/UpdateAPIKey": {All: APIKeyFieldPathsNested, Allowed: APIKeyFieldPathsNested, Set: true},
 
 	// Clients:
 	"/ttn.lorawan.v3.ClientRegistry/Get":                 {All: ClientFieldPathsNested, Allowed: omitFields(ClientFieldPathsNested, "secret")},
@@ -590,6 +597,8 @@ var RPCFieldMaskPaths = map[string]RPCFieldMaskPathValue{
 			"mac_settings.desired_beacon_frequency.value",
 			"mac_settings.desired_max_duty_cycle",
 			"mac_settings.desired_max_duty_cycle.value",
+			"mac_settings.desired_max_eirp",
+			"mac_settings.desired_max_eirp.value",
 			"mac_settings.desired_ping_slot_data_rate_index",
 			"mac_settings.desired_ping_slot_data_rate_index.value",
 			"mac_settings.desired_ping_slot_frequency",
@@ -889,6 +898,26 @@ var RPCFieldMaskPaths = map[string]RPCFieldMaskPathValue{
 			"gateway.claim_authentication_code.valid_to"),
 		Set: true,
 	},
+	"/ttn.lorawan.v3.GsPba/UpdateGateway": {
+		All: PacketBrokerGatewayFieldPathsNested,
+		Allowed: []string{
+			"antennas",
+			"contact_info",
+			"frequency_plan_ids",
+			"ids.eui",
+			"ids.gateway_id",
+			"ids",
+			"location_public",
+			"online",
+			"rx_rate",
+			"status_public",
+			"tx_rate",
+		},
+		Set: true,
+	},
+
+	// Gateway API Keys:
+	"/ttn.lorawan.v3.GatewayAccess/UpdateAPIKey": {All: APIKeyFieldPathsNested, Allowed: APIKeyFieldPathsNested, Set: true},
 
 	// Organizations:
 	"/ttn.lorawan.v3.OrganizationRegistry/Get":                 {All: OrganizationFieldPathsNested, Allowed: OrganizationFieldPathsNested},
@@ -896,11 +925,17 @@ var RPCFieldMaskPaths = map[string]RPCFieldMaskPathValue{
 	"/ttn.lorawan.v3.OrganizationRegistry/Update":              {All: OrganizationFieldPathsNested, Allowed: OrganizationFieldPathsNested, Set: true},
 	"/ttn.lorawan.v3.EntityRegistrySearch/SearchOrganizations": {All: OrganizationFieldPathsNested, Allowed: OrganizationFieldPathsNested},
 
+	// Organization API Keys:
+	"/ttn.lorawan.v3.OrganizationAccess/UpdateAPIKey": {All: APIKeyFieldPathsNested, Allowed: APIKeyFieldPathsNested, Set: true},
+
 	// Users:
 	"/ttn.lorawan.v3.UserRegistry/Get":                 {All: UserFieldPathsNested, Allowed: omitFields(UserFieldPathsNested, "password", "temporary_password")},
 	"/ttn.lorawan.v3.UserRegistry/List":                {All: UserFieldPathsNested, Allowed: omitFields(UserFieldPathsNested, "password", "temporary_password")},
 	"/ttn.lorawan.v3.UserRegistry/Update":              {All: UserFieldPathsNested, Allowed: omitFields(UserFieldPathsNested, "password", "password_updated_at"), Set: true},
 	"/ttn.lorawan.v3.EntityRegistrySearch/SearchUsers": {All: UserFieldPathsNested, Allowed: omitFields(UserFieldPathsNested, "password", "temporary_password")},
+
+	// User API Keys:
+	"/ttn.lorawan.v3.UserAccess/UpdateAPIKey": {All: APIKeyFieldPathsNested, Allowed: APIKeyFieldPathsNested, Set: true},
 
 	// Storage Integration:
 	"/ttn.lorawan.v3.ApplicationUpStorage/GetStoredApplicationUp": {All: ApplicationUpFieldPathsNested, Allowed: applicationUpFieldMaskPaths()},

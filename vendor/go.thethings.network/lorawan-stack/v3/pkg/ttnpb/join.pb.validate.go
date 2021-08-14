@@ -74,9 +74,9 @@ func (m *JoinRequest) ValidateFields(paths ...string) error {
 		case "dev_addr":
 			// no validation rules for DevAddr
 		case "selected_mac_version":
-			// no validation rules for SelectedMACVersion
+			// no validation rules for SelectedMacVersion
 		case "net_id":
-			// no validation rules for NetID
+			// no validation rules for NetId
 		case "downlink_settings":
 
 			if v, ok := interface{}(&m.DownlinkSettings).(interface{ ValidateFields(...string) error }); ok {
@@ -100,7 +100,7 @@ func (m *JoinRequest) ValidateFields(paths ...string) error {
 
 		case "cf_list":
 
-			if v, ok := interface{}(m.GetCFList()).(interface{ ValidateFields(...string) error }); ok {
+			if v, ok := interface{}(m.GetCfList()).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return JoinRequestValidationError{
 						field:  "cf_list",
@@ -112,7 +112,7 @@ func (m *JoinRequest) ValidateFields(paths ...string) error {
 
 		case "correlation_ids":
 
-			for idx, item := range m.GetCorrelationIDs() {
+			for idx, item := range m.GetCorrelationIds() {
 				_, _ = idx, item
 
 				if utf8.RuneCountInString(item) > 100 {
@@ -250,7 +250,7 @@ func (m *JoinResponse) ValidateFields(paths ...string) error {
 
 		case "correlation_ids":
 
-			for idx, item := range m.GetCorrelationIDs() {
+			for idx, item := range m.GetCorrelationIds() {
 				_, _ = idx, item
 
 				if utf8.RuneCountInString(item) > 100 {

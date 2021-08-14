@@ -111,11 +111,17 @@ func (r Right) Implied() *Rights {
 	case RIGHT_APPLICATION_ALL:
 		return AllApplicationRights
 	case RIGHT_APPLICATION_LINK:
-		return RightsFrom(RIGHT_APPLICATION_INFO)
+		return RightsFrom(
+			RIGHT_APPLICATION_INFO,
+			RIGHT_APPLICATION_TRAFFIC_READ,
+			RIGHT_APPLICATION_TRAFFIC_DOWN_WRITE,
+		)
 	case RIGHT_GATEWAY_ALL:
 		return AllGatewayRights
 	case RIGHT_GATEWAY_LINK:
-		return RightsFrom(RIGHT_GATEWAY_INFO)
+		return RightsFrom(
+			RIGHT_GATEWAY_INFO,
+		)
 	case RIGHT_ORGANIZATION_ALL:
 		return AllOrganizationRights
 	case RIGHT_ALL:
@@ -225,7 +231,7 @@ func RightsFrom(rights ...Right) *Rights { return &Rights{Rights: rights} }
 
 // PrettyName returns the key ID (Name if present)
 func (m *APIKey) PrettyName() string {
-	identifier := m.GetID()
+	identifier := m.GetId()
 	if name := m.GetName(); name != "" {
 		identifier = fmt.Sprintf("%v (%v)", identifier, name)
 	}

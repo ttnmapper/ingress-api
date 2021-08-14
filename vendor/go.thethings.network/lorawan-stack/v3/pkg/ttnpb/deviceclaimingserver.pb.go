@@ -7,12 +7,6 @@ import (
 	bytes "bytes"
 	context "context"
 	fmt "fmt"
-	io "io"
-	math "math"
-	math_bits "math/bits"
-	reflect "reflect"
-	strings "strings"
-
 	_ "github.com/envoyproxy/protoc-gen-validate/validate"
 	_ "github.com/gogo/protobuf/gogoproto"
 	proto "github.com/gogo/protobuf/proto"
@@ -23,6 +17,9 @@ import (
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
+	math "math"
+	reflect "reflect"
+	strings "strings"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -40,28 +37,28 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 type ClaimEndDeviceRequest struct {
 	// Types that are valid to be assigned to SourceDevice:
 	//	*ClaimEndDeviceRequest_AuthenticatedIdentifiers_
-	//	*ClaimEndDeviceRequest_QRCode
+	//	*ClaimEndDeviceRequest_QrCode
 	SourceDevice isClaimEndDeviceRequest_SourceDevice `protobuf_oneof:"source_device"`
 	// Application identifiers of the target end device.
-	TargetApplicationIDs ApplicationIdentifiers `protobuf:"bytes,3,opt,name=target_application_ids,json=targetApplicationIds,proto3" json:"target_application_ids"`
+	TargetApplicationIds ApplicationIdentifiers `protobuf:"bytes,3,opt,name=target_application_ids,json=targetApplicationIds,proto3" json:"target_application_ids"`
 	// End device ID of the target end device. If empty, use the source device ID.
-	TargetDeviceID string `protobuf:"bytes,4,opt,name=target_device_id,json=targetDeviceId,proto3" json:"target_device_id,omitempty"`
+	TargetDeviceId string `protobuf:"bytes,4,opt,name=target_device_id,json=targetDeviceId,proto3" json:"target_device_id,omitempty"`
 	// The address of the Network Server where the device will be registered.
 	// If set and if the source device is currently registered on a Network Server, settings will be transferred.
 	// If not set, the device shall not be registered on a Network Server.
 	TargetNetworkServerAddress string `protobuf:"bytes,7,opt,name=target_network_server_address,json=targetNetworkServerAddress,proto3" json:"target_network_server_address,omitempty"`
 	// The KEK label of the Network Server to use for wrapping network session keys.
-	TargetNetworkServerKEKLabel string `protobuf:"bytes,8,opt,name=target_network_server_kek_label,json=targetNetworkServerKekLabel,proto3" json:"target_network_server_kek_label,omitempty"`
+	TargetNetworkServerKekLabel string `protobuf:"bytes,8,opt,name=target_network_server_kek_label,json=targetNetworkServerKekLabel,proto3" json:"target_network_server_kek_label,omitempty"`
 	// The address of the Application Server where the device will be registered.
 	// If set and if the source device is currently registered on an Application Server, settings will be transferred.
 	// If not set, the device shall not be registered on an Application Server.
 	TargetApplicationServerAddress string `protobuf:"bytes,9,opt,name=target_application_server_address,json=targetApplicationServerAddress,proto3" json:"target_application_server_address,omitempty"`
 	// The KEK label of the Application Server to use for wrapping the application session key.
-	TargetApplicationServerKEKLabel string `protobuf:"bytes,10,opt,name=target_application_server_kek_label,json=targetApplicationServerKekLabel,proto3" json:"target_application_server_kek_label,omitempty"`
+	TargetApplicationServerKekLabel string `protobuf:"bytes,10,opt,name=target_application_server_kek_label,json=targetApplicationServerKekLabel,proto3" json:"target_application_server_kek_label,omitempty"`
 	// The AS-ID of the Application Server to use.
-	TargetApplicationServerID string `protobuf:"bytes,11,opt,name=target_application_server_id,json=targetApplicationServerId,proto3" json:"target_application_server_id,omitempty"`
+	TargetApplicationServerId string `protobuf:"bytes,11,opt,name=target_application_server_id,json=targetApplicationServerId,proto3" json:"target_application_server_id,omitempty"`
 	// Home NetID.
-	TargetNetID *go_thethings_network_lorawan_stack_v3_pkg_types.NetID `protobuf:"bytes,13,opt,name=target_net_id,json=targetNetId,proto3,customtype=go.thethings.network/lorawan-stack/v3/pkg/types.NetID" json:"target_net_id,omitempty"`
+	TargetNetId *go_thethings_network_lorawan_stack_v3_pkg_types.NetID `protobuf:"bytes,13,opt,name=target_net_id,json=targetNetId,proto3,customtype=go.thethings.network/lorawan-stack/v3/pkg/types.NetID" json:"target_net_id,omitempty"`
 	// If set, invalidate the authentication code with which the device gets claimed. This prohibits subsequent claiming requests.
 	InvalidateAuthenticationCode bool     `protobuf:"varint,5,opt,name=invalidate_authentication_code,json=invalidateAuthenticationCode,proto3" json:"invalidate_authentication_code,omitempty"`
 	XXX_NoUnkeyedLiteral         struct{} `json:"-"`
@@ -74,25 +71,16 @@ func (*ClaimEndDeviceRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_e8a7f6d184fc3dc3, []int{0}
 }
 func (m *ClaimEndDeviceRequest) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	return xxx_messageInfo_ClaimEndDeviceRequest.Unmarshal(m, b)
 }
 func (m *ClaimEndDeviceRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_ClaimEndDeviceRequest.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	return xxx_messageInfo_ClaimEndDeviceRequest.Marshal(b, m, deterministic)
 }
 func (m *ClaimEndDeviceRequest) XXX_Merge(src proto.Message) {
 	xxx_messageInfo_ClaimEndDeviceRequest.Merge(m, src)
 }
 func (m *ClaimEndDeviceRequest) XXX_Size() int {
-	return m.Size()
+	return xxx_messageInfo_ClaimEndDeviceRequest.Size(m)
 }
 func (m *ClaimEndDeviceRequest) XXX_DiscardUnknown() {
 	xxx_messageInfo_ClaimEndDeviceRequest.DiscardUnknown(m)
@@ -103,19 +91,17 @@ var xxx_messageInfo_ClaimEndDeviceRequest proto.InternalMessageInfo
 type isClaimEndDeviceRequest_SourceDevice interface {
 	isClaimEndDeviceRequest_SourceDevice()
 	Equal(interface{}) bool
-	MarshalTo([]byte) (int, error)
-	Size() int
 }
 
 type ClaimEndDeviceRequest_AuthenticatedIdentifiers_ struct {
 	AuthenticatedIdentifiers *ClaimEndDeviceRequest_AuthenticatedIdentifiers `protobuf:"bytes,1,opt,name=authenticated_identifiers,json=authenticatedIdentifiers,proto3,oneof" json:"authenticated_identifiers,omitempty"`
 }
-type ClaimEndDeviceRequest_QRCode struct {
-	QRCode []byte `protobuf:"bytes,2,opt,name=qr_code,json=qrCode,proto3,oneof" json:"qr_code,omitempty"`
+type ClaimEndDeviceRequest_QrCode struct {
+	QrCode []byte `protobuf:"bytes,2,opt,name=qr_code,json=qrCode,proto3,oneof" json:"qr_code,omitempty"`
 }
 
 func (*ClaimEndDeviceRequest_AuthenticatedIdentifiers_) isClaimEndDeviceRequest_SourceDevice() {}
-func (*ClaimEndDeviceRequest_QRCode) isClaimEndDeviceRequest_SourceDevice()                    {}
+func (*ClaimEndDeviceRequest_QrCode) isClaimEndDeviceRequest_SourceDevice()                    {}
 
 func (m *ClaimEndDeviceRequest) GetSourceDevice() isClaimEndDeviceRequest_SourceDevice {
 	if m != nil {
@@ -131,23 +117,23 @@ func (m *ClaimEndDeviceRequest) GetAuthenticatedIdentifiers() *ClaimEndDeviceReq
 	return nil
 }
 
-func (m *ClaimEndDeviceRequest) GetQRCode() []byte {
-	if x, ok := m.GetSourceDevice().(*ClaimEndDeviceRequest_QRCode); ok {
-		return x.QRCode
+func (m *ClaimEndDeviceRequest) GetQrCode() []byte {
+	if x, ok := m.GetSourceDevice().(*ClaimEndDeviceRequest_QrCode); ok {
+		return x.QrCode
 	}
 	return nil
 }
 
-func (m *ClaimEndDeviceRequest) GetTargetApplicationIDs() ApplicationIdentifiers {
+func (m *ClaimEndDeviceRequest) GetTargetApplicationIds() ApplicationIdentifiers {
 	if m != nil {
-		return m.TargetApplicationIDs
+		return m.TargetApplicationIds
 	}
 	return ApplicationIdentifiers{}
 }
 
-func (m *ClaimEndDeviceRequest) GetTargetDeviceID() string {
+func (m *ClaimEndDeviceRequest) GetTargetDeviceId() string {
 	if m != nil {
-		return m.TargetDeviceID
+		return m.TargetDeviceId
 	}
 	return ""
 }
@@ -159,9 +145,9 @@ func (m *ClaimEndDeviceRequest) GetTargetNetworkServerAddress() string {
 	return ""
 }
 
-func (m *ClaimEndDeviceRequest) GetTargetNetworkServerKEKLabel() string {
+func (m *ClaimEndDeviceRequest) GetTargetNetworkServerKekLabel() string {
 	if m != nil {
-		return m.TargetNetworkServerKEKLabel
+		return m.TargetNetworkServerKekLabel
 	}
 	return ""
 }
@@ -173,16 +159,16 @@ func (m *ClaimEndDeviceRequest) GetTargetApplicationServerAddress() string {
 	return ""
 }
 
-func (m *ClaimEndDeviceRequest) GetTargetApplicationServerKEKLabel() string {
+func (m *ClaimEndDeviceRequest) GetTargetApplicationServerKekLabel() string {
 	if m != nil {
-		return m.TargetApplicationServerKEKLabel
+		return m.TargetApplicationServerKekLabel
 	}
 	return ""
 }
 
-func (m *ClaimEndDeviceRequest) GetTargetApplicationServerID() string {
+func (m *ClaimEndDeviceRequest) GetTargetApplicationServerId() string {
 	if m != nil {
-		return m.TargetApplicationServerID
+		return m.TargetApplicationServerId
 	}
 	return ""
 }
@@ -198,15 +184,15 @@ func (m *ClaimEndDeviceRequest) GetInvalidateAuthenticationCode() bool {
 func (*ClaimEndDeviceRequest) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
 		(*ClaimEndDeviceRequest_AuthenticatedIdentifiers_)(nil),
-		(*ClaimEndDeviceRequest_QRCode)(nil),
+		(*ClaimEndDeviceRequest_QrCode)(nil),
 	}
 }
 
 type ClaimEndDeviceRequest_AuthenticatedIdentifiers struct {
 	// JoinEUI (or AppEUI) of the device to claim.
-	JoinEUI go_thethings_network_lorawan_stack_v3_pkg_types.EUI64 `protobuf:"bytes,1,opt,name=join_eui,json=joinEui,proto3,customtype=go.thethings.network/lorawan-stack/v3/pkg/types.EUI64" json:"join_eui"`
+	JoinEui go_thethings_network_lorawan_stack_v3_pkg_types.EUI64 `protobuf:"bytes,1,opt,name=join_eui,json=joinEui,proto3,customtype=go.thethings.network/lorawan-stack/v3/pkg/types.EUI64" json:"join_eui"`
 	// DevEUI of the device to claim.
-	DevEUI go_thethings_network_lorawan_stack_v3_pkg_types.EUI64 `protobuf:"bytes,2,opt,name=dev_eui,json=devEui,proto3,customtype=go.thethings.network/lorawan-stack/v3/pkg/types.EUI64" json:"dev_eui"`
+	DevEui go_thethings_network_lorawan_stack_v3_pkg_types.EUI64 `protobuf:"bytes,2,opt,name=dev_eui,json=devEui,proto3,customtype=go.thethings.network/lorawan-stack/v3/pkg/types.EUI64" json:"dev_eui"`
 	// Authentication code to prove ownership.
 	// In the LoRa Alliance TR005 specification, this equals the OwnerToken.
 	AuthenticationCode   string   `protobuf:"bytes,3,opt,name=authentication_code,json=authenticationCode,proto3" json:"authentication_code,omitempty"`
@@ -222,25 +208,16 @@ func (*ClaimEndDeviceRequest_AuthenticatedIdentifiers) Descriptor() ([]byte, []i
 	return fileDescriptor_e8a7f6d184fc3dc3, []int{0, 0}
 }
 func (m *ClaimEndDeviceRequest_AuthenticatedIdentifiers) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	return xxx_messageInfo_ClaimEndDeviceRequest_AuthenticatedIdentifiers.Unmarshal(m, b)
 }
 func (m *ClaimEndDeviceRequest_AuthenticatedIdentifiers) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_ClaimEndDeviceRequest_AuthenticatedIdentifiers.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	return xxx_messageInfo_ClaimEndDeviceRequest_AuthenticatedIdentifiers.Marshal(b, m, deterministic)
 }
 func (m *ClaimEndDeviceRequest_AuthenticatedIdentifiers) XXX_Merge(src proto.Message) {
 	xxx_messageInfo_ClaimEndDeviceRequest_AuthenticatedIdentifiers.Merge(m, src)
 }
 func (m *ClaimEndDeviceRequest_AuthenticatedIdentifiers) XXX_Size() int {
-	return m.Size()
+	return xxx_messageInfo_ClaimEndDeviceRequest_AuthenticatedIdentifiers.Size(m)
 }
 func (m *ClaimEndDeviceRequest_AuthenticatedIdentifiers) XXX_DiscardUnknown() {
 	xxx_messageInfo_ClaimEndDeviceRequest_AuthenticatedIdentifiers.DiscardUnknown(m)
@@ -257,7 +234,7 @@ func (m *ClaimEndDeviceRequest_AuthenticatedIdentifiers) GetAuthenticationCode()
 
 type AuthorizeApplicationRequest struct {
 	ApplicationIdentifiers `protobuf:"bytes,1,opt,name=application_ids,json=applicationIds,proto3,embedded=application_ids" json:"application_ids"`
-	APIKey                 string   `protobuf:"bytes,2,opt,name=api_key,json=apiKey,proto3" json:"api_key,omitempty"`
+	ApiKey                 string   `protobuf:"bytes,2,opt,name=api_key,json=apiKey,proto3" json:"api_key,omitempty"`
 	XXX_NoUnkeyedLiteral   struct{} `json:"-"`
 	XXX_sizecache          int32    `json:"-"`
 }
@@ -268,25 +245,16 @@ func (*AuthorizeApplicationRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_e8a7f6d184fc3dc3, []int{1}
 }
 func (m *AuthorizeApplicationRequest) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	return xxx_messageInfo_AuthorizeApplicationRequest.Unmarshal(m, b)
 }
 func (m *AuthorizeApplicationRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_AuthorizeApplicationRequest.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	return xxx_messageInfo_AuthorizeApplicationRequest.Marshal(b, m, deterministic)
 }
 func (m *AuthorizeApplicationRequest) XXX_Merge(src proto.Message) {
 	xxx_messageInfo_AuthorizeApplicationRequest.Merge(m, src)
 }
 func (m *AuthorizeApplicationRequest) XXX_Size() int {
-	return m.Size()
+	return xxx_messageInfo_AuthorizeApplicationRequest.Size(m)
 }
 func (m *AuthorizeApplicationRequest) XXX_DiscardUnknown() {
 	xxx_messageInfo_AuthorizeApplicationRequest.DiscardUnknown(m)
@@ -294,20 +262,28 @@ func (m *AuthorizeApplicationRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_AuthorizeApplicationRequest proto.InternalMessageInfo
 
-func (m *AuthorizeApplicationRequest) GetAPIKey() string {
+func (m *AuthorizeApplicationRequest) GetApiKey() string {
 	if m != nil {
-		return m.APIKey
+		return m.ApiKey
 	}
 	return ""
 }
 
 type CUPSRedirection struct {
 	// CUPS URI for LoRa Basics Station CUPS redirection.
-	TargetCUPSURI string `protobuf:"bytes,1,opt,name=target_cups_uri,json=targetCupsUri,proto3" json:"target_cups_uri,omitempty"`
+	TargetCupsUri string `protobuf:"bytes,1,opt,name=target_cups_uri,json=targetCupsUri,proto3" json:"target_cups_uri,omitempty"`
 	// The key set in the gateway to authenticate itself.
-	CurrentGatewayKey    string   `protobuf:"bytes,2,opt,name=current_gateway_key,json=currentGatewayKey,proto3" json:"current_gateway_key,omitempty"`
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
+	CurrentGatewayKey string `protobuf:"bytes,2,opt,name=current_gateway_key,json=currentGatewayKey,proto3" json:"current_gateway_key,omitempty"`
+	// Optional PEM encoded CA Root certificate. If this field is empty, DCS will attempt to dial the Target CUPS server and fetch the CA.
+	TargetCupsTrust []byte `protobuf:"bytes,3,opt,name=target_cups_trust,json=targetCupsTrust,proto3" json:"target_cups_trust,omitempty"`
+	// CUPS Credentials for the gateway.
+	//
+	// Types that are valid to be assigned to GatewayCredentials:
+	//	*CUPSRedirection_ClientTls
+	//	*CUPSRedirection_AuthToken
+	GatewayCredentials   isCUPSRedirection_GatewayCredentials `protobuf_oneof:"gateway_credentials"`
+	XXX_NoUnkeyedLiteral struct{}                             `json:"-"`
+	XXX_sizecache        int32                                `json:"-"`
 }
 
 func (m *CUPSRedirection) Reset()      { *m = CUPSRedirection{} }
@@ -316,25 +292,16 @@ func (*CUPSRedirection) Descriptor() ([]byte, []int) {
 	return fileDescriptor_e8a7f6d184fc3dc3, []int{2}
 }
 func (m *CUPSRedirection) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	return xxx_messageInfo_CUPSRedirection.Unmarshal(m, b)
 }
 func (m *CUPSRedirection) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_CUPSRedirection.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	return xxx_messageInfo_CUPSRedirection.Marshal(b, m, deterministic)
 }
 func (m *CUPSRedirection) XXX_Merge(src proto.Message) {
 	xxx_messageInfo_CUPSRedirection.Merge(m, src)
 }
 func (m *CUPSRedirection) XXX_Size() int {
-	return m.Size()
+	return xxx_messageInfo_CUPSRedirection.Size(m)
 }
 func (m *CUPSRedirection) XXX_DiscardUnknown() {
 	xxx_messageInfo_CUPSRedirection.DiscardUnknown(m)
@@ -342,9 +309,31 @@ func (m *CUPSRedirection) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_CUPSRedirection proto.InternalMessageInfo
 
-func (m *CUPSRedirection) GetTargetCUPSURI() string {
+type isCUPSRedirection_GatewayCredentials interface {
+	isCUPSRedirection_GatewayCredentials()
+	Equal(interface{}) bool
+}
+
+type CUPSRedirection_ClientTls struct {
+	ClientTls *CUPSRedirection_ClientTLS `protobuf:"bytes,4,opt,name=client_tls,json=clientTls,proto3,oneof" json:"client_tls,omitempty"`
+}
+type CUPSRedirection_AuthToken struct {
+	AuthToken string `protobuf:"bytes,5,opt,name=auth_token,json=authToken,proto3,oneof" json:"auth_token,omitempty"`
+}
+
+func (*CUPSRedirection_ClientTls) isCUPSRedirection_GatewayCredentials() {}
+func (*CUPSRedirection_AuthToken) isCUPSRedirection_GatewayCredentials() {}
+
+func (m *CUPSRedirection) GetGatewayCredentials() isCUPSRedirection_GatewayCredentials {
 	if m != nil {
-		return m.TargetCUPSURI
+		return m.GatewayCredentials
+	}
+	return nil
+}
+
+func (m *CUPSRedirection) GetTargetCupsUri() string {
+	if m != nil {
+		return m.TargetCupsUri
 	}
 	return ""
 }
@@ -356,22 +345,100 @@ func (m *CUPSRedirection) GetCurrentGatewayKey() string {
 	return ""
 }
 
+func (m *CUPSRedirection) GetTargetCupsTrust() []byte {
+	if m != nil {
+		return m.TargetCupsTrust
+	}
+	return nil
+}
+
+func (m *CUPSRedirection) GetClientTls() *CUPSRedirection_ClientTLS {
+	if x, ok := m.GetGatewayCredentials().(*CUPSRedirection_ClientTls); ok {
+		return x.ClientTls
+	}
+	return nil
+}
+
+func (m *CUPSRedirection) GetAuthToken() string {
+	if x, ok := m.GetGatewayCredentials().(*CUPSRedirection_AuthToken); ok {
+		return x.AuthToken
+	}
+	return ""
+}
+
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*CUPSRedirection) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
+		(*CUPSRedirection_ClientTls)(nil),
+		(*CUPSRedirection_AuthToken)(nil),
+	}
+}
+
+type CUPSRedirection_ClientTLS struct {
+	// PEM encoded Client Certificate.
+	Cert []byte `protobuf:"bytes,1,opt,name=cert,proto3" json:"cert,omitempty"`
+	// PEM encoded Client Private Key.
+	Key                  []byte   `protobuf:"bytes,2,opt,name=key,proto3" json:"key,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *CUPSRedirection_ClientTLS) Reset()      { *m = CUPSRedirection_ClientTLS{} }
+func (*CUPSRedirection_ClientTLS) ProtoMessage() {}
+func (*CUPSRedirection_ClientTLS) Descriptor() ([]byte, []int) {
+	return fileDescriptor_e8a7f6d184fc3dc3, []int{2, 0}
+}
+func (m *CUPSRedirection_ClientTLS) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_CUPSRedirection_ClientTLS.Unmarshal(m, b)
+}
+func (m *CUPSRedirection_ClientTLS) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_CUPSRedirection_ClientTLS.Marshal(b, m, deterministic)
+}
+func (m *CUPSRedirection_ClientTLS) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CUPSRedirection_ClientTLS.Merge(m, src)
+}
+func (m *CUPSRedirection_ClientTLS) XXX_Size() int {
+	return xxx_messageInfo_CUPSRedirection_ClientTLS.Size(m)
+}
+func (m *CUPSRedirection_ClientTLS) XXX_DiscardUnknown() {
+	xxx_messageInfo_CUPSRedirection_ClientTLS.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_CUPSRedirection_ClientTLS proto.InternalMessageInfo
+
+func (m *CUPSRedirection_ClientTLS) GetCert() []byte {
+	if m != nil {
+		return m.Cert
+	}
+	return nil
+}
+
+func (m *CUPSRedirection_ClientTLS) GetKey() []byte {
+	if m != nil {
+		return m.Key
+	}
+	return nil
+}
+
 type ClaimGatewayRequest struct {
 	// Types that are valid to be assigned to SourceGateway:
 	//	*ClaimGatewayRequest_AuthenticatedIdentifiers_
-	//	*ClaimGatewayRequest_QRCode
+	//	*ClaimGatewayRequest_QrCode
 	SourceGateway isClaimGatewayRequest_SourceGateway `protobuf_oneof:"source_gateway"`
 	// Collaborator to grant all rights on the target gateway.
 	Collaborator OrganizationOrUserIdentifiers `protobuf:"bytes,3,opt,name=collaborator,proto3" json:"collaborator"`
 	// Gateway ID for the target gateway. This must be a unique value.
-	// If this is not set, the target ID for the target gateway will be set to `eui-<gateway-eui>`
-	TargetGatewayID string `protobuf:"bytes,4,opt,name=target_gateway_id,json=targetGatewayId,proto3" json:"target_gateway_id,omitempty"`
+	// If this is not set, the target ID for the target gateway will be set to `<gateway-eui>`.
+	TargetGatewayId string `protobuf:"bytes,4,opt,name=target_gateway_id,json=targetGatewayId,proto3" json:"target_gateway_id,omitempty"`
 	// Target Gateway Server Address for the target gateway.
 	TargetGatewayServerAddress string `protobuf:"bytes,5,opt,name=target_gateway_server_address,json=targetGatewayServerAddress,proto3" json:"target_gateway_server_address,omitempty"`
 	// Parameters to set CUPS redirection for the gateway.
-	CUPSRedirection      *CUPSRedirection `protobuf:"bytes,6,opt,name=cups_redirection,json=cupsRedirection,proto3" json:"cups_redirection,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}         `json:"-"`
-	XXX_sizecache        int32            `json:"-"`
+	CupsRedirection *CUPSRedirection `protobuf:"bytes,6,opt,name=cups_redirection,json=cupsRedirection,proto3" json:"cups_redirection,omitempty"`
+	// Frequency plan ID of the target gateway.
+	// This equals the first element of the frequency_plan_ids field.
+	TargetFrequencyPlanId string   `protobuf:"bytes,7,opt,name=target_frequency_plan_id,json=targetFrequencyPlanId,proto3" json:"target_frequency_plan_id,omitempty"`
+	XXX_NoUnkeyedLiteral  struct{} `json:"-"`
+	XXX_sizecache         int32    `json:"-"`
 }
 
 func (m *ClaimGatewayRequest) Reset()      { *m = ClaimGatewayRequest{} }
@@ -380,25 +447,16 @@ func (*ClaimGatewayRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_e8a7f6d184fc3dc3, []int{3}
 }
 func (m *ClaimGatewayRequest) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	return xxx_messageInfo_ClaimGatewayRequest.Unmarshal(m, b)
 }
 func (m *ClaimGatewayRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_ClaimGatewayRequest.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	return xxx_messageInfo_ClaimGatewayRequest.Marshal(b, m, deterministic)
 }
 func (m *ClaimGatewayRequest) XXX_Merge(src proto.Message) {
 	xxx_messageInfo_ClaimGatewayRequest.Merge(m, src)
 }
 func (m *ClaimGatewayRequest) XXX_Size() int {
-	return m.Size()
+	return xxx_messageInfo_ClaimGatewayRequest.Size(m)
 }
 func (m *ClaimGatewayRequest) XXX_DiscardUnknown() {
 	xxx_messageInfo_ClaimGatewayRequest.DiscardUnknown(m)
@@ -409,19 +467,17 @@ var xxx_messageInfo_ClaimGatewayRequest proto.InternalMessageInfo
 type isClaimGatewayRequest_SourceGateway interface {
 	isClaimGatewayRequest_SourceGateway()
 	Equal(interface{}) bool
-	MarshalTo([]byte) (int, error)
-	Size() int
 }
 
 type ClaimGatewayRequest_AuthenticatedIdentifiers_ struct {
 	AuthenticatedIdentifiers *ClaimGatewayRequest_AuthenticatedIdentifiers `protobuf:"bytes,1,opt,name=authenticated_identifiers,json=authenticatedIdentifiers,proto3,oneof" json:"authenticated_identifiers,omitempty"`
 }
-type ClaimGatewayRequest_QRCode struct {
-	QRCode []byte `protobuf:"bytes,2,opt,name=qr_code,json=qrCode,proto3,oneof" json:"qr_code,omitempty"`
+type ClaimGatewayRequest_QrCode struct {
+	QrCode []byte `protobuf:"bytes,2,opt,name=qr_code,json=qrCode,proto3,oneof" json:"qr_code,omitempty"`
 }
 
 func (*ClaimGatewayRequest_AuthenticatedIdentifiers_) isClaimGatewayRequest_SourceGateway() {}
-func (*ClaimGatewayRequest_QRCode) isClaimGatewayRequest_SourceGateway()                    {}
+func (*ClaimGatewayRequest_QrCode) isClaimGatewayRequest_SourceGateway()                    {}
 
 func (m *ClaimGatewayRequest) GetSourceGateway() isClaimGatewayRequest_SourceGateway {
 	if m != nil {
@@ -437,9 +493,9 @@ func (m *ClaimGatewayRequest) GetAuthenticatedIdentifiers() *ClaimGatewayRequest
 	return nil
 }
 
-func (m *ClaimGatewayRequest) GetQRCode() []byte {
-	if x, ok := m.GetSourceGateway().(*ClaimGatewayRequest_QRCode); ok {
-		return x.QRCode
+func (m *ClaimGatewayRequest) GetQrCode() []byte {
+	if x, ok := m.GetSourceGateway().(*ClaimGatewayRequest_QrCode); ok {
+		return x.QrCode
 	}
 	return nil
 }
@@ -451,9 +507,9 @@ func (m *ClaimGatewayRequest) GetCollaborator() OrganizationOrUserIdentifiers {
 	return OrganizationOrUserIdentifiers{}
 }
 
-func (m *ClaimGatewayRequest) GetTargetGatewayID() string {
+func (m *ClaimGatewayRequest) GetTargetGatewayId() string {
 	if m != nil {
-		return m.TargetGatewayID
+		return m.TargetGatewayId
 	}
 	return ""
 }
@@ -465,23 +521,30 @@ func (m *ClaimGatewayRequest) GetTargetGatewayServerAddress() string {
 	return ""
 }
 
-func (m *ClaimGatewayRequest) GetCUPSRedirection() *CUPSRedirection {
+func (m *ClaimGatewayRequest) GetCupsRedirection() *CUPSRedirection {
 	if m != nil {
-		return m.CUPSRedirection
+		return m.CupsRedirection
 	}
 	return nil
+}
+
+func (m *ClaimGatewayRequest) GetTargetFrequencyPlanId() string {
+	if m != nil {
+		return m.TargetFrequencyPlanId
+	}
+	return ""
 }
 
 // XXX_OneofWrappers is for the internal use of the proto package.
 func (*ClaimGatewayRequest) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
 		(*ClaimGatewayRequest_AuthenticatedIdentifiers_)(nil),
-		(*ClaimGatewayRequest_QRCode)(nil),
+		(*ClaimGatewayRequest_QrCode)(nil),
 	}
 }
 
 type ClaimGatewayRequest_AuthenticatedIdentifiers struct {
-	GatewayEUI           go_thethings_network_lorawan_stack_v3_pkg_types.EUI64 `protobuf:"bytes,1,opt,name=gateway_eui,json=gatewayEui,proto3,customtype=go.thethings.network/lorawan-stack/v3/pkg/types.EUI64" json:"gateway_eui"`
+	GatewayEui           go_thethings_network_lorawan_stack_v3_pkg_types.EUI64 `protobuf:"bytes,1,opt,name=gateway_eui,json=gatewayEui,proto3,customtype=go.thethings.network/lorawan-stack/v3/pkg/types.EUI64" json:"gateway_eui"`
 	AuthenticationCode   []byte                                                `protobuf:"bytes,2,opt,name=authentication_code,json=authenticationCode,proto3" json:"authentication_code,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}                                              `json:"-"`
 	XXX_sizecache        int32                                                 `json:"-"`
@@ -495,25 +558,16 @@ func (*ClaimGatewayRequest_AuthenticatedIdentifiers) Descriptor() ([]byte, []int
 	return fileDescriptor_e8a7f6d184fc3dc3, []int{3, 0}
 }
 func (m *ClaimGatewayRequest_AuthenticatedIdentifiers) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	return xxx_messageInfo_ClaimGatewayRequest_AuthenticatedIdentifiers.Unmarshal(m, b)
 }
 func (m *ClaimGatewayRequest_AuthenticatedIdentifiers) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_ClaimGatewayRequest_AuthenticatedIdentifiers.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	return xxx_messageInfo_ClaimGatewayRequest_AuthenticatedIdentifiers.Marshal(b, m, deterministic)
 }
 func (m *ClaimGatewayRequest_AuthenticatedIdentifiers) XXX_Merge(src proto.Message) {
 	xxx_messageInfo_ClaimGatewayRequest_AuthenticatedIdentifiers.Merge(m, src)
 }
 func (m *ClaimGatewayRequest_AuthenticatedIdentifiers) XXX_Size() int {
-	return m.Size()
+	return xxx_messageInfo_ClaimGatewayRequest_AuthenticatedIdentifiers.Size(m)
 }
 func (m *ClaimGatewayRequest_AuthenticatedIdentifiers) XXX_DiscardUnknown() {
 	xxx_messageInfo_ClaimGatewayRequest_AuthenticatedIdentifiers.DiscardUnknown(m)
@@ -530,7 +584,7 @@ func (m *ClaimGatewayRequest_AuthenticatedIdentifiers) GetAuthenticationCode() [
 
 type AuthorizeGatewayRequest struct {
 	GatewayIdentifiers   `protobuf:"bytes,1,opt,name=gateway_ids,json=gatewayIds,proto3,embedded=gateway_ids" json:"gateway_ids"`
-	APIKey               string   `protobuf:"bytes,2,opt,name=api_key,json=apiKey,proto3" json:"api_key,omitempty"`
+	ApiKey               string   `protobuf:"bytes,2,opt,name=api_key,json=apiKey,proto3" json:"api_key,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
@@ -541,25 +595,16 @@ func (*AuthorizeGatewayRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_e8a7f6d184fc3dc3, []int{4}
 }
 func (m *AuthorizeGatewayRequest) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	return xxx_messageInfo_AuthorizeGatewayRequest.Unmarshal(m, b)
 }
 func (m *AuthorizeGatewayRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_AuthorizeGatewayRequest.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	return xxx_messageInfo_AuthorizeGatewayRequest.Marshal(b, m, deterministic)
 }
 func (m *AuthorizeGatewayRequest) XXX_Merge(src proto.Message) {
 	xxx_messageInfo_AuthorizeGatewayRequest.Merge(m, src)
 }
 func (m *AuthorizeGatewayRequest) XXX_Size() int {
-	return m.Size()
+	return xxx_messageInfo_AuthorizeGatewayRequest.Size(m)
 }
 func (m *AuthorizeGatewayRequest) XXX_DiscardUnknown() {
 	xxx_messageInfo_AuthorizeGatewayRequest.DiscardUnknown(m)
@@ -567,9 +612,9 @@ func (m *AuthorizeGatewayRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_AuthorizeGatewayRequest proto.InternalMessageInfo
 
-func (m *AuthorizeGatewayRequest) GetAPIKey() string {
+func (m *AuthorizeGatewayRequest) GetApiKey() string {
 	if m != nil {
-		return m.APIKey
+		return m.ApiKey
 	}
 	return ""
 }
@@ -583,6 +628,8 @@ func init() {
 	golang_proto.RegisterType((*AuthorizeApplicationRequest)(nil), "ttn.lorawan.v3.AuthorizeApplicationRequest")
 	proto.RegisterType((*CUPSRedirection)(nil), "ttn.lorawan.v3.CUPSRedirection")
 	golang_proto.RegisterType((*CUPSRedirection)(nil), "ttn.lorawan.v3.CUPSRedirection")
+	proto.RegisterType((*CUPSRedirection_ClientTLS)(nil), "ttn.lorawan.v3.CUPSRedirection.ClientTLS")
+	golang_proto.RegisterType((*CUPSRedirection_ClientTLS)(nil), "ttn.lorawan.v3.CUPSRedirection.ClientTLS")
 	proto.RegisterType((*ClaimGatewayRequest)(nil), "ttn.lorawan.v3.ClaimGatewayRequest")
 	golang_proto.RegisterType((*ClaimGatewayRequest)(nil), "ttn.lorawan.v3.ClaimGatewayRequest")
 	proto.RegisterType((*ClaimGatewayRequest_AuthenticatedIdentifiers)(nil), "ttn.lorawan.v3.ClaimGatewayRequest.AuthenticatedIdentifiers")
@@ -599,110 +646,107 @@ func init() {
 }
 
 var fileDescriptor_e8a7f6d184fc3dc3 = []byte{
-	// 1645 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xcc, 0x57, 0x4b, 0x6c, 0x13, 0xd7,
-	0x1a, 0x9e, 0x93, 0x87, 0x9d, 0x9c, 0xbc, 0x9c, 0x49, 0x08, 0xc6, 0xc9, 0x9d, 0x09, 0x26, 0xdc,
-	0x3c, 0x88, 0x67, 0x2e, 0xce, 0x05, 0x5d, 0x22, 0xb8, 0x91, 0x27, 0x8e, 0x88, 0x49, 0x05, 0x74,
-	0xc0, 0x1b, 0x02, 0x71, 0x27, 0x9e, 0x83, 0x33, 0x8d, 0x33, 0x63, 0x66, 0xc6, 0xa6, 0x4e, 0x88,
-	0x1a, 0xa1, 0xaa, 0x45, 0x2c, 0xfa, 0x50, 0xa5, 0xaa, 0x55, 0xbb, 0xe8, 0x06, 0x09, 0xa9, 0x8b,
-	0xb2, 0x64, 0x09, 0xea, 0x86, 0x25, 0x6a, 0x37, 0x88, 0x85, 0x45, 0xc6, 0x5d, 0xb0, 0x64, 0x89,
-	0xb2, 0xaa, 0xce, 0x99, 0xb1, 0x3d, 0x7e, 0xd1, 0x50, 0x36, 0xec, 0xce, 0x9c, 0xc7, 0xff, 0x7f,
-	0xff, 0xff, 0x7f, 0xe7, 0xfb, 0xe7, 0xc0, 0xe9, 0xb4, 0xa6, 0x4b, 0x37, 0x25, 0x35, 0x64, 0x98,
-	0x52, 0x72, 0x9d, 0x97, 0x32, 0x0a, 0x2f, 0xa3, 0x9c, 0x92, 0x44, 0xc9, 0xb4, 0xa4, 0x6c, 0x28,
-	0x6a, 0xca, 0x40, 0x7a, 0x0e, 0xe9, 0x5c, 0x46, 0xd7, 0x4c, 0x8d, 0xee, 0x35, 0x4d, 0x95, 0x73,
-	0x4e, 0x70, 0xb9, 0x99, 0x40, 0x24, 0xa5, 0x98, 0x6b, 0xd9, 0x55, 0x2e, 0xa9, 0x6d, 0xf0, 0x48,
-	0xcd, 0x69, 0xf9, 0x8c, 0xae, 0x7d, 0x92, 0xe7, 0xc9, 0xe6, 0x64, 0x28, 0x85, 0xd4, 0x50, 0x4e,
-	0x4a, 0x2b, 0xb2, 0x64, 0x22, 0xbe, 0x6e, 0x60, 0x9b, 0x0c, 0x84, 0x5c, 0x26, 0x52, 0x5a, 0x4a,
-	0xb3, 0x0f, 0xaf, 0x66, 0xaf, 0x93, 0x2f, 0xf2, 0x41, 0x46, 0xce, 0xf6, 0x91, 0x94, 0xa6, 0xa5,
-	0xd2, 0x88, 0x00, 0x95, 0x54, 0x55, 0x33, 0x25, 0x53, 0xd1, 0x54, 0xc3, 0x59, 0x1d, 0x76, 0x56,
-	0xcb, 0x36, 0xd0, 0x46, 0xc6, 0xcc, 0x3b, 0x8b, 0x47, 0xea, 0x43, 0x55, 0x64, 0xa4, 0x9a, 0xca,
-	0x75, 0x05, 0xe9, 0x8e, 0x85, 0xe0, 0xf3, 0x1e, 0x78, 0x60, 0x1e, 0x87, 0xbe, 0xa0, 0xca, 0x51,
-	0x92, 0x08, 0x11, 0xdd, 0xc8, 0x22, 0xc3, 0xa4, 0x7f, 0x04, 0xf0, 0x90, 0x94, 0x35, 0xd7, 0xf0,
-	0x89, 0xa4, 0x64, 0x22, 0x39, 0xe1, 0x3a, 0xed, 0x07, 0xa3, 0x60, 0xa2, 0x2b, 0xfc, 0x7f, 0xae,
-	0x3a, 0x41, 0x5c, 0x43, 0x53, 0x5c, 0xc4, 0x6d, 0x26, 0x56, 0xb1, 0x22, 0x8c, 0x58, 0x05, 0xd6,
-	0xdf, 0x6c, 0x75, 0x91, 0x12, 0xfd, 0x52, 0x93, 0x35, 0x9a, 0x87, 0xde, 0x1b, 0x7a, 0x22, 0xa9,
-	0xc9, 0xc8, 0xdf, 0x32, 0x0a, 0x26, 0xba, 0x85, 0xc1, 0x3d, 0xc1, 0xbb, 0xd9, 0xee, 0xa3, 0xfc,
-	0x3b, 0x1d, 0x56, 0x81, 0xf5, 0x7c, 0x28, 0xce, 0x6b, 0x32, 0x5a, 0xa4, 0x44, 0xcf, 0x0d, 0x1d,
-	0x8f, 0xe8, 0xdb, 0x00, 0x0e, 0x99, 0x92, 0x9e, 0x42, 0x66, 0x42, 0xca, 0x64, 0xd2, 0xd8, 0xa2,
-	0xa2, 0xa9, 0x09, 0x45, 0x36, 0xfc, 0xad, 0x24, 0x96, 0x7f, 0xd7, 0xc6, 0x12, 0xa9, 0x6c, 0x73,
-	0x63, 0x1e, 0xdb, 0x13, 0xda, 0xef, 0x82, 0x16, 0x1f, 0x78, 0x52, 0x60, 0x29, 0xab, 0xc0, 0x0e,
-	0x5e, 0x26, 0x56, 0xdd, 0xbb, 0xa3, 0x86, 0x38, 0x68, 0xd6, 0xcd, 0xca, 0x06, 0x7d, 0x1d, 0xfa,
-	0x1c, 0x0c, 0x36, 0xe9, 0x12, 0x8a, 0xec, 0x6f, 0x1b, 0x05, 0x13, 0x9d, 0xc2, 0xe9, 0x3d, 0x61,
-	0x5c, 0x3f, 0xea, 0x1f, 0x0b, 0x1f, 0x5e, 0x59, 0x96, 0x42, 0x9b, 0xff, 0x09, 0x9d, 0xba, 0x36,
-	0x31, 0x37, 0xbb, 0x1c, 0xba, 0x36, 0x57, 0xfa, 0x9c, 0xdc, 0x0a, 0x4f, 0x6f, 0x8f, 0xdd, 0x5a,
-	0x19, 0xb3, 0x0a, 0x6c, 0xaf, 0xed, 0xd3, 0xce, 0x72, 0x2c, 0x2a, 0xf6, 0x9a, 0xee, 0x6f, 0x99,
-	0xfe, 0x1d, 0xc0, 0x7f, 0x39, 0x8e, 0x54, 0x64, 0xde, 0xd4, 0xf4, 0xf5, 0x84, 0xcd, 0xeb, 0x84,
-	0x24, 0xcb, 0x3a, 0x32, 0x0c, 0xbf, 0x97, 0x78, 0xfd, 0x12, 0xec, 0x09, 0x77, 0x81, 0xfe, 0x05,
-	0x08, 0x7f, 0x06, 0x56, 0x26, 0xe6, 0x66, 0xb1, 0x4b, 0x29, 0xb4, 0x19, 0x09, 0x5d, 0xc1, 0x1e,
-	0x6f, 0xb9, 0xc6, 0x95, 0xe1, 0xd5, 0xd0, 0xb5, 0x29, 0xd7, 0xc2, 0xe4, 0x55, 0x6e, 0x72, 0x0a,
-	0x9f, 0x8b, 0x84, 0xae, 0x38, 0x48, 0x6f, 0xb9, 0xc6, 0x95, 0x21, 0x39, 0x57, 0x59, 0x98, 0x9c,
-	0x98, 0x9b, 0x9d, 0x5d, 0xc6, 0xa3, 0xad, 0xe3, 0xd3, 0x27, 0xb6, 0x27, 0xe7, 0x70, 0x68, 0x62,
-	0xc0, 0x46, 0x7d, 0xde, 0x06, 0x7d, 0x89, 0x60, 0x8e, 0xd8, 0x90, 0xe9, 0x0d, 0xc8, 0x36, 0x8e,
-	0x69, 0x1d, 0xad, 0x27, 0xd2, 0xd2, 0x2a, 0x4a, 0xfb, 0x3b, 0x48, 0x54, 0xe3, 0x7b, 0x42, 0xbb,
-	0xde, 0xea, 0xdf, 0xf1, 0x59, 0x05, 0x76, 0xf8, 0x72, 0xbd, 0xc1, 0xa5, 0x85, 0xa5, 0x0f, 0xf0,
-	0x76, 0x71, 0xb8, 0x81, 0xb7, 0x25, 0xb4, 0x4e, 0x16, 0xe9, 0xe7, 0x00, 0x1e, 0x6e, 0x40, 0x98,
-	0x9a, 0x3c, 0x76, 0xbe, 0x9f, 0x79, 0x64, 0xea, 0xe8, 0x57, 0x9d, 0xcb, 0x3c, 0x3c, 0xd2, 0x3c,
-	0xb6, 0x4a, 0x3e, 0x21, 0x89, 0xee, 0x98, 0x2b, 0x9f, 0xec, 0xe5, 0xc6, 0x86, 0xcb, 0x39, 0x65,
-	0x9b, 0x78, 0x2e, 0xe7, 0x15, 0xc1, 0x91, 0xe6, 0xae, 0x15, 0xd9, 0xdf, 0x45, 0x7c, 0x8e, 0xed,
-	0x09, 0x6d, 0x7a, 0x8b, 0x5f, 0xb6, 0x0a, 0xec, 0xa1, 0x26, 0x2e, 0x63, 0x51, 0xf1, 0x50, 0x13,
-	0x67, 0x31, 0x99, 0x4e, 0xc3, 0x9e, 0x0a, 0x5b, 0xb0, 0xdd, 0x1e, 0x22, 0x13, 0x8b, 0xcf, 0x0b,
-	0xec, 0x89, 0x94, 0xc6, 0x99, 0x6b, 0xc8, 0x5c, 0xc3, 0x72, 0xcf, 0x39, 0x64, 0xe2, 0xab, 0xd5,
-	0x32, 0x37, 0xc3, 0x67, 0xd6, 0x53, 0xbc, 0x99, 0xcf, 0x20, 0x83, 0x3b, 0x8f, 0xcc, 0x58, 0xd4,
-	0x2a, 0xb0, 0x5d, 0x65, 0x32, 0xc5, 0xa2, 0x62, 0x57, 0x99, 0x3c, 0x31, 0x99, 0x8e, 0x42, 0x46,
-	0x51, 0x4b, 0x4a, 0x9f, 0x70, 0xa9, 0x16, 0x8e, 0x8d, 0xa8, 0x54, 0xfb, 0x28, 0x98, 0xe8, 0x10,
-	0x47, 0x2a, 0xbb, 0x22, 0x55, 0x9b, 0xb0, 0x46, 0x05, 0x7e, 0x69, 0x81, 0x4d, 0xd5, 0x90, 0x4e,
-	0xc2, 0x8e, 0x8f, 0x35, 0x45, 0x4d, 0xa0, 0xac, 0x42, 0xd4, 0xb7, 0x5b, 0x58, 0xc4, 0x0a, 0xf4,
-	0x4f, 0xe2, 0x59, 0x88, 0xc7, 0x4e, 0xfe, 0xd7, 0x2a, 0xb0, 0xde, 0x73, 0x9a, 0xa2, 0x2e, 0xc4,
-	0x63, 0xa2, 0x17, 0x5b, 0x5e, 0xc8, 0x2a, 0xf4, 0x47, 0xd0, 0x2b, 0xa3, 0x1c, 0xf1, 0x61, 0xcb,
-	0xea, 0xd9, 0x77, 0xf5, 0xe1, 0x89, 0xa2, 0x1c, 0x76, 0xe1, 0x91, 0x51, 0x0e, 0x7b, 0x58, 0x84,
-	0x03, 0x8d, 0xd2, 0xd3, 0x4a, 0xaa, 0x7e, 0x70, 0x4f, 0x18, 0xd4, 0xe9, 0xb0, 0x6f, 0x65, 0xd9,
-	0xb9, 0x15, 0x5b, 0xc7, 0xa7, 0x67, 0xc2, 0xdb, 0x63, 0x22, 0x2d, 0xd5, 0x65, 0x4b, 0x18, 0x84,
-	0x3d, 0x86, 0x96, 0xd5, 0x93, 0xc8, 0x11, 0x53, 0xba, 0xf5, 0xb5, 0x00, 0xce, 0xb5, 0x75, 0x78,
-	0x7c, 0xde, 0x73, 0x6d, 0x1d, 0xdd, 0xbe, 0x9e, 0xe0, 0xaf, 0x00, 0x0e, 0xe3, 0x7c, 0x6a, 0xba,
-	0xb2, 0x89, 0x5c, 0x24, 0x29, 0xb5, 0x38, 0x09, 0xf6, 0xd5, 0xf6, 0x02, 0xf0, 0x56, 0xbd, 0xc0,
-	0xe7, 0xee, 0x05, 0x4f, 0x0b, 0x2c, 0x10, 0x7b, 0xa5, 0x6a, 0xc5, 0x0f, 0x41, 0xaf, 0x94, 0x51,
-	0x12, 0xeb, 0x28, 0x4f, 0x12, 0xda, 0x49, 0xfa, 0x94, 0xde, 0xee, 0x03, 0xfe, 0x1d, 0x80, 0xb3,
-	0x13, 0xb9, 0x18, 0x5b, 0x42, 0x79, 0xd1, 0x23, 0x65, 0x94, 0x25, 0x94, 0x0f, 0x7e, 0x0e, 0x60,
-	0xdf, 0x7c, 0xfc, 0xe2, 0x25, 0x11, 0xc9, 0x8a, 0x8e, 0x92, 0xd8, 0x0a, 0x7d, 0x0a, 0xf6, 0x39,
-	0x4c, 0x4e, 0x66, 0x33, 0x46, 0x22, 0xab, 0xdb, 0xf5, 0xef, 0x14, 0xfa, 0xad, 0x02, 0xdb, 0x63,
-	0x53, 0x12, 0x9f, 0x89, 0x8b, 0x31, 0xd1, 0xe1, 0xfc, 0x7c, 0x36, 0x63, 0xc4, 0x75, 0x85, 0xfe,
-	0x1f, 0x1c, 0x48, 0x66, 0x75, 0x1d, 0xa9, 0x66, 0x22, 0x25, 0x99, 0xe8, 0xa6, 0x94, 0x77, 0x21,
-	0xe9, 0x28, 0x5d, 0x6b, 0xb1, 0xdf, 0xd9, 0x74, 0xd6, 0xde, 0x83, 0x81, 0x3c, 0xf6, 0xc2, 0x01,
-	0xd2, 0xcc, 0x9d, 0xb9, 0x52, 0xca, 0x7e, 0xd8, 0xc7, 0x5f, 0xc1, 0xe9, 0x86, 0x7f, 0x05, 0xd5,
-	0x86, 0xde, 0x8b, 0x7f, 0x82, 0x04, 0xec, 0x4e, 0x6a, 0xe9, 0xb4, 0xb4, 0xaa, 0xe9, 0x92, 0xa9,
-	0xe9, 0xce, 0x8f, 0x40, 0xa8, 0x16, 0xfe, 0x05, 0x3d, 0x25, 0xa9, 0xca, 0x26, 0xa9, 0xe9, 0x05,
-	0x3d, 0x6e, 0x60, 0x7d, 0xa9, 0xe0, 0xed, 0x76, 0x73, 0x40, 0xac, 0x32, 0x48, 0x2b, 0xb0, 0xdf,
-	0x29, 0x5d, 0x29, 0xfd, 0xe5, 0x86, 0x7f, 0xe6, 0xad, 0x1a, 0x7e, 0x9f, 0x5d, 0x66, 0x27, 0x87,
-	0xb1, 0xa8, 0xe8, 0x50, 0xa2, 0x34, 0x51, 0xd5, 0xf2, 0x4b, 0xbe, 0x6a, 0x5a, 0x55, 0xfb, 0x7b,
-	0xdd, 0xf2, 0x9d, 0x48, 0xaa, 0xdb, 0x54, 0x02, 0xfa, 0x08, 0xe7, 0xf5, 0xca, 0x75, 0xf0, 0x7b,
-	0x48, 0x91, 0xd8, 0x3a, 0x8e, 0x55, 0xdf, 0x1a, 0x61, 0x00, 0x67, 0xad, 0x66, 0x52, 0xec, 0xc3,
-	0xd6, 0x5c, 0x13, 0x81, 0xdf, 0xc0, 0x1b, 0x14, 0x37, 0x0d, 0xbb, 0x4a, 0xa9, 0xac, 0x88, 0xee,
-	0xd2, 0xbb, 0x0a, 0x22, 0x74, 0x22, 0xc5, 0xa2, 0x08, 0x1d, 0xfb, 0x58, 0x18, 0x4f, 0x35, 0x16,
-	0x46, 0x9b, 0xc9, 0xf8, 0xae, 0x6e, 0x92, 0xbb, 0xda, 0x48, 0x09, 0x0f, 0xc0, 0x5e, 0x47, 0x09,
-	0x1d, 0x7b, 0x44, 0x0a, 0x83, 0x3f, 0x01, 0x78, 0xb0, 0x2c, 0x7f, 0x35, 0xf7, 0x38, 0x5e, 0x89,
-	0xad, 0x22, 0x7b, 0xc1, 0xda, 0xa4, 0x96, 0xe9, 0xf5, 0x26, 0xc9, 0x2b, 0x05, 0x81, 0xe5, 0x6e,
-	0xaa, 0x56, 0xee, 0xfa, 0x49, 0x1f, 0xf7, 0x35, 0xd0, 0xba, 0xf0, 0xe3, 0x56, 0x78, 0xb0, 0xfc,
-	0x54, 0x98, 0x77, 0x9e, 0x5f, 0x76, 0xfd, 0xe9, 0x34, 0x6c, 0x27, 0x33, 0xf4, 0xd1, 0x7d, 0xbd,
-	0x30, 0x02, 0x63, 0xb5, 0xdb, 0xca, 0x3b, 0x5c, 0xd8, 0x83, 0x43, 0xb7, 0xff, 0xf8, 0xf3, 0xdb,
-	0x16, 0x5f, 0xb0, 0x8b, 0x47, 0x72, 0xd2, 0xe0, 0xc9, 0x93, 0x6f, 0x16, 0x4c, 0xd1, 0xf7, 0x00,
-	0x1c, 0x6c, 0xd4, 0x27, 0xe8, 0x63, 0x75, 0x7d, 0xa0, 0x79, 0x37, 0x09, 0x0c, 0x71, 0xf6, 0x6b,
-	0x8c, 0x2b, 0xbd, 0xc6, 0xb8, 0x05, 0xfc, 0x1a, 0x0b, 0x2e, 0x12, 0xaf, 0x42, 0xf0, 0x8c, 0xed,
-	0xd5, 0xd5, 0x20, 0x0c, 0x7e, 0xab, 0xa6, 0xff, 0x70, 0xd5, 0xdf, 0xdb, 0xbc, 0x54, 0x72, 0x88,
-	0x71, 0x7e, 0x05, 0xe0, 0x50, 0x5c, 0x95, 0x1a, 0x21, 0xdd, 0x67, 0xc7, 0x6a, 0x0a, 0xf2, 0x04,
-	0x01, 0xc9, 0x4f, 0x85, 0xfe, 0x1e, 0xa4, 0x0b, 0x54, 0xf8, 0xbb, 0x56, 0x78, 0xc0, 0x21, 0x49,
-	0x4d, 0x05, 0xd7, 0x4a, 0x15, 0x3c, 0xb2, 0x8f, 0x6e, 0x10, 0xd8, 0x07, 0xf3, 0x5c, 0xd5, 0x4b,
-	0x25, 0xd3, 0xae, 0xea, 0x7d, 0x03, 0xa0, 0xaf, 0x96, 0xe6, 0xf4, 0x78, 0xd3, 0xca, 0xd5, 0x78,
-	0x6e, 0x96, 0x90, 0xd3, 0xc4, 0xdb, 0xc9, 0xe0, 0x71, 0xdb, 0x9b, 0xc3, 0x71, 0x83, 0xdf, 0x72,
-	0x5d, 0x1b, 0xae, 0x32, 0xae, 0xa9, 0xd4, 0xa7, 0x90, 0x76, 0x15, 0xaa, 0x04, 0x6a, 0x1f, 0x51,
-	0x36, 0xc5, 0x13, 0x22, 0x78, 0xc6, 0xa7, 0x8e, 0x36, 0xc7, 0xe3, 0xc2, 0x20, 0xdc, 0x03, 0x4f,
-	0x76, 0x19, 0xf0, 0x74, 0x97, 0x01, 0xcf, 0x76, 0x19, 0xea, 0xc5, 0x2e, 0x43, 0xbd, 0xdc, 0x65,
-	0xa8, 0x57, 0xbb, 0x0c, 0xf5, 0x7a, 0x97, 0x01, 0x3b, 0x16, 0x03, 0xee, 0x58, 0x0c, 0x75, 0xdf,
-	0x62, 0xc0, 0x03, 0x8b, 0xa1, 0x1e, 0x5a, 0x0c, 0xf5, 0xc8, 0x62, 0xa8, 0x27, 0x16, 0x03, 0x9e,
-	0x5a, 0x0c, 0x78, 0x66, 0x31, 0xd4, 0x0b, 0x8b, 0x01, 0x2f, 0x2d, 0x86, 0x7a, 0x65, 0x31, 0xe0,
-	0xb5, 0xc5, 0x50, 0x3b, 0x45, 0x86, 0xba, 0x53, 0x64, 0xc0, 0xd7, 0x45, 0x86, 0xfa, 0xbe, 0xc8,
-	0x80, 0x9f, 0x8b, 0x0c, 0x75, 0xbf, 0xc8, 0x50, 0x0f, 0x8a, 0x0c, 0x78, 0x58, 0x64, 0xc0, 0xa3,
-	0x22, 0x03, 0xae, 0xf0, 0x6f, 0xa1, 0x8a, 0xa6, 0x9a, 0x59, 0x5d, 0xf5, 0x90, 0x30, 0x67, 0xfe,
-	0x0a, 0x00, 0x00, 0xff, 0xff, 0x41, 0xf9, 0xfc, 0x6c, 0x98, 0x11, 0x00, 0x00,
+	// 1589 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xcc, 0x57, 0x5d, 0x6f, 0x13, 0xc7,
+	0x1a, 0xf6, 0xc4, 0x49, 0x9c, 0x4c, 0xbe, 0xcc, 0xe6, 0x83, 0xc5, 0xe4, 0x38, 0xc1, 0x49, 0x0e,
+	0x49, 0x4e, 0xbc, 0x3e, 0x38, 0x07, 0x74, 0xc8, 0x81, 0x13, 0xb2, 0x21, 0xe7, 0x24, 0x81, 0x02,
+	0x5a, 0x12, 0x54, 0x11, 0x92, 0xd5, 0x64, 0x77, 0x70, 0x16, 0x2f, 0xbb, 0x66, 0x76, 0x6c, 0xea,
+	0x84, 0xa8, 0x51, 0x5b, 0xa9, 0x2d, 0x17, 0xfd, 0x94, 0xf8, 0x05, 0x45, 0xea, 0x1f, 0xe8, 0x7d,
+	0x7b, 0xd7, 0xcb, 0xaa, 0xbd, 0xa9, 0xb8, 0x40, 0x6a, 0xe8, 0x45, 0x2f, 0x7b, 0x59, 0xf9, 0xaa,
+	0x9a, 0xd9, 0xb5, 0xbd, 0xde, 0xd8, 0x10, 0x10, 0x95, 0xb8, 0x9b, 0xdd, 0x79, 0xe7, 0x99, 0xe7,
+	0xfd, 0x98, 0xe7, 0x9d, 0x81, 0x53, 0xa6, 0x4d, 0xd0, 0x7d, 0x64, 0x25, 0x1d, 0x8a, 0xb4, 0x6c,
+	0x0a, 0xe5, 0x8c, 0x94, 0x8e, 0x0b, 0x86, 0x86, 0x35, 0x13, 0x19, 0x77, 0x0d, 0x2b, 0xe3, 0x60,
+	0x52, 0xc0, 0x44, 0xca, 0x11, 0x9b, 0xda, 0x42, 0x37, 0xa5, 0x96, 0xe4, 0xad, 0x90, 0x0a, 0xd3,
+	0xb1, 0xb9, 0x8c, 0x41, 0xb7, 0xf2, 0x9b, 0x92, 0x66, 0xdf, 0x4d, 0x61, 0xab, 0x60, 0x17, 0x73,
+	0xc4, 0x7e, 0xa7, 0x98, 0xe2, 0xc6, 0x5a, 0x32, 0x83, 0xad, 0x64, 0x01, 0x99, 0x86, 0x8e, 0x28,
+	0x4e, 0x1d, 0x18, 0xb8, 0x90, 0xb1, 0xa4, 0x0f, 0x22, 0x63, 0x67, 0x6c, 0x77, 0xf1, 0x66, 0xfe,
+	0x36, 0xff, 0xe2, 0x1f, 0x7c, 0xe4, 0x99, 0x0f, 0x66, 0x6c, 0x3b, 0x63, 0x62, 0x4e, 0x14, 0x59,
+	0x96, 0x4d, 0x11, 0x35, 0x6c, 0xcb, 0xf1, 0x66, 0x8f, 0x7b, 0xb3, 0x15, 0x0c, 0x7c, 0x37, 0x47,
+	0x8b, 0xde, 0xe4, 0xc8, 0x41, 0x57, 0x0d, 0x1d, 0x5b, 0xd4, 0xb8, 0x6d, 0x60, 0xe2, 0x21, 0x24,
+	0xde, 0xef, 0x84, 0xfd, 0xf3, 0xcc, 0xf5, 0x05, 0x4b, 0xbf, 0xc8, 0x03, 0xa1, 0xe0, 0x7b, 0x79,
+	0xec, 0x50, 0x61, 0x17, 0x1e, 0x43, 0x79, 0xba, 0xc5, 0x16, 0x68, 0x88, 0x62, 0x5d, 0xf5, 0x2d,
+	0x16, 0xc1, 0x30, 0x18, 0xef, 0x48, 0xff, 0x57, 0xaa, 0x8d, 0x8f, 0x54, 0x17, 0x49, 0x9a, 0xf3,
+	0xc3, 0x2c, 0x55, 0x51, 0x16, 0x43, 0x8a, 0x88, 0x1a, 0xcc, 0x09, 0x63, 0x30, 0x72, 0x8f, 0xa8,
+	0x9a, 0xad, 0x63, 0xb1, 0x69, 0x18, 0x8c, 0x77, 0xca, 0xb0, 0x24, 0x47, 0xb6, 0x5b, 0xa2, 0x21,
+	0x71, 0xaf, 0x6d, 0x31, 0xa4, 0xb4, 0xde, 0x23, 0xf3, 0xb6, 0x8e, 0x85, 0x3b, 0x70, 0x80, 0x22,
+	0x92, 0xc1, 0x54, 0x45, 0xb9, 0x9c, 0xc9, 0x60, 0x0c, 0xdb, 0x52, 0x0d, 0xdd, 0x11, 0xc3, 0x9c,
+	0xe2, 0xdf, 0x83, 0x14, 0xe7, 0xaa, 0x66, 0xbe, 0xed, 0xe4, 0xce, 0x92, 0xdc, 0xf2, 0x10, 0x34,
+	0x45, 0xc1, 0xf7, 0x4f, 0x87, 0x42, 0x4a, 0x9f, 0x8b, 0x59, 0x63, 0xeb, 0x08, 0x2b, 0x30, 0xea,
+	0xed, 0xe5, 0x96, 0x8c, 0x6a, 0xe8, 0x62, 0xf3, 0x30, 0x18, 0x6f, 0x97, 0x27, 0x4b, 0xf2, 0x49,
+	0x32, 0x26, 0x8e, 0xa6, 0x4f, 0x6c, 0xac, 0xa1, 0xe4, 0xf6, 0x3f, 0x93, 0x67, 0xd7, 0xc7, 0x67,
+	0x67, 0xd6, 0x92, 0xeb, 0xb3, 0xe5, 0xcf, 0x89, 0x9d, 0xf4, 0xd4, 0xee, 0xe8, 0x83, 0x8d, 0x51,
+	0xa5, 0xdb, 0xc5, 0x70, 0x43, 0xb4, 0xa4, 0x0b, 0x3f, 0x02, 0xf8, 0x37, 0x0f, 0xd6, 0xc2, 0xf4,
+	0xbe, 0x4d, 0xb2, 0xaa, 0x5b, 0x83, 0x2a, 0xd2, 0x75, 0x82, 0x1d, 0x47, 0x8c, 0xf0, 0x3d, 0x3e,
+	0x01, 0x25, 0xf9, 0x21, 0x20, 0x1f, 0x82, 0xf4, 0x07, 0x60, 0x63, 0x7c, 0x76, 0x86, 0x6d, 0x80,
+	0x92, 0xdb, 0x73, 0xc9, 0x9b, 0x0c, 0xff, 0x81, 0x6f, 0x5c, 0x1d, 0xde, 0x4a, 0xae, 0x4f, 0xfa,
+	0x26, 0x26, 0x6e, 0x49, 0x13, 0x93, 0x6c, 0xdd, 0x5c, 0xf2, 0xa6, 0xc7, 0xeb, 0x81, 0x6f, 0x5c,
+	0x1d, 0xf2, 0x75, 0xd5, 0x89, 0x89, 0xf1, 0xd9, 0x99, 0x99, 0x35, 0x36, 0xda, 0x39, 0x35, 0x75,
+	0x7a, 0x77, 0x62, 0x96, 0x3b, 0x12, 0x73, 0x59, 0x5f, 0x71, 0x49, 0x5f, 0xe7, 0x9c, 0xe7, 0x5c,
+	0xca, 0xc2, 0x15, 0x38, 0x54, 0xdf, 0xa7, 0x2c, 0xce, 0xaa, 0x26, 0xda, 0xc4, 0xa6, 0xd8, 0xc6,
+	0xbd, 0x6a, 0x2b, 0xc9, 0x2d, 0x24, 0x2c, 0xee, 0x45, 0x95, 0xe3, 0x75, 0xe0, 0x2e, 0xe1, 0xec,
+	0x65, 0x66, 0x2c, 0x3c, 0x01, 0xf0, 0x44, 0x9d, 0x3c, 0x07, 0x02, 0xd5, 0xfe, 0x66, 0x06, 0x2a,
+	0x7e, 0xa0, 0x9a, 0x6a, 0x83, 0x75, 0x03, 0x8e, 0x34, 0xf6, 0xad, 0x1a, 0x30, 0x18, 0x08, 0xd8,
+	0x50, 0x03, 0xd8, 0x4a, 0xd0, 0x16, 0xe1, 0x60, 0x63, 0x5c, 0x43, 0x17, 0x3b, 0x38, 0x60, 0xa4,
+	0x24, 0x37, 0x93, 0x26, 0x51, 0x57, 0x8e, 0x35, 0xc0, 0x5b, 0xd2, 0x85, 0x75, 0xd8, 0x55, 0x4d,
+	0x27, 0x5b, 0xda, 0xc5, 0x8f, 0xe4, 0xd9, 0x27, 0x4f, 0x87, 0x4e, 0x67, 0x6c, 0x89, 0x6e, 0x61,
+	0xba, 0xc5, 0xb4, 0x53, 0xf2, 0xb2, 0x9d, 0xaa, 0x95, 0x9e, 0xc2, 0x74, 0x2a, 0x97, 0xcd, 0xa4,
+	0x68, 0x31, 0x87, 0x1d, 0xe9, 0x0a, 0xa6, 0x4b, 0x17, 0x95, 0x8e, 0x4a, 0xb6, 0x97, 0x74, 0xe1,
+	0x22, 0x8c, 0x1b, 0x56, 0x59, 0x27, 0x55, 0x9f, 0x24, 0x30, 0xbe, 0x5c, 0x02, 0x5a, 0x86, 0xc1,
+	0x78, 0x9b, 0x32, 0x58, 0xb5, 0x9a, 0xab, 0x31, 0x62, 0x52, 0x10, 0x7b, 0xd4, 0x04, 0xc5, 0x46,
+	0x52, 0x23, 0xbc, 0x0d, 0xdb, 0xee, 0xd8, 0x86, 0xa5, 0xe2, 0xbc, 0xc1, 0xc5, 0xab, 0x53, 0x3e,
+	0xcf, 0x4e, 0xfa, 0xab, 0x38, 0xb0, 0xb0, 0xba, 0x74, 0xe6, 0x5f, 0x4a, 0x84, 0xc1, 0x2d, 0xe4,
+	0x0d, 0xe1, 0x06, 0x8c, 0xe8, 0xb8, 0xc0, 0x81, 0x9b, 0x5e, 0x07, 0x70, 0xab, 0x8e, 0x0b, 0x0c,
+	0x77, 0x11, 0xf6, 0xd6, 0x8b, 0x44, 0x98, 0x27, 0xed, 0x68, 0x49, 0xee, 0x23, 0x42, 0x3a, 0xba,
+	0xb1, 0xe6, 0x55, 0xec, 0xce, 0xa9, 0xa9, 0xe9, 0xf4, 0xee, 0xa8, 0x22, 0xa0, 0x03, 0x81, 0x91,
+	0xfb, 0x60, 0x97, 0x63, 0xe7, 0x89, 0x86, 0x3d, 0xdd, 0x12, 0xc2, 0x7f, 0xc8, 0x60, 0xb9, 0xb9,
+	0xad, 0x35, 0x1a, 0x59, 0x6e, 0x6e, 0xeb, 0x8c, 0x76, 0x25, 0x1e, 0x03, 0x78, 0x9c, 0x85, 0xce,
+	0x26, 0xc6, 0x36, 0xf6, 0x15, 0x40, 0xb9, 0x17, 0x20, 0xd8, 0x13, 0x94, 0x57, 0xf0, 0x52, 0xf2,
+	0x1a, 0xf5, 0xcb, 0xeb, 0x0f, 0x4f, 0x87, 0x80, 0xd2, 0x8d, 0x6a, 0xc5, 0x75, 0x04, 0x46, 0x50,
+	0xce, 0x50, 0xb3, 0xb8, 0xc8, 0xc3, 0xd8, 0xce, 0xf5, 0x9e, 0xb4, 0x44, 0x81, 0xb8, 0x07, 0x94,
+	0x56, 0x94, 0x33, 0x2e, 0xe1, 0x62, 0xe2, 0xe3, 0x30, 0xec, 0x99, 0x5f, 0xbd, 0x76, 0x5d, 0xc1,
+	0xba, 0x41, 0xb0, 0xc6, 0xd6, 0x0a, 0xff, 0x81, 0x3d, 0x5e, 0x6d, 0x6a, 0xf9, 0x9c, 0xa3, 0xe6,
+	0x89, 0x9b, 0xe0, 0x76, 0xb9, 0xb7, 0x24, 0x47, 0x49, 0xb7, 0xb8, 0xd7, 0x94, 0x6e, 0xdd, 0xd8,
+	0xa2, 0x34, 0xe7, 0x7c, 0x04, 0x80, 0xe2, 0xd5, 0xf1, 0x7c, 0x3e, 0xe7, 0xac, 0x12, 0x43, 0xf8,
+	0x37, 0xec, 0xd5, 0xf2, 0x84, 0x60, 0x8b, 0xaa, 0x19, 0x44, 0xf1, 0x7d, 0x54, 0xf4, 0x31, 0xa8,
+	0x1e, 0xb5, 0x23, 0x9e, 0xd1, 0xff, 0x5d, 0x9b, 0x4b, 0xb8, 0x28, 0x4c, 0xc2, 0x23, 0xfe, 0x6d,
+	0x29, 0xc9, 0x3b, 0x94, 0x27, 0xa7, 0x53, 0xe9, 0xa9, 0xee, 0xb1, 0xc2, 0x7e, 0x0b, 0xcb, 0x10,
+	0x6a, 0xa6, 0xc1, 0x36, 0xa1, 0xa6, 0xc3, 0x5b, 0x46, 0x47, 0x7a, 0xe2, 0x40, 0xef, 0xac, 0xf5,
+	0x4b, 0x9a, 0xe7, 0x2b, 0x56, 0x2e, 0x5f, 0x5f, 0x0c, 0x29, 0xed, 0xee, 0xf2, 0x15, 0xd3, 0x11,
+	0x26, 0x20, 0x64, 0x29, 0x56, 0xa9, 0x9d, 0xc5, 0x16, 0x3f, 0x17, 0x3e, 0xa2, 0xcc, 0x94, 0xcd,
+	0xae, 0xb0, 0xc9, 0xd8, 0x02, 0x6c, 0xaf, 0x80, 0x08, 0x83, 0xb0, 0x59, 0xc3, 0x84, 0x7a, 0xc5,
+	0xcf, 0x56, 0x6c, 0x87, 0xc5, 0xbd, 0x0b, 0x0a, 0xff, 0x2b, 0xc4, 0x60, 0xb8, 0xec, 0xb7, 0x7f,
+	0x92, 0xfd, 0x94, 0xfb, 0x61, 0x6f, 0x39, 0x36, 0x1a, 0xc1, 0x3c, 0xa9, 0xc8, 0x74, 0x12, 0x5f,
+	0x45, 0x60, 0x2f, 0xef, 0xf7, 0x5e, 0x50, 0xca, 0xb5, 0xb2, 0xf3, 0xe2, 0x7b, 0xc3, 0xb9, 0xba,
+	0xf7, 0x86, 0x5a, 0x9c, 0xbf, 0xf4, 0xd6, 0xa0, 0xc2, 0x4e, 0xcd, 0x36, 0x4d, 0xb4, 0x69, 0x13,
+	0x44, 0x6d, 0xe2, 0xdd, 0x15, 0x92, 0x41, 0x5a, 0x57, 0x49, 0x06, 0x59, 0xc6, 0x36, 0xaf, 0xd1,
+	0xab, 0x64, 0xd5, 0x61, 0x5a, 0xd8, 0xe8, 0xca, 0x50, 0x03, 0x28, 0xdc, 0xa8, 0x54, 0x47, 0x39,
+	0x74, 0xaf, 0x74, 0x57, 0xf0, 0x2a, 0xc9, 0x8b, 0x4c, 0xed, 0x65, 0xa1, 0x0c, 0x1c, 0xe8, 0x81,
+	0x2d, 0x6f, 0xf4, 0x65, 0xc1, 0xf3, 0xa4, 0xb6, 0xff, 0x2d, 0xc3, 0x28, 0x3f, 0x43, 0xa4, 0x5a,
+	0xfd, 0x62, 0x2b, 0xcf, 0xc8, 0xd0, 0x0b, 0x0e, 0x89, 0xd2, 0xc3, 0x16, 0xfa, 0xd5, 0xe0, 0x02,
+	0x14, 0xbd, 0xf8, 0xdc, 0x26, 0xac, 0x90, 0x2c, 0xad, 0xa8, 0xe6, 0x4c, 0xc4, 0x34, 0xcb, 0xbb,
+	0x47, 0x79, 0xfd, 0xee, 0x82, 0xd2, 0xef, 0x1a, 0xfe, 0xaf, 0x6c, 0x77, 0xcd, 0x44, 0xd6, 0x92,
+	0x1e, 0xfb, 0x06, 0x3c, 0xa7, 0x8d, 0x6c, 0xc0, 0x8e, 0x72, 0xdc, 0x5f, 0x5b, 0x27, 0x81, 0x1e,
+	0x22, 0x13, 0xfd, 0xb3, 0xf5, 0x45, 0xbf, 0xf6, 0x5c, 0x46, 0xeb, 0xaa, 0x7c, 0x3f, 0xec, 0xf6,
+	0x54, 0xde, 0xc3, 0xe3, 0x32, 0x9f, 0xf8, 0x02, 0xc0, 0xa3, 0x15, 0x69, 0x0f, 0x1c, 0xd5, 0xd5,
+	0xaa, 0x37, 0x55, 0x49, 0x4f, 0x04, 0x63, 0x5e, 0xa9, 0xbe, 0xe7, 0xc9, 0x79, 0xd9, 0x09, 0x26,
+	0xe5, 0xc3, 0x41, 0x29, 0x77, 0x43, 0x1e, 0xad, 0xe8, 0x78, 0xfa, 0xbb, 0x30, 0x3c, 0x5a, 0x79,
+	0x26, 0xcc, 0x7b, 0x2f, 0x2f, 0xb7, 0x28, 0x04, 0x13, 0xb6, 0xf0, 0x3f, 0xc2, 0xd8, 0xa1, 0x5e,
+	0x17, 0xb1, 0xd1, 0xa0, 0x59, 0xc5, 0xc2, 0xc7, 0x38, 0x31, 0xf0, 0xde, 0x4f, 0xbf, 0x7e, 0xd9,
+	0x14, 0x4d, 0x74, 0xa4, 0xb0, 0xae, 0x39, 0x29, 0xfe, 0xda, 0x9b, 0x01, 0x93, 0xc2, 0x63, 0x00,
+	0xfb, 0xea, 0x75, 0x3e, 0xe1, 0x1f, 0x07, 0x3a, 0x5b, 0xe3, 0xfe, 0x18, 0x1b, 0x90, 0xdc, 0x87,
+	0x98, 0x54, 0x7e, 0x88, 0x49, 0x0b, 0xec, 0x21, 0x96, 0x58, 0xe4, 0xbb, 0xca, 0x89, 0xf3, 0xee,
+	0xae, 0xbe, 0x96, 0xe7, 0xa4, 0x76, 0x02, 0x1d, 0x55, 0xaa, 0xfd, 0xde, 0x4d, 0xa1, 0xf2, 0x86,
+	0x8c, 0xe7, 0xa7, 0x00, 0x0e, 0xac, 0x5a, 0xa8, 0x1e, 0xd3, 0x43, 0xf6, 0xe0, 0x86, 0x24, 0x4f,
+	0x73, 0x92, 0xa9, 0xc9, 0xe4, 0x8b, 0x49, 0xfa, 0x48, 0xa5, 0x1f, 0x85, 0x61, 0xbf, 0x57, 0x1a,
+	0x81, 0x0c, 0x6e, 0x95, 0x33, 0x38, 0x72, 0x08, 0x9d, 0x8f, 0x1d, 0xa2, 0xde, 0x7c, 0xd9, 0xcb,
+	0x68, 0xa6, 0x2f, 0x7b, 0x9f, 0x03, 0x18, 0x0d, 0x16, 0xb7, 0x70, 0xb2, 0x61, 0xe6, 0x02, 0x3b,
+	0x37, 0x0a, 0xc8, 0x39, 0xbe, 0xdb, 0x99, 0xc4, 0x29, 0x77, 0x37, 0xaf, 0xb2, 0x9d, 0xd4, 0x8e,
+	0xef, 0xb0, 0x48, 0xd5, 0x71, 0x20, 0x53, 0xef, 0x42, 0xc1, 0x97, 0xa8, 0x32, 0xa9, 0x43, 0x78,
+	0xd9, 0x90, 0x4f, 0x92, 0xf3, 0x39, 0x39, 0x39, 0xd6, 0x98, 0x8f, 0x8f, 0x83, 0xfc, 0xd6, 0xcf,
+	0xbf, 0xc4, 0x43, 0x7b, 0xfb, 0x71, 0xf0, 0xf5, 0x7e, 0x1c, 0xfc, 0xb6, 0x1f, 0x0f, 0xfd, 0xbe,
+	0x1f, 0x07, 0x9f, 0x3d, 0x8b, 0x87, 0xbe, 0x7d, 0x16, 0x07, 0x37, 0x53, 0x2f, 0x21, 0x52, 0xd4,
+	0xca, 0x6d, 0x6e, 0xb6, 0x72, 0x36, 0xd3, 0x7f, 0x06, 0x00, 0x00, 0xff, 0xff, 0x28, 0xda, 0x66,
+	0x8c, 0x3a, 0x11, 0x00, 0x00,
 }
 
 func (this *ClaimEndDeviceRequest) Equal(that interface{}) bool {
@@ -733,32 +777,32 @@ func (this *ClaimEndDeviceRequest) Equal(that interface{}) bool {
 	} else if !this.SourceDevice.Equal(that1.SourceDevice) {
 		return false
 	}
-	if !this.TargetApplicationIDs.Equal(&that1.TargetApplicationIDs) {
+	if !this.TargetApplicationIds.Equal(&that1.TargetApplicationIds) {
 		return false
 	}
-	if this.TargetDeviceID != that1.TargetDeviceID {
+	if this.TargetDeviceId != that1.TargetDeviceId {
 		return false
 	}
 	if this.TargetNetworkServerAddress != that1.TargetNetworkServerAddress {
 		return false
 	}
-	if this.TargetNetworkServerKEKLabel != that1.TargetNetworkServerKEKLabel {
+	if this.TargetNetworkServerKekLabel != that1.TargetNetworkServerKekLabel {
 		return false
 	}
 	if this.TargetApplicationServerAddress != that1.TargetApplicationServerAddress {
 		return false
 	}
-	if this.TargetApplicationServerKEKLabel != that1.TargetApplicationServerKEKLabel {
+	if this.TargetApplicationServerKekLabel != that1.TargetApplicationServerKekLabel {
 		return false
 	}
-	if this.TargetApplicationServerID != that1.TargetApplicationServerID {
+	if this.TargetApplicationServerId != that1.TargetApplicationServerId {
 		return false
 	}
-	if that1.TargetNetID == nil {
-		if this.TargetNetID != nil {
+	if that1.TargetNetId == nil {
+		if this.TargetNetId != nil {
 			return false
 		}
-	} else if !this.TargetNetID.Equal(*that1.TargetNetID) {
+	} else if !this.TargetNetId.Equal(*that1.TargetNetId) {
 		return false
 	}
 	if this.InvalidateAuthenticationCode != that1.InvalidateAuthenticationCode {
@@ -790,14 +834,14 @@ func (this *ClaimEndDeviceRequest_AuthenticatedIdentifiers_) Equal(that interfac
 	}
 	return true
 }
-func (this *ClaimEndDeviceRequest_QRCode) Equal(that interface{}) bool {
+func (this *ClaimEndDeviceRequest_QrCode) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
 	}
 
-	that1, ok := that.(*ClaimEndDeviceRequest_QRCode)
+	that1, ok := that.(*ClaimEndDeviceRequest_QrCode)
 	if !ok {
-		that2, ok := that.(ClaimEndDeviceRequest_QRCode)
+		that2, ok := that.(ClaimEndDeviceRequest_QrCode)
 		if ok {
 			that1 = &that2
 		} else {
@@ -809,7 +853,7 @@ func (this *ClaimEndDeviceRequest_QRCode) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if !bytes.Equal(this.QRCode, that1.QRCode) {
+	if !bytes.Equal(this.QrCode, that1.QrCode) {
 		return false
 	}
 	return true
@@ -833,10 +877,10 @@ func (this *ClaimEndDeviceRequest_AuthenticatedIdentifiers) Equal(that interface
 	} else if this == nil {
 		return false
 	}
-	if !this.JoinEUI.Equal(that1.JoinEUI) {
+	if !this.JoinEui.Equal(that1.JoinEui) {
 		return false
 	}
-	if !this.DevEUI.Equal(that1.DevEUI) {
+	if !this.DevEui.Equal(that1.DevEui) {
 		return false
 	}
 	if this.AuthenticationCode != that1.AuthenticationCode {
@@ -866,7 +910,7 @@ func (this *AuthorizeApplicationRequest) Equal(that interface{}) bool {
 	if !this.ApplicationIdentifiers.Equal(&that1.ApplicationIdentifiers) {
 		return false
 	}
-	if this.APIKey != that1.APIKey {
+	if this.ApiKey != that1.ApiKey {
 		return false
 	}
 	return true
@@ -890,10 +934,97 @@ func (this *CUPSRedirection) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if this.TargetCUPSURI != that1.TargetCUPSURI {
+	if this.TargetCupsUri != that1.TargetCupsUri {
 		return false
 	}
 	if this.CurrentGatewayKey != that1.CurrentGatewayKey {
+		return false
+	}
+	if !bytes.Equal(this.TargetCupsTrust, that1.TargetCupsTrust) {
+		return false
+	}
+	if that1.GatewayCredentials == nil {
+		if this.GatewayCredentials != nil {
+			return false
+		}
+	} else if this.GatewayCredentials == nil {
+		return false
+	} else if !this.GatewayCredentials.Equal(that1.GatewayCredentials) {
+		return false
+	}
+	return true
+}
+func (this *CUPSRedirection_ClientTls) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CUPSRedirection_ClientTls)
+	if !ok {
+		that2, ok := that.(CUPSRedirection_ClientTls)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.ClientTls.Equal(that1.ClientTls) {
+		return false
+	}
+	return true
+}
+func (this *CUPSRedirection_AuthToken) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CUPSRedirection_AuthToken)
+	if !ok {
+		that2, ok := that.(CUPSRedirection_AuthToken)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.AuthToken != that1.AuthToken {
+		return false
+	}
+	return true
+}
+func (this *CUPSRedirection_ClientTLS) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CUPSRedirection_ClientTLS)
+	if !ok {
+		that2, ok := that.(CUPSRedirection_ClientTLS)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !bytes.Equal(this.Cert, that1.Cert) {
+		return false
+	}
+	if !bytes.Equal(this.Key, that1.Key) {
 		return false
 	}
 	return true
@@ -929,13 +1060,16 @@ func (this *ClaimGatewayRequest) Equal(that interface{}) bool {
 	if !this.Collaborator.Equal(&that1.Collaborator) {
 		return false
 	}
-	if this.TargetGatewayID != that1.TargetGatewayID {
+	if this.TargetGatewayId != that1.TargetGatewayId {
 		return false
 	}
 	if this.TargetGatewayServerAddress != that1.TargetGatewayServerAddress {
 		return false
 	}
-	if !this.CUPSRedirection.Equal(that1.CUPSRedirection) {
+	if !this.CupsRedirection.Equal(that1.CupsRedirection) {
+		return false
+	}
+	if this.TargetFrequencyPlanId != that1.TargetFrequencyPlanId {
 		return false
 	}
 	return true
@@ -964,14 +1098,14 @@ func (this *ClaimGatewayRequest_AuthenticatedIdentifiers_) Equal(that interface{
 	}
 	return true
 }
-func (this *ClaimGatewayRequest_QRCode) Equal(that interface{}) bool {
+func (this *ClaimGatewayRequest_QrCode) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
 	}
 
-	that1, ok := that.(*ClaimGatewayRequest_QRCode)
+	that1, ok := that.(*ClaimGatewayRequest_QrCode)
 	if !ok {
-		that2, ok := that.(ClaimGatewayRequest_QRCode)
+		that2, ok := that.(ClaimGatewayRequest_QrCode)
 		if ok {
 			that1 = &that2
 		} else {
@@ -983,7 +1117,7 @@ func (this *ClaimGatewayRequest_QRCode) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if !bytes.Equal(this.QRCode, that1.QRCode) {
+	if !bytes.Equal(this.QrCode, that1.QrCode) {
 		return false
 	}
 	return true
@@ -1007,7 +1141,7 @@ func (this *ClaimGatewayRequest_AuthenticatedIdentifiers) Equal(that interface{}
 	} else if this == nil {
 		return false
 	}
-	if !this.GatewayEUI.Equal(that1.GatewayEUI) {
+	if !this.GatewayEui.Equal(that1.GatewayEui) {
 		return false
 	}
 	if !bytes.Equal(this.AuthenticationCode, that1.AuthenticationCode) {
@@ -1037,7 +1171,7 @@ func (this *AuthorizeGatewayRequest) Equal(that interface{}) bool {
 	if !this.GatewayIdentifiers.Equal(&that1.GatewayIdentifiers) {
 		return false
 	}
-	if this.APIKey != that1.APIKey {
+	if this.ApiKey != that1.ApiKey {
 		return false
 	}
 	return true
@@ -1359,891 +1493,21 @@ var _GatewayClaimingServer_serviceDesc = grpc.ServiceDesc{
 	Metadata: "lorawan-stack/api/deviceclaimingserver.proto",
 }
 
-func (m *ClaimEndDeviceRequest) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *ClaimEndDeviceRequest) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *ClaimEndDeviceRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.TargetNetID != nil {
-		{
-			size := m.TargetNetID.Size()
-			i -= size
-			if _, err := m.TargetNetID.MarshalTo(dAtA[i:]); err != nil {
-				return 0, err
-			}
-			i = encodeVarintDeviceclaimingserver(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x6a
-	}
-	if len(m.TargetApplicationServerID) > 0 {
-		i -= len(m.TargetApplicationServerID)
-		copy(dAtA[i:], m.TargetApplicationServerID)
-		i = encodeVarintDeviceclaimingserver(dAtA, i, uint64(len(m.TargetApplicationServerID)))
-		i--
-		dAtA[i] = 0x5a
-	}
-	if len(m.TargetApplicationServerKEKLabel) > 0 {
-		i -= len(m.TargetApplicationServerKEKLabel)
-		copy(dAtA[i:], m.TargetApplicationServerKEKLabel)
-		i = encodeVarintDeviceclaimingserver(dAtA, i, uint64(len(m.TargetApplicationServerKEKLabel)))
-		i--
-		dAtA[i] = 0x52
-	}
-	if len(m.TargetApplicationServerAddress) > 0 {
-		i -= len(m.TargetApplicationServerAddress)
-		copy(dAtA[i:], m.TargetApplicationServerAddress)
-		i = encodeVarintDeviceclaimingserver(dAtA, i, uint64(len(m.TargetApplicationServerAddress)))
-		i--
-		dAtA[i] = 0x4a
-	}
-	if len(m.TargetNetworkServerKEKLabel) > 0 {
-		i -= len(m.TargetNetworkServerKEKLabel)
-		copy(dAtA[i:], m.TargetNetworkServerKEKLabel)
-		i = encodeVarintDeviceclaimingserver(dAtA, i, uint64(len(m.TargetNetworkServerKEKLabel)))
-		i--
-		dAtA[i] = 0x42
-	}
-	if len(m.TargetNetworkServerAddress) > 0 {
-		i -= len(m.TargetNetworkServerAddress)
-		copy(dAtA[i:], m.TargetNetworkServerAddress)
-		i = encodeVarintDeviceclaimingserver(dAtA, i, uint64(len(m.TargetNetworkServerAddress)))
-		i--
-		dAtA[i] = 0x3a
-	}
-	if m.InvalidateAuthenticationCode {
-		i--
-		if m.InvalidateAuthenticationCode {
-			dAtA[i] = 1
-		} else {
-			dAtA[i] = 0
-		}
-		i--
-		dAtA[i] = 0x28
-	}
-	if len(m.TargetDeviceID) > 0 {
-		i -= len(m.TargetDeviceID)
-		copy(dAtA[i:], m.TargetDeviceID)
-		i = encodeVarintDeviceclaimingserver(dAtA, i, uint64(len(m.TargetDeviceID)))
-		i--
-		dAtA[i] = 0x22
-	}
-	{
-		size, err := m.TargetApplicationIDs.MarshalToSizedBuffer(dAtA[:i])
-		if err != nil {
-			return 0, err
-		}
-		i -= size
-		i = encodeVarintDeviceclaimingserver(dAtA, i, uint64(size))
-	}
-	i--
-	dAtA[i] = 0x1a
-	if m.SourceDevice != nil {
-		{
-			size := m.SourceDevice.Size()
-			i -= size
-			if _, err := m.SourceDevice.MarshalTo(dAtA[i:]); err != nil {
-				return 0, err
-			}
-		}
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *ClaimEndDeviceRequest_AuthenticatedIdentifiers_) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *ClaimEndDeviceRequest_AuthenticatedIdentifiers_) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.AuthenticatedIdentifiers != nil {
-		{
-			size, err := m.AuthenticatedIdentifiers.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintDeviceclaimingserver(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
-}
-func (m *ClaimEndDeviceRequest_QRCode) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *ClaimEndDeviceRequest_QRCode) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.QRCode != nil {
-		i -= len(m.QRCode)
-		copy(dAtA[i:], m.QRCode)
-		i = encodeVarintDeviceclaimingserver(dAtA, i, uint64(len(m.QRCode)))
-		i--
-		dAtA[i] = 0x12
-	}
-	return len(dAtA) - i, nil
-}
-func (m *ClaimEndDeviceRequest_AuthenticatedIdentifiers) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *ClaimEndDeviceRequest_AuthenticatedIdentifiers) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *ClaimEndDeviceRequest_AuthenticatedIdentifiers) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.AuthenticationCode) > 0 {
-		i -= len(m.AuthenticationCode)
-		copy(dAtA[i:], m.AuthenticationCode)
-		i = encodeVarintDeviceclaimingserver(dAtA, i, uint64(len(m.AuthenticationCode)))
-		i--
-		dAtA[i] = 0x1a
-	}
-	{
-		size := m.DevEUI.Size()
-		i -= size
-		if _, err := m.DevEUI.MarshalTo(dAtA[i:]); err != nil {
-			return 0, err
-		}
-		i = encodeVarintDeviceclaimingserver(dAtA, i, uint64(size))
-	}
-	i--
-	dAtA[i] = 0x12
-	{
-		size := m.JoinEUI.Size()
-		i -= size
-		if _, err := m.JoinEUI.MarshalTo(dAtA[i:]); err != nil {
-			return 0, err
-		}
-		i = encodeVarintDeviceclaimingserver(dAtA, i, uint64(size))
-	}
-	i--
-	dAtA[i] = 0xa
-	return len(dAtA) - i, nil
-}
-
-func (m *AuthorizeApplicationRequest) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *AuthorizeApplicationRequest) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *AuthorizeApplicationRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.APIKey) > 0 {
-		i -= len(m.APIKey)
-		copy(dAtA[i:], m.APIKey)
-		i = encodeVarintDeviceclaimingserver(dAtA, i, uint64(len(m.APIKey)))
-		i--
-		dAtA[i] = 0x12
-	}
-	{
-		size, err := m.ApplicationIdentifiers.MarshalToSizedBuffer(dAtA[:i])
-		if err != nil {
-			return 0, err
-		}
-		i -= size
-		i = encodeVarintDeviceclaimingserver(dAtA, i, uint64(size))
-	}
-	i--
-	dAtA[i] = 0xa
-	return len(dAtA) - i, nil
-}
-
-func (m *CUPSRedirection) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *CUPSRedirection) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *CUPSRedirection) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.CurrentGatewayKey) > 0 {
-		i -= len(m.CurrentGatewayKey)
-		copy(dAtA[i:], m.CurrentGatewayKey)
-		i = encodeVarintDeviceclaimingserver(dAtA, i, uint64(len(m.CurrentGatewayKey)))
-		i--
-		dAtA[i] = 0x12
-	}
-	if len(m.TargetCUPSURI) > 0 {
-		i -= len(m.TargetCUPSURI)
-		copy(dAtA[i:], m.TargetCUPSURI)
-		i = encodeVarintDeviceclaimingserver(dAtA, i, uint64(len(m.TargetCUPSURI)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *ClaimGatewayRequest) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *ClaimGatewayRequest) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *ClaimGatewayRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.CUPSRedirection != nil {
-		{
-			size, err := m.CUPSRedirection.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintDeviceclaimingserver(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x32
-	}
-	if len(m.TargetGatewayServerAddress) > 0 {
-		i -= len(m.TargetGatewayServerAddress)
-		copy(dAtA[i:], m.TargetGatewayServerAddress)
-		i = encodeVarintDeviceclaimingserver(dAtA, i, uint64(len(m.TargetGatewayServerAddress)))
-		i--
-		dAtA[i] = 0x2a
-	}
-	if len(m.TargetGatewayID) > 0 {
-		i -= len(m.TargetGatewayID)
-		copy(dAtA[i:], m.TargetGatewayID)
-		i = encodeVarintDeviceclaimingserver(dAtA, i, uint64(len(m.TargetGatewayID)))
-		i--
-		dAtA[i] = 0x22
-	}
-	{
-		size, err := m.Collaborator.MarshalToSizedBuffer(dAtA[:i])
-		if err != nil {
-			return 0, err
-		}
-		i -= size
-		i = encodeVarintDeviceclaimingserver(dAtA, i, uint64(size))
-	}
-	i--
-	dAtA[i] = 0x1a
-	if m.SourceGateway != nil {
-		{
-			size := m.SourceGateway.Size()
-			i -= size
-			if _, err := m.SourceGateway.MarshalTo(dAtA[i:]); err != nil {
-				return 0, err
-			}
-		}
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *ClaimGatewayRequest_AuthenticatedIdentifiers_) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *ClaimGatewayRequest_AuthenticatedIdentifiers_) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.AuthenticatedIdentifiers != nil {
-		{
-			size, err := m.AuthenticatedIdentifiers.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintDeviceclaimingserver(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
-}
-func (m *ClaimGatewayRequest_QRCode) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *ClaimGatewayRequest_QRCode) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.QRCode != nil {
-		i -= len(m.QRCode)
-		copy(dAtA[i:], m.QRCode)
-		i = encodeVarintDeviceclaimingserver(dAtA, i, uint64(len(m.QRCode)))
-		i--
-		dAtA[i] = 0x12
-	}
-	return len(dAtA) - i, nil
-}
-func (m *ClaimGatewayRequest_AuthenticatedIdentifiers) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *ClaimGatewayRequest_AuthenticatedIdentifiers) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *ClaimGatewayRequest_AuthenticatedIdentifiers) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.AuthenticationCode) > 0 {
-		i -= len(m.AuthenticationCode)
-		copy(dAtA[i:], m.AuthenticationCode)
-		i = encodeVarintDeviceclaimingserver(dAtA, i, uint64(len(m.AuthenticationCode)))
-		i--
-		dAtA[i] = 0x12
-	}
-	{
-		size := m.GatewayEUI.Size()
-		i -= size
-		if _, err := m.GatewayEUI.MarshalTo(dAtA[i:]); err != nil {
-			return 0, err
-		}
-		i = encodeVarintDeviceclaimingserver(dAtA, i, uint64(size))
-	}
-	i--
-	dAtA[i] = 0xa
-	return len(dAtA) - i, nil
-}
-
-func (m *AuthorizeGatewayRequest) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *AuthorizeGatewayRequest) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *AuthorizeGatewayRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.APIKey) > 0 {
-		i -= len(m.APIKey)
-		copy(dAtA[i:], m.APIKey)
-		i = encodeVarintDeviceclaimingserver(dAtA, i, uint64(len(m.APIKey)))
-		i--
-		dAtA[i] = 0x12
-	}
-	{
-		size, err := m.GatewayIdentifiers.MarshalToSizedBuffer(dAtA[:i])
-		if err != nil {
-			return 0, err
-		}
-		i -= size
-		i = encodeVarintDeviceclaimingserver(dAtA, i, uint64(size))
-	}
-	i--
-	dAtA[i] = 0xa
-	return len(dAtA) - i, nil
-}
-
-func encodeVarintDeviceclaimingserver(dAtA []byte, offset int, v uint64) int {
-	offset -= sovDeviceclaimingserver(v)
-	base := offset
-	for v >= 1<<7 {
-		dAtA[offset] = uint8(v&0x7f | 0x80)
-		v >>= 7
-		offset++
-	}
-	dAtA[offset] = uint8(v)
-	return base
-}
-func NewPopulatedClaimEndDeviceRequest(r randyDeviceclaimingserver, easy bool) *ClaimEndDeviceRequest {
-	this := &ClaimEndDeviceRequest{}
-	oneofNumber_SourceDevice := []int32{1, 2}[r.Intn(2)]
-	switch oneofNumber_SourceDevice {
-	case 1:
-		this.SourceDevice = NewPopulatedClaimEndDeviceRequest_AuthenticatedIdentifiers_(r, easy)
-	case 2:
-		this.SourceDevice = NewPopulatedClaimEndDeviceRequest_QRCode(r, easy)
-	}
-	v1 := NewPopulatedApplicationIdentifiers(r, easy)
-	this.TargetApplicationIDs = *v1
-	this.TargetDeviceID = randStringDeviceclaimingserver(r)
-	this.InvalidateAuthenticationCode = bool(r.Intn(2) == 0)
-	this.TargetNetworkServerAddress = randStringDeviceclaimingserver(r)
-	this.TargetNetworkServerKEKLabel = randStringDeviceclaimingserver(r)
-	this.TargetApplicationServerAddress = randStringDeviceclaimingserver(r)
-	this.TargetApplicationServerKEKLabel = randStringDeviceclaimingserver(r)
-	this.TargetApplicationServerID = randStringDeviceclaimingserver(r)
-	this.TargetNetID = go_thethings_network_lorawan_stack_v3_pkg_types.NewPopulatedNetID(r)
-	if !easy && r.Intn(10) != 0 {
-	}
-	return this
-}
-
-func NewPopulatedClaimEndDeviceRequest_AuthenticatedIdentifiers_(r randyDeviceclaimingserver, easy bool) *ClaimEndDeviceRequest_AuthenticatedIdentifiers_ {
-	this := &ClaimEndDeviceRequest_AuthenticatedIdentifiers_{}
-	this.AuthenticatedIdentifiers = NewPopulatedClaimEndDeviceRequest_AuthenticatedIdentifiers(r, easy)
-	return this
-}
-func NewPopulatedClaimEndDeviceRequest_QRCode(r randyDeviceclaimingserver, easy bool) *ClaimEndDeviceRequest_QRCode {
-	this := &ClaimEndDeviceRequest_QRCode{}
-	v2 := r.Intn(100)
-	this.QRCode = make([]byte, v2)
-	for i := 0; i < v2; i++ {
-		this.QRCode[i] = byte(r.Intn(256))
-	}
-	return this
-}
-func NewPopulatedClaimEndDeviceRequest_AuthenticatedIdentifiers(r randyDeviceclaimingserver, easy bool) *ClaimEndDeviceRequest_AuthenticatedIdentifiers {
-	this := &ClaimEndDeviceRequest_AuthenticatedIdentifiers{}
-	v3 := go_thethings_network_lorawan_stack_v3_pkg_types.NewPopulatedEUI64(r)
-	this.JoinEUI = *v3
-	v4 := go_thethings_network_lorawan_stack_v3_pkg_types.NewPopulatedEUI64(r)
-	this.DevEUI = *v4
-	this.AuthenticationCode = randStringDeviceclaimingserver(r)
-	if !easy && r.Intn(10) != 0 {
-	}
-	return this
-}
-
-func NewPopulatedAuthorizeApplicationRequest(r randyDeviceclaimingserver, easy bool) *AuthorizeApplicationRequest {
-	this := &AuthorizeApplicationRequest{}
-	v5 := NewPopulatedApplicationIdentifiers(r, easy)
-	this.ApplicationIdentifiers = *v5
-	this.APIKey = randStringDeviceclaimingserver(r)
-	if !easy && r.Intn(10) != 0 {
-	}
-	return this
-}
-
-func NewPopulatedCUPSRedirection(r randyDeviceclaimingserver, easy bool) *CUPSRedirection {
-	this := &CUPSRedirection{}
-	this.TargetCUPSURI = randStringDeviceclaimingserver(r)
-	this.CurrentGatewayKey = randStringDeviceclaimingserver(r)
-	if !easy && r.Intn(10) != 0 {
-	}
-	return this
-}
-
-func NewPopulatedClaimGatewayRequest(r randyDeviceclaimingserver, easy bool) *ClaimGatewayRequest {
-	this := &ClaimGatewayRequest{}
-	oneofNumber_SourceGateway := []int32{1, 2}[r.Intn(2)]
-	switch oneofNumber_SourceGateway {
-	case 1:
-		this.SourceGateway = NewPopulatedClaimGatewayRequest_AuthenticatedIdentifiers_(r, easy)
-	case 2:
-		this.SourceGateway = NewPopulatedClaimGatewayRequest_QRCode(r, easy)
-	}
-	v6 := NewPopulatedOrganizationOrUserIdentifiers(r, easy)
-	this.Collaborator = *v6
-	this.TargetGatewayID = randStringDeviceclaimingserver(r)
-	this.TargetGatewayServerAddress = randStringDeviceclaimingserver(r)
-	if r.Intn(5) != 0 {
-		this.CUPSRedirection = NewPopulatedCUPSRedirection(r, easy)
-	}
-	if !easy && r.Intn(10) != 0 {
-	}
-	return this
-}
-
-func NewPopulatedClaimGatewayRequest_AuthenticatedIdentifiers_(r randyDeviceclaimingserver, easy bool) *ClaimGatewayRequest_AuthenticatedIdentifiers_ {
-	this := &ClaimGatewayRequest_AuthenticatedIdentifiers_{}
-	this.AuthenticatedIdentifiers = NewPopulatedClaimGatewayRequest_AuthenticatedIdentifiers(r, easy)
-	return this
-}
-func NewPopulatedClaimGatewayRequest_QRCode(r randyDeviceclaimingserver, easy bool) *ClaimGatewayRequest_QRCode {
-	this := &ClaimGatewayRequest_QRCode{}
-	v7 := r.Intn(100)
-	this.QRCode = make([]byte, v7)
-	for i := 0; i < v7; i++ {
-		this.QRCode[i] = byte(r.Intn(256))
-	}
-	return this
-}
-func NewPopulatedClaimGatewayRequest_AuthenticatedIdentifiers(r randyDeviceclaimingserver, easy bool) *ClaimGatewayRequest_AuthenticatedIdentifiers {
-	this := &ClaimGatewayRequest_AuthenticatedIdentifiers{}
-	v8 := go_thethings_network_lorawan_stack_v3_pkg_types.NewPopulatedEUI64(r)
-	this.GatewayEUI = *v8
-	v9 := r.Intn(100)
-	this.AuthenticationCode = make([]byte, v9)
-	for i := 0; i < v9; i++ {
-		this.AuthenticationCode[i] = byte(r.Intn(256))
-	}
-	if !easy && r.Intn(10) != 0 {
-	}
-	return this
-}
-
-func NewPopulatedAuthorizeGatewayRequest(r randyDeviceclaimingserver, easy bool) *AuthorizeGatewayRequest {
-	this := &AuthorizeGatewayRequest{}
-	v10 := NewPopulatedGatewayIdentifiers(r, easy)
-	this.GatewayIdentifiers = *v10
-	this.APIKey = randStringDeviceclaimingserver(r)
-	if !easy && r.Intn(10) != 0 {
-	}
-	return this
-}
-
-type randyDeviceclaimingserver interface {
-	Float32() float32
-	Float64() float64
-	Int63() int64
-	Int31() int32
-	Uint32() uint32
-	Intn(n int) int
-}
-
-func randUTF8RuneDeviceclaimingserver(r randyDeviceclaimingserver) rune {
-	ru := r.Intn(62)
-	if ru < 10 {
-		return rune(ru + 48)
-	} else if ru < 36 {
-		return rune(ru + 55)
-	}
-	return rune(ru + 61)
-}
-func randStringDeviceclaimingserver(r randyDeviceclaimingserver) string {
-	v11 := r.Intn(100)
-	tmps := make([]rune, v11)
-	for i := 0; i < v11; i++ {
-		tmps[i] = randUTF8RuneDeviceclaimingserver(r)
-	}
-	return string(tmps)
-}
-func randUnrecognizedDeviceclaimingserver(r randyDeviceclaimingserver, maxFieldNumber int) (dAtA []byte) {
-	l := r.Intn(5)
-	for i := 0; i < l; i++ {
-		wire := r.Intn(4)
-		if wire == 3 {
-			wire = 5
-		}
-		fieldNumber := maxFieldNumber + r.Intn(100)
-		dAtA = randFieldDeviceclaimingserver(dAtA, r, fieldNumber, wire)
-	}
-	return dAtA
-}
-func randFieldDeviceclaimingserver(dAtA []byte, r randyDeviceclaimingserver, fieldNumber int, wire int) []byte {
-	key := uint32(fieldNumber)<<3 | uint32(wire)
-	switch wire {
-	case 0:
-		dAtA = encodeVarintPopulateDeviceclaimingserver(dAtA, uint64(key))
-		v12 := r.Int63()
-		if r.Intn(2) == 0 {
-			v12 *= -1
-		}
-		dAtA = encodeVarintPopulateDeviceclaimingserver(dAtA, uint64(v12))
-	case 1:
-		dAtA = encodeVarintPopulateDeviceclaimingserver(dAtA, uint64(key))
-		dAtA = append(dAtA, byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)))
-	case 2:
-		dAtA = encodeVarintPopulateDeviceclaimingserver(dAtA, uint64(key))
-		ll := r.Intn(100)
-		dAtA = encodeVarintPopulateDeviceclaimingserver(dAtA, uint64(ll))
-		for j := 0; j < ll; j++ {
-			dAtA = append(dAtA, byte(r.Intn(256)))
-		}
-	default:
-		dAtA = encodeVarintPopulateDeviceclaimingserver(dAtA, uint64(key))
-		dAtA = append(dAtA, byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)))
-	}
-	return dAtA
-}
-func encodeVarintPopulateDeviceclaimingserver(dAtA []byte, v uint64) []byte {
-	for v >= 1<<7 {
-		dAtA = append(dAtA, uint8(v&0x7f|0x80))
-		v >>= 7
-	}
-	dAtA = append(dAtA, uint8(v))
-	return dAtA
-}
-func (m *ClaimEndDeviceRequest) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.SourceDevice != nil {
-		n += m.SourceDevice.Size()
-	}
-	l = m.TargetApplicationIDs.Size()
-	n += 1 + l + sovDeviceclaimingserver(uint64(l))
-	l = len(m.TargetDeviceID)
-	if l > 0 {
-		n += 1 + l + sovDeviceclaimingserver(uint64(l))
-	}
-	if m.InvalidateAuthenticationCode {
-		n += 2
-	}
-	l = len(m.TargetNetworkServerAddress)
-	if l > 0 {
-		n += 1 + l + sovDeviceclaimingserver(uint64(l))
-	}
-	l = len(m.TargetNetworkServerKEKLabel)
-	if l > 0 {
-		n += 1 + l + sovDeviceclaimingserver(uint64(l))
-	}
-	l = len(m.TargetApplicationServerAddress)
-	if l > 0 {
-		n += 1 + l + sovDeviceclaimingserver(uint64(l))
-	}
-	l = len(m.TargetApplicationServerKEKLabel)
-	if l > 0 {
-		n += 1 + l + sovDeviceclaimingserver(uint64(l))
-	}
-	l = len(m.TargetApplicationServerID)
-	if l > 0 {
-		n += 1 + l + sovDeviceclaimingserver(uint64(l))
-	}
-	if m.TargetNetID != nil {
-		l = m.TargetNetID.Size()
-		n += 1 + l + sovDeviceclaimingserver(uint64(l))
-	}
-	return n
-}
-
-func (m *ClaimEndDeviceRequest_AuthenticatedIdentifiers_) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.AuthenticatedIdentifiers != nil {
-		l = m.AuthenticatedIdentifiers.Size()
-		n += 1 + l + sovDeviceclaimingserver(uint64(l))
-	}
-	return n
-}
-func (m *ClaimEndDeviceRequest_QRCode) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.QRCode != nil {
-		l = len(m.QRCode)
-		n += 1 + l + sovDeviceclaimingserver(uint64(l))
-	}
-	return n
-}
-func (m *ClaimEndDeviceRequest_AuthenticatedIdentifiers) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = m.JoinEUI.Size()
-	n += 1 + l + sovDeviceclaimingserver(uint64(l))
-	l = m.DevEUI.Size()
-	n += 1 + l + sovDeviceclaimingserver(uint64(l))
-	l = len(m.AuthenticationCode)
-	if l > 0 {
-		n += 1 + l + sovDeviceclaimingserver(uint64(l))
-	}
-	return n
-}
-
-func (m *AuthorizeApplicationRequest) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = m.ApplicationIdentifiers.Size()
-	n += 1 + l + sovDeviceclaimingserver(uint64(l))
-	l = len(m.APIKey)
-	if l > 0 {
-		n += 1 + l + sovDeviceclaimingserver(uint64(l))
-	}
-	return n
-}
-
-func (m *CUPSRedirection) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.TargetCUPSURI)
-	if l > 0 {
-		n += 1 + l + sovDeviceclaimingserver(uint64(l))
-	}
-	l = len(m.CurrentGatewayKey)
-	if l > 0 {
-		n += 1 + l + sovDeviceclaimingserver(uint64(l))
-	}
-	return n
-}
-
-func (m *ClaimGatewayRequest) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.SourceGateway != nil {
-		n += m.SourceGateway.Size()
-	}
-	l = m.Collaborator.Size()
-	n += 1 + l + sovDeviceclaimingserver(uint64(l))
-	l = len(m.TargetGatewayID)
-	if l > 0 {
-		n += 1 + l + sovDeviceclaimingserver(uint64(l))
-	}
-	l = len(m.TargetGatewayServerAddress)
-	if l > 0 {
-		n += 1 + l + sovDeviceclaimingserver(uint64(l))
-	}
-	if m.CUPSRedirection != nil {
-		l = m.CUPSRedirection.Size()
-		n += 1 + l + sovDeviceclaimingserver(uint64(l))
-	}
-	return n
-}
-
-func (m *ClaimGatewayRequest_AuthenticatedIdentifiers_) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.AuthenticatedIdentifiers != nil {
-		l = m.AuthenticatedIdentifiers.Size()
-		n += 1 + l + sovDeviceclaimingserver(uint64(l))
-	}
-	return n
-}
-func (m *ClaimGatewayRequest_QRCode) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.QRCode != nil {
-		l = len(m.QRCode)
-		n += 1 + l + sovDeviceclaimingserver(uint64(l))
-	}
-	return n
-}
-func (m *ClaimGatewayRequest_AuthenticatedIdentifiers) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = m.GatewayEUI.Size()
-	n += 1 + l + sovDeviceclaimingserver(uint64(l))
-	l = len(m.AuthenticationCode)
-	if l > 0 {
-		n += 1 + l + sovDeviceclaimingserver(uint64(l))
-	}
-	return n
-}
-
-func (m *AuthorizeGatewayRequest) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = m.GatewayIdentifiers.Size()
-	n += 1 + l + sovDeviceclaimingserver(uint64(l))
-	l = len(m.APIKey)
-	if l > 0 {
-		n += 1 + l + sovDeviceclaimingserver(uint64(l))
-	}
-	return n
-}
-
-func sovDeviceclaimingserver(x uint64) (n int) {
-	return (math_bits.Len64(x|1) + 6) / 7
-}
-func sozDeviceclaimingserver(x uint64) (n int) {
-	return sovDeviceclaimingserver((x << 1) ^ uint64((int64(x) >> 63)))
-}
 func (this *ClaimEndDeviceRequest) String() string {
 	if this == nil {
 		return "nil"
 	}
 	s := strings.Join([]string{`&ClaimEndDeviceRequest{`,
 		`SourceDevice:` + fmt.Sprintf("%v", this.SourceDevice) + `,`,
-		`TargetApplicationIDs:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.TargetApplicationIDs), "ApplicationIdentifiers", "ApplicationIdentifiers", 1), `&`, ``, 1) + `,`,
-		`TargetDeviceID:` + fmt.Sprintf("%v", this.TargetDeviceID) + `,`,
-		`InvalidateAuthenticationCode:` + fmt.Sprintf("%v", this.InvalidateAuthenticationCode) + `,`,
+		`TargetApplicationIds:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.TargetApplicationIds), "ApplicationIdentifiers", "ApplicationIdentifiers", 1), `&`, ``, 1) + `,`,
+		`TargetDeviceId:` + fmt.Sprintf("%v", this.TargetDeviceId) + `,`,
 		`TargetNetworkServerAddress:` + fmt.Sprintf("%v", this.TargetNetworkServerAddress) + `,`,
-		`TargetNetworkServerKEKLabel:` + fmt.Sprintf("%v", this.TargetNetworkServerKEKLabel) + `,`,
+		`TargetNetworkServerKekLabel:` + fmt.Sprintf("%v", this.TargetNetworkServerKekLabel) + `,`,
 		`TargetApplicationServerAddress:` + fmt.Sprintf("%v", this.TargetApplicationServerAddress) + `,`,
-		`TargetApplicationServerKEKLabel:` + fmt.Sprintf("%v", this.TargetApplicationServerKEKLabel) + `,`,
-		`TargetApplicationServerID:` + fmt.Sprintf("%v", this.TargetApplicationServerID) + `,`,
-		`TargetNetID:` + fmt.Sprintf("%v", this.TargetNetID) + `,`,
+		`TargetApplicationServerKekLabel:` + fmt.Sprintf("%v", this.TargetApplicationServerKekLabel) + `,`,
+		`TargetApplicationServerId:` + fmt.Sprintf("%v", this.TargetApplicationServerId) + `,`,
+		`TargetNetId:` + fmt.Sprintf("%v", this.TargetNetId) + `,`,
+		`InvalidateAuthenticationCode:` + fmt.Sprintf("%v", this.InvalidateAuthenticationCode) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2258,12 +1522,12 @@ func (this *ClaimEndDeviceRequest_AuthenticatedIdentifiers_) String() string {
 	}, "")
 	return s
 }
-func (this *ClaimEndDeviceRequest_QRCode) String() string {
+func (this *ClaimEndDeviceRequest_QrCode) String() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&ClaimEndDeviceRequest_QRCode{`,
-		`QRCode:` + fmt.Sprintf("%v", this.QRCode) + `,`,
+	s := strings.Join([]string{`&ClaimEndDeviceRequest_QrCode{`,
+		`QrCode:` + fmt.Sprintf("%v", this.QrCode) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2273,8 +1537,8 @@ func (this *ClaimEndDeviceRequest_AuthenticatedIdentifiers) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&ClaimEndDeviceRequest_AuthenticatedIdentifiers{`,
-		`JoinEUI:` + fmt.Sprintf("%v", this.JoinEUI) + `,`,
-		`DevEUI:` + fmt.Sprintf("%v", this.DevEUI) + `,`,
+		`JoinEui:` + fmt.Sprintf("%v", this.JoinEui) + `,`,
+		`DevEui:` + fmt.Sprintf("%v", this.DevEui) + `,`,
 		`AuthenticationCode:` + fmt.Sprintf("%v", this.AuthenticationCode) + `,`,
 		`}`,
 	}, "")
@@ -2286,7 +1550,7 @@ func (this *AuthorizeApplicationRequest) String() string {
 	}
 	s := strings.Join([]string{`&AuthorizeApplicationRequest{`,
 		`ApplicationIdentifiers:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.ApplicationIdentifiers), "ApplicationIdentifiers", "ApplicationIdentifiers", 1), `&`, ``, 1) + `,`,
-		`APIKey:` + fmt.Sprintf("%v", this.APIKey) + `,`,
+		`ApiKey:` + fmt.Sprintf("%v", this.ApiKey) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2296,8 +1560,41 @@ func (this *CUPSRedirection) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&CUPSRedirection{`,
-		`TargetCUPSURI:` + fmt.Sprintf("%v", this.TargetCUPSURI) + `,`,
+		`TargetCupsUri:` + fmt.Sprintf("%v", this.TargetCupsUri) + `,`,
 		`CurrentGatewayKey:` + fmt.Sprintf("%v", this.CurrentGatewayKey) + `,`,
+		`TargetCupsTrust:` + fmt.Sprintf("%v", this.TargetCupsTrust) + `,`,
+		`GatewayCredentials:` + fmt.Sprintf("%v", this.GatewayCredentials) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CUPSRedirection_ClientTls) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CUPSRedirection_ClientTls{`,
+		`ClientTls:` + strings.Replace(fmt.Sprintf("%v", this.ClientTls), "CUPSRedirection_ClientTLS", "CUPSRedirection_ClientTLS", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CUPSRedirection_AuthToken) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CUPSRedirection_AuthToken{`,
+		`AuthToken:` + fmt.Sprintf("%v", this.AuthToken) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CUPSRedirection_ClientTLS) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CUPSRedirection_ClientTLS{`,
+		`Cert:` + fmt.Sprintf("%v", this.Cert) + `,`,
+		`Key:` + fmt.Sprintf("%v", this.Key) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2309,9 +1606,10 @@ func (this *ClaimGatewayRequest) String() string {
 	s := strings.Join([]string{`&ClaimGatewayRequest{`,
 		`SourceGateway:` + fmt.Sprintf("%v", this.SourceGateway) + `,`,
 		`Collaborator:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.Collaborator), "OrganizationOrUserIdentifiers", "OrganizationOrUserIdentifiers", 1), `&`, ``, 1) + `,`,
-		`TargetGatewayID:` + fmt.Sprintf("%v", this.TargetGatewayID) + `,`,
+		`TargetGatewayId:` + fmt.Sprintf("%v", this.TargetGatewayId) + `,`,
 		`TargetGatewayServerAddress:` + fmt.Sprintf("%v", this.TargetGatewayServerAddress) + `,`,
-		`CUPSRedirection:` + strings.Replace(this.CUPSRedirection.String(), "CUPSRedirection", "CUPSRedirection", 1) + `,`,
+		`CupsRedirection:` + strings.Replace(this.CupsRedirection.String(), "CUPSRedirection", "CUPSRedirection", 1) + `,`,
+		`TargetFrequencyPlanId:` + fmt.Sprintf("%v", this.TargetFrequencyPlanId) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2326,12 +1624,12 @@ func (this *ClaimGatewayRequest_AuthenticatedIdentifiers_) String() string {
 	}, "")
 	return s
 }
-func (this *ClaimGatewayRequest_QRCode) String() string {
+func (this *ClaimGatewayRequest_QrCode) String() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&ClaimGatewayRequest_QRCode{`,
-		`QRCode:` + fmt.Sprintf("%v", this.QRCode) + `,`,
+	s := strings.Join([]string{`&ClaimGatewayRequest_QrCode{`,
+		`QrCode:` + fmt.Sprintf("%v", this.QrCode) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2341,7 +1639,7 @@ func (this *ClaimGatewayRequest_AuthenticatedIdentifiers) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&ClaimGatewayRequest_AuthenticatedIdentifiers{`,
-		`GatewayEUI:` + fmt.Sprintf("%v", this.GatewayEUI) + `,`,
+		`GatewayEui:` + fmt.Sprintf("%v", this.GatewayEui) + `,`,
 		`AuthenticationCode:` + fmt.Sprintf("%v", this.AuthenticationCode) + `,`,
 		`}`,
 	}, "")
@@ -2353,7 +1651,7 @@ func (this *AuthorizeGatewayRequest) String() string {
 	}
 	s := strings.Join([]string{`&AuthorizeGatewayRequest{`,
 		`GatewayIdentifiers:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.GatewayIdentifiers), "GatewayIdentifiers", "GatewayIdentifiers", 1), `&`, ``, 1) + `,`,
-		`APIKey:` + fmt.Sprintf("%v", this.APIKey) + `,`,
+		`ApiKey:` + fmt.Sprintf("%v", this.ApiKey) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2366,1366 +1664,3 @@ func valueToStringDeviceclaimingserver(v interface{}) string {
 	pv := reflect.Indirect(rv).Interface()
 	return fmt.Sprintf("*%v", pv)
 }
-func (m *ClaimEndDeviceRequest) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowDeviceclaimingserver
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: ClaimEndDeviceRequest: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: ClaimEndDeviceRequest: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field AuthenticatedIdentifiers", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowDeviceclaimingserver
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthDeviceclaimingserver
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthDeviceclaimingserver
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &ClaimEndDeviceRequest_AuthenticatedIdentifiers{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.SourceDevice = &ClaimEndDeviceRequest_AuthenticatedIdentifiers_{v}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field QRCode", wireType)
-			}
-			var byteLen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowDeviceclaimingserver
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				byteLen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if byteLen < 0 {
-				return ErrInvalidLengthDeviceclaimingserver
-			}
-			postIndex := iNdEx + byteLen
-			if postIndex < 0 {
-				return ErrInvalidLengthDeviceclaimingserver
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := make([]byte, postIndex-iNdEx)
-			copy(v, dAtA[iNdEx:postIndex])
-			m.SourceDevice = &ClaimEndDeviceRequest_QRCode{v}
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field TargetApplicationIDs", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowDeviceclaimingserver
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthDeviceclaimingserver
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthDeviceclaimingserver
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := m.TargetApplicationIDs.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 4:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field TargetDeviceID", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowDeviceclaimingserver
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthDeviceclaimingserver
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthDeviceclaimingserver
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.TargetDeviceID = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 5:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field InvalidateAuthenticationCode", wireType)
-			}
-			var v int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowDeviceclaimingserver
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				v |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			m.InvalidateAuthenticationCode = bool(v != 0)
-		case 7:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field TargetNetworkServerAddress", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowDeviceclaimingserver
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthDeviceclaimingserver
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthDeviceclaimingserver
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.TargetNetworkServerAddress = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 8:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field TargetNetworkServerKEKLabel", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowDeviceclaimingserver
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthDeviceclaimingserver
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthDeviceclaimingserver
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.TargetNetworkServerKEKLabel = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 9:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field TargetApplicationServerAddress", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowDeviceclaimingserver
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthDeviceclaimingserver
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthDeviceclaimingserver
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.TargetApplicationServerAddress = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 10:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field TargetApplicationServerKEKLabel", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowDeviceclaimingserver
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthDeviceclaimingserver
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthDeviceclaimingserver
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.TargetApplicationServerKEKLabel = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 11:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field TargetApplicationServerID", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowDeviceclaimingserver
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthDeviceclaimingserver
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthDeviceclaimingserver
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.TargetApplicationServerID = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 13:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field TargetNetID", wireType)
-			}
-			var byteLen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowDeviceclaimingserver
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				byteLen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if byteLen < 0 {
-				return ErrInvalidLengthDeviceclaimingserver
-			}
-			postIndex := iNdEx + byteLen
-			if postIndex < 0 {
-				return ErrInvalidLengthDeviceclaimingserver
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			var v go_thethings_network_lorawan_stack_v3_pkg_types.NetID
-			m.TargetNetID = &v
-			if err := m.TargetNetID.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipDeviceclaimingserver(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthDeviceclaimingserver
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthDeviceclaimingserver
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *ClaimEndDeviceRequest_AuthenticatedIdentifiers) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowDeviceclaimingserver
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: AuthenticatedIdentifiers: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: AuthenticatedIdentifiers: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field JoinEUI", wireType)
-			}
-			var byteLen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowDeviceclaimingserver
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				byteLen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if byteLen < 0 {
-				return ErrInvalidLengthDeviceclaimingserver
-			}
-			postIndex := iNdEx + byteLen
-			if postIndex < 0 {
-				return ErrInvalidLengthDeviceclaimingserver
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := m.JoinEUI.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field DevEUI", wireType)
-			}
-			var byteLen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowDeviceclaimingserver
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				byteLen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if byteLen < 0 {
-				return ErrInvalidLengthDeviceclaimingserver
-			}
-			postIndex := iNdEx + byteLen
-			if postIndex < 0 {
-				return ErrInvalidLengthDeviceclaimingserver
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := m.DevEUI.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field AuthenticationCode", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowDeviceclaimingserver
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthDeviceclaimingserver
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthDeviceclaimingserver
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.AuthenticationCode = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipDeviceclaimingserver(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthDeviceclaimingserver
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthDeviceclaimingserver
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *AuthorizeApplicationRequest) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowDeviceclaimingserver
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: AuthorizeApplicationRequest: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: AuthorizeApplicationRequest: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ApplicationIdentifiers", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowDeviceclaimingserver
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthDeviceclaimingserver
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthDeviceclaimingserver
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := m.ApplicationIdentifiers.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field APIKey", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowDeviceclaimingserver
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthDeviceclaimingserver
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthDeviceclaimingserver
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.APIKey = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipDeviceclaimingserver(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthDeviceclaimingserver
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthDeviceclaimingserver
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *CUPSRedirection) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowDeviceclaimingserver
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: CUPSRedirection: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: CUPSRedirection: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field TargetCUPSURI", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowDeviceclaimingserver
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthDeviceclaimingserver
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthDeviceclaimingserver
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.TargetCUPSURI = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field CurrentGatewayKey", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowDeviceclaimingserver
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthDeviceclaimingserver
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthDeviceclaimingserver
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.CurrentGatewayKey = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipDeviceclaimingserver(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthDeviceclaimingserver
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthDeviceclaimingserver
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *ClaimGatewayRequest) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowDeviceclaimingserver
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: ClaimGatewayRequest: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: ClaimGatewayRequest: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field AuthenticatedIdentifiers", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowDeviceclaimingserver
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthDeviceclaimingserver
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthDeviceclaimingserver
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &ClaimGatewayRequest_AuthenticatedIdentifiers{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.SourceGateway = &ClaimGatewayRequest_AuthenticatedIdentifiers_{v}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field QRCode", wireType)
-			}
-			var byteLen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowDeviceclaimingserver
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				byteLen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if byteLen < 0 {
-				return ErrInvalidLengthDeviceclaimingserver
-			}
-			postIndex := iNdEx + byteLen
-			if postIndex < 0 {
-				return ErrInvalidLengthDeviceclaimingserver
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := make([]byte, postIndex-iNdEx)
-			copy(v, dAtA[iNdEx:postIndex])
-			m.SourceGateway = &ClaimGatewayRequest_QRCode{v}
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Collaborator", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowDeviceclaimingserver
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthDeviceclaimingserver
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthDeviceclaimingserver
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := m.Collaborator.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 4:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field TargetGatewayID", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowDeviceclaimingserver
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthDeviceclaimingserver
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthDeviceclaimingserver
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.TargetGatewayID = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 5:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field TargetGatewayServerAddress", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowDeviceclaimingserver
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthDeviceclaimingserver
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthDeviceclaimingserver
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.TargetGatewayServerAddress = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 6:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field CUPSRedirection", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowDeviceclaimingserver
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthDeviceclaimingserver
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthDeviceclaimingserver
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.CUPSRedirection == nil {
-				m.CUPSRedirection = &CUPSRedirection{}
-			}
-			if err := m.CUPSRedirection.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipDeviceclaimingserver(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthDeviceclaimingserver
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthDeviceclaimingserver
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *ClaimGatewayRequest_AuthenticatedIdentifiers) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowDeviceclaimingserver
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: AuthenticatedIdentifiers: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: AuthenticatedIdentifiers: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field GatewayEUI", wireType)
-			}
-			var byteLen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowDeviceclaimingserver
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				byteLen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if byteLen < 0 {
-				return ErrInvalidLengthDeviceclaimingserver
-			}
-			postIndex := iNdEx + byteLen
-			if postIndex < 0 {
-				return ErrInvalidLengthDeviceclaimingserver
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := m.GatewayEUI.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field AuthenticationCode", wireType)
-			}
-			var byteLen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowDeviceclaimingserver
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				byteLen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if byteLen < 0 {
-				return ErrInvalidLengthDeviceclaimingserver
-			}
-			postIndex := iNdEx + byteLen
-			if postIndex < 0 {
-				return ErrInvalidLengthDeviceclaimingserver
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.AuthenticationCode = append(m.AuthenticationCode[:0], dAtA[iNdEx:postIndex]...)
-			if m.AuthenticationCode == nil {
-				m.AuthenticationCode = []byte{}
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipDeviceclaimingserver(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthDeviceclaimingserver
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthDeviceclaimingserver
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *AuthorizeGatewayRequest) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowDeviceclaimingserver
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: AuthorizeGatewayRequest: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: AuthorizeGatewayRequest: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field GatewayIdentifiers", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowDeviceclaimingserver
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthDeviceclaimingserver
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthDeviceclaimingserver
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := m.GatewayIdentifiers.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field APIKey", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowDeviceclaimingserver
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthDeviceclaimingserver
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthDeviceclaimingserver
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.APIKey = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipDeviceclaimingserver(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthDeviceclaimingserver
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthDeviceclaimingserver
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func skipDeviceclaimingserver(dAtA []byte) (n int, err error) {
-	l := len(dAtA)
-	iNdEx := 0
-	depth := 0
-	for iNdEx < l {
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return 0, ErrIntOverflowDeviceclaimingserver
-			}
-			if iNdEx >= l {
-				return 0, io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		wireType := int(wire & 0x7)
-		switch wireType {
-		case 0:
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return 0, ErrIntOverflowDeviceclaimingserver
-				}
-				if iNdEx >= l {
-					return 0, io.ErrUnexpectedEOF
-				}
-				iNdEx++
-				if dAtA[iNdEx-1] < 0x80 {
-					break
-				}
-			}
-		case 1:
-			iNdEx += 8
-		case 2:
-			var length int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return 0, ErrIntOverflowDeviceclaimingserver
-				}
-				if iNdEx >= l {
-					return 0, io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				length |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if length < 0 {
-				return 0, ErrInvalidLengthDeviceclaimingserver
-			}
-			iNdEx += length
-		case 3:
-			depth++
-		case 4:
-			if depth == 0 {
-				return 0, ErrUnexpectedEndOfGroupDeviceclaimingserver
-			}
-			depth--
-		case 5:
-			iNdEx += 4
-		default:
-			return 0, fmt.Errorf("proto: illegal wireType %d", wireType)
-		}
-		if iNdEx < 0 {
-			return 0, ErrInvalidLengthDeviceclaimingserver
-		}
-		if depth == 0 {
-			return iNdEx, nil
-		}
-	}
-	return 0, io.ErrUnexpectedEOF
-}
-
-var (
-	ErrInvalidLengthDeviceclaimingserver        = fmt.Errorf("proto: negative length found during unmarshaling")
-	ErrIntOverflowDeviceclaimingserver          = fmt.Errorf("proto: integer overflow")
-	ErrUnexpectedEndOfGroupDeviceclaimingserver = fmt.Errorf("proto: unexpected end of group")
-)

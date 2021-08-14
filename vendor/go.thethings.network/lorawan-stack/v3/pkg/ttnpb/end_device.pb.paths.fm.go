@@ -101,21 +101,6 @@ var MACParametersFieldPathsTopLevel = []string{
 	"rx2_frequency",
 	"uplink_dwell_time",
 }
-var EndDeviceVersionIdentifiersFieldPathsNested = []string{
-	"band_id",
-	"brand_id",
-	"firmware_version",
-	"hardware_version",
-	"model_id",
-}
-
-var EndDeviceVersionIdentifiersFieldPathsTopLevel = []string{
-	"band_id",
-	"brand_id",
-	"firmware_version",
-	"hardware_version",
-	"model_id",
-}
 var EndDeviceVersionFieldPathsNested = []string{
 	"default_formatters",
 	"default_formatters.down_formatter",
@@ -136,6 +121,8 @@ var EndDeviceVersionFieldPathsNested = []string{
 	"default_mac_settings.desired_beacon_frequency.value",
 	"default_mac_settings.desired_max_duty_cycle",
 	"default_mac_settings.desired_max_duty_cycle.value",
+	"default_mac_settings.desired_max_eirp",
+	"default_mac_settings.desired_max_eirp.value",
 	"default_mac_settings.desired_ping_slot_data_rate_index",
 	"default_mac_settings.desired_ping_slot_data_rate_index.value",
 	"default_mac_settings.desired_ping_slot_frequency",
@@ -220,6 +207,8 @@ var MACSettingsFieldPathsNested = []string{
 	"desired_beacon_frequency.value",
 	"desired_max_duty_cycle",
 	"desired_max_duty_cycle.value",
+	"desired_max_eirp",
+	"desired_max_eirp.value",
 	"desired_ping_slot_data_rate_index",
 	"desired_ping_slot_data_rate_index.value",
 	"desired_ping_slot_frequency",
@@ -268,6 +257,7 @@ var MACSettingsFieldPathsTopLevel = []string{
 	"desired_adr_ack_limit_exponent",
 	"desired_beacon_frequency",
 	"desired_max_duty_cycle",
+	"desired_max_eirp",
 	"desired_ping_slot_data_rate_index",
 	"desired_ping_slot_frequency",
 	"desired_rx1_data_rate_offset",
@@ -458,6 +448,7 @@ var EndDeviceAuthenticationCodeFieldPathsTopLevel = []string{
 	"value",
 }
 var EndDeviceFieldPathsNested = []string{
+	"activated_at",
 	"application_server_address",
 	"application_server_id",
 	"application_server_kek_label",
@@ -506,6 +497,8 @@ var EndDeviceFieldPathsNested = []string{
 	"mac_settings.desired_beacon_frequency.value",
 	"mac_settings.desired_max_duty_cycle",
 	"mac_settings.desired_max_duty_cycle.value",
+	"mac_settings.desired_max_eirp",
+	"mac_settings.desired_max_eirp.value",
 	"mac_settings.desired_ping_slot_data_rate_index",
 	"mac_settings.desired_ping_slot_data_rate_index.value",
 	"mac_settings.desired_ping_slot_frequency",
@@ -901,6 +894,7 @@ var EndDeviceFieldPathsNested = []string{
 }
 
 var EndDeviceFieldPathsTopLevel = []string{
+	"activated_at",
 	"application_server_address",
 	"application_server_id",
 	"application_server_kek_label",
@@ -969,6 +963,7 @@ var DevAddrPrefixFieldPathsTopLevel = []string{
 }
 var CreateEndDeviceRequestFieldPathsNested = []string{
 	"end_device",
+	"end_device.activated_at",
 	"end_device.application_server_address",
 	"end_device.application_server_id",
 	"end_device.application_server_kek_label",
@@ -1017,6 +1012,8 @@ var CreateEndDeviceRequestFieldPathsNested = []string{
 	"end_device.mac_settings.desired_beacon_frequency.value",
 	"end_device.mac_settings.desired_max_duty_cycle",
 	"end_device.mac_settings.desired_max_duty_cycle.value",
+	"end_device.mac_settings.desired_max_eirp",
+	"end_device.mac_settings.desired_max_eirp.value",
 	"end_device.mac_settings.desired_ping_slot_data_rate_index",
 	"end_device.mac_settings.desired_ping_slot_data_rate_index.value",
 	"end_device.mac_settings.desired_ping_slot_frequency",
@@ -1416,6 +1413,7 @@ var CreateEndDeviceRequestFieldPathsTopLevel = []string{
 }
 var UpdateEndDeviceRequestFieldPathsNested = []string{
 	"end_device",
+	"end_device.activated_at",
 	"end_device.application_server_address",
 	"end_device.application_server_id",
 	"end_device.application_server_kek_label",
@@ -1464,6 +1462,8 @@ var UpdateEndDeviceRequestFieldPathsNested = []string{
 	"end_device.mac_settings.desired_beacon_frequency.value",
 	"end_device.mac_settings.desired_max_duty_cycle",
 	"end_device.mac_settings.desired_max_duty_cycle.value",
+	"end_device.mac_settings.desired_max_eirp",
+	"end_device.mac_settings.desired_max_eirp.value",
 	"end_device.mac_settings.desired_ping_slot_data_rate_index",
 	"end_device.mac_settings.desired_ping_slot_data_rate_index.value",
 	"end_device.mac_settings.desired_ping_slot_frequency",
@@ -1905,6 +1905,7 @@ var ListEndDevicesRequestFieldPathsTopLevel = []string{
 }
 var SetEndDeviceRequestFieldPathsNested = []string{
 	"end_device",
+	"end_device.activated_at",
 	"end_device.application_server_address",
 	"end_device.application_server_id",
 	"end_device.application_server_kek_label",
@@ -1953,6 +1954,8 @@ var SetEndDeviceRequestFieldPathsNested = []string{
 	"end_device.mac_settings.desired_beacon_frequency.value",
 	"end_device.mac_settings.desired_max_duty_cycle",
 	"end_device.mac_settings.desired_max_duty_cycle.value",
+	"end_device.mac_settings.desired_max_eirp",
+	"end_device.mac_settings.desired_max_eirp.value",
 	"end_device.mac_settings.desired_ping_slot_data_rate_index",
 	"end_device.mac_settings.desired_ping_slot_data_rate_index.value",
 	"end_device.mac_settings.desired_ping_slot_frequency",
@@ -2369,6 +2372,7 @@ var ResetAndGetEndDeviceRequestFieldPathsTopLevel = []string{
 }
 var EndDeviceTemplateFieldPathsNested = []string{
 	"end_device",
+	"end_device.activated_at",
 	"end_device.application_server_address",
 	"end_device.application_server_id",
 	"end_device.application_server_kek_label",
@@ -2417,6 +2421,8 @@ var EndDeviceTemplateFieldPathsNested = []string{
 	"end_device.mac_settings.desired_beacon_frequency.value",
 	"end_device.mac_settings.desired_max_duty_cycle",
 	"end_device.mac_settings.desired_max_duty_cycle.value",
+	"end_device.mac_settings.desired_max_eirp",
+	"end_device.mac_settings.desired_max_eirp.value",
 	"end_device.mac_settings.desired_ping_slot_data_rate_index",
 	"end_device.mac_settings.desired_ping_slot_data_rate_index.value",
 	"end_device.mac_settings.desired_ping_slot_frequency",

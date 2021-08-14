@@ -52,7 +52,7 @@ func (m *SessionKeyRequest) ValidateFields(paths ...string) error {
 		switch name {
 		case "session_key_id":
 
-			if len(m.GetSessionKeyID()) > 2048 {
+			if len(m.GetSessionKeyId()) > 2048 {
 				return SessionKeyRequestValidationError{
 					field:  "session_key_id",
 					reason: "value length must be at most 2048 bytes",
@@ -60,9 +60,9 @@ func (m *SessionKeyRequest) ValidateFields(paths ...string) error {
 			}
 
 		case "dev_eui":
-			// no validation rules for DevEUI
+			// no validation rules for DevEui
 		case "join_eui":
-			// no validation rules for JoinEUI
+			// no validation rules for JoinEui
 		default:
 			return SessionKeyRequestValidationError{
 				field:  name,
@@ -364,7 +364,7 @@ func (m *CryptoServicePayloadRequest) ValidateFields(paths ...string) error {
 
 		case "lorawan_version":
 
-			if _, ok := MACVersion_name[int32(m.GetLoRaWANVersion())]; !ok {
+			if _, ok := MACVersion_name[int32(m.GetLorawanVersion())]; !ok {
 				return CryptoServicePayloadRequestValidationError{
 					field:  "lorawan_version",
 					reason: "value must be one of the defined enum values",
@@ -382,14 +382,14 @@ func (m *CryptoServicePayloadRequest) ValidateFields(paths ...string) error {
 
 		case "provisioner_id":
 
-			if utf8.RuneCountInString(m.GetProvisionerID()) > 36 {
+			if utf8.RuneCountInString(m.GetProvisionerId()) > 36 {
 				return CryptoServicePayloadRequestValidationError{
 					field:  "provisioner_id",
 					reason: "value length must be at most 36 runes",
 				}
 			}
 
-			if !_CryptoServicePayloadRequest_ProvisionerID_Pattern.MatchString(m.GetProvisionerID()) {
+			if !_CryptoServicePayloadRequest_ProvisionerId_Pattern.MatchString(m.GetProvisionerId()) {
 				return CryptoServicePayloadRequestValidationError{
 					field:  "provisioner_id",
 					reason: "value does not match regex pattern \"^[a-z0-9](?:[-]?[a-z0-9]){2,}$|^$\"",
@@ -475,7 +475,7 @@ var _ interface {
 	ErrorName() string
 } = CryptoServicePayloadRequestValidationError{}
 
-var _CryptoServicePayloadRequest_ProvisionerID_Pattern = regexp.MustCompile("^[a-z0-9](?:[-]?[a-z0-9]){2,}$|^$")
+var _CryptoServicePayloadRequest_ProvisionerId_Pattern = regexp.MustCompile("^[a-z0-9](?:[-]?[a-z0-9]){2,}$|^$")
 
 // ValidateFields checks the field values on CryptoServicePayloadResponse with
 // the rules defined in the proto definition for this message. If any rules
@@ -694,7 +694,7 @@ func (m *DeriveSessionKeysRequest) ValidateFields(paths ...string) error {
 
 		case "lorawan_version":
 
-			if _, ok := MACVersion_name[int32(m.GetLoRaWANVersion())]; !ok {
+			if _, ok := MACVersion_name[int32(m.GetLorawanVersion())]; !ok {
 				return DeriveSessionKeysRequestValidationError{
 					field:  "lorawan_version",
 					reason: "value must be one of the defined enum values",
@@ -706,17 +706,17 @@ func (m *DeriveSessionKeysRequest) ValidateFields(paths ...string) error {
 		case "dev_nonce":
 			// no validation rules for DevNonce
 		case "net_id":
-			// no validation rules for NetID
+			// no validation rules for NetId
 		case "provisioner_id":
 
-			if utf8.RuneCountInString(m.GetProvisionerID()) > 36 {
+			if utf8.RuneCountInString(m.GetProvisionerId()) > 36 {
 				return DeriveSessionKeysRequestValidationError{
 					field:  "provisioner_id",
 					reason: "value length must be at most 36 runes",
 				}
 			}
 
-			if !_DeriveSessionKeysRequest_ProvisionerID_Pattern.MatchString(m.GetProvisionerID()) {
+			if !_DeriveSessionKeysRequest_ProvisionerId_Pattern.MatchString(m.GetProvisionerId()) {
 				return DeriveSessionKeysRequestValidationError{
 					field:  "provisioner_id",
 					reason: "value does not match regex pattern \"^[a-z0-9](?:[-]?[a-z0-9]){2,}$|^$\"",
@@ -802,7 +802,7 @@ var _ interface {
 	ErrorName() string
 } = DeriveSessionKeysRequestValidationError{}
 
-var _DeriveSessionKeysRequest_ProvisionerID_Pattern = regexp.MustCompile("^[a-z0-9](?:[-]?[a-z0-9]){2,}$|^$")
+var _DeriveSessionKeysRequest_ProvisionerId_Pattern = regexp.MustCompile("^[a-z0-9](?:[-]?[a-z0-9]){2,}$|^$")
 
 // ValidateFields checks the field values on GetRootKeysRequest with the rules
 // defined in the proto definition for this message. If any rules are
@@ -833,14 +833,14 @@ func (m *GetRootKeysRequest) ValidateFields(paths ...string) error {
 
 		case "provisioner_id":
 
-			if utf8.RuneCountInString(m.GetProvisionerID()) > 36 {
+			if utf8.RuneCountInString(m.GetProvisionerId()) > 36 {
 				return GetRootKeysRequestValidationError{
 					field:  "provisioner_id",
 					reason: "value length must be at most 36 runes",
 				}
 			}
 
-			if !_GetRootKeysRequest_ProvisionerID_Pattern.MatchString(m.GetProvisionerID()) {
+			if !_GetRootKeysRequest_ProvisionerId_Pattern.MatchString(m.GetProvisionerId()) {
 				return GetRootKeysRequestValidationError{
 					field:  "provisioner_id",
 					reason: "value does not match regex pattern \"^[a-z0-9](?:[-]?[a-z0-9]){2,}$|^$\"",
@@ -925,7 +925,7 @@ var _ interface {
 	ErrorName() string
 } = GetRootKeysRequestValidationError{}
 
-var _GetRootKeysRequest_ProvisionerID_Pattern = regexp.MustCompile("^[a-z0-9](?:[-]?[a-z0-9]){2,}$|^$")
+var _GetRootKeysRequest_ProvisionerId_Pattern = regexp.MustCompile("^[a-z0-9](?:[-]?[a-z0-9]){2,}$|^$")
 
 // ValidateFields checks the field values on ProvisionEndDevicesRequest with
 // the rules defined in the proto definition for this message. If any rules
@@ -956,14 +956,14 @@ func (m *ProvisionEndDevicesRequest) ValidateFields(paths ...string) error {
 
 		case "provisioner_id":
 
-			if utf8.RuneCountInString(m.GetProvisionerID()) > 36 {
+			if utf8.RuneCountInString(m.GetProvisionerId()) > 36 {
 				return ProvisionEndDevicesRequestValidationError{
 					field:  "provisioner_id",
 					reason: "value length must be at most 36 runes",
 				}
 			}
 
-			if !_ProvisionEndDevicesRequest_ProvisionerID_Pattern.MatchString(m.GetProvisionerID()) {
+			if !_ProvisionEndDevicesRequest_ProvisionerId_Pattern.MatchString(m.GetProvisionerId()) {
 				return ProvisionEndDevicesRequestValidationError{
 					field:  "provisioner_id",
 					reason: "value does not match regex pattern \"^[a-z0-9](?:[-]?[a-z0-9]){2,}$\"",
@@ -1098,7 +1098,7 @@ var _ interface {
 	ErrorName() string
 } = ProvisionEndDevicesRequestValidationError{}
 
-var _ProvisionEndDevicesRequest_ProvisionerID_Pattern = regexp.MustCompile("^[a-z0-9](?:[-]?[a-z0-9]){2,}$")
+var _ProvisionEndDevicesRequest_ProvisionerId_Pattern = regexp.MustCompile("^[a-z0-9](?:[-]?[a-z0-9]){2,}$")
 
 // ValidateFields checks the field values on ApplicationActivationSettings with
 // the rules defined in the proto definition for this message. If any rules
@@ -1117,7 +1117,7 @@ func (m *ApplicationActivationSettings) ValidateFields(paths ...string) error {
 		switch name {
 		case "kek_label":
 
-			if utf8.RuneCountInString(m.GetKEKLabel()) > 2048 {
+			if utf8.RuneCountInString(m.GetKekLabel()) > 2048 {
 				return ApplicationActivationSettingsValidationError{
 					field:  "kek_label",
 					reason: "value length must be at most 2048 runes",
@@ -1126,7 +1126,7 @@ func (m *ApplicationActivationSettings) ValidateFields(paths ...string) error {
 
 		case "kek":
 
-			if v, ok := interface{}(m.GetKEK()).(interface{ ValidateFields(...string) error }); ok {
+			if v, ok := interface{}(m.GetKek()).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return ApplicationActivationSettingsValidationError{
 						field:  "kek",
@@ -1137,10 +1137,10 @@ func (m *ApplicationActivationSettings) ValidateFields(paths ...string) error {
 			}
 
 		case "home_net_id":
-			// no validation rules for HomeNetID
+			// no validation rules for HomeNetId
 		case "application_server_id":
 
-			if utf8.RuneCountInString(m.GetApplicationServerID()) > 100 {
+			if utf8.RuneCountInString(m.GetApplicationServerId()) > 100 {
 				return ApplicationActivationSettingsValidationError{
 					field:  "application_server_id",
 					reason: "value length must be at most 100 runes",
@@ -1243,7 +1243,7 @@ func (m *GetApplicationActivationSettingsRequest) ValidateFields(paths ...string
 
 		case "field_mask":
 
-			if v, ok := interface{}(&m.FieldMask).(interface{ ValidateFields(...string) error }); ok {
+			if v, ok := interface{}(m.GetFieldMask()).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return GetApplicationActivationSettingsRequestValidationError{
 						field:  "field_mask",
@@ -1361,7 +1361,7 @@ func (m *SetApplicationActivationSettingsRequest) ValidateFields(paths ...string
 
 		case "field_mask":
 
-			if v, ok := interface{}(&m.FieldMask).(interface{ ValidateFields(...string) error }); ok {
+			if v, ok := interface{}(m.GetFieldMask()).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return SetApplicationActivationSettingsRequestValidationError{
 						field:  "field_mask",
@@ -1548,7 +1548,7 @@ func (m *JoinEUIPrefix) ValidateFields(paths ...string) error {
 		_ = subs
 		switch name {
 		case "join_eui":
-			// no validation rules for JoinEUI
+			// no validation rules for JoinEui
 		case "length":
 			// no validation rules for Length
 		default:
@@ -1727,10 +1727,10 @@ func (m *ProvisionEndDevicesRequest_IdentifiersList) ValidateFields(paths ...str
 		_ = subs
 		switch name {
 		case "join_eui":
-			// no validation rules for JoinEUI
+			// no validation rules for JoinEui
 		case "end_device_ids":
 
-			for idx, item := range m.EndDeviceIDs {
+			for idx, item := range m.EndDeviceIds {
 				_, _ = idx, item
 
 				if v, ok := interface{}(item).(interface{ ValidateFields(...string) error }); ok {
@@ -1828,9 +1828,9 @@ func (m *ProvisionEndDevicesRequest_IdentifiersRange) ValidateFields(paths ...st
 		_ = subs
 		switch name {
 		case "join_eui":
-			// no validation rules for JoinEUI
+			// no validation rules for JoinEui
 		case "start_dev_eui":
-			// no validation rules for StartDevEUI
+			// no validation rules for StartDevEui
 		default:
 			return ProvisionEndDevicesRequest_IdentifiersRangeValidationError{
 				field:  name,
@@ -1916,7 +1916,7 @@ func (m *ProvisionEndDevicesRequest_IdentifiersFromData) ValidateFields(paths ..
 		_ = subs
 		switch name {
 		case "join_eui":
-			// no validation rules for JoinEUI
+			// no validation rules for JoinEui
 		default:
 			return ProvisionEndDevicesRequest_IdentifiersFromDataValidationError{
 				field:  name,

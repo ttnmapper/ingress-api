@@ -56,8 +56,8 @@ func (handlerContext *Context) PostTtnV2(w http.ResponseWriter, r *http.Request)
 
 	// For ttnv2 we use the ip address of the originating stack to id the network
 	packetOut.NetworkType = types.NS_TTN_V2
-	packetOut.NetworkAddress = r.RemoteAddr
-	packetOut.NetworkId = packetOut.NetworkType + "://" + packetOut.NetworkAddress
+	packetOut.NetworkAddress = r.RemoteAddr      // IP address changes al the time for clusters
+	packetOut.NetworkId = "thethingsnetwork.org" //packetOut.NetworkType + "://" + packetOut.NetworkAddress
 
 	packetOut.UserAgent = r.Header.Get("USER-AGENT")
 	packetOut.UserId = email

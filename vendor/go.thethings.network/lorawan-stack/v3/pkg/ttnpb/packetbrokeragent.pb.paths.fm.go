@@ -2,6 +2,61 @@
 
 package ttnpb
 
+var PacketBrokerGatewayFieldPathsNested = []string{
+	"antennas",
+	"contact_info",
+	"frequency_plan_ids",
+	"ids",
+	"ids.eui",
+	"ids.gateway_id",
+	"location_public",
+	"online",
+	"rx_rate",
+	"status_public",
+	"tx_rate",
+	"update_location_from_status",
+}
+
+var PacketBrokerGatewayFieldPathsTopLevel = []string{
+	"antennas",
+	"contact_info",
+	"frequency_plan_ids",
+	"ids",
+	"location_public",
+	"online",
+	"rx_rate",
+	"status_public",
+	"tx_rate",
+	"update_location_from_status",
+}
+var UpdatePacketBrokerGatewayRequestFieldPathsNested = []string{
+	"field_mask",
+	"gateway",
+	"gateway.antennas",
+	"gateway.contact_info",
+	"gateway.frequency_plan_ids",
+	"gateway.ids",
+	"gateway.ids.eui",
+	"gateway.ids.gateway_id",
+	"gateway.location_public",
+	"gateway.online",
+	"gateway.rx_rate",
+	"gateway.status_public",
+	"gateway.tx_rate",
+	"gateway.update_location_from_status",
+}
+
+var UpdatePacketBrokerGatewayRequestFieldPathsTopLevel = []string{
+	"field_mask",
+	"gateway",
+}
+var UpdatePacketBrokerGatewayResponseFieldPathsNested = []string{
+	"online_ttl",
+}
+
+var UpdatePacketBrokerGatewayResponseFieldPathsTopLevel = []string{
+	"online_ttl",
+}
 var PacketBrokerNetworkIdentifierFieldPathsNested = []string{
 	"net_id",
 	"tenant_id",
@@ -190,14 +245,33 @@ var SetPacketBrokerRoutingPolicyRequestFieldPathsTopLevel = []string{
 	"home_network_id",
 	"uplink",
 }
-var ListHomeNetworksRequestFieldPathsNested = []string{
+var ListPacketBrokerNetworksRequestFieldPathsNested = []string{
 	"limit",
+	"name_contains",
 	"page",
+	"tenant_id_contains",
+	"with_routing_policy",
 }
 
-var ListHomeNetworksRequestFieldPathsTopLevel = []string{
+var ListPacketBrokerNetworksRequestFieldPathsTopLevel = []string{
 	"limit",
+	"name_contains",
 	"page",
+	"tenant_id_contains",
+	"with_routing_policy",
+}
+var ListPacketBrokerHomeNetworksRequestFieldPathsNested = []string{
+	"limit",
+	"name_contains",
+	"page",
+	"tenant_id_contains",
+}
+
+var ListPacketBrokerHomeNetworksRequestFieldPathsTopLevel = []string{
+	"limit",
+	"name_contains",
+	"page",
+	"tenant_id_contains",
 }
 var ListForwarderRoutingPoliciesRequestFieldPathsNested = []string{
 	"home_network_id",
@@ -211,4 +285,13 @@ var ListForwarderRoutingPoliciesRequestFieldPathsTopLevel = []string{
 	"home_network_id",
 	"limit",
 	"page",
+}
+var PacketBrokerGateway_GatewayIdentifiersFieldPathsNested = []string{
+	"eui",
+	"gateway_id",
+}
+
+var PacketBrokerGateway_GatewayIdentifiersFieldPathsTopLevel = []string{
+	"eui",
+	"gateway_id",
 }

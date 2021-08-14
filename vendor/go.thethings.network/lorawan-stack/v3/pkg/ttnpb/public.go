@@ -82,9 +82,12 @@ var PublicGatewayFields = append(PublicEntityFields,
 	"name",
 	"description",
 	"frequency_plan_id",
+	"frequency_plan_ids",
 	"status_public",
+	"gateway_server_address", // only public if status_public=true
 	"location_public",
 	"antennas", // only public if location_public=true
+	"lrfhss.supported",
 )
 
 // PublicSafe returns a copy of the gateway with only the fields that are
@@ -96,8 +99,13 @@ func (g *Gateway) PublicSafe() *Gateway {
 	var safe Gateway
 	safe.SetFields(g, PublicGatewayFields...)
 	safe.ContactInfo = onlyPublicContactInfo(safe.ContactInfo)
+	if !safe.StatusPublic {
+		safe.GatewayServerAddress = ""
+	}
 	if !safe.LocationPublic {
-		safe.Antennas = nil
+		for _, ant := range safe.Antennas {
+			ant.Location = nil
+		}
 	}
 	return &safe
 }
@@ -138,4 +146,28 @@ func (u *User) PublicSafe() *User {
 	safe.SetFields(u, PublicUserFields...)
 	safe.ContactInfo = onlyPublicContactInfo(safe.ContactInfo)
 	return &safe
+}
+
+// PublicSafe returns only the identifiers of the collaborators.
+func (c *Collaborators) PublicSafe() *Collaborators {
+	if c == nil {
+		return nil
+	}
+	safe := Collaborators{
+		Collaborators: make([]*Collaborator, len(c.Collaborators)),
+	}
+	for i, collaborator := range c.Collaborators {
+		safe.Collaborators[i] = collaborator.PublicSafe()
+	}
+	return &safe
+}
+
+// PublicSafe returns only the identifiers of the collaborator.
+func (c *Collaborator) PublicSafe() *Collaborator {
+	if c == nil {
+		return nil
+	}
+	return &Collaborator{
+		OrganizationOrUserIdentifiers: c.OrganizationOrUserIdentifiers,
+	}
 }

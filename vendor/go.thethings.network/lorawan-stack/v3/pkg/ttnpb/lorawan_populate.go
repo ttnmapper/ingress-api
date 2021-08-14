@@ -131,8 +131,8 @@ func NewPopulatedMACCommand_BeaconFreqReq(r randyLorawan, easy bool) *MACCommand
 
 func NewPopulatedMACCommand(r randyLorawan, easy bool) *MACCommand {
 	out := &MACCommand{}
-	out.CID = MACCommandIdentifier([]int32{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 32}[r.Intn(20)])
-	switch out.CID {
+	out.Cid = MACCommandIdentifier([]int32{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 32}[r.Intn(20)])
+	switch out.Cid {
 	case CID_RESET:
 		if r.Intn(2) == 1 {
 			out.Payload = &MACCommand_ResetInd_{ResetInd: NewPopulatedMACCommand_ResetInd(r, easy)}
@@ -145,9 +145,9 @@ func NewPopulatedMACCommand(r randyLorawan, easy bool) *MACCommand {
 		}
 	case CID_LINK_ADR:
 		if r.Intn(2) == 1 {
-			out.Payload = &MACCommand_LinkADRReq_{LinkADRReq: NewPopulatedMACCommand_LinkADRReq(r, easy)}
+			out.Payload = &MACCommand_LinkAdrReq{LinkAdrReq: NewPopulatedMACCommand_LinkADRReq(r, easy)}
 		} else {
-			out.Payload = &MACCommand_LinkADRAns_{LinkADRAns: NewPopulatedMACCommand_LinkADRAns(r, easy)}
+			out.Payload = &MACCommand_LinkAdrAns{LinkAdrAns: NewPopulatedMACCommand_LinkADRAns(r, easy)}
 		}
 	case CID_DUTY_CYCLE:
 		if r.Intn(2) == 1 {
@@ -171,9 +171,9 @@ func NewPopulatedMACCommand(r randyLorawan, easy bool) *MACCommand {
 		}
 	case CID_DL_CHANNEL:
 		if r.Intn(2) == 1 {
-			out.Payload = &MACCommand_DLChannelReq_{DLChannelReq: NewPopulatedMACCommand_DLChannelReq(r, easy)}
+			out.Payload = &MACCommand_DlChannelReq{DlChannelReq: NewPopulatedMACCommand_DLChannelReq(r, easy)}
 		} else {
-			out.Payload = &MACCommand_DLChannelAns_{DLChannelAns: NewPopulatedMACCommand_DLChannelAns(r, easy)}
+			out.Payload = &MACCommand_DlChannelAns{DlChannelAns: NewPopulatedMACCommand_DLChannelAns(r, easy)}
 		}
 	case CID_RX_TIMING_SETUP:
 		if r.Intn(2) == 1 {
@@ -191,7 +191,7 @@ func NewPopulatedMACCommand(r randyLorawan, easy bool) *MACCommand {
 		}
 	case CID_ADR_PARAM_SETUP:
 		if r.Intn(2) == 1 {
-			out.Payload = &MACCommand_ADRParamSetupReq_{ADRParamSetupReq: NewPopulatedMACCommand_ADRParamSetupReq(r, easy)}
+			out.Payload = &MACCommand_AdrParamSetupReq{AdrParamSetupReq: NewPopulatedMACCommand_ADRParamSetupReq(r, easy)}
 		}
 	case CID_DEVICE_TIME:
 		if r.Intn(2) == 1 {
@@ -261,12 +261,12 @@ func NewPopulatedMACPayload(r randyLorawan, easy bool) *MACPayload {
 	out := &MACPayload{}
 	out.FHDR = *NewPopulatedFHDR(r, easy)
 	out.FPort = uint32(r.Intn(225))
-	out.FRMPayload = make([]byte, 10)
-	for i := 0; i < len(out.FRMPayload); i++ {
+	out.FrmPayload = make([]byte, 10)
+	for i := 0; i < len(out.FrmPayload); i++ {
 		if r.Intn(2) == 0 {
-			out.FRMPayload[i] = byte(1 + r.Intn(15))
+			out.FrmPayload[i] = byte(1 + r.Intn(15))
 		} else {
-			out.FRMPayload[i] = byte(128 + r.Intn(128))
+			out.FrmPayload[i] = byte(128 + r.Intn(128))
 		}
 	}
 	return out
@@ -324,14 +324,14 @@ func NewPopulatedTxSettings(r randyLorawan, easy bool) *TxSettings {
 	}
 	switch r.Intn(2) {
 	case 0:
-		out.DataRate.Modulation = &DataRate_FSK{
-			FSK: &FSKDataRate{
+		out.DataRate.Modulation = &DataRate_Fsk{
+			Fsk: &FSKDataRate{
 				BitRate: 50000,
 			},
 		}
 	case 1:
-		out.DataRate.Modulation = &DataRate_LoRa{
-			LoRa: &LoRaDataRate{
+		out.DataRate.Modulation = &DataRate_Lora{
+			Lora: &LoRaDataRate{
 				Bandwidth:       []uint32{125000, 250000, 500000}[r.Intn(3)],
 				SpreadingFactor: uint32(r.Intn(6) + 7),
 			},
@@ -344,14 +344,14 @@ func NewPopulatedTxSettings(r randyLorawan, easy bool) *TxSettings {
 	return out
 }
 
-func NewPopulatedMessage_MACPayload(r randyLorawan) *Message_MACPayload {
-	return &Message_MACPayload{NewPopulatedMACPayload(r, false)}
+func NewPopulatedMessage_MACPayload(r randyLorawan) *Message_MacPayload {
+	return &Message_MacPayload{NewPopulatedMACPayload(r, false)}
 }
 
 func NewPopulatedJoinRequestPayload(r randyLorawan, easy bool) *JoinRequestPayload {
 	out := &JoinRequestPayload{}
-	out.JoinEUI = *types.NewPopulatedEUI64(r)
-	out.DevEUI = *types.NewPopulatedEUI64(r)
+	out.JoinEui = *types.NewPopulatedEUI64(r)
+	out.DevEui = *types.NewPopulatedEUI64(r)
 	out.DevNonce = *types.NewPopulatedDevNonce(r)
 	return out
 }
@@ -362,8 +362,8 @@ func NewPopulatedMessage_JoinRequestPayload(r randyLorawan) *Message_JoinRequest
 
 func NewPopulatedDLSettings(r randyLorawan, easy bool) *DLSettings {
 	out := &DLSettings{}
-	out.Rx1DROffset = DataRateOffset(r.Uint32() % 8)
-	out.Rx2DR = NewPopulatedDataRateIndex(r, easy)
+	out.Rx1DrOffset = DataRateOffset(r.Uint32() % 8)
+	out.Rx2Dr = NewPopulatedDataRateIndex(r, easy)
 	return out
 }
 
@@ -390,12 +390,12 @@ func NewPopulatedCFList(r randyLorawan, easy bool) *CFList {
 func NewPopulatedJoinAcceptPayload(r randyLorawan, easy bool) *JoinAcceptPayload {
 	out := &JoinAcceptPayload{}
 	out.JoinNonce = *types.NewPopulatedJoinNonce(r)
-	out.NetID = *types.NewPopulatedNetID(r)
+	out.NetId = *types.NewPopulatedNetID(r)
 	out.DevAddr = *types.NewPopulatedDevAddr(r)
 	out.DLSettings = *NewPopulatedDLSettings(r, easy)
 	out.RxDelay = RxDelay(r.Intn(16))
 	if r.Intn(10) != 0 {
-		out.CFList = NewPopulatedCFList(r, false)
+		out.CfList = NewPopulatedCFList(r, false)
 	}
 	return out
 }
@@ -409,14 +409,14 @@ func NewPopulatedRejoinRequestPayloadType(r randyLorawan, typ RejoinRequestType)
 	out.RejoinType = typ
 	switch typ {
 	case 0, 2:
-		out.JoinEUI = types.EUI64{}
-		out.NetID = *types.NewPopulatedNetID(r)
-		out.DevEUI = *types.NewPopulatedEUI64(r)
+		out.JoinEui = types.EUI64{}
+		out.NetId = *types.NewPopulatedNetID(r)
+		out.DevEui = *types.NewPopulatedEUI64(r)
 		out.RejoinCnt = uint32(uint16(r.Uint32()))
 	case 1:
-		out.NetID = types.NetID{}
-		out.JoinEUI = *types.NewPopulatedEUI64(r)
-		out.DevEUI = *types.NewPopulatedEUI64(r)
+		out.NetId = types.NetID{}
+		out.JoinEui = *types.NewPopulatedEUI64(r)
+		out.DevEui = *types.NewPopulatedEUI64(r)
 		out.RejoinCnt = uint32(uint16(r.Uint32()))
 	}
 	return out
@@ -462,26 +462,26 @@ func NewPopulatedMessageUplink(r randyLorawan, sNwkSIntKey, fNwkSIntKey types.AE
 		out.MHDR.MType = MType_UNCONFIRMED_UP
 	}
 	pld := NewPopulatedMessage_MACPayload(r)
-	pld.MACPayload.FHDR.FCtrl = FCtrl{
-		ADR:       r.Intn(2) == 0,
-		ADRAckReq: r.Intn(2) == 0,
+	pld.MacPayload.FHDR.FCtrl = FCtrl{
+		Adr:       r.Intn(2) == 0,
+		AdrAckReq: r.Intn(2) == 0,
 		ClassB:    r.Intn(2) == 0,
 		Ack:       r.Intn(2) == 0,
 	}
 
-	b, err := macMICPayload(out.MHDR, pld.MACPayload.FHDR, uint8(pld.MACPayload.FPort), pld.MACPayload.FRMPayload, false)
+	b, err := macMICPayload(out.MHDR, pld.MacPayload.FHDR, uint8(pld.MacPayload.FPort), pld.MacPayload.FrmPayload, false)
 	if err != nil {
 		panic(fmt.Sprintf("failed to compute payload for MIC computation: %s", err))
 	}
 	var confFCnt uint32
-	if pld.MACPayload.Ack {
-		confFCnt = pld.MACPayload.FCnt % (1 << 16)
+	if pld.MacPayload.Ack {
+		confFCnt = pld.MacPayload.FCnt % (1 << 16)
 	}
-	mic, err := PopulatorConfig.LoRaWAN.ComputeUplinkMIC(sNwkSIntKey, fNwkSIntKey, confFCnt, txDrIdx, txChIdx, pld.MACPayload.DevAddr, pld.MACPayload.FCnt, b)
+	mic, err := PopulatorConfig.LoRaWAN.ComputeUplinkMIC(sNwkSIntKey, fNwkSIntKey, confFCnt, txDrIdx, txChIdx, pld.MacPayload.DevAddr, pld.MacPayload.FCnt, b)
 	if err != nil {
 		panic(fmt.Sprintf("failed to compute MIC: %s", err))
 	}
-	out.MIC = mic[:]
+	out.Mic = mic[:]
 	out.Payload = pld
 	return out
 }
@@ -495,20 +495,20 @@ func NewPopulatedMessageDownlink(r randyLorawan, sNwkSIntKey types.AES128Key, co
 		out.MHDR.MType = MType_UNCONFIRMED_DOWN
 	}
 	pld := NewPopulatedMessage_MACPayload(r)
-	pld.MACPayload.FHDR.FCtrl = FCtrl{
-		ADR:      r.Intn(2) == 0,
+	pld.MacPayload.FHDR.FCtrl = FCtrl{
+		Adr:      r.Intn(2) == 0,
 		FPending: r.Intn(2) == 0,
 		Ack:      r.Intn(2) == 0,
 	}
-	b, err := macMICPayload(out.MHDR, pld.MACPayload.FHDR, uint8(pld.MACPayload.FPort), pld.MACPayload.FRMPayload, false)
+	b, err := macMICPayload(out.MHDR, pld.MacPayload.FHDR, uint8(pld.MacPayload.FPort), pld.MacPayload.FrmPayload, false)
 	if err != nil {
 		panic(fmt.Sprintf("failed to compute payload for MIC computation: %s", err))
 	}
-	mic, err := PopulatorConfig.LoRaWAN.ComputeDownlinkMIC(sNwkSIntKey, pld.MACPayload.DevAddr, 0, pld.MACPayload.FCnt, b)
+	mic, err := PopulatorConfig.LoRaWAN.ComputeDownlinkMIC(sNwkSIntKey, pld.MacPayload.DevAddr, 0, pld.MacPayload.FCnt, b)
 	if err != nil {
 		panic(fmt.Sprintf("failed to compute MIC: %s", err))
 	}
-	out.MIC = mic[:]
+	out.Mic = mic[:]
 	out.Payload = pld
 	return out
 }
@@ -517,9 +517,9 @@ func NewPopulatedMessageJoinRequest(r randyLorawan) *Message {
 	out := &Message{}
 	out.MHDR = *NewPopulatedMHDR(r, false)
 	out.MHDR.MType = MType_JOIN_REQUEST
-	out.MIC = make([]byte, 4)
+	out.Mic = make([]byte, 4)
 	for i := 0; i < 4; i++ {
-		out.MIC[i] = byte(r.Intn(256))
+		out.Mic[i] = byte(r.Intn(256))
 	}
 	pld := NewPopulatedMessage_JoinRequestPayload(r)
 	pld.JoinRequestPayload = NewPopulatedJoinRequestPayload(r, false)
@@ -534,11 +534,11 @@ func NewPopulatedMessageJoinAccept(r randyLorawan, decrypted bool) *Message {
 	var pld *JoinAcceptPayload
 	if decrypted {
 		pld = NewPopulatedJoinAcceptPayload(r, false)
-		out.MIC = make([]byte, 4)
+		out.Mic = make([]byte, 4)
 		for i := 0; i < 4; i++ {
-			out.MIC[i] = byte(r.Intn(256))
+			out.Mic[i] = byte(r.Intn(256))
 		}
-		pld.Rx1DROffset %= 8
+		pld.Rx1DrOffset %= 8
 	} else {
 		pld = &JoinAcceptPayload{
 			Encrypted: []byte{42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42},
@@ -552,9 +552,9 @@ func NewPopulatedMessageRejoinRequest(r randyLorawan, typ RejoinRequestType) *Me
 	out := &Message{}
 	out.MHDR = *NewPopulatedMHDR(r, false)
 	out.MHDR.MType = MType_REJOIN_REQUEST
-	out.MIC = make([]byte, 4)
+	out.Mic = make([]byte, 4)
 	for i := 0; i < 4; i++ {
-		out.MIC[i] = byte(r.Intn(256))
+		out.Mic[i] = byte(r.Intn(256))
 	}
 	out.Payload = NewPopulatedMessage_RejoinRequestPayloadType(r, typ)
 	return out

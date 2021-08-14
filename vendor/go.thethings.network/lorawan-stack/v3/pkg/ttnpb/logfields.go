@@ -18,43 +18,43 @@ func (ids *ApplicationIdentifiers) ExtractRequestFields(m map[string]interface{}
 	if ids == nil {
 		return
 	}
-	m["application_id"] = ids.ApplicationID
+	m["application_id"] = ids.ApplicationId
 }
 
 func (ids *ClientIdentifiers) ExtractRequestFields(m map[string]interface{}) {
 	if ids == nil {
 		return
 	}
-	m["client_id"] = ids.ClientID
+	m["client_id"] = ids.ClientId
 }
 
 func (ids *EndDeviceIdentifiers) ExtractRequestFields(m map[string]interface{}) {
 	if ids == nil {
 		return
 	}
-	m["application_id"] = ids.ApplicationID
-	m["device_id"] = ids.DeviceID
+	m["application_id"] = ids.ApplicationId
+	m["device_id"] = ids.DeviceId
 }
 
 func (ids *GatewayIdentifiers) ExtractRequestFields(m map[string]interface{}) {
 	if ids == nil {
 		return
 	}
-	m["gateway_id"] = ids.GatewayID
+	m["gateway_id"] = ids.GatewayId
 }
 
 func (ids *OrganizationIdentifiers) ExtractRequestFields(m map[string]interface{}) {
 	if ids == nil {
 		return
 	}
-	m["organization_id"] = ids.OrganizationID
+	m["organization_id"] = ids.OrganizationId
 }
 
 func (ids *UserIdentifiers) ExtractRequestFields(m map[string]interface{}) {
 	if ids == nil {
 		return
 	}
-	m["user_id"] = ids.UserID
+	m["user_id"] = ids.UserId
 }
 
 func extractCollaboratorFields(m map[string]interface{}, ids *OrganizationOrUserIdentifiers) {
@@ -63,10 +63,10 @@ func extractCollaboratorFields(m map[string]interface{}, ids *OrganizationOrUser
 	}
 	switch oneof := ids.Ids.(type) {
 	case nil:
-	case *OrganizationOrUserIdentifiers_OrganizationIDs:
-		m["collaborator_organization_id"] = oneof.OrganizationIDs.OrganizationID
-	case *OrganizationOrUserIdentifiers_UserIDs:
-		m["collaborator_user_id"] = oneof.UserIDs.UserID
+	case *OrganizationOrUserIdentifiers_OrganizationIds:
+		m["collaborator_organization_id"] = oneof.OrganizationIds.OrganizationId
+	case *OrganizationOrUserIdentifiers_UserIds:
+		m["collaborator_user_id"] = oneof.UserIds.UserId
 	default:
 		panic("missed oneof type in extractCollaboratorFields()")
 	}

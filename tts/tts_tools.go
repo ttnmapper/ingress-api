@@ -49,10 +49,11 @@ func CopyV3Fields(packetIn ttnpb.ApplicationUp, packetOut *types.TtnMapperUplink
 		    "dev_addr" : "00BCB929"                  // Device address known by the Network Server
 		  },
 	*/
-	packetOut.AppID = packetIn.EndDeviceIdentifiers.ApplicationID
-	packetOut.DevID = packetIn.EndDeviceIdentifiers.DeviceID
-	if packetIn.EndDeviceIdentifiers.DevEUI != nil {
-		packetOut.DevEui = packetIn.EndDeviceIdentifiers.DevEUI.String()
+	packetOut.AppID = packetIn.EndDeviceIdentifiers.ApplicationId
+	packetOut.DevID = packetIn.EndDeviceIdentifiers.DeviceId
+
+	if packetIn.EndDeviceIdentifiers.DevEui != nil {
+		packetOut.DevEui = packetIn.EndDeviceIdentifiers.DevEui.String()
 	}
 
 	/*
@@ -95,16 +96,21 @@ func CopyV3Fields(packetIn ttnpb.ApplicationUp, packetOut *types.TtnMapperUplink
 	*/
 	packetOut.Frequency = utils.SanitizeFrequency(float64(packetIn.GetUplinkMessage().Settings.Frequency))
 
-	if packetIn.GetUplinkMessage().Settings.DataRate.GetLoRa() != nil {
+	if packetIn.GetUplinkMessage().Settings.DataRate.GetLora() != nil {
 		//log.Println("Is LORA")
 		packetOut.Modulation = "LORA"
-		packetOut.SpreadingFactor = uint8(packetIn.GetUplinkMessage().Settings.DataRate.GetLoRa().SpreadingFactor)
-		packetOut.Bandwidth = uint64(packetIn.GetUplinkMessage().Settings.DataRate.GetLoRa().Bandwidth)
+		packetOut.SpreadingFactor = uint8(packetIn.GetUplinkMessage().Settings.DataRate.GetLora().SpreadingFactor)
+		packetOut.Bandwidth = uint64(packetIn.GetUplinkMessage().Settings.DataRate.GetLora().Bandwidth)
 	}
-	if packetIn.GetUplinkMessage().Settings.DataRate.GetFSK() != nil {
+	if packetIn.GetUplinkMessage().Settings.DataRate.GetFsk() != nil {
 		//log.Println("Is FSK")
 		packetOut.Modulation = "FSK"
-		packetOut.Bitrate = uint64(packetIn.GetUplinkMessage().Settings.DataRate.GetFSK().BitRate)
+		packetOut.Bitrate = uint64(packetIn.GetUplinkMessage().Settings.DataRate.GetFsk().BitRate)
+	}
+	if packetIn.GetUplinkMessage().Settings.DataRate.GetLrfhss() != nil {
+		packetOut.Modulation = "LR_FHSS"
+		packetOut.Bandwidth = uint64(packetIn.GetUplinkMessage().Settings.DataRate.GetLrfhss().GetOperatingChannelWidth())
+		// TODO: grid steps, code rate
 	}
 
 	packetOut.CodingRate = packetIn.GetUplinkMessage().Settings.CodingRate
@@ -156,9 +162,9 @@ func CopyV3Fields(packetIn ttnpb.ApplicationUp, packetOut *types.TtnMapperUplink
 		gatewayOut := types.TtnMapperGateway{}
 
 		// The gateway's ID - unique per network
-		gatewayOut.GatewayId = gatewayIn.GatewayIdentifiers.GatewayID
-		if gatewayIn.GatewayIdentifiers.EUI != nil {
-			gatewayOut.GatewayEui = gatewayIn.GatewayIdentifiers.EUI.String()
+		gatewayOut.GatewayId = gatewayIn.GatewayIdentifiers.GetGatewayId()
+		if gatewayIn.GatewayIdentifiers.Eui != nil {
+			gatewayOut.GatewayEui = gatewayIn.GatewayIdentifiers.Eui.String()
 		}
 
 		/*
@@ -187,7 +193,11 @@ func CopyV3Fields(packetIn ttnpb.ApplicationUp, packetOut *types.TtnMapperUplink
 			*/
 			forwarderTenantId := gatewayIn.PacketBroker.ForwarderTenantId
 			forwarderNetId := gatewayIn.PacketBroker.ForwarderNetId
-			gatewayOut.NetworkId = types.NS_TTS_V3 + "://" + forwarderTenantId + "@" + forwarderNetId.String()
+			if forwarderTenantId == "ttnv2" {
+				gatewayOut.NetworkId = "thethingsnetwork.org"
+			} else {
+				gatewayOut.NetworkId = types.NS_TTS_V3 + "://" + forwarderTenantId + "@" + forwarderNetId.String()
+			}
 
 			/*
 				Use GatewayId and EUI if reported by PacketBroker
@@ -218,20 +228,20 @@ func CopyV3Fields(packetIn ttnpb.ApplicationUp, packetOut *types.TtnMapperUplink
 
 		gatewayOut.FineTimestamp = gatewayIn.FineTimestamp
 		gatewayOut.FineTimestampEncrypted = gatewayIn.EncryptedFineTimestamp
-		gatewayOut.FineTimestampEncryptedKeyId = gatewayIn.EncryptedFineTimestampKeyID
+		gatewayOut.FineTimestampEncryptedKeyId = gatewayIn.EncryptedFineTimestampKeyId
 
 		gatewayOut.ChannelIndex = gatewayIn.ChannelIndex
 
-		if gatewayIn.ChannelRSSI != 0 {
-			gatewayOut.Rssi = gatewayIn.ChannelRSSI
+		if gatewayIn.ChannelRssi != 0 {
+			gatewayOut.Rssi = gatewayIn.ChannelRssi
 		}
-		if gatewayIn.RSSI != 0 {
-			gatewayOut.Rssi = gatewayIn.RSSI
+		if gatewayIn.Rssi != 0 {
+			gatewayOut.Rssi = gatewayIn.Rssi
 		}
-		if gatewayIn.SignalRSSI != nil {
-			gatewayOut.SignalRssi = gatewayIn.SignalRSSI.Value
+		if gatewayIn.SignalRssi != nil {
+			gatewayOut.SignalRssi = gatewayIn.SignalRssi.Value
 		}
-		gatewayOut.Snr = gatewayIn.SNR
+		gatewayOut.Snr = gatewayIn.Snr
 		gatewayOut.AntennaIndex = uint8(gatewayIn.AntennaIndex)
 		if gatewayIn.Location != nil {
 			gatewayOut.Latitude = gatewayIn.Location.Latitude

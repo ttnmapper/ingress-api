@@ -52,7 +52,7 @@ func (m *ClaimEndDeviceRequest) ValidateFields(paths ...string) error {
 		switch name {
 		case "target_application_ids":
 
-			if v, ok := interface{}(&m.TargetApplicationIDs).(interface{ ValidateFields(...string) error }); ok {
+			if v, ok := interface{}(&m.TargetApplicationIds).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return ClaimEndDeviceRequestValidationError{
 						field:  "target_application_ids",
@@ -64,14 +64,14 @@ func (m *ClaimEndDeviceRequest) ValidateFields(paths ...string) error {
 
 		case "target_device_id":
 
-			if utf8.RuneCountInString(m.GetTargetDeviceID()) > 36 {
+			if utf8.RuneCountInString(m.GetTargetDeviceId()) > 36 {
 				return ClaimEndDeviceRequestValidationError{
 					field:  "target_device_id",
 					reason: "value length must be at most 36 runes",
 				}
 			}
 
-			if !_ClaimEndDeviceRequest_TargetDeviceID_Pattern.MatchString(m.GetTargetDeviceID()) {
+			if !_ClaimEndDeviceRequest_TargetDeviceId_Pattern.MatchString(m.GetTargetDeviceId()) {
 				return ClaimEndDeviceRequestValidationError{
 					field:  "target_device_id",
 					reason: "value does not match regex pattern \"^[a-z0-9](?:[-]?[a-z0-9]){2,}$|^$\"",
@@ -89,7 +89,7 @@ func (m *ClaimEndDeviceRequest) ValidateFields(paths ...string) error {
 
 		case "target_network_server_kek_label":
 
-			if utf8.RuneCountInString(m.GetTargetNetworkServerKEKLabel()) > 2048 {
+			if utf8.RuneCountInString(m.GetTargetNetworkServerKekLabel()) > 2048 {
 				return ClaimEndDeviceRequestValidationError{
 					field:  "target_network_server_kek_label",
 					reason: "value length must be at most 2048 runes",
@@ -107,7 +107,7 @@ func (m *ClaimEndDeviceRequest) ValidateFields(paths ...string) error {
 
 		case "target_application_server_kek_label":
 
-			if utf8.RuneCountInString(m.GetTargetApplicationServerKEKLabel()) > 2048 {
+			if utf8.RuneCountInString(m.GetTargetApplicationServerKekLabel()) > 2048 {
 				return ClaimEndDeviceRequestValidationError{
 					field:  "target_application_server_kek_label",
 					reason: "value length must be at most 2048 runes",
@@ -116,7 +116,7 @@ func (m *ClaimEndDeviceRequest) ValidateFields(paths ...string) error {
 
 		case "target_application_server_id":
 
-			if utf8.RuneCountInString(m.GetTargetApplicationServerID()) > 100 {
+			if utf8.RuneCountInString(m.GetTargetApplicationServerId()) > 100 {
 				return ClaimEndDeviceRequestValidationError{
 					field:  "target_application_server_id",
 					reason: "value length must be at most 100 runes",
@@ -124,7 +124,7 @@ func (m *ClaimEndDeviceRequest) ValidateFields(paths ...string) error {
 			}
 
 		case "target_net_id":
-			// no validation rules for TargetNetID
+			// no validation rules for TargetNetId
 		case "invalidate_authentication_code":
 			// no validation rules for InvalidateAuthenticationCode
 		case "source_device":
@@ -159,12 +159,12 @@ func (m *ClaimEndDeviceRequest) ValidateFields(paths ...string) error {
 					}
 
 				case "qr_code":
-					w, ok := m.SourceDevice.(*ClaimEndDeviceRequest_QRCode)
+					w, ok := m.SourceDevice.(*ClaimEndDeviceRequest_QrCode)
 					if !ok || w == nil {
 						continue
 					}
 
-					if l := len(m.GetQRCode()); l < 0 || l > 1024 {
+					if l := len(m.GetQrCode()); l < 0 || l > 1024 {
 						return ClaimEndDeviceRequestValidationError{
 							field:  "qr_code",
 							reason: "value length must be between 0 and 1024 bytes, inclusive",
@@ -239,7 +239,7 @@ var _ interface {
 	ErrorName() string
 } = ClaimEndDeviceRequestValidationError{}
 
-var _ClaimEndDeviceRequest_TargetDeviceID_Pattern = regexp.MustCompile("^[a-z0-9](?:[-]?[a-z0-9]){2,}$|^$")
+var _ClaimEndDeviceRequest_TargetDeviceId_Pattern = regexp.MustCompile("^[a-z0-9](?:[-]?[a-z0-9]){2,}$|^$")
 
 var _ClaimEndDeviceRequest_TargetNetworkServerAddress_Pattern = regexp.MustCompile("^(?:(?:[a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\\-]*[a-zA-Z0-9])\\.)*(?:[A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\\-]*[A-Za-z0-9])(?::[0-9]{1,5})?$|^$")
 
@@ -274,7 +274,7 @@ func (m *AuthorizeApplicationRequest) ValidateFields(paths ...string) error {
 
 		case "api_key":
 
-			if l := utf8.RuneCountInString(m.GetAPIKey()); l < 1 || l > 128 {
+			if l := utf8.RuneCountInString(m.GetApiKey()); l < 1 || l > 128 {
 				return AuthorizeApplicationRequestValidationError{
 					field:  "api_key",
 					reason: "value length must be between 1 and 128 runes, inclusive",
@@ -364,7 +364,34 @@ func (m *CUPSRedirection) ValidateFields(paths ...string) error {
 		_ = subs
 		switch name {
 		case "target_cups_uri":
-			// no validation rules for TargetCUPSURI
+
+			if utf8.RuneCountInString(m.GetTargetCupsUri()) > 256 {
+				return CUPSRedirectionValidationError{
+					field:  "target_cups_uri",
+					reason: "value length must be at most 256 runes",
+				}
+			}
+
+			if uri, err := url.Parse(m.GetTargetCupsUri()); err != nil {
+				return CUPSRedirectionValidationError{
+					field:  "target_cups_uri",
+					reason: "value must be a valid URI",
+					cause:  err,
+				}
+			} else if !uri.IsAbs() {
+				return CUPSRedirectionValidationError{
+					field:  "target_cups_uri",
+					reason: "value must be absolute",
+				}
+			}
+
+			if !_CUPSRedirection_TargetCupsUri_Pattern.MatchString(m.GetTargetCupsUri()) {
+				return CUPSRedirectionValidationError{
+					field:  "target_cups_uri",
+					reason: "value does not match regex pattern \"^https\"",
+				}
+			}
+
 		case "current_gateway_key":
 
 			if utf8.RuneCountInString(m.GetCurrentGatewayKey()) > 2048 {
@@ -374,6 +401,48 @@ func (m *CUPSRedirection) ValidateFields(paths ...string) error {
 				}
 			}
 
+		case "target_cups_trust":
+			// no validation rules for TargetCupsTrust
+		case "gateway_credentials":
+			if len(subs) == 0 {
+				subs = []string{
+					"client_tls", "auth_token",
+				}
+			}
+			for name, subs := range _processPaths(subs) {
+				_ = subs
+				switch name {
+				case "client_tls":
+					w, ok := m.GatewayCredentials.(*CUPSRedirection_ClientTls)
+					if !ok || w == nil {
+						continue
+					}
+
+					if v, ok := interface{}(m.GetClientTls()).(interface{ ValidateFields(...string) error }); ok {
+						if err := v.ValidateFields(subs...); err != nil {
+							return CUPSRedirectionValidationError{
+								field:  "client_tls",
+								reason: "embedded message failed validation",
+								cause:  err,
+							}
+						}
+					}
+
+				case "auth_token":
+					w, ok := m.GatewayCredentials.(*CUPSRedirection_AuthToken)
+					if !ok || w == nil {
+						continue
+					}
+
+					if utf8.RuneCountInString(m.GetAuthToken()) > 2048 {
+						return CUPSRedirectionValidationError{
+							field:  "auth_token",
+							reason: "value length must be at most 2048 runes",
+						}
+					}
+
+				}
+			}
 		default:
 			return CUPSRedirectionValidationError{
 				field:  name,
@@ -438,6 +507,8 @@ var _ interface {
 	ErrorName() string
 } = CUPSRedirectionValidationError{}
 
+var _CUPSRedirection_TargetCupsUri_Pattern = regexp.MustCompile("^https")
+
 // ValidateFields checks the field values on ClaimGatewayRequest with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, an error is returned.
@@ -467,14 +538,14 @@ func (m *ClaimGatewayRequest) ValidateFields(paths ...string) error {
 
 		case "target_gateway_id":
 
-			if utf8.RuneCountInString(m.GetTargetGatewayID()) > 36 {
+			if utf8.RuneCountInString(m.GetTargetGatewayId()) > 36 {
 				return ClaimGatewayRequestValidationError{
 					field:  "target_gateway_id",
 					reason: "value length must be at most 36 runes",
 				}
 			}
 
-			if !_ClaimGatewayRequest_TargetGatewayID_Pattern.MatchString(m.GetTargetGatewayID()) {
+			if !_ClaimGatewayRequest_TargetGatewayId_Pattern.MatchString(m.GetTargetGatewayId()) {
 				return ClaimGatewayRequestValidationError{
 					field:  "target_gateway_id",
 					reason: "value does not match regex pattern \"^[a-z0-9](?:[-]?[a-z0-9]){2,}$|^$\"",
@@ -492,13 +563,22 @@ func (m *ClaimGatewayRequest) ValidateFields(paths ...string) error {
 
 		case "cups_redirection":
 
-			if v, ok := interface{}(m.GetCUPSRedirection()).(interface{ ValidateFields(...string) error }); ok {
+			if v, ok := interface{}(m.GetCupsRedirection()).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return ClaimGatewayRequestValidationError{
 						field:  "cups_redirection",
 						reason: "embedded message failed validation",
 						cause:  err,
 					}
+				}
+			}
+
+		case "target_frequency_plan_id":
+
+			if utf8.RuneCountInString(m.GetTargetFrequencyPlanId()) > 64 {
+				return ClaimGatewayRequestValidationError{
+					field:  "target_frequency_plan_id",
+					reason: "value length must be at most 64 runes",
 				}
 			}
 
@@ -534,12 +614,12 @@ func (m *ClaimGatewayRequest) ValidateFields(paths ...string) error {
 					}
 
 				case "qr_code":
-					w, ok := m.SourceGateway.(*ClaimGatewayRequest_QRCode)
+					w, ok := m.SourceGateway.(*ClaimGatewayRequest_QrCode)
 					if !ok || w == nil {
 						continue
 					}
 
-					if l := len(m.GetQRCode()); l < 0 || l > 1024 {
+					if l := len(m.GetQrCode()); l < 0 || l > 1024 {
 						return ClaimGatewayRequestValidationError{
 							field:  "qr_code",
 							reason: "value length must be between 0 and 1024 bytes, inclusive",
@@ -614,7 +694,7 @@ var _ interface {
 	ErrorName() string
 } = ClaimGatewayRequestValidationError{}
 
-var _ClaimGatewayRequest_TargetGatewayID_Pattern = regexp.MustCompile("^[a-z0-9](?:[-]?[a-z0-9]){2,}$|^$")
+var _ClaimGatewayRequest_TargetGatewayId_Pattern = regexp.MustCompile("^[a-z0-9](?:[-]?[a-z0-9]){2,}$|^$")
 
 var _ClaimGatewayRequest_TargetGatewayServerAddress_Pattern = regexp.MustCompile("^(?:(?:[a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\\-]*[a-zA-Z0-9])\\.)*(?:[A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\\-]*[A-Za-z0-9])(?::[0-9]{1,5})?$|^$")
 
@@ -647,7 +727,7 @@ func (m *AuthorizeGatewayRequest) ValidateFields(paths ...string) error {
 
 		case "api_key":
 
-			if utf8.RuneCountInString(m.GetAPIKey()) < 1 {
+			if utf8.RuneCountInString(m.GetApiKey()) < 1 {
 				return AuthorizeGatewayRequestValidationError{
 					field:  "api_key",
 					reason: "value length must be at least 1 runes",
@@ -737,9 +817,9 @@ func (m *ClaimEndDeviceRequest_AuthenticatedIdentifiers) ValidateFields(paths ..
 		_ = subs
 		switch name {
 		case "join_eui":
-			// no validation rules for JoinEUI
+			// no validation rules for JoinEui
 		case "dev_eui":
-			// no validation rules for DevEUI
+			// no validation rules for DevEui
 		case "authentication_code":
 
 			if !_ClaimEndDeviceRequest_AuthenticatedIdentifiers_AuthenticationCode_Pattern.MatchString(m.GetAuthenticationCode()) {
@@ -821,6 +901,106 @@ var _ interface {
 
 var _ClaimEndDeviceRequest_AuthenticatedIdentifiers_AuthenticationCode_Pattern = regexp.MustCompile("^[A-Z0-9]{1,32}$")
 
+// ValidateFields checks the field values on CUPSRedirection_ClientTLS with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *CUPSRedirection_ClientTLS) ValidateFields(paths ...string) error {
+	if m == nil {
+		return nil
+	}
+
+	if len(paths) == 0 {
+		paths = CUPSRedirection_ClientTLSFieldPathsNested
+	}
+
+	for name, subs := range _processPaths(append(paths[:0:0], paths...)) {
+		_ = subs
+		switch name {
+		case "cert":
+
+			if len(m.GetCert()) > 8192 {
+				return CUPSRedirection_ClientTLSValidationError{
+					field:  "cert",
+					reason: "value length must be at most 8192 bytes",
+				}
+			}
+
+		case "key":
+
+			if len(m.GetKey()) > 8192 {
+				return CUPSRedirection_ClientTLSValidationError{
+					field:  "key",
+					reason: "value length must be at most 8192 bytes",
+				}
+			}
+
+		default:
+			return CUPSRedirection_ClientTLSValidationError{
+				field:  name,
+				reason: "invalid field path",
+			}
+		}
+	}
+	return nil
+}
+
+// CUPSRedirection_ClientTLSValidationError is the validation error returned by
+// CUPSRedirection_ClientTLS.ValidateFields if the designated constraints
+// aren't met.
+type CUPSRedirection_ClientTLSValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e CUPSRedirection_ClientTLSValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e CUPSRedirection_ClientTLSValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e CUPSRedirection_ClientTLSValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e CUPSRedirection_ClientTLSValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e CUPSRedirection_ClientTLSValidationError) ErrorName() string {
+	return "CUPSRedirection_ClientTLSValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e CUPSRedirection_ClientTLSValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sCUPSRedirection_ClientTLS.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = CUPSRedirection_ClientTLSValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = CUPSRedirection_ClientTLSValidationError{}
+
 // ValidateFields checks the field values on
 // ClaimGatewayRequest_AuthenticatedIdentifiers with the rules defined in the
 // proto definition for this message. If any rules are violated, an error is returned.
@@ -837,7 +1017,7 @@ func (m *ClaimGatewayRequest_AuthenticatedIdentifiers) ValidateFields(paths ...s
 		_ = subs
 		switch name {
 		case "gateway_eui":
-			// no validation rules for GatewayEUI
+			// no validation rules for GatewayEui
 		case "authentication_code":
 
 			if len(m.GetAuthenticationCode()) > 2048 {

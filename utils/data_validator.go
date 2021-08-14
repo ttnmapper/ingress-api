@@ -64,17 +64,26 @@ func SanitizeData(packet *types.TtnMapperUplinkMessage) {
 		packet.Altitude = packet.Altitude - math.Pow(2, 16) // Negative altitude
 	}
 
-	// round lat to 6 decimal places?
-	// round lon to 6 decimal places?
+	// Null island
+	if packet.Longitude < 1 && packet.Longitude > -1 && packet.Latitude < 1 && packet.Latitude > -1 {
+		packet.Latitude = 0
+		packet.Longitude = 0
+	}
 
-	// Some single channel gateways send frequency in Hz, not MHz
-	// TTNv3 also sends the frequency in Herz, not MHz like V2 - change to Hz here
-	// Below 1MHz assume the value is passed in MHz not Hz, so convert to Hz
-	if packet.Frequency < 1000000 {
-		packet.Frequency = packet.Frequency * 1000000
+	// Latitude
+	if packet.Latitude >= 90 || packet.Latitude <= -90 {
+		packet.Latitude = 0
+	}
+
+	// Longitude
+	if packet.Longitude >= 180 || packet.Longitude <= -180 {
+		packet.Longitude = 0
 	}
 }
 
+// Some single channel gateways send frequency in Hz, not MHz
+// TTNv3 also sends the frequency in Herz, not MHz like V2 - change to Hz here
+// Below 1MHz assume the value is passed in MHz not Hz, so convert to Hz
 func SanitizeFrequency(frequency float64) uint64 {
 	// 868.1 to 868100000 - but we will lose the decimals
 	if frequency < 1000.0 {

@@ -14,36 +14,36 @@ func (dst *OAuthClientAuthorizationIdentifiers) SetFields(src *OAuthClientAuthor
 			if len(subs) > 0 {
 				var newDst, newSrc *UserIdentifiers
 				if src != nil {
-					newSrc = &src.UserIDs
+					newSrc = &src.UserIds
 				}
-				newDst = &dst.UserIDs
+				newDst = &dst.UserIds
 				if err := newDst.SetFields(newSrc, subs...); err != nil {
 					return err
 				}
 			} else {
 				if src != nil {
-					dst.UserIDs = src.UserIDs
+					dst.UserIds = src.UserIds
 				} else {
 					var zero UserIdentifiers
-					dst.UserIDs = zero
+					dst.UserIds = zero
 				}
 			}
 		case "client_ids":
 			if len(subs) > 0 {
 				var newDst, newSrc *ClientIdentifiers
 				if src != nil {
-					newSrc = &src.ClientIDs
+					newSrc = &src.ClientIds
 				}
-				newDst = &dst.ClientIDs
+				newDst = &dst.ClientIds
 				if err := newDst.SetFields(newSrc, subs...); err != nil {
 					return err
 				}
 			} else {
 				if src != nil {
-					dst.ClientIDs = src.ClientIDs
+					dst.ClientIds = src.ClientIds
 				} else {
 					var zero ClientIdentifiers
-					dst.ClientIDs = zero
+					dst.ClientIds = zero
 				}
 			}
 
@@ -61,36 +61,36 @@ func (dst *OAuthClientAuthorization) SetFields(src *OAuthClientAuthorization, pa
 			if len(subs) > 0 {
 				var newDst, newSrc *UserIdentifiers
 				if src != nil {
-					newSrc = &src.UserIDs
+					newSrc = &src.UserIds
 				}
-				newDst = &dst.UserIDs
+				newDst = &dst.UserIds
 				if err := newDst.SetFields(newSrc, subs...); err != nil {
 					return err
 				}
 			} else {
 				if src != nil {
-					dst.UserIDs = src.UserIDs
+					dst.UserIds = src.UserIds
 				} else {
 					var zero UserIdentifiers
-					dst.UserIDs = zero
+					dst.UserIds = zero
 				}
 			}
 		case "client_ids":
 			if len(subs) > 0 {
 				var newDst, newSrc *ClientIdentifiers
 				if src != nil {
-					newSrc = &src.ClientIDs
+					newSrc = &src.ClientIds
 				}
-				newDst = &dst.ClientIDs
+				newDst = &dst.ClientIds
 				if err := newDst.SetFields(newSrc, subs...); err != nil {
 					return err
 				}
 			} else {
 				if src != nil {
-					dst.ClientIDs = src.ClientIDs
+					dst.ClientIds = src.ClientIds
 				} else {
 					var zero ClientIdentifiers
-					dst.ClientIDs = zero
+					dst.ClientIds = zero
 				}
 			}
 		case "rights":
@@ -216,18 +216,18 @@ func (dst *OAuthAuthorizationCode) SetFields(src *OAuthAuthorizationCode, paths 
 			if len(subs) > 0 {
 				var newDst, newSrc *UserIdentifiers
 				if src != nil {
-					newSrc = &src.UserIDs
+					newSrc = &src.UserIds
 				}
-				newDst = &dst.UserIDs
+				newDst = &dst.UserIds
 				if err := newDst.SetFields(newSrc, subs...); err != nil {
 					return err
 				}
 			} else {
 				if src != nil {
-					dst.UserIDs = src.UserIDs
+					dst.UserIds = src.UserIds
 				} else {
 					var zero UserIdentifiers
-					dst.UserIDs = zero
+					dst.UserIds = zero
 				}
 			}
 		case "user_session_id":
@@ -235,27 +235,27 @@ func (dst *OAuthAuthorizationCode) SetFields(src *OAuthAuthorizationCode, paths 
 				return fmt.Errorf("'user_session_id' has no subfields, but %s were specified", subs)
 			}
 			if src != nil {
-				dst.UserSessionID = src.UserSessionID
+				dst.UserSessionId = src.UserSessionId
 			} else {
 				var zero string
-				dst.UserSessionID = zero
+				dst.UserSessionId = zero
 			}
 		case "client_ids":
 			if len(subs) > 0 {
 				var newDst, newSrc *ClientIdentifiers
 				if src != nil {
-					newSrc = &src.ClientIDs
+					newSrc = &src.ClientIds
 				}
-				newDst = &dst.ClientIDs
+				newDst = &dst.ClientIds
 				if err := newDst.SetFields(newSrc, subs...); err != nil {
 					return err
 				}
 			} else {
 				if src != nil {
-					dst.ClientIDs = src.ClientIDs
+					dst.ClientIds = src.ClientIds
 				} else {
 					var zero ClientIdentifiers
-					dst.ClientIDs = zero
+					dst.ClientIds = zero
 				}
 			}
 		case "rights":
@@ -282,10 +282,10 @@ func (dst *OAuthAuthorizationCode) SetFields(src *OAuthAuthorizationCode, paths 
 				return fmt.Errorf("'redirect_uri' has no subfields, but %s were specified", subs)
 			}
 			if src != nil {
-				dst.RedirectURI = src.RedirectURI
+				dst.RedirectUri = src.RedirectUri
 			} else {
 				var zero string
-				dst.RedirectURI = zero
+				dst.RedirectUri = zero
 			}
 		case "state":
 			if len(subs) > 0 {
@@ -332,36 +332,36 @@ func (dst *OAuthAccessTokenIdentifiers) SetFields(src *OAuthAccessTokenIdentifie
 			if len(subs) > 0 {
 				var newDst, newSrc *UserIdentifiers
 				if src != nil {
-					newSrc = &src.UserIDs
+					newSrc = &src.UserIds
 				}
-				newDst = &dst.UserIDs
+				newDst = &dst.UserIds
 				if err := newDst.SetFields(newSrc, subs...); err != nil {
 					return err
 				}
 			} else {
 				if src != nil {
-					dst.UserIDs = src.UserIDs
+					dst.UserIds = src.UserIds
 				} else {
 					var zero UserIdentifiers
-					dst.UserIDs = zero
+					dst.UserIds = zero
 				}
 			}
 		case "client_ids":
 			if len(subs) > 0 {
 				var newDst, newSrc *ClientIdentifiers
 				if src != nil {
-					newSrc = &src.ClientIDs
+					newSrc = &src.ClientIds
 				}
-				newDst = &dst.ClientIDs
+				newDst = &dst.ClientIds
 				if err := newDst.SetFields(newSrc, subs...); err != nil {
 					return err
 				}
 			} else {
 				if src != nil {
-					dst.ClientIDs = src.ClientIDs
+					dst.ClientIds = src.ClientIds
 				} else {
 					var zero ClientIdentifiers
-					dst.ClientIDs = zero
+					dst.ClientIds = zero
 				}
 			}
 		case "id":
@@ -369,10 +369,10 @@ func (dst *OAuthAccessTokenIdentifiers) SetFields(src *OAuthAccessTokenIdentifie
 				return fmt.Errorf("'id' has no subfields, but %s were specified", subs)
 			}
 			if src != nil {
-				dst.ID = src.ID
+				dst.Id = src.Id
 			} else {
 				var zero string
-				dst.ID = zero
+				dst.Id = zero
 			}
 
 		default:
@@ -389,18 +389,18 @@ func (dst *OAuthAccessToken) SetFields(src *OAuthAccessToken, paths ...string) e
 			if len(subs) > 0 {
 				var newDst, newSrc *UserIdentifiers
 				if src != nil {
-					newSrc = &src.UserIDs
+					newSrc = &src.UserIds
 				}
-				newDst = &dst.UserIDs
+				newDst = &dst.UserIds
 				if err := newDst.SetFields(newSrc, subs...); err != nil {
 					return err
 				}
 			} else {
 				if src != nil {
-					dst.UserIDs = src.UserIDs
+					dst.UserIds = src.UserIds
 				} else {
 					var zero UserIdentifiers
-					dst.UserIDs = zero
+					dst.UserIds = zero
 				}
 			}
 		case "user_session_id":
@@ -408,27 +408,27 @@ func (dst *OAuthAccessToken) SetFields(src *OAuthAccessToken, paths ...string) e
 				return fmt.Errorf("'user_session_id' has no subfields, but %s were specified", subs)
 			}
 			if src != nil {
-				dst.UserSessionID = src.UserSessionID
+				dst.UserSessionId = src.UserSessionId
 			} else {
 				var zero string
-				dst.UserSessionID = zero
+				dst.UserSessionId = zero
 			}
 		case "client_ids":
 			if len(subs) > 0 {
 				var newDst, newSrc *ClientIdentifiers
 				if src != nil {
-					newSrc = &src.ClientIDs
+					newSrc = &src.ClientIds
 				}
-				newDst = &dst.ClientIDs
+				newDst = &dst.ClientIds
 				if err := newDst.SetFields(newSrc, subs...); err != nil {
 					return err
 				}
 			} else {
 				if src != nil {
-					dst.ClientIDs = src.ClientIDs
+					dst.ClientIds = src.ClientIds
 				} else {
 					var zero ClientIdentifiers
-					dst.ClientIDs = zero
+					dst.ClientIds = zero
 				}
 			}
 		case "id":
@@ -436,10 +436,10 @@ func (dst *OAuthAccessToken) SetFields(src *OAuthAccessToken, paths ...string) e
 				return fmt.Errorf("'id' has no subfields, but %s were specified", subs)
 			}
 			if src != nil {
-				dst.ID = src.ID
+				dst.Id = src.Id
 			} else {
 				var zero string
-				dst.ID = zero
+				dst.Id = zero
 			}
 		case "access_token":
 			if len(subs) > 0 {
@@ -525,36 +525,36 @@ func (dst *ListOAuthAccessTokensRequest) SetFields(src *ListOAuthAccessTokensReq
 			if len(subs) > 0 {
 				var newDst, newSrc *UserIdentifiers
 				if src != nil {
-					newSrc = &src.UserIDs
+					newSrc = &src.UserIds
 				}
-				newDst = &dst.UserIDs
+				newDst = &dst.UserIds
 				if err := newDst.SetFields(newSrc, subs...); err != nil {
 					return err
 				}
 			} else {
 				if src != nil {
-					dst.UserIDs = src.UserIDs
+					dst.UserIds = src.UserIds
 				} else {
 					var zero UserIdentifiers
-					dst.UserIDs = zero
+					dst.UserIds = zero
 				}
 			}
 		case "client_ids":
 			if len(subs) > 0 {
 				var newDst, newSrc *ClientIdentifiers
 				if src != nil {
-					newSrc = &src.ClientIDs
+					newSrc = &src.ClientIds
 				}
-				newDst = &dst.ClientIDs
+				newDst = &dst.ClientIds
 				if err := newDst.SetFields(newSrc, subs...); err != nil {
 					return err
 				}
 			} else {
 				if src != nil {
-					dst.ClientIDs = src.ClientIDs
+					dst.ClientIds = src.ClientIds
 				} else {
 					var zero ClientIdentifiers
-					dst.ClientIDs = zero
+					dst.ClientIds = zero
 				}
 			}
 		case "order":

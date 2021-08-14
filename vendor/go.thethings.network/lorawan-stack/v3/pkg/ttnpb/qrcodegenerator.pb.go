@@ -6,12 +6,6 @@ package ttnpb
 import (
 	context "context"
 	fmt "fmt"
-	io "io"
-	math "math"
-	math_bits "math/bits"
-	reflect "reflect"
-	strings "strings"
-
 	_ "github.com/envoyproxy/protoc-gen-validate/validate"
 	_ "github.com/gogo/protobuf/gogoproto"
 	proto "github.com/gogo/protobuf/proto"
@@ -22,6 +16,9 @@ import (
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
+	math "math"
+	reflect "reflect"
+	strings "strings"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -40,9 +37,9 @@ type QRCodeFormat struct {
 	Name        string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
 	Description string `protobuf:"bytes,2,opt,name=description,proto3" json:"description,omitempty"`
 	// The entity fields required to generate the QR code.
-	FieldMask            types.FieldMask `protobuf:"bytes,3,opt,name=field_mask,json=fieldMask,proto3" json:"field_mask"`
-	XXX_NoUnkeyedLiteral struct{}        `json:"-"`
-	XXX_sizecache        int32           `json:"-"`
+	FieldMask            *types.FieldMask `protobuf:"bytes,3,opt,name=field_mask,json=fieldMask,proto3" json:"field_mask,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}         `json:"-"`
+	XXX_sizecache        int32            `json:"-"`
 }
 
 func (m *QRCodeFormat) Reset()      { *m = QRCodeFormat{} }
@@ -51,25 +48,16 @@ func (*QRCodeFormat) Descriptor() ([]byte, []int) {
 	return fileDescriptor_f400aed11530ba72, []int{0}
 }
 func (m *QRCodeFormat) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	return xxx_messageInfo_QRCodeFormat.Unmarshal(m, b)
 }
 func (m *QRCodeFormat) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_QRCodeFormat.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	return xxx_messageInfo_QRCodeFormat.Marshal(b, m, deterministic)
 }
 func (m *QRCodeFormat) XXX_Merge(src proto.Message) {
 	xxx_messageInfo_QRCodeFormat.Merge(m, src)
 }
 func (m *QRCodeFormat) XXX_Size() int {
-	return m.Size()
+	return xxx_messageInfo_QRCodeFormat.Size(m)
 }
 func (m *QRCodeFormat) XXX_DiscardUnknown() {
 	xxx_messageInfo_QRCodeFormat.DiscardUnknown(m)
@@ -91,11 +79,11 @@ func (m *QRCodeFormat) GetDescription() string {
 	return ""
 }
 
-func (m *QRCodeFormat) GetFieldMask() types.FieldMask {
+func (m *QRCodeFormat) GetFieldMask() *types.FieldMask {
 	if m != nil {
 		return m.FieldMask
 	}
-	return types.FieldMask{}
+	return nil
 }
 
 type QRCodeFormats struct {
@@ -111,25 +99,16 @@ func (*QRCodeFormats) Descriptor() ([]byte, []int) {
 	return fileDescriptor_f400aed11530ba72, []int{1}
 }
 func (m *QRCodeFormats) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	return xxx_messageInfo_QRCodeFormats.Unmarshal(m, b)
 }
 func (m *QRCodeFormats) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_QRCodeFormats.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	return xxx_messageInfo_QRCodeFormats.Marshal(b, m, deterministic)
 }
 func (m *QRCodeFormats) XXX_Merge(src proto.Message) {
 	xxx_messageInfo_QRCodeFormats.Merge(m, src)
 }
 func (m *QRCodeFormats) XXX_Size() int {
-	return m.Size()
+	return xxx_messageInfo_QRCodeFormats.Size(m)
 }
 func (m *QRCodeFormats) XXX_DiscardUnknown() {
 	xxx_messageInfo_QRCodeFormats.DiscardUnknown(m)
@@ -146,7 +125,7 @@ func (m *QRCodeFormats) GetFormats() map[string]*QRCodeFormat {
 
 type GetQRCodeFormatRequest struct {
 	// QR code format identifier. Enumerate available formats with rpc ListFormats in the EndDeviceQRCodeGenerator service.
-	FormatID             string   `protobuf:"bytes,1,opt,name=format_id,json=formatId,proto3" json:"format_id,omitempty"`
+	FormatId             string   `protobuf:"bytes,1,opt,name=format_id,json=formatId,proto3" json:"format_id,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
@@ -157,25 +136,16 @@ func (*GetQRCodeFormatRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_f400aed11530ba72, []int{2}
 }
 func (m *GetQRCodeFormatRequest) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	return xxx_messageInfo_GetQRCodeFormatRequest.Unmarshal(m, b)
 }
 func (m *GetQRCodeFormatRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_GetQRCodeFormatRequest.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	return xxx_messageInfo_GetQRCodeFormatRequest.Marshal(b, m, deterministic)
 }
 func (m *GetQRCodeFormatRequest) XXX_Merge(src proto.Message) {
 	xxx_messageInfo_GetQRCodeFormatRequest.Merge(m, src)
 }
 func (m *GetQRCodeFormatRequest) XXX_Size() int {
-	return m.Size()
+	return xxx_messageInfo_GetQRCodeFormatRequest.Size(m)
 }
 func (m *GetQRCodeFormatRequest) XXX_DiscardUnknown() {
 	xxx_messageInfo_GetQRCodeFormatRequest.DiscardUnknown(m)
@@ -183,16 +153,16 @@ func (m *GetQRCodeFormatRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_GetQRCodeFormatRequest proto.InternalMessageInfo
 
-func (m *GetQRCodeFormatRequest) GetFormatID() string {
+func (m *GetQRCodeFormatRequest) GetFormatId() string {
 	if m != nil {
-		return m.FormatID
+		return m.FormatId
 	}
 	return ""
 }
 
 type GenerateEndDeviceQRCodeRequest struct {
 	// QR code format identifier. Enumerate available formats with rpc ListFormats in the EndDeviceQRCodeGenerator service.
-	FormatID string `protobuf:"bytes,1,opt,name=format_id,json=formatId,proto3" json:"format_id,omitempty"`
+	FormatId string `protobuf:"bytes,1,opt,name=format_id,json=formatId,proto3" json:"format_id,omitempty"`
 	// End device to use as input to generate the QR code.
 	EndDevice EndDevice `protobuf:"bytes,2,opt,name=end_device,json=endDevice,proto3" json:"end_device"`
 	// If set, the server will render the QR code image according to these settings.
@@ -207,25 +177,16 @@ func (*GenerateEndDeviceQRCodeRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_f400aed11530ba72, []int{3}
 }
 func (m *GenerateEndDeviceQRCodeRequest) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	return xxx_messageInfo_GenerateEndDeviceQRCodeRequest.Unmarshal(m, b)
 }
 func (m *GenerateEndDeviceQRCodeRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_GenerateEndDeviceQRCodeRequest.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	return xxx_messageInfo_GenerateEndDeviceQRCodeRequest.Marshal(b, m, deterministic)
 }
 func (m *GenerateEndDeviceQRCodeRequest) XXX_Merge(src proto.Message) {
 	xxx_messageInfo_GenerateEndDeviceQRCodeRequest.Merge(m, src)
 }
 func (m *GenerateEndDeviceQRCodeRequest) XXX_Size() int {
-	return m.Size()
+	return xxx_messageInfo_GenerateEndDeviceQRCodeRequest.Size(m)
 }
 func (m *GenerateEndDeviceQRCodeRequest) XXX_DiscardUnknown() {
 	xxx_messageInfo_GenerateEndDeviceQRCodeRequest.DiscardUnknown(m)
@@ -233,9 +194,9 @@ func (m *GenerateEndDeviceQRCodeRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_GenerateEndDeviceQRCodeRequest proto.InternalMessageInfo
 
-func (m *GenerateEndDeviceQRCodeRequest) GetFormatID() string {
+func (m *GenerateEndDeviceQRCodeRequest) GetFormatId() string {
 	if m != nil {
-		return m.FormatID
+		return m.FormatId
 	}
 	return ""
 }
@@ -267,25 +228,16 @@ func (*GenerateEndDeviceQRCodeRequest_Image) Descriptor() ([]byte, []int) {
 	return fileDescriptor_f400aed11530ba72, []int{3, 0}
 }
 func (m *GenerateEndDeviceQRCodeRequest_Image) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	return xxx_messageInfo_GenerateEndDeviceQRCodeRequest_Image.Unmarshal(m, b)
 }
 func (m *GenerateEndDeviceQRCodeRequest_Image) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_GenerateEndDeviceQRCodeRequest_Image.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	return xxx_messageInfo_GenerateEndDeviceQRCodeRequest_Image.Marshal(b, m, deterministic)
 }
 func (m *GenerateEndDeviceQRCodeRequest_Image) XXX_Merge(src proto.Message) {
 	xxx_messageInfo_GenerateEndDeviceQRCodeRequest_Image.Merge(m, src)
 }
 func (m *GenerateEndDeviceQRCodeRequest_Image) XXX_Size() int {
-	return m.Size()
+	return xxx_messageInfo_GenerateEndDeviceQRCodeRequest_Image.Size(m)
 }
 func (m *GenerateEndDeviceQRCodeRequest_Image) XXX_DiscardUnknown() {
 	xxx_messageInfo_GenerateEndDeviceQRCodeRequest_Image.DiscardUnknown(m)
@@ -315,25 +267,16 @@ func (*GenerateQRCodeResponse) Descriptor() ([]byte, []int) {
 	return fileDescriptor_f400aed11530ba72, []int{4}
 }
 func (m *GenerateQRCodeResponse) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	return xxx_messageInfo_GenerateQRCodeResponse.Unmarshal(m, b)
 }
 func (m *GenerateQRCodeResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_GenerateQRCodeResponse.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	return xxx_messageInfo_GenerateQRCodeResponse.Marshal(b, m, deterministic)
 }
 func (m *GenerateQRCodeResponse) XXX_Merge(src proto.Message) {
 	xxx_messageInfo_GenerateQRCodeResponse.Merge(m, src)
 }
 func (m *GenerateQRCodeResponse) XXX_Size() int {
-	return m.Size()
+	return xxx_messageInfo_GenerateQRCodeResponse.Size(m)
 }
 func (m *GenerateQRCodeResponse) XXX_DiscardUnknown() {
 	xxx_messageInfo_GenerateQRCodeResponse.DiscardUnknown(m)
@@ -380,64 +323,58 @@ func init() {
 }
 
 var fileDescriptor_f400aed11530ba72 = []byte{
-	// 908 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xb4, 0x54, 0x4d, 0x6c, 0xdc, 0x44,
-	0x14, 0xf6, 0xec, 0x0f, 0xc9, 0xce, 0xa6, 0xa8, 0x1a, 0x89, 0x62, 0xdc, 0x76, 0x76, 0x65, 0x85,
-	0xb0, 0x09, 0xb5, 0x0d, 0x1b, 0x0e, 0x90, 0x4b, 0x84, 0x69, 0x12, 0x05, 0x81, 0x54, 0xcc, 0x05,
-	0x51, 0x95, 0xc8, 0x59, 0x4f, 0x1c, 0x6b, 0x77, 0x3d, 0x8e, 0x3d, 0xbb, 0xed, 0xa6, 0xaa, 0x54,
-	0x21, 0x0e, 0x15, 0x27, 0x24, 0x84, 0x84, 0x38, 0xa0, 0x5e, 0x90, 0x7a, 0xec, 0x31, 0xc7, 0x1c,
-	0x73, 0xac, 0xc4, 0xa5, 0xa7, 0xaa, 0x6b, 0x73, 0xc8, 0xb1, 0xc7, 0x6a, 0x4f, 0xc8, 0x9e, 0x71,
-	0x9a, 0xdd, 0x2d, 0x2b, 0x38, 0x70, 0xf2, 0xcc, 0xbc, 0xcf, 0xef, 0x7d, 0xef, 0xbd, 0xef, 0x3d,
-	0xf8, 0x5e, 0x87, 0x86, 0xf6, 0x6d, 0xdb, 0xd7, 0x22, 0x66, 0xb7, 0xda, 0x86, 0x1d, 0x78, 0xc6,
-	0x41, 0xd8, 0xa2, 0x0e, 0x71, 0x89, 0x4f, 0x42, 0x9b, 0xd1, 0x50, 0x0f, 0x42, 0xca, 0x28, 0x7a,
-	0x93, 0x31, 0x5f, 0x17, 0x60, 0xbd, 0xbf, 0xaa, 0x7c, 0xea, 0x7a, 0x6c, 0xbf, 0xb7, 0xab, 0xb7,
-	0x68, 0xd7, 0x20, 0x7e, 0x9f, 0x0e, 0x82, 0x90, 0xde, 0x19, 0x18, 0x19, 0xb8, 0xa5, 0xb9, 0xc4,
-	0xd7, 0xfa, 0x76, 0xc7, 0x73, 0x6c, 0x46, 0x8c, 0xa9, 0x03, 0x77, 0xa9, 0x68, 0xe7, 0x5c, 0xb8,
-	0xd4, 0xa5, 0xfc, 0xe7, 0xdd, 0xde, 0x5e, 0x76, 0xcb, 0x2e, 0xd9, 0x49, 0xc0, 0xaf, 0xb8, 0x94,
-	0xba, 0x1d, 0x92, 0x71, 0xb4, 0x7d, 0x9f, 0x32, 0x9b, 0x79, 0xd4, 0x8f, 0x84, 0xf5, 0xb2, 0xb0,
-	0x9e, 0xf9, 0x20, 0xdd, 0x80, 0x0d, 0x84, 0xb1, 0x3e, 0x69, 0xdc, 0xf3, 0x48, 0xc7, 0xd9, 0xe9,
-	0xda, 0x51, 0x5b, 0x20, 0xd4, 0xe9, 0x3a, 0x10, 0xdf, 0xd9, 0x71, 0x48, 0xdf, 0x6b, 0xe5, 0x7c,
-	0x6b, 0xd3, 0x98, 0xc0, 0x6b, 0xb1, 0x5e, 0x28, 0x00, 0xea, 0xef, 0x00, 0x2e, 0x7c, 0x65, 0x7d,
-	0x46, 0x1d, 0xb2, 0x49, 0xc3, 0xae, 0xcd, 0xd0, 0x65, 0x58, 0xf2, 0xed, 0x2e, 0x91, 0x41, 0x1d,
-	0x34, 0x2a, 0xe6, 0xdc, 0xc8, 0x2c, 0x85, 0x05, 0xd9, 0xb1, 0xb2, 0x47, 0xb4, 0x02, 0xab, 0x0e,
-	0x89, 0x5a, 0xa1, 0x17, 0xa4, 0x79, 0xc8, 0x85, 0x0c, 0x33, 0x3f, 0x32, 0xcb, 0x61, 0x51, 0x3e,
-	0x01, 0xd6, 0x79, 0x23, 0x5a, 0x87, 0xf0, 0x15, 0x65, 0xb9, 0x58, 0x07, 0x8d, 0x6a, 0x53, 0xd1,
-	0x79, 0x56, 0x7a, 0x9e, 0x95, 0xbe, 0x99, 0x42, 0xbe, 0xb4, 0xa3, 0xb6, 0x59, 0x3a, 0x79, 0x56,
-	0x93, 0xac, 0xca, 0x5e, 0xfe, 0xb0, 0x56, 0x3a, 0x7a, 0x58, 0x93, 0xd4, 0x04, 0xc0, 0x0b, 0xe7,
-	0x09, 0x46, 0x28, 0x84, 0x73, 0x7b, 0xfc, 0x28, 0x83, 0x7a, 0xb1, 0x51, 0x6d, 0xae, 0xe8, 0xe3,
-	0x8d, 0xd6, 0xc7, 0xf0, 0xba, 0xf8, 0x6e, 0xf8, 0x2c, 0x1c, 0x98, 0xd7, 0x46, 0xe6, 0xf2, 0x6f,
-	0x60, 0x49, 0x5d, 0x0c, 0x55, 0x79, 0xb1, 0x89, 0xbf, 0xbb, 0x69, 0x6b, 0x87, 0x1f, 0x68, 0x9f,
-	0xdc, 0x6a, 0xac, 0xaf, 0xdd, 0xd4, 0x6e, 0xad, 0xe7, 0xd7, 0xe5, 0xbb, 0xcd, 0x6b, 0xf7, 0x16,
-	0xad, 0x3c, 0x90, 0xf2, 0x0d, 0x5c, 0x38, 0xef, 0x06, 0x5d, 0x84, 0xc5, 0x36, 0x19, 0xf0, 0x22,
-	0x59, 0xe9, 0x11, 0x35, 0x61, 0xb9, 0x6f, 0x77, 0x7a, 0x24, 0x2b, 0x4a, 0xb5, 0x79, 0x65, 0x16,
-	0x27, 0x8b, 0x43, 0xd7, 0x0a, 0x1f, 0x03, 0x91, 0x65, 0x00, 0x2f, 0x6d, 0x11, 0x36, 0x86, 0x21,
-	0x07, 0x3d, 0x12, 0x31, 0x74, 0x03, 0x56, 0x38, 0x89, 0x1d, 0xcf, 0x11, 0x4d, 0x59, 0x1d, 0x99,
-	0xff, 0x8a, 0x7e, 0xfc, 0xac, 0x36, 0xcf, 0x9d, 0x6d, 0x5f, 0xb7, 0xe6, 0xb9, 0x97, 0x6d, 0x47,
-	0x44, 0x3c, 0x2e, 0x40, 0xbc, 0xc5, 0x07, 0x86, 0x6c, 0xf8, 0xce, 0xf5, 0x4c, 0x35, 0x9c, 0xc0,
-	0xff, 0x16, 0x1a, 0x6d, 0x42, 0xf8, 0x4a, 0xa2, 0xa2, 0x52, 0xef, 0x4c, 0x56, 0xea, 0x8c, 0x8d,
-	0xb9, 0x30, 0x32, 0xcb, 0x3f, 0x82, 0xc2, 0x45, 0xc0, 0xa5, 0x41, 0x72, 0x03, 0xfa, 0x1c, 0x96,
-	0xbd, 0xae, 0xed, 0x12, 0x21, 0xab, 0x8f, 0x26, 0x5d, 0xcc, 0x4e, 0x4c, 0xdf, 0x4e, 0xff, 0xb5,
-	0xb8, 0x0b, 0xa5, 0x09, 0xcb, 0xd9, 0x1d, 0x2d, 0x43, 0x98, 0xbd, 0xec, 0x44, 0xde, 0x21, 0xd7,
-	0xff, 0x05, 0x13, 0x8e, 0xcc, 0xb9, 0x95, 0xb2, 0x7c, 0x3a, 0xd7, 0x80, 0x56, 0x25, 0xb3, 0x7e,
-	0xed, 0x1d, 0x12, 0x51, 0x42, 0x3b, 0x6d, 0x1a, 0x0f, 0x94, 0xfb, 0x8f, 0x02, 0xea, 0x47, 0x04,
-	0x21, 0x58, 0x62, 0xe4, 0x0e, 0x13, 0xfa, 0xc8, 0xce, 0x48, 0xcb, 0x39, 0xf3, 0xb4, 0xdf, 0x9e,
-	0xe4, 0x7c, 0x83, 0xcf, 0xa5, 0xa0, 0xc5, 0x43, 0x34, 0x7f, 0x29, 0x42, 0x79, 0x22, 0x89, 0xad,
-	0x7c, 0xcb, 0xa1, 0x1f, 0x00, 0xac, 0x6c, 0x11, 0x26, 0x06, 0x77, 0x69, 0xba, 0x08, 0xaf, 0x13,
-	0x94, 0x32, 0x53, 0x99, 0xea, 0x87, 0xdf, 0xff, 0xf9, 0xd7, 0xcf, 0x85, 0xf7, 0xd1, 0xb2, 0x71,
-	0x10, 0x6a, 0xe9, 0x52, 0x8d, 0xd2, 0xa5, 0xa2, 0xf1, 0x8e, 0x45, 0x86, 0x98, 0x07, 0xe3, 0xee,
-	0x99, 0x30, 0xee, 0xa1, 0x36, 0xac, 0x7e, 0xe1, 0x45, 0x2c, 0x1f, 0xcf, 0x4b, 0x53, 0x33, 0xbe,
-	0x91, 0xae, 0x35, 0xe5, 0xea, 0xcc, 0x29, 0x55, 0xdf, 0xcd, 0x02, 0xd7, 0xd0, 0xd5, 0x99, 0x81,
-	0xd3, 0x9c, 0xe7, 0xf3, 0xa2, 0x23, 0xfd, 0xbf, 0xf5, 0x5d, 0x59, 0xfa, 0x27, 0xfc, 0x78, 0xfb,
-	0xd4, 0x7a, 0xc6, 0x45, 0x51, 0xdf, 0x7a, 0x2d, 0x97, 0x35, 0xb0, 0x62, 0xfe, 0x01, 0x4e, 0x86,
-	0x18, 0x3c, 0x19, 0x62, 0xf0, 0x74, 0x88, 0xa5, 0xe7, 0x43, 0x2c, 0x9d, 0x0e, 0xb1, 0xf4, 0x62,
-	0x88, 0xa5, 0x97, 0x43, 0x0c, 0xee, 0xc7, 0x18, 0x3c, 0x88, 0xb1, 0xf4, 0x28, 0xc6, 0xe0, 0x71,
-	0x8c, 0xa5, 0xa3, 0x18, 0x4b, 0xc7, 0x31, 0x96, 0x4e, 0x62, 0x0c, 0x9e, 0xc4, 0x18, 0x3c, 0x8d,
-	0xb1, 0xf4, 0x3c, 0xc6, 0xe0, 0x34, 0xc6, 0xd2, 0x8b, 0x18, 0x83, 0x97, 0x31, 0x96, 0xee, 0x27,
-	0x58, 0x7a, 0x90, 0x60, 0xf0, 0x53, 0x82, 0xa5, 0x5f, 0x13, 0x0c, 0x1e, 0x26, 0x58, 0x7a, 0x94,
-	0x60, 0xe9, 0x71, 0x82, 0xc1, 0x51, 0x82, 0xc1, 0x71, 0x82, 0xc1, 0xb7, 0x86, 0x4b, 0x75, 0xb6,
-	0x4f, 0xd8, 0xbe, 0xe7, 0xbb, 0x91, 0xee, 0x13, 0x76, 0x9b, 0x86, 0x6d, 0x63, 0x7c, 0xc7, 0xf7,
-	0x57, 0x8d, 0xa0, 0xed, 0x1a, 0x8c, 0xf9, 0xc1, 0xee, 0xee, 0x1b, 0x59, 0x13, 0x56, 0xff, 0x0e,
-	0x00, 0x00, 0xff, 0xff, 0xd7, 0x6e, 0xcb, 0xd3, 0x34, 0x07, 0x00, 0x00,
+	// 803 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xac, 0x54, 0x4f, 0x8f, 0xdb, 0x44,
+	0x14, 0xcf, 0x24, 0x1b, 0xb2, 0x99, 0x6c, 0x51, 0x35, 0x12, 0xc5, 0xb8, 0xad, 0x37, 0xb2, 0x96,
+	0x6d, 0x12, 0x6a, 0x1b, 0xbc, 0x1c, 0xe8, 0x5e, 0x2a, 0x4c, 0x77, 0xa3, 0x22, 0x2a, 0x81, 0xb9,
+	0x20, 0x56, 0x6d, 0x34, 0x89, 0x27, 0x5e, 0x2b, 0xc9, 0x8c, 0x77, 0x3c, 0x49, 0x9b, 0xad, 0x2a,
+	0x21, 0xc4, 0x89, 0x13, 0x02, 0x71, 0xe1, 0x13, 0x70, 0xe2, 0x33, 0x70, 0xec, 0x9d, 0x0b, 0x17,
+	0x90, 0x48, 0x39, 0xf4, 0xc8, 0x39, 0x27, 0xe4, 0x19, 0x7b, 0x9b, 0x3f, 0x25, 0x02, 0x89, 0x93,
+	0xdf, 0xf3, 0xfb, 0xcd, 0x7b, 0xbf, 0xf7, 0x17, 0xde, 0x18, 0x32, 0x8e, 0x1f, 0x62, 0x6a, 0x25,
+	0x02, 0xf7, 0x06, 0x0e, 0x8e, 0x23, 0xe7, 0x8c, 0xf7, 0x58, 0x40, 0x42, 0x42, 0x09, 0xc7, 0x82,
+	0x71, 0x3b, 0xe6, 0x4c, 0x30, 0xf4, 0xaa, 0x10, 0xd4, 0xce, 0xc0, 0xf6, 0xe4, 0x40, 0x7f, 0x3f,
+	0x8c, 0xc4, 0xe9, 0xb8, 0x6b, 0xf7, 0xd8, 0xc8, 0x21, 0x74, 0xc2, 0xa6, 0x31, 0x67, 0x8f, 0xa6,
+	0x8e, 0x04, 0xf7, 0xac, 0x90, 0x50, 0x6b, 0x82, 0x87, 0x51, 0x80, 0x05, 0x71, 0xd6, 0x04, 0xe5,
+	0x52, 0xb7, 0x16, 0x5c, 0x84, 0x2c, 0x64, 0xea, 0x71, 0x77, 0xdc, 0x97, 0x9a, 0x54, 0xa4, 0x94,
+	0xc1, 0xaf, 0x85, 0x8c, 0x85, 0x43, 0x22, 0x39, 0x62, 0x4a, 0x99, 0xc0, 0x22, 0x62, 0x34, 0xc9,
+	0xac, 0x57, 0x33, 0xeb, 0x85, 0x0f, 0x32, 0x8a, 0xc5, 0x34, 0x33, 0xd6, 0x57, 0x8d, 0xfd, 0x88,
+	0x0c, 0x83, 0xce, 0x08, 0x27, 0x83, 0x0c, 0x61, 0xae, 0xd7, 0x81, 0xd0, 0xa0, 0x13, 0x90, 0x49,
+	0xd4, 0xcb, 0xf9, 0xee, 0xae, 0x63, 0xe2, 0xa8, 0x27, 0xc6, 0x3c, 0x03, 0x98, 0xdf, 0x02, 0xb8,
+	0xf3, 0x89, 0xff, 0x01, 0x0b, 0xc8, 0x31, 0xe3, 0x23, 0x2c, 0xd0, 0x55, 0xb8, 0x45, 0xf1, 0x88,
+	0x68, 0xa0, 0x0e, 0x1a, 0x55, 0xaf, 0x32, 0xf7, 0xb6, 0x78, 0x51, 0x0b, 0x7c, 0xf9, 0x13, 0xb5,
+	0x60, 0x2d, 0x20, 0x49, 0x8f, 0x47, 0x71, 0x9a, 0x87, 0x56, 0x94, 0x98, 0xed, 0xb9, 0x57, 0xe6,
+	0x25, 0xed, 0x29, 0xf0, 0x17, 0x8d, 0xe8, 0x16, 0x84, 0x2f, 0x28, 0x6b, 0xa5, 0x3a, 0x68, 0xd4,
+	0x5c, 0xdd, 0x56, 0x59, 0xd9, 0x79, 0x56, 0xf6, 0x71, 0x0a, 0xb9, 0x87, 0x93, 0x81, 0x5f, 0xed,
+	0xe7, 0xa2, 0xf9, 0x1b, 0x80, 0x97, 0x16, 0x49, 0x25, 0x88, 0xc3, 0x4a, 0x5f, 0x89, 0x1a, 0xa8,
+	0x97, 0x1a, 0x35, 0xb7, 0x65, 0x2f, 0x37, 0xd7, 0x5e, 0xc2, 0xdb, 0xd9, 0xf7, 0x88, 0x0a, 0x3e,
+	0xf5, 0x6e, 0xce, 0xbd, 0xe6, 0x0f, 0x60, 0xdf, 0xdc, 0xe3, 0xa6, 0xb6, 0xe7, 0x1a, 0x0f, 0x4e,
+	0xb0, 0x75, 0xfe, 0xb6, 0x75, 0xeb, 0x7e, 0xe3, 0xf6, 0xe1, 0x89, 0x75, 0xff, 0x76, 0xae, 0x36,
+	0x1f, 0xbb, 0x37, 0x9f, 0xec, 0xf9, 0x79, 0x20, 0xfd, 0x33, 0xb8, 0xb3, 0xe8, 0x06, 0x5d, 0x86,
+	0xa5, 0x01, 0x99, 0xaa, 0xc2, 0xf8, 0xa9, 0x88, 0x5c, 0x58, 0x9e, 0xe0, 0xe1, 0x98, 0xc8, 0x42,
+	0xd4, 0xdc, 0x6b, 0x9b, 0x38, 0xf9, 0x0a, 0x7a, 0x58, 0x7c, 0x0f, 0x98, 0x0f, 0xe0, 0x95, 0x36,
+	0x11, 0x4b, 0x56, 0x72, 0x36, 0x26, 0x89, 0x40, 0x77, 0x60, 0x55, 0x85, 0xef, 0x44, 0x41, 0xd6,
+	0x82, 0x1b, 0x73, 0xef, 0xdf, 0x11, 0xdf, 0x56, 0x2f, 0xef, 0x06, 0xe6, 0x4f, 0x45, 0x68, 0xb4,
+	0xd5, 0x32, 0x90, 0x23, 0x1a, 0xdc, 0x91, 0x13, 0xa1, 0xc2, 0xfd, 0xaf, 0x81, 0xd0, 0x31, 0x84,
+	0x2f, 0x46, 0x2e, 0xab, 0xc2, 0x1b, 0xab, 0x55, 0xb8, 0x60, 0xe0, 0xed, 0xcc, 0xbd, 0xf2, 0xd7,
+	0xa0, 0x78, 0x19, 0x3c, 0xfd, 0x7d, 0xb7, 0xe0, 0x57, 0x49, 0x6e, 0x40, 0x1f, 0xc2, 0x72, 0x34,
+	0xc2, 0x21, 0xc9, 0xc6, 0xe4, 0xdd, 0x55, 0x17, 0x9b, 0x93, 0xb1, 0xef, 0xa6, 0x6f, 0x7d, 0xe5,
+	0x42, 0x77, 0x61, 0x59, 0xea, 0xa8, 0x09, 0xa1, 0xfc, 0xd3, 0x49, 0xa2, 0x73, 0x35, 0xcf, 0x97,
+	0x3c, 0x38, 0xf7, 0x2a, 0xad, 0xb2, 0xf6, 0xbc, 0xd2, 0x80, 0x7e, 0x55, 0x5a, 0x3f, 0x8d, 0xce,
+	0x89, 0x79, 0x92, 0x36, 0x44, 0x85, 0xc8, 0x3d, 0x27, 0x31, 0xa3, 0x09, 0x41, 0x08, 0x6e, 0x09,
+	0xf2, 0x48, 0x64, 0x5d, 0x97, 0x32, 0xb2, 0x72, 0xb6, 0x2a, 0xe1, 0xd7, 0x57, 0xd9, 0x7e, 0xac,
+	0x36, 0x2c, 0x23, 0xe4, 0x7e, 0x5f, 0x82, 0xda, 0x0a, 0xf1, 0x76, 0x7e, 0xa9, 0xd0, 0x57, 0x00,
+	0x56, 0xdb, 0x44, 0x64, 0xcb, 0xb7, 0xbf, 0x9e, 0xf8, 0xcb, 0xc6, 0x44, 0xdf, 0x38, 0x69, 0xe6,
+	0x3b, 0x5f, 0xfe, 0xf2, 0xe7, 0x77, 0xc5, 0xb7, 0x50, 0xd3, 0x39, 0xe3, 0x56, 0x7a, 0x18, 0x93,
+	0xf4, 0x30, 0x58, 0xaa, 0x4b, 0x89, 0x93, 0xcd, 0xb7, 0xf3, 0xf8, 0x62, 0x00, 0x9e, 0xa0, 0x01,
+	0xac, 0x7d, 0x14, 0x25, 0x22, 0x5f, 0xb7, 0x2b, 0x6b, 0x7b, 0x7a, 0x94, 0x9e, 0x26, 0xfd, 0xfa,
+	0xc6, 0xad, 0x33, 0xdf, 0x94, 0x81, 0x77, 0xd1, 0xf5, 0x8d, 0x81, 0xd3, 0x9c, 0xb7, 0xf3, 0x72,
+	0x23, 0xfb, 0xbf, 0xf5, 0x5a, 0xdf, 0xff, 0x27, 0xfc, 0x72, 0xe3, 0xcc, 0xba, 0xe4, 0xa2, 0x9b,
+	0xaf, 0xbd, 0x94, 0xcb, 0x21, 0x68, 0x79, 0xf7, 0x7e, 0xfd, 0xc3, 0x28, 0x7c, 0x31, 0x33, 0xc0,
+	0x8f, 0x33, 0x03, 0x3c, 0x9f, 0x19, 0x85, 0xbf, 0x66, 0x06, 0xf8, 0xe6, 0x99, 0x51, 0xf8, 0xf9,
+	0x99, 0x01, 0x3e, 0x77, 0x42, 0x66, 0x8b, 0x53, 0x22, 0x4e, 0x23, 0x1a, 0x26, 0x36, 0x25, 0xe2,
+	0x21, 0xe3, 0x03, 0x67, 0xf9, 0x9c, 0x4e, 0x0e, 0x9c, 0x78, 0x10, 0x3a, 0x42, 0xd0, 0xb8, 0xdb,
+	0x7d, 0x45, 0xd6, 0xea, 0xe0, 0xef, 0x00, 0x00, 0x00, 0xff, 0xff, 0x47, 0x57, 0x14, 0xe1, 0x9f,
+	0x06, 0x00, 0x00,
 }
 
 func (this *QRCodeFormat) Equal(that interface{}) bool {
@@ -465,7 +402,7 @@ func (this *QRCodeFormat) Equal(that interface{}) bool {
 	if this.Description != that1.Description {
 		return false
 	}
-	if !this.FieldMask.Equal(&that1.FieldMask) {
+	if !this.FieldMask.Equal(that1.FieldMask) {
 		return false
 	}
 	return true
@@ -518,7 +455,7 @@ func (this *GetQRCodeFormatRequest) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if this.FormatID != that1.FormatID {
+	if this.FormatId != that1.FormatId {
 		return false
 	}
 	return true
@@ -542,7 +479,7 @@ func (this *GenerateEndDeviceQRCodeRequest) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if this.FormatID != that1.FormatID {
+	if this.FormatId != that1.FormatId {
 		return false
 	}
 	if !this.EndDevice.Equal(&that1.EndDevice) {
@@ -763,453 +700,6 @@ var _EndDeviceQRCodeGenerator_serviceDesc = grpc.ServiceDesc{
 	Metadata: "lorawan-stack/api/qrcodegenerator.proto",
 }
 
-func (m *QRCodeFormat) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *QRCodeFormat) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *QRCodeFormat) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	{
-		size, err := m.FieldMask.MarshalToSizedBuffer(dAtA[:i])
-		if err != nil {
-			return 0, err
-		}
-		i -= size
-		i = encodeVarintQrcodegenerator(dAtA, i, uint64(size))
-	}
-	i--
-	dAtA[i] = 0x1a
-	if len(m.Description) > 0 {
-		i -= len(m.Description)
-		copy(dAtA[i:], m.Description)
-		i = encodeVarintQrcodegenerator(dAtA, i, uint64(len(m.Description)))
-		i--
-		dAtA[i] = 0x12
-	}
-	if len(m.Name) > 0 {
-		i -= len(m.Name)
-		copy(dAtA[i:], m.Name)
-		i = encodeVarintQrcodegenerator(dAtA, i, uint64(len(m.Name)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *QRCodeFormats) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *QRCodeFormats) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *QRCodeFormats) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.Formats) > 0 {
-		for k := range m.Formats {
-			v := m.Formats[k]
-			baseI := i
-			if v != nil {
-				{
-					size, err := v.MarshalToSizedBuffer(dAtA[:i])
-					if err != nil {
-						return 0, err
-					}
-					i -= size
-					i = encodeVarintQrcodegenerator(dAtA, i, uint64(size))
-				}
-				i--
-				dAtA[i] = 0x12
-			}
-			i -= len(k)
-			copy(dAtA[i:], k)
-			i = encodeVarintQrcodegenerator(dAtA, i, uint64(len(k)))
-			i--
-			dAtA[i] = 0xa
-			i = encodeVarintQrcodegenerator(dAtA, i, uint64(baseI-i))
-			i--
-			dAtA[i] = 0xa
-		}
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *GetQRCodeFormatRequest) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *GetQRCodeFormatRequest) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *GetQRCodeFormatRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.FormatID) > 0 {
-		i -= len(m.FormatID)
-		copy(dAtA[i:], m.FormatID)
-		i = encodeVarintQrcodegenerator(dAtA, i, uint64(len(m.FormatID)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *GenerateEndDeviceQRCodeRequest) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *GenerateEndDeviceQRCodeRequest) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *GenerateEndDeviceQRCodeRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.Image != nil {
-		{
-			size, err := m.Image.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintQrcodegenerator(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x1a
-	}
-	{
-		size, err := m.EndDevice.MarshalToSizedBuffer(dAtA[:i])
-		if err != nil {
-			return 0, err
-		}
-		i -= size
-		i = encodeVarintQrcodegenerator(dAtA, i, uint64(size))
-	}
-	i--
-	dAtA[i] = 0x12
-	if len(m.FormatID) > 0 {
-		i -= len(m.FormatID)
-		copy(dAtA[i:], m.FormatID)
-		i = encodeVarintQrcodegenerator(dAtA, i, uint64(len(m.FormatID)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *GenerateEndDeviceQRCodeRequest_Image) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *GenerateEndDeviceQRCodeRequest_Image) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *GenerateEndDeviceQRCodeRequest_Image) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.ImageSize != 0 {
-		i = encodeVarintQrcodegenerator(dAtA, i, uint64(m.ImageSize))
-		i--
-		dAtA[i] = 0x8
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *GenerateQRCodeResponse) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *GenerateQRCodeResponse) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *GenerateQRCodeResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.Image != nil {
-		{
-			size, err := m.Image.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintQrcodegenerator(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x12
-	}
-	if len(m.Text) > 0 {
-		i -= len(m.Text)
-		copy(dAtA[i:], m.Text)
-		i = encodeVarintQrcodegenerator(dAtA, i, uint64(len(m.Text)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
-}
-
-func encodeVarintQrcodegenerator(dAtA []byte, offset int, v uint64) int {
-	offset -= sovQrcodegenerator(v)
-	base := offset
-	for v >= 1<<7 {
-		dAtA[offset] = uint8(v&0x7f | 0x80)
-		v >>= 7
-		offset++
-	}
-	dAtA[offset] = uint8(v)
-	return base
-}
-func NewPopulatedGenerateEndDeviceQRCodeRequest_Image(r randyQrcodegenerator, easy bool) *GenerateEndDeviceQRCodeRequest_Image {
-	this := &GenerateEndDeviceQRCodeRequest_Image{}
-	this.ImageSize = r.Uint32()
-	if !easy && r.Intn(10) != 0 {
-	}
-	return this
-}
-
-type randyQrcodegenerator interface {
-	Float32() float32
-	Float64() float64
-	Int63() int64
-	Int31() int32
-	Uint32() uint32
-	Intn(n int) int
-}
-
-func randUTF8RuneQrcodegenerator(r randyQrcodegenerator) rune {
-	ru := r.Intn(62)
-	if ru < 10 {
-		return rune(ru + 48)
-	} else if ru < 36 {
-		return rune(ru + 55)
-	}
-	return rune(ru + 61)
-}
-func randStringQrcodegenerator(r randyQrcodegenerator) string {
-	v1 := r.Intn(100)
-	tmps := make([]rune, v1)
-	for i := 0; i < v1; i++ {
-		tmps[i] = randUTF8RuneQrcodegenerator(r)
-	}
-	return string(tmps)
-}
-func randUnrecognizedQrcodegenerator(r randyQrcodegenerator, maxFieldNumber int) (dAtA []byte) {
-	l := r.Intn(5)
-	for i := 0; i < l; i++ {
-		wire := r.Intn(4)
-		if wire == 3 {
-			wire = 5
-		}
-		fieldNumber := maxFieldNumber + r.Intn(100)
-		dAtA = randFieldQrcodegenerator(dAtA, r, fieldNumber, wire)
-	}
-	return dAtA
-}
-func randFieldQrcodegenerator(dAtA []byte, r randyQrcodegenerator, fieldNumber int, wire int) []byte {
-	key := uint32(fieldNumber)<<3 | uint32(wire)
-	switch wire {
-	case 0:
-		dAtA = encodeVarintPopulateQrcodegenerator(dAtA, uint64(key))
-		v2 := r.Int63()
-		if r.Intn(2) == 0 {
-			v2 *= -1
-		}
-		dAtA = encodeVarintPopulateQrcodegenerator(dAtA, uint64(v2))
-	case 1:
-		dAtA = encodeVarintPopulateQrcodegenerator(dAtA, uint64(key))
-		dAtA = append(dAtA, byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)))
-	case 2:
-		dAtA = encodeVarintPopulateQrcodegenerator(dAtA, uint64(key))
-		ll := r.Intn(100)
-		dAtA = encodeVarintPopulateQrcodegenerator(dAtA, uint64(ll))
-		for j := 0; j < ll; j++ {
-			dAtA = append(dAtA, byte(r.Intn(256)))
-		}
-	default:
-		dAtA = encodeVarintPopulateQrcodegenerator(dAtA, uint64(key))
-		dAtA = append(dAtA, byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)))
-	}
-	return dAtA
-}
-func encodeVarintPopulateQrcodegenerator(dAtA []byte, v uint64) []byte {
-	for v >= 1<<7 {
-		dAtA = append(dAtA, uint8(v&0x7f|0x80))
-		v >>= 7
-	}
-	dAtA = append(dAtA, uint8(v))
-	return dAtA
-}
-func (m *QRCodeFormat) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.Name)
-	if l > 0 {
-		n += 1 + l + sovQrcodegenerator(uint64(l))
-	}
-	l = len(m.Description)
-	if l > 0 {
-		n += 1 + l + sovQrcodegenerator(uint64(l))
-	}
-	l = m.FieldMask.Size()
-	n += 1 + l + sovQrcodegenerator(uint64(l))
-	return n
-}
-
-func (m *QRCodeFormats) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if len(m.Formats) > 0 {
-		for k, v := range m.Formats {
-			_ = k
-			_ = v
-			l = 0
-			if v != nil {
-				l = v.Size()
-				l += 1 + sovQrcodegenerator(uint64(l))
-			}
-			mapEntrySize := 1 + len(k) + sovQrcodegenerator(uint64(len(k))) + l
-			n += mapEntrySize + 1 + sovQrcodegenerator(uint64(mapEntrySize))
-		}
-	}
-	return n
-}
-
-func (m *GetQRCodeFormatRequest) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.FormatID)
-	if l > 0 {
-		n += 1 + l + sovQrcodegenerator(uint64(l))
-	}
-	return n
-}
-
-func (m *GenerateEndDeviceQRCodeRequest) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.FormatID)
-	if l > 0 {
-		n += 1 + l + sovQrcodegenerator(uint64(l))
-	}
-	l = m.EndDevice.Size()
-	n += 1 + l + sovQrcodegenerator(uint64(l))
-	if m.Image != nil {
-		l = m.Image.Size()
-		n += 1 + l + sovQrcodegenerator(uint64(l))
-	}
-	return n
-}
-
-func (m *GenerateEndDeviceQRCodeRequest_Image) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.ImageSize != 0 {
-		n += 1 + sovQrcodegenerator(uint64(m.ImageSize))
-	}
-	return n
-}
-
-func (m *GenerateQRCodeResponse) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.Text)
-	if l > 0 {
-		n += 1 + l + sovQrcodegenerator(uint64(l))
-	}
-	if m.Image != nil {
-		l = m.Image.Size()
-		n += 1 + l + sovQrcodegenerator(uint64(l))
-	}
-	return n
-}
-
-func sovQrcodegenerator(x uint64) (n int) {
-	return (math_bits.Len64(x|1) + 6) / 7
-}
-func sozQrcodegenerator(x uint64) (n int) {
-	return sovQrcodegenerator((x << 1) ^ uint64((int64(x) >> 63)))
-}
 func (this *QRCodeFormat) String() string {
 	if this == nil {
 		return "nil"
@@ -1217,7 +707,7 @@ func (this *QRCodeFormat) String() string {
 	s := strings.Join([]string{`&QRCodeFormat{`,
 		`Name:` + fmt.Sprintf("%v", this.Name) + `,`,
 		`Description:` + fmt.Sprintf("%v", this.Description) + `,`,
-		`FieldMask:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.FieldMask), "FieldMask", "types.FieldMask", 1), `&`, ``, 1) + `,`,
+		`FieldMask:` + strings.Replace(fmt.Sprintf("%v", this.FieldMask), "FieldMask", "types.FieldMask", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1247,7 +737,7 @@ func (this *GetQRCodeFormatRequest) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GetQRCodeFormatRequest{`,
-		`FormatID:` + fmt.Sprintf("%v", this.FormatID) + `,`,
+		`FormatId:` + fmt.Sprintf("%v", this.FormatId) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1257,7 +747,7 @@ func (this *GenerateEndDeviceQRCodeRequest) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GenerateEndDeviceQRCodeRequest{`,
-		`FormatID:` + fmt.Sprintf("%v", this.FormatID) + `,`,
+		`FormatId:` + fmt.Sprintf("%v", this.FormatId) + `,`,
 		`EndDevice:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.EndDevice), "EndDevice", "EndDevice", 1), `&`, ``, 1) + `,`,
 		`Image:` + strings.Replace(fmt.Sprintf("%v", this.Image), "GenerateEndDeviceQRCodeRequest_Image", "GenerateEndDeviceQRCodeRequest_Image", 1) + `,`,
 		`}`,
@@ -1293,851 +783,3 @@ func valueToStringQrcodegenerator(v interface{}) string {
 	pv := reflect.Indirect(rv).Interface()
 	return fmt.Sprintf("*%v", pv)
 }
-func (m *QRCodeFormat) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowQrcodegenerator
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: QRCodeFormat: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QRCodeFormat: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Name", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQrcodegenerator
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthQrcodegenerator
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthQrcodegenerator
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Name = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Description", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQrcodegenerator
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthQrcodegenerator
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthQrcodegenerator
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Description = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field FieldMask", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQrcodegenerator
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthQrcodegenerator
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthQrcodegenerator
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := m.FieldMask.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipQrcodegenerator(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthQrcodegenerator
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthQrcodegenerator
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *QRCodeFormats) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowQrcodegenerator
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: QRCodeFormats: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QRCodeFormats: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Formats", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQrcodegenerator
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthQrcodegenerator
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthQrcodegenerator
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Formats == nil {
-				m.Formats = make(map[string]*QRCodeFormat)
-			}
-			var mapkey string
-			var mapvalue *QRCodeFormat
-			for iNdEx < postIndex {
-				entryPreIndex := iNdEx
-				var wire uint64
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return ErrIntOverflowQrcodegenerator
-					}
-					if iNdEx >= l {
-						return io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					wire |= uint64(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				fieldNum := int32(wire >> 3)
-				if fieldNum == 1 {
-					var stringLenmapkey uint64
-					for shift := uint(0); ; shift += 7 {
-						if shift >= 64 {
-							return ErrIntOverflowQrcodegenerator
-						}
-						if iNdEx >= l {
-							return io.ErrUnexpectedEOF
-						}
-						b := dAtA[iNdEx]
-						iNdEx++
-						stringLenmapkey |= uint64(b&0x7F) << shift
-						if b < 0x80 {
-							break
-						}
-					}
-					intStringLenmapkey := int(stringLenmapkey)
-					if intStringLenmapkey < 0 {
-						return ErrInvalidLengthQrcodegenerator
-					}
-					postStringIndexmapkey := iNdEx + intStringLenmapkey
-					if postStringIndexmapkey < 0 {
-						return ErrInvalidLengthQrcodegenerator
-					}
-					if postStringIndexmapkey > l {
-						return io.ErrUnexpectedEOF
-					}
-					mapkey = string(dAtA[iNdEx:postStringIndexmapkey])
-					iNdEx = postStringIndexmapkey
-				} else if fieldNum == 2 {
-					var mapmsglen int
-					for shift := uint(0); ; shift += 7 {
-						if shift >= 64 {
-							return ErrIntOverflowQrcodegenerator
-						}
-						if iNdEx >= l {
-							return io.ErrUnexpectedEOF
-						}
-						b := dAtA[iNdEx]
-						iNdEx++
-						mapmsglen |= int(b&0x7F) << shift
-						if b < 0x80 {
-							break
-						}
-					}
-					if mapmsglen < 0 {
-						return ErrInvalidLengthQrcodegenerator
-					}
-					postmsgIndex := iNdEx + mapmsglen
-					if postmsgIndex < 0 {
-						return ErrInvalidLengthQrcodegenerator
-					}
-					if postmsgIndex > l {
-						return io.ErrUnexpectedEOF
-					}
-					mapvalue = &QRCodeFormat{}
-					if err := mapvalue.Unmarshal(dAtA[iNdEx:postmsgIndex]); err != nil {
-						return err
-					}
-					iNdEx = postmsgIndex
-				} else {
-					iNdEx = entryPreIndex
-					skippy, err := skipQrcodegenerator(dAtA[iNdEx:])
-					if err != nil {
-						return err
-					}
-					if skippy < 0 {
-						return ErrInvalidLengthQrcodegenerator
-					}
-					if (iNdEx + skippy) > postIndex {
-						return io.ErrUnexpectedEOF
-					}
-					iNdEx += skippy
-				}
-			}
-			m.Formats[mapkey] = mapvalue
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipQrcodegenerator(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthQrcodegenerator
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthQrcodegenerator
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *GetQRCodeFormatRequest) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowQrcodegenerator
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: GetQRCodeFormatRequest: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: GetQRCodeFormatRequest: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field FormatID", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQrcodegenerator
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthQrcodegenerator
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthQrcodegenerator
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.FormatID = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipQrcodegenerator(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthQrcodegenerator
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthQrcodegenerator
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *GenerateEndDeviceQRCodeRequest) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowQrcodegenerator
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: GenerateEndDeviceQRCodeRequest: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: GenerateEndDeviceQRCodeRequest: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field FormatID", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQrcodegenerator
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthQrcodegenerator
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthQrcodegenerator
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.FormatID = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field EndDevice", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQrcodegenerator
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthQrcodegenerator
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthQrcodegenerator
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := m.EndDevice.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Image", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQrcodegenerator
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthQrcodegenerator
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthQrcodegenerator
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Image == nil {
-				m.Image = &GenerateEndDeviceQRCodeRequest_Image{}
-			}
-			if err := m.Image.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipQrcodegenerator(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthQrcodegenerator
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthQrcodegenerator
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *GenerateEndDeviceQRCodeRequest_Image) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowQrcodegenerator
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: Image: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: Image: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ImageSize", wireType)
-			}
-			m.ImageSize = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQrcodegenerator
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.ImageSize |= uint32(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		default:
-			iNdEx = preIndex
-			skippy, err := skipQrcodegenerator(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthQrcodegenerator
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthQrcodegenerator
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *GenerateQRCodeResponse) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowQrcodegenerator
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: GenerateQRCodeResponse: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: GenerateQRCodeResponse: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Text", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQrcodegenerator
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthQrcodegenerator
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthQrcodegenerator
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Text = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Image", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQrcodegenerator
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthQrcodegenerator
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthQrcodegenerator
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Image == nil {
-				m.Image = &Picture{}
-			}
-			if err := m.Image.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipQrcodegenerator(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthQrcodegenerator
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthQrcodegenerator
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func skipQrcodegenerator(dAtA []byte) (n int, err error) {
-	l := len(dAtA)
-	iNdEx := 0
-	depth := 0
-	for iNdEx < l {
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return 0, ErrIntOverflowQrcodegenerator
-			}
-			if iNdEx >= l {
-				return 0, io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		wireType := int(wire & 0x7)
-		switch wireType {
-		case 0:
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return 0, ErrIntOverflowQrcodegenerator
-				}
-				if iNdEx >= l {
-					return 0, io.ErrUnexpectedEOF
-				}
-				iNdEx++
-				if dAtA[iNdEx-1] < 0x80 {
-					break
-				}
-			}
-		case 1:
-			iNdEx += 8
-		case 2:
-			var length int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return 0, ErrIntOverflowQrcodegenerator
-				}
-				if iNdEx >= l {
-					return 0, io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				length |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if length < 0 {
-				return 0, ErrInvalidLengthQrcodegenerator
-			}
-			iNdEx += length
-		case 3:
-			depth++
-		case 4:
-			if depth == 0 {
-				return 0, ErrUnexpectedEndOfGroupQrcodegenerator
-			}
-			depth--
-		case 5:
-			iNdEx += 4
-		default:
-			return 0, fmt.Errorf("proto: illegal wireType %d", wireType)
-		}
-		if iNdEx < 0 {
-			return 0, ErrInvalidLengthQrcodegenerator
-		}
-		if depth == 0 {
-			return iNdEx, nil
-		}
-	}
-	return 0, io.ErrUnexpectedEOF
-}
-
-var (
-	ErrInvalidLengthQrcodegenerator        = fmt.Errorf("proto: negative length found during unmarshaling")
-	ErrIntOverflowQrcodegenerator          = fmt.Errorf("proto: integer overflow")
-	ErrUnexpectedEndOfGroupQrcodegenerator = fmt.Errorf("proto: unexpected end of group")
-)

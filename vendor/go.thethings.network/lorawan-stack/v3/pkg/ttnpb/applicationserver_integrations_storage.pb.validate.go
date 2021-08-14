@@ -52,7 +52,7 @@ func (m *GetStoredApplicationUpRequest) ValidateFields(paths ...string) error {
 		switch name {
 		case "application_ids":
 
-			if v, ok := interface{}(m.GetApplicationIDs()).(interface{ ValidateFields(...string) error }); ok {
+			if v, ok := interface{}(m.GetApplicationIds()).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return GetStoredApplicationUpRequestValidationError{
 						field:  "application_ids",
@@ -64,7 +64,7 @@ func (m *GetStoredApplicationUpRequest) ValidateFields(paths ...string) error {
 
 		case "end_device_ids":
 
-			if v, ok := interface{}(m.GetEndDeviceIDs()).(interface{ ValidateFields(...string) error }); ok {
+			if v, ok := interface{}(m.GetEndDeviceIds()).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return GetStoredApplicationUpRequestValidationError{
 						field:  "end_device_ids",
@@ -142,10 +142,22 @@ func (m *GetStoredApplicationUpRequest) ValidateFields(paths ...string) error {
 
 		case "field_mask":
 
-			if v, ok := interface{}(&m.FieldMask).(interface{ ValidateFields(...string) error }); ok {
+			if v, ok := interface{}(m.GetFieldMask()).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return GetStoredApplicationUpRequestValidationError{
 						field:  "field_mask",
+						reason: "embedded message failed validation",
+						cause:  err,
+					}
+				}
+			}
+
+		case "last":
+
+			if v, ok := interface{}(m.GetLast()).(interface{ ValidateFields(...string) error }); ok {
+				if err := v.ValidateFields(subs...); err != nil {
+					return GetStoredApplicationUpRequestValidationError{
+						field:  "last",
 						reason: "embedded message failed validation",
 						cause:  err,
 					}

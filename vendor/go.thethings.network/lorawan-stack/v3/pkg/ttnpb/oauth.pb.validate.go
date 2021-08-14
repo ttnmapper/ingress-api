@@ -52,7 +52,7 @@ func (m *OAuthClientAuthorizationIdentifiers) ValidateFields(paths ...string) er
 		switch name {
 		case "user_ids":
 
-			if v, ok := interface{}(&m.UserIDs).(interface{ ValidateFields(...string) error }); ok {
+			if v, ok := interface{}(&m.UserIds).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return OAuthClientAuthorizationIdentifiersValidationError{
 						field:  "user_ids",
@@ -64,7 +64,7 @@ func (m *OAuthClientAuthorizationIdentifiers) ValidateFields(paths ...string) er
 
 		case "client_ids":
 
-			if v, ok := interface{}(&m.ClientIDs).(interface{ ValidateFields(...string) error }); ok {
+			if v, ok := interface{}(&m.ClientIds).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return OAuthClientAuthorizationIdentifiersValidationError{
 						field:  "client_ids",
@@ -158,7 +158,7 @@ func (m *OAuthClientAuthorization) ValidateFields(paths ...string) error {
 		switch name {
 		case "user_ids":
 
-			if v, ok := interface{}(&m.UserIDs).(interface{ ValidateFields(...string) error }); ok {
+			if v, ok := interface{}(&m.UserIds).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return OAuthClientAuthorizationValidationError{
 						field:  "user_ids",
@@ -170,7 +170,7 @@ func (m *OAuthClientAuthorization) ValidateFields(paths ...string) error {
 
 		case "client_ids":
 
-			if v, ok := interface{}(&m.ClientIDs).(interface{ ValidateFields(...string) error }); ok {
+			if v, ok := interface{}(&m.ClientIds).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return OAuthClientAuthorizationValidationError{
 						field:  "client_ids",
@@ -509,7 +509,7 @@ func (m *OAuthAuthorizationCode) ValidateFields(paths ...string) error {
 		switch name {
 		case "user_ids":
 
-			if v, ok := interface{}(&m.UserIDs).(interface{ ValidateFields(...string) error }); ok {
+			if v, ok := interface{}(&m.UserIds).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return OAuthAuthorizationCodeValidationError{
 						field:  "user_ids",
@@ -521,7 +521,7 @@ func (m *OAuthAuthorizationCode) ValidateFields(paths ...string) error {
 
 		case "user_session_id":
 
-			if utf8.RuneCountInString(m.GetUserSessionID()) > 64 {
+			if utf8.RuneCountInString(m.GetUserSessionId()) > 64 {
 				return OAuthAuthorizationCodeValidationError{
 					field:  "user_session_id",
 					reason: "value length must be at most 64 runes",
@@ -530,7 +530,7 @@ func (m *OAuthAuthorizationCode) ValidateFields(paths ...string) error {
 
 		case "client_ids":
 
-			if v, ok := interface{}(&m.ClientIDs).(interface{ ValidateFields(...string) error }); ok {
+			if v, ok := interface{}(&m.ClientIds).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return OAuthAuthorizationCodeValidationError{
 						field:  "client_ids",
@@ -546,7 +546,7 @@ func (m *OAuthAuthorizationCode) ValidateFields(paths ...string) error {
 			// no validation rules for Code
 		case "redirect_uri":
 
-			if _, err := url.Parse(m.GetRedirectURI()); err != nil {
+			if _, err := url.Parse(m.GetRedirectUri()); err != nil {
 				return OAuthAuthorizationCodeValidationError{
 					field:  "redirect_uri",
 					reason: "value must be a valid URI",
@@ -663,7 +663,7 @@ func (m *OAuthAccessTokenIdentifiers) ValidateFields(paths ...string) error {
 		switch name {
 		case "user_ids":
 
-			if v, ok := interface{}(&m.UserIDs).(interface{ ValidateFields(...string) error }); ok {
+			if v, ok := interface{}(&m.UserIds).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return OAuthAccessTokenIdentifiersValidationError{
 						field:  "user_ids",
@@ -675,7 +675,7 @@ func (m *OAuthAccessTokenIdentifiers) ValidateFields(paths ...string) error {
 
 		case "client_ids":
 
-			if v, ok := interface{}(&m.ClientIDs).(interface{ ValidateFields(...string) error }); ok {
+			if v, ok := interface{}(&m.ClientIds).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return OAuthAccessTokenIdentifiersValidationError{
 						field:  "client_ids",
@@ -686,7 +686,7 @@ func (m *OAuthAccessTokenIdentifiers) ValidateFields(paths ...string) error {
 			}
 
 		case "id":
-			// no validation rules for ID
+			// no validation rules for Id
 		default:
 			return OAuthAccessTokenIdentifiersValidationError{
 				field:  name,
@@ -771,7 +771,7 @@ func (m *OAuthAccessToken) ValidateFields(paths ...string) error {
 		switch name {
 		case "user_ids":
 
-			if v, ok := interface{}(&m.UserIDs).(interface{ ValidateFields(...string) error }); ok {
+			if v, ok := interface{}(&m.UserIds).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return OAuthAccessTokenValidationError{
 						field:  "user_ids",
@@ -783,7 +783,7 @@ func (m *OAuthAccessToken) ValidateFields(paths ...string) error {
 
 		case "user_session_id":
 
-			if utf8.RuneCountInString(m.GetUserSessionID()) > 64 {
+			if utf8.RuneCountInString(m.GetUserSessionId()) > 64 {
 				return OAuthAccessTokenValidationError{
 					field:  "user_session_id",
 					reason: "value length must be at most 64 runes",
@@ -792,7 +792,7 @@ func (m *OAuthAccessToken) ValidateFields(paths ...string) error {
 
 		case "client_ids":
 
-			if v, ok := interface{}(&m.ClientIDs).(interface{ ValidateFields(...string) error }); ok {
+			if v, ok := interface{}(&m.ClientIds).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return OAuthAccessTokenValidationError{
 						field:  "client_ids",
@@ -803,7 +803,7 @@ func (m *OAuthAccessToken) ValidateFields(paths ...string) error {
 			}
 
 		case "id":
-			// no validation rules for ID
+			// no validation rules for Id
 		case "access_token":
 			// no validation rules for AccessToken
 		case "refresh_token":
@@ -1013,7 +1013,7 @@ func (m *ListOAuthAccessTokensRequest) ValidateFields(paths ...string) error {
 		switch name {
 		case "user_ids":
 
-			if v, ok := interface{}(&m.UserIDs).(interface{ ValidateFields(...string) error }); ok {
+			if v, ok := interface{}(&m.UserIds).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return ListOAuthAccessTokensRequestValidationError{
 						field:  "user_ids",
@@ -1025,7 +1025,7 @@ func (m *ListOAuthAccessTokensRequest) ValidateFields(paths ...string) error {
 
 		case "client_ids":
 
-			if v, ok := interface{}(&m.ClientIDs).(interface{ ValidateFields(...string) error }); ok {
+			if v, ok := interface{}(&m.ClientIds).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return ListOAuthAccessTokensRequestValidationError{
 						field:  "client_ids",

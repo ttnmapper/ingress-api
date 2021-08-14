@@ -17,24 +17,23 @@ package ttnpb
 import (
 	"fmt"
 
-	"go.thethings.network/lorawan-stack/v3/pkg/log"
 	"go.thethings.network/lorawan-stack/v3/pkg/types"
 )
 
 func NewPopulatedJoinRequest(r randyJoin, easy bool) *JoinRequest {
 	defer func() {
 		if r := recover(); r != nil {
-			log.Errorf("NewPopulatedJoinRequest: %s", r)
+			panic(fmt.Errorf("NewPopulatedJoinRequest: %s", r))
 		}
 	}()
 
 	out := &JoinRequest{}
-	out.SelectedMACVersion = MACVersion(r.Intn(5))
-	out.NetID = *types.NewPopulatedNetID(r)
+	out.SelectedMacVersion = MACVersion(r.Intn(5))
+	out.NetId = *types.NewPopulatedNetID(r)
 	out.DownlinkSettings = *NewPopulatedDLSettings(r, easy)
 	out.RxDelay = RxDelay(r.Uint32() % 16)
 	if r.Intn(10) != 0 {
-		out.CFList = NewPopulatedCFList(r, false)
+		out.CfList = NewPopulatedCFList(r, false)
 	}
 
 	msg := NewPopulatedMessageJoinRequest(r)

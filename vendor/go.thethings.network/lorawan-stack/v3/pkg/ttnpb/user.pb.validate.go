@@ -525,7 +525,7 @@ func (m *GetUserRequest) ValidateFields(paths ...string) error {
 
 		case "field_mask":
 
-			if v, ok := interface{}(&m.FieldMask).(interface{ ValidateFields(...string) error }); ok {
+			if v, ok := interface{}(m.GetFieldMask()).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return GetUserRequestValidationError{
 						field:  "field_mask",
@@ -616,7 +616,7 @@ func (m *ListUsersRequest) ValidateFields(paths ...string) error {
 		switch name {
 		case "field_mask":
 
-			if v, ok := interface{}(&m.FieldMask).(interface{ ValidateFields(...string) error }); ok {
+			if v, ok := interface{}(m.GetFieldMask()).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return ListUsersRequestValidationError{
 						field:  "field_mask",
@@ -852,7 +852,7 @@ func (m *UpdateUserRequest) ValidateFields(paths ...string) error {
 
 		case "field_mask":
 
-			if v, ok := interface{}(&m.FieldMask).(interface{ ValidateFields(...string) error }); ok {
+			if v, ok := interface{}(m.GetFieldMask()).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return UpdateUserRequestValidationError{
 						field:  "field_mask",
@@ -1268,7 +1268,7 @@ func (m *GetUserAPIKeyRequest) ValidateFields(paths ...string) error {
 			}
 
 		case "key_id":
-			// no validation rules for KeyID
+			// no validation rules for KeyId
 		default:
 			return GetUserAPIKeyRequestValidationError{
 				field:  name,
@@ -1403,6 +1403,21 @@ func (m *CreateUserAPIKeyRequest) ValidateFields(paths ...string) error {
 
 			}
 
+		case "expires_at":
+
+			if ts := m.GetExpiresAt(); ts != nil {
+
+				now := time.Now()
+
+				if ts.Sub(now) <= 0 {
+					return CreateUserAPIKeyRequestValidationError{
+						field:  "expires_at",
+						reason: "value must be greater than now",
+					}
+				}
+
+			}
+
 		default:
 			return CreateUserAPIKeyRequestValidationError{
 				field:  name,
@@ -1502,6 +1517,18 @@ func (m *UpdateUserAPIKeyRequest) ValidateFields(paths ...string) error {
 				if err := v.ValidateFields(subs...); err != nil {
 					return UpdateUserAPIKeyRequestValidationError{
 						field:  "api_key",
+						reason: "embedded message failed validation",
+						cause:  err,
+					}
+				}
+			}
+
+		case "field_mask":
+
+			if v, ok := interface{}(m.GetFieldMask()).(interface{ ValidateFields(...string) error }); ok {
+				if err := v.ValidateFields(subs...); err != nil {
+					return UpdateUserAPIKeyRequestValidationError{
+						field:  "field_mask",
 						reason: "embedded message failed validation",
 						cause:  err,
 					}
@@ -2274,7 +2301,7 @@ func (m *UserSessionIdentifiers) ValidateFields(paths ...string) error {
 
 		case "session_id":
 
-			if utf8.RuneCountInString(m.GetSessionID()) > 64 {
+			if utf8.RuneCountInString(m.GetSessionId()) > 64 {
 				return UserSessionIdentifiersValidationError{
 					field:  "session_id",
 					reason: "value length must be at most 64 runes",
@@ -2376,7 +2403,7 @@ func (m *UserSession) ValidateFields(paths ...string) error {
 
 		case "session_id":
 
-			if utf8.RuneCountInString(m.GetSessionID()) > 64 {
+			if utf8.RuneCountInString(m.GetSessionId()) > 64 {
 				return UserSessionValidationError{
 					field:  "session_id",
 					reason: "value length must be at most 64 runes",

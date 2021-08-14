@@ -6,17 +6,14 @@ package ttnpb
 import (
 	bytes "bytes"
 	fmt "fmt"
-	io "io"
-	math "math"
-	math_bits "math/bits"
-	reflect "reflect"
-	strings "strings"
-
 	_ "github.com/envoyproxy/protoc-gen-validate/validate"
 	_ "github.com/gogo/protobuf/gogoproto"
 	proto "github.com/gogo/protobuf/proto"
 	golang_proto "github.com/golang/protobuf/proto"
 	go_thethings_network_lorawan_stack_v3_pkg_types "go.thethings.network/lorawan-stack/v3/pkg/types"
+	math "math"
+	reflect "reflect"
+	strings "strings"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -35,7 +32,7 @@ type KeyEnvelope struct {
 	// The unencrypted AES key.
 	Key *go_thethings_network_lorawan_stack_v3_pkg_types.AES128Key `protobuf:"bytes,1,opt,name=key,proto3,customtype=go.thethings.network/lorawan-stack/v3/pkg/types.AES128Key" json:"key,omitempty"`
 	// The label of the RFC 3394 key-encryption-key (KEK) that was used to encrypt the key.
-	KEKLabel             string   `protobuf:"bytes,2,opt,name=kek_label,json=kekLabel,proto3" json:"kek_label,omitempty"`
+	KekLabel             string   `protobuf:"bytes,2,opt,name=kek_label,json=kekLabel,proto3" json:"kek_label,omitempty"`
 	EncryptedKey         []byte   `protobuf:"bytes,3,opt,name=encrypted_key,json=encryptedKey,proto3" json:"encrypted_key,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -47,25 +44,16 @@ func (*KeyEnvelope) Descriptor() ([]byte, []int) {
 	return fileDescriptor_ee170ee4ccd55993, []int{0}
 }
 func (m *KeyEnvelope) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	return xxx_messageInfo_KeyEnvelope.Unmarshal(m, b)
 }
 func (m *KeyEnvelope) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_KeyEnvelope.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	return xxx_messageInfo_KeyEnvelope.Marshal(b, m, deterministic)
 }
 func (m *KeyEnvelope) XXX_Merge(src proto.Message) {
 	xxx_messageInfo_KeyEnvelope.Merge(m, src)
 }
 func (m *KeyEnvelope) XXX_Size() int {
-	return m.Size()
+	return xxx_messageInfo_KeyEnvelope.Size(m)
 }
 func (m *KeyEnvelope) XXX_DiscardUnknown() {
 	xxx_messageInfo_KeyEnvelope.DiscardUnknown(m)
@@ -73,9 +61,9 @@ func (m *KeyEnvelope) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_KeyEnvelope proto.InternalMessageInfo
 
-func (m *KeyEnvelope) GetKEKLabel() string {
+func (m *KeyEnvelope) GetKekLabel() string {
 	if m != nil {
-		return m.KEKLabel
+		return m.KekLabel
 	}
 	return ""
 }
@@ -91,7 +79,7 @@ func (m *KeyEnvelope) GetEncryptedKey() []byte {
 // These are stored on the Join Server.
 type RootKeys struct {
 	// Join Server issued identifier for the root keys.
-	RootKeyID string `protobuf:"bytes,1,opt,name=root_key_id,json=rootKeyId,proto3" json:"root_key_id,omitempty"`
+	RootKeyId string `protobuf:"bytes,1,opt,name=root_key_id,json=rootKeyId,proto3" json:"root_key_id,omitempty"`
 	// The (encrypted) Application Key.
 	AppKey *KeyEnvelope `protobuf:"bytes,2,opt,name=app_key,json=appKey,proto3" json:"app_key,omitempty"`
 	// The (encrypted) Network Key.
@@ -106,25 +94,16 @@ func (*RootKeys) Descriptor() ([]byte, []int) {
 	return fileDescriptor_ee170ee4ccd55993, []int{1}
 }
 func (m *RootKeys) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	return xxx_messageInfo_RootKeys.Unmarshal(m, b)
 }
 func (m *RootKeys) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_RootKeys.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	return xxx_messageInfo_RootKeys.Marshal(b, m, deterministic)
 }
 func (m *RootKeys) XXX_Merge(src proto.Message) {
 	xxx_messageInfo_RootKeys.Merge(m, src)
 }
 func (m *RootKeys) XXX_Size() int {
-	return m.Size()
+	return xxx_messageInfo_RootKeys.Size(m)
 }
 func (m *RootKeys) XXX_DiscardUnknown() {
 	xxx_messageInfo_RootKeys.DiscardUnknown(m)
@@ -132,9 +111,9 @@ func (m *RootKeys) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_RootKeys proto.InternalMessageInfo
 
-func (m *RootKeys) GetRootKeyID() string {
+func (m *RootKeys) GetRootKeyId() string {
 	if m != nil {
-		return m.RootKeyID
+		return m.RootKeyId
 	}
 	return ""
 }
@@ -158,7 +137,7 @@ func (m *RootKeys) GetNwkKey() *KeyEnvelope {
 type SessionKeys struct {
 	// Join Server issued identifier for the session keys.
 	// This ID can be used to request the keys from the Join Server in case the are lost.
-	SessionKeyID []byte `protobuf:"bytes,1,opt,name=session_key_id,json=sessionKeyId,proto3" json:"session_key_id,omitempty"`
+	SessionKeyId []byte `protobuf:"bytes,1,opt,name=session_key_id,json=sessionKeyId,proto3" json:"session_key_id,omitempty"`
 	// The (encrypted) Forwarding Network Session Integrity Key (or Network Session Key in 1.0 compatibility mode).
 	// This key is stored by the (forwarding) Network Server.
 	FNwkSIntKey *KeyEnvelope `protobuf:"bytes,2,opt,name=f_nwk_s_int_key,json=fNwkSIntKey,proto3" json:"f_nwk_s_int_key,omitempty"`
@@ -181,25 +160,16 @@ func (*SessionKeys) Descriptor() ([]byte, []int) {
 	return fileDescriptor_ee170ee4ccd55993, []int{2}
 }
 func (m *SessionKeys) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	return xxx_messageInfo_SessionKeys.Unmarshal(m, b)
 }
 func (m *SessionKeys) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_SessionKeys.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	return xxx_messageInfo_SessionKeys.Marshal(b, m, deterministic)
 }
 func (m *SessionKeys) XXX_Merge(src proto.Message) {
 	xxx_messageInfo_SessionKeys.Merge(m, src)
 }
 func (m *SessionKeys) XXX_Size() int {
-	return m.Size()
+	return xxx_messageInfo_SessionKeys.Size(m)
 }
 func (m *SessionKeys) XXX_DiscardUnknown() {
 	xxx_messageInfo_SessionKeys.DiscardUnknown(m)
@@ -207,9 +177,9 @@ func (m *SessionKeys) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_SessionKeys proto.InternalMessageInfo
 
-func (m *SessionKeys) GetSessionKeyID() []byte {
+func (m *SessionKeys) GetSessionKeyId() []byte {
 	if m != nil {
-		return m.SessionKeyID
+		return m.SessionKeyId
 	}
 	return nil
 }
@@ -257,45 +227,39 @@ func init() {
 }
 
 var fileDescriptor_ee170ee4ccd55993 = []byte{
-	// 607 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x94, 0x93, 0x3f, 0x4c, 0xdb, 0x4e,
-	0x14, 0xc7, 0xef, 0x08, 0xf0, 0x4b, 0x2e, 0x81, 0x5f, 0x65, 0xb5, 0x52, 0x44, 0xab, 0x07, 0x62,
-	0x62, 0x89, 0x2d, 0xa0, 0x55, 0xff, 0x48, 0x45, 0xc2, 0x22, 0x03, 0x72, 0xd5, 0x4a, 0xce, 0xd6,
-	0x25, 0x72, 0x92, 0xc3, 0x58, 0x4e, 0xef, 0x2c, 0xdf, 0x91, 0xd4, 0x9d, 0x32, 0x32, 0x76, 0xec,
-	0xc8, 0x52, 0x89, 0xa5, 0x12, 0x23, 0x23, 0x23, 0x23, 0xea, 0x84, 0x3a, 0x20, 0x7c, 0x5e, 0x18,
-	0x19, 0x11, 0x53, 0x75, 0x4e, 0x04, 0xa1, 0x1d, 0xa0, 0xdb, 0x7b, 0xba, 0xf7, 0xfd, 0xde, 0xe7,
-	0x7b, 0x4f, 0x47, 0x9e, 0x75, 0x79, 0xec, 0xf5, 0x3d, 0x56, 0x13, 0xd2, 0x6b, 0x87, 0x96, 0x17,
-	0x05, 0x56, 0x48, 0x13, 0x61, 0x46, 0x31, 0x97, 0xdc, 0x98, 0x95, 0x92, 0x99, 0xa3, 0x09, 0xb3,
-	0xb7, 0x3a, 0xb7, 0xee, 0x07, 0x72, 0x7b, 0xa7, 0x65, 0xb6, 0xf9, 0x27, 0x8b, 0xb2, 0x1e, 0x4f,
-	0xa2, 0x98, 0x7f, 0x4e, 0xac, 0x7c, 0xb8, 0x5d, 0xf3, 0x29, 0xab, 0xf5, 0xbc, 0x6e, 0xd0, 0xf1,
-	0x24, 0xb5, 0xfe, 0x2a, 0x86, 0x96, 0x73, 0xb5, 0x31, 0x0b, 0x9f, 0xfb, 0x7c, 0x28, 0x6e, 0xed,
-	0x6c, 0xe5, 0x5d, 0xde, 0xe4, 0xd5, 0x70, 0x7c, 0xf1, 0x08, 0x93, 0xb2, 0x43, 0x93, 0x3a, 0xeb,
-	0xd1, 0x2e, 0x8f, 0xa8, 0xf1, 0x81, 0x14, 0x42, 0x9a, 0x54, 0xf1, 0x02, 0x5e, 0xaa, 0xd8, 0x6f,
-	0x7f, 0x9d, 0xcd, 0xbf, 0xf6, 0xb9, 0x29, 0xb7, 0xa9, 0xdc, 0x0e, 0x98, 0x2f, 0x4c, 0x46, 0x65,
-	0x9f, 0xc7, 0xa1, 0x75, 0x37, 0x55, 0x6f, 0xd5, 0x8a, 0x42, 0xdf, 0x92, 0x49, 0x44, 0x85, 0xb9,
-	0x5e, 0x6f, 0x2c, 0xaf, 0xbc, 0x72, 0x68, 0xe2, 0x6a, 0x27, 0x63, 0x99, 0x94, 0x42, 0x1a, 0x36,
-	0xbb, 0x5e, 0x8b, 0x76, 0xab, 0x13, 0x0b, 0x78, 0xa9, 0x64, 0x3f, 0xbe, 0xb6, 0xa7, 0xe2, 0x42,
-	0x75, 0xf0, 0x48, 0x9d, 0xcd, 0x17, 0x9d, 0xba, 0xf3, 0x4e, 0x9f, 0xb9, 0xc5, 0x90, 0x86, 0x79,
-	0x65, 0xd4, 0xc8, 0x0c, 0x65, 0xed, 0x38, 0x89, 0x24, 0xed, 0x34, 0x35, 0x4d, 0x21, 0xa7, 0x29,
-	0x5e, 0xdb, 0x53, 0x5f, 0x0a, 0xd5, 0x41, 0xd1, 0xad, 0xdc, 0x1c, 0x3b, 0x34, 0x59, 0xfc, 0x81,
-	0x49, 0xd1, 0xe5, 0x5c, 0x3a, 0x34, 0x11, 0xc6, 0x0b, 0x52, 0x8e, 0x39, 0x97, 0x5a, 0xd6, 0x0c,
-	0x3a, 0x79, 0x8e, 0x92, 0xfd, 0x64, 0xec, 0xc2, 0xd2, 0x68, 0x74, 0x73, 0xc3, 0x2d, 0xc5, 0xa3,
-	0xb2, 0x63, 0x3c, 0x27, 0xff, 0x79, 0x51, 0x94, 0x5f, 0xa6, 0x19, 0xcb, 0x2b, 0x4f, 0xcd, 0xbb,
-	0xab, 0x31, 0xc7, 0x1e, 0xc9, 0x9d, 0xf6, 0xa2, 0xc8, 0xa1, 0x89, 0x56, 0xb1, 0x7e, 0x78, 0x83,
-	0x78, 0x9f, 0x8a, 0xf5, 0x43, 0xcd, 0xfb, 0x73, 0x82, 0x94, 0x1b, 0x54, 0x88, 0x80, 0xb3, 0x1c,
-	0x79, 0x8d, 0xcc, 0x8a, 0x61, 0x3b, 0x4e, 0x5d, 0xb1, 0xab, 0xa3, 0xbc, 0x9a, 0xba, 0x72, 0x2b,
-	0xd8, 0xdc, 0x70, 0x2b, 0xe2, 0xb6, 0xeb, 0x18, 0xeb, 0xe4, 0xff, 0xad, 0xa6, 0xe6, 0x10, 0xcd,
-	0x80, 0xc9, 0x87, 0x66, 0x28, 0x6f, 0xbd, 0xef, 0x87, 0x8d, 0x4d, 0xa6, 0x1f, 0x40, 0x5b, 0x88,
-	0x3f, 0x2c, 0x1e, 0x10, 0xa8, 0x2c, 0xc6, 0x2c, 0xd6, 0xc8, 0xcc, 0xd0, 0x80, 0xb2, 0x76, 0x6e,
-	0x30, 0x79, 0xbf, 0x01, 0x61, 0xfd, 0xb0, 0x51, 0x67, 0x6d, 0xad, 0x7f, 0x49, 0x4a, 0x7a, 0x03,
-	0x22, 0xd7, 0x4e, 0xdd, 0xaf, 0xd5, 0xfb, 0x6a, 0x38, 0x34, 0x79, 0x33, 0x79, 0xb8, 0x37, 0x8f,
-	0xec, 0xef, 0xf8, 0x38, 0x05, 0x7c, 0x92, 0x02, 0x3e, 0x4d, 0x01, 0x9d, 0xa7, 0x80, 0x2e, 0x52,
-	0x40, 0x97, 0x29, 0xa0, 0xab, 0x14, 0xf0, 0x40, 0x01, 0xde, 0x55, 0x80, 0xf6, 0x15, 0xe0, 0x03,
-	0x05, 0xe8, 0x50, 0x01, 0x3a, 0x52, 0x80, 0x8e, 0x15, 0xe0, 0x13, 0x05, 0xf8, 0x54, 0x01, 0x3a,
-	0x57, 0x80, 0x2f, 0x14, 0xa0, 0x4b, 0x05, 0xf8, 0x4a, 0x01, 0x1a, 0x64, 0x80, 0x76, 0x33, 0xc0,
-	0x5f, 0x33, 0x40, 0xdf, 0x32, 0xc0, 0x7b, 0x19, 0xa0, 0xfd, 0x0c, 0xd0, 0x41, 0x06, 0xf8, 0x30,
-	0x03, 0x7c, 0x94, 0x01, 0xfe, 0x68, 0xfd, 0xc3, 0xef, 0x90, 0x2c, 0x6a, 0xb5, 0xa6, 0xf3, 0x6f,
-	0xb7, 0xfa, 0x3b, 0x00, 0x00, 0xff, 0xff, 0x9b, 0x7e, 0x14, 0x5d, 0x18, 0x04, 0x00, 0x00,
+	// 506 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x94, 0x92, 0x4d, 0x8b, 0x13, 0x31,
+	0x1c, 0xc6, 0x9b, 0xed, 0xee, 0xda, 0x66, 0xba, 0xeb, 0x32, 0xa7, 0xb2, 0xca, 0xec, 0x52, 0x10,
+	0x7a, 0x69, 0x06, 0xb7, 0x82, 0x2f, 0xa0, 0xd0, 0x42, 0x0f, 0x65, 0x7c, 0x81, 0xe9, 0xcd, 0x4b,
+	0x99, 0x4e, 0xff, 0x9d, 0x0e, 0xa9, 0x49, 0x98, 0x64, 0x3b, 0xc6, 0x53, 0x3f, 0x82, 0x1f, 0x61,
+	0x8f, 0x7e, 0x04, 0x11, 0x0f, 0x7e, 0x0c, 0xf1, 0x20, 0xd8, 0xbd, 0x78, 0xf4, 0xec, 0x49, 0x92,
+	0x91, 0x3a, 0xab, 0x87, 0xae, 0xb7, 0x84, 0x3c, 0xcf, 0xef, 0xff, 0x3c, 0x49, 0xf0, 0xed, 0x05,
+	0xcf, 0xa2, 0x3c, 0x62, 0x1d, 0xa9, 0xa2, 0x98, 0xfa, 0x91, 0x48, 0x7d, 0x0a, 0x5a, 0x12, 0x91,
+	0x71, 0xc5, 0xdd, 0x43, 0xa5, 0x18, 0xf9, 0xad, 0x20, 0xcb, 0xee, 0x71, 0x2f, 0x49, 0xd5, 0xfc,
+	0x7c, 0x42, 0x62, 0xfe, 0xca, 0x07, 0xb6, 0xe4, 0x5a, 0x64, 0xfc, 0xb5, 0xf6, 0xad, 0x38, 0xee,
+	0x24, 0xc0, 0x3a, 0xcb, 0x68, 0x91, 0x4e, 0x23, 0x05, 0xfe, 0x3f, 0x8b, 0x02, 0x79, 0xdc, 0x29,
+	0x21, 0x12, 0x9e, 0xf0, 0xc2, 0x3c, 0x39, 0x9f, 0xd9, 0x9d, 0xdd, 0xd8, 0x55, 0x21, 0x6f, 0x7d,
+	0x40, 0xd8, 0x09, 0x40, 0x0f, 0xd8, 0x12, 0x16, 0x5c, 0x80, 0xfb, 0x02, 0x57, 0x29, 0xe8, 0x26,
+	0x3a, 0x45, 0xed, 0x46, 0xff, 0xf1, 0x97, 0xaf, 0x27, 0x0f, 0x13, 0x4e, 0xd4, 0x1c, 0xd4, 0x3c,
+	0x65, 0x89, 0x24, 0x0c, 0x54, 0xce, 0x33, 0xea, 0x5f, 0x6d, 0xb5, 0xec, 0xfa, 0x82, 0x26, 0xbe,
+	0xd2, 0x02, 0x24, 0xe9, 0x0d, 0x46, 0x77, 0xcf, 0x1e, 0x04, 0xa0, 0x43, 0x43, 0x72, 0xef, 0xe0,
+	0x3a, 0x05, 0x3a, 0x5e, 0x44, 0x13, 0x58, 0x34, 0x77, 0x4e, 0x51, 0xbb, 0xde, 0xaf, 0xfd, 0xec,
+	0xef, 0x65, 0xd5, 0xe6, 0xea, 0x28, 0xac, 0x51, 0xa0, 0x4f, 0xcd, 0x89, 0xdb, 0xc1, 0x07, 0xc0,
+	0xe2, 0x4c, 0x0b, 0x05, 0xd3, 0xb1, 0x49, 0x50, 0xb5, 0x09, 0x8c, 0xf4, 0x4d, 0xb5, 0xb9, 0xaa,
+	0x85, 0x8d, 0xcd, 0x71, 0x00, 0xfa, 0xd1, 0xee, 0xfb, 0x8b, 0x13, 0xd4, 0xba, 0x40, 0xb8, 0x16,
+	0x72, 0xae, 0x02, 0xd0, 0xd2, 0x6d, 0x63, 0x27, 0xe3, 0x5c, 0x19, 0xf3, 0x38, 0x9d, 0xda, 0x06,
+	0xe5, 0x51, 0xf5, 0xac, 0x10, 0x0e, 0xa7, 0xee, 0x3d, 0x7c, 0x23, 0x12, 0xc2, 0x4e, 0x31, 0x81,
+	0x9c, 0xb3, 0x5b, 0xe4, 0xea, 0x3b, 0x90, 0xd2, 0x8d, 0x84, 0xfb, 0x91, 0x10, 0x01, 0x68, 0xe3,
+	0x62, 0x39, 0xdd, 0x64, 0xdb, 0xe6, 0x62, 0x39, 0x0d, 0x40, 0xb7, 0x3e, 0xee, 0x60, 0x67, 0x04,
+	0x52, 0xa6, 0x9c, 0xd9, 0x94, 0x04, 0x1f, 0xca, 0x62, 0x5b, 0x0e, 0xfa, 0xa7, 0xe8, 0x51, 0xd8,
+	0x90, 0x1b, 0xf9, 0x70, 0xea, 0xf6, 0xf0, 0xcd, 0xd9, 0xd8, 0xcc, 0x95, 0xe3, 0x94, 0xa9, 0xeb,
+	0x66, 0x76, 0x66, 0xcf, 0x73, 0x3a, 0x1a, 0x32, 0x53, 0xd8, 0x20, 0xe4, 0x5f, 0x88, 0x6b, 0x14,
+	0x70, 0x64, 0x09, 0xf1, 0x04, 0x1f, 0x14, 0x00, 0x60, 0xb1, 0x05, 0xec, 0x6e, 0x07, 0x60, 0x96,
+	0xd3, 0xd1, 0x80, 0xc5, 0xc6, 0x7f, 0x1f, 0xd7, 0xcd, 0x8d, 0x4b, 0xeb, 0xdd, 0xdb, 0xee, 0x35,
+	0xef, 0x33, 0x0a, 0x40, 0xf7, 0x9f, 0x7d, 0xfe, 0xe6, 0x55, 0x56, 0x6b, 0x0f, 0xbd, 0x5b, 0x7b,
+	0xe8, 0xfb, 0xda, 0xab, 0xfc, 0x58, 0x7b, 0xe8, 0xed, 0xa5, 0x57, 0xf9, 0x74, 0xe9, 0xa1, 0x97,
+	0xfe, 0x7f, 0xfc, 0x4d, 0xc5, 0xc4, 0x64, 0xb2, 0x6f, 0x3f, 0x7d, 0xf7, 0x57, 0x00, 0x00, 0x00,
+	0xff, 0xff, 0xc9, 0x0a, 0x0c, 0xe4, 0x96, 0x03, 0x00, 0x00,
 }
 
 func (this *KeyEnvelope) Equal(that interface{}) bool {
@@ -324,7 +288,7 @@ func (this *KeyEnvelope) Equal(that interface{}) bool {
 	} else if !this.Key.Equal(*that1.Key) {
 		return false
 	}
-	if this.KEKLabel != that1.KEKLabel {
+	if this.KekLabel != that1.KekLabel {
 		return false
 	}
 	if !bytes.Equal(this.EncryptedKey, that1.EncryptedKey) {
@@ -351,7 +315,7 @@ func (this *RootKeys) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if this.RootKeyID != that1.RootKeyID {
+	if this.RootKeyId != that1.RootKeyId {
 		return false
 	}
 	if !this.AppKey.Equal(that1.AppKey) {
@@ -381,7 +345,7 @@ func (this *SessionKeys) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if !bytes.Equal(this.SessionKeyID, that1.SessionKeyID) {
+	if !bytes.Equal(this.SessionKeyId, that1.SessionKeyId) {
 		return false
 	}
 	if !this.FNwkSIntKey.Equal(that1.FNwkSIntKey) {
@@ -398,220 +362,14 @@ func (this *SessionKeys) Equal(that interface{}) bool {
 	}
 	return true
 }
-func (m *KeyEnvelope) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *KeyEnvelope) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *KeyEnvelope) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.EncryptedKey) > 0 {
-		i -= len(m.EncryptedKey)
-		copy(dAtA[i:], m.EncryptedKey)
-		i = encodeVarintKeys(dAtA, i, uint64(len(m.EncryptedKey)))
-		i--
-		dAtA[i] = 0x1a
-	}
-	if len(m.KEKLabel) > 0 {
-		i -= len(m.KEKLabel)
-		copy(dAtA[i:], m.KEKLabel)
-		i = encodeVarintKeys(dAtA, i, uint64(len(m.KEKLabel)))
-		i--
-		dAtA[i] = 0x12
-	}
-	if m.Key != nil {
-		{
-			size := m.Key.Size()
-			i -= size
-			if _, err := m.Key.MarshalTo(dAtA[i:]); err != nil {
-				return 0, err
-			}
-			i = encodeVarintKeys(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *RootKeys) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *RootKeys) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *RootKeys) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.NwkKey != nil {
-		{
-			size, err := m.NwkKey.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintKeys(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x1a
-	}
-	if m.AppKey != nil {
-		{
-			size, err := m.AppKey.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintKeys(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x12
-	}
-	if len(m.RootKeyID) > 0 {
-		i -= len(m.RootKeyID)
-		copy(dAtA[i:], m.RootKeyID)
-		i = encodeVarintKeys(dAtA, i, uint64(len(m.RootKeyID)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *SessionKeys) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *SessionKeys) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *SessionKeys) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.AppSKey != nil {
-		{
-			size, err := m.AppSKey.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintKeys(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x2a
-	}
-	if m.NwkSEncKey != nil {
-		{
-			size, err := m.NwkSEncKey.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintKeys(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x22
-	}
-	if m.SNwkSIntKey != nil {
-		{
-			size, err := m.SNwkSIntKey.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintKeys(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x1a
-	}
-	if m.FNwkSIntKey != nil {
-		{
-			size, err := m.FNwkSIntKey.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintKeys(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x12
-	}
-	if len(m.SessionKeyID) > 0 {
-		i -= len(m.SessionKeyID)
-		copy(dAtA[i:], m.SessionKeyID)
-		i = encodeVarintKeys(dAtA, i, uint64(len(m.SessionKeyID)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
-}
-
-func encodeVarintKeys(dAtA []byte, offset int, v uint64) int {
-	offset -= sovKeys(v)
-	base := offset
-	for v >= 1<<7 {
-		dAtA[offset] = uint8(v&0x7f | 0x80)
-		v >>= 7
-		offset++
-	}
-	dAtA[offset] = uint8(v)
-	return base
-}
 func NewPopulatedKeyEnvelope(r randyKeys, easy bool) *KeyEnvelope {
 	this := &KeyEnvelope{}
 	this.Key = go_thethings_network_lorawan_stack_v3_pkg_types.NewPopulatedAES128Key(r)
-	this.KEKLabel = randStringKeys(r)
+	this.KekLabel = string(randStringKeys(r))
 	v1 := r.Intn(100)
 	this.EncryptedKey = make([]byte, v1)
 	for i := 0; i < v1; i++ {
 		this.EncryptedKey[i] = byte(r.Intn(256))
-	}
-	if !easy && r.Intn(10) != 0 {
-	}
-	return this
-}
-
-func NewPopulatedRootKeys(r randyKeys, easy bool) *RootKeys {
-	this := &RootKeys{}
-	this.RootKeyID = randStringKeys(r)
-	if r.Intn(5) != 0 {
-		this.AppKey = NewPopulatedKeyEnvelope(r, easy)
-	}
-	if r.Intn(5) != 0 {
-		this.NwkKey = NewPopulatedKeyEnvelope(r, easy)
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
@@ -684,88 +442,11 @@ func randFieldKeys(dAtA []byte, r randyKeys, fieldNumber int, wire int) []byte {
 }
 func encodeVarintPopulateKeys(dAtA []byte, v uint64) []byte {
 	for v >= 1<<7 {
-		dAtA = append(dAtA, uint8(v&0x7f|0x80))
+		dAtA = append(dAtA, uint8(uint64(v)&0x7f|0x80))
 		v >>= 7
 	}
 	dAtA = append(dAtA, uint8(v))
 	return dAtA
-}
-func (m *KeyEnvelope) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.Key != nil {
-		l = m.Key.Size()
-		n += 1 + l + sovKeys(uint64(l))
-	}
-	l = len(m.KEKLabel)
-	if l > 0 {
-		n += 1 + l + sovKeys(uint64(l))
-	}
-	l = len(m.EncryptedKey)
-	if l > 0 {
-		n += 1 + l + sovKeys(uint64(l))
-	}
-	return n
-}
-
-func (m *RootKeys) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.RootKeyID)
-	if l > 0 {
-		n += 1 + l + sovKeys(uint64(l))
-	}
-	if m.AppKey != nil {
-		l = m.AppKey.Size()
-		n += 1 + l + sovKeys(uint64(l))
-	}
-	if m.NwkKey != nil {
-		l = m.NwkKey.Size()
-		n += 1 + l + sovKeys(uint64(l))
-	}
-	return n
-}
-
-func (m *SessionKeys) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.SessionKeyID)
-	if l > 0 {
-		n += 1 + l + sovKeys(uint64(l))
-	}
-	if m.FNwkSIntKey != nil {
-		l = m.FNwkSIntKey.Size()
-		n += 1 + l + sovKeys(uint64(l))
-	}
-	if m.SNwkSIntKey != nil {
-		l = m.SNwkSIntKey.Size()
-		n += 1 + l + sovKeys(uint64(l))
-	}
-	if m.NwkSEncKey != nil {
-		l = m.NwkSEncKey.Size()
-		n += 1 + l + sovKeys(uint64(l))
-	}
-	if m.AppSKey != nil {
-		l = m.AppSKey.Size()
-		n += 1 + l + sovKeys(uint64(l))
-	}
-	return n
-}
-
-func sovKeys(x uint64) (n int) {
-	return (math_bits.Len64(x|1) + 6) / 7
-}
-func sozKeys(x uint64) (n int) {
-	return sovKeys((x << 1) ^ uint64((int64(x) >> 63)))
 }
 func (this *KeyEnvelope) String() string {
 	if this == nil {
@@ -773,7 +454,7 @@ func (this *KeyEnvelope) String() string {
 	}
 	s := strings.Join([]string{`&KeyEnvelope{`,
 		`Key:` + fmt.Sprintf("%v", this.Key) + `,`,
-		`KEKLabel:` + fmt.Sprintf("%v", this.KEKLabel) + `,`,
+		`KekLabel:` + fmt.Sprintf("%v", this.KekLabel) + `,`,
 		`EncryptedKey:` + fmt.Sprintf("%v", this.EncryptedKey) + `,`,
 		`}`,
 	}, "")
@@ -784,7 +465,7 @@ func (this *RootKeys) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&RootKeys{`,
-		`RootKeyID:` + fmt.Sprintf("%v", this.RootKeyID) + `,`,
+		`RootKeyId:` + fmt.Sprintf("%v", this.RootKeyId) + `,`,
 		`AppKey:` + strings.Replace(this.AppKey.String(), "KeyEnvelope", "KeyEnvelope", 1) + `,`,
 		`NwkKey:` + strings.Replace(this.NwkKey.String(), "KeyEnvelope", "KeyEnvelope", 1) + `,`,
 		`}`,
@@ -796,7 +477,7 @@ func (this *SessionKeys) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&SessionKeys{`,
-		`SessionKeyID:` + fmt.Sprintf("%v", this.SessionKeyID) + `,`,
+		`SessionKeyId:` + fmt.Sprintf("%v", this.SessionKeyId) + `,`,
 		`FNwkSIntKey:` + strings.Replace(this.FNwkSIntKey.String(), "KeyEnvelope", "KeyEnvelope", 1) + `,`,
 		`SNwkSIntKey:` + strings.Replace(this.SNwkSIntKey.String(), "KeyEnvelope", "KeyEnvelope", 1) + `,`,
 		`NwkSEncKey:` + strings.Replace(this.NwkSEncKey.String(), "KeyEnvelope", "KeyEnvelope", 1) + `,`,
@@ -813,629 +494,3 @@ func valueToStringKeys(v interface{}) string {
 	pv := reflect.Indirect(rv).Interface()
 	return fmt.Sprintf("*%v", pv)
 }
-func (m *KeyEnvelope) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowKeys
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: KeyEnvelope: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: KeyEnvelope: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Key", wireType)
-			}
-			var byteLen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowKeys
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				byteLen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if byteLen < 0 {
-				return ErrInvalidLengthKeys
-			}
-			postIndex := iNdEx + byteLen
-			if postIndex < 0 {
-				return ErrInvalidLengthKeys
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			var v go_thethings_network_lorawan_stack_v3_pkg_types.AES128Key
-			m.Key = &v
-			if err := m.Key.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field KEKLabel", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowKeys
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthKeys
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthKeys
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.KEKLabel = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field EncryptedKey", wireType)
-			}
-			var byteLen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowKeys
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				byteLen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if byteLen < 0 {
-				return ErrInvalidLengthKeys
-			}
-			postIndex := iNdEx + byteLen
-			if postIndex < 0 {
-				return ErrInvalidLengthKeys
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.EncryptedKey = append(m.EncryptedKey[:0], dAtA[iNdEx:postIndex]...)
-			if m.EncryptedKey == nil {
-				m.EncryptedKey = []byte{}
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipKeys(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthKeys
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthKeys
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *RootKeys) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowKeys
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: RootKeys: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: RootKeys: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field RootKeyID", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowKeys
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthKeys
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthKeys
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.RootKeyID = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field AppKey", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowKeys
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthKeys
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthKeys
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.AppKey == nil {
-				m.AppKey = &KeyEnvelope{}
-			}
-			if err := m.AppKey.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field NwkKey", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowKeys
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthKeys
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthKeys
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.NwkKey == nil {
-				m.NwkKey = &KeyEnvelope{}
-			}
-			if err := m.NwkKey.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipKeys(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthKeys
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthKeys
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *SessionKeys) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowKeys
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: SessionKeys: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: SessionKeys: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field SessionKeyID", wireType)
-			}
-			var byteLen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowKeys
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				byteLen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if byteLen < 0 {
-				return ErrInvalidLengthKeys
-			}
-			postIndex := iNdEx + byteLen
-			if postIndex < 0 {
-				return ErrInvalidLengthKeys
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.SessionKeyID = append(m.SessionKeyID[:0], dAtA[iNdEx:postIndex]...)
-			if m.SessionKeyID == nil {
-				m.SessionKeyID = []byte{}
-			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field FNwkSIntKey", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowKeys
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthKeys
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthKeys
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.FNwkSIntKey == nil {
-				m.FNwkSIntKey = &KeyEnvelope{}
-			}
-			if err := m.FNwkSIntKey.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field SNwkSIntKey", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowKeys
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthKeys
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthKeys
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.SNwkSIntKey == nil {
-				m.SNwkSIntKey = &KeyEnvelope{}
-			}
-			if err := m.SNwkSIntKey.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 4:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field NwkSEncKey", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowKeys
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthKeys
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthKeys
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.NwkSEncKey == nil {
-				m.NwkSEncKey = &KeyEnvelope{}
-			}
-			if err := m.NwkSEncKey.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 5:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field AppSKey", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowKeys
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthKeys
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthKeys
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.AppSKey == nil {
-				m.AppSKey = &KeyEnvelope{}
-			}
-			if err := m.AppSKey.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipKeys(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthKeys
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthKeys
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func skipKeys(dAtA []byte) (n int, err error) {
-	l := len(dAtA)
-	iNdEx := 0
-	depth := 0
-	for iNdEx < l {
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return 0, ErrIntOverflowKeys
-			}
-			if iNdEx >= l {
-				return 0, io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		wireType := int(wire & 0x7)
-		switch wireType {
-		case 0:
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return 0, ErrIntOverflowKeys
-				}
-				if iNdEx >= l {
-					return 0, io.ErrUnexpectedEOF
-				}
-				iNdEx++
-				if dAtA[iNdEx-1] < 0x80 {
-					break
-				}
-			}
-		case 1:
-			iNdEx += 8
-		case 2:
-			var length int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return 0, ErrIntOverflowKeys
-				}
-				if iNdEx >= l {
-					return 0, io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				length |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if length < 0 {
-				return 0, ErrInvalidLengthKeys
-			}
-			iNdEx += length
-		case 3:
-			depth++
-		case 4:
-			if depth == 0 {
-				return 0, ErrUnexpectedEndOfGroupKeys
-			}
-			depth--
-		case 5:
-			iNdEx += 4
-		default:
-			return 0, fmt.Errorf("proto: illegal wireType %d", wireType)
-		}
-		if iNdEx < 0 {
-			return 0, ErrInvalidLengthKeys
-		}
-		if depth == 0 {
-			return iNdEx, nil
-		}
-	}
-	return 0, io.ErrUnexpectedEOF
-}
-
-var (
-	ErrInvalidLengthKeys        = fmt.Errorf("proto: negative length found during unmarshaling")
-	ErrIntOverflowKeys          = fmt.Errorf("proto: integer overflow")
-	ErrUnexpectedEndOfGroupKeys = fmt.Errorf("proto: unexpected end of group")
-)

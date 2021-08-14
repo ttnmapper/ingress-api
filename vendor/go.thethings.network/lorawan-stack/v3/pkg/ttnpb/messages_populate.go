@@ -18,7 +18,6 @@ import (
 	"fmt"
 	"math"
 
-	"go.thethings.network/lorawan-stack/v3/pkg/log"
 	"go.thethings.network/lorawan-stack/v3/pkg/types"
 )
 
@@ -96,7 +95,7 @@ func NewPopulatedUplinkMessageRejoinRequest(r randyLorawan, typ RejoinRequestTyp
 func NewPopulatedDownlinkMessage(r randyMessages, easy bool) *DownlinkMessage {
 	defer func() {
 		if r := recover(); r != nil {
-			log.Errorf("NewPopulatedDownlinkMessage: %s", r)
+			panic(fmt.Errorf("NewPopulatedDownlinkMessage: %s", r))
 		}
 	}()
 
@@ -126,9 +125,9 @@ func NewPopulatedApplicationDownlink(r randyMessages, _ bool) *ApplicationDownli
 	out := &ApplicationDownlink{}
 	out.FPort = 1 + uint32(r.Intn(222))
 	out.FCnt = r.Uint32() % math.MaxUint16
-	out.FRMPayload = make([]byte, r.Intn(255))
-	for i := range out.FRMPayload {
-		out.FRMPayload[i] = byte(r.Intn(256))
+	out.FrmPayload = make([]byte, r.Intn(255))
+	for i := range out.FrmPayload {
+		out.FrmPayload[i] = byte(r.Intn(256))
 	}
 	return out
 }

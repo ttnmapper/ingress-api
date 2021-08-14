@@ -69,7 +69,7 @@ func (m *ConcentratorConfig) ValidateFields(paths ...string) error {
 
 		case "lora_standard_channel":
 
-			if v, ok := interface{}(m.GetLoRaStandardChannel()).(interface{ ValidateFields(...string) error }); ok {
+			if v, ok := interface{}(m.GetLoraStandardChannel()).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return ConcentratorConfigValidationError{
 						field:  "lora_standard_channel",
@@ -81,7 +81,7 @@ func (m *ConcentratorConfig) ValidateFields(paths ...string) error {
 
 		case "fsk_channel":
 
-			if v, ok := interface{}(m.GetFSKChannel()).(interface{ ValidateFields(...string) error }); ok {
+			if v, ok := interface{}(m.GetFskChannel()).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return ConcentratorConfigValidationError{
 						field:  "fsk_channel",
@@ -93,7 +93,7 @@ func (m *ConcentratorConfig) ValidateFields(paths ...string) error {
 
 		case "lbt":
 
-			if v, ok := interface{}(m.GetLBT()).(interface{ ValidateFields(...string) error }); ok {
+			if v, ok := interface{}(m.GetLbt()).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return ConcentratorConfigValidationError{
 						field:  "lbt",
@@ -478,9 +478,9 @@ func (m *ConcentratorConfig_LBTConfiguration) ValidateFields(paths ...string) er
 		_ = subs
 		switch name {
 		case "rssi_target":
-			// no validation rules for RSSITarget
+			// no validation rules for RssiTarget
 		case "rssi_offset":
-			// no validation rules for RSSIOffset
+			// no validation rules for RssiOffset
 		case "scan_time":
 
 			if v, ok := interface{}(&m.ScanTime).(interface{ ValidateFields(...string) error }); ok {

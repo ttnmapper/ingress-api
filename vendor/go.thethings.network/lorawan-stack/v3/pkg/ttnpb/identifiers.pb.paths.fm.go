@@ -95,3 +95,29 @@ var EntityIdentifiersFieldPathsNested = []string{
 var EntityIdentifiersFieldPathsTopLevel = []string{
 	"ids",
 }
+var EndDeviceVersionIdentifiersFieldPathsNested = []string{
+	"band_id",
+	"brand_id",
+	"firmware_version",
+	"hardware_version",
+	"model_id",
+}
+
+var EndDeviceVersionIdentifiersFieldPathsTopLevel = []string{
+	"band_id",
+	"brand_id",
+	"firmware_version",
+	"hardware_version",
+	"model_id",
+}
+var NetworkIdentifiersFieldPathsNested = []string{
+	"cluster_id",
+	"net_id",
+	"tenant_id",
+}
+
+var NetworkIdentifiersFieldPathsTopLevel = []string{
+	"cluster_id",
+	"net_id",
+	"tenant_id",
+}

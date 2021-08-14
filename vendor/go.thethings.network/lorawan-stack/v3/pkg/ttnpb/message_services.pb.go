@@ -6,12 +6,6 @@ package ttnpb
 import (
 	context "context"
 	fmt "fmt"
-	io "io"
-	math "math"
-	math_bits "math/bits"
-	reflect "reflect"
-	strings "strings"
-
 	_ "github.com/envoyproxy/protoc-gen-validate/validate"
 	_ "github.com/gogo/protobuf/gogoproto"
 	proto "github.com/gogo/protobuf/proto"
@@ -19,6 +13,9 @@ import (
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
+	math "math"
+	reflect "reflect"
+	strings "strings"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -35,7 +32,7 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 type EncodeDownlinkMessageRequest struct {
 	EndDeviceIdentifiers `protobuf:"bytes,1,opt,name=ids,proto3,embedded=ids" json:"ids"`
-	EndDeviceVersionIDs  EndDeviceVersionIdentifiers `protobuf:"bytes,2,opt,name=end_device_version_ids,json=endDeviceVersionIds,proto3" json:"end_device_version_ids"`
+	EndDeviceVersionIds  EndDeviceVersionIdentifiers `protobuf:"bytes,2,opt,name=end_device_version_ids,json=endDeviceVersionIds,proto3" json:"end_device_version_ids"`
 	Message              ApplicationDownlink         `protobuf:"bytes,3,opt,name=message,proto3" json:"message"`
 	Formatter            PayloadFormatter            `protobuf:"varint,4,opt,name=formatter,proto3,enum=ttn.lorawan.v3.PayloadFormatter" json:"formatter,omitempty"`
 	Parameter            string                      `protobuf:"bytes,5,opt,name=parameter,proto3" json:"parameter,omitempty"`
@@ -49,25 +46,16 @@ func (*EncodeDownlinkMessageRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_6fa32647f6f069ac, []int{0}
 }
 func (m *EncodeDownlinkMessageRequest) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	return xxx_messageInfo_EncodeDownlinkMessageRequest.Unmarshal(m, b)
 }
 func (m *EncodeDownlinkMessageRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_EncodeDownlinkMessageRequest.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	return xxx_messageInfo_EncodeDownlinkMessageRequest.Marshal(b, m, deterministic)
 }
 func (m *EncodeDownlinkMessageRequest) XXX_Merge(src proto.Message) {
 	xxx_messageInfo_EncodeDownlinkMessageRequest.Merge(m, src)
 }
 func (m *EncodeDownlinkMessageRequest) XXX_Size() int {
-	return m.Size()
+	return xxx_messageInfo_EncodeDownlinkMessageRequest.Size(m)
 }
 func (m *EncodeDownlinkMessageRequest) XXX_DiscardUnknown() {
 	xxx_messageInfo_EncodeDownlinkMessageRequest.DiscardUnknown(m)
@@ -75,9 +63,9 @@ func (m *EncodeDownlinkMessageRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_EncodeDownlinkMessageRequest proto.InternalMessageInfo
 
-func (m *EncodeDownlinkMessageRequest) GetEndDeviceVersionIDs() EndDeviceVersionIdentifiers {
+func (m *EncodeDownlinkMessageRequest) GetEndDeviceVersionIds() EndDeviceVersionIdentifiers {
 	if m != nil {
-		return m.EndDeviceVersionIDs
+		return m.EndDeviceVersionIds
 	}
 	return EndDeviceVersionIdentifiers{}
 }
@@ -105,7 +93,7 @@ func (m *EncodeDownlinkMessageRequest) GetParameter() string {
 
 type DecodeUplinkMessageRequest struct {
 	EndDeviceIdentifiers `protobuf:"bytes,1,opt,name=ids,proto3,embedded=ids" json:"ids"`
-	EndDeviceVersionIDs  EndDeviceVersionIdentifiers `protobuf:"bytes,2,opt,name=end_device_version_ids,json=endDeviceVersionIds,proto3" json:"end_device_version_ids"`
+	EndDeviceVersionIds  EndDeviceVersionIdentifiers `protobuf:"bytes,2,opt,name=end_device_version_ids,json=endDeviceVersionIds,proto3" json:"end_device_version_ids"`
 	Message              ApplicationUplink           `protobuf:"bytes,3,opt,name=message,proto3" json:"message"`
 	Formatter            PayloadFormatter            `protobuf:"varint,4,opt,name=formatter,proto3,enum=ttn.lorawan.v3.PayloadFormatter" json:"formatter,omitempty"`
 	Parameter            string                      `protobuf:"bytes,5,opt,name=parameter,proto3" json:"parameter,omitempty"`
@@ -119,25 +107,16 @@ func (*DecodeUplinkMessageRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_6fa32647f6f069ac, []int{1}
 }
 func (m *DecodeUplinkMessageRequest) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	return xxx_messageInfo_DecodeUplinkMessageRequest.Unmarshal(m, b)
 }
 func (m *DecodeUplinkMessageRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_DecodeUplinkMessageRequest.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	return xxx_messageInfo_DecodeUplinkMessageRequest.Marshal(b, m, deterministic)
 }
 func (m *DecodeUplinkMessageRequest) XXX_Merge(src proto.Message) {
 	xxx_messageInfo_DecodeUplinkMessageRequest.Merge(m, src)
 }
 func (m *DecodeUplinkMessageRequest) XXX_Size() int {
-	return m.Size()
+	return xxx_messageInfo_DecodeUplinkMessageRequest.Size(m)
 }
 func (m *DecodeUplinkMessageRequest) XXX_DiscardUnknown() {
 	xxx_messageInfo_DecodeUplinkMessageRequest.DiscardUnknown(m)
@@ -145,9 +124,9 @@ func (m *DecodeUplinkMessageRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_DecodeUplinkMessageRequest proto.InternalMessageInfo
 
-func (m *DecodeUplinkMessageRequest) GetEndDeviceVersionIDs() EndDeviceVersionIdentifiers {
+func (m *DecodeUplinkMessageRequest) GetEndDeviceVersionIds() EndDeviceVersionIdentifiers {
 	if m != nil {
-		return m.EndDeviceVersionIDs
+		return m.EndDeviceVersionIds
 	}
 	return EndDeviceVersionIdentifiers{}
 }
@@ -175,7 +154,7 @@ func (m *DecodeUplinkMessageRequest) GetParameter() string {
 
 type DecodeDownlinkMessageRequest struct {
 	EndDeviceIdentifiers `protobuf:"bytes,1,opt,name=ids,proto3,embedded=ids" json:"ids"`
-	EndDeviceVersionIDs  EndDeviceVersionIdentifiers `protobuf:"bytes,2,opt,name=end_device_version_ids,json=endDeviceVersionIds,proto3" json:"end_device_version_ids"`
+	EndDeviceVersionIds  EndDeviceVersionIdentifiers `protobuf:"bytes,2,opt,name=end_device_version_ids,json=endDeviceVersionIds,proto3" json:"end_device_version_ids"`
 	Message              ApplicationDownlink         `protobuf:"bytes,3,opt,name=message,proto3" json:"message"`
 	Formatter            PayloadFormatter            `protobuf:"varint,4,opt,name=formatter,proto3,enum=ttn.lorawan.v3.PayloadFormatter" json:"formatter,omitempty"`
 	Parameter            string                      `protobuf:"bytes,5,opt,name=parameter,proto3" json:"parameter,omitempty"`
@@ -189,25 +168,16 @@ func (*DecodeDownlinkMessageRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_6fa32647f6f069ac, []int{2}
 }
 func (m *DecodeDownlinkMessageRequest) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	return xxx_messageInfo_DecodeDownlinkMessageRequest.Unmarshal(m, b)
 }
 func (m *DecodeDownlinkMessageRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_DecodeDownlinkMessageRequest.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	return xxx_messageInfo_DecodeDownlinkMessageRequest.Marshal(b, m, deterministic)
 }
 func (m *DecodeDownlinkMessageRequest) XXX_Merge(src proto.Message) {
 	xxx_messageInfo_DecodeDownlinkMessageRequest.Merge(m, src)
 }
 func (m *DecodeDownlinkMessageRequest) XXX_Size() int {
-	return m.Size()
+	return xxx_messageInfo_DecodeDownlinkMessageRequest.Size(m)
 }
 func (m *DecodeDownlinkMessageRequest) XXX_DiscardUnknown() {
 	xxx_messageInfo_DecodeDownlinkMessageRequest.DiscardUnknown(m)
@@ -215,9 +185,9 @@ func (m *DecodeDownlinkMessageRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_DecodeDownlinkMessageRequest proto.InternalMessageInfo
 
-func (m *DecodeDownlinkMessageRequest) GetEndDeviceVersionIDs() EndDeviceVersionIdentifiers {
+func (m *DecodeDownlinkMessageRequest) GetEndDeviceVersionIds() EndDeviceVersionIdentifiers {
 	if m != nil {
-		return m.EndDeviceVersionIDs
+		return m.EndDeviceVersionIds
 	}
 	return EndDeviceVersionIdentifiers{}
 }
@@ -260,47 +230,41 @@ func init() {
 }
 
 var fileDescriptor_6fa32647f6f069ac = []byte{
-	// 632 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x55, 0x3f, 0x48, 0x1c, 0x4f,
-	0x18, 0x9d, 0xf1, 0x7e, 0xfe, 0x82, 0x1b, 0x11, 0x59, 0x21, 0xc8, 0x21, 0x9f, 0x17, 0x4d, 0x71,
-	0x24, 0xb9, 0x5d, 0xd0, 0x3e, 0xe0, 0x71, 0x86, 0x48, 0x08, 0xc8, 0x41, 0x52, 0x04, 0xc2, 0x31,
-	0xb7, 0x3b, 0xae, 0xc3, 0xdd, 0xcd, 0x6c, 0x76, 0xc6, 0x33, 0x76, 0x36, 0x01, 0x49, 0x95, 0x2e,
-	0x81, 0x34, 0x69, 0x02, 0x96, 0x96, 0x42, 0x1a, 0x4b, 0x4b, 0x4b, 0x2b, 0x71, 0x67, 0x1b, 0x4b,
-	0x4b, 0x49, 0x15, 0xf6, 0x8f, 0xdc, 0x9f, 0xe5, 0x8c, 0x5d, 0x02, 0x49, 0x37, 0xb3, 0xbc, 0xef,
-	0xbd, 0x79, 0xdf, 0x9b, 0x6f, 0xc7, 0x28, 0xb7, 0x45, 0x40, 0xb6, 0x09, 0xaf, 0x48, 0x45, 0x9c,
-	0x96, 0x4d, 0x7c, 0x66, 0x77, 0xa8, 0x94, 0xc4, 0xa3, 0x0d, 0x49, 0x83, 0x2e, 0x73, 0xa8, 0xb4,
-	0xfc, 0x40, 0x28, 0x61, 0x4e, 0x29, 0xc5, 0xad, 0x0c, 0x6d, 0x75, 0x97, 0x8b, 0x2b, 0x1e, 0x53,
-	0x9b, 0x5b, 0x4d, 0xcb, 0x11, 0x1d, 0x9b, 0xf2, 0xae, 0xd8, 0xf1, 0x03, 0xf1, 0x6e, 0xc7, 0x4e,
-	0xc0, 0x4e, 0xc5, 0xa3, 0xbc, 0xd2, 0x25, 0x6d, 0xe6, 0x12, 0x45, 0xed, 0xdc, 0x22, 0xa5, 0x2c,
-	0x56, 0xfa, 0x28, 0x3c, 0xe1, 0x89, 0xb4, 0xb8, 0xb9, 0xb5, 0x91, 0xec, 0x92, 0x4d, 0xb2, 0xca,
-	0xe0, 0x0b, 0xf9, 0xb3, 0x52, 0xee, 0x36, 0x5c, 0x1a, 0x1f, 0x33, 0xc3, 0x2c, 0xe6, 0x31, 0xcc,
-	0xa5, 0x5c, 0xb1, 0x0d, 0x46, 0x83, 0xcc, 0x4a, 0xb1, 0x34, 0xd2, 0x74, 0x86, 0x58, 0xf8, 0x52,
-	0x30, 0xe6, 0x56, 0xb9, 0x23, 0x5c, 0x5a, 0x13, 0xdb, 0xbc, 0xcd, 0x78, 0xeb, 0x45, 0x0a, 0xa8,
-	0xd3, 0xb7, 0x5b, 0x54, 0x2a, 0xf3, 0x99, 0x51, 0x60, 0xae, 0x9c, 0xc5, 0x25, 0x5c, 0xbe, 0xbb,
-	0xf4, 0xc0, 0x1a, 0xec, 0x8d, 0xb5, 0xca, 0xdd, 0x5a, 0x72, 0xaa, 0xb5, 0x9e, 0x76, 0x75, 0xfa,
-	0x47, 0x75, 0xfc, 0x03, 0x1e, 0x9b, 0xc6, 0xc7, 0x67, 0xf3, 0xe8, 0xe4, 0x6c, 0x1e, 0xd7, 0x63,
-	0x0a, 0xf3, 0x3d, 0x36, 0xee, 0xf5, 0x6c, 0x34, 0xba, 0x34, 0x90, 0x4c, 0xf0, 0x46, 0xcc, 0x3e,
-	0x96, 0xb0, 0x3f, 0x1a, 0xc9, 0xfe, 0x2a, 0xc5, 0xf6, 0x8b, 0x2c, 0xf6, 0x8b, 0xe8, 0xb3, 0xf9,
-	0x99, 0x1c, 0xb8, 0x26, 0xeb, 0x33, 0x34, 0xc7, 0x20, 0xcd, 0xe7, 0xc6, 0x9d, 0xac, 0x09, 0xb3,
-	0x85, 0x44, 0x77, 0x71, 0x58, 0x77, 0xc5, 0xf7, 0xdb, 0xcc, 0x21, 0x8a, 0x09, 0x7e, 0xdd, 0x95,
-	0xea, 0x64, 0xbf, 0x5e, 0xfd, 0x9a, 0xc1, 0x7c, 0x62, 0x4c, 0x6c, 0x88, 0xa0, 0x43, 0x94, 0xa2,
-	0xc1, 0xec, 0x7f, 0x25, 0x5c, 0x9e, 0x5a, 0x2a, 0x0d, 0xd3, 0xad, 0x93, 0x9d, 0xb6, 0x20, 0xee,
-	0xd3, 0x6b, 0x5c, 0xbd, 0x57, 0x62, 0xce, 0x19, 0x13, 0x3e, 0x09, 0x48, 0x87, 0xc6, 0xf5, 0xe3,
-	0x25, 0x5c, 0x9e, 0xa8, 0xf7, 0x3e, 0x2c, 0x7c, 0x2a, 0x18, 0xc5, 0x1a, 0x8d, 0xd3, 0x79, 0xe9,
-	0xff, 0x15, 0xd9, 0xac, 0x0d, 0x67, 0x73, 0xff, 0x86, 0x6c, 0xd2, 0x9e, 0xfc, 0x9e, 0x64, 0xe2,
-	0xb9, 0x49, 0x93, 0xf9, 0x37, 0x37, 0x7f, 0xdc, 0xdc, 0x2c, 0x7d, 0x1f, 0x33, 0xa6, 0xb3, 0x3c,
-	0xd6, 0x03, 0xe1, 0x50, 0x29, 0x45, 0x60, 0x3a, 0xc6, 0xd4, 0xe0, 0x9f, 0xce, 0x7c, 0x9c, 0x6f,
-	0xdc, 0xe8, 0x44, 0x8b, 0xb7, 0xb1, 0x6b, 0xbe, 0x31, 0x26, 0xfb, 0x07, 0xd6, 0x7c, 0x38, 0x5c,
-	0x34, 0x7a, 0x9c, 0x8b, 0xbf, 0xbe, 0xeb, 0xb1, 0x87, 0xc1, 0x5b, 0x97, 0xf7, 0x70, 0xd3, 0xad,
-	0xbc, 0x95, 0x87, 0xea, 0x37, 0x7c, 0x1c, 0x02, 0x3e, 0x09, 0x01, 0x9f, 0x86, 0x80, 0xce, 0x43,
-	0x40, 0x17, 0x21, 0xa0, 0xcb, 0x10, 0xd0, 0x55, 0x08, 0x78, 0x57, 0x03, 0xde, 0xd3, 0x80, 0xf6,
-	0x35, 0xe0, 0x03, 0x0d, 0xe8, 0x50, 0x03, 0x3a, 0xd2, 0x80, 0x8e, 0x35, 0xe0, 0x13, 0x0d, 0xf8,
-	0x54, 0x03, 0x3a, 0xd7, 0x80, 0x2f, 0x34, 0xa0, 0x4b, 0x0d, 0xf8, 0x4a, 0x03, 0xda, 0x8d, 0x00,
-	0xed, 0x45, 0x80, 0x3f, 0x46, 0x80, 0x3e, 0x47, 0x80, 0xbf, 0x46, 0x80, 0xf6, 0x23, 0x40, 0x07,
-	0x11, 0xe0, 0xc3, 0x08, 0xf0, 0x51, 0x04, 0xf8, 0xb5, 0xed, 0x09, 0x4b, 0x6d, 0x52, 0xb5, 0xc9,
-	0xb8, 0x27, 0x2d, 0x4e, 0xd5, 0xb6, 0x08, 0x5a, 0xf6, 0xe0, 0x0b, 0xd6, 0x5d, 0xb6, 0xfd, 0x96,
-	0x67, 0x2b, 0xc5, 0xfd, 0x66, 0xf3, 0xff, 0xe4, 0x09, 0x5b, 0xfe, 0x19, 0x00, 0x00, 0xff, 0xff,
-	0xe3, 0x81, 0x3e, 0xeb, 0xdb, 0x07, 0x00, 0x00,
+	// 535 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x55, 0xbf, 0x8b, 0x13, 0x41,
+	0x18, 0xcd, 0x24, 0x9e, 0x92, 0xf1, 0x08, 0x61, 0x04, 0x09, 0xcb, 0xb1, 0x17, 0xef, 0x2c, 0x82,
+	0x9a, 0x5d, 0x48, 0x7a, 0xe1, 0x42, 0x4e, 0x3c, 0xe4, 0xe0, 0x08, 0x68, 0x21, 0x48, 0x98, 0xec,
+	0x7e, 0xd9, 0x0c, 0xd9, 0xcc, 0xac, 0x33, 0x93, 0x8d, 0xe9, 0x04, 0x3b, 0x2b, 0xff, 0x0c, 0xff,
+	0x07, 0x1b, 0x4b, 0x4b, 0x4b, 0xab, 0x03, 0x73, 0x8d, 0xa5, 0xb5, 0x8d, 0xb2, 0x3f, 0x42, 0x92,
+	0x5d, 0x72, 0x5e, 0x77, 0x20, 0x76, 0x33, 0xcb, 0xfb, 0xde, 0x9b, 0x37, 0xef, 0xfb, 0x76, 0x70,
+	0xc3, 0x17, 0x92, 0xce, 0x28, 0x6f, 0x2a, 0x4d, 0x9d, 0xb1, 0x4d, 0x03, 0x66, 0x4f, 0x40, 0x29,
+	0xea, 0x41, 0x5f, 0x81, 0x0c, 0x99, 0x03, 0xca, 0x0a, 0xa4, 0xd0, 0x82, 0x54, 0xb4, 0xe6, 0x56,
+	0x8a, 0xb6, 0xc2, 0xb6, 0x71, 0xe4, 0x31, 0x3d, 0x9a, 0x0e, 0x2c, 0x47, 0x4c, 0x6c, 0xe0, 0xa1,
+	0x98, 0x07, 0x52, 0xbc, 0x99, 0xdb, 0x31, 0xd8, 0x69, 0x7a, 0xc0, 0x9b, 0x21, 0xf5, 0x99, 0x4b,
+	0x35, 0xd8, 0xb9, 0x45, 0x42, 0x69, 0x34, 0xd7, 0x28, 0x3c, 0xe1, 0x89, 0xa4, 0x78, 0x30, 0x1d,
+	0xc6, 0xbb, 0x78, 0x13, 0xaf, 0x52, 0xf8, 0x61, 0xfe, 0xac, 0xcc, 0x05, 0xae, 0xd9, 0x90, 0x81,
+	0x4c, 0x8f, 0x69, 0xd4, 0xb7, 0x1a, 0x4a, 0x11, 0x07, 0xef, 0x4a, 0x78, 0xef, 0x98, 0x3b, 0xc2,
+	0x85, 0xae, 0x98, 0x71, 0x9f, 0xf1, 0xf1, 0x69, 0x02, 0xe8, 0xc1, 0xeb, 0x29, 0x28, 0x4d, 0x9e,
+	0xe2, 0x12, 0x73, 0x55, 0x0d, 0xd5, 0x51, 0xe3, 0x76, 0xeb, 0xbe, 0xb5, 0xe9, 0xdb, 0x3a, 0xe6,
+	0x6e, 0x17, 0xa2, 0x8b, 0x39, 0x59, 0x69, 0x77, 0xaa, 0xbf, 0x3a, 0x3b, 0xef, 0x51, 0xb1, 0x8a,
+	0xbe, 0x9c, 0xef, 0x17, 0xbe, 0x9e, 0xef, 0xa3, 0x5e, 0x44, 0x41, 0x38, 0xbe, 0x0b, 0xdc, 0xed,
+	0xbb, 0x31, 0xbe, 0x1f, 0x82, 0x54, 0x4c, 0xf0, 0x7e, 0x44, 0x5e, 0x8c, 0xc9, 0x1f, 0x6e, 0x25,
+	0x7f, 0x91, 0x60, 0xd7, 0x35, 0x76, 0xd7, 0x35, 0x7a, 0x77, 0x20, 0x07, 0x55, 0xe4, 0x19, 0xbe,
+	0x95, 0x9a, 0xad, 0x95, 0x62, 0x81, 0xc3, 0xac, 0xc0, 0x51, 0x10, 0xf8, 0xcc, 0xa1, 0x9a, 0x09,
+	0xbe, 0x74, 0x9f, 0x21, 0x5e, 0x32, 0x90, 0xc7, 0xb8, 0x3c, 0x14, 0x72, 0x42, 0xb5, 0x06, 0x59,
+	0xbb, 0x51, 0x47, 0x8d, 0x4a, 0xab, 0x9e, 0xa5, 0x3b, 0xa3, 0x73, 0x5f, 0x50, 0xf7, 0xc9, 0x12,
+	0xd7, 0x5b, 0x95, 0x90, 0x3d, 0x5c, 0x0e, 0xa8, 0xa4, 0x13, 0x88, 0xea, 0x77, 0xea, 0xa8, 0x51,
+	0xee, 0xad, 0x3e, 0x1c, 0xfc, 0x2e, 0x62, 0xa3, 0x0b, 0x51, 0x0a, 0xcf, 0x83, 0x7f, 0x2a, 0x83,
+	0x93, 0x6c, 0x06, 0xf7, 0x2e, 0xc9, 0x20, 0xf1, 0x7e, 0x3d, 0x09, 0x44, 0x73, 0x90, 0x24, 0xf0,
+	0x7f, 0x0e, 0xae, 0x2d, 0x85, 0xd6, 0xa7, 0x22, 0xae, 0xa6, 0xf7, 0x7e, 0x26, 0x85, 0x03, 0x4a,
+	0x09, 0x49, 0x1c, 0x5c, 0xd9, 0xfc, 0x43, 0x91, 0x47, 0xf9, 0x1b, 0xda, 0x9e, 0x9c, 0x71, 0x15,
+	0xbb, 0xe4, 0x15, 0xde, 0x5d, 0x1f, 0x40, 0xf2, 0x20, 0x5b, 0xb4, 0x7d, 0x3c, 0x8d, 0xbf, 0xf7,
+	0x74, 0xe4, 0x61, 0xb3, 0xbb, 0xf2, 0x1e, 0x2e, 0xeb, 0xbe, 0x2b, 0x79, 0xe8, 0x9c, 0x7e, 0xfb,
+	0x6e, 0x16, 0xde, 0x2e, 0x4c, 0xf4, 0x71, 0x61, 0xa2, 0x1f, 0x0b, 0xb3, 0xf0, 0x73, 0x61, 0xa2,
+	0x0f, 0x17, 0x66, 0xe1, 0xf3, 0x85, 0x89, 0x5e, 0xda, 0x9e, 0xb0, 0xf4, 0x08, 0xf4, 0x88, 0x71,
+	0x4f, 0x59, 0x1c, 0xf4, 0x4c, 0xc8, 0xb1, 0xbd, 0xf9, 0x40, 0x84, 0x6d, 0x3b, 0x18, 0x7b, 0xb6,
+	0xd6, 0x3c, 0x18, 0x0c, 0x6e, 0xc6, 0x2f, 0x44, 0xfb, 0x4f, 0x00, 0x00, 0x00, 0xff, 0xff, 0x68,
+	0x9c, 0x5b, 0xbd, 0x16, 0x07, 0x00, 0x00,
 }
 
 func (this *EncodeDownlinkMessageRequest) Equal(that interface{}) bool {
@@ -325,7 +289,7 @@ func (this *EncodeDownlinkMessageRequest) Equal(that interface{}) bool {
 	if !this.EndDeviceIdentifiers.Equal(&that1.EndDeviceIdentifiers) {
 		return false
 	}
-	if !this.EndDeviceVersionIDs.Equal(&that1.EndDeviceVersionIDs) {
+	if !this.EndDeviceVersionIds.Equal(&that1.EndDeviceVersionIds) {
 		return false
 	}
 	if !this.Message.Equal(&that1.Message) {
@@ -361,7 +325,7 @@ func (this *DecodeUplinkMessageRequest) Equal(that interface{}) bool {
 	if !this.EndDeviceIdentifiers.Equal(&that1.EndDeviceIdentifiers) {
 		return false
 	}
-	if !this.EndDeviceVersionIDs.Equal(&that1.EndDeviceVersionIDs) {
+	if !this.EndDeviceVersionIds.Equal(&that1.EndDeviceVersionIds) {
 		return false
 	}
 	if !this.Message.Equal(&that1.Message) {
@@ -397,7 +361,7 @@ func (this *DecodeDownlinkMessageRequest) Equal(that interface{}) bool {
 	if !this.EndDeviceIdentifiers.Equal(&that1.EndDeviceIdentifiers) {
 		return false
 	}
-	if !this.EndDeviceVersionIDs.Equal(&that1.EndDeviceVersionIDs) {
+	if !this.EndDeviceVersionIds.Equal(&that1.EndDeviceVersionIds) {
 		return false
 	}
 	if !this.Message.Equal(&that1.Message) {
@@ -564,408 +528,13 @@ var _MessageProcessor_serviceDesc = grpc.ServiceDesc{
 	Metadata: "lorawan-stack/api/message_services.proto",
 }
 
-func (m *EncodeDownlinkMessageRequest) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *EncodeDownlinkMessageRequest) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *EncodeDownlinkMessageRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.Parameter) > 0 {
-		i -= len(m.Parameter)
-		copy(dAtA[i:], m.Parameter)
-		i = encodeVarintMessageServices(dAtA, i, uint64(len(m.Parameter)))
-		i--
-		dAtA[i] = 0x2a
-	}
-	if m.Formatter != 0 {
-		i = encodeVarintMessageServices(dAtA, i, uint64(m.Formatter))
-		i--
-		dAtA[i] = 0x20
-	}
-	{
-		size, err := m.Message.MarshalToSizedBuffer(dAtA[:i])
-		if err != nil {
-			return 0, err
-		}
-		i -= size
-		i = encodeVarintMessageServices(dAtA, i, uint64(size))
-	}
-	i--
-	dAtA[i] = 0x1a
-	{
-		size, err := m.EndDeviceVersionIDs.MarshalToSizedBuffer(dAtA[:i])
-		if err != nil {
-			return 0, err
-		}
-		i -= size
-		i = encodeVarintMessageServices(dAtA, i, uint64(size))
-	}
-	i--
-	dAtA[i] = 0x12
-	{
-		size, err := m.EndDeviceIdentifiers.MarshalToSizedBuffer(dAtA[:i])
-		if err != nil {
-			return 0, err
-		}
-		i -= size
-		i = encodeVarintMessageServices(dAtA, i, uint64(size))
-	}
-	i--
-	dAtA[i] = 0xa
-	return len(dAtA) - i, nil
-}
-
-func (m *DecodeUplinkMessageRequest) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *DecodeUplinkMessageRequest) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *DecodeUplinkMessageRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.Parameter) > 0 {
-		i -= len(m.Parameter)
-		copy(dAtA[i:], m.Parameter)
-		i = encodeVarintMessageServices(dAtA, i, uint64(len(m.Parameter)))
-		i--
-		dAtA[i] = 0x2a
-	}
-	if m.Formatter != 0 {
-		i = encodeVarintMessageServices(dAtA, i, uint64(m.Formatter))
-		i--
-		dAtA[i] = 0x20
-	}
-	{
-		size, err := m.Message.MarshalToSizedBuffer(dAtA[:i])
-		if err != nil {
-			return 0, err
-		}
-		i -= size
-		i = encodeVarintMessageServices(dAtA, i, uint64(size))
-	}
-	i--
-	dAtA[i] = 0x1a
-	{
-		size, err := m.EndDeviceVersionIDs.MarshalToSizedBuffer(dAtA[:i])
-		if err != nil {
-			return 0, err
-		}
-		i -= size
-		i = encodeVarintMessageServices(dAtA, i, uint64(size))
-	}
-	i--
-	dAtA[i] = 0x12
-	{
-		size, err := m.EndDeviceIdentifiers.MarshalToSizedBuffer(dAtA[:i])
-		if err != nil {
-			return 0, err
-		}
-		i -= size
-		i = encodeVarintMessageServices(dAtA, i, uint64(size))
-	}
-	i--
-	dAtA[i] = 0xa
-	return len(dAtA) - i, nil
-}
-
-func (m *DecodeDownlinkMessageRequest) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *DecodeDownlinkMessageRequest) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *DecodeDownlinkMessageRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.Parameter) > 0 {
-		i -= len(m.Parameter)
-		copy(dAtA[i:], m.Parameter)
-		i = encodeVarintMessageServices(dAtA, i, uint64(len(m.Parameter)))
-		i--
-		dAtA[i] = 0x2a
-	}
-	if m.Formatter != 0 {
-		i = encodeVarintMessageServices(dAtA, i, uint64(m.Formatter))
-		i--
-		dAtA[i] = 0x20
-	}
-	{
-		size, err := m.Message.MarshalToSizedBuffer(dAtA[:i])
-		if err != nil {
-			return 0, err
-		}
-		i -= size
-		i = encodeVarintMessageServices(dAtA, i, uint64(size))
-	}
-	i--
-	dAtA[i] = 0x1a
-	{
-		size, err := m.EndDeviceVersionIDs.MarshalToSizedBuffer(dAtA[:i])
-		if err != nil {
-			return 0, err
-		}
-		i -= size
-		i = encodeVarintMessageServices(dAtA, i, uint64(size))
-	}
-	i--
-	dAtA[i] = 0x12
-	{
-		size, err := m.EndDeviceIdentifiers.MarshalToSizedBuffer(dAtA[:i])
-		if err != nil {
-			return 0, err
-		}
-		i -= size
-		i = encodeVarintMessageServices(dAtA, i, uint64(size))
-	}
-	i--
-	dAtA[i] = 0xa
-	return len(dAtA) - i, nil
-}
-
-func encodeVarintMessageServices(dAtA []byte, offset int, v uint64) int {
-	offset -= sovMessageServices(v)
-	base := offset
-	for v >= 1<<7 {
-		dAtA[offset] = uint8(v&0x7f | 0x80)
-		v >>= 7
-		offset++
-	}
-	dAtA[offset] = uint8(v)
-	return base
-}
-func NewPopulatedEncodeDownlinkMessageRequest(r randyMessageServices, easy bool) *EncodeDownlinkMessageRequest {
-	this := &EncodeDownlinkMessageRequest{}
-	v1 := NewPopulatedEndDeviceIdentifiers(r, easy)
-	this.EndDeviceIdentifiers = *v1
-	v2 := NewPopulatedEndDeviceVersionIdentifiers(r, easy)
-	this.EndDeviceVersionIDs = *v2
-	v3 := NewPopulatedApplicationDownlink(r, easy)
-	this.Message = *v3
-	this.Formatter = PayloadFormatter([]int32{0, 1, 2, 3, 4}[r.Intn(5)])
-	this.Parameter = randStringMessageServices(r)
-	if !easy && r.Intn(10) != 0 {
-	}
-	return this
-}
-
-func NewPopulatedDecodeUplinkMessageRequest(r randyMessageServices, easy bool) *DecodeUplinkMessageRequest {
-	this := &DecodeUplinkMessageRequest{}
-	v4 := NewPopulatedEndDeviceIdentifiers(r, easy)
-	this.EndDeviceIdentifiers = *v4
-	v5 := NewPopulatedEndDeviceVersionIdentifiers(r, easy)
-	this.EndDeviceVersionIDs = *v5
-	v6 := NewPopulatedApplicationUplink(r, easy)
-	this.Message = *v6
-	this.Formatter = PayloadFormatter([]int32{0, 1, 2, 3, 4}[r.Intn(5)])
-	this.Parameter = randStringMessageServices(r)
-	if !easy && r.Intn(10) != 0 {
-	}
-	return this
-}
-
-func NewPopulatedDecodeDownlinkMessageRequest(r randyMessageServices, easy bool) *DecodeDownlinkMessageRequest {
-	this := &DecodeDownlinkMessageRequest{}
-	v7 := NewPopulatedEndDeviceIdentifiers(r, easy)
-	this.EndDeviceIdentifiers = *v7
-	v8 := NewPopulatedEndDeviceVersionIdentifiers(r, easy)
-	this.EndDeviceVersionIDs = *v8
-	v9 := NewPopulatedApplicationDownlink(r, easy)
-	this.Message = *v9
-	this.Formatter = PayloadFormatter([]int32{0, 1, 2, 3, 4}[r.Intn(5)])
-	this.Parameter = randStringMessageServices(r)
-	if !easy && r.Intn(10) != 0 {
-	}
-	return this
-}
-
-type randyMessageServices interface {
-	Float32() float32
-	Float64() float64
-	Int63() int64
-	Int31() int32
-	Uint32() uint32
-	Intn(n int) int
-}
-
-func randUTF8RuneMessageServices(r randyMessageServices) rune {
-	ru := r.Intn(62)
-	if ru < 10 {
-		return rune(ru + 48)
-	} else if ru < 36 {
-		return rune(ru + 55)
-	}
-	return rune(ru + 61)
-}
-func randStringMessageServices(r randyMessageServices) string {
-	v10 := r.Intn(100)
-	tmps := make([]rune, v10)
-	for i := 0; i < v10; i++ {
-		tmps[i] = randUTF8RuneMessageServices(r)
-	}
-	return string(tmps)
-}
-func randUnrecognizedMessageServices(r randyMessageServices, maxFieldNumber int) (dAtA []byte) {
-	l := r.Intn(5)
-	for i := 0; i < l; i++ {
-		wire := r.Intn(4)
-		if wire == 3 {
-			wire = 5
-		}
-		fieldNumber := maxFieldNumber + r.Intn(100)
-		dAtA = randFieldMessageServices(dAtA, r, fieldNumber, wire)
-	}
-	return dAtA
-}
-func randFieldMessageServices(dAtA []byte, r randyMessageServices, fieldNumber int, wire int) []byte {
-	key := uint32(fieldNumber)<<3 | uint32(wire)
-	switch wire {
-	case 0:
-		dAtA = encodeVarintPopulateMessageServices(dAtA, uint64(key))
-		v11 := r.Int63()
-		if r.Intn(2) == 0 {
-			v11 *= -1
-		}
-		dAtA = encodeVarintPopulateMessageServices(dAtA, uint64(v11))
-	case 1:
-		dAtA = encodeVarintPopulateMessageServices(dAtA, uint64(key))
-		dAtA = append(dAtA, byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)))
-	case 2:
-		dAtA = encodeVarintPopulateMessageServices(dAtA, uint64(key))
-		ll := r.Intn(100)
-		dAtA = encodeVarintPopulateMessageServices(dAtA, uint64(ll))
-		for j := 0; j < ll; j++ {
-			dAtA = append(dAtA, byte(r.Intn(256)))
-		}
-	default:
-		dAtA = encodeVarintPopulateMessageServices(dAtA, uint64(key))
-		dAtA = append(dAtA, byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)))
-	}
-	return dAtA
-}
-func encodeVarintPopulateMessageServices(dAtA []byte, v uint64) []byte {
-	for v >= 1<<7 {
-		dAtA = append(dAtA, uint8(v&0x7f|0x80))
-		v >>= 7
-	}
-	dAtA = append(dAtA, uint8(v))
-	return dAtA
-}
-func (m *EncodeDownlinkMessageRequest) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = m.EndDeviceIdentifiers.Size()
-	n += 1 + l + sovMessageServices(uint64(l))
-	l = m.EndDeviceVersionIDs.Size()
-	n += 1 + l + sovMessageServices(uint64(l))
-	l = m.Message.Size()
-	n += 1 + l + sovMessageServices(uint64(l))
-	if m.Formatter != 0 {
-		n += 1 + sovMessageServices(uint64(m.Formatter))
-	}
-	l = len(m.Parameter)
-	if l > 0 {
-		n += 1 + l + sovMessageServices(uint64(l))
-	}
-	return n
-}
-
-func (m *DecodeUplinkMessageRequest) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = m.EndDeviceIdentifiers.Size()
-	n += 1 + l + sovMessageServices(uint64(l))
-	l = m.EndDeviceVersionIDs.Size()
-	n += 1 + l + sovMessageServices(uint64(l))
-	l = m.Message.Size()
-	n += 1 + l + sovMessageServices(uint64(l))
-	if m.Formatter != 0 {
-		n += 1 + sovMessageServices(uint64(m.Formatter))
-	}
-	l = len(m.Parameter)
-	if l > 0 {
-		n += 1 + l + sovMessageServices(uint64(l))
-	}
-	return n
-}
-
-func (m *DecodeDownlinkMessageRequest) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = m.EndDeviceIdentifiers.Size()
-	n += 1 + l + sovMessageServices(uint64(l))
-	l = m.EndDeviceVersionIDs.Size()
-	n += 1 + l + sovMessageServices(uint64(l))
-	l = m.Message.Size()
-	n += 1 + l + sovMessageServices(uint64(l))
-	if m.Formatter != 0 {
-		n += 1 + sovMessageServices(uint64(m.Formatter))
-	}
-	l = len(m.Parameter)
-	if l > 0 {
-		n += 1 + l + sovMessageServices(uint64(l))
-	}
-	return n
-}
-
-func sovMessageServices(x uint64) (n int) {
-	return (math_bits.Len64(x|1) + 6) / 7
-}
-func sozMessageServices(x uint64) (n int) {
-	return sovMessageServices((x << 1) ^ uint64((int64(x) >> 63)))
-}
 func (this *EncodeDownlinkMessageRequest) String() string {
 	if this == nil {
 		return "nil"
 	}
 	s := strings.Join([]string{`&EncodeDownlinkMessageRequest{`,
 		`EndDeviceIdentifiers:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.EndDeviceIdentifiers), "EndDeviceIdentifiers", "EndDeviceIdentifiers", 1), `&`, ``, 1) + `,`,
-		`EndDeviceVersionIDs:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.EndDeviceVersionIDs), "EndDeviceVersionIdentifiers", "EndDeviceVersionIdentifiers", 1), `&`, ``, 1) + `,`,
+		`EndDeviceVersionIds:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.EndDeviceVersionIds), "EndDeviceVersionIdentifiers", "EndDeviceVersionIdentifiers", 1), `&`, ``, 1) + `,`,
 		`Message:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.Message), "ApplicationDownlink", "ApplicationDownlink", 1), `&`, ``, 1) + `,`,
 		`Formatter:` + fmt.Sprintf("%v", this.Formatter) + `,`,
 		`Parameter:` + fmt.Sprintf("%v", this.Parameter) + `,`,
@@ -979,7 +548,7 @@ func (this *DecodeUplinkMessageRequest) String() string {
 	}
 	s := strings.Join([]string{`&DecodeUplinkMessageRequest{`,
 		`EndDeviceIdentifiers:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.EndDeviceIdentifiers), "EndDeviceIdentifiers", "EndDeviceIdentifiers", 1), `&`, ``, 1) + `,`,
-		`EndDeviceVersionIDs:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.EndDeviceVersionIDs), "EndDeviceVersionIdentifiers", "EndDeviceVersionIdentifiers", 1), `&`, ``, 1) + `,`,
+		`EndDeviceVersionIds:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.EndDeviceVersionIds), "EndDeviceVersionIdentifiers", "EndDeviceVersionIdentifiers", 1), `&`, ``, 1) + `,`,
 		`Message:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.Message), "ApplicationUplink", "ApplicationUplink", 1), `&`, ``, 1) + `,`,
 		`Formatter:` + fmt.Sprintf("%v", this.Formatter) + `,`,
 		`Parameter:` + fmt.Sprintf("%v", this.Parameter) + `,`,
@@ -993,7 +562,7 @@ func (this *DecodeDownlinkMessageRequest) String() string {
 	}
 	s := strings.Join([]string{`&DecodeDownlinkMessageRequest{`,
 		`EndDeviceIdentifiers:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.EndDeviceIdentifiers), "EndDeviceIdentifiers", "EndDeviceIdentifiers", 1), `&`, ``, 1) + `,`,
-		`EndDeviceVersionIDs:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.EndDeviceVersionIDs), "EndDeviceVersionIdentifiers", "EndDeviceVersionIdentifiers", 1), `&`, ``, 1) + `,`,
+		`EndDeviceVersionIds:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.EndDeviceVersionIds), "EndDeviceVersionIdentifiers", "EndDeviceVersionIdentifiers", 1), `&`, ``, 1) + `,`,
 		`Message:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.Message), "ApplicationDownlink", "ApplicationDownlink", 1), `&`, ``, 1) + `,`,
 		`Formatter:` + fmt.Sprintf("%v", this.Formatter) + `,`,
 		`Parameter:` + fmt.Sprintf("%v", this.Parameter) + `,`,
@@ -1009,696 +578,3 @@ func valueToStringMessageServices(v interface{}) string {
 	pv := reflect.Indirect(rv).Interface()
 	return fmt.Sprintf("*%v", pv)
 }
-func (m *EncodeDownlinkMessageRequest) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowMessageServices
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: EncodeDownlinkMessageRequest: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: EncodeDownlinkMessageRequest: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field EndDeviceIdentifiers", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowMessageServices
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthMessageServices
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthMessageServices
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := m.EndDeviceIdentifiers.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field EndDeviceVersionIDs", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowMessageServices
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthMessageServices
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthMessageServices
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := m.EndDeviceVersionIDs.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Message", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowMessageServices
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthMessageServices
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthMessageServices
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := m.Message.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 4:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Formatter", wireType)
-			}
-			m.Formatter = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowMessageServices
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.Formatter |= PayloadFormatter(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 5:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Parameter", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowMessageServices
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthMessageServices
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthMessageServices
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Parameter = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipMessageServices(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthMessageServices
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthMessageServices
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *DecodeUplinkMessageRequest) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowMessageServices
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: DecodeUplinkMessageRequest: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: DecodeUplinkMessageRequest: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field EndDeviceIdentifiers", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowMessageServices
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthMessageServices
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthMessageServices
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := m.EndDeviceIdentifiers.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field EndDeviceVersionIDs", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowMessageServices
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthMessageServices
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthMessageServices
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := m.EndDeviceVersionIDs.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Message", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowMessageServices
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthMessageServices
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthMessageServices
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := m.Message.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 4:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Formatter", wireType)
-			}
-			m.Formatter = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowMessageServices
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.Formatter |= PayloadFormatter(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 5:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Parameter", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowMessageServices
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthMessageServices
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthMessageServices
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Parameter = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipMessageServices(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthMessageServices
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthMessageServices
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *DecodeDownlinkMessageRequest) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowMessageServices
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: DecodeDownlinkMessageRequest: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: DecodeDownlinkMessageRequest: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field EndDeviceIdentifiers", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowMessageServices
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthMessageServices
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthMessageServices
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := m.EndDeviceIdentifiers.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field EndDeviceVersionIDs", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowMessageServices
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthMessageServices
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthMessageServices
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := m.EndDeviceVersionIDs.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Message", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowMessageServices
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthMessageServices
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthMessageServices
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := m.Message.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 4:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Formatter", wireType)
-			}
-			m.Formatter = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowMessageServices
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.Formatter |= PayloadFormatter(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 5:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Parameter", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowMessageServices
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthMessageServices
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthMessageServices
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Parameter = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipMessageServices(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthMessageServices
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthMessageServices
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func skipMessageServices(dAtA []byte) (n int, err error) {
-	l := len(dAtA)
-	iNdEx := 0
-	depth := 0
-	for iNdEx < l {
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return 0, ErrIntOverflowMessageServices
-			}
-			if iNdEx >= l {
-				return 0, io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		wireType := int(wire & 0x7)
-		switch wireType {
-		case 0:
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return 0, ErrIntOverflowMessageServices
-				}
-				if iNdEx >= l {
-					return 0, io.ErrUnexpectedEOF
-				}
-				iNdEx++
-				if dAtA[iNdEx-1] < 0x80 {
-					break
-				}
-			}
-		case 1:
-			iNdEx += 8
-		case 2:
-			var length int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return 0, ErrIntOverflowMessageServices
-				}
-				if iNdEx >= l {
-					return 0, io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				length |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if length < 0 {
-				return 0, ErrInvalidLengthMessageServices
-			}
-			iNdEx += length
-		case 3:
-			depth++
-		case 4:
-			if depth == 0 {
-				return 0, ErrUnexpectedEndOfGroupMessageServices
-			}
-			depth--
-		case 5:
-			iNdEx += 4
-		default:
-			return 0, fmt.Errorf("proto: illegal wireType %d", wireType)
-		}
-		if iNdEx < 0 {
-			return 0, ErrInvalidLengthMessageServices
-		}
-		if depth == 0 {
-			return iNdEx, nil
-		}
-	}
-	return 0, io.ErrUnexpectedEOF
-}
-
-var (
-	ErrInvalidLengthMessageServices        = fmt.Errorf("proto: negative length found during unmarshaling")
-	ErrIntOverflowMessageServices          = fmt.Errorf("proto: integer overflow")
-	ErrUnexpectedEndOfGroupMessageServices = fmt.Errorf("proto: unexpected end of group")
-)

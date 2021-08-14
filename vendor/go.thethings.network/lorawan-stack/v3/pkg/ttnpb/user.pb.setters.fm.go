@@ -5,8 +5,6 @@ package ttnpb
 import (
 	fmt "fmt"
 	time "time"
-
-	types "github.com/gogo/protobuf/types"
 )
 
 func (dst *User) SetFields(src *User, paths ...string) error {
@@ -284,8 +282,7 @@ func (dst *GetUserRequest) SetFields(src *GetUserRequest, paths ...string) error
 			if src != nil {
 				dst.FieldMask = src.FieldMask
 			} else {
-				var zero types.FieldMask
-				dst.FieldMask = zero
+				dst.FieldMask = nil
 			}
 
 		default:
@@ -305,8 +302,7 @@ func (dst *ListUsersRequest) SetFields(src *ListUsersRequest, paths ...string) e
 			if src != nil {
 				dst.FieldMask = src.FieldMask
 			} else {
-				var zero types.FieldMask
-				dst.FieldMask = zero
+				dst.FieldMask = nil
 			}
 		case "order":
 			if len(subs) > 0 {
@@ -423,8 +419,7 @@ func (dst *UpdateUserRequest) SetFields(src *UpdateUserRequest, paths ...string)
 			if src != nil {
 				dst.FieldMask = src.FieldMask
 			} else {
-				var zero types.FieldMask
-				dst.FieldMask = zero
+				dst.FieldMask = nil
 			}
 
 		default:
@@ -597,10 +592,10 @@ func (dst *GetUserAPIKeyRequest) SetFields(src *GetUserAPIKeyRequest, paths ...s
 				return fmt.Errorf("'key_id' has no subfields, but %s were specified", subs)
 			}
 			if src != nil {
-				dst.KeyID = src.KeyID
+				dst.KeyId = src.KeyId
 			} else {
 				var zero string
-				dst.KeyID = zero
+				dst.KeyId = zero
 			}
 
 		default:
@@ -650,6 +645,15 @@ func (dst *CreateUserAPIKeyRequest) SetFields(src *CreateUserAPIKeyRequest, path
 			} else {
 				dst.Rights = nil
 			}
+		case "expires_at":
+			if len(subs) > 0 {
+				return fmt.Errorf("'expires_at' has no subfields, but %s were specified", subs)
+			}
+			if src != nil {
+				dst.ExpiresAt = src.ExpiresAt
+			} else {
+				dst.ExpiresAt = nil
+			}
 
 		default:
 			return fmt.Errorf("invalid field: '%s'", name)
@@ -696,6 +700,15 @@ func (dst *UpdateUserAPIKeyRequest) SetFields(src *UpdateUserAPIKeyRequest, path
 					var zero APIKey
 					dst.APIKey = zero
 				}
+			}
+		case "field_mask":
+			if len(subs) > 0 {
+				return fmt.Errorf("'field_mask' has no subfields, but %s were specified", subs)
+			}
+			if src != nil {
+				dst.FieldMask = src.FieldMask
+			} else {
+				dst.FieldMask = nil
 			}
 
 		default:
@@ -919,10 +932,10 @@ func (dst *UserSessionIdentifiers) SetFields(src *UserSessionIdentifiers, paths 
 				return fmt.Errorf("'session_id' has no subfields, but %s were specified", subs)
 			}
 			if src != nil {
-				dst.SessionID = src.SessionID
+				dst.SessionId = src.SessionId
 			} else {
 				var zero string
-				dst.SessionID = zero
+				dst.SessionId = zero
 			}
 
 		default:
@@ -958,10 +971,10 @@ func (dst *UserSession) SetFields(src *UserSession, paths ...string) error {
 				return fmt.Errorf("'session_id' has no subfields, but %s were specified", subs)
 			}
 			if src != nil {
-				dst.SessionID = src.SessionID
+				dst.SessionId = src.SessionId
 			} else {
 				var zero string
-				dst.SessionID = zero
+				dst.SessionId = zero
 			}
 		case "created_at":
 			if len(subs) > 0 {

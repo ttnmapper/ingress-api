@@ -6,24 +6,20 @@ package ttnpb
 import (
 	context "context"
 	fmt "fmt"
-	io "io"
-	math "math"
-	math_bits "math/bits"
-	reflect "reflect"
-	strconv "strconv"
-	strings "strings"
-	time "time"
-
 	_ "github.com/envoyproxy/protoc-gen-validate/validate"
 	_ "github.com/gogo/protobuf/gogoproto"
 	proto "github.com/gogo/protobuf/proto"
-	github_com_gogo_protobuf_types "github.com/gogo/protobuf/types"
 	types "github.com/gogo/protobuf/types"
 	golang_proto "github.com/golang/protobuf/proto"
 	_ "google.golang.org/genproto/googleapis/api/annotations"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
+	math "math"
+	reflect "reflect"
+	strconv "strconv"
+	strings "strings"
+	time "time"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -72,7 +68,7 @@ type ApplicationLink struct {
 	DefaultFormatters *MessagePayloadFormatters `protobuf:"bytes,3,opt,name=default_formatters,json=defaultFormatters,proto3" json:"default_formatters,omitempty"`
 	// Enable TLS for linking to the external Network Server.
 	// For cluster-local Network Servers, the cluster's TLS setting is used.
-	TLS bool `protobuf:"varint,4,opt,name=tls,proto3" json:"tls,omitempty"`
+	Tls bool `protobuf:"varint,4,opt,name=tls,proto3" json:"tls,omitempty"`
 	// Skip decryption of uplink payloads and encryption of downlink payloads.
 	// Leave empty for the using the Application Server's default setting.
 	SkipPayloadCrypto    *types.BoolValue `protobuf:"bytes,5,opt,name=skip_payload_crypto,json=skipPayloadCrypto,proto3" json:"skip_payload_crypto,omitempty"`
@@ -86,25 +82,16 @@ func (*ApplicationLink) Descriptor() ([]byte, []int) {
 	return fileDescriptor_df9d75a19dc066e1, []int{0}
 }
 func (m *ApplicationLink) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	return xxx_messageInfo_ApplicationLink.Unmarshal(m, b)
 }
 func (m *ApplicationLink) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_ApplicationLink.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	return xxx_messageInfo_ApplicationLink.Marshal(b, m, deterministic)
 }
 func (m *ApplicationLink) XXX_Merge(src proto.Message) {
 	xxx_messageInfo_ApplicationLink.Merge(m, src)
 }
 func (m *ApplicationLink) XXX_Size() int {
-	return m.Size()
+	return xxx_messageInfo_ApplicationLink.Size(m)
 }
 func (m *ApplicationLink) XXX_DiscardUnknown() {
 	xxx_messageInfo_ApplicationLink.DiscardUnknown(m)
@@ -119,9 +106,9 @@ func (m *ApplicationLink) GetDefaultFormatters() *MessagePayloadFormatters {
 	return nil
 }
 
-func (m *ApplicationLink) GetTLS() bool {
+func (m *ApplicationLink) GetTls() bool {
 	if m != nil {
-		return m.TLS
+		return m.Tls
 	}
 	return false
 }
@@ -135,9 +122,9 @@ func (m *ApplicationLink) GetSkipPayloadCrypto() *types.BoolValue {
 
 type GetApplicationLinkRequest struct {
 	ApplicationIdentifiers `protobuf:"bytes,1,opt,name=application_ids,json=applicationIds,proto3,embedded=application_ids" json:"application_ids"`
-	FieldMask              types.FieldMask `protobuf:"bytes,2,opt,name=field_mask,json=fieldMask,proto3" json:"field_mask"`
-	XXX_NoUnkeyedLiteral   struct{}        `json:"-"`
-	XXX_sizecache          int32           `json:"-"`
+	FieldMask              *types.FieldMask `protobuf:"bytes,2,opt,name=field_mask,json=fieldMask,proto3" json:"field_mask,omitempty"`
+	XXX_NoUnkeyedLiteral   struct{}         `json:"-"`
+	XXX_sizecache          int32            `json:"-"`
 }
 
 func (m *GetApplicationLinkRequest) Reset()      { *m = GetApplicationLinkRequest{} }
@@ -146,25 +133,16 @@ func (*GetApplicationLinkRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_df9d75a19dc066e1, []int{1}
 }
 func (m *GetApplicationLinkRequest) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	return xxx_messageInfo_GetApplicationLinkRequest.Unmarshal(m, b)
 }
 func (m *GetApplicationLinkRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_GetApplicationLinkRequest.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	return xxx_messageInfo_GetApplicationLinkRequest.Marshal(b, m, deterministic)
 }
 func (m *GetApplicationLinkRequest) XXX_Merge(src proto.Message) {
 	xxx_messageInfo_GetApplicationLinkRequest.Merge(m, src)
 }
 func (m *GetApplicationLinkRequest) XXX_Size() int {
-	return m.Size()
+	return xxx_messageInfo_GetApplicationLinkRequest.Size(m)
 }
 func (m *GetApplicationLinkRequest) XXX_DiscardUnknown() {
 	xxx_messageInfo_GetApplicationLinkRequest.DiscardUnknown(m)
@@ -172,19 +150,19 @@ func (m *GetApplicationLinkRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_GetApplicationLinkRequest proto.InternalMessageInfo
 
-func (m *GetApplicationLinkRequest) GetFieldMask() types.FieldMask {
+func (m *GetApplicationLinkRequest) GetFieldMask() *types.FieldMask {
 	if m != nil {
 		return m.FieldMask
 	}
-	return types.FieldMask{}
+	return nil
 }
 
 type SetApplicationLinkRequest struct {
 	ApplicationIdentifiers `protobuf:"bytes,1,opt,name=application_ids,json=applicationIds,proto3,embedded=application_ids" json:"application_ids"`
 	ApplicationLink        `protobuf:"bytes,2,opt,name=link,proto3,embedded=link" json:"link"`
-	FieldMask              types.FieldMask `protobuf:"bytes,3,opt,name=field_mask,json=fieldMask,proto3" json:"field_mask"`
-	XXX_NoUnkeyedLiteral   struct{}        `json:"-"`
-	XXX_sizecache          int32           `json:"-"`
+	FieldMask              *types.FieldMask `protobuf:"bytes,3,opt,name=field_mask,json=fieldMask,proto3" json:"field_mask,omitempty"`
+	XXX_NoUnkeyedLiteral   struct{}         `json:"-"`
+	XXX_sizecache          int32            `json:"-"`
 }
 
 func (m *SetApplicationLinkRequest) Reset()      { *m = SetApplicationLinkRequest{} }
@@ -193,25 +171,16 @@ func (*SetApplicationLinkRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_df9d75a19dc066e1, []int{2}
 }
 func (m *SetApplicationLinkRequest) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	return xxx_messageInfo_SetApplicationLinkRequest.Unmarshal(m, b)
 }
 func (m *SetApplicationLinkRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_SetApplicationLinkRequest.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	return xxx_messageInfo_SetApplicationLinkRequest.Marshal(b, m, deterministic)
 }
 func (m *SetApplicationLinkRequest) XXX_Merge(src proto.Message) {
 	xxx_messageInfo_SetApplicationLinkRequest.Merge(m, src)
 }
 func (m *SetApplicationLinkRequest) XXX_Size() int {
-	return m.Size()
+	return xxx_messageInfo_SetApplicationLinkRequest.Size(m)
 }
 func (m *SetApplicationLinkRequest) XXX_DiscardUnknown() {
 	xxx_messageInfo_SetApplicationLinkRequest.DiscardUnknown(m)
@@ -219,11 +188,11 @@ func (m *SetApplicationLinkRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_SetApplicationLinkRequest proto.InternalMessageInfo
 
-func (m *SetApplicationLinkRequest) GetFieldMask() types.FieldMask {
+func (m *SetApplicationLinkRequest) GetFieldMask() *types.FieldMask {
 	if m != nil {
 		return m.FieldMask
 	}
-	return types.FieldMask{}
+	return nil
 }
 
 // Link stats as monitored by the Application Server.
@@ -249,25 +218,16 @@ func (*ApplicationLinkStats) Descriptor() ([]byte, []int) {
 	return fileDescriptor_df9d75a19dc066e1, []int{3}
 }
 func (m *ApplicationLinkStats) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	return xxx_messageInfo_ApplicationLinkStats.Unmarshal(m, b)
 }
 func (m *ApplicationLinkStats) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_ApplicationLinkStats.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	return xxx_messageInfo_ApplicationLinkStats.Marshal(b, m, deterministic)
 }
 func (m *ApplicationLinkStats) XXX_Merge(src proto.Message) {
 	xxx_messageInfo_ApplicationLinkStats.Merge(m, src)
 }
 func (m *ApplicationLinkStats) XXX_Size() int {
-	return m.Size()
+	return xxx_messageInfo_ApplicationLinkStats.Size(m)
 }
 func (m *ApplicationLinkStats) XXX_DiscardUnknown() {
 	xxx_messageInfo_ApplicationLinkStats.DiscardUnknown(m)
@@ -319,7 +279,7 @@ func (m *ApplicationLinkStats) GetDownlinkCount() uint64 {
 
 // Application Server configuration.
 type AsConfiguration struct {
-	PubSub               *AsConfiguration_PubSub `protobuf:"bytes,1,opt,name=pubsub,proto3" json:"pubsub,omitempty"`
+	Pubsub               *AsConfiguration_PubSub `protobuf:"bytes,1,opt,name=pubsub,proto3" json:"pubsub,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}                `json:"-"`
 	XXX_sizecache        int32                   `json:"-"`
 }
@@ -330,25 +290,16 @@ func (*AsConfiguration) Descriptor() ([]byte, []int) {
 	return fileDescriptor_df9d75a19dc066e1, []int{4}
 }
 func (m *AsConfiguration) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	return xxx_messageInfo_AsConfiguration.Unmarshal(m, b)
 }
 func (m *AsConfiguration) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_AsConfiguration.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	return xxx_messageInfo_AsConfiguration.Marshal(b, m, deterministic)
 }
 func (m *AsConfiguration) XXX_Merge(src proto.Message) {
 	xxx_messageInfo_AsConfiguration.Merge(m, src)
 }
 func (m *AsConfiguration) XXX_Size() int {
-	return m.Size()
+	return xxx_messageInfo_AsConfiguration.Size(m)
 }
 func (m *AsConfiguration) XXX_DiscardUnknown() {
 	xxx_messageInfo_AsConfiguration.DiscardUnknown(m)
@@ -356,9 +307,9 @@ func (m *AsConfiguration) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_AsConfiguration proto.InternalMessageInfo
 
-func (m *AsConfiguration) GetPubSub() *AsConfiguration_PubSub {
+func (m *AsConfiguration) GetPubsub() *AsConfiguration_PubSub {
 	if m != nil {
-		return m.PubSub
+		return m.Pubsub
 	}
 	return nil
 }
@@ -375,25 +326,16 @@ func (*AsConfiguration_PubSub) Descriptor() ([]byte, []int) {
 	return fileDescriptor_df9d75a19dc066e1, []int{4, 0}
 }
 func (m *AsConfiguration_PubSub) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	return xxx_messageInfo_AsConfiguration_PubSub.Unmarshal(m, b)
 }
 func (m *AsConfiguration_PubSub) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_AsConfiguration_PubSub.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	return xxx_messageInfo_AsConfiguration_PubSub.Marshal(b, m, deterministic)
 }
 func (m *AsConfiguration_PubSub) XXX_Merge(src proto.Message) {
 	xxx_messageInfo_AsConfiguration_PubSub.Merge(m, src)
 }
 func (m *AsConfiguration_PubSub) XXX_Size() int {
-	return m.Size()
+	return xxx_messageInfo_AsConfiguration_PubSub.Size(m)
 }
 func (m *AsConfiguration_PubSub) XXX_DiscardUnknown() {
 	xxx_messageInfo_AsConfiguration_PubSub.DiscardUnknown(m)
@@ -409,9 +351,8 @@ func (m *AsConfiguration_PubSub) GetProviders() *AsConfiguration_PubSub_Provider
 }
 
 type AsConfiguration_PubSub_Providers struct {
-	MQTT                 AsConfiguration_PubSub_Providers_Status `protobuf:"varint,1,opt,name=mqtt,proto3,enum=ttn.lorawan.v3.AsConfiguration_PubSub_Providers_Status" json:"mqtt,omitempty"`
-	NATS                 AsConfiguration_PubSub_Providers_Status `protobuf:"varint,2,opt,name=nats,proto3,enum=ttn.lorawan.v3.AsConfiguration_PubSub_Providers_Status" json:"nats,omitempty"`
-	AWSIoT               AsConfiguration_PubSub_Providers_Status `protobuf:"varint,3,opt,name=aws_iot,json=awsIot,proto3,enum=ttn.lorawan.v3.AsConfiguration_PubSub_Providers_Status" json:"aws_iot,omitempty"`
+	Mqtt                 AsConfiguration_PubSub_Providers_Status `protobuf:"varint,1,opt,name=mqtt,proto3,enum=ttn.lorawan.v3.AsConfiguration_PubSub_Providers_Status" json:"mqtt,omitempty"`
+	Nats                 AsConfiguration_PubSub_Providers_Status `protobuf:"varint,2,opt,name=nats,proto3,enum=ttn.lorawan.v3.AsConfiguration_PubSub_Providers_Status" json:"nats,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}                                `json:"-"`
 	XXX_sizecache        int32                                   `json:"-"`
 }
@@ -422,25 +363,16 @@ func (*AsConfiguration_PubSub_Providers) Descriptor() ([]byte, []int) {
 	return fileDescriptor_df9d75a19dc066e1, []int{4, 0, 0}
 }
 func (m *AsConfiguration_PubSub_Providers) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	return xxx_messageInfo_AsConfiguration_PubSub_Providers.Unmarshal(m, b)
 }
 func (m *AsConfiguration_PubSub_Providers) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_AsConfiguration_PubSub_Providers.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	return xxx_messageInfo_AsConfiguration_PubSub_Providers.Marshal(b, m, deterministic)
 }
 func (m *AsConfiguration_PubSub_Providers) XXX_Merge(src proto.Message) {
 	xxx_messageInfo_AsConfiguration_PubSub_Providers.Merge(m, src)
 }
 func (m *AsConfiguration_PubSub_Providers) XXX_Size() int {
-	return m.Size()
+	return xxx_messageInfo_AsConfiguration_PubSub_Providers.Size(m)
 }
 func (m *AsConfiguration_PubSub_Providers) XXX_DiscardUnknown() {
 	xxx_messageInfo_AsConfiguration_PubSub_Providers.DiscardUnknown(m)
@@ -448,23 +380,16 @@ func (m *AsConfiguration_PubSub_Providers) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_AsConfiguration_PubSub_Providers proto.InternalMessageInfo
 
-func (m *AsConfiguration_PubSub_Providers) GetMQTT() AsConfiguration_PubSub_Providers_Status {
+func (m *AsConfiguration_PubSub_Providers) GetMqtt() AsConfiguration_PubSub_Providers_Status {
 	if m != nil {
-		return m.MQTT
+		return m.Mqtt
 	}
 	return AsConfiguration_PubSub_Providers_ENABLED
 }
 
-func (m *AsConfiguration_PubSub_Providers) GetNATS() AsConfiguration_PubSub_Providers_Status {
+func (m *AsConfiguration_PubSub_Providers) GetNats() AsConfiguration_PubSub_Providers_Status {
 	if m != nil {
-		return m.NATS
-	}
-	return AsConfiguration_PubSub_Providers_ENABLED
-}
-
-func (m *AsConfiguration_PubSub_Providers) GetAWSIoT() AsConfiguration_PubSub_Providers_Status {
-	if m != nil {
-		return m.AWSIoT
+		return m.Nats
 	}
 	return AsConfiguration_PubSub_Providers_ENABLED
 }
@@ -480,25 +405,16 @@ func (*GetAsConfigurationRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_df9d75a19dc066e1, []int{5}
 }
 func (m *GetAsConfigurationRequest) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	return xxx_messageInfo_GetAsConfigurationRequest.Unmarshal(m, b)
 }
 func (m *GetAsConfigurationRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_GetAsConfigurationRequest.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	return xxx_messageInfo_GetAsConfigurationRequest.Marshal(b, m, deterministic)
 }
 func (m *GetAsConfigurationRequest) XXX_Merge(src proto.Message) {
 	xxx_messageInfo_GetAsConfigurationRequest.Merge(m, src)
 }
 func (m *GetAsConfigurationRequest) XXX_Size() int {
-	return m.Size()
+	return xxx_messageInfo_GetAsConfigurationRequest.Size(m)
 }
 func (m *GetAsConfigurationRequest) XXX_DiscardUnknown() {
 	xxx_messageInfo_GetAsConfigurationRequest.DiscardUnknown(m)
@@ -518,25 +434,16 @@ func (*GetAsConfigurationResponse) Descriptor() ([]byte, []int) {
 	return fileDescriptor_df9d75a19dc066e1, []int{6}
 }
 func (m *GetAsConfigurationResponse) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	return xxx_messageInfo_GetAsConfigurationResponse.Unmarshal(m, b)
 }
 func (m *GetAsConfigurationResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_GetAsConfigurationResponse.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	return xxx_messageInfo_GetAsConfigurationResponse.Marshal(b, m, deterministic)
 }
 func (m *GetAsConfigurationResponse) XXX_Merge(src proto.Message) {
 	xxx_messageInfo_GetAsConfigurationResponse.Merge(m, src)
 }
 func (m *GetAsConfigurationResponse) XXX_Size() int {
-	return m.Size()
+	return xxx_messageInfo_GetAsConfigurationResponse.Size(m)
 }
 func (m *GetAsConfigurationResponse) XXX_DiscardUnknown() {
 	xxx_messageInfo_GetAsConfigurationResponse.DiscardUnknown(m)
@@ -564,25 +471,16 @@ func (*NsAsHandleUplinkRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_df9d75a19dc066e1, []int{7}
 }
 func (m *NsAsHandleUplinkRequest) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	return xxx_messageInfo_NsAsHandleUplinkRequest.Unmarshal(m, b)
 }
 func (m *NsAsHandleUplinkRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_NsAsHandleUplinkRequest.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	return xxx_messageInfo_NsAsHandleUplinkRequest.Marshal(b, m, deterministic)
 }
 func (m *NsAsHandleUplinkRequest) XXX_Merge(src proto.Message) {
 	xxx_messageInfo_NsAsHandleUplinkRequest.Merge(m, src)
 }
 func (m *NsAsHandleUplinkRequest) XXX_Size() int {
-	return m.Size()
+	return xxx_messageInfo_NsAsHandleUplinkRequest.Size(m)
 }
 func (m *NsAsHandleUplinkRequest) XXX_DiscardUnknown() {
 	xxx_messageInfo_NsAsHandleUplinkRequest.DiscardUnknown(m)
@@ -613,25 +511,16 @@ func (*EncodeDownlinkRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_df9d75a19dc066e1, []int{8}
 }
 func (m *EncodeDownlinkRequest) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	return xxx_messageInfo_EncodeDownlinkRequest.Unmarshal(m, b)
 }
 func (m *EncodeDownlinkRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_EncodeDownlinkRequest.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	return xxx_messageInfo_EncodeDownlinkRequest.Marshal(b, m, deterministic)
 }
 func (m *EncodeDownlinkRequest) XXX_Merge(src proto.Message) {
 	xxx_messageInfo_EncodeDownlinkRequest.Merge(m, src)
 }
 func (m *EncodeDownlinkRequest) XXX_Size() int {
-	return m.Size()
+	return xxx_messageInfo_EncodeDownlinkRequest.Size(m)
 }
 func (m *EncodeDownlinkRequest) XXX_DiscardUnknown() {
 	xxx_messageInfo_EncodeDownlinkRequest.DiscardUnknown(m)
@@ -686,25 +575,16 @@ func (*EncodeDownlinkResponse) Descriptor() ([]byte, []int) {
 	return fileDescriptor_df9d75a19dc066e1, []int{9}
 }
 func (m *EncodeDownlinkResponse) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	return xxx_messageInfo_EncodeDownlinkResponse.Unmarshal(m, b)
 }
 func (m *EncodeDownlinkResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_EncodeDownlinkResponse.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	return xxx_messageInfo_EncodeDownlinkResponse.Marshal(b, m, deterministic)
 }
 func (m *EncodeDownlinkResponse) XXX_Merge(src proto.Message) {
 	xxx_messageInfo_EncodeDownlinkResponse.Merge(m, src)
 }
 func (m *EncodeDownlinkResponse) XXX_Size() int {
-	return m.Size()
+	return xxx_messageInfo_EncodeDownlinkResponse.Size(m)
 }
 func (m *EncodeDownlinkResponse) XXX_DiscardUnknown() {
 	xxx_messageInfo_EncodeDownlinkResponse.DiscardUnknown(m)
@@ -735,25 +615,16 @@ func (*DecodeUplinkRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_df9d75a19dc066e1, []int{10}
 }
 func (m *DecodeUplinkRequest) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	return xxx_messageInfo_DecodeUplinkRequest.Unmarshal(m, b)
 }
 func (m *DecodeUplinkRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_DecodeUplinkRequest.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	return xxx_messageInfo_DecodeUplinkRequest.Marshal(b, m, deterministic)
 }
 func (m *DecodeUplinkRequest) XXX_Merge(src proto.Message) {
 	xxx_messageInfo_DecodeUplinkRequest.Merge(m, src)
 }
 func (m *DecodeUplinkRequest) XXX_Size() int {
-	return m.Size()
+	return xxx_messageInfo_DecodeUplinkRequest.Size(m)
 }
 func (m *DecodeUplinkRequest) XXX_DiscardUnknown() {
 	xxx_messageInfo_DecodeUplinkRequest.DiscardUnknown(m)
@@ -808,25 +679,16 @@ func (*DecodeUplinkResponse) Descriptor() ([]byte, []int) {
 	return fileDescriptor_df9d75a19dc066e1, []int{11}
 }
 func (m *DecodeUplinkResponse) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	return xxx_messageInfo_DecodeUplinkResponse.Unmarshal(m, b)
 }
 func (m *DecodeUplinkResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_DecodeUplinkResponse.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	return xxx_messageInfo_DecodeUplinkResponse.Marshal(b, m, deterministic)
 }
 func (m *DecodeUplinkResponse) XXX_Merge(src proto.Message) {
 	xxx_messageInfo_DecodeUplinkResponse.Merge(m, src)
 }
 func (m *DecodeUplinkResponse) XXX_Size() int {
-	return m.Size()
+	return xxx_messageInfo_DecodeUplinkResponse.Size(m)
 }
 func (m *DecodeUplinkResponse) XXX_DiscardUnknown() {
 	xxx_messageInfo_DecodeUplinkResponse.DiscardUnknown(m)
@@ -857,25 +719,16 @@ func (*DecodeDownlinkRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_df9d75a19dc066e1, []int{12}
 }
 func (m *DecodeDownlinkRequest) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	return xxx_messageInfo_DecodeDownlinkRequest.Unmarshal(m, b)
 }
 func (m *DecodeDownlinkRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_DecodeDownlinkRequest.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	return xxx_messageInfo_DecodeDownlinkRequest.Marshal(b, m, deterministic)
 }
 func (m *DecodeDownlinkRequest) XXX_Merge(src proto.Message) {
 	xxx_messageInfo_DecodeDownlinkRequest.Merge(m, src)
 }
 func (m *DecodeDownlinkRequest) XXX_Size() int {
-	return m.Size()
+	return xxx_messageInfo_DecodeDownlinkRequest.Size(m)
 }
 func (m *DecodeDownlinkRequest) XXX_DiscardUnknown() {
 	xxx_messageInfo_DecodeDownlinkRequest.DiscardUnknown(m)
@@ -930,25 +783,16 @@ func (*DecodeDownlinkResponse) Descriptor() ([]byte, []int) {
 	return fileDescriptor_df9d75a19dc066e1, []int{13}
 }
 func (m *DecodeDownlinkResponse) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	return xxx_messageInfo_DecodeDownlinkResponse.Unmarshal(m, b)
 }
 func (m *DecodeDownlinkResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_DecodeDownlinkResponse.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	return xxx_messageInfo_DecodeDownlinkResponse.Marshal(b, m, deterministic)
 }
 func (m *DecodeDownlinkResponse) XXX_Merge(src proto.Message) {
 	xxx_messageInfo_DecodeDownlinkResponse.Merge(m, src)
 }
 func (m *DecodeDownlinkResponse) XXX_Size() int {
-	return m.Size()
+	return xxx_messageInfo_DecodeDownlinkResponse.Size(m)
 }
 func (m *DecodeDownlinkResponse) XXX_DiscardUnknown() {
 	xxx_messageInfo_DecodeDownlinkResponse.DiscardUnknown(m)
@@ -1008,132 +852,123 @@ func init() {
 }
 
 var fileDescriptor_df9d75a19dc066e1 = []byte{
-	// 1994 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x59, 0x5d, 0x6c, 0xdb, 0xd6,
-	0x15, 0xd6, 0x95, 0x64, 0x5b, 0xbe, 0x71, 0x1c, 0xe7, 0x3a, 0x4d, 0x6d, 0x35, 0xa3, 0x3d, 0x36,
-	0xcd, 0x6c, 0xaf, 0xa2, 0x32, 0x67, 0x7f, 0xf5, 0xb0, 0x19, 0x94, 0xed, 0x38, 0x36, 0x6c, 0xd7,
-	0xa1, 0xec, 0x06, 0x4b, 0x93, 0x0a, 0x57, 0xe2, 0xb5, 0x4c, 0x58, 0x22, 0x59, 0xde, 0x4b, 0xb9,
-	0xce, 0x0f, 0x50, 0x14, 0x41, 0x57, 0xf4, 0x61, 0x2b, 0x3a, 0x14, 0xe8, 0xe3, 0x80, 0x6d, 0x40,
-	0x1f, 0x8b, 0xf5, 0x61, 0x7d, 0xda, 0x0a, 0x0c, 0x03, 0x32, 0xec, 0x25, 0x45, 0x5f, 0x0a, 0x0c,
-	0xf3, 0x6a, 0x79, 0x18, 0x0a, 0x0c, 0x18, 0xfa, 0x58, 0xe4, 0x69, 0xe0, 0x25, 0x29, 0x89, 0x94,
-	0x64, 0x2b, 0x3f, 0x70, 0x30, 0x60, 0x6f, 0x57, 0xbc, 0xe7, 0x7c, 0xe7, 0x3b, 0xbf, 0x3c, 0xb4,
-	0xe1, 0x78, 0xc9, 0xb0, 0xf0, 0x36, 0xd6, 0x53, 0x94, 0xe1, 0xc2, 0x56, 0x1a, 0x9b, 0x5a, 0x1a,
-	0x9b, 0x66, 0x49, 0x2b, 0x60, 0xa6, 0x19, 0x3a, 0x25, 0x56, 0x85, 0x58, 0x92, 0x69, 0x19, 0xcc,
-	0x40, 0xfd, 0x8c, 0xe9, 0x92, 0x27, 0x2e, 0x55, 0x2e, 0x24, 0xe5, 0xa2, 0xc6, 0x36, 0xed, 0xbc,
-	0x54, 0x30, 0xca, 0x69, 0xa2, 0x57, 0x8c, 0x1d, 0xd3, 0x32, 0x5e, 0xdb, 0x49, 0x73, 0xe1, 0x42,
-	0xaa, 0x48, 0xf4, 0x54, 0x05, 0x97, 0x34, 0x15, 0x33, 0x92, 0x6e, 0x3a, 0xb8, 0x90, 0xc9, 0x54,
-	0x03, 0x44, 0xd1, 0x28, 0x1a, 0xae, 0x72, 0xde, 0xde, 0xe0, 0xbf, 0xf8, 0x0f, 0x7e, 0xf2, 0xc4,
-	0xcf, 0x14, 0x0d, 0xa3, 0x58, 0x22, 0x2e, 0x4b, 0x5d, 0x37, 0x98, 0x4b, 0xd2, 0xbb, 0x7d, 0xc6,
-	0xbb, 0xad, 0x61, 0x90, 0xb2, 0xc9, 0x76, 0xbc, 0xcb, 0xd1, 0xf0, 0xe5, 0x86, 0x46, 0x4a, 0x6a,
-	0xae, 0x8c, 0xe9, 0x96, 0x27, 0x31, 0x12, 0x96, 0x60, 0x5a, 0x99, 0x50, 0x86, 0xcb, 0xa6, 0x27,
-	0x20, 0x84, 0x05, 0xb6, 0x2d, 0x6c, 0x9a, 0xc4, 0xf2, 0xed, 0x8b, 0xcd, 0xa1, 0x24, 0xba, 0x9a,
-	0x53, 0x49, 0x45, 0x2b, 0xf8, 0x0e, 0x3f, 0xdb, 0x2c, 0xa3, 0xa9, 0x44, 0x67, 0xda, 0x86, 0x56,
-	0x07, 0x1a, 0x6d, 0x16, 0x2a, 0x13, 0x4a, 0x71, 0x91, 0xf8, 0x12, 0x67, 0x5a, 0x48, 0xbc, 0xca,
-	0x98, 0x7b, 0x2b, 0xfe, 0x1d, 0xc0, 0x13, 0x72, 0x3d, 0x89, 0x4b, 0x9a, 0xbe, 0x85, 0xae, 0x40,
-	0xa4, 0x92, 0x0d, 0x6c, 0x97, 0x58, 0x6e, 0xc3, 0xb0, 0xca, 0x98, 0x31, 0x62, 0xd1, 0xa1, 0xd8,
-	0x28, 0x18, 0x3b, 0x36, 0x39, 0x26, 0x05, 0x33, 0x2b, 0x2d, 0xbb, 0xd6, 0x56, 0xf1, 0x4e, 0xc9,
-	0xc0, 0xea, 0xc5, 0x9a, 0xbc, 0x72, 0xd2, 0xc3, 0xa8, 0x3f, 0x42, 0xc3, 0x30, 0xc6, 0x4a, 0x74,
-	0x28, 0x3e, 0x0a, 0xc6, 0x12, 0x99, 0x9e, 0xea, 0xee, 0x48, 0x6c, 0x6d, 0x29, 0xab, 0x38, 0xcf,
-	0xd0, 0x22, 0x1c, 0xa4, 0x5b, 0x9a, 0x99, 0x33, 0x5d, 0x9c, 0x5c, 0xc1, 0xda, 0x31, 0x99, 0x31,
-	0xd4, 0xc5, 0x8d, 0x26, 0x25, 0x37, 0x9c, 0x92, 0x1f, 0x4e, 0x29, 0x63, 0x18, 0xa5, 0x97, 0x70,
-	0xc9, 0x26, 0xca, 0x49, 0x47, 0xcd, 0xb3, 0x3e, 0xc3, 0x95, 0x16, 0xe3, 0x09, 0x30, 0x10, 0x5d,
-	0x8c, 0x27, 0xa2, 0x03, 0x31, 0xf1, 0x8f, 0x00, 0x0e, 0xcf, 0x13, 0x16, 0x72, 0x51, 0x21, 0xaf,
-	0xda, 0x84, 0x32, 0x84, 0xe1, 0x89, 0x86, 0x0a, 0xce, 0x69, 0x2a, 0x1d, 0x02, 0xdc, 0xe2, 0xb9,
-	0xb0, 0x9b, 0x0d, 0x00, 0x0b, 0xf5, 0x24, 0x64, 0x06, 0xee, 0x67, 0xba, 0xde, 0x06, 0xd1, 0x01,
-	0x70, 0x77, 0x77, 0x24, 0x72, 0x6f, 0x77, 0x04, 0x28, 0xfd, 0xb8, 0x51, 0x92, 0xa2, 0x69, 0x08,
-	0xeb, 0xe5, 0x33, 0x14, 0x6d, 0xe3, 0xcf, 0x45, 0x47, 0x64, 0x19, 0xd3, 0xad, 0x4c, 0xdc, 0x41,
-	0x52, 0x7a, 0x37, 0xfc, 0x07, 0xe2, 0x9b, 0x51, 0x38, 0x9c, 0x7d, 0x92, 0x1e, 0xcc, 0xc1, 0x78,
-	0x49, 0xd3, 0x7d, 0xee, 0x23, 0x07, 0xe0, 0x3a, 0xc4, 0x5a, 0x00, 0x72, 0xf5, 0x50, 0x20, 0x62,
-	0x0f, 0x1e, 0x88, 0x5f, 0xc4, 0xe1, 0xa9, 0x90, 0xb1, 0x2c, 0xc3, 0x8c, 0xa2, 0x1f, 0xc3, 0x5e,
-	0xc7, 0x02, 0x51, 0x73, 0x98, 0x79, 0xde, 0x37, 0x03, 0xaf, 0xf9, 0x1d, 0x9a, 0x89, 0xbf, 0xf3,
-	0x8f, 0x11, 0xa0, 0x24, 0x5c, 0x15, 0x99, 0xa1, 0x3f, 0x03, 0x78, 0x5a, 0x27, 0x6c, 0xdb, 0xb0,
-	0xb6, 0x72, 0xee, 0x10, 0xcb, 0x61, 0x55, 0xb5, 0x08, 0xa5, 0xdc, 0xe5, 0xde, 0xcc, 0xcf, 0xc1,
-	0xfd, 0xcc, 0xdb, 0xc0, 0xfa, 0x19, 0x98, 0xbc, 0x03, 0x5e, 0x19, 0x9b, 0x9e, 0x1a, 0x9b, 0x9e,
-	0x7a, 0x19, 0xa7, 0x6e, 0xc8, 0xa9, 0xab, 0xe7, 0x53, 0x2f, 0x5c, 0xbf, 0xd5, 0x70, 0xae, 0x1f,
-	0xaf, 0xa5, 0xae, 0x4f, 0x34, 0x5c, 0x8c, 0x5f, 0x93, 0xc6, 0x27, 0x1c, 0x3d, 0x39, 0x75, 0x15,
-	0xa7, 0x6e, 0xb8, 0x7a, 0xf5, 0x73, 0xfd, 0xc8, 0xf5, 0xea, 0x17, 0xe3, 0x63, 0xd3, 0x53, 0x53,
-	0x2f, 0x3b, 0xa7, 0x9b, 0xdf, 0x79, 0xfe, 0x7b, 0xb7, 0xc7, 0xa7, 0xcf, 0xde, 0x7a, 0xe5, 0xac,
-	0x72, 0xca, 0xa3, 0x9b, 0xe5, 0x6c, 0x65, 0x97, 0x2c, 0x7a, 0x11, 0x0e, 0x96, 0x30, 0x65, 0x39,
-	0xdb, 0xcc, 0x59, 0xa4, 0x40, 0xb4, 0x8a, 0x1b, 0x90, 0x58, 0x87, 0x01, 0x19, 0x70, 0x94, 0xd7,
-	0x4d, 0xc5, 0x53, 0x95, 0x19, 0x1a, 0x86, 0x09, 0xdb, 0xcc, 0x15, 0x0c, 0x5b, 0x67, 0xbc, 0x67,
-	0xe3, 0x4a, 0x8f, 0x6d, 0xce, 0x38, 0x3f, 0xd1, 0x75, 0x98, 0xe4, 0xb6, 0x54, 0x63, 0x5b, 0x77,
-	0x02, 0xe9, 0x0c, 0x8a, 0x6d, 0x6c, 0xa9, 0xae, 0xc9, 0xae, 0x0e, 0x4d, 0x3e, 0xed, 0x60, 0xcc,
-	0x7a, 0x10, 0x17, 0x7d, 0x04, 0x99, 0xa1, 0xe7, 0x60, 0x7f, 0x0d, 0xd9, 0xb5, 0xdf, 0xcd, 0xed,
-	0x1f, 0xf7, 0x9f, 0x72, 0x16, 0xe2, 0x9d, 0x38, 0x3c, 0x21, 0xd3, 0x19, 0x43, 0xdf, 0xd0, 0x8a,
-	0xb6, 0xc5, 0xab, 0x02, 0x2d, 0xc2, 0x6e, 0xd3, 0xce, 0x53, 0x3b, 0xdf, 0xb6, 0x0f, 0x82, 0x0a,
-	0xd2, 0xaa, 0x9d, 0xcf, 0xda, 0xf9, 0x0c, 0xac, 0xee, 0x8e, 0x74, 0xbb, 0x67, 0xc5, 0x43, 0x48,
-	0xfe, 0x26, 0x06, 0xbd, 0x47, 0x68, 0x05, 0xf6, 0x9a, 0x96, 0x51, 0xd1, 0x54, 0x67, 0x14, 0xba,
-	0xc8, 0xe7, 0x3b, 0x43, 0x96, 0x56, 0x7d, 0x3d, 0xa5, 0x0e, 0x91, 0xfc, 0x4b, 0x14, 0xf6, 0xd6,
-	0x2e, 0xd0, 0x3a, 0x8c, 0x3b, 0x33, 0x99, 0x03, 0xf7, 0x4f, 0xfe, 0xe0, 0x41, 0x81, 0x25, 0xa7,
-	0x0f, 0x6c, 0x9a, 0x49, 0x54, 0x77, 0x47, 0xe2, 0xcb, 0x97, 0xd7, 0xd6, 0x14, 0x0e, 0xe7, 0xc0,
-	0xea, 0x98, 0xb9, 0x65, 0xfc, 0xa8, 0xb0, 0x2b, 0xf2, 0x5a, 0x56, 0xe1, 0x70, 0xe8, 0x1a, 0xec,
-	0xc1, 0xdb, 0x34, 0xa7, 0x19, 0x6e, 0x71, 0x3d, 0x02, 0x32, 0x0f, 0xba, 0x7c, 0x25, 0xbb, 0x60,
-	0xac, 0x29, 0xdd, 0x78, 0x9b, 0x2e, 0x18, 0x4c, 0x3c, 0x0f, 0xbb, 0xdd, 0x5b, 0x74, 0x0c, 0xf6,
-	0xcc, 0xad, 0xc8, 0x99, 0xa5, 0xb9, 0xd9, 0x81, 0x88, 0xf3, 0xe3, 0x8a, 0xac, 0xac, 0x2c, 0xac,
-	0xcc, 0x0f, 0x00, 0xd4, 0x07, 0x13, 0xb3, 0x0b, 0x59, 0xf7, 0x2a, 0x2a, 0x3e, 0xe3, 0x8e, 0xf8,
-	0xa0, 0x4d, 0x6f, 0x40, 0x8a, 0x05, 0x98, 0x6c, 0x75, 0x49, 0x4d, 0x67, 0x63, 0x41, 0x73, 0xf0,
-	0x78, 0xa1, 0xf1, 0xc2, 0x4b, 0xed, 0xc8, 0x21, 0x0e, 0x29, 0x41, 0x2d, 0x71, 0x0b, 0x3e, 0xbd,
-	0x42, 0x65, 0x7a, 0x09, 0xeb, 0x6a, 0x89, 0xac, 0x9b, 0xa5, 0x86, 0x01, 0xbd, 0x1a, 0x1c, 0xd0,
-	0xb6, 0xe9, 0x94, 0x4f, 0x6c, 0xec, 0xd8, 0xe4, 0x37, 0x0e, 0x18, 0xa4, 0xeb, 0x66, 0x26, 0x71,
-	0x3f, 0xd3, 0xf5, 0x2e, 0x88, 0x26, 0x82, 0xf3, 0x78, 0xdd, 0xa4, 0xe2, 0x7f, 0xa2, 0xf0, 0xa9,
-	0x39, 0xbd, 0x60, 0xa8, 0xc4, 0x6f, 0x1d, 0xdf, 0xd6, 0x1a, 0xec, 0xaf, 0x6f, 0x11, 0x0d, 0xef,
-	0x82, 0xb3, 0x61, 0x53, 0x73, 0xba, 0x3a, 0xcb, 0x85, 0x1a, 0xdf, 0x04, 0x09, 0x7f, 0x70, 0x2b,
-	0x7d, 0xa4, 0x7e, 0x4f, 0xd1, 0x12, 0x3c, 0x56, 0x21, 0x16, 0xf5, 0x5f, 0x2f, 0xee, 0x6b, 0xe0,
-	0xdb, 0x6d, 0x21, 0x5f, 0x72, 0x65, 0x1b, 0x90, 0x15, 0x58, 0xf1, 0x9f, 0x51, 0xb4, 0x00, 0x13,
-	0x7e, 0x13, 0x7b, 0xa3, 0xe9, 0xd9, 0x03, 0x02, 0xe1, 0x7b, 0xd8, 0x40, 0xae, 0xa6, 0x8e, 0x2e,
-	0xc1, 0xde, 0xda, 0x7e, 0xc2, 0x07, 0x54, 0xff, 0xe4, 0x68, 0x18, 0x2b, 0xbc, 0x97, 0x70, 0xa0,
-	0x37, 0x38, 0x50, 0x5d, 0x19, 0x9d, 0x81, 0xbd, 0x26, 0xb6, 0x70, 0x99, 0x38, 0x48, 0xce, 0xf4,
-	0xea, 0x55, 0xea, 0x0f, 0xc4, 0x9f, 0xc2, 0xd3, 0xe1, 0x78, 0x7b, 0xe5, 0x33, 0xdd, 0xe0, 0x0c,
-	0xe8, 0xd8, 0x99, 0xba, 0x0b, 0xe2, 0xbf, 0xa2, 0x70, 0x70, 0x96, 0x38, 0xd8, 0xc1, 0xaa, 0xf9,
-	0x5f, 0xc8, 0xe4, 0x0c, 0xec, 0xb6, 0xcd, 0x86, 0x3c, 0x7e, 0xf3, 0xc0, 0x82, 0x0e, 0x65, 0xd1,
-	0x53, 0x3d, 0xb2, 0x1c, 0x5e, 0x86, 0xa7, 0x82, 0x71, 0xf6, 0x32, 0xf8, 0x42, 0xcd, 0x09, 0xd0,
-	0xa1, 0x13, 0x3e, 0x75, 0xde, 0x87, 0x2e, 0xe6, 0xff, 0xfb, 0xf0, 0xa8, 0xfa, 0x30, 0x1c, 0xef,
-	0xc7, 0xd4, 0x87, 0x93, 0x9f, 0x76, 0xc1, 0xa8, 0x4c, 0xd1, 0x7b, 0x00, 0xf6, 0xcc, 0x13, 0xc6,
-	0xbf, 0x82, 0xc6, 0xc3, 0x08, 0x6d, 0x3f, 0x23, 0x92, 0x87, 0xed, 0xc4, 0xe2, 0x4f, 0xde, 0xf8,
-	0xec, 0x9f, 0xbf, 0x8c, 0xfe, 0x10, 0x7d, 0x3f, 0x8d, 0x69, 0xe0, 0x9b, 0x39, 0x7d, 0x33, 0xb4,
-	0xbd, 0x4b, 0xc1, 0xdf, 0xb7, 0xd3, 0x3c, 0xc2, 0xef, 0x03, 0xd8, 0x93, 0x6d, 0xc7, 0x2b, 0xfb,
-	0xf0, 0xbc, 0x64, 0xce, 0xeb, 0x47, 0xc9, 0x87, 0xe4, 0x35, 0x05, 0x26, 0xd0, 0x2d, 0x08, 0x67,
-	0x49, 0x89, 0x30, 0xc2, 0xc9, 0x75, 0xf8, 0xd5, 0x91, 0x3c, 0xdd, 0xb4, 0x1b, 0xce, 0x39, 0x1f,
-	0xe0, 0xa2, 0xc4, 0x09, 0x8d, 0x4d, 0x9c, 0x3b, 0x8c, 0x90, 0x17, 0x98, 0x77, 0x01, 0xec, 0xf3,
-	0x12, 0xe6, 0x7e, 0x0b, 0x74, 0x4a, 0xe0, 0xec, 0x21, 0xa1, 0xe1, 0x68, 0xe2, 0x77, 0x39, 0x1d,
-	0x09, 0x3d, 0xdf, 0x19, 0x9d, 0x34, 0xe5, 0x1c, 0xee, 0x00, 0x38, 0x30, 0x4f, 0x58, 0x70, 0x2f,
-	0x6d, 0x59, 0x4e, 0x2d, 0x57, 0x96, 0xe4, 0x44, 0x27, 0xa2, 0x6e, 0xe5, 0x8b, 0xc3, 0x9c, 0xe1,
-	0x20, 0x3a, 0xe9, 0x30, 0x0c, 0x2c, 0x25, 0x93, 0x57, 0x60, 0xdc, 0x59, 0x4a, 0xd0, 0x8b, 0xb0,
-	0xaf, 0x71, 0x31, 0x41, 0xdf, 0x0a, 0xc3, 0xb7, 0x59, 0x5d, 0xda, 0x25, 0x69, 0xf2, 0xa3, 0xe3,
-	0xb0, 0x4b, 0x36, 0x4d, 0x99, 0xa2, 0x35, 0xd8, 0x9b, 0xb5, 0xf3, 0xb4, 0x60, 0x69, 0x79, 0xd2,
-	0x71, 0xe8, 0x0f, 0x5e, 0x7c, 0xce, 0x03, 0xf4, 0x57, 0x00, 0x4f, 0xfa, 0x3d, 0x7a, 0xd9, 0x26,
-	0x36, 0x59, 0xb5, 0xe9, 0x26, 0x6a, 0xca, 0x58, 0x40, 0xe4, 0x10, 0xce, 0xe2, 0x6b, 0x3c, 0x4e,
-	0x96, 0x58, 0x6e, 0xce, 0x64, 0x70, 0x54, 0x4b, 0x87, 0x15, 0xbe, 0x2b, 0xda, 0xac, 0x57, 0x3b,
-	0xde, 0x4e, 0x3b, 0x63, 0x25, 0x6d, 0xda, 0x74, 0xd3, 0x69, 0x90, 0x4f, 0x01, 0x3c, 0x15, 0xa2,
-	0x6a, 0x96, 0x70, 0x81, 0x3c, 0xa2, 0x43, 0x37, 0xb9, 0x43, 0xb6, 0x68, 0x1e, 0x99, 0x43, 0x96,
-	0xcb, 0xdb, 0xf1, 0xe9, 0xa3, 0x70, 0x86, 0x96, 0x34, 0xca, 0x50, 0x47, 0xaf, 0xb7, 0x03, 0x3b,
-	0xcf, 0xc7, 0xa4, 0xa2, 0xc2, 0xdd, 0x5b, 0x42, 0x8b, 0x0f, 0x3e, 0x99, 0x6a, 0xfe, 0x84, 0x1c,
-	0x40, 0xbf, 0x06, 0xf0, 0xa9, 0x79, 0xc2, 0x9c, 0x0f, 0xa4, 0x19, 0x43, 0xd7, 0x49, 0x81, 0x57,
-	0xa6, 0xbe, 0x61, 0x74, 0x5c, 0xba, 0x62, 0xd3, 0x5f, 0xbf, 0x9a, 0xb0, 0x3a, 0x9f, 0xf5, 0xb7,
-	0xf9, 0xdf, 0xe1, 0x52, 0x85, 0x9a, 0x7a, 0x4a, 0x73, 0xb8, 0xfc, 0x09, 0xc0, 0xfe, 0xac, 0x56,
-	0xb6, 0x4b, 0x98, 0xf9, 0x1d, 0x7b, 0x70, 0xc7, 0xb4, 0x2d, 0x91, 0x1b, 0x9c, 0x09, 0x13, 0x8d,
-	0xa3, 0x28, 0x11, 0xdb, 0x4c, 0x53, 0x8f, 0xb5, 0x53, 0x21, 0x7f, 0x03, 0xb0, 0x3f, 0xb8, 0x34,
-	0xa3, 0xe7, 0x9a, 0xcb, 0xa3, 0xc5, 0xf2, 0x94, 0x3c, 0x77, 0x98, 0x98, 0x37, 0xf9, 0x8e, 0xd4,
-	0x3b, 0xde, 0x00, 0x84, 0x13, 0x71, 0xbc, 0xfb, 0x0c, 0xc0, 0xbe, 0xc6, 0x75, 0x12, 0x35, 0xad,
-	0x1b, 0x2d, 0x96, 0xfa, 0xe6, 0xca, 0x6f, 0xb5, 0x91, 0x1e, 0xed, 0xa4, 0xb2, 0xcd, 0xb4, 0x4a,
-	0x7c, 0xaf, 0x9c, 0x9c, 0x05, 0x17, 0xac, 0xe6, 0x9c, 0xb5, 0x5c, 0x78, 0x9b, 0x73, 0xd6, 0x7a,
-	0x4f, 0x7b, 0x02, 0x39, 0xab, 0x79, 0x37, 0xf9, 0xef, 0x38, 0x1c, 0x94, 0x69, 0x6d, 0x24, 0x29,
-	0xa4, 0xa8, 0x51, 0x66, 0xed, 0xa0, 0xdf, 0x01, 0x18, 0x9b, 0x27, 0xac, 0x39, 0x85, 0xf3, 0x84,
-	0x35, 0x48, 0xbb, 0x8e, 0x0e, 0xb7, 0x1d, 0x71, 0xe2, 0x16, 0xf7, 0x8d, 0xa0, 0xc2, 0x11, 0xf8,
-	0x86, 0xde, 0x8c, 0xc2, 0x58, 0xb6, 0x15, 0xe9, 0xec, 0x83, 0x91, 0xfe, 0x03, 0xe0, 0xac, 0x7f,
-	0x0f, 0x92, 0x07, 0xd2, 0x96, 0x1e, 0x92, 0xb6, 0x14, 0xa4, 0x3d, 0x05, 0x26, 0xae, 0x2e, 0x8b,
-	0x97, 0x1e, 0x97, 0x25, 0xa7, 0x66, 0xdf, 0x03, 0xb0, 0xdb, 0xdd, 0x3f, 0x3b, 0x7c, 0xfd, 0xb4,
-	0x1b, 0x96, 0xcb, 0x3c, 0x10, 0xf3, 0x13, 0x73, 0x8f, 0xe5, 0x85, 0x93, 0xf9, 0x2d, 0xb8, 0xbb,
-	0x27, 0x80, 0x7b, 0x7b, 0x02, 0xf8, 0x7c, 0x4f, 0x88, 0x7c, 0xb1, 0x27, 0x44, 0xbe, 0xdc, 0x13,
-	0x22, 0x5f, 0xed, 0x09, 0x91, 0xaf, 0xf7, 0x04, 0xf0, 0x7a, 0x55, 0x00, 0x6f, 0x55, 0x85, 0xc8,
-	0x07, 0x55, 0x01, 0x7c, 0x58, 0x15, 0x22, 0x1f, 0x57, 0x85, 0xc8, 0x27, 0x55, 0x21, 0x72, 0xb7,
-	0x2a, 0x80, 0x7b, 0x55, 0x01, 0x7c, 0x5e, 0x15, 0x22, 0x5f, 0x54, 0x05, 0xf0, 0x65, 0x55, 0x88,
-	0x7c, 0x55, 0x15, 0xc0, 0xd7, 0x55, 0x21, 0xf2, 0xfa, 0xbe, 0x10, 0x79, 0x6b, 0x5f, 0x00, 0xef,
-	0xec, 0x0b, 0x91, 0xf7, 0xf7, 0x05, 0xf0, 0xab, 0x7d, 0x21, 0xf2, 0xc1, 0xbe, 0x10, 0xf9, 0x70,
-	0x5f, 0x00, 0x1f, 0xef, 0x0b, 0xe0, 0x93, 0x7d, 0x01, 0x5c, 0x4d, 0x17, 0x0d, 0x89, 0x6d, 0x12,
-	0xb6, 0xa9, 0xe9, 0x45, 0x2a, 0x79, 0x7f, 0x26, 0x4e, 0x07, 0xff, 0x03, 0x54, 0xb9, 0x90, 0x36,
-	0xb7, 0x8a, 0x69, 0xc6, 0x74, 0x33, 0x9f, 0xef, 0xe6, 0x61, 0xb8, 0xf0, 0xdf, 0x00, 0x00, 0x00,
-	0xff, 0xff, 0x78, 0x14, 0x59, 0x5c, 0xdc, 0x1b, 0x00, 0x00,
+	// 1848 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x59, 0x4d, 0x6c, 0x1b, 0xc7,
+	0x15, 0xd6, 0x90, 0x94, 0x4c, 0x8d, 0x65, 0x99, 0x1e, 0x39, 0x8e, 0xc4, 0xb8, 0x92, 0xba, 0x71,
+	0x5c, 0x49, 0x0d, 0x97, 0x2e, 0xdd, 0x3f, 0xab, 0x68, 0x04, 0x52, 0x92, 0x65, 0xbb, 0x92, 0x22,
+	0x2f, 0xe5, 0x18, 0x75, 0xe2, 0x10, 0x43, 0xee, 0x88, 0x5a, 0x90, 0xdc, 0x9d, 0xec, 0xcc, 0x52,
+	0x91, 0x7f, 0x80, 0x20, 0x08, 0x5a, 0x20, 0x28, 0xda, 0x20, 0x45, 0x80, 0xde, 0x7b, 0xe9, 0xb9,
+	0x39, 0xb4, 0xbd, 0x14, 0x05, 0x8a, 0x02, 0x05, 0x7a, 0x69, 0x90, 0x1e, 0x0a, 0x14, 0x4d, 0x51,
+	0xa7, 0x28, 0x0a, 0x14, 0x28, 0x7a, 0xf6, 0xa9, 0x98, 0xd9, 0x5d, 0x72, 0x7f, 0x48, 0x89, 0x76,
+	0x0c, 0x19, 0x05, 0x72, 0x9b, 0xdd, 0x79, 0xef, 0x7b, 0xdf, 0xfb, 0xdd, 0x27, 0x0a, 0xce, 0x37,
+	0x2d, 0x1b, 0xef, 0x61, 0x33, 0xc7, 0x38, 0xae, 0x35, 0xf2, 0x98, 0x1a, 0x79, 0x4c, 0x69, 0xd3,
+	0xa8, 0x61, 0x6e, 0x58, 0x26, 0x23, 0x76, 0x9b, 0xd8, 0x2a, 0xb5, 0x2d, 0x6e, 0xa1, 0x71, 0xce,
+	0x4d, 0xd5, 0x13, 0x57, 0xdb, 0x17, 0xb3, 0xc5, 0xba, 0xc1, 0x77, 0x9d, 0xaa, 0x5a, 0xb3, 0x5a,
+	0x79, 0x62, 0xb6, 0xad, 0x7d, 0x6a, 0x5b, 0x6f, 0xee, 0xe7, 0xa5, 0x70, 0x2d, 0x57, 0x27, 0x66,
+	0xae, 0x8d, 0x9b, 0x86, 0x8e, 0x39, 0xc9, 0xc7, 0x0e, 0x2e, 0x64, 0x36, 0x17, 0x80, 0xa8, 0x5b,
+	0x75, 0xcb, 0x55, 0xae, 0x3a, 0x3b, 0xf2, 0x49, 0x3e, 0xc8, 0x93, 0x27, 0x7e, 0xb6, 0x6e, 0x59,
+	0xf5, 0x26, 0x71, 0x59, 0x9a, 0xa6, 0xc5, 0x5d, 0x92, 0xde, 0xed, 0x73, 0xde, 0x6d, 0x07, 0x83,
+	0xb4, 0x28, 0xdf, 0xf7, 0x2e, 0x67, 0xa3, 0x97, 0x3b, 0x06, 0x69, 0xea, 0x95, 0x16, 0x66, 0x0d,
+	0x4f, 0x62, 0x26, 0x2a, 0xc1, 0x8d, 0x16, 0x61, 0x1c, 0xb7, 0xa8, 0x27, 0x30, 0x1d, 0x15, 0xd8,
+	0xb3, 0x31, 0xa5, 0xc4, 0xf6, 0xed, 0x2b, 0xf1, 0x50, 0x12, 0x53, 0xaf, 0xe8, 0xa4, 0x6d, 0xd4,
+	0x7c, 0x87, 0x9f, 0x8f, 0xcb, 0x18, 0x3a, 0x31, 0xb9, 0xb1, 0x63, 0x74, 0x81, 0x66, 0xe3, 0x42,
+	0x2d, 0xc2, 0x18, 0xae, 0x13, 0x5f, 0xe2, 0x6c, 0x0f, 0x89, 0x37, 0x38, 0x77, 0x6f, 0x95, 0x3f,
+	0x01, 0x78, 0xb2, 0xd8, 0x4d, 0xe2, 0xba, 0x61, 0x36, 0xd0, 0x4d, 0x88, 0x74, 0xb2, 0x83, 0x9d,
+	0x26, 0xaf, 0xec, 0x58, 0x76, 0x0b, 0x73, 0x4e, 0x6c, 0x36, 0x99, 0x9c, 0x05, 0x73, 0xc7, 0x0b,
+	0x73, 0x6a, 0x38, 0xb3, 0xea, 0x86, 0x6b, 0x6d, 0x0b, 0xef, 0x37, 0x2d, 0xac, 0x5f, 0xee, 0xc8,
+	0x6b, 0xa7, 0x3c, 0x8c, 0xee, 0x2b, 0x94, 0x81, 0x49, 0xde, 0x64, 0x93, 0xa9, 0x59, 0x30, 0x97,
+	0xd6, 0xc4, 0x11, 0x5d, 0x83, 0x13, 0xac, 0x61, 0xd0, 0x0a, 0x75, 0xd5, 0x2b, 0x35, 0x7b, 0x9f,
+	0x72, 0x6b, 0x72, 0x58, 0xda, 0xca, 0xaa, 0x6e, 0x14, 0x55, 0x3f, 0x8a, 0x6a, 0xc9, 0xb2, 0x9a,
+	0xaf, 0xe0, 0xa6, 0x43, 0xb4, 0x53, 0x42, 0xcd, 0x33, 0xba, 0x2c, 0x95, 0xae, 0xa5, 0xd2, 0x20,
+	0x93, 0xb8, 0x96, 0x4a, 0x27, 0x32, 0x49, 0xe5, 0x57, 0x00, 0x4e, 0xad, 0x11, 0x1e, 0xf1, 0x4c,
+	0x23, 0x6f, 0x38, 0x84, 0x71, 0x84, 0xe1, 0xc9, 0x40, 0xe1, 0x56, 0x0c, 0x9d, 0x4d, 0x02, 0x69,
+	0xf1, 0x7c, 0xd4, 0xbb, 0x00, 0xc0, 0xd5, 0x6e, 0xec, 0x4b, 0x99, 0x87, 0xa5, 0xe1, 0x77, 0x41,
+	0x22, 0x03, 0x7e, 0xff, 0xc9, 0xcc, 0xd0, 0x1f, 0x3f, 0x99, 0x01, 0xda, 0x38, 0x0e, 0x4a, 0x32,
+	0x74, 0x09, 0xc2, 0x6e, 0xd5, 0x4c, 0x26, 0xfa, 0xf8, 0x73, 0x59, 0x88, 0x6c, 0x60, 0xd6, 0xd0,
+	0x46, 0x77, 0xfc, 0xa3, 0xf2, 0x56, 0x02, 0x4e, 0x95, 0x9f, 0x26, 0xf7, 0x55, 0x98, 0x6a, 0x1a,
+	0xa6, 0xcf, 0x7a, 0xe6, 0x00, 0x5c, 0x41, 0xac, 0x07, 0xa0, 0x54, 0x8f, 0x84, 0x20, 0xf9, 0x28,
+	0x21, 0xf8, 0x51, 0x0a, 0x9e, 0x8e, 0x98, 0x29, 0x73, 0xcc, 0x19, 0xfa, 0x36, 0x1c, 0x15, 0xd8,
+	0x44, 0xaf, 0x60, 0xee, 0xf9, 0x1d, 0x87, 0xdc, 0xf6, 0x9b, 0xb1, 0x94, 0x7a, 0xef, 0x6f, 0x33,
+	0x40, 0x4b, 0xbb, 0x2a, 0x45, 0x8e, 0x7e, 0x07, 0xe0, 0x19, 0x93, 0xf0, 0x3d, 0xcb, 0x6e, 0x54,
+	0xdc, 0x79, 0x55, 0xc1, 0xba, 0x6e, 0x13, 0xc6, 0xa4, 0xb3, 0xa3, 0xa5, 0x1f, 0x82, 0x87, 0xa5,
+	0x77, 0x81, 0xfd, 0x7d, 0x50, 0x78, 0x07, 0xbc, 0x3e, 0xb7, 0xb4, 0x38, 0xb7, 0xb4, 0xf8, 0x2a,
+	0xce, 0xdd, 0x29, 0xe6, 0x6e, 0x5d, 0xc8, 0x5d, 0xba, 0x7d, 0x2f, 0x70, 0xee, 0x1e, 0x5f, 0xcb,
+	0xdd, 0x5e, 0x08, 0x5c, 0xcc, 0xbf, 0xa6, 0xce, 0x2f, 0x08, 0xbd, 0x62, 0xee, 0x16, 0xce, 0xdd,
+	0x71, 0xf5, 0xba, 0xe7, 0xee, 0x51, 0xea, 0x75, 0x2f, 0xe6, 0xe7, 0x96, 0x16, 0x17, 0x5f, 0x15,
+	0xa7, 0xbb, 0x5f, 0x79, 0xf1, 0x6b, 0xf7, 0xe7, 0x97, 0xce, 0xdd, 0x7b, 0xfd, 0x9c, 0x76, 0xda,
+	0xa3, 0x5b, 0x96, 0x6c, 0x8b, 0x2e, 0x59, 0xf4, 0x32, 0x9c, 0x68, 0x62, 0xc6, 0x2b, 0x0e, 0xad,
+	0xd8, 0xa4, 0x46, 0x8c, 0xb6, 0x1b, 0x90, 0xe4, 0x80, 0x01, 0xc9, 0x08, 0xe5, 0x1b, 0x54, 0xf3,
+	0x54, 0x8b, 0x1c, 0x4d, 0xc1, 0xb4, 0x43, 0x2b, 0x35, 0xcb, 0x31, 0xb9, 0x6c, 0xcf, 0x94, 0x76,
+	0xcc, 0xa1, 0xcb, 0xe2, 0x11, 0xdd, 0x86, 0x59, 0x69, 0x4b, 0xb7, 0xf6, 0x4c, 0x11, 0x48, 0x31,
+	0x13, 0xf6, 0xb0, 0xad, 0xbb, 0x26, 0x87, 0x07, 0x34, 0xf9, 0xac, 0xc0, 0x58, 0xf1, 0x20, 0x2e,
+	0xfb, 0x08, 0x45, 0x8e, 0x5e, 0x80, 0xe3, 0x1d, 0x64, 0xd7, 0xfe, 0x88, 0xb4, 0x7f, 0xc2, 0x7f,
+	0x2b, 0x59, 0x28, 0x3f, 0x48, 0xc2, 0x93, 0x45, 0xb6, 0x6c, 0x99, 0x3b, 0x46, 0xdd, 0xb1, 0x65,
+	0x55, 0xa0, 0x97, 0xe0, 0x08, 0x75, 0xaa, 0xcc, 0xa9, 0xf6, 0xed, 0x80, 0xb0, 0x82, 0xba, 0xe5,
+	0x54, 0xcb, 0x4e, 0x55, 0xf3, 0xb4, 0xb2, 0xbf, 0x4c, 0xc0, 0x11, 0xf7, 0x15, 0xda, 0x84, 0xa3,
+	0xd4, 0xb6, 0xda, 0x86, 0x2e, 0x26, 0x9d, 0x8b, 0x76, 0x61, 0x30, 0x34, 0x75, 0xcb, 0xd7, 0xd3,
+	0xba, 0x10, 0xd9, 0xbf, 0x02, 0x38, 0xda, 0xb9, 0x40, 0xdf, 0x81, 0x29, 0x31, 0x72, 0x25, 0xf0,
+	0x78, 0xe1, 0x1b, 0x8f, 0x0a, 0xac, 0x8a, 0xda, 0x77, 0x98, 0x26, 0x41, 0x04, 0x98, 0x89, 0xb9,
+	0x5b, 0xb0, 0x9f, 0x05, 0x4c, 0x80, 0x28, 0x17, 0xe0, 0x88, 0xfb, 0x8c, 0x8e, 0xc3, 0x63, 0xab,
+	0x9b, 0xc5, 0xd2, 0xfa, 0xea, 0x4a, 0x66, 0x48, 0x3c, 0xdc, 0x2c, 0x6a, 0x9b, 0x57, 0x37, 0xd7,
+	0x32, 0x00, 0x8d, 0xc1, 0xf4, 0xca, 0xd5, 0xb2, 0x7b, 0x25, 0xe6, 0x6b, 0x32, 0x93, 0x52, 0x9e,
+	0x73, 0xc7, 0x6b, 0xd8, 0x96, 0x37, 0xa2, 0x94, 0x1a, 0xcc, 0xf6, 0xba, 0x64, 0x54, 0x2c, 0x09,
+	0x68, 0x15, 0x9e, 0xa8, 0x05, 0x2f, 0xbc, 0x70, 0xcf, 0x1c, 0xe2, 0x88, 0x16, 0xd6, 0x52, 0x1a,
+	0xf0, 0xd9, 0x4d, 0x56, 0x64, 0x57, 0xb0, 0xa9, 0x37, 0xc9, 0x0d, 0xda, 0x0c, 0x8c, 0xc8, 0xad,
+	0xf0, 0x88, 0x74, 0xa8, 0x48, 0x69, 0x72, 0xee, 0x78, 0xe1, 0x0b, 0x07, 0x8c, 0xb2, 0x1b, 0xb4,
+	0x94, 0x7e, 0x58, 0x1a, 0x7e, 0x1f, 0x24, 0xd2, 0xe1, 0x89, 0x78, 0x83, 0x32, 0xe5, 0x3f, 0x09,
+	0xf8, 0xcc, 0xaa, 0x59, 0xb3, 0x74, 0xe2, 0x97, 0xb0, 0x6f, 0x6b, 0x1b, 0x8e, 0x77, 0x3f, 0xdc,
+	0x81, 0x69, 0x7c, 0x2e, 0x6a, 0x6a, 0xd5, 0xd4, 0x57, 0xa4, 0x50, 0x70, 0x16, 0xa7, 0xfd, 0xd1,
+	0xa9, 0x8d, 0x91, 0xee, 0x3d, 0x43, 0xeb, 0xf0, 0x78, 0x9b, 0xd8, 0xcc, 0x1f, 0xf0, 0xee, 0x20,
+	0xfe, 0x72, 0x5f, 0xc8, 0x57, 0x5c, 0xd9, 0x00, 0xb2, 0x06, 0xdb, 0xfe, 0x3b, 0x86, 0xae, 0xc2,
+	0xb4, 0xdf, 0x4c, 0xde, 0x88, 0x78, 0xfe, 0x80, 0x40, 0xf8, 0x1e, 0x06, 0xc8, 0x75, 0xd4, 0xd1,
+	0x15, 0x38, 0xda, 0x59, 0x09, 0xe4, 0xa0, 0x18, 0x2f, 0xcc, 0x46, 0xb1, 0xa2, 0xab, 0x80, 0x04,
+	0x7a, 0x5b, 0x02, 0x75, 0x95, 0xd1, 0x59, 0x38, 0x4a, 0xb1, 0x8d, 0x5b, 0x44, 0x20, 0x89, 0x29,
+	0x32, 0xaa, 0x75, 0x5f, 0x28, 0xdf, 0x85, 0x67, 0xa2, 0xf1, 0xf6, 0xca, 0x67, 0x29, 0xe0, 0x0c,
+	0x18, 0xd8, 0x99, 0xae, 0x0b, 0xca, 0x3f, 0x13, 0x70, 0x62, 0x85, 0x08, 0xec, 0x70, 0xd5, 0xfc,
+	0x3f, 0x64, 0x72, 0x19, 0x8e, 0x38, 0x34, 0x90, 0xc7, 0x2f, 0x1e, 0x58, 0xd0, 0x91, 0x2c, 0x7a,
+	0xaa, 0x47, 0x96, 0xc3, 0xeb, 0xf0, 0x74, 0x38, 0xce, 0x5e, 0x06, 0x2f, 0x75, 0x9c, 0x00, 0x03,
+	0x3a, 0xe1, 0x53, 0x97, 0x7d, 0xe8, 0x62, 0x7e, 0xde, 0x87, 0x47, 0xd5, 0x87, 0xd1, 0x78, 0x3f,
+	0xa1, 0x3e, 0x2c, 0x7c, 0x34, 0x0c, 0x13, 0x45, 0x86, 0x3e, 0x00, 0xf0, 0xd8, 0x1a, 0xe1, 0xf2,
+	0x0f, 0x8f, 0xf9, 0x28, 0x42, 0xdf, 0x15, 0x3e, 0x7b, 0xd8, 0x56, 0xaa, 0xbc, 0xf4, 0xf6, 0xc7,
+	0xff, 0xf8, 0x71, 0xe2, 0x9b, 0xe8, 0xeb, 0x79, 0xcc, 0x42, 0x7f, 0xa6, 0xe6, 0xef, 0x46, 0xf6,
+	0x67, 0x35, 0xfc, 0x7c, 0x3f, 0x2f, 0x23, 0xfc, 0x13, 0x00, 0x8f, 0x95, 0xfb, 0xf1, 0x2a, 0x3f,
+	0x3e, 0xaf, 0xa2, 0xe4, 0xf5, 0xad, 0xec, 0x63, 0xf2, 0x5a, 0x04, 0x0b, 0xe8, 0x1e, 0x84, 0x2b,
+	0xa4, 0x49, 0x38, 0x91, 0xe4, 0x06, 0xdc, 0xfb, 0xb3, 0x67, 0x62, 0x3b, 0xda, 0xaa, 0xf8, 0x9b,
+	0x57, 0x51, 0x25, 0xa1, 0xb9, 0x85, 0xf3, 0x87, 0x11, 0xf2, 0x02, 0xf3, 0x3e, 0x80, 0x63, 0x5e,
+	0xc2, 0xdc, 0x9d, 0x7c, 0x50, 0x02, 0xe7, 0x0e, 0x09, 0x8d, 0x44, 0x53, 0xbe, 0x2a, 0xe9, 0xa8,
+	0xe8, 0xc5, 0xc1, 0xe8, 0xe4, 0x99, 0xe4, 0xf0, 0x0e, 0x80, 0x99, 0x35, 0xc2, 0xc3, 0xfb, 0x61,
+	0xcf, 0x72, 0xea, 0xb9, 0xb2, 0x64, 0x17, 0x06, 0x11, 0x75, 0x2b, 0x5f, 0x99, 0x92, 0x0c, 0x27,
+	0xd0, 0x29, 0xc1, 0x30, 0xb4, 0x94, 0x14, 0x6e, 0xc2, 0x94, 0x58, 0x4a, 0xd0, 0xcb, 0x70, 0x2c,
+	0xb8, 0x98, 0xa0, 0x2f, 0x45, 0xe1, 0xfb, 0xac, 0x2e, 0xfd, 0x92, 0x54, 0xf8, 0xf0, 0x04, 0x1c,
+	0x2e, 0x52, 0x5a, 0x64, 0x68, 0x1b, 0x8e, 0x96, 0x9d, 0x2a, 0xab, 0xd9, 0x46, 0x95, 0x0c, 0x1c,
+	0xfa, 0x83, 0x17, 0x9f, 0x0b, 0x00, 0xfd, 0x01, 0xc0, 0x53, 0x7e, 0x8f, 0x5e, 0x77, 0x88, 0x43,
+	0xb6, 0x1c, 0xb6, 0x8b, 0x62, 0x19, 0x0b, 0x89, 0x1c, 0xc2, 0x59, 0x79, 0x53, 0xc6, 0xc9, 0x56,
+	0x5a, 0xf1, 0x4c, 0x86, 0x47, 0xb5, 0x7a, 0x58, 0xe1, 0xbb, 0xa2, 0x71, 0xbd, 0xce, 0xf1, 0x7e,
+	0x5e, 0x8c, 0x95, 0x3c, 0x75, 0xd8, 0xae, 0x68, 0x90, 0x8f, 0x00, 0x3c, 0x1d, 0xa1, 0x4a, 0x9b,
+	0xb8, 0x46, 0x3e, 0xa3, 0x43, 0x77, 0xa5, 0x43, 0x8e, 0x42, 0x8f, 0xcc, 0x21, 0xdb, 0xe5, 0x2d,
+	0x7c, 0xfa, 0x30, 0x9a, 0xa1, 0x75, 0x83, 0x71, 0x34, 0xd0, 0xe7, 0xed, 0xc0, 0xce, 0xf3, 0x31,
+	0x99, 0xa2, 0x49, 0xf7, 0xd6, 0xd1, 0xb5, 0x47, 0x9f, 0x4c, 0x1d, 0x7f, 0x22, 0x0e, 0xa0, 0x9f,
+	0x02, 0xf8, 0xcc, 0x1a, 0xe1, 0x1b, 0xd7, 0xb7, 0xb7, 0x97, 0x2d, 0xd3, 0x24, 0x35, 0x59, 0x99,
+	0xe6, 0x8e, 0x35, 0x70, 0xe9, 0x2a, 0xb1, 0x1f, 0x9c, 0x62, 0x58, 0x83, 0xcf, 0xfa, 0xfb, 0xf2,
+	0xa7, 0xaf, 0x5c, 0xad, 0xa3, 0x9e, 0x33, 0x04, 0x97, 0xdf, 0x02, 0x38, 0x5e, 0x36, 0x5a, 0x4e,
+	0x13, 0x73, 0xbf, 0x63, 0x0f, 0xee, 0x98, 0xbe, 0x25, 0x72, 0x47, 0x32, 0xe1, 0x8a, 0x75, 0x14,
+	0x25, 0xe2, 0xd0, 0x3c, 0xf3, 0x58, 0x8b, 0x0a, 0xf9, 0x0b, 0x80, 0xe3, 0xe1, 0xa5, 0x19, 0xbd,
+	0x10, 0x2f, 0x8f, 0x1e, 0xcb, 0x53, 0xf6, 0xfc, 0x61, 0x62, 0xde, 0xe4, 0x3b, 0x52, 0xef, 0x64,
+	0x03, 0x10, 0x49, 0x44, 0x78, 0xf7, 0x31, 0x80, 0x63, 0xc1, 0x75, 0x12, 0xc5, 0xd6, 0x8d, 0x1e,
+	0x4b, 0x7d, 0xbc, 0xf2, 0x7b, 0x6d, 0xa4, 0x47, 0x3b, 0xa9, 0x1c, 0x9a, 0xd7, 0x89, 0xef, 0x95,
+	0xc8, 0x59, 0x78, 0xc1, 0x8a, 0xe7, 0xac, 0xe7, 0xc2, 0x1b, 0xcf, 0x59, 0xef, 0x3d, 0xed, 0x29,
+	0xe4, 0xac, 0xe3, 0x5d, 0xe1, 0xdf, 0x29, 0x38, 0x51, 0x64, 0x9d, 0x91, 0xa4, 0x91, 0xba, 0xc1,
+	0xb8, 0xbd, 0x8f, 0x7e, 0x0e, 0x60, 0x72, 0x8d, 0xf0, 0x78, 0x0a, 0xd7, 0x08, 0x0f, 0x48, 0xbb,
+	0x8e, 0x4e, 0xf5, 0x1d, 0x71, 0x4a, 0x43, 0xfa, 0x46, 0x50, 0xed, 0x08, 0x7c, 0x43, 0xdf, 0x4b,
+	0xc0, 0x64, 0xb9, 0x17, 0xe9, 0xf2, 0xa3, 0x91, 0xfe, 0x35, 0x90, 0xac, 0x7f, 0x01, 0xb2, 0x07,
+	0xd2, 0x56, 0x1f, 0x93, 0xb6, 0x1a, 0xa6, 0xbd, 0x08, 0x16, 0x6e, 0x6d, 0x28, 0x57, 0x9e, 0x94,
+	0x25, 0x51, 0xb3, 0x1f, 0x00, 0x38, 0xe2, 0xee, 0x9f, 0x03, 0x7e, 0x7e, 0xfa, 0x0d, 0xcb, 0x0d,
+	0x19, 0x88, 0xb5, 0x85, 0xd5, 0x27, 0xf2, 0xc1, 0x29, 0x6d, 0xfc, 0xf9, 0xef, 0xd3, 0x43, 0x6f,
+	0x3d, 0x98, 0x06, 0x3f, 0x7b, 0x30, 0x0d, 0xfe, 0xf5, 0x60, 0x7a, 0xe8, 0xbf, 0x0f, 0xa6, 0xc1,
+	0x7b, 0x9f, 0x4e, 0x0f, 0xfd, 0xe6, 0xd3, 0x69, 0x70, 0x2b, 0x5f, 0xb7, 0x54, 0xbe, 0x4b, 0xf8,
+	0xae, 0x61, 0xd6, 0x99, 0xea, 0xfd, 0xaa, 0x9a, 0x0f, 0xff, 0x6f, 0xa4, 0x7d, 0x31, 0x4f, 0x1b,
+	0xf5, 0x3c, 0xe7, 0x26, 0xad, 0x56, 0x47, 0x24, 0xdb, 0x8b, 0xff, 0x0b, 0x00, 0x00, 0xff, 0xff,
+	0x9b, 0xf8, 0x95, 0x7f, 0xf6, 0x1a, 0x00, 0x00,
 }
 
 func (x AsConfiguration_PubSub_Providers_Status) String() string {
@@ -1165,7 +1000,7 @@ func (this *ApplicationLink) Equal(that interface{}) bool {
 	if !this.DefaultFormatters.Equal(that1.DefaultFormatters) {
 		return false
 	}
-	if this.TLS != that1.TLS {
+	if this.Tls != that1.Tls {
 		return false
 	}
 	if !this.SkipPayloadCrypto.Equal(that1.SkipPayloadCrypto) {
@@ -1195,7 +1030,7 @@ func (this *GetApplicationLinkRequest) Equal(that interface{}) bool {
 	if !this.ApplicationIdentifiers.Equal(&that1.ApplicationIdentifiers) {
 		return false
 	}
-	if !this.FieldMask.Equal(&that1.FieldMask) {
+	if !this.FieldMask.Equal(that1.FieldMask) {
 		return false
 	}
 	return true
@@ -1225,7 +1060,7 @@ func (this *SetApplicationLinkRequest) Equal(that interface{}) bool {
 	if !this.ApplicationLink.Equal(&that1.ApplicationLink) {
 		return false
 	}
-	if !this.FieldMask.Equal(&that1.FieldMask) {
+	if !this.FieldMask.Equal(that1.FieldMask) {
 		return false
 	}
 	return true
@@ -1300,7 +1135,7 @@ func (this *AsConfiguration) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if !this.PubSub.Equal(that1.PubSub) {
+	if !this.Pubsub.Equal(that1.Pubsub) {
 		return false
 	}
 	return true
@@ -1348,13 +1183,10 @@ func (this *AsConfiguration_PubSub_Providers) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if this.MQTT != that1.MQTT {
+	if this.Mqtt != that1.Mqtt {
 		return false
 	}
-	if this.NATS != that1.NATS {
-		return false
-	}
-	if this.AWSIoT != that1.AWSIoT {
+	if this.Nats != that1.Nats {
 		return false
 	}
 	return true
@@ -2488,1331 +2320,13 @@ var _AsEndDeviceRegistry_serviceDesc = grpc.ServiceDesc{
 	Metadata: "lorawan-stack/api/applicationserver.proto",
 }
 
-func (m *ApplicationLink) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *ApplicationLink) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *ApplicationLink) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.SkipPayloadCrypto != nil {
-		{
-			size, err := m.SkipPayloadCrypto.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintApplicationserver(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x2a
-	}
-	if m.TLS {
-		i--
-		if m.TLS {
-			dAtA[i] = 1
-		} else {
-			dAtA[i] = 0
-		}
-		i--
-		dAtA[i] = 0x20
-	}
-	if m.DefaultFormatters != nil {
-		{
-			size, err := m.DefaultFormatters.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintApplicationserver(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x1a
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *GetApplicationLinkRequest) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *GetApplicationLinkRequest) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *GetApplicationLinkRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	{
-		size, err := m.FieldMask.MarshalToSizedBuffer(dAtA[:i])
-		if err != nil {
-			return 0, err
-		}
-		i -= size
-		i = encodeVarintApplicationserver(dAtA, i, uint64(size))
-	}
-	i--
-	dAtA[i] = 0x12
-	{
-		size, err := m.ApplicationIdentifiers.MarshalToSizedBuffer(dAtA[:i])
-		if err != nil {
-			return 0, err
-		}
-		i -= size
-		i = encodeVarintApplicationserver(dAtA, i, uint64(size))
-	}
-	i--
-	dAtA[i] = 0xa
-	return len(dAtA) - i, nil
-}
-
-func (m *SetApplicationLinkRequest) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *SetApplicationLinkRequest) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *SetApplicationLinkRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	{
-		size, err := m.FieldMask.MarshalToSizedBuffer(dAtA[:i])
-		if err != nil {
-			return 0, err
-		}
-		i -= size
-		i = encodeVarintApplicationserver(dAtA, i, uint64(size))
-	}
-	i--
-	dAtA[i] = 0x1a
-	{
-		size, err := m.ApplicationLink.MarshalToSizedBuffer(dAtA[:i])
-		if err != nil {
-			return 0, err
-		}
-		i -= size
-		i = encodeVarintApplicationserver(dAtA, i, uint64(size))
-	}
-	i--
-	dAtA[i] = 0x12
-	{
-		size, err := m.ApplicationIdentifiers.MarshalToSizedBuffer(dAtA[:i])
-		if err != nil {
-			return 0, err
-		}
-		i -= size
-		i = encodeVarintApplicationserver(dAtA, i, uint64(size))
-	}
-	i--
-	dAtA[i] = 0xa
-	return len(dAtA) - i, nil
-}
-
-func (m *ApplicationLinkStats) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *ApplicationLinkStats) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *ApplicationLinkStats) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.DownlinkCount != 0 {
-		i = encodeVarintApplicationserver(dAtA, i, m.DownlinkCount)
-		i--
-		dAtA[i] = 0x30
-	}
-	if m.LastDownlinkForwardedAt != nil {
-		n8, err8 := github_com_gogo_protobuf_types.StdTimeMarshalTo(*m.LastDownlinkForwardedAt, dAtA[i-github_com_gogo_protobuf_types.SizeOfStdTime(*m.LastDownlinkForwardedAt):])
-		if err8 != nil {
-			return 0, err8
-		}
-		i -= n8
-		i = encodeVarintApplicationserver(dAtA, i, uint64(n8))
-		i--
-		dAtA[i] = 0x2a
-	}
-	if m.UpCount != 0 {
-		i = encodeVarintApplicationserver(dAtA, i, m.UpCount)
-		i--
-		dAtA[i] = 0x20
-	}
-	if m.LastUpReceivedAt != nil {
-		n9, err9 := github_com_gogo_protobuf_types.StdTimeMarshalTo(*m.LastUpReceivedAt, dAtA[i-github_com_gogo_protobuf_types.SizeOfStdTime(*m.LastUpReceivedAt):])
-		if err9 != nil {
-			return 0, err9
-		}
-		i -= n9
-		i = encodeVarintApplicationserver(dAtA, i, uint64(n9))
-		i--
-		dAtA[i] = 0x1a
-	}
-	if len(m.NetworkServerAddress) > 0 {
-		i -= len(m.NetworkServerAddress)
-		copy(dAtA[i:], m.NetworkServerAddress)
-		i = encodeVarintApplicationserver(dAtA, i, uint64(len(m.NetworkServerAddress)))
-		i--
-		dAtA[i] = 0x12
-	}
-	if m.LinkedAt != nil {
-		n10, err10 := github_com_gogo_protobuf_types.StdTimeMarshalTo(*m.LinkedAt, dAtA[i-github_com_gogo_protobuf_types.SizeOfStdTime(*m.LinkedAt):])
-		if err10 != nil {
-			return 0, err10
-		}
-		i -= n10
-		i = encodeVarintApplicationserver(dAtA, i, uint64(n10))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *AsConfiguration) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *AsConfiguration) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *AsConfiguration) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.PubSub != nil {
-		{
-			size, err := m.PubSub.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintApplicationserver(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *AsConfiguration_PubSub) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *AsConfiguration_PubSub) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *AsConfiguration_PubSub) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.Providers != nil {
-		{
-			size, err := m.Providers.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintApplicationserver(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *AsConfiguration_PubSub_Providers) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *AsConfiguration_PubSub_Providers) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *AsConfiguration_PubSub_Providers) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.AWSIoT != 0 {
-		i = encodeVarintApplicationserver(dAtA, i, uint64(m.AWSIoT))
-		i--
-		dAtA[i] = 0x18
-	}
-	if m.NATS != 0 {
-		i = encodeVarintApplicationserver(dAtA, i, uint64(m.NATS))
-		i--
-		dAtA[i] = 0x10
-	}
-	if m.MQTT != 0 {
-		i = encodeVarintApplicationserver(dAtA, i, uint64(m.MQTT))
-		i--
-		dAtA[i] = 0x8
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *GetAsConfigurationRequest) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *GetAsConfigurationRequest) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *GetAsConfigurationRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	return len(dAtA) - i, nil
-}
-
-func (m *GetAsConfigurationResponse) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *GetAsConfigurationResponse) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *GetAsConfigurationResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.Configuration != nil {
-		{
-			size, err := m.Configuration.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintApplicationserver(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *NsAsHandleUplinkRequest) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *NsAsHandleUplinkRequest) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *NsAsHandleUplinkRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.ApplicationUps) > 0 {
-		for iNdEx := len(m.ApplicationUps) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.ApplicationUps[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintApplicationserver(dAtA, i, uint64(size))
-			}
-			i--
-			dAtA[i] = 0xa
-		}
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *EncodeDownlinkRequest) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *EncodeDownlinkRequest) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *EncodeDownlinkRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.Parameter) > 0 {
-		i -= len(m.Parameter)
-		copy(dAtA[i:], m.Parameter)
-		i = encodeVarintApplicationserver(dAtA, i, uint64(len(m.Parameter)))
-		i--
-		dAtA[i] = 0x2a
-	}
-	if m.Formatter != 0 {
-		i = encodeVarintApplicationserver(dAtA, i, uint64(m.Formatter))
-		i--
-		dAtA[i] = 0x20
-	}
-	if m.Downlink != nil {
-		{
-			size, err := m.Downlink.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintApplicationserver(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x1a
-	}
-	if m.VersionIds != nil {
-		{
-			size, err := m.VersionIds.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintApplicationserver(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x12
-	}
-	if m.EndDeviceIds != nil {
-		{
-			size, err := m.EndDeviceIds.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintApplicationserver(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *EncodeDownlinkResponse) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *EncodeDownlinkResponse) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *EncodeDownlinkResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.Downlink != nil {
-		{
-			size, err := m.Downlink.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintApplicationserver(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *DecodeUplinkRequest) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *DecodeUplinkRequest) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *DecodeUplinkRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.Parameter) > 0 {
-		i -= len(m.Parameter)
-		copy(dAtA[i:], m.Parameter)
-		i = encodeVarintApplicationserver(dAtA, i, uint64(len(m.Parameter)))
-		i--
-		dAtA[i] = 0x2a
-	}
-	if m.Formatter != 0 {
-		i = encodeVarintApplicationserver(dAtA, i, uint64(m.Formatter))
-		i--
-		dAtA[i] = 0x20
-	}
-	if m.Uplink != nil {
-		{
-			size, err := m.Uplink.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintApplicationserver(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x1a
-	}
-	if m.VersionIds != nil {
-		{
-			size, err := m.VersionIds.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintApplicationserver(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x12
-	}
-	if m.EndDeviceIds != nil {
-		{
-			size, err := m.EndDeviceIds.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintApplicationserver(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *DecodeUplinkResponse) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *DecodeUplinkResponse) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *DecodeUplinkResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.Uplink != nil {
-		{
-			size, err := m.Uplink.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintApplicationserver(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *DecodeDownlinkRequest) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *DecodeDownlinkRequest) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *DecodeDownlinkRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.Parameter) > 0 {
-		i -= len(m.Parameter)
-		copy(dAtA[i:], m.Parameter)
-		i = encodeVarintApplicationserver(dAtA, i, uint64(len(m.Parameter)))
-		i--
-		dAtA[i] = 0x2a
-	}
-	if m.Formatter != 0 {
-		i = encodeVarintApplicationserver(dAtA, i, uint64(m.Formatter))
-		i--
-		dAtA[i] = 0x20
-	}
-	if m.Downlink != nil {
-		{
-			size, err := m.Downlink.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintApplicationserver(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x1a
-	}
-	if m.VersionIds != nil {
-		{
-			size, err := m.VersionIds.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintApplicationserver(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x12
-	}
-	if m.EndDeviceIds != nil {
-		{
-			size, err := m.EndDeviceIds.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintApplicationserver(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *DecodeDownlinkResponse) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *DecodeDownlinkResponse) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *DecodeDownlinkResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.Downlink != nil {
-		{
-			size, err := m.Downlink.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintApplicationserver(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
-}
-
-func encodeVarintApplicationserver(dAtA []byte, offset int, v uint64) int {
-	offset -= sovApplicationserver(v)
-	base := offset
-	for v >= 1<<7 {
-		dAtA[offset] = uint8(v&0x7f | 0x80)
-		v >>= 7
-		offset++
-	}
-	dAtA[offset] = uint8(v)
-	return base
-}
-func NewPopulatedApplicationLink(r randyApplicationserver, easy bool) *ApplicationLink {
-	this := &ApplicationLink{}
-	if r.Intn(5) != 0 {
-		this.DefaultFormatters = NewPopulatedMessagePayloadFormatters(r, easy)
-	}
-	this.TLS = bool(r.Intn(2) == 0)
-	if r.Intn(5) != 0 {
-		this.SkipPayloadCrypto = types.NewPopulatedBoolValue(r, easy)
-	}
-	if !easy && r.Intn(10) != 0 {
-	}
-	return this
-}
-
-func NewPopulatedGetApplicationLinkRequest(r randyApplicationserver, easy bool) *GetApplicationLinkRequest {
-	this := &GetApplicationLinkRequest{}
-	v1 := NewPopulatedApplicationIdentifiers(r, easy)
-	this.ApplicationIdentifiers = *v1
-	v2 := types.NewPopulatedFieldMask(r, easy)
-	this.FieldMask = *v2
-	if !easy && r.Intn(10) != 0 {
-	}
-	return this
-}
-
-func NewPopulatedSetApplicationLinkRequest(r randyApplicationserver, easy bool) *SetApplicationLinkRequest {
-	this := &SetApplicationLinkRequest{}
-	v3 := NewPopulatedApplicationIdentifiers(r, easy)
-	this.ApplicationIdentifiers = *v3
-	v4 := NewPopulatedApplicationLink(r, easy)
-	this.ApplicationLink = *v4
-	v5 := types.NewPopulatedFieldMask(r, easy)
-	this.FieldMask = *v5
-	if !easy && r.Intn(10) != 0 {
-	}
-	return this
-}
-
-func NewPopulatedApplicationLinkStats(r randyApplicationserver, easy bool) *ApplicationLinkStats {
-	this := &ApplicationLinkStats{}
-	if r.Intn(5) != 0 {
-		this.LinkedAt = github_com_gogo_protobuf_types.NewPopulatedStdTime(r, easy)
-	}
-	this.NetworkServerAddress = randStringApplicationserver(r)
-	if r.Intn(5) != 0 {
-		this.LastUpReceivedAt = github_com_gogo_protobuf_types.NewPopulatedStdTime(r, easy)
-	}
-	this.UpCount = uint64(r.Uint32())
-	if r.Intn(5) != 0 {
-		this.LastDownlinkForwardedAt = github_com_gogo_protobuf_types.NewPopulatedStdTime(r, easy)
-	}
-	this.DownlinkCount = uint64(r.Uint32())
-	if !easy && r.Intn(10) != 0 {
-	}
-	return this
-}
-
-func NewPopulatedAsConfiguration(r randyApplicationserver, easy bool) *AsConfiguration {
-	this := &AsConfiguration{}
-	if r.Intn(5) != 0 {
-		this.PubSub = NewPopulatedAsConfiguration_PubSub(r, easy)
-	}
-	if !easy && r.Intn(10) != 0 {
-	}
-	return this
-}
-
-func NewPopulatedAsConfiguration_PubSub(r randyApplicationserver, easy bool) *AsConfiguration_PubSub {
-	this := &AsConfiguration_PubSub{}
-	if r.Intn(5) != 0 {
-		this.Providers = NewPopulatedAsConfiguration_PubSub_Providers(r, easy)
-	}
-	if !easy && r.Intn(10) != 0 {
-	}
-	return this
-}
-
-func NewPopulatedAsConfiguration_PubSub_Providers(r randyApplicationserver, easy bool) *AsConfiguration_PubSub_Providers {
-	this := &AsConfiguration_PubSub_Providers{}
-	this.MQTT = AsConfiguration_PubSub_Providers_Status([]int32{0, 1, 2}[r.Intn(3)])
-	this.NATS = AsConfiguration_PubSub_Providers_Status([]int32{0, 1, 2}[r.Intn(3)])
-	this.AWSIoT = AsConfiguration_PubSub_Providers_Status([]int32{0, 1, 2}[r.Intn(3)])
-	if !easy && r.Intn(10) != 0 {
-	}
-	return this
-}
-
-func NewPopulatedGetAsConfigurationRequest(r randyApplicationserver, easy bool) *GetAsConfigurationRequest {
-	this := &GetAsConfigurationRequest{}
-	if !easy && r.Intn(10) != 0 {
-	}
-	return this
-}
-
-func NewPopulatedGetAsConfigurationResponse(r randyApplicationserver, easy bool) *GetAsConfigurationResponse {
-	this := &GetAsConfigurationResponse{}
-	if r.Intn(5) != 0 {
-		this.Configuration = NewPopulatedAsConfiguration(r, easy)
-	}
-	if !easy && r.Intn(10) != 0 {
-	}
-	return this
-}
-
-func NewPopulatedNsAsHandleUplinkRequest(r randyApplicationserver, easy bool) *NsAsHandleUplinkRequest {
-	this := &NsAsHandleUplinkRequest{}
-	if r.Intn(5) == 0 {
-		v6 := r.Intn(5)
-		this.ApplicationUps = make([]*ApplicationUp, v6)
-		for i := 0; i < v6; i++ {
-			this.ApplicationUps[i] = NewPopulatedApplicationUp(r, easy)
-		}
-	}
-	if !easy && r.Intn(10) != 0 {
-	}
-	return this
-}
-
-func NewPopulatedEncodeDownlinkRequest(r randyApplicationserver, easy bool) *EncodeDownlinkRequest {
-	this := &EncodeDownlinkRequest{}
-	if r.Intn(5) != 0 {
-		this.EndDeviceIds = NewPopulatedEndDeviceIdentifiers(r, easy)
-	}
-	if r.Intn(5) != 0 {
-		this.VersionIds = NewPopulatedEndDeviceVersionIdentifiers(r, easy)
-	}
-	if r.Intn(5) != 0 {
-		this.Downlink = NewPopulatedApplicationDownlink(r, easy)
-	}
-	this.Formatter = PayloadFormatter([]int32{0, 1, 2, 3, 4}[r.Intn(5)])
-	this.Parameter = randStringApplicationserver(r)
-	if !easy && r.Intn(10) != 0 {
-	}
-	return this
-}
-
-func NewPopulatedEncodeDownlinkResponse(r randyApplicationserver, easy bool) *EncodeDownlinkResponse {
-	this := &EncodeDownlinkResponse{}
-	if r.Intn(5) != 0 {
-		this.Downlink = NewPopulatedApplicationDownlink(r, easy)
-	}
-	if !easy && r.Intn(10) != 0 {
-	}
-	return this
-}
-
-func NewPopulatedDecodeUplinkRequest(r randyApplicationserver, easy bool) *DecodeUplinkRequest {
-	this := &DecodeUplinkRequest{}
-	if r.Intn(5) != 0 {
-		this.EndDeviceIds = NewPopulatedEndDeviceIdentifiers(r, easy)
-	}
-	if r.Intn(5) != 0 {
-		this.VersionIds = NewPopulatedEndDeviceVersionIdentifiers(r, easy)
-	}
-	if r.Intn(5) != 0 {
-		this.Uplink = NewPopulatedApplicationUplink(r, easy)
-	}
-	this.Formatter = PayloadFormatter([]int32{0, 1, 2, 3, 4}[r.Intn(5)])
-	this.Parameter = randStringApplicationserver(r)
-	if !easy && r.Intn(10) != 0 {
-	}
-	return this
-}
-
-func NewPopulatedDecodeUplinkResponse(r randyApplicationserver, easy bool) *DecodeUplinkResponse {
-	this := &DecodeUplinkResponse{}
-	if r.Intn(5) != 0 {
-		this.Uplink = NewPopulatedApplicationUplink(r, easy)
-	}
-	if !easy && r.Intn(10) != 0 {
-	}
-	return this
-}
-
-func NewPopulatedDecodeDownlinkRequest(r randyApplicationserver, easy bool) *DecodeDownlinkRequest {
-	this := &DecodeDownlinkRequest{}
-	if r.Intn(5) != 0 {
-		this.EndDeviceIds = NewPopulatedEndDeviceIdentifiers(r, easy)
-	}
-	if r.Intn(5) != 0 {
-		this.VersionIds = NewPopulatedEndDeviceVersionIdentifiers(r, easy)
-	}
-	if r.Intn(5) != 0 {
-		this.Downlink = NewPopulatedApplicationDownlink(r, easy)
-	}
-	this.Formatter = PayloadFormatter([]int32{0, 1, 2, 3, 4}[r.Intn(5)])
-	this.Parameter = randStringApplicationserver(r)
-	if !easy && r.Intn(10) != 0 {
-	}
-	return this
-}
-
-func NewPopulatedDecodeDownlinkResponse(r randyApplicationserver, easy bool) *DecodeDownlinkResponse {
-	this := &DecodeDownlinkResponse{}
-	if r.Intn(5) != 0 {
-		this.Downlink = NewPopulatedApplicationDownlink(r, easy)
-	}
-	if !easy && r.Intn(10) != 0 {
-	}
-	return this
-}
-
-type randyApplicationserver interface {
-	Float32() float32
-	Float64() float64
-	Int63() int64
-	Int31() int32
-	Uint32() uint32
-	Intn(n int) int
-}
-
-func randUTF8RuneApplicationserver(r randyApplicationserver) rune {
-	ru := r.Intn(62)
-	if ru < 10 {
-		return rune(ru + 48)
-	} else if ru < 36 {
-		return rune(ru + 55)
-	}
-	return rune(ru + 61)
-}
-func randStringApplicationserver(r randyApplicationserver) string {
-	v7 := r.Intn(100)
-	tmps := make([]rune, v7)
-	for i := 0; i < v7; i++ {
-		tmps[i] = randUTF8RuneApplicationserver(r)
-	}
-	return string(tmps)
-}
-func randUnrecognizedApplicationserver(r randyApplicationserver, maxFieldNumber int) (dAtA []byte) {
-	l := r.Intn(5)
-	for i := 0; i < l; i++ {
-		wire := r.Intn(4)
-		if wire == 3 {
-			wire = 5
-		}
-		fieldNumber := maxFieldNumber + r.Intn(100)
-		dAtA = randFieldApplicationserver(dAtA, r, fieldNumber, wire)
-	}
-	return dAtA
-}
-func randFieldApplicationserver(dAtA []byte, r randyApplicationserver, fieldNumber int, wire int) []byte {
-	key := uint32(fieldNumber)<<3 | uint32(wire)
-	switch wire {
-	case 0:
-		dAtA = encodeVarintPopulateApplicationserver(dAtA, uint64(key))
-		v8 := r.Int63()
-		if r.Intn(2) == 0 {
-			v8 *= -1
-		}
-		dAtA = encodeVarintPopulateApplicationserver(dAtA, uint64(v8))
-	case 1:
-		dAtA = encodeVarintPopulateApplicationserver(dAtA, uint64(key))
-		dAtA = append(dAtA, byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)))
-	case 2:
-		dAtA = encodeVarintPopulateApplicationserver(dAtA, uint64(key))
-		ll := r.Intn(100)
-		dAtA = encodeVarintPopulateApplicationserver(dAtA, uint64(ll))
-		for j := 0; j < ll; j++ {
-			dAtA = append(dAtA, byte(r.Intn(256)))
-		}
-	default:
-		dAtA = encodeVarintPopulateApplicationserver(dAtA, uint64(key))
-		dAtA = append(dAtA, byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)))
-	}
-	return dAtA
-}
-func encodeVarintPopulateApplicationserver(dAtA []byte, v uint64) []byte {
-	for v >= 1<<7 {
-		dAtA = append(dAtA, uint8(v&0x7f|0x80))
-		v >>= 7
-	}
-	dAtA = append(dAtA, uint8(v))
-	return dAtA
-}
-func (m *ApplicationLink) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.DefaultFormatters != nil {
-		l = m.DefaultFormatters.Size()
-		n += 1 + l + sovApplicationserver(uint64(l))
-	}
-	if m.TLS {
-		n += 2
-	}
-	if m.SkipPayloadCrypto != nil {
-		l = m.SkipPayloadCrypto.Size()
-		n += 1 + l + sovApplicationserver(uint64(l))
-	}
-	return n
-}
-
-func (m *GetApplicationLinkRequest) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = m.ApplicationIdentifiers.Size()
-	n += 1 + l + sovApplicationserver(uint64(l))
-	l = m.FieldMask.Size()
-	n += 1 + l + sovApplicationserver(uint64(l))
-	return n
-}
-
-func (m *SetApplicationLinkRequest) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = m.ApplicationIdentifiers.Size()
-	n += 1 + l + sovApplicationserver(uint64(l))
-	l = m.ApplicationLink.Size()
-	n += 1 + l + sovApplicationserver(uint64(l))
-	l = m.FieldMask.Size()
-	n += 1 + l + sovApplicationserver(uint64(l))
-	return n
-}
-
-func (m *ApplicationLinkStats) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.LinkedAt != nil {
-		l = github_com_gogo_protobuf_types.SizeOfStdTime(*m.LinkedAt)
-		n += 1 + l + sovApplicationserver(uint64(l))
-	}
-	l = len(m.NetworkServerAddress)
-	if l > 0 {
-		n += 1 + l + sovApplicationserver(uint64(l))
-	}
-	if m.LastUpReceivedAt != nil {
-		l = github_com_gogo_protobuf_types.SizeOfStdTime(*m.LastUpReceivedAt)
-		n += 1 + l + sovApplicationserver(uint64(l))
-	}
-	if m.UpCount != 0 {
-		n += 1 + sovApplicationserver(m.UpCount)
-	}
-	if m.LastDownlinkForwardedAt != nil {
-		l = github_com_gogo_protobuf_types.SizeOfStdTime(*m.LastDownlinkForwardedAt)
-		n += 1 + l + sovApplicationserver(uint64(l))
-	}
-	if m.DownlinkCount != 0 {
-		n += 1 + sovApplicationserver(m.DownlinkCount)
-	}
-	return n
-}
-
-func (m *AsConfiguration) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.PubSub != nil {
-		l = m.PubSub.Size()
-		n += 1 + l + sovApplicationserver(uint64(l))
-	}
-	return n
-}
-
-func (m *AsConfiguration_PubSub) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.Providers != nil {
-		l = m.Providers.Size()
-		n += 1 + l + sovApplicationserver(uint64(l))
-	}
-	return n
-}
-
-func (m *AsConfiguration_PubSub_Providers) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.MQTT != 0 {
-		n += 1 + sovApplicationserver(uint64(m.MQTT))
-	}
-	if m.NATS != 0 {
-		n += 1 + sovApplicationserver(uint64(m.NATS))
-	}
-	if m.AWSIoT != 0 {
-		n += 1 + sovApplicationserver(uint64(m.AWSIoT))
-	}
-	return n
-}
-
-func (m *GetAsConfigurationRequest) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	return n
-}
-
-func (m *GetAsConfigurationResponse) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.Configuration != nil {
-		l = m.Configuration.Size()
-		n += 1 + l + sovApplicationserver(uint64(l))
-	}
-	return n
-}
-
-func (m *NsAsHandleUplinkRequest) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if len(m.ApplicationUps) > 0 {
-		for _, e := range m.ApplicationUps {
-			l = e.Size()
-			n += 1 + l + sovApplicationserver(uint64(l))
-		}
-	}
-	return n
-}
-
-func (m *EncodeDownlinkRequest) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.EndDeviceIds != nil {
-		l = m.EndDeviceIds.Size()
-		n += 1 + l + sovApplicationserver(uint64(l))
-	}
-	if m.VersionIds != nil {
-		l = m.VersionIds.Size()
-		n += 1 + l + sovApplicationserver(uint64(l))
-	}
-	if m.Downlink != nil {
-		l = m.Downlink.Size()
-		n += 1 + l + sovApplicationserver(uint64(l))
-	}
-	if m.Formatter != 0 {
-		n += 1 + sovApplicationserver(uint64(m.Formatter))
-	}
-	l = len(m.Parameter)
-	if l > 0 {
-		n += 1 + l + sovApplicationserver(uint64(l))
-	}
-	return n
-}
-
-func (m *EncodeDownlinkResponse) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.Downlink != nil {
-		l = m.Downlink.Size()
-		n += 1 + l + sovApplicationserver(uint64(l))
-	}
-	return n
-}
-
-func (m *DecodeUplinkRequest) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.EndDeviceIds != nil {
-		l = m.EndDeviceIds.Size()
-		n += 1 + l + sovApplicationserver(uint64(l))
-	}
-	if m.VersionIds != nil {
-		l = m.VersionIds.Size()
-		n += 1 + l + sovApplicationserver(uint64(l))
-	}
-	if m.Uplink != nil {
-		l = m.Uplink.Size()
-		n += 1 + l + sovApplicationserver(uint64(l))
-	}
-	if m.Formatter != 0 {
-		n += 1 + sovApplicationserver(uint64(m.Formatter))
-	}
-	l = len(m.Parameter)
-	if l > 0 {
-		n += 1 + l + sovApplicationserver(uint64(l))
-	}
-	return n
-}
-
-func (m *DecodeUplinkResponse) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.Uplink != nil {
-		l = m.Uplink.Size()
-		n += 1 + l + sovApplicationserver(uint64(l))
-	}
-	return n
-}
-
-func (m *DecodeDownlinkRequest) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.EndDeviceIds != nil {
-		l = m.EndDeviceIds.Size()
-		n += 1 + l + sovApplicationserver(uint64(l))
-	}
-	if m.VersionIds != nil {
-		l = m.VersionIds.Size()
-		n += 1 + l + sovApplicationserver(uint64(l))
-	}
-	if m.Downlink != nil {
-		l = m.Downlink.Size()
-		n += 1 + l + sovApplicationserver(uint64(l))
-	}
-	if m.Formatter != 0 {
-		n += 1 + sovApplicationserver(uint64(m.Formatter))
-	}
-	l = len(m.Parameter)
-	if l > 0 {
-		n += 1 + l + sovApplicationserver(uint64(l))
-	}
-	return n
-}
-
-func (m *DecodeDownlinkResponse) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.Downlink != nil {
-		l = m.Downlink.Size()
-		n += 1 + l + sovApplicationserver(uint64(l))
-	}
-	return n
-}
-
-func sovApplicationserver(x uint64) (n int) {
-	return (math_bits.Len64(x|1) + 6) / 7
-}
-func sozApplicationserver(x uint64) (n int) {
-	return sovApplicationserver((x << 1) ^ uint64((int64(x) >> 63)))
-}
 func (this *ApplicationLink) String() string {
 	if this == nil {
 		return "nil"
 	}
 	s := strings.Join([]string{`&ApplicationLink{`,
 		`DefaultFormatters:` + strings.Replace(fmt.Sprintf("%v", this.DefaultFormatters), "MessagePayloadFormatters", "MessagePayloadFormatters", 1) + `,`,
-		`TLS:` + fmt.Sprintf("%v", this.TLS) + `,`,
+		`Tls:` + fmt.Sprintf("%v", this.Tls) + `,`,
 		`SkipPayloadCrypto:` + strings.Replace(fmt.Sprintf("%v", this.SkipPayloadCrypto), "BoolValue", "types.BoolValue", 1) + `,`,
 		`}`,
 	}, "")
@@ -3824,7 +2338,7 @@ func (this *GetApplicationLinkRequest) String() string {
 	}
 	s := strings.Join([]string{`&GetApplicationLinkRequest{`,
 		`ApplicationIdentifiers:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.ApplicationIdentifiers), "ApplicationIdentifiers", "ApplicationIdentifiers", 1), `&`, ``, 1) + `,`,
-		`FieldMask:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.FieldMask), "FieldMask", "types.FieldMask", 1), `&`, ``, 1) + `,`,
+		`FieldMask:` + strings.Replace(fmt.Sprintf("%v", this.FieldMask), "FieldMask", "types.FieldMask", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -3836,7 +2350,7 @@ func (this *SetApplicationLinkRequest) String() string {
 	s := strings.Join([]string{`&SetApplicationLinkRequest{`,
 		`ApplicationIdentifiers:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.ApplicationIdentifiers), "ApplicationIdentifiers", "ApplicationIdentifiers", 1), `&`, ``, 1) + `,`,
 		`ApplicationLink:` + strings.Replace(strings.Replace(this.ApplicationLink.String(), "ApplicationLink", "ApplicationLink", 1), `&`, ``, 1) + `,`,
-		`FieldMask:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.FieldMask), "FieldMask", "types.FieldMask", 1), `&`, ``, 1) + `,`,
+		`FieldMask:` + strings.Replace(fmt.Sprintf("%v", this.FieldMask), "FieldMask", "types.FieldMask", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -3861,7 +2375,7 @@ func (this *AsConfiguration) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&AsConfiguration{`,
-		`PubSub:` + strings.Replace(fmt.Sprintf("%v", this.PubSub), "AsConfiguration_PubSub", "AsConfiguration_PubSub", 1) + `,`,
+		`Pubsub:` + strings.Replace(fmt.Sprintf("%v", this.Pubsub), "AsConfiguration_PubSub", "AsConfiguration_PubSub", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -3881,9 +2395,8 @@ func (this *AsConfiguration_PubSub_Providers) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&AsConfiguration_PubSub_Providers{`,
-		`MQTT:` + fmt.Sprintf("%v", this.MQTT) + `,`,
-		`NATS:` + fmt.Sprintf("%v", this.NATS) + `,`,
-		`AWSIoT:` + fmt.Sprintf("%v", this.AWSIoT) + `,`,
+		`Mqtt:` + fmt.Sprintf("%v", this.Mqtt) + `,`,
+		`Nats:` + fmt.Sprintf("%v", this.Nats) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -4002,2154 +2515,3 @@ func valueToStringApplicationserver(v interface{}) string {
 	pv := reflect.Indirect(rv).Interface()
 	return fmt.Sprintf("*%v", pv)
 }
-func (m *ApplicationLink) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowApplicationserver
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: ApplicationLink: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: ApplicationLink: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field DefaultFormatters", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApplicationserver
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthApplicationserver
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthApplicationserver
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.DefaultFormatters == nil {
-				m.DefaultFormatters = &MessagePayloadFormatters{}
-			}
-			if err := m.DefaultFormatters.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 4:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field TLS", wireType)
-			}
-			var v int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApplicationserver
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				v |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			m.TLS = bool(v != 0)
-		case 5:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field SkipPayloadCrypto", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApplicationserver
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthApplicationserver
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthApplicationserver
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.SkipPayloadCrypto == nil {
-				m.SkipPayloadCrypto = &types.BoolValue{}
-			}
-			if err := m.SkipPayloadCrypto.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipApplicationserver(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthApplicationserver
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthApplicationserver
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *GetApplicationLinkRequest) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowApplicationserver
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: GetApplicationLinkRequest: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: GetApplicationLinkRequest: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ApplicationIdentifiers", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApplicationserver
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthApplicationserver
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthApplicationserver
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := m.ApplicationIdentifiers.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field FieldMask", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApplicationserver
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthApplicationserver
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthApplicationserver
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := m.FieldMask.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipApplicationserver(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthApplicationserver
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthApplicationserver
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *SetApplicationLinkRequest) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowApplicationserver
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: SetApplicationLinkRequest: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: SetApplicationLinkRequest: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ApplicationIdentifiers", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApplicationserver
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthApplicationserver
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthApplicationserver
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := m.ApplicationIdentifiers.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ApplicationLink", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApplicationserver
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthApplicationserver
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthApplicationserver
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := m.ApplicationLink.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field FieldMask", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApplicationserver
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthApplicationserver
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthApplicationserver
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := m.FieldMask.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipApplicationserver(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthApplicationserver
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthApplicationserver
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *ApplicationLinkStats) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowApplicationserver
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: ApplicationLinkStats: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: ApplicationLinkStats: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field LinkedAt", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApplicationserver
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthApplicationserver
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthApplicationserver
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.LinkedAt == nil {
-				m.LinkedAt = new(time.Time)
-			}
-			if err := github_com_gogo_protobuf_types.StdTimeUnmarshal(m.LinkedAt, dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field NetworkServerAddress", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApplicationserver
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthApplicationserver
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthApplicationserver
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.NetworkServerAddress = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field LastUpReceivedAt", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApplicationserver
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthApplicationserver
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthApplicationserver
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.LastUpReceivedAt == nil {
-				m.LastUpReceivedAt = new(time.Time)
-			}
-			if err := github_com_gogo_protobuf_types.StdTimeUnmarshal(m.LastUpReceivedAt, dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 4:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field UpCount", wireType)
-			}
-			m.UpCount = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApplicationserver
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.UpCount |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 5:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field LastDownlinkForwardedAt", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApplicationserver
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthApplicationserver
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthApplicationserver
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.LastDownlinkForwardedAt == nil {
-				m.LastDownlinkForwardedAt = new(time.Time)
-			}
-			if err := github_com_gogo_protobuf_types.StdTimeUnmarshal(m.LastDownlinkForwardedAt, dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 6:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field DownlinkCount", wireType)
-			}
-			m.DownlinkCount = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApplicationserver
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.DownlinkCount |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		default:
-			iNdEx = preIndex
-			skippy, err := skipApplicationserver(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthApplicationserver
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthApplicationserver
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *AsConfiguration) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowApplicationserver
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: AsConfiguration: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: AsConfiguration: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field PubSub", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApplicationserver
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthApplicationserver
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthApplicationserver
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.PubSub == nil {
-				m.PubSub = &AsConfiguration_PubSub{}
-			}
-			if err := m.PubSub.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipApplicationserver(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthApplicationserver
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthApplicationserver
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *AsConfiguration_PubSub) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowApplicationserver
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: PubSub: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: PubSub: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Providers", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApplicationserver
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthApplicationserver
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthApplicationserver
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Providers == nil {
-				m.Providers = &AsConfiguration_PubSub_Providers{}
-			}
-			if err := m.Providers.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipApplicationserver(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthApplicationserver
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthApplicationserver
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *AsConfiguration_PubSub_Providers) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowApplicationserver
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: Providers: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: Providers: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field MQTT", wireType)
-			}
-			m.MQTT = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApplicationserver
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.MQTT |= AsConfiguration_PubSub_Providers_Status(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 2:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field NATS", wireType)
-			}
-			m.NATS = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApplicationserver
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.NATS |= AsConfiguration_PubSub_Providers_Status(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 3:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field AWSIoT", wireType)
-			}
-			m.AWSIoT = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApplicationserver
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.AWSIoT |= AsConfiguration_PubSub_Providers_Status(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		default:
-			iNdEx = preIndex
-			skippy, err := skipApplicationserver(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthApplicationserver
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthApplicationserver
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *GetAsConfigurationRequest) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowApplicationserver
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: GetAsConfigurationRequest: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: GetAsConfigurationRequest: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		default:
-			iNdEx = preIndex
-			skippy, err := skipApplicationserver(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthApplicationserver
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthApplicationserver
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *GetAsConfigurationResponse) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowApplicationserver
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: GetAsConfigurationResponse: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: GetAsConfigurationResponse: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Configuration", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApplicationserver
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthApplicationserver
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthApplicationserver
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Configuration == nil {
-				m.Configuration = &AsConfiguration{}
-			}
-			if err := m.Configuration.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipApplicationserver(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthApplicationserver
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthApplicationserver
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *NsAsHandleUplinkRequest) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowApplicationserver
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: NsAsHandleUplinkRequest: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: NsAsHandleUplinkRequest: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ApplicationUps", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApplicationserver
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthApplicationserver
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthApplicationserver
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.ApplicationUps = append(m.ApplicationUps, &ApplicationUp{})
-			if err := m.ApplicationUps[len(m.ApplicationUps)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipApplicationserver(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthApplicationserver
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthApplicationserver
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *EncodeDownlinkRequest) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowApplicationserver
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: EncodeDownlinkRequest: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: EncodeDownlinkRequest: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field EndDeviceIds", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApplicationserver
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthApplicationserver
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthApplicationserver
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.EndDeviceIds == nil {
-				m.EndDeviceIds = &EndDeviceIdentifiers{}
-			}
-			if err := m.EndDeviceIds.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field VersionIds", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApplicationserver
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthApplicationserver
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthApplicationserver
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.VersionIds == nil {
-				m.VersionIds = &EndDeviceVersionIdentifiers{}
-			}
-			if err := m.VersionIds.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Downlink", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApplicationserver
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthApplicationserver
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthApplicationserver
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Downlink == nil {
-				m.Downlink = &ApplicationDownlink{}
-			}
-			if err := m.Downlink.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 4:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Formatter", wireType)
-			}
-			m.Formatter = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApplicationserver
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.Formatter |= PayloadFormatter(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 5:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Parameter", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApplicationserver
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthApplicationserver
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthApplicationserver
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Parameter = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipApplicationserver(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthApplicationserver
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthApplicationserver
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *EncodeDownlinkResponse) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowApplicationserver
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: EncodeDownlinkResponse: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: EncodeDownlinkResponse: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Downlink", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApplicationserver
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthApplicationserver
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthApplicationserver
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Downlink == nil {
-				m.Downlink = &ApplicationDownlink{}
-			}
-			if err := m.Downlink.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipApplicationserver(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthApplicationserver
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthApplicationserver
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *DecodeUplinkRequest) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowApplicationserver
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: DecodeUplinkRequest: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: DecodeUplinkRequest: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field EndDeviceIds", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApplicationserver
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthApplicationserver
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthApplicationserver
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.EndDeviceIds == nil {
-				m.EndDeviceIds = &EndDeviceIdentifiers{}
-			}
-			if err := m.EndDeviceIds.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field VersionIds", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApplicationserver
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthApplicationserver
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthApplicationserver
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.VersionIds == nil {
-				m.VersionIds = &EndDeviceVersionIdentifiers{}
-			}
-			if err := m.VersionIds.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Uplink", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApplicationserver
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthApplicationserver
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthApplicationserver
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Uplink == nil {
-				m.Uplink = &ApplicationUplink{}
-			}
-			if err := m.Uplink.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 4:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Formatter", wireType)
-			}
-			m.Formatter = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApplicationserver
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.Formatter |= PayloadFormatter(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 5:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Parameter", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApplicationserver
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthApplicationserver
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthApplicationserver
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Parameter = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipApplicationserver(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthApplicationserver
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthApplicationserver
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *DecodeUplinkResponse) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowApplicationserver
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: DecodeUplinkResponse: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: DecodeUplinkResponse: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Uplink", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApplicationserver
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthApplicationserver
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthApplicationserver
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Uplink == nil {
-				m.Uplink = &ApplicationUplink{}
-			}
-			if err := m.Uplink.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipApplicationserver(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthApplicationserver
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthApplicationserver
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *DecodeDownlinkRequest) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowApplicationserver
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: DecodeDownlinkRequest: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: DecodeDownlinkRequest: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field EndDeviceIds", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApplicationserver
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthApplicationserver
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthApplicationserver
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.EndDeviceIds == nil {
-				m.EndDeviceIds = &EndDeviceIdentifiers{}
-			}
-			if err := m.EndDeviceIds.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field VersionIds", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApplicationserver
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthApplicationserver
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthApplicationserver
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.VersionIds == nil {
-				m.VersionIds = &EndDeviceVersionIdentifiers{}
-			}
-			if err := m.VersionIds.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Downlink", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApplicationserver
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthApplicationserver
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthApplicationserver
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Downlink == nil {
-				m.Downlink = &ApplicationDownlink{}
-			}
-			if err := m.Downlink.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 4:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Formatter", wireType)
-			}
-			m.Formatter = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApplicationserver
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.Formatter |= PayloadFormatter(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 5:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Parameter", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApplicationserver
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthApplicationserver
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthApplicationserver
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Parameter = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipApplicationserver(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthApplicationserver
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthApplicationserver
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *DecodeDownlinkResponse) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowApplicationserver
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: DecodeDownlinkResponse: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: DecodeDownlinkResponse: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Downlink", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApplicationserver
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthApplicationserver
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthApplicationserver
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Downlink == nil {
-				m.Downlink = &ApplicationDownlink{}
-			}
-			if err := m.Downlink.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipApplicationserver(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthApplicationserver
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthApplicationserver
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func skipApplicationserver(dAtA []byte) (n int, err error) {
-	l := len(dAtA)
-	iNdEx := 0
-	depth := 0
-	for iNdEx < l {
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return 0, ErrIntOverflowApplicationserver
-			}
-			if iNdEx >= l {
-				return 0, io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		wireType := int(wire & 0x7)
-		switch wireType {
-		case 0:
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return 0, ErrIntOverflowApplicationserver
-				}
-				if iNdEx >= l {
-					return 0, io.ErrUnexpectedEOF
-				}
-				iNdEx++
-				if dAtA[iNdEx-1] < 0x80 {
-					break
-				}
-			}
-		case 1:
-			iNdEx += 8
-		case 2:
-			var length int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return 0, ErrIntOverflowApplicationserver
-				}
-				if iNdEx >= l {
-					return 0, io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				length |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if length < 0 {
-				return 0, ErrInvalidLengthApplicationserver
-			}
-			iNdEx += length
-		case 3:
-			depth++
-		case 4:
-			if depth == 0 {
-				return 0, ErrUnexpectedEndOfGroupApplicationserver
-			}
-			depth--
-		case 5:
-			iNdEx += 4
-		default:
-			return 0, fmt.Errorf("proto: illegal wireType %d", wireType)
-		}
-		if iNdEx < 0 {
-			return 0, ErrInvalidLengthApplicationserver
-		}
-		if depth == 0 {
-			return iNdEx, nil
-		}
-	}
-	return 0, io.ErrUnexpectedEOF
-}
-
-var (
-	ErrInvalidLengthApplicationserver        = fmt.Errorf("proto: negative length found during unmarshaling")
-	ErrIntOverflowApplicationserver          = fmt.Errorf("proto: integer overflow")
-	ErrUnexpectedEndOfGroupApplicationserver = fmt.Errorf("proto: unexpected end of group")
-)

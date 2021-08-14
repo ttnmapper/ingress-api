@@ -38,29 +38,29 @@ func NewPopulatedID(r randyIdentifiers) string {
 
 func NewPopulatedApplicationIdentifiers(r randyIdentifiers, _ bool) *ApplicationIdentifiers {
 	return &ApplicationIdentifiers{
-		ApplicationID: NewPopulatedID(r),
+		ApplicationId: NewPopulatedID(r),
 	}
 }
 
 func NewPopulatedClientIdentifiers(r randyIdentifiers, _ bool) *ClientIdentifiers {
 	return &ClientIdentifiers{
-		ClientID: NewPopulatedID(r),
+		ClientId: NewPopulatedID(r),
 	}
 }
 
 func NewPopulatedGatewayIdentifiers(r randyIdentifiers, _ bool) *GatewayIdentifiers {
 	return &GatewayIdentifiers{
-		GatewayID: NewPopulatedID(r),
-		EUI:       types.NewPopulatedEUI64(r),
+		GatewayId: NewPopulatedID(r),
+		Eui:       types.NewPopulatedEUI64(r),
 	}
 }
 
 func NewPopulatedEndDeviceIdentifiers(r randyIdentifiers, easy bool) *EndDeviceIdentifiers {
 	out := &EndDeviceIdentifiers{}
-	out.DeviceID = NewPopulatedID(r)
+	out.DeviceId = NewPopulatedID(r)
 	out.ApplicationIdentifiers = *NewPopulatedApplicationIdentifiers(r, easy)
-	out.DevEUI = types.NewPopulatedEUI64(r)
-	out.JoinEUI = types.NewPopulatedEUI64(r)
+	out.DevEui = types.NewPopulatedEUI64(r)
+	out.JoinEui = types.NewPopulatedEUI64(r)
 	if r.Intn(10) == 0 {
 		out.DevAddr = types.NewPopulatedDevAddr(r)
 	}
@@ -69,14 +69,14 @@ func NewPopulatedEndDeviceIdentifiers(r randyIdentifiers, easy bool) *EndDeviceI
 
 func NewPopulatedOrganizationIdentifiers(r randyIdentifiers, _ bool) *OrganizationIdentifiers {
 	return &OrganizationIdentifiers{
-		OrganizationID: NewPopulatedID(r),
+		OrganizationId: NewPopulatedID(r),
 	}
 }
 
 func NewPopulatedUserIdentifiers(r randyIdentifiers, _ bool) *UserIdentifiers {
 	id := NewPopulatedID(r)
 	return &UserIdentifiers{
-		UserID: id,
+		UserId: id,
 		Email:  fmt.Sprintf("%s@example.com", id),
 	}
 }

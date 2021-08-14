@@ -27,17 +27,17 @@ func (v *JoinRequest) FieldIsZero(p string) bool {
 	}
 	switch p {
 	case "cf_list":
-		return v.CFList == nil
+		return v.CfList == nil
 	case "cf_list.ch_masks":
-		return v.CFList.FieldIsZero("ch_masks")
+		return v.CfList.FieldIsZero("ch_masks")
 	case "cf_list.freq":
-		return v.CFList.FieldIsZero("freq")
+		return v.CfList.FieldIsZero("freq")
 	case "cf_list.type":
-		return v.CFList.FieldIsZero("type")
+		return v.CfList.FieldIsZero("type")
 	case "consumed_airtime":
 		return v.ConsumedAirtime == nil
 	case "correlation_ids":
-		return v.CorrelationIDs == nil
+		return v.CorrelationIds == nil
 	case "dev_addr":
 		return v.DevAddr == types.DevAddr{}
 	case "downlink_settings":
@@ -49,7 +49,7 @@ func (v *JoinRequest) FieldIsZero(p string) bool {
 	case "downlink_settings.rx2_dr":
 		return v.DownlinkSettings.FieldIsZero("rx2_dr")
 	case "net_id":
-		return v.NetID == types.NetID{}
+		return v.NetId == types.NetID{}
 	case "payload":
 		return v.Payload == nil
 	case "payload.Payload":
@@ -145,7 +145,7 @@ func (v *JoinRequest) FieldIsZero(p string) bool {
 	case "rx_delay":
 		return v.RxDelay == 0
 	case "selected_mac_version":
-		return v.SelectedMACVersion == 0
+		return v.SelectedMacVersion == 0
 	}
 	panic(fmt.Sprintf("unknown path '%s'", p))
 }

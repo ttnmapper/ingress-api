@@ -22,76 +22,76 @@ func (dst *ConcentratorConfig) SetFields(src *ConcentratorConfig, paths ...strin
 		case "lora_standard_channel":
 			if len(subs) > 0 {
 				var newDst, newSrc *ConcentratorConfig_LoRaStandardChannel
-				if (src == nil || src.LoRaStandardChannel == nil) && dst.LoRaStandardChannel == nil {
+				if (src == nil || src.LoraStandardChannel == nil) && dst.LoraStandardChannel == nil {
 					continue
 				}
 				if src != nil {
-					newSrc = src.LoRaStandardChannel
+					newSrc = src.LoraStandardChannel
 				}
-				if dst.LoRaStandardChannel != nil {
-					newDst = dst.LoRaStandardChannel
+				if dst.LoraStandardChannel != nil {
+					newDst = dst.LoraStandardChannel
 				} else {
 					newDst = &ConcentratorConfig_LoRaStandardChannel{}
-					dst.LoRaStandardChannel = newDst
+					dst.LoraStandardChannel = newDst
 				}
 				if err := newDst.SetFields(newSrc, subs...); err != nil {
 					return err
 				}
 			} else {
 				if src != nil {
-					dst.LoRaStandardChannel = src.LoRaStandardChannel
+					dst.LoraStandardChannel = src.LoraStandardChannel
 				} else {
-					dst.LoRaStandardChannel = nil
+					dst.LoraStandardChannel = nil
 				}
 			}
 		case "fsk_channel":
 			if len(subs) > 0 {
 				var newDst, newSrc *ConcentratorConfig_FSKChannel
-				if (src == nil || src.FSKChannel == nil) && dst.FSKChannel == nil {
+				if (src == nil || src.FskChannel == nil) && dst.FskChannel == nil {
 					continue
 				}
 				if src != nil {
-					newSrc = src.FSKChannel
+					newSrc = src.FskChannel
 				}
-				if dst.FSKChannel != nil {
-					newDst = dst.FSKChannel
+				if dst.FskChannel != nil {
+					newDst = dst.FskChannel
 				} else {
 					newDst = &ConcentratorConfig_FSKChannel{}
-					dst.FSKChannel = newDst
+					dst.FskChannel = newDst
 				}
 				if err := newDst.SetFields(newSrc, subs...); err != nil {
 					return err
 				}
 			} else {
 				if src != nil {
-					dst.FSKChannel = src.FSKChannel
+					dst.FskChannel = src.FskChannel
 				} else {
-					dst.FSKChannel = nil
+					dst.FskChannel = nil
 				}
 			}
 		case "lbt":
 			if len(subs) > 0 {
 				var newDst, newSrc *ConcentratorConfig_LBTConfiguration
-				if (src == nil || src.LBT == nil) && dst.LBT == nil {
+				if (src == nil || src.Lbt == nil) && dst.Lbt == nil {
 					continue
 				}
 				if src != nil {
-					newSrc = src.LBT
+					newSrc = src.Lbt
 				}
-				if dst.LBT != nil {
-					newDst = dst.LBT
+				if dst.Lbt != nil {
+					newDst = dst.Lbt
 				} else {
 					newDst = &ConcentratorConfig_LBTConfiguration{}
-					dst.LBT = newDst
+					dst.Lbt = newDst
 				}
 				if err := newDst.SetFields(newSrc, subs...); err != nil {
 					return err
 				}
 			} else {
 				if src != nil {
-					dst.LBT = src.LBT
+					dst.Lbt = src.Lbt
 				} else {
-					dst.LBT = nil
+					dst.Lbt = nil
 				}
 			}
 		case "ping_slot":
@@ -267,20 +267,20 @@ func (dst *ConcentratorConfig_LBTConfiguration) SetFields(src *ConcentratorConfi
 				return fmt.Errorf("'rssi_target' has no subfields, but %s were specified", subs)
 			}
 			if src != nil {
-				dst.RSSITarget = src.RSSITarget
+				dst.RssiTarget = src.RssiTarget
 			} else {
 				var zero float32
-				dst.RSSITarget = zero
+				dst.RssiTarget = zero
 			}
 		case "rssi_offset":
 			if len(subs) > 0 {
 				return fmt.Errorf("'rssi_offset' has no subfields, but %s were specified", subs)
 			}
 			if src != nil {
-				dst.RSSIOffset = src.RSSIOffset
+				dst.RssiOffset = src.RssiOffset
 			} else {
 				var zero float32
-				dst.RSSIOffset = zero
+				dst.RssiOffset = zero
 			}
 		case "scan_time":
 			if len(subs) > 0 {

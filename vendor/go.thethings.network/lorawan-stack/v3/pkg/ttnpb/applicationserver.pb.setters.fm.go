@@ -2,11 +2,7 @@
 
 package ttnpb
 
-import (
-	fmt "fmt"
-
-	types "github.com/gogo/protobuf/types"
-)
+import fmt "fmt"
 
 func (dst *ApplicationLink) SetFields(src *ApplicationLink, paths ...string) error {
 	for name, subs := range _processPaths(paths) {
@@ -41,10 +37,10 @@ func (dst *ApplicationLink) SetFields(src *ApplicationLink, paths ...string) err
 				return fmt.Errorf("'tls' has no subfields, but %s were specified", subs)
 			}
 			if src != nil {
-				dst.TLS = src.TLS
+				dst.Tls = src.Tls
 			} else {
 				var zero bool
-				dst.TLS = zero
+				dst.Tls = zero
 			}
 		case "skip_payload_crypto":
 			if len(subs) > 0 {
@@ -91,8 +87,7 @@ func (dst *GetApplicationLinkRequest) SetFields(src *GetApplicationLinkRequest, 
 			if src != nil {
 				dst.FieldMask = src.FieldMask
 			} else {
-				var zero types.FieldMask
-				dst.FieldMask = zero
+				dst.FieldMask = nil
 			}
 
 		default:
@@ -148,8 +143,7 @@ func (dst *SetApplicationLinkRequest) SetFields(src *SetApplicationLinkRequest, 
 			if src != nil {
 				dst.FieldMask = src.FieldMask
 			} else {
-				var zero types.FieldMask
-				dst.FieldMask = zero
+				dst.FieldMask = nil
 			}
 
 		default:
@@ -233,26 +227,26 @@ func (dst *AsConfiguration) SetFields(src *AsConfiguration, paths ...string) err
 		case "pubsub":
 			if len(subs) > 0 {
 				var newDst, newSrc *AsConfiguration_PubSub
-				if (src == nil || src.PubSub == nil) && dst.PubSub == nil {
+				if (src == nil || src.Pubsub == nil) && dst.Pubsub == nil {
 					continue
 				}
 				if src != nil {
-					newSrc = src.PubSub
+					newSrc = src.Pubsub
 				}
-				if dst.PubSub != nil {
-					newDst = dst.PubSub
+				if dst.Pubsub != nil {
+					newDst = dst.Pubsub
 				} else {
 					newDst = &AsConfiguration_PubSub{}
-					dst.PubSub = newDst
+					dst.Pubsub = newDst
 				}
 				if err := newDst.SetFields(newSrc, subs...); err != nil {
 					return err
 				}
 			} else {
 				if src != nil {
-					dst.PubSub = src.PubSub
+					dst.Pubsub = src.Pubsub
 				} else {
-					dst.PubSub = nil
+					dst.Pubsub = nil
 				}
 			}
 
@@ -799,30 +793,20 @@ func (dst *AsConfiguration_PubSub_Providers) SetFields(src *AsConfiguration_PubS
 				return fmt.Errorf("'mqtt' has no subfields, but %s were specified", subs)
 			}
 			if src != nil {
-				dst.MQTT = src.MQTT
+				dst.Mqtt = src.Mqtt
 			} else {
 				var zero AsConfiguration_PubSub_Providers_Status
-				dst.MQTT = zero
+				dst.Mqtt = zero
 			}
 		case "nats":
 			if len(subs) > 0 {
 				return fmt.Errorf("'nats' has no subfields, but %s were specified", subs)
 			}
 			if src != nil {
-				dst.NATS = src.NATS
+				dst.Nats = src.Nats
 			} else {
 				var zero AsConfiguration_PubSub_Providers_Status
-				dst.NATS = zero
-			}
-		case "aws_iot":
-			if len(subs) > 0 {
-				return fmt.Errorf("'aws_iot' has no subfields, but %s were specified", subs)
-			}
-			if src != nil {
-				dst.AWSIoT = src.AWSIoT
-			} else {
-				var zero AsConfiguration_PubSub_Providers_Status
-				dst.AWSIoT = zero
+				dst.Nats = zero
 			}
 
 		default:

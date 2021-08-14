@@ -85,7 +85,7 @@ func (m *Event) ValidateFields(paths ...string) error {
 
 		case "correlation_ids":
 
-			for idx, item := range m.GetCorrelationIDs() {
+			for idx, item := range m.GetCorrelationIds() {
 				_, _ = idx, item
 
 				if utf8.RuneCountInString(item) > 100 {
@@ -126,11 +126,11 @@ func (m *Event) ValidateFields(paths ...string) error {
 			}
 
 		case "remote_ip":
-			// no validation rules for RemoteIP
+			// no validation rules for RemoteIp
 		case "user_agent":
 			// no validation rules for UserAgent
 		case "unique_id":
-			// no validation rules for UniqueID
+			// no validation rules for UniqueId
 		default:
 			return EventValidationError{
 				field:  name,
@@ -307,6 +307,196 @@ var _ interface {
 	ErrorName() string
 } = StreamEventsRequestValidationError{}
 
+// ValidateFields checks the field values on FindRelatedEventsRequest with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *FindRelatedEventsRequest) ValidateFields(paths ...string) error {
+	if m == nil {
+		return nil
+	}
+
+	if len(paths) == 0 {
+		paths = FindRelatedEventsRequestFieldPathsNested
+	}
+
+	for name, subs := range _processPaths(append(paths[:0:0], paths...)) {
+		_ = subs
+		switch name {
+		case "correlation_id":
+
+			if l := utf8.RuneCountInString(m.GetCorrelationId()); l < 1 || l > 100 {
+				return FindRelatedEventsRequestValidationError{
+					field:  "correlation_id",
+					reason: "value length must be between 1 and 100 runes, inclusive",
+				}
+			}
+
+		default:
+			return FindRelatedEventsRequestValidationError{
+				field:  name,
+				reason: "invalid field path",
+			}
+		}
+	}
+	return nil
+}
+
+// FindRelatedEventsRequestValidationError is the validation error returned by
+// FindRelatedEventsRequest.ValidateFields if the designated constraints
+// aren't met.
+type FindRelatedEventsRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e FindRelatedEventsRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e FindRelatedEventsRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e FindRelatedEventsRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e FindRelatedEventsRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e FindRelatedEventsRequestValidationError) ErrorName() string {
+	return "FindRelatedEventsRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e FindRelatedEventsRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sFindRelatedEventsRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = FindRelatedEventsRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = FindRelatedEventsRequestValidationError{}
+
+// ValidateFields checks the field values on FindRelatedEventsResponse with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *FindRelatedEventsResponse) ValidateFields(paths ...string) error {
+	if m == nil {
+		return nil
+	}
+
+	if len(paths) == 0 {
+		paths = FindRelatedEventsResponseFieldPathsNested
+	}
+
+	for name, subs := range _processPaths(append(paths[:0:0], paths...)) {
+		_ = subs
+		switch name {
+		case "events":
+
+			for idx, item := range m.GetEvents() {
+				_, _ = idx, item
+
+				if v, ok := interface{}(item).(interface{ ValidateFields(...string) error }); ok {
+					if err := v.ValidateFields(subs...); err != nil {
+						return FindRelatedEventsResponseValidationError{
+							field:  fmt.Sprintf("events[%v]", idx),
+							reason: "embedded message failed validation",
+							cause:  err,
+						}
+					}
+				}
+
+			}
+
+		default:
+			return FindRelatedEventsResponseValidationError{
+				field:  name,
+				reason: "invalid field path",
+			}
+		}
+	}
+	return nil
+}
+
+// FindRelatedEventsResponseValidationError is the validation error returned by
+// FindRelatedEventsResponse.ValidateFields if the designated constraints
+// aren't met.
+type FindRelatedEventsResponseValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e FindRelatedEventsResponseValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e FindRelatedEventsResponseValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e FindRelatedEventsResponseValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e FindRelatedEventsResponseValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e FindRelatedEventsResponseValidationError) ErrorName() string {
+	return "FindRelatedEventsResponseValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e FindRelatedEventsResponseValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sFindRelatedEventsResponse.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = FindRelatedEventsResponseValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = FindRelatedEventsResponseValidationError{}
+
 // ValidateFields checks the field values on Event_Authentication with the
 // rules defined in the proto definition for this message. If any rules are
 // violated, an error is returned.
@@ -327,7 +517,7 @@ func (m *Event_Authentication) ValidateFields(paths ...string) error {
 		case "token_type":
 			// no validation rules for TokenType
 		case "token_id":
-			// no validation rules for TokenID
+			// no validation rules for TokenId
 		default:
 			return Event_AuthenticationValidationError{
 				field:  name,

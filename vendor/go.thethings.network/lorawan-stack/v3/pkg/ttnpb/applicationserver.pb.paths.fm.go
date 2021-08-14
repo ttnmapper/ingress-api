@@ -66,7 +66,6 @@ var ApplicationLinkStatsFieldPathsTopLevel = []string{
 var AsConfigurationFieldPathsNested = []string{
 	"pubsub",
 	"pubsub.providers",
-	"pubsub.providers.aws_iot",
 	"pubsub.providers.mqtt",
 	"pubsub.providers.nats",
 }
@@ -80,7 +79,6 @@ var GetAsConfigurationResponseFieldPathsNested = []string{
 	"configuration",
 	"configuration.pubsub",
 	"configuration.pubsub.providers",
-	"configuration.pubsub.providers.aws_iot",
 	"configuration.pubsub.providers.mqtt",
 	"configuration.pubsub.providers.nats",
 }
@@ -176,6 +174,10 @@ var DecodeUplinkRequestFieldPathsNested = []string{
 	"uplink.frm_payload",
 	"uplink.last_a_f_cnt_down",
 	"uplink.locations",
+	"uplink.network_ids",
+	"uplink.network_ids.cluster_id",
+	"uplink.network_ids.net_id",
+	"uplink.network_ids.tenant_id",
 	"uplink.received_at",
 	"uplink.rx_metadata",
 	"uplink.session_key_id",
@@ -188,6 +190,9 @@ var DecodeUplinkRequestFieldPathsNested = []string{
 	"uplink.settings.data_rate.modulation.lora",
 	"uplink.settings.data_rate.modulation.lora.bandwidth",
 	"uplink.settings.data_rate.modulation.lora.spreading_factor",
+	"uplink.settings.data_rate.modulation.lrfhss",
+	"uplink.settings.data_rate.modulation.lrfhss.modulation_type",
+	"uplink.settings.data_rate.modulation.lrfhss.operating_channel_width",
 	"uplink.settings.data_rate_index",
 	"uplink.settings.downlink",
 	"uplink.settings.downlink.antenna_index",
@@ -197,6 +202,12 @@ var DecodeUplinkRequestFieldPathsNested = []string{
 	"uplink.settings.frequency",
 	"uplink.settings.time",
 	"uplink.settings.timestamp",
+	"uplink.version_ids",
+	"uplink.version_ids.band_id",
+	"uplink.version_ids.brand_id",
+	"uplink.version_ids.firmware_version",
+	"uplink.version_ids.hardware_version",
+	"uplink.version_ids.model_id",
 	"version_ids",
 	"version_ids.band_id",
 	"version_ids.brand_id",
@@ -227,6 +238,10 @@ var DecodeUplinkResponseFieldPathsNested = []string{
 	"uplink.frm_payload",
 	"uplink.last_a_f_cnt_down",
 	"uplink.locations",
+	"uplink.network_ids",
+	"uplink.network_ids.cluster_id",
+	"uplink.network_ids.net_id",
+	"uplink.network_ids.tenant_id",
 	"uplink.received_at",
 	"uplink.rx_metadata",
 	"uplink.session_key_id",
@@ -239,6 +254,9 @@ var DecodeUplinkResponseFieldPathsNested = []string{
 	"uplink.settings.data_rate.modulation.lora",
 	"uplink.settings.data_rate.modulation.lora.bandwidth",
 	"uplink.settings.data_rate.modulation.lora.spreading_factor",
+	"uplink.settings.data_rate.modulation.lrfhss",
+	"uplink.settings.data_rate.modulation.lrfhss.modulation_type",
+	"uplink.settings.data_rate.modulation.lrfhss.operating_channel_width",
 	"uplink.settings.data_rate_index",
 	"uplink.settings.downlink",
 	"uplink.settings.downlink.antenna_index",
@@ -248,6 +266,12 @@ var DecodeUplinkResponseFieldPathsNested = []string{
 	"uplink.settings.frequency",
 	"uplink.settings.time",
 	"uplink.settings.timestamp",
+	"uplink.version_ids",
+	"uplink.version_ids.band_id",
+	"uplink.version_ids.brand_id",
+	"uplink.version_ids.firmware_version",
+	"uplink.version_ids.hardware_version",
+	"uplink.version_ids.model_id",
 }
 
 var DecodeUplinkResponseFieldPathsTopLevel = []string{
@@ -312,7 +336,6 @@ var DecodeDownlinkResponseFieldPathsTopLevel = []string{
 }
 var AsConfiguration_PubSubFieldPathsNested = []string{
 	"providers",
-	"providers.aws_iot",
 	"providers.mqtt",
 	"providers.nats",
 }
@@ -321,13 +344,11 @@ var AsConfiguration_PubSubFieldPathsTopLevel = []string{
 	"providers",
 }
 var AsConfiguration_PubSub_ProvidersFieldPathsNested = []string{
-	"aws_iot",
 	"mqtt",
 	"nats",
 }
 
 var AsConfiguration_PubSub_ProvidersFieldPathsTopLevel = []string{
-	"aws_iot",
 	"mqtt",
 	"nats",
 }

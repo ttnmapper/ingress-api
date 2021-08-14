@@ -52,14 +52,14 @@ func (m *ApplicationIdentifiers) ValidateFields(paths ...string) error {
 		switch name {
 		case "application_id":
 
-			if utf8.RuneCountInString(m.GetApplicationID()) > 36 {
+			if utf8.RuneCountInString(m.GetApplicationId()) > 36 {
 				return ApplicationIdentifiersValidationError{
 					field:  "application_id",
 					reason: "value length must be at most 36 runes",
 				}
 			}
 
-			if !_ApplicationIdentifiers_ApplicationID_Pattern.MatchString(m.GetApplicationID()) {
+			if !_ApplicationIdentifiers_ApplicationId_Pattern.MatchString(m.GetApplicationId()) {
 				return ApplicationIdentifiersValidationError{
 					field:  "application_id",
 					reason: "value does not match regex pattern \"^[a-z0-9](?:[-]?[a-z0-9]){2,}$\"",
@@ -132,7 +132,7 @@ var _ interface {
 	ErrorName() string
 } = ApplicationIdentifiersValidationError{}
 
-var _ApplicationIdentifiers_ApplicationID_Pattern = regexp.MustCompile("^[a-z0-9](?:[-]?[a-z0-9]){2,}$")
+var _ApplicationIdentifiers_ApplicationId_Pattern = regexp.MustCompile("^[a-z0-9](?:[-]?[a-z0-9]){2,}$")
 
 // ValidateFields checks the field values on ClientIdentifiers with the rules
 // defined in the proto definition for this message. If any rules are
@@ -151,14 +151,14 @@ func (m *ClientIdentifiers) ValidateFields(paths ...string) error {
 		switch name {
 		case "client_id":
 
-			if utf8.RuneCountInString(m.GetClientID()) > 36 {
+			if utf8.RuneCountInString(m.GetClientId()) > 36 {
 				return ClientIdentifiersValidationError{
 					field:  "client_id",
 					reason: "value length must be at most 36 runes",
 				}
 			}
 
-			if !_ClientIdentifiers_ClientID_Pattern.MatchString(m.GetClientID()) {
+			if !_ClientIdentifiers_ClientId_Pattern.MatchString(m.GetClientId()) {
 				return ClientIdentifiersValidationError{
 					field:  "client_id",
 					reason: "value does not match regex pattern \"^[a-z0-9](?:[-]?[a-z0-9]){2,}$\"",
@@ -231,7 +231,7 @@ var _ interface {
 	ErrorName() string
 } = ClientIdentifiersValidationError{}
 
-var _ClientIdentifiers_ClientID_Pattern = regexp.MustCompile("^[a-z0-9](?:[-]?[a-z0-9]){2,}$")
+var _ClientIdentifiers_ClientId_Pattern = regexp.MustCompile("^[a-z0-9](?:[-]?[a-z0-9]){2,}$")
 
 // ValidateFields checks the field values on EndDeviceIdentifiers with the
 // rules defined in the proto definition for this message. If any rules are
@@ -250,14 +250,14 @@ func (m *EndDeviceIdentifiers) ValidateFields(paths ...string) error {
 		switch name {
 		case "device_id":
 
-			if utf8.RuneCountInString(m.GetDeviceID()) > 36 {
+			if utf8.RuneCountInString(m.GetDeviceId()) > 36 {
 				return EndDeviceIdentifiersValidationError{
 					field:  "device_id",
 					reason: "value length must be at most 36 runes",
 				}
 			}
 
-			if !_EndDeviceIdentifiers_DeviceID_Pattern.MatchString(m.GetDeviceID()) {
+			if !_EndDeviceIdentifiers_DeviceId_Pattern.MatchString(m.GetDeviceId()) {
 				return EndDeviceIdentifiersValidationError{
 					field:  "device_id",
 					reason: "value does not match regex pattern \"^[a-z0-9](?:[-]?[a-z0-9]){2,}$\"",
@@ -277,9 +277,9 @@ func (m *EndDeviceIdentifiers) ValidateFields(paths ...string) error {
 			}
 
 		case "dev_eui":
-			// no validation rules for DevEUI
+			// no validation rules for DevEui
 		case "join_eui":
-			// no validation rules for JoinEUI
+			// no validation rules for JoinEui
 		case "dev_addr":
 			// no validation rules for DevAddr
 		default:
@@ -348,7 +348,7 @@ var _ interface {
 	ErrorName() string
 } = EndDeviceIdentifiersValidationError{}
 
-var _EndDeviceIdentifiers_DeviceID_Pattern = regexp.MustCompile("^[a-z0-9](?:[-]?[a-z0-9]){2,}$")
+var _EndDeviceIdentifiers_DeviceId_Pattern = regexp.MustCompile("^[a-z0-9](?:[-]?[a-z0-9]){2,}$")
 
 // ValidateFields checks the field values on GatewayIdentifiers with the rules
 // defined in the proto definition for this message. If any rules are
@@ -367,14 +367,14 @@ func (m *GatewayIdentifiers) ValidateFields(paths ...string) error {
 		switch name {
 		case "gateway_id":
 
-			if utf8.RuneCountInString(m.GetGatewayID()) > 36 {
+			if utf8.RuneCountInString(m.GetGatewayId()) > 36 {
 				return GatewayIdentifiersValidationError{
 					field:  "gateway_id",
 					reason: "value length must be at most 36 runes",
 				}
 			}
 
-			if !_GatewayIdentifiers_GatewayID_Pattern.MatchString(m.GetGatewayID()) {
+			if !_GatewayIdentifiers_GatewayId_Pattern.MatchString(m.GetGatewayId()) {
 				return GatewayIdentifiersValidationError{
 					field:  "gateway_id",
 					reason: "value does not match regex pattern \"^[a-z0-9](?:[-]?[a-z0-9]){2,}$\"",
@@ -382,7 +382,7 @@ func (m *GatewayIdentifiers) ValidateFields(paths ...string) error {
 			}
 
 		case "eui":
-			// no validation rules for EUI
+			// no validation rules for Eui
 		default:
 			return GatewayIdentifiersValidationError{
 				field:  name,
@@ -449,7 +449,7 @@ var _ interface {
 	ErrorName() string
 } = GatewayIdentifiersValidationError{}
 
-var _GatewayIdentifiers_GatewayID_Pattern = regexp.MustCompile("^[a-z0-9](?:[-]?[a-z0-9]){2,}$")
+var _GatewayIdentifiers_GatewayId_Pattern = regexp.MustCompile("^[a-z0-9](?:[-]?[a-z0-9]){2,}$")
 
 // ValidateFields checks the field values on OrganizationIdentifiers with the
 // rules defined in the proto definition for this message. If any rules are
@@ -468,14 +468,14 @@ func (m *OrganizationIdentifiers) ValidateFields(paths ...string) error {
 		switch name {
 		case "organization_id":
 
-			if utf8.RuneCountInString(m.GetOrganizationID()) > 36 {
+			if utf8.RuneCountInString(m.GetOrganizationId()) > 36 {
 				return OrganizationIdentifiersValidationError{
 					field:  "organization_id",
 					reason: "value length must be at most 36 runes",
 				}
 			}
 
-			if !_OrganizationIdentifiers_OrganizationID_Pattern.MatchString(m.GetOrganizationID()) {
+			if !_OrganizationIdentifiers_OrganizationId_Pattern.MatchString(m.GetOrganizationId()) {
 				return OrganizationIdentifiersValidationError{
 					field:  "organization_id",
 					reason: "value does not match regex pattern \"^[a-z0-9](?:[-]?[a-z0-9]){2,}$\"",
@@ -548,7 +548,7 @@ var _ interface {
 	ErrorName() string
 } = OrganizationIdentifiersValidationError{}
 
-var _OrganizationIdentifiers_OrganizationID_Pattern = regexp.MustCompile("^[a-z0-9](?:[-]?[a-z0-9]){2,}$")
+var _OrganizationIdentifiers_OrganizationId_Pattern = regexp.MustCompile("^[a-z0-9](?:[-]?[a-z0-9]){2,}$")
 
 // ValidateFields checks the field values on UserIdentifiers with the rules
 // defined in the proto definition for this message. If any rules are
@@ -567,17 +567,17 @@ func (m *UserIdentifiers) ValidateFields(paths ...string) error {
 		switch name {
 		case "user_id":
 
-			if utf8.RuneCountInString(m.GetUserID()) > 36 {
+			if utf8.RuneCountInString(m.GetUserId()) > 36 {
 				return UserIdentifiersValidationError{
 					field:  "user_id",
 					reason: "value length must be at most 36 runes",
 				}
 			}
 
-			if !_UserIdentifiers_UserID_Pattern.MatchString(m.GetUserID()) {
+			if !_UserIdentifiers_UserId_Pattern.MatchString(m.GetUserId()) {
 				return UserIdentifiersValidationError{
 					field:  "user_id",
-					reason: "value does not match regex pattern \"^[a-z0-9](?:[-]?[a-z0-9]){2,}$\"",
+					reason: "value does not match regex pattern \"^[a-z0-9](?:[-]?[a-z0-9]){1,}$\"",
 				}
 			}
 
@@ -647,7 +647,7 @@ var _ interface {
 	ErrorName() string
 } = UserIdentifiersValidationError{}
 
-var _UserIdentifiers_UserID_Pattern = regexp.MustCompile("^[a-z0-9](?:[-]?[a-z0-9]){2,}$")
+var _UserIdentifiers_UserId_Pattern = regexp.MustCompile("^[a-z0-9](?:[-]?[a-z0-9]){1,}$")
 
 // ValidateFields checks the field values on OrganizationOrUserIdentifiers with
 // the rules defined in the proto definition for this message. If any rules
@@ -680,12 +680,12 @@ func (m *OrganizationOrUserIdentifiers) ValidateFields(paths ...string) error {
 				_ = subs
 				switch name {
 				case "organization_ids":
-					w, ok := m.Ids.(*OrganizationOrUserIdentifiers_OrganizationIDs)
+					w, ok := m.Ids.(*OrganizationOrUserIdentifiers_OrganizationIds)
 					if !ok || w == nil {
 						continue
 					}
 
-					if v, ok := interface{}(m.GetOrganizationIDs()).(interface{ ValidateFields(...string) error }); ok {
+					if v, ok := interface{}(m.GetOrganizationIds()).(interface{ ValidateFields(...string) error }); ok {
 						if err := v.ValidateFields(subs...); err != nil {
 							return OrganizationOrUserIdentifiersValidationError{
 								field:  "organization_ids",
@@ -696,12 +696,12 @@ func (m *OrganizationOrUserIdentifiers) ValidateFields(paths ...string) error {
 					}
 
 				case "user_ids":
-					w, ok := m.Ids.(*OrganizationOrUserIdentifiers_UserIDs)
+					w, ok := m.Ids.(*OrganizationOrUserIdentifiers_UserIds)
 					if !ok || w == nil {
 						continue
 					}
 
-					if v, ok := interface{}(m.GetUserIDs()).(interface{ ValidateFields(...string) error }); ok {
+					if v, ok := interface{}(m.GetUserIds()).(interface{ ValidateFields(...string) error }); ok {
 						if err := v.ValidateFields(subs...); err != nil {
 							return OrganizationOrUserIdentifiersValidationError{
 								field:  "user_ids",
@@ -811,12 +811,12 @@ func (m *EntityIdentifiers) ValidateFields(paths ...string) error {
 				_ = subs
 				switch name {
 				case "application_ids":
-					w, ok := m.Ids.(*EntityIdentifiers_ApplicationIDs)
+					w, ok := m.Ids.(*EntityIdentifiers_ApplicationIds)
 					if !ok || w == nil {
 						continue
 					}
 
-					if v, ok := interface{}(m.GetApplicationIDs()).(interface{ ValidateFields(...string) error }); ok {
+					if v, ok := interface{}(m.GetApplicationIds()).(interface{ ValidateFields(...string) error }); ok {
 						if err := v.ValidateFields(subs...); err != nil {
 							return EntityIdentifiersValidationError{
 								field:  "application_ids",
@@ -827,12 +827,12 @@ func (m *EntityIdentifiers) ValidateFields(paths ...string) error {
 					}
 
 				case "client_ids":
-					w, ok := m.Ids.(*EntityIdentifiers_ClientIDs)
+					w, ok := m.Ids.(*EntityIdentifiers_ClientIds)
 					if !ok || w == nil {
 						continue
 					}
 
-					if v, ok := interface{}(m.GetClientIDs()).(interface{ ValidateFields(...string) error }); ok {
+					if v, ok := interface{}(m.GetClientIds()).(interface{ ValidateFields(...string) error }); ok {
 						if err := v.ValidateFields(subs...); err != nil {
 							return EntityIdentifiersValidationError{
 								field:  "client_ids",
@@ -843,12 +843,12 @@ func (m *EntityIdentifiers) ValidateFields(paths ...string) error {
 					}
 
 				case "device_ids":
-					w, ok := m.Ids.(*EntityIdentifiers_DeviceIDs)
+					w, ok := m.Ids.(*EntityIdentifiers_DeviceIds)
 					if !ok || w == nil {
 						continue
 					}
 
-					if v, ok := interface{}(m.GetDeviceIDs()).(interface{ ValidateFields(...string) error }); ok {
+					if v, ok := interface{}(m.GetDeviceIds()).(interface{ ValidateFields(...string) error }); ok {
 						if err := v.ValidateFields(subs...); err != nil {
 							return EntityIdentifiersValidationError{
 								field:  "device_ids",
@@ -859,12 +859,12 @@ func (m *EntityIdentifiers) ValidateFields(paths ...string) error {
 					}
 
 				case "gateway_ids":
-					w, ok := m.Ids.(*EntityIdentifiers_GatewayIDs)
+					w, ok := m.Ids.(*EntityIdentifiers_GatewayIds)
 					if !ok || w == nil {
 						continue
 					}
 
-					if v, ok := interface{}(m.GetGatewayIDs()).(interface{ ValidateFields(...string) error }); ok {
+					if v, ok := interface{}(m.GetGatewayIds()).(interface{ ValidateFields(...string) error }); ok {
 						if err := v.ValidateFields(subs...); err != nil {
 							return EntityIdentifiersValidationError{
 								field:  "gateway_ids",
@@ -875,12 +875,12 @@ func (m *EntityIdentifiers) ValidateFields(paths ...string) error {
 					}
 
 				case "organization_ids":
-					w, ok := m.Ids.(*EntityIdentifiers_OrganizationIDs)
+					w, ok := m.Ids.(*EntityIdentifiers_OrganizationIds)
 					if !ok || w == nil {
 						continue
 					}
 
-					if v, ok := interface{}(m.GetOrganizationIDs()).(interface{ ValidateFields(...string) error }); ok {
+					if v, ok := interface{}(m.GetOrganizationIds()).(interface{ ValidateFields(...string) error }); ok {
 						if err := v.ValidateFields(subs...); err != nil {
 							return EntityIdentifiersValidationError{
 								field:  "organization_ids",
@@ -891,12 +891,12 @@ func (m *EntityIdentifiers) ValidateFields(paths ...string) error {
 					}
 
 				case "user_ids":
-					w, ok := m.Ids.(*EntityIdentifiers_UserIDs)
+					w, ok := m.Ids.(*EntityIdentifiers_UserIds)
 					if !ok || w == nil {
 						continue
 					}
 
-					if v, ok := interface{}(m.GetUserIDs()).(interface{ ValidateFields(...string) error }); ok {
+					if v, ok := interface{}(m.GetUserIds()).(interface{ ValidateFields(...string) error }); ok {
 						if err := v.ValidateFields(subs...); err != nil {
 							return EntityIdentifiersValidationError{
 								field:  "user_ids",
@@ -973,3 +973,266 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = EntityIdentifiersValidationError{}
+
+// ValidateFields checks the field values on EndDeviceVersionIdentifiers with
+// the rules defined in the proto definition for this message. If any rules
+// are violated, an error is returned.
+func (m *EndDeviceVersionIdentifiers) ValidateFields(paths ...string) error {
+	if m == nil {
+		return nil
+	}
+
+	if len(paths) == 0 {
+		paths = EndDeviceVersionIdentifiersFieldPathsNested
+	}
+
+	for name, subs := range _processPaths(append(paths[:0:0], paths...)) {
+		_ = subs
+		switch name {
+		case "brand_id":
+
+			if m.GetBrandId() != "" {
+
+				if utf8.RuneCountInString(m.GetBrandId()) > 36 {
+					return EndDeviceVersionIdentifiersValidationError{
+						field:  "brand_id",
+						reason: "value length must be at most 36 runes",
+					}
+				}
+
+				if !_EndDeviceVersionIdentifiers_BrandId_Pattern.MatchString(m.GetBrandId()) {
+					return EndDeviceVersionIdentifiersValidationError{
+						field:  "brand_id",
+						reason: "value does not match regex pattern \"^[a-z0-9](?:[-]?[a-z0-9]){2,}$\"",
+					}
+				}
+
+			}
+
+		case "model_id":
+
+			if m.GetModelId() != "" {
+
+				if utf8.RuneCountInString(m.GetModelId()) > 36 {
+					return EndDeviceVersionIdentifiersValidationError{
+						field:  "model_id",
+						reason: "value length must be at most 36 runes",
+					}
+				}
+
+				if !_EndDeviceVersionIdentifiers_ModelId_Pattern.MatchString(m.GetModelId()) {
+					return EndDeviceVersionIdentifiersValidationError{
+						field:  "model_id",
+						reason: "value does not match regex pattern \"^[a-z0-9](?:[-]?[a-z0-9]){2,}$\"",
+					}
+				}
+
+			}
+
+		case "hardware_version":
+
+			if utf8.RuneCountInString(m.GetHardwareVersion()) > 32 {
+				return EndDeviceVersionIdentifiersValidationError{
+					field:  "hardware_version",
+					reason: "value length must be at most 32 runes",
+				}
+			}
+
+		case "firmware_version":
+
+			if utf8.RuneCountInString(m.GetFirmwareVersion()) > 32 {
+				return EndDeviceVersionIdentifiersValidationError{
+					field:  "firmware_version",
+					reason: "value length must be at most 32 runes",
+				}
+			}
+
+		case "band_id":
+
+			if utf8.RuneCountInString(m.GetBandId()) > 32 {
+				return EndDeviceVersionIdentifiersValidationError{
+					field:  "band_id",
+					reason: "value length must be at most 32 runes",
+				}
+			}
+
+		default:
+			return EndDeviceVersionIdentifiersValidationError{
+				field:  name,
+				reason: "invalid field path",
+			}
+		}
+	}
+	return nil
+}
+
+// EndDeviceVersionIdentifiersValidationError is the validation error returned
+// by EndDeviceVersionIdentifiers.ValidateFields if the designated constraints
+// aren't met.
+type EndDeviceVersionIdentifiersValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e EndDeviceVersionIdentifiersValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e EndDeviceVersionIdentifiersValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e EndDeviceVersionIdentifiersValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e EndDeviceVersionIdentifiersValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e EndDeviceVersionIdentifiersValidationError) ErrorName() string {
+	return "EndDeviceVersionIdentifiersValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e EndDeviceVersionIdentifiersValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sEndDeviceVersionIdentifiers.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = EndDeviceVersionIdentifiersValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = EndDeviceVersionIdentifiersValidationError{}
+
+var _EndDeviceVersionIdentifiers_BrandId_Pattern = regexp.MustCompile("^[a-z0-9](?:[-]?[a-z0-9]){2,}$")
+
+var _EndDeviceVersionIdentifiers_ModelId_Pattern = regexp.MustCompile("^[a-z0-9](?:[-]?[a-z0-9]){2,}$")
+
+// ValidateFields checks the field values on NetworkIdentifiers with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *NetworkIdentifiers) ValidateFields(paths ...string) error {
+	if m == nil {
+		return nil
+	}
+
+	if len(paths) == 0 {
+		paths = NetworkIdentifiersFieldPathsNested
+	}
+
+	for name, subs := range _processPaths(append(paths[:0:0], paths...)) {
+		_ = subs
+		switch name {
+		case "net_id":
+			// no validation rules for NetId
+		case "tenant_id":
+
+			if utf8.RuneCountInString(m.GetTenantId()) > 36 {
+				return NetworkIdentifiersValidationError{
+					field:  "tenant_id",
+					reason: "value length must be at most 36 runes",
+				}
+			}
+
+			if !_NetworkIdentifiers_TenantId_Pattern.MatchString(m.GetTenantId()) {
+				return NetworkIdentifiersValidationError{
+					field:  "tenant_id",
+					reason: "value does not match regex pattern \"^[a-z0-9](?:[-]?[a-z0-9]){2,}$|^$\"",
+				}
+			}
+
+		case "cluster_id":
+
+			if utf8.RuneCountInString(m.GetClusterId()) > 64 {
+				return NetworkIdentifiersValidationError{
+					field:  "cluster_id",
+					reason: "value length must be at most 64 runes",
+				}
+			}
+
+		default:
+			return NetworkIdentifiersValidationError{
+				field:  name,
+				reason: "invalid field path",
+			}
+		}
+	}
+	return nil
+}
+
+// NetworkIdentifiersValidationError is the validation error returned by
+// NetworkIdentifiers.ValidateFields if the designated constraints aren't met.
+type NetworkIdentifiersValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e NetworkIdentifiersValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e NetworkIdentifiersValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e NetworkIdentifiersValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e NetworkIdentifiersValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e NetworkIdentifiersValidationError) ErrorName() string {
+	return "NetworkIdentifiersValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e NetworkIdentifiersValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sNetworkIdentifiers.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = NetworkIdentifiersValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = NetworkIdentifiersValidationError{}
+
+var _NetworkIdentifiers_TenantId_Pattern = regexp.MustCompile("^[a-z0-9](?:[-]?[a-z0-9]){2,}$|^$")

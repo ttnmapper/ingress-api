@@ -366,7 +366,7 @@ func (m *GetOrganizationRequest) ValidateFields(paths ...string) error {
 
 		case "field_mask":
 
-			if v, ok := interface{}(&m.FieldMask).(interface{ ValidateFields(...string) error }); ok {
+			if v, ok := interface{}(m.GetFieldMask()).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return GetOrganizationRequestValidationError{
 						field:  "field_mask",
@@ -471,7 +471,7 @@ func (m *ListOrganizationsRequest) ValidateFields(paths ...string) error {
 
 		case "field_mask":
 
-			if v, ok := interface{}(&m.FieldMask).(interface{ ValidateFields(...string) error }); ok {
+			if v, ok := interface{}(m.GetFieldMask()).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return ListOrganizationsRequestValidationError{
 						field:  "field_mask",
@@ -715,7 +715,7 @@ func (m *UpdateOrganizationRequest) ValidateFields(paths ...string) error {
 
 		case "field_mask":
 
-			if v, ok := interface{}(&m.FieldMask).(interface{ ValidateFields(...string) error }); ok {
+			if v, ok := interface{}(m.GetFieldMask()).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return UpdateOrganizationRequestValidationError{
 						field:  "field_mask",
@@ -925,7 +925,7 @@ func (m *GetOrganizationAPIKeyRequest) ValidateFields(paths ...string) error {
 			}
 
 		case "key_id":
-			// no validation rules for KeyID
+			// no validation rules for KeyId
 		default:
 			return GetOrganizationAPIKeyRequestValidationError{
 				field:  name,
@@ -1061,6 +1061,21 @@ func (m *CreateOrganizationAPIKeyRequest) ValidateFields(paths ...string) error 
 
 			}
 
+		case "expires_at":
+
+			if ts := m.GetExpiresAt(); ts != nil {
+
+				now := time.Now()
+
+				if ts.Sub(now) <= 0 {
+					return CreateOrganizationAPIKeyRequestValidationError{
+						field:  "expires_at",
+						reason: "value must be greater than now",
+					}
+				}
+
+			}
+
 		default:
 			return CreateOrganizationAPIKeyRequestValidationError{
 				field:  name,
@@ -1161,6 +1176,18 @@ func (m *UpdateOrganizationAPIKeyRequest) ValidateFields(paths ...string) error 
 				if err := v.ValidateFields(subs...); err != nil {
 					return UpdateOrganizationAPIKeyRequestValidationError{
 						field:  "api_key",
+						reason: "embedded message failed validation",
+						cause:  err,
+					}
+				}
+			}
+
+		case "field_mask":
+
+			if v, ok := interface{}(m.GetFieldMask()).(interface{ ValidateFields(...string) error }); ok {
+				if err := v.ValidateFields(subs...); err != nil {
+					return UpdateOrganizationAPIKeyRequestValidationError{
+						field:  "field_mask",
 						reason: "embedded message failed validation",
 						cause:  err,
 					}

@@ -29,6 +29,7 @@ var GetQRCodeFormatRequestFieldPathsTopLevel = []string{
 }
 var GenerateEndDeviceQRCodeRequestFieldPathsNested = []string{
 	"end_device",
+	"end_device.activated_at",
 	"end_device.application_server_address",
 	"end_device.application_server_id",
 	"end_device.application_server_kek_label",
@@ -77,6 +78,8 @@ var GenerateEndDeviceQRCodeRequestFieldPathsNested = []string{
 	"end_device.mac_settings.desired_beacon_frequency.value",
 	"end_device.mac_settings.desired_max_duty_cycle",
 	"end_device.mac_settings.desired_max_duty_cycle.value",
+	"end_device.mac_settings.desired_max_eirp",
+	"end_device.mac_settings.desired_max_eirp.value",
 	"end_device.mac_settings.desired_ping_slot_data_rate_index",
 	"end_device.mac_settings.desired_ping_slot_data_rate_index.value",
 	"end_device.mac_settings.desired_ping_slot_frequency",

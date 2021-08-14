@@ -4,9 +4,8 @@ package ttnpb
 
 import (
 	fmt "fmt"
-	time "time"
-
 	go_thethings_network_lorawan_stack_v3_pkg_types "go.thethings.network/lorawan-stack/v3/pkg/types"
+	time "time"
 )
 
 func (dst *RxMetadata) SetFields(src *RxMetadata, paths ...string) error {
@@ -108,59 +107,59 @@ func (dst *RxMetadata) SetFields(src *RxMetadata, paths ...string) error {
 				return fmt.Errorf("'encrypted_fine_timestamp_key_id' has no subfields, but %s were specified", subs)
 			}
 			if src != nil {
-				dst.EncryptedFineTimestampKeyID = src.EncryptedFineTimestampKeyID
+				dst.EncryptedFineTimestampKeyId = src.EncryptedFineTimestampKeyId
 			} else {
 				var zero string
-				dst.EncryptedFineTimestampKeyID = zero
+				dst.EncryptedFineTimestampKeyId = zero
 			}
 		case "rssi":
 			if len(subs) > 0 {
 				return fmt.Errorf("'rssi' has no subfields, but %s were specified", subs)
 			}
 			if src != nil {
-				dst.RSSI = src.RSSI
+				dst.Rssi = src.Rssi
 			} else {
 				var zero float32
-				dst.RSSI = zero
+				dst.Rssi = zero
 			}
 		case "signal_rssi":
 			if len(subs) > 0 {
 				return fmt.Errorf("'signal_rssi' has no subfields, but %s were specified", subs)
 			}
 			if src != nil {
-				dst.SignalRSSI = src.SignalRSSI
+				dst.SignalRssi = src.SignalRssi
 			} else {
-				dst.SignalRSSI = nil
+				dst.SignalRssi = nil
 			}
 		case "channel_rssi":
 			if len(subs) > 0 {
 				return fmt.Errorf("'channel_rssi' has no subfields, but %s were specified", subs)
 			}
 			if src != nil {
-				dst.ChannelRSSI = src.ChannelRSSI
+				dst.ChannelRssi = src.ChannelRssi
 			} else {
 				var zero float32
-				dst.ChannelRSSI = zero
+				dst.ChannelRssi = zero
 			}
 		case "rssi_standard_deviation":
 			if len(subs) > 0 {
 				return fmt.Errorf("'rssi_standard_deviation' has no subfields, but %s were specified", subs)
 			}
 			if src != nil {
-				dst.RSSIStandardDeviation = src.RSSIStandardDeviation
+				dst.RssiStandardDeviation = src.RssiStandardDeviation
 			} else {
 				var zero float32
-				dst.RSSIStandardDeviation = zero
+				dst.RssiStandardDeviation = zero
 			}
 		case "snr":
 			if len(subs) > 0 {
 				return fmt.Errorf("'snr' has no subfields, but %s were specified", subs)
 			}
 			if src != nil {
-				dst.SNR = src.SNR
+				dst.Snr = src.Snr
 			} else {
 				var zero float32
-				dst.SNR = zero
+				dst.Snr = zero
 			}
 		case "frequency_offset":
 			if len(subs) > 0 {
@@ -225,6 +224,26 @@ func (dst *RxMetadata) SetFields(src *RxMetadata, paths ...string) error {
 			} else {
 				var zero uint32
 				dst.ChannelIndex = zero
+			}
+		case "hopping_width":
+			if len(subs) > 0 {
+				return fmt.Errorf("'hopping_width' has no subfields, but %s were specified", subs)
+			}
+			if src != nil {
+				dst.HoppingWidth = src.HoppingWidth
+			} else {
+				var zero uint32
+				dst.HoppingWidth = zero
+			}
+		case "frequency_drift":
+			if len(subs) > 0 {
+				return fmt.Errorf("'frequency_drift' has no subfields, but %s were specified", subs)
+			}
+			if src != nil {
+				dst.FrequencyDrift = src.FrequencyDrift
+			} else {
+				var zero int32
+				dst.FrequencyDrift = zero
 			}
 		case "advanced":
 			if len(subs) > 0 {

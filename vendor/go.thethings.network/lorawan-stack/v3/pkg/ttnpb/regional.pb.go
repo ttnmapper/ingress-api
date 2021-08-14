@@ -4,20 +4,15 @@
 package ttnpb
 
 import (
-	encoding_binary "encoding/binary"
 	fmt "fmt"
-	io "io"
-	math "math"
-	math_bits "math/bits"
-	reflect "reflect"
-	strings "strings"
-	time "time"
-
 	_ "github.com/gogo/protobuf/gogoproto"
 	proto "github.com/gogo/protobuf/proto"
 	_ "github.com/gogo/protobuf/types"
-	github_com_gogo_protobuf_types "github.com/gogo/protobuf/types"
 	golang_proto "github.com/golang/protobuf/proto"
+	math "math"
+	reflect "reflect"
+	strings "strings"
+	time "time"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -35,9 +30,9 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 type ConcentratorConfig struct {
 	Channels             []*ConcentratorConfig_Channel           `protobuf:"bytes,1,rep,name=channels,proto3" json:"channels,omitempty"`
-	LoRaStandardChannel  *ConcentratorConfig_LoRaStandardChannel `protobuf:"bytes,2,opt,name=lora_standard_channel,json=loraStandardChannel,proto3" json:"lora_standard_channel,omitempty"`
-	FSKChannel           *ConcentratorConfig_FSKChannel          `protobuf:"bytes,3,opt,name=fsk_channel,json=fskChannel,proto3" json:"fsk_channel,omitempty"`
-	LBT                  *ConcentratorConfig_LBTConfiguration    `protobuf:"bytes,4,opt,name=lbt,proto3" json:"lbt,omitempty"`
+	LoraStandardChannel  *ConcentratorConfig_LoRaStandardChannel `protobuf:"bytes,2,opt,name=lora_standard_channel,json=loraStandardChannel,proto3" json:"lora_standard_channel,omitempty"`
+	FskChannel           *ConcentratorConfig_FSKChannel          `protobuf:"bytes,3,opt,name=fsk_channel,json=fskChannel,proto3" json:"fsk_channel,omitempty"`
+	Lbt                  *ConcentratorConfig_LBTConfiguration    `protobuf:"bytes,4,opt,name=lbt,proto3" json:"lbt,omitempty"`
 	PingSlot             *ConcentratorConfig_Channel             `protobuf:"bytes,5,opt,name=ping_slot,json=pingSlot,proto3" json:"ping_slot,omitempty"`
 	Radios               []*GatewayRadio                         `protobuf:"bytes,6,rep,name=radios,proto3" json:"radios,omitempty"`
 	ClockSource          uint32                                  `protobuf:"varint,7,opt,name=clock_source,json=clockSource,proto3" json:"clock_source,omitempty"`
@@ -51,25 +46,16 @@ func (*ConcentratorConfig) Descriptor() ([]byte, []int) {
 	return fileDescriptor_cfe48e1cbcf8ee88, []int{0}
 }
 func (m *ConcentratorConfig) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	return xxx_messageInfo_ConcentratorConfig.Unmarshal(m, b)
 }
 func (m *ConcentratorConfig) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_ConcentratorConfig.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	return xxx_messageInfo_ConcentratorConfig.Marshal(b, m, deterministic)
 }
 func (m *ConcentratorConfig) XXX_Merge(src proto.Message) {
 	xxx_messageInfo_ConcentratorConfig.Merge(m, src)
 }
 func (m *ConcentratorConfig) XXX_Size() int {
-	return m.Size()
+	return xxx_messageInfo_ConcentratorConfig.Size(m)
 }
 func (m *ConcentratorConfig) XXX_DiscardUnknown() {
 	xxx_messageInfo_ConcentratorConfig.DiscardUnknown(m)
@@ -84,23 +70,23 @@ func (m *ConcentratorConfig) GetChannels() []*ConcentratorConfig_Channel {
 	return nil
 }
 
-func (m *ConcentratorConfig) GetLoRaStandardChannel() *ConcentratorConfig_LoRaStandardChannel {
+func (m *ConcentratorConfig) GetLoraStandardChannel() *ConcentratorConfig_LoRaStandardChannel {
 	if m != nil {
-		return m.LoRaStandardChannel
+		return m.LoraStandardChannel
 	}
 	return nil
 }
 
-func (m *ConcentratorConfig) GetFSKChannel() *ConcentratorConfig_FSKChannel {
+func (m *ConcentratorConfig) GetFskChannel() *ConcentratorConfig_FSKChannel {
 	if m != nil {
-		return m.FSKChannel
+		return m.FskChannel
 	}
 	return nil
 }
 
-func (m *ConcentratorConfig) GetLBT() *ConcentratorConfig_LBTConfiguration {
+func (m *ConcentratorConfig) GetLbt() *ConcentratorConfig_LBTConfiguration {
 	if m != nil {
-		return m.LBT
+		return m.Lbt
 	}
 	return nil
 }
@@ -140,25 +126,16 @@ func (*ConcentratorConfig_Channel) Descriptor() ([]byte, []int) {
 	return fileDescriptor_cfe48e1cbcf8ee88, []int{0, 0}
 }
 func (m *ConcentratorConfig_Channel) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	return xxx_messageInfo_ConcentratorConfig_Channel.Unmarshal(m, b)
 }
 func (m *ConcentratorConfig_Channel) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_ConcentratorConfig_Channel.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	return xxx_messageInfo_ConcentratorConfig_Channel.Marshal(b, m, deterministic)
 }
 func (m *ConcentratorConfig_Channel) XXX_Merge(src proto.Message) {
 	xxx_messageInfo_ConcentratorConfig_Channel.Merge(m, src)
 }
 func (m *ConcentratorConfig_Channel) XXX_Size() int {
-	return m.Size()
+	return xxx_messageInfo_ConcentratorConfig_Channel.Size(m)
 }
 func (m *ConcentratorConfig_Channel) XXX_DiscardUnknown() {
 	xxx_messageInfo_ConcentratorConfig_Channel.DiscardUnknown(m)
@@ -199,25 +176,16 @@ func (*ConcentratorConfig_LoRaStandardChannel) Descriptor() ([]byte, []int) {
 	return fileDescriptor_cfe48e1cbcf8ee88, []int{0, 1}
 }
 func (m *ConcentratorConfig_LoRaStandardChannel) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	return xxx_messageInfo_ConcentratorConfig_LoRaStandardChannel.Unmarshal(m, b)
 }
 func (m *ConcentratorConfig_LoRaStandardChannel) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_ConcentratorConfig_LoRaStandardChannel.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	return xxx_messageInfo_ConcentratorConfig_LoRaStandardChannel.Marshal(b, m, deterministic)
 }
 func (m *ConcentratorConfig_LoRaStandardChannel) XXX_Merge(src proto.Message) {
 	xxx_messageInfo_ConcentratorConfig_LoRaStandardChannel.Merge(m, src)
 }
 func (m *ConcentratorConfig_LoRaStandardChannel) XXX_Size() int {
-	return m.Size()
+	return xxx_messageInfo_ConcentratorConfig_LoRaStandardChannel.Size(m)
 }
 func (m *ConcentratorConfig_LoRaStandardChannel) XXX_DiscardUnknown() {
 	xxx_messageInfo_ConcentratorConfig_LoRaStandardChannel.DiscardUnknown(m)
@@ -267,25 +235,16 @@ func (*ConcentratorConfig_FSKChannel) Descriptor() ([]byte, []int) {
 	return fileDescriptor_cfe48e1cbcf8ee88, []int{0, 2}
 }
 func (m *ConcentratorConfig_FSKChannel) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	return xxx_messageInfo_ConcentratorConfig_FSKChannel.Unmarshal(m, b)
 }
 func (m *ConcentratorConfig_FSKChannel) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_ConcentratorConfig_FSKChannel.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	return xxx_messageInfo_ConcentratorConfig_FSKChannel.Marshal(b, m, deterministic)
 }
 func (m *ConcentratorConfig_FSKChannel) XXX_Merge(src proto.Message) {
 	xxx_messageInfo_ConcentratorConfig_FSKChannel.Merge(m, src)
 }
 func (m *ConcentratorConfig_FSKChannel) XXX_Size() int {
-	return m.Size()
+	return xxx_messageInfo_ConcentratorConfig_FSKChannel.Size(m)
 }
 func (m *ConcentratorConfig_FSKChannel) XXX_DiscardUnknown() {
 	xxx_messageInfo_ConcentratorConfig_FSKChannel.DiscardUnknown(m)
@@ -309,9 +268,9 @@ func (m *ConcentratorConfig_FSKChannel) GetRadio() uint32 {
 
 type ConcentratorConfig_LBTConfiguration struct {
 	// Received signal strength (dBm).
-	RSSITarget float32 `protobuf:"fixed32,1,opt,name=rssi_target,json=rssiTarget,proto3" json:"rssi_target,omitempty"`
+	RssiTarget float32 `protobuf:"fixed32,1,opt,name=rssi_target,json=rssiTarget,proto3" json:"rssi_target,omitempty"`
 	// Received signal strength offset (dBm).
-	RSSIOffset           float32       `protobuf:"fixed32,2,opt,name=rssi_offset,json=rssiOffset,proto3" json:"rssi_offset,omitempty"`
+	RssiOffset           float32       `protobuf:"fixed32,2,opt,name=rssi_offset,json=rssiOffset,proto3" json:"rssi_offset,omitempty"`
 	ScanTime             time.Duration `protobuf:"bytes,3,opt,name=scan_time,json=scanTime,proto3,stdduration" json:"scan_time"`
 	XXX_NoUnkeyedLiteral struct{}      `json:"-"`
 	XXX_sizecache        int32         `json:"-"`
@@ -323,25 +282,16 @@ func (*ConcentratorConfig_LBTConfiguration) Descriptor() ([]byte, []int) {
 	return fileDescriptor_cfe48e1cbcf8ee88, []int{0, 3}
 }
 func (m *ConcentratorConfig_LBTConfiguration) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	return xxx_messageInfo_ConcentratorConfig_LBTConfiguration.Unmarshal(m, b)
 }
 func (m *ConcentratorConfig_LBTConfiguration) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_ConcentratorConfig_LBTConfiguration.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	return xxx_messageInfo_ConcentratorConfig_LBTConfiguration.Marshal(b, m, deterministic)
 }
 func (m *ConcentratorConfig_LBTConfiguration) XXX_Merge(src proto.Message) {
 	xxx_messageInfo_ConcentratorConfig_LBTConfiguration.Merge(m, src)
 }
 func (m *ConcentratorConfig_LBTConfiguration) XXX_Size() int {
-	return m.Size()
+	return xxx_messageInfo_ConcentratorConfig_LBTConfiguration.Size(m)
 }
 func (m *ConcentratorConfig_LBTConfiguration) XXX_DiscardUnknown() {
 	xxx_messageInfo_ConcentratorConfig_LBTConfiguration.DiscardUnknown(m)
@@ -349,16 +299,16 @@ func (m *ConcentratorConfig_LBTConfiguration) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_ConcentratorConfig_LBTConfiguration proto.InternalMessageInfo
 
-func (m *ConcentratorConfig_LBTConfiguration) GetRSSITarget() float32 {
+func (m *ConcentratorConfig_LBTConfiguration) GetRssiTarget() float32 {
 	if m != nil {
-		return m.RSSITarget
+		return m.RssiTarget
 	}
 	return 0
 }
 
-func (m *ConcentratorConfig_LBTConfiguration) GetRSSIOffset() float32 {
+func (m *ConcentratorConfig_LBTConfiguration) GetRssiOffset() float32 {
 	if m != nil {
-		return m.RSSIOffset
+		return m.RssiOffset
 	}
 	return 0
 }
@@ -389,51 +339,44 @@ func init() {
 }
 
 var fileDescriptor_cfe48e1cbcf8ee88 = []byte{
-	// 703 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x9c, 0x54, 0x3f, 0x4c, 0xdb, 0x4e,
-	0x14, 0xbe, 0x23, 0xfc, 0x09, 0x97, 0x5f, 0xf8, 0x21, 0xd3, 0xaa, 0x69, 0x84, 0x2e, 0x69, 0xa7,
-	0xb4, 0x12, 0xb6, 0x44, 0xaa, 0x6e, 0x95, 0x50, 0xa8, 0x40, 0x55, 0x51, 0x2b, 0x39, 0x99, 0x3a,
-	0x34, 0xba, 0x38, 0xb6, 0x63, 0xc5, 0xdc, 0xa5, 0xe7, 0x0b, 0x11, 0x1b, 0x12, 0x0b, 0x63, 0xd5,
-	0x89, 0xb1, 0x4b, 0x25, 0x46, 0xa6, 0x8a, 0x91, 0x91, 0x91, 0x91, 0x29, 0x25, 0xe7, 0x85, 0x91,
-	0x91, 0xb1, 0xf2, 0xd9, 0x49, 0xf8, 0x37, 0x50, 0xb6, 0xf7, 0xbe, 0x7b, 0xdf, 0xf7, 0xee, 0xdd,
-	0xf7, 0x74, 0xa8, 0xe8, 0x33, 0x4e, 0x7a, 0x84, 0x2e, 0x05, 0x82, 0x58, 0x6d, 0x83, 0x74, 0x3c,
-	0x83, 0xdb, 0xae, 0xc7, 0x28, 0xf1, 0xf5, 0x0e, 0x67, 0x82, 0x69, 0x73, 0x42, 0x50, 0x3d, 0xa9,
-	0xd2, 0xb7, 0xca, 0xf9, 0x25, 0xd7, 0x13, 0xad, 0x6e, 0x43, 0xb7, 0xd8, 0xa6, 0xe1, 0x32, 0x97,
-	0x19, 0xaa, 0xac, 0xd1, 0x75, 0x54, 0xa6, 0x12, 0x15, 0xc5, 0xf4, 0x3c, 0x76, 0x19, 0x73, 0x7d,
-	0x7b, 0x5c, 0xd5, 0xec, 0x72, 0x22, 0x3c, 0x46, 0x93, 0xf3, 0xc2, 0xdd, 0x0b, 0xb8, 0x44, 0xd8,
-	0x3d, 0xb2, 0x1d, 0x17, 0xbc, 0xdc, 0x4d, 0x23, 0x6d, 0x95, 0x51, 0xcb, 0xa6, 0x82, 0x13, 0xc1,
-	0xf8, 0x2a, 0xa3, 0x8e, 0xe7, 0x6a, 0x6b, 0x28, 0x6d, 0xb5, 0x08, 0xa5, 0xb6, 0x1f, 0xe4, 0x60,
-	0x31, 0x55, 0xca, 0x2c, 0xbf, 0xd6, 0x6f, 0xde, 0x54, 0xbf, 0xcb, 0xd2, 0x57, 0x63, 0x8a, 0x39,
-	0xe2, 0x6a, 0xbb, 0x10, 0x3d, 0x8d, 0x38, 0xf5, 0x40, 0x10, 0xda, 0x24, 0xbc, 0x59, 0x4f, 0x8e,
-	0x72, 0x13, 0x45, 0x58, 0xca, 0x2c, 0xbf, 0x7d, 0x80, 0xea, 0x06, 0x33, 0x49, 0x35, 0xa1, 0x27,
-	0x1d, 0x2a, 0xcf, 0x64, 0xbf, 0xb0, 0x70, 0xcf, 0x81, 0xb9, 0x10, 0x69, 0xdd, 0x02, 0xb5, 0xaf,
-	0x28, 0xe3, 0x04, 0xed, 0x51, 0xeb, 0x94, 0x6a, 0xbd, 0xf4, 0x80, 0xd6, 0x6b, 0xd5, 0x8f, 0xc3,
-	0x8e, 0x73, 0xb2, 0x5f, 0x40, 0xe3, 0xdc, 0x44, 0x4e, 0xd0, 0x1e, 0xea, 0x7f, 0x42, 0x29, 0xbf,
-	0x21, 0x72, 0x93, 0x4a, 0xb7, 0xfc, 0x90, 0x91, 0x2a, 0xb5, 0x38, 0x4a, 0xdc, 0xaa, 0xcc, 0xc8,
-	0x7e, 0x21, 0xb5, 0x51, 0xa9, 0x99, 0x91, 0x90, 0xb6, 0x8e, 0x66, 0x3b, 0x1e, 0x75, 0xeb, 0x81,
-	0xcf, 0x44, 0x6e, 0x4a, 0xa9, 0xfe, 0xd3, 0xf3, 0x47, 0xe4, 0xaa, 0xcf, 0x84, 0xf6, 0x06, 0x4d,
-	0x73, 0xd2, 0xf4, 0x58, 0x90, 0x9b, 0x56, 0x26, 0x2e, 0xde, 0x56, 0x59, 0x8f, 0x97, 0xc1, 0x8c,
-	0x8a, 0xcc, 0xa4, 0x56, 0x7b, 0x81, 0xfe, 0xb3, 0x7c, 0x66, 0xb5, 0xeb, 0x01, 0xeb, 0x72, 0xcb,
-	0xce, 0xcd, 0x14, 0x61, 0x29, 0x6b, 0x66, 0x14, 0x56, 0x55, 0x50, 0xfe, 0x1d, 0x9a, 0x19, 0x0e,
-	0xbf, 0x88, 0x66, 0x1d, 0x6e, 0x7f, 0xeb, 0xda, 0xd4, 0xda, 0xce, 0xc1, 0x22, 0x2c, 0x4d, 0x9a,
-	0x63, 0x40, 0x7b, 0x82, 0xa6, 0x94, 0xaa, 0xf2, 0x3b, 0x6b, 0xc6, 0x49, 0xfe, 0x07, 0x44, 0xf7,
-	0xb9, 0xf7, 0x18, 0xad, 0x88, 0xd3, 0x20, 0xb4, 0xd9, 0xf3, 0x9a, 0xa2, 0xa5, 0xac, 0xcd, 0x9a,
-	0x63, 0x40, 0x7b, 0x85, 0xe6, 0x83, 0x0e, 0xb7, 0x49, 0x33, 0x7a, 0x4f, 0x87, 0x58, 0x82, 0x71,
-	0xe5, 0x53, 0xd6, 0xfc, 0x7f, 0x84, 0xaf, 0x29, 0x38, 0xbf, 0x82, 0xae, 0xf9, 0xfb, 0xa8, 0xb1,
-	0x7e, 0x43, 0x34, 0x7f, 0xdb, 0x5a, 0xcd, 0x40, 0x19, 0x1e, 0x04, 0x5e, 0x5d, 0x10, 0xee, 0xda,
-	0x42, 0x49, 0x4d, 0xc4, 0xdb, 0x64, 0x56, 0xab, 0x1f, 0x6a, 0x0a, 0x35, 0x51, 0x54, 0x12, 0xc7,
-	0x23, 0x02, 0x73, 0x9c, 0xc0, 0x16, 0xaa, 0xc3, 0x35, 0xc2, 0x67, 0x85, 0xc6, 0x84, 0x38, 0xd6,
-	0x56, 0xd0, 0x6c, 0x60, 0x11, 0x5a, 0x17, 0xde, 0xa6, 0x9d, 0x2c, 0xf7, 0x73, 0x3d, 0xfe, 0x18,
-	0xf4, 0xe1, 0xc7, 0xa0, 0xbf, 0x1f, 0xae, 0x5a, 0xfa, 0xa4, 0x5f, 0x00, 0xfb, 0x7f, 0x0a, 0xd0,
-	0x4c, 0x47, 0xac, 0x9a, 0xb7, 0x69, 0x57, 0x7e, 0xc1, 0x93, 0x01, 0x86, 0xa7, 0x03, 0x0c, 0xcf,
-	0x06, 0x18, 0x9c, 0x0f, 0x30, 0xb8, 0x18, 0x60, 0x70, 0x39, 0xc0, 0xe0, 0x6a, 0x80, 0xe1, 0x8e,
-	0xc4, 0x70, 0x4f, 0x62, 0x70, 0x20, 0x31, 0x3c, 0x94, 0x18, 0x1c, 0x49, 0x0c, 0x8e, 0x25, 0x06,
-	0x27, 0x12, 0xc3, 0x53, 0x89, 0xe1, 0x99, 0xc4, 0xe0, 0x5c, 0x62, 0x78, 0x21, 0x31, 0xb8, 0x94,
-	0x18, 0x5e, 0x49, 0x0c, 0x76, 0x42, 0x0c, 0xf6, 0x42, 0x0c, 0xbf, 0x87, 0x18, 0xec, 0x87, 0x18,
-	0xfe, 0x0c, 0x31, 0x38, 0x08, 0x31, 0x38, 0x0c, 0x31, 0x3c, 0x0a, 0x31, 0x3c, 0x0e, 0x31, 0xfc,
-	0x62, 0xb8, 0x4c, 0x17, 0x2d, 0x5b, 0xb4, 0x3c, 0xea, 0x06, 0x3a, 0xb5, 0x45, 0x8f, 0xf1, 0xb6,
-	0x71, 0xf3, 0xcb, 0xda, 0x2a, 0x1b, 0x9d, 0xb6, 0x6b, 0x08, 0x41, 0x3b, 0x8d, 0xc6, 0xb4, 0x1a,
-	0xa7, 0xfc, 0x37, 0x00, 0x00, 0xff, 0xff, 0x12, 0xf6, 0xaf, 0x74, 0x58, 0x05, 0x00, 0x00,
+	// 587 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x9c, 0x54, 0x3d, 0x6f, 0x13, 0x3f,
+	0x1c, 0x8e, 0xfb, 0x5e, 0xe7, 0x9f, 0x3f, 0x95, 0x0b, 0xd2, 0x11, 0x55, 0x97, 0xc0, 0x14, 0x90,
+	0xea, 0x93, 0x1a, 0xc4, 0x86, 0x54, 0xb5, 0xd0, 0x0e, 0xbc, 0x49, 0x4e, 0x27, 0x96, 0xc8, 0xb9,
+	0xf3, 0x39, 0x26, 0x57, 0x3b, 0xd8, 0xbf, 0x34, 0xea, 0xc6, 0x47, 0x40, 0x0c, 0x88, 0x8f, 0xc0,
+	0xc8, 0x47, 0x60, 0xe4, 0x23, 0x30, 0x81, 0x48, 0x17, 0x46, 0x3e, 0x02, 0x3a, 0xdf, 0x25, 0x51,
+	0x5b, 0x86, 0xd2, 0xcd, 0x7e, 0xfc, 0xbc, 0xd8, 0x7e, 0xce, 0x87, 0x9b, 0x99, 0xb1, 0x7c, 0xcc,
+	0xf5, 0xb6, 0x03, 0x1e, 0x0f, 0x22, 0x3e, 0x54, 0x91, 0x15, 0x52, 0x19, 0xcd, 0x33, 0x3a, 0xb4,
+	0x06, 0x0c, 0xf9, 0x1f, 0x40, 0xd3, 0x92, 0x45, 0x4f, 0xda, 0xf5, 0x6d, 0xa9, 0xa0, 0x3f, 0xea,
+	0xd1, 0xd8, 0x1c, 0x47, 0xd2, 0x48, 0x13, 0x79, 0x5a, 0x6f, 0x94, 0xfa, 0x99, 0x9f, 0xf8, 0x51,
+	0x21, 0xaf, 0x87, 0xd2, 0x18, 0x99, 0x89, 0x39, 0x2b, 0x19, 0x59, 0x0e, 0xca, 0xe8, 0x72, 0xbd,
+	0x71, 0x79, 0x03, 0x92, 0x83, 0x18, 0xf3, 0xd3, 0x82, 0x70, 0xf7, 0xf3, 0x2a, 0x26, 0xfb, 0x46,
+	0xc7, 0x42, 0x83, 0xe5, 0x60, 0xec, 0xbe, 0xd1, 0xa9, 0x92, 0xe4, 0x00, 0xaf, 0xc5, 0x7d, 0xae,
+	0xb5, 0xc8, 0x5c, 0x80, 0x9a, 0x8b, 0xad, 0xea, 0xce, 0x7d, 0x7a, 0x7e, 0xa7, 0xf4, 0xb2, 0x8a,
+	0xee, 0x17, 0x12, 0x36, 0xd3, 0x92, 0xd7, 0xf8, 0x56, 0x2e, 0xe9, 0x3a, 0xe0, 0x3a, 0xe1, 0x36,
+	0xe9, 0x96, 0x2b, 0xc1, 0x42, 0x13, 0xb5, 0xaa, 0x3b, 0x0f, 0xaf, 0x60, 0xfa, 0xcc, 0x30, 0xde,
+	0x29, 0xe5, 0xd3, 0x80, 0xcd, 0x5c, 0x72, 0x01, 0x24, 0x2f, 0x70, 0x35, 0x75, 0x83, 0x59, 0xc2,
+	0xa2, 0x4f, 0xd8, 0xbe, 0x42, 0xc2, 0x41, 0xe7, 0xe9, 0xd4, 0x18, 0xa7, 0x6e, 0x30, 0xf5, 0x7b,
+	0x82, 0x17, 0xb3, 0x1e, 0x04, 0x4b, 0xde, 0xa7, 0x7d, 0x95, 0x9d, 0xee, 0x1d, 0x15, 0xa3, 0xb2,
+	0x03, 0x96, 0xeb, 0xc9, 0x21, 0x5e, 0x1f, 0x2a, 0x2d, 0xbb, 0x2e, 0x33, 0x10, 0x2c, 0x7b, 0xb3,
+	0x7f, 0xba, 0xcb, 0x5c, 0xdc, 0xc9, 0x0c, 0x90, 0x07, 0x78, 0xc5, 0xf2, 0x44, 0x19, 0x17, 0xac,
+	0xf8, 0x46, 0xb6, 0x2e, 0xba, 0x1c, 0x16, 0xcd, 0xb2, 0x9c, 0xc4, 0x4a, 0x2e, 0xb9, 0x83, 0xff,
+	0x8b, 0x33, 0x13, 0x0f, 0xba, 0xce, 0x8c, 0x6c, 0x2c, 0x82, 0xd5, 0x26, 0x6a, 0xd5, 0x58, 0xd5,
+	0x63, 0x1d, 0x0f, 0xd5, 0x1f, 0xe1, 0xd5, 0xe9, 0x99, 0xb7, 0xf0, 0x7a, 0x6a, 0xc5, 0x9b, 0x91,
+	0xd0, 0xf1, 0x69, 0x80, 0x9a, 0xa8, 0xb5, 0xc4, 0xe6, 0x00, 0xb9, 0x89, 0x97, 0xbd, 0xab, 0x6f,
+	0xaf, 0xc6, 0x8a, 0x49, 0xfd, 0x3d, 0xc2, 0x9b, 0x7f, 0x29, 0xe9, 0x3a, 0x5e, 0xb9, 0xa6, 0xc7,
+	0x75, 0x32, 0x56, 0x09, 0xf4, 0x7d, 0x83, 0x35, 0x36, 0x07, 0xc8, 0x3d, 0xbc, 0xe1, 0x86, 0x56,
+	0xf0, 0x24, 0xbf, 0xcf, 0x94, 0xc7, 0x60, 0xac, 0xaf, 0xa7, 0xc6, 0x6e, 0xcc, 0xf0, 0x03, 0x0f,
+	0xd7, 0x77, 0x31, 0x9e, 0xd7, 0x7a, 0xad, 0x63, 0x7d, 0x40, 0x78, 0xe3, 0x62, 0xa3, 0xa4, 0x81,
+	0xab, 0xd6, 0x39, 0xd5, 0x05, 0x6e, 0xa5, 0x00, 0x6f, 0xb5, 0xc0, 0x70, 0x0e, 0x1d, 0x79, 0x64,
+	0x46, 0x30, 0x69, 0xea, 0x04, 0x78, 0xc7, 0x92, 0xf0, 0xd2, 0x23, 0x64, 0x17, 0xaf, 0xbb, 0x98,
+	0xeb, 0x2e, 0xa8, 0x63, 0x51, 0x7e, 0xa3, 0xb7, 0x69, 0xf1, 0x8a, 0xe9, 0xf4, 0x15, 0xd3, 0xc7,
+	0x65, 0xde, 0xde, 0xda, 0xd7, 0xef, 0x8d, 0xca, 0xc7, 0x1f, 0x0d, 0xc4, 0xd6, 0x72, 0xd5, 0x91,
+	0x3a, 0x16, 0x7b, 0xcf, 0xbf, 0xfd, 0x0c, 0x2b, 0x6f, 0x27, 0x21, 0xfa, 0x34, 0x09, 0xd1, 0xaf,
+	0x49, 0x58, 0xf9, 0x3d, 0x09, 0xd1, 0xbb, 0xb3, 0xb0, 0xf2, 0xe5, 0x2c, 0x44, 0xaf, 0x22, 0x69,
+	0x28, 0xf4, 0x05, 0xf4, 0x95, 0x96, 0x8e, 0x6a, 0x01, 0x63, 0x63, 0x07, 0xd1, 0xf9, 0xdf, 0xc0,
+	0x49, 0x3b, 0x1a, 0x0e, 0x64, 0x04, 0xa0, 0x87, 0xbd, 0xde, 0x8a, 0x4f, 0x6d, 0xff, 0x09, 0x00,
+	0x00, 0xff, 0xff, 0xc2, 0xa7, 0x0a, 0xc3, 0xac, 0x04, 0x00, 0x00,
 }
 
 func (this *ConcentratorConfig) Equal(that interface{}) bool {
@@ -463,13 +406,13 @@ func (this *ConcentratorConfig) Equal(that interface{}) bool {
 			return false
 		}
 	}
-	if !this.LoRaStandardChannel.Equal(that1.LoRaStandardChannel) {
+	if !this.LoraStandardChannel.Equal(that1.LoraStandardChannel) {
 		return false
 	}
-	if !this.FSKChannel.Equal(that1.FSKChannel) {
+	if !this.FskChannel.Equal(that1.FskChannel) {
 		return false
 	}
-	if !this.LBT.Equal(that1.LBT) {
+	if !this.Lbt.Equal(that1.Lbt) {
 		return false
 	}
 	if !this.PingSlot.Equal(that1.PingSlot) {
@@ -594,549 +537,16 @@ func (this *ConcentratorConfig_LBTConfiguration) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if this.RSSITarget != that1.RSSITarget {
+	if this.RssiTarget != that1.RssiTarget {
 		return false
 	}
-	if this.RSSIOffset != that1.RSSIOffset {
+	if this.RssiOffset != that1.RssiOffset {
 		return false
 	}
 	if this.ScanTime != that1.ScanTime {
 		return false
 	}
 	return true
-}
-func (m *ConcentratorConfig) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *ConcentratorConfig) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *ConcentratorConfig) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.ClockSource != 0 {
-		i = encodeVarintRegional(dAtA, i, uint64(m.ClockSource))
-		i--
-		dAtA[i] = 0x38
-	}
-	if len(m.Radios) > 0 {
-		for iNdEx := len(m.Radios) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.Radios[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintRegional(dAtA, i, uint64(size))
-			}
-			i--
-			dAtA[i] = 0x32
-		}
-	}
-	if m.PingSlot != nil {
-		{
-			size, err := m.PingSlot.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintRegional(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x2a
-	}
-	if m.LBT != nil {
-		{
-			size, err := m.LBT.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintRegional(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x22
-	}
-	if m.FSKChannel != nil {
-		{
-			size, err := m.FSKChannel.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintRegional(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x1a
-	}
-	if m.LoRaStandardChannel != nil {
-		{
-			size, err := m.LoRaStandardChannel.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintRegional(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x12
-	}
-	if len(m.Channels) > 0 {
-		for iNdEx := len(m.Channels) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.Channels[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintRegional(dAtA, i, uint64(size))
-			}
-			i--
-			dAtA[i] = 0xa
-		}
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *ConcentratorConfig_Channel) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *ConcentratorConfig_Channel) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *ConcentratorConfig_Channel) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.Radio != 0 {
-		i = encodeVarintRegional(dAtA, i, uint64(m.Radio))
-		i--
-		dAtA[i] = 0x10
-	}
-	if m.Frequency != 0 {
-		i = encodeVarintRegional(dAtA, i, m.Frequency)
-		i--
-		dAtA[i] = 0x8
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *ConcentratorConfig_LoRaStandardChannel) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *ConcentratorConfig_LoRaStandardChannel) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *ConcentratorConfig_LoRaStandardChannel) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.SpreadingFactor != 0 {
-		i = encodeVarintRegional(dAtA, i, uint64(m.SpreadingFactor))
-		i--
-		dAtA[i] = 0x20
-	}
-	if m.Bandwidth != 0 {
-		i = encodeVarintRegional(dAtA, i, uint64(m.Bandwidth))
-		i--
-		dAtA[i] = 0x18
-	}
-	if m.Radio != 0 {
-		i = encodeVarintRegional(dAtA, i, uint64(m.Radio))
-		i--
-		dAtA[i] = 0x10
-	}
-	if m.Frequency != 0 {
-		i = encodeVarintRegional(dAtA, i, m.Frequency)
-		i--
-		dAtA[i] = 0x8
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *ConcentratorConfig_FSKChannel) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *ConcentratorConfig_FSKChannel) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *ConcentratorConfig_FSKChannel) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.Radio != 0 {
-		i = encodeVarintRegional(dAtA, i, uint64(m.Radio))
-		i--
-		dAtA[i] = 0x10
-	}
-	if m.Frequency != 0 {
-		i = encodeVarintRegional(dAtA, i, m.Frequency)
-		i--
-		dAtA[i] = 0x8
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *ConcentratorConfig_LBTConfiguration) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *ConcentratorConfig_LBTConfiguration) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *ConcentratorConfig_LBTConfiguration) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	n5, err5 := github_com_gogo_protobuf_types.StdDurationMarshalTo(m.ScanTime, dAtA[i-github_com_gogo_protobuf_types.SizeOfStdDuration(m.ScanTime):])
-	if err5 != nil {
-		return 0, err5
-	}
-	i -= n5
-	i = encodeVarintRegional(dAtA, i, uint64(n5))
-	i--
-	dAtA[i] = 0x1a
-	if m.RSSIOffset != 0 {
-		i -= 4
-		encoding_binary.LittleEndian.PutUint32(dAtA[i:], math.Float32bits(float32(m.RSSIOffset)))
-		i--
-		dAtA[i] = 0x15
-	}
-	if m.RSSITarget != 0 {
-		i -= 4
-		encoding_binary.LittleEndian.PutUint32(dAtA[i:], math.Float32bits(float32(m.RSSITarget)))
-		i--
-		dAtA[i] = 0xd
-	}
-	return len(dAtA) - i, nil
-}
-
-func encodeVarintRegional(dAtA []byte, offset int, v uint64) int {
-	offset -= sovRegional(v)
-	base := offset
-	for v >= 1<<7 {
-		dAtA[offset] = uint8(v&0x7f | 0x80)
-		v >>= 7
-		offset++
-	}
-	dAtA[offset] = uint8(v)
-	return base
-}
-func NewPopulatedConcentratorConfig(r randyRegional, easy bool) *ConcentratorConfig {
-	this := &ConcentratorConfig{}
-	if r.Intn(5) != 0 {
-		v1 := r.Intn(5)
-		this.Channels = make([]*ConcentratorConfig_Channel, v1)
-		for i := 0; i < v1; i++ {
-			this.Channels[i] = NewPopulatedConcentratorConfig_Channel(r, easy)
-		}
-	}
-	if r.Intn(5) != 0 {
-		this.LoRaStandardChannel = NewPopulatedConcentratorConfig_LoRaStandardChannel(r, easy)
-	}
-	if r.Intn(5) != 0 {
-		this.FSKChannel = NewPopulatedConcentratorConfig_FSKChannel(r, easy)
-	}
-	if r.Intn(5) != 0 {
-		this.LBT = NewPopulatedConcentratorConfig_LBTConfiguration(r, easy)
-	}
-	if r.Intn(5) != 0 {
-		this.PingSlot = NewPopulatedConcentratorConfig_Channel(r, easy)
-	}
-	if r.Intn(5) != 0 {
-		v2 := r.Intn(5)
-		this.Radios = make([]*GatewayRadio, v2)
-		for i := 0; i < v2; i++ {
-			this.Radios[i] = NewPopulatedGatewayRadio(r, easy)
-		}
-	}
-	this.ClockSource = r.Uint32()
-	if !easy && r.Intn(10) != 0 {
-	}
-	return this
-}
-
-func NewPopulatedConcentratorConfig_Channel(r randyRegional, easy bool) *ConcentratorConfig_Channel {
-	this := &ConcentratorConfig_Channel{}
-	this.Frequency = uint64(r.Uint32())
-	this.Radio = r.Uint32()
-	if !easy && r.Intn(10) != 0 {
-	}
-	return this
-}
-
-func NewPopulatedConcentratorConfig_LoRaStandardChannel(r randyRegional, easy bool) *ConcentratorConfig_LoRaStandardChannel {
-	this := &ConcentratorConfig_LoRaStandardChannel{}
-	this.Frequency = uint64(r.Uint32())
-	this.Radio = r.Uint32()
-	this.Bandwidth = r.Uint32()
-	this.SpreadingFactor = r.Uint32()
-	if !easy && r.Intn(10) != 0 {
-	}
-	return this
-}
-
-func NewPopulatedConcentratorConfig_FSKChannel(r randyRegional, easy bool) *ConcentratorConfig_FSKChannel {
-	this := &ConcentratorConfig_FSKChannel{}
-	this.Frequency = uint64(r.Uint32())
-	this.Radio = r.Uint32()
-	if !easy && r.Intn(10) != 0 {
-	}
-	return this
-}
-
-func NewPopulatedConcentratorConfig_LBTConfiguration(r randyRegional, easy bool) *ConcentratorConfig_LBTConfiguration {
-	this := &ConcentratorConfig_LBTConfiguration{}
-	this.RSSITarget = float32(r.Float32())
-	if r.Intn(2) == 0 {
-		this.RSSITarget *= -1
-	}
-	this.RSSIOffset = float32(r.Float32())
-	if r.Intn(2) == 0 {
-		this.RSSIOffset *= -1
-	}
-	v3 := github_com_gogo_protobuf_types.NewPopulatedStdDuration(r, easy)
-	this.ScanTime = *v3
-	if !easy && r.Intn(10) != 0 {
-	}
-	return this
-}
-
-type randyRegional interface {
-	Float32() float32
-	Float64() float64
-	Int63() int64
-	Int31() int32
-	Uint32() uint32
-	Intn(n int) int
-}
-
-func randUTF8RuneRegional(r randyRegional) rune {
-	ru := r.Intn(62)
-	if ru < 10 {
-		return rune(ru + 48)
-	} else if ru < 36 {
-		return rune(ru + 55)
-	}
-	return rune(ru + 61)
-}
-func randStringRegional(r randyRegional) string {
-	v4 := r.Intn(100)
-	tmps := make([]rune, v4)
-	for i := 0; i < v4; i++ {
-		tmps[i] = randUTF8RuneRegional(r)
-	}
-	return string(tmps)
-}
-func randUnrecognizedRegional(r randyRegional, maxFieldNumber int) (dAtA []byte) {
-	l := r.Intn(5)
-	for i := 0; i < l; i++ {
-		wire := r.Intn(4)
-		if wire == 3 {
-			wire = 5
-		}
-		fieldNumber := maxFieldNumber + r.Intn(100)
-		dAtA = randFieldRegional(dAtA, r, fieldNumber, wire)
-	}
-	return dAtA
-}
-func randFieldRegional(dAtA []byte, r randyRegional, fieldNumber int, wire int) []byte {
-	key := uint32(fieldNumber)<<3 | uint32(wire)
-	switch wire {
-	case 0:
-		dAtA = encodeVarintPopulateRegional(dAtA, uint64(key))
-		v5 := r.Int63()
-		if r.Intn(2) == 0 {
-			v5 *= -1
-		}
-		dAtA = encodeVarintPopulateRegional(dAtA, uint64(v5))
-	case 1:
-		dAtA = encodeVarintPopulateRegional(dAtA, uint64(key))
-		dAtA = append(dAtA, byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)))
-	case 2:
-		dAtA = encodeVarintPopulateRegional(dAtA, uint64(key))
-		ll := r.Intn(100)
-		dAtA = encodeVarintPopulateRegional(dAtA, uint64(ll))
-		for j := 0; j < ll; j++ {
-			dAtA = append(dAtA, byte(r.Intn(256)))
-		}
-	default:
-		dAtA = encodeVarintPopulateRegional(dAtA, uint64(key))
-		dAtA = append(dAtA, byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)))
-	}
-	return dAtA
-}
-func encodeVarintPopulateRegional(dAtA []byte, v uint64) []byte {
-	for v >= 1<<7 {
-		dAtA = append(dAtA, uint8(v&0x7f|0x80))
-		v >>= 7
-	}
-	dAtA = append(dAtA, uint8(v))
-	return dAtA
-}
-func (m *ConcentratorConfig) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if len(m.Channels) > 0 {
-		for _, e := range m.Channels {
-			l = e.Size()
-			n += 1 + l + sovRegional(uint64(l))
-		}
-	}
-	if m.LoRaStandardChannel != nil {
-		l = m.LoRaStandardChannel.Size()
-		n += 1 + l + sovRegional(uint64(l))
-	}
-	if m.FSKChannel != nil {
-		l = m.FSKChannel.Size()
-		n += 1 + l + sovRegional(uint64(l))
-	}
-	if m.LBT != nil {
-		l = m.LBT.Size()
-		n += 1 + l + sovRegional(uint64(l))
-	}
-	if m.PingSlot != nil {
-		l = m.PingSlot.Size()
-		n += 1 + l + sovRegional(uint64(l))
-	}
-	if len(m.Radios) > 0 {
-		for _, e := range m.Radios {
-			l = e.Size()
-			n += 1 + l + sovRegional(uint64(l))
-		}
-	}
-	if m.ClockSource != 0 {
-		n += 1 + sovRegional(uint64(m.ClockSource))
-	}
-	return n
-}
-
-func (m *ConcentratorConfig_Channel) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.Frequency != 0 {
-		n += 1 + sovRegional(m.Frequency)
-	}
-	if m.Radio != 0 {
-		n += 1 + sovRegional(uint64(m.Radio))
-	}
-	return n
-}
-
-func (m *ConcentratorConfig_LoRaStandardChannel) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.Frequency != 0 {
-		n += 1 + sovRegional(m.Frequency)
-	}
-	if m.Radio != 0 {
-		n += 1 + sovRegional(uint64(m.Radio))
-	}
-	if m.Bandwidth != 0 {
-		n += 1 + sovRegional(uint64(m.Bandwidth))
-	}
-	if m.SpreadingFactor != 0 {
-		n += 1 + sovRegional(uint64(m.SpreadingFactor))
-	}
-	return n
-}
-
-func (m *ConcentratorConfig_FSKChannel) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.Frequency != 0 {
-		n += 1 + sovRegional(m.Frequency)
-	}
-	if m.Radio != 0 {
-		n += 1 + sovRegional(uint64(m.Radio))
-	}
-	return n
-}
-
-func (m *ConcentratorConfig_LBTConfiguration) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.RSSITarget != 0 {
-		n += 5
-	}
-	if m.RSSIOffset != 0 {
-		n += 5
-	}
-	l = github_com_gogo_protobuf_types.SizeOfStdDuration(m.ScanTime)
-	n += 1 + l + sovRegional(uint64(l))
-	return n
-}
-
-func sovRegional(x uint64) (n int) {
-	return (math_bits.Len64(x|1) + 6) / 7
-}
-func sozRegional(x uint64) (n int) {
-	return sovRegional((x << 1) ^ uint64((int64(x) >> 63)))
 }
 func (this *ConcentratorConfig) String() string {
 	if this == nil {
@@ -1154,9 +564,9 @@ func (this *ConcentratorConfig) String() string {
 	repeatedStringForRadios += "}"
 	s := strings.Join([]string{`&ConcentratorConfig{`,
 		`Channels:` + repeatedStringForChannels + `,`,
-		`LoRaStandardChannel:` + strings.Replace(fmt.Sprintf("%v", this.LoRaStandardChannel), "ConcentratorConfig_LoRaStandardChannel", "ConcentratorConfig_LoRaStandardChannel", 1) + `,`,
-		`FSKChannel:` + strings.Replace(fmt.Sprintf("%v", this.FSKChannel), "ConcentratorConfig_FSKChannel", "ConcentratorConfig_FSKChannel", 1) + `,`,
-		`LBT:` + strings.Replace(fmt.Sprintf("%v", this.LBT), "ConcentratorConfig_LBTConfiguration", "ConcentratorConfig_LBTConfiguration", 1) + `,`,
+		`LoraStandardChannel:` + strings.Replace(fmt.Sprintf("%v", this.LoraStandardChannel), "ConcentratorConfig_LoRaStandardChannel", "ConcentratorConfig_LoRaStandardChannel", 1) + `,`,
+		`FskChannel:` + strings.Replace(fmt.Sprintf("%v", this.FskChannel), "ConcentratorConfig_FSKChannel", "ConcentratorConfig_FSKChannel", 1) + `,`,
+		`Lbt:` + strings.Replace(fmt.Sprintf("%v", this.Lbt), "ConcentratorConfig_LBTConfiguration", "ConcentratorConfig_LBTConfiguration", 1) + `,`,
 		`PingSlot:` + strings.Replace(fmt.Sprintf("%v", this.PingSlot), "ConcentratorConfig_Channel", "ConcentratorConfig_Channel", 1) + `,`,
 		`Radios:` + repeatedStringForRadios + `,`,
 		`ClockSource:` + fmt.Sprintf("%v", this.ClockSource) + `,`,
@@ -1204,8 +614,8 @@ func (this *ConcentratorConfig_LBTConfiguration) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&ConcentratorConfig_LBTConfiguration{`,
-		`RSSITarget:` + fmt.Sprintf("%v", this.RSSITarget) + `,`,
-		`RSSIOffset:` + fmt.Sprintf("%v", this.RSSIOffset) + `,`,
+		`RssiTarget:` + fmt.Sprintf("%v", this.RssiTarget) + `,`,
+		`RssiOffset:` + fmt.Sprintf("%v", this.RssiOffset) + `,`,
 		`ScanTime:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.ScanTime), "Duration", "types.Duration", 1), `&`, ``, 1) + `,`,
 		`}`,
 	}, "")
@@ -1219,790 +629,3 @@ func valueToStringRegional(v interface{}) string {
 	pv := reflect.Indirect(rv).Interface()
 	return fmt.Sprintf("*%v", pv)
 }
-func (m *ConcentratorConfig) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowRegional
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: ConcentratorConfig: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: ConcentratorConfig: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Channels", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowRegional
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthRegional
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthRegional
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Channels = append(m.Channels, &ConcentratorConfig_Channel{})
-			if err := m.Channels[len(m.Channels)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field LoRaStandardChannel", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowRegional
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthRegional
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthRegional
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.LoRaStandardChannel == nil {
-				m.LoRaStandardChannel = &ConcentratorConfig_LoRaStandardChannel{}
-			}
-			if err := m.LoRaStandardChannel.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field FSKChannel", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowRegional
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthRegional
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthRegional
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.FSKChannel == nil {
-				m.FSKChannel = &ConcentratorConfig_FSKChannel{}
-			}
-			if err := m.FSKChannel.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 4:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field LBT", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowRegional
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthRegional
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthRegional
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.LBT == nil {
-				m.LBT = &ConcentratorConfig_LBTConfiguration{}
-			}
-			if err := m.LBT.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 5:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field PingSlot", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowRegional
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthRegional
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthRegional
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.PingSlot == nil {
-				m.PingSlot = &ConcentratorConfig_Channel{}
-			}
-			if err := m.PingSlot.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 6:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Radios", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowRegional
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthRegional
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthRegional
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Radios = append(m.Radios, &GatewayRadio{})
-			if err := m.Radios[len(m.Radios)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 7:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ClockSource", wireType)
-			}
-			m.ClockSource = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowRegional
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.ClockSource |= uint32(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		default:
-			iNdEx = preIndex
-			skippy, err := skipRegional(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthRegional
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthRegional
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *ConcentratorConfig_Channel) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowRegional
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: Channel: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: Channel: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Frequency", wireType)
-			}
-			m.Frequency = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowRegional
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.Frequency |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 2:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Radio", wireType)
-			}
-			m.Radio = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowRegional
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.Radio |= uint32(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		default:
-			iNdEx = preIndex
-			skippy, err := skipRegional(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthRegional
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthRegional
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *ConcentratorConfig_LoRaStandardChannel) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowRegional
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: LoRaStandardChannel: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: LoRaStandardChannel: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Frequency", wireType)
-			}
-			m.Frequency = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowRegional
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.Frequency |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 2:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Radio", wireType)
-			}
-			m.Radio = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowRegional
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.Radio |= uint32(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 3:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Bandwidth", wireType)
-			}
-			m.Bandwidth = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowRegional
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.Bandwidth |= uint32(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 4:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field SpreadingFactor", wireType)
-			}
-			m.SpreadingFactor = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowRegional
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.SpreadingFactor |= uint32(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		default:
-			iNdEx = preIndex
-			skippy, err := skipRegional(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthRegional
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthRegional
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *ConcentratorConfig_FSKChannel) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowRegional
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: FSKChannel: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: FSKChannel: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Frequency", wireType)
-			}
-			m.Frequency = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowRegional
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.Frequency |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 2:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Radio", wireType)
-			}
-			m.Radio = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowRegional
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.Radio |= uint32(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		default:
-			iNdEx = preIndex
-			skippy, err := skipRegional(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthRegional
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthRegional
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *ConcentratorConfig_LBTConfiguration) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowRegional
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: LBTConfiguration: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: LBTConfiguration: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 5 {
-				return fmt.Errorf("proto: wrong wireType = %d for field RSSITarget", wireType)
-			}
-			var v uint32
-			if (iNdEx + 4) > l {
-				return io.ErrUnexpectedEOF
-			}
-			v = encoding_binary.LittleEndian.Uint32(dAtA[iNdEx:])
-			iNdEx += 4
-			m.RSSITarget = float32(math.Float32frombits(v))
-		case 2:
-			if wireType != 5 {
-				return fmt.Errorf("proto: wrong wireType = %d for field RSSIOffset", wireType)
-			}
-			var v uint32
-			if (iNdEx + 4) > l {
-				return io.ErrUnexpectedEOF
-			}
-			v = encoding_binary.LittleEndian.Uint32(dAtA[iNdEx:])
-			iNdEx += 4
-			m.RSSIOffset = float32(math.Float32frombits(v))
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ScanTime", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowRegional
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthRegional
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthRegional
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := github_com_gogo_protobuf_types.StdDurationUnmarshal(&m.ScanTime, dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipRegional(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthRegional
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthRegional
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func skipRegional(dAtA []byte) (n int, err error) {
-	l := len(dAtA)
-	iNdEx := 0
-	depth := 0
-	for iNdEx < l {
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return 0, ErrIntOverflowRegional
-			}
-			if iNdEx >= l {
-				return 0, io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		wireType := int(wire & 0x7)
-		switch wireType {
-		case 0:
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return 0, ErrIntOverflowRegional
-				}
-				if iNdEx >= l {
-					return 0, io.ErrUnexpectedEOF
-				}
-				iNdEx++
-				if dAtA[iNdEx-1] < 0x80 {
-					break
-				}
-			}
-		case 1:
-			iNdEx += 8
-		case 2:
-			var length int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return 0, ErrIntOverflowRegional
-				}
-				if iNdEx >= l {
-					return 0, io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				length |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if length < 0 {
-				return 0, ErrInvalidLengthRegional
-			}
-			iNdEx += length
-		case 3:
-			depth++
-		case 4:
-			if depth == 0 {
-				return 0, ErrUnexpectedEndOfGroupRegional
-			}
-			depth--
-		case 5:
-			iNdEx += 4
-		default:
-			return 0, fmt.Errorf("proto: illegal wireType %d", wireType)
-		}
-		if iNdEx < 0 {
-			return 0, ErrInvalidLengthRegional
-		}
-		if depth == 0 {
-			return iNdEx, nil
-		}
-	}
-	return 0, io.ErrUnexpectedEOF
-}
-
-var (
-	ErrInvalidLengthRegional        = fmt.Errorf("proto: negative length found during unmarshaling")
-	ErrIntOverflowRegional          = fmt.Errorf("proto: integer overflow")
-	ErrUnexpectedEndOfGroupRegional = fmt.Errorf("proto: unexpected end of group")
-)

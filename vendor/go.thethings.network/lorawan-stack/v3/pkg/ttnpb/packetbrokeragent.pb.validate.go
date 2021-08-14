@@ -35,6 +35,414 @@ var (
 // define the regex for a UUID once up-front
 var _packetbrokeragent_uuidPattern = regexp.MustCompile("^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$")
 
+// ValidateFields checks the field values on PacketBrokerGateway with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *PacketBrokerGateway) ValidateFields(paths ...string) error {
+	if m == nil {
+		return nil
+	}
+
+	if len(paths) == 0 {
+		paths = PacketBrokerGatewayFieldPathsNested
+	}
+
+	for name, subs := range _processPaths(append(paths[:0:0], paths...)) {
+		_ = subs
+		switch name {
+		case "ids":
+
+			if m.GetIds() == nil {
+				return PacketBrokerGatewayValidationError{
+					field:  "ids",
+					reason: "value is required",
+				}
+			}
+
+			if v, ok := interface{}(m.GetIds()).(interface{ ValidateFields(...string) error }); ok {
+				if err := v.ValidateFields(subs...); err != nil {
+					return PacketBrokerGatewayValidationError{
+						field:  "ids",
+						reason: "embedded message failed validation",
+						cause:  err,
+					}
+				}
+			}
+
+		case "contact_info":
+
+			if len(m.GetContactInfo()) > 10 {
+				return PacketBrokerGatewayValidationError{
+					field:  "contact_info",
+					reason: "value must contain no more than 10 item(s)",
+				}
+			}
+
+			for idx, item := range m.GetContactInfo() {
+				_, _ = idx, item
+
+				if v, ok := interface{}(item).(interface{ ValidateFields(...string) error }); ok {
+					if err := v.ValidateFields(subs...); err != nil {
+						return PacketBrokerGatewayValidationError{
+							field:  fmt.Sprintf("contact_info[%v]", idx),
+							reason: "embedded message failed validation",
+							cause:  err,
+						}
+					}
+				}
+
+			}
+
+		case "antennas":
+
+			if len(m.GetAntennas()) > 8 {
+				return PacketBrokerGatewayValidationError{
+					field:  "antennas",
+					reason: "value must contain no more than 8 item(s)",
+				}
+			}
+
+			for idx, item := range m.GetAntennas() {
+				_, _ = idx, item
+
+				if v, ok := interface{}(item).(interface{ ValidateFields(...string) error }); ok {
+					if err := v.ValidateFields(subs...); err != nil {
+						return PacketBrokerGatewayValidationError{
+							field:  fmt.Sprintf("antennas[%v]", idx),
+							reason: "embedded message failed validation",
+							cause:  err,
+						}
+					}
+				}
+
+			}
+
+		case "status_public":
+			// no validation rules for StatusPublic
+		case "location_public":
+			// no validation rules for LocationPublic
+		case "frequency_plan_ids":
+
+			if len(m.GetFrequencyPlanIds()) > 8 {
+				return PacketBrokerGatewayValidationError{
+					field:  "frequency_plan_ids",
+					reason: "value must contain no more than 8 item(s)",
+				}
+			}
+
+			for idx, item := range m.GetFrequencyPlanIds() {
+				_, _ = idx, item
+
+				if utf8.RuneCountInString(item) > 64 {
+					return PacketBrokerGatewayValidationError{
+						field:  fmt.Sprintf("frequency_plan_ids[%v]", idx),
+						reason: "value length must be at most 64 runes",
+					}
+				}
+
+			}
+
+		case "update_location_from_status":
+			// no validation rules for UpdateLocationFromStatus
+		case "online":
+			// no validation rules for Online
+		case "rx_rate":
+
+			if v, ok := interface{}(m.GetRxRate()).(interface{ ValidateFields(...string) error }); ok {
+				if err := v.ValidateFields(subs...); err != nil {
+					return PacketBrokerGatewayValidationError{
+						field:  "rx_rate",
+						reason: "embedded message failed validation",
+						cause:  err,
+					}
+				}
+			}
+
+		case "tx_rate":
+
+			if v, ok := interface{}(m.GetTxRate()).(interface{ ValidateFields(...string) error }); ok {
+				if err := v.ValidateFields(subs...); err != nil {
+					return PacketBrokerGatewayValidationError{
+						field:  "tx_rate",
+						reason: "embedded message failed validation",
+						cause:  err,
+					}
+				}
+			}
+
+		default:
+			return PacketBrokerGatewayValidationError{
+				field:  name,
+				reason: "invalid field path",
+			}
+		}
+	}
+	return nil
+}
+
+// PacketBrokerGatewayValidationError is the validation error returned by
+// PacketBrokerGateway.ValidateFields if the designated constraints aren't met.
+type PacketBrokerGatewayValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e PacketBrokerGatewayValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e PacketBrokerGatewayValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e PacketBrokerGatewayValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e PacketBrokerGatewayValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e PacketBrokerGatewayValidationError) ErrorName() string {
+	return "PacketBrokerGatewayValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e PacketBrokerGatewayValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sPacketBrokerGateway.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = PacketBrokerGatewayValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = PacketBrokerGatewayValidationError{}
+
+// ValidateFields checks the field values on UpdatePacketBrokerGatewayRequest
+// with the rules defined in the proto definition for this message. If any
+// rules are violated, an error is returned.
+func (m *UpdatePacketBrokerGatewayRequest) ValidateFields(paths ...string) error {
+	if m == nil {
+		return nil
+	}
+
+	if len(paths) == 0 {
+		paths = UpdatePacketBrokerGatewayRequestFieldPathsNested
+	}
+
+	for name, subs := range _processPaths(append(paths[:0:0], paths...)) {
+		_ = subs
+		switch name {
+		case "gateway":
+
+			if m.GetGateway() == nil {
+				return UpdatePacketBrokerGatewayRequestValidationError{
+					field:  "gateway",
+					reason: "value is required",
+				}
+			}
+
+			if v, ok := interface{}(m.GetGateway()).(interface{ ValidateFields(...string) error }); ok {
+				if err := v.ValidateFields(subs...); err != nil {
+					return UpdatePacketBrokerGatewayRequestValidationError{
+						field:  "gateway",
+						reason: "embedded message failed validation",
+						cause:  err,
+					}
+				}
+			}
+
+		case "field_mask":
+
+			if v, ok := interface{}(m.GetFieldMask()).(interface{ ValidateFields(...string) error }); ok {
+				if err := v.ValidateFields(subs...); err != nil {
+					return UpdatePacketBrokerGatewayRequestValidationError{
+						field:  "field_mask",
+						reason: "embedded message failed validation",
+						cause:  err,
+					}
+				}
+			}
+
+		default:
+			return UpdatePacketBrokerGatewayRequestValidationError{
+				field:  name,
+				reason: "invalid field path",
+			}
+		}
+	}
+	return nil
+}
+
+// UpdatePacketBrokerGatewayRequestValidationError is the validation error
+// returned by UpdatePacketBrokerGatewayRequest.ValidateFields if the
+// designated constraints aren't met.
+type UpdatePacketBrokerGatewayRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e UpdatePacketBrokerGatewayRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e UpdatePacketBrokerGatewayRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e UpdatePacketBrokerGatewayRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e UpdatePacketBrokerGatewayRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e UpdatePacketBrokerGatewayRequestValidationError) ErrorName() string {
+	return "UpdatePacketBrokerGatewayRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e UpdatePacketBrokerGatewayRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sUpdatePacketBrokerGatewayRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = UpdatePacketBrokerGatewayRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = UpdatePacketBrokerGatewayRequestValidationError{}
+
+// ValidateFields checks the field values on UpdatePacketBrokerGatewayResponse
+// with the rules defined in the proto definition for this message. If any
+// rules are violated, an error is returned.
+func (m *UpdatePacketBrokerGatewayResponse) ValidateFields(paths ...string) error {
+	if m == nil {
+		return nil
+	}
+
+	if len(paths) == 0 {
+		paths = UpdatePacketBrokerGatewayResponseFieldPathsNested
+	}
+
+	for name, subs := range _processPaths(append(paths[:0:0], paths...)) {
+		_ = subs
+		switch name {
+		case "online_ttl":
+
+			if v, ok := interface{}(m.GetOnlineTtl()).(interface{ ValidateFields(...string) error }); ok {
+				if err := v.ValidateFields(subs...); err != nil {
+					return UpdatePacketBrokerGatewayResponseValidationError{
+						field:  "online_ttl",
+						reason: "embedded message failed validation",
+						cause:  err,
+					}
+				}
+			}
+
+		default:
+			return UpdatePacketBrokerGatewayResponseValidationError{
+				field:  name,
+				reason: "invalid field path",
+			}
+		}
+	}
+	return nil
+}
+
+// UpdatePacketBrokerGatewayResponseValidationError is the validation error
+// returned by UpdatePacketBrokerGatewayResponse.ValidateFields if the
+// designated constraints aren't met.
+type UpdatePacketBrokerGatewayResponseValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e UpdatePacketBrokerGatewayResponseValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e UpdatePacketBrokerGatewayResponseValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e UpdatePacketBrokerGatewayResponseValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e UpdatePacketBrokerGatewayResponseValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e UpdatePacketBrokerGatewayResponseValidationError) ErrorName() string {
+	return "UpdatePacketBrokerGatewayResponseValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e UpdatePacketBrokerGatewayResponseValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sUpdatePacketBrokerGatewayResponse.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = UpdatePacketBrokerGatewayResponseValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = UpdatePacketBrokerGatewayResponseValidationError{}
+
 // ValidateFields checks the field values on PacketBrokerNetworkIdentifier with
 // the rules defined in the proto definition for this message. If any rules
 // are violated, an error is returned.
@@ -51,17 +459,17 @@ func (m *PacketBrokerNetworkIdentifier) ValidateFields(paths ...string) error {
 		_ = subs
 		switch name {
 		case "net_id":
-			// no validation rules for NetID
+			// no validation rules for NetId
 		case "tenant_id":
 
-			if utf8.RuneCountInString(m.GetTenantID()) > 36 {
+			if utf8.RuneCountInString(m.GetTenantId()) > 36 {
 				return PacketBrokerNetworkIdentifierValidationError{
 					field:  "tenant_id",
 					reason: "value length must be at most 36 runes",
 				}
 			}
 
-			if !_PacketBrokerNetworkIdentifier_TenantID_Pattern.MatchString(m.GetTenantID()) {
+			if !_PacketBrokerNetworkIdentifier_TenantId_Pattern.MatchString(m.GetTenantId()) {
 				return PacketBrokerNetworkIdentifierValidationError{
 					field:  "tenant_id",
 					reason: "value does not match regex pattern \"^[a-z0-9](?:[-]?[a-z0-9]){2,}$|^$\"",
@@ -135,7 +543,7 @@ var _ interface {
 	ErrorName() string
 } = PacketBrokerNetworkIdentifierValidationError{}
 
-var _PacketBrokerNetworkIdentifier_TenantID_Pattern = regexp.MustCompile("^[a-z0-9](?:[-]?[a-z0-9]){2,}$|^$")
+var _PacketBrokerNetworkIdentifier_TenantId_Pattern = regexp.MustCompile("^[a-z0-9](?:[-]?[a-z0-9]){2,}$|^$")
 
 // ValidateFields checks the field values on PacketBrokerDevAddrBlock with the
 // rules defined in the proto definition for this message. If any rules are
@@ -165,7 +573,7 @@ func (m *PacketBrokerDevAddrBlock) ValidateFields(paths ...string) error {
 			}
 
 		case "home_network_cluster_id":
-			// no validation rules for HomeNetworkClusterID
+			// no validation rules for HomeNetworkClusterId
 		default:
 			return PacketBrokerDevAddrBlockValidationError{
 				field:  name,
@@ -1441,16 +1849,16 @@ var _ interface {
 	ErrorName() string
 } = SetPacketBrokerRoutingPolicyRequestValidationError{}
 
-// ValidateFields checks the field values on ListHomeNetworksRequest with the
-// rules defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
-func (m *ListHomeNetworksRequest) ValidateFields(paths ...string) error {
+// ValidateFields checks the field values on ListPacketBrokerNetworksRequest
+// with the rules defined in the proto definition for this message. If any
+// rules are violated, an error is returned.
+func (m *ListPacketBrokerNetworksRequest) ValidateFields(paths ...string) error {
 	if m == nil {
 		return nil
 	}
 
 	if len(paths) == 0 {
-		paths = ListHomeNetworksRequestFieldPathsNested
+		paths = ListPacketBrokerNetworksRequestFieldPathsNested
 	}
 
 	for name, subs := range _processPaths(append(paths[:0:0], paths...)) {
@@ -1459,7 +1867,7 @@ func (m *ListHomeNetworksRequest) ValidateFields(paths ...string) error {
 		case "limit":
 
 			if m.GetLimit() > 1000 {
-				return ListHomeNetworksRequestValidationError{
+				return ListPacketBrokerNetworksRequestValidationError{
 					field:  "limit",
 					reason: "value must be less than or equal to 1000",
 				}
@@ -1467,8 +1875,28 @@ func (m *ListHomeNetworksRequest) ValidateFields(paths ...string) error {
 
 		case "page":
 			// no validation rules for Page
+		case "with_routing_policy":
+			// no validation rules for WithRoutingPolicy
+		case "tenant_id_contains":
+
+			if utf8.RuneCountInString(m.GetTenantIdContains()) > 100 {
+				return ListPacketBrokerNetworksRequestValidationError{
+					field:  "tenant_id_contains",
+					reason: "value length must be at most 100 runes",
+				}
+			}
+
+		case "name_contains":
+
+			if utf8.RuneCountInString(m.GetNameContains()) > 100 {
+				return ListPacketBrokerNetworksRequestValidationError{
+					field:  "name_contains",
+					reason: "value length must be at most 100 runes",
+				}
+			}
+
 		default:
-			return ListHomeNetworksRequestValidationError{
+			return ListPacketBrokerNetworksRequestValidationError{
 				field:  name,
 				reason: "invalid field path",
 			}
@@ -1477,9 +1905,10 @@ func (m *ListHomeNetworksRequest) ValidateFields(paths ...string) error {
 	return nil
 }
 
-// ListHomeNetworksRequestValidationError is the validation error returned by
-// ListHomeNetworksRequest.ValidateFields if the designated constraints aren't met.
-type ListHomeNetworksRequestValidationError struct {
+// ListPacketBrokerNetworksRequestValidationError is the validation error
+// returned by ListPacketBrokerNetworksRequest.ValidateFields if the
+// designated constraints aren't met.
+type ListPacketBrokerNetworksRequestValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -1487,24 +1916,24 @@ type ListHomeNetworksRequestValidationError struct {
 }
 
 // Field function returns field value.
-func (e ListHomeNetworksRequestValidationError) Field() string { return e.field }
+func (e ListPacketBrokerNetworksRequestValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e ListHomeNetworksRequestValidationError) Reason() string { return e.reason }
+func (e ListPacketBrokerNetworksRequestValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e ListHomeNetworksRequestValidationError) Cause() error { return e.cause }
+func (e ListPacketBrokerNetworksRequestValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e ListHomeNetworksRequestValidationError) Key() bool { return e.key }
+func (e ListPacketBrokerNetworksRequestValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e ListHomeNetworksRequestValidationError) ErrorName() string {
-	return "ListHomeNetworksRequestValidationError"
+func (e ListPacketBrokerNetworksRequestValidationError) ErrorName() string {
+	return "ListPacketBrokerNetworksRequestValidationError"
 }
 
 // Error satisfies the builtin error interface
-func (e ListHomeNetworksRequestValidationError) Error() string {
+func (e ListPacketBrokerNetworksRequestValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -1516,14 +1945,14 @@ func (e ListHomeNetworksRequestValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sListHomeNetworksRequest.%s: %s%s",
+		"invalid %sListPacketBrokerNetworksRequest.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = ListHomeNetworksRequestValidationError{}
+var _ error = ListPacketBrokerNetworksRequestValidationError{}
 
 var _ interface {
 	Field() string
@@ -1531,7 +1960,118 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = ListHomeNetworksRequestValidationError{}
+} = ListPacketBrokerNetworksRequestValidationError{}
+
+// ValidateFields checks the field values on
+// ListPacketBrokerHomeNetworksRequest with the rules defined in the proto
+// definition for this message. If any rules are violated, an error is returned.
+func (m *ListPacketBrokerHomeNetworksRequest) ValidateFields(paths ...string) error {
+	if m == nil {
+		return nil
+	}
+
+	if len(paths) == 0 {
+		paths = ListPacketBrokerHomeNetworksRequestFieldPathsNested
+	}
+
+	for name, subs := range _processPaths(append(paths[:0:0], paths...)) {
+		_ = subs
+		switch name {
+		case "limit":
+
+			if m.GetLimit() > 1000 {
+				return ListPacketBrokerHomeNetworksRequestValidationError{
+					field:  "limit",
+					reason: "value must be less than or equal to 1000",
+				}
+			}
+
+		case "page":
+			// no validation rules for Page
+		case "tenant_id_contains":
+
+			if utf8.RuneCountInString(m.GetTenantIdContains()) > 100 {
+				return ListPacketBrokerHomeNetworksRequestValidationError{
+					field:  "tenant_id_contains",
+					reason: "value length must be at most 100 runes",
+				}
+			}
+
+		case "name_contains":
+
+			if utf8.RuneCountInString(m.GetNameContains()) > 100 {
+				return ListPacketBrokerHomeNetworksRequestValidationError{
+					field:  "name_contains",
+					reason: "value length must be at most 100 runes",
+				}
+			}
+
+		default:
+			return ListPacketBrokerHomeNetworksRequestValidationError{
+				field:  name,
+				reason: "invalid field path",
+			}
+		}
+	}
+	return nil
+}
+
+// ListPacketBrokerHomeNetworksRequestValidationError is the validation error
+// returned by ListPacketBrokerHomeNetworksRequest.ValidateFields if the
+// designated constraints aren't met.
+type ListPacketBrokerHomeNetworksRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ListPacketBrokerHomeNetworksRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ListPacketBrokerHomeNetworksRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ListPacketBrokerHomeNetworksRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ListPacketBrokerHomeNetworksRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ListPacketBrokerHomeNetworksRequestValidationError) ErrorName() string {
+	return "ListPacketBrokerHomeNetworksRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e ListPacketBrokerHomeNetworksRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sListPacketBrokerHomeNetworksRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ListPacketBrokerHomeNetworksRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ListPacketBrokerHomeNetworksRequestValidationError{}
 
 // ValidateFields checks the field values on
 // ListForwarderRoutingPoliciesRequest with the rules defined in the proto
@@ -1630,3 +2170,105 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = ListForwarderRoutingPoliciesRequestValidationError{}
+
+// ValidateFields checks the field values on
+// PacketBrokerGateway_GatewayIdentifiers with the rules defined in the proto
+// definition for this message. If any rules are violated, an error is returned.
+func (m *PacketBrokerGateway_GatewayIdentifiers) ValidateFields(paths ...string) error {
+	if m == nil {
+		return nil
+	}
+
+	if len(paths) == 0 {
+		paths = PacketBrokerGateway_GatewayIdentifiersFieldPathsNested
+	}
+
+	for name, subs := range _processPaths(append(paths[:0:0], paths...)) {
+		_ = subs
+		switch name {
+		case "gateway_id":
+
+			if utf8.RuneCountInString(m.GetGatewayId()) > 36 {
+				return PacketBrokerGateway_GatewayIdentifiersValidationError{
+					field:  "gateway_id",
+					reason: "value length must be at most 36 runes",
+				}
+			}
+
+			if !_PacketBrokerGateway_GatewayIdentifiers_GatewayId_Pattern.MatchString(m.GetGatewayId()) {
+				return PacketBrokerGateway_GatewayIdentifiersValidationError{
+					field:  "gateway_id",
+					reason: "value does not match regex pattern \"^[a-z0-9](?:[_-]?[a-z0-9]){2,}$\"",
+				}
+			}
+
+		case "eui":
+			// no validation rules for Eui
+		default:
+			return PacketBrokerGateway_GatewayIdentifiersValidationError{
+				field:  name,
+				reason: "invalid field path",
+			}
+		}
+	}
+	return nil
+}
+
+// PacketBrokerGateway_GatewayIdentifiersValidationError is the validation
+// error returned by PacketBrokerGateway_GatewayIdentifiers.ValidateFields if
+// the designated constraints aren't met.
+type PacketBrokerGateway_GatewayIdentifiersValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e PacketBrokerGateway_GatewayIdentifiersValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e PacketBrokerGateway_GatewayIdentifiersValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e PacketBrokerGateway_GatewayIdentifiersValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e PacketBrokerGateway_GatewayIdentifiersValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e PacketBrokerGateway_GatewayIdentifiersValidationError) ErrorName() string {
+	return "PacketBrokerGateway_GatewayIdentifiersValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e PacketBrokerGateway_GatewayIdentifiersValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sPacketBrokerGateway_GatewayIdentifiers.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = PacketBrokerGateway_GatewayIdentifiersValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = PacketBrokerGateway_GatewayIdentifiersValidationError{}
+
+var _PacketBrokerGateway_GatewayIdentifiers_GatewayId_Pattern = regexp.MustCompile("^[a-z0-9](?:[_-]?[a-z0-9]){2,}$")

@@ -52,14 +52,14 @@ func (m *EndDeviceBrand) ValidateFields(paths ...string) error {
 		switch name {
 		case "brand_id":
 
-			if utf8.RuneCountInString(m.GetBrandID()) > 36 {
+			if utf8.RuneCountInString(m.GetBrandId()) > 36 {
 				return EndDeviceBrandValidationError{
 					field:  "brand_id",
 					reason: "value length must be at most 36 runes",
 				}
 			}
 
-			if !_EndDeviceBrand_BrandID_Pattern.MatchString(m.GetBrandID()) {
+			if !_EndDeviceBrand_BrandId_Pattern.MatchString(m.GetBrandId()) {
 				return EndDeviceBrandValidationError{
 					field:  "brand_id",
 					reason: "value does not match regex pattern \"^[a-z0-9](?:[-]?[a-z0-9]){2,}$\"",
@@ -73,7 +73,7 @@ func (m *EndDeviceBrand) ValidateFields(paths ...string) error {
 		case "organization_unique_identifiers":
 
 		case "lora_alliance_vendor_id":
-			// no validation rules for LoRaAllianceVendorID
+			// no validation rules for LoraAllianceVendorId
 		case "website":
 			// no validation rules for Website
 		case "email":
@@ -144,7 +144,7 @@ var _ interface {
 	ErrorName() string
 } = EndDeviceBrandValidationError{}
 
-var _EndDeviceBrand_BrandID_Pattern = regexp.MustCompile("^[a-z0-9](?:[-]?[a-z0-9]){2,}$")
+var _EndDeviceBrand_BrandId_Pattern = regexp.MustCompile("^[a-z0-9](?:[-]?[a-z0-9]){2,}$")
 
 // ValidateFields checks the field values on EndDeviceModel with the rules
 // defined in the proto definition for this message. If any rules are
@@ -163,14 +163,14 @@ func (m *EndDeviceModel) ValidateFields(paths ...string) error {
 		switch name {
 		case "brand_id":
 
-			if utf8.RuneCountInString(m.GetBrandID()) > 36 {
+			if utf8.RuneCountInString(m.GetBrandId()) > 36 {
 				return EndDeviceModelValidationError{
 					field:  "brand_id",
 					reason: "value length must be at most 36 runes",
 				}
 			}
 
-			if !_EndDeviceModel_BrandID_Pattern.MatchString(m.GetBrandID()) {
+			if !_EndDeviceModel_BrandId_Pattern.MatchString(m.GetBrandId()) {
 				return EndDeviceModelValidationError{
 					field:  "brand_id",
 					reason: "value does not match regex pattern \"^[a-z0-9](?:[-]?[a-z0-9]){2,}$\"",
@@ -179,14 +179,14 @@ func (m *EndDeviceModel) ValidateFields(paths ...string) error {
 
 		case "model_id":
 
-			if utf8.RuneCountInString(m.GetModelID()) > 36 {
+			if utf8.RuneCountInString(m.GetModelId()) > 36 {
 				return EndDeviceModelValidationError{
 					field:  "model_id",
 					reason: "value length must be at most 36 runes",
 				}
 			}
 
-			if !_EndDeviceModel_ModelID_Pattern.MatchString(m.GetModelID()) {
+			if !_EndDeviceModel_ModelId_Pattern.MatchString(m.GetModelId()) {
 				return EndDeviceModelValidationError{
 					field:  "model_id",
 					reason: "value does not match regex pattern \"^[a-z0-9](?:[-]?[a-z0-9]){2,}$\"",
@@ -296,7 +296,7 @@ func (m *EndDeviceModel) ValidateFields(paths ...string) error {
 			}
 
 		case "ip_code":
-			// no validation rules for IPCode
+			// no validation rules for IpCode
 		case "key_provisioning":
 
 		case "key_security":
@@ -326,9 +326,9 @@ func (m *EndDeviceModel) ValidateFields(paths ...string) error {
 			}
 
 		case "product_url":
-			// no validation rules for ProductURL
+			// no validation rules for ProductUrl
 		case "datasheet_url":
-			// no validation rules for DatasheetURL
+			// no validation rules for DatasheetUrl
 		case "resellers":
 
 			for idx, item := range m.GetResellers() {
@@ -424,9 +424,9 @@ var _ interface {
 	ErrorName() string
 } = EndDeviceModelValidationError{}
 
-var _EndDeviceModel_BrandID_Pattern = regexp.MustCompile("^[a-z0-9](?:[-]?[a-z0-9]){2,}$")
+var _EndDeviceModel_BrandId_Pattern = regexp.MustCompile("^[a-z0-9](?:[-]?[a-z0-9]){2,}$")
 
-var _EndDeviceModel_ModelID_Pattern = regexp.MustCompile("^[a-z0-9](?:[-]?[a-z0-9]){2,}$")
+var _EndDeviceModel_ModelId_Pattern = regexp.MustCompile("^[a-z0-9](?:[-]?[a-z0-9]){2,}$")
 
 // ValidateFields checks the field values on GetEndDeviceBrandRequest with the
 // rules defined in the proto definition for this message. If any rules are
@@ -445,7 +445,7 @@ func (m *GetEndDeviceBrandRequest) ValidateFields(paths ...string) error {
 		switch name {
 		case "application_ids":
 
-			if v, ok := interface{}(&m.ApplicationIDs).(interface{ ValidateFields(...string) error }); ok {
+			if v, ok := interface{}(&m.ApplicationIds).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return GetEndDeviceBrandRequestValidationError{
 						field:  "application_ids",
@@ -457,14 +457,14 @@ func (m *GetEndDeviceBrandRequest) ValidateFields(paths ...string) error {
 
 		case "brand_id":
 
-			if utf8.RuneCountInString(m.GetBrandID()) > 36 {
+			if utf8.RuneCountInString(m.GetBrandId()) > 36 {
 				return GetEndDeviceBrandRequestValidationError{
 					field:  "brand_id",
 					reason: "value length must be at most 36 runes",
 				}
 			}
 
-			if !_GetEndDeviceBrandRequest_BrandID_Pattern.MatchString(m.GetBrandID()) {
+			if !_GetEndDeviceBrandRequest_BrandId_Pattern.MatchString(m.GetBrandId()) {
 				return GetEndDeviceBrandRequestValidationError{
 					field:  "brand_id",
 					reason: "value does not match regex pattern \"^[a-z0-9](?:[-]?[a-z0-9]){2,}$\"",
@@ -473,7 +473,7 @@ func (m *GetEndDeviceBrandRequest) ValidateFields(paths ...string) error {
 
 		case "field_mask":
 
-			if v, ok := interface{}(&m.FieldMask).(interface{ ValidateFields(...string) error }); ok {
+			if v, ok := interface{}(m.GetFieldMask()).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return GetEndDeviceBrandRequestValidationError{
 						field:  "field_mask",
@@ -550,7 +550,7 @@ var _ interface {
 	ErrorName() string
 } = GetEndDeviceBrandRequestValidationError{}
 
-var _GetEndDeviceBrandRequest_BrandID_Pattern = regexp.MustCompile("^[a-z0-9](?:[-]?[a-z0-9]){2,}$")
+var _GetEndDeviceBrandRequest_BrandId_Pattern = regexp.MustCompile("^[a-z0-9](?:[-]?[a-z0-9]){2,}$")
 
 // ValidateFields checks the field values on ListEndDeviceBrandsRequest with
 // the rules defined in the proto definition for this message. If any rules
@@ -569,7 +569,7 @@ func (m *ListEndDeviceBrandsRequest) ValidateFields(paths ...string) error {
 		switch name {
 		case "application_ids":
 
-			if v, ok := interface{}(&m.ApplicationIDs).(interface{ ValidateFields(...string) error }); ok {
+			if v, ok := interface{}(&m.ApplicationIds).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return ListEndDeviceBrandsRequestValidationError{
 						field:  "application_ids",
@@ -610,7 +610,7 @@ func (m *ListEndDeviceBrandsRequest) ValidateFields(paths ...string) error {
 
 		case "field_mask":
 
-			if v, ok := interface{}(&m.FieldMask).(interface{ ValidateFields(...string) error }); ok {
+			if v, ok := interface{}(m.GetFieldMask()).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return ListEndDeviceBrandsRequestValidationError{
 						field:  "field_mask",
@@ -712,7 +712,7 @@ func (m *GetEndDeviceModelRequest) ValidateFields(paths ...string) error {
 		switch name {
 		case "application_ids":
 
-			if v, ok := interface{}(&m.ApplicationIDs).(interface{ ValidateFields(...string) error }); ok {
+			if v, ok := interface{}(&m.ApplicationIds).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return GetEndDeviceModelRequestValidationError{
 						field:  "application_ids",
@@ -724,14 +724,14 @@ func (m *GetEndDeviceModelRequest) ValidateFields(paths ...string) error {
 
 		case "brand_id":
 
-			if utf8.RuneCountInString(m.GetBrandID()) > 36 {
+			if utf8.RuneCountInString(m.GetBrandId()) > 36 {
 				return GetEndDeviceModelRequestValidationError{
 					field:  "brand_id",
 					reason: "value length must be at most 36 runes",
 				}
 			}
 
-			if !_GetEndDeviceModelRequest_BrandID_Pattern.MatchString(m.GetBrandID()) {
+			if !_GetEndDeviceModelRequest_BrandId_Pattern.MatchString(m.GetBrandId()) {
 				return GetEndDeviceModelRequestValidationError{
 					field:  "brand_id",
 					reason: "value does not match regex pattern \"^[a-z0-9](?:[-]?[a-z0-9]){2,}$\"",
@@ -740,14 +740,14 @@ func (m *GetEndDeviceModelRequest) ValidateFields(paths ...string) error {
 
 		case "model_id":
 
-			if utf8.RuneCountInString(m.GetModelID()) > 36 {
+			if utf8.RuneCountInString(m.GetModelId()) > 36 {
 				return GetEndDeviceModelRequestValidationError{
 					field:  "model_id",
 					reason: "value length must be at most 36 runes",
 				}
 			}
 
-			if !_GetEndDeviceModelRequest_ModelID_Pattern.MatchString(m.GetModelID()) {
+			if !_GetEndDeviceModelRequest_ModelId_Pattern.MatchString(m.GetModelId()) {
 				return GetEndDeviceModelRequestValidationError{
 					field:  "model_id",
 					reason: "value does not match regex pattern \"^[a-z0-9](?:[-]?[a-z0-9]){2,}$\"",
@@ -756,7 +756,7 @@ func (m *GetEndDeviceModelRequest) ValidateFields(paths ...string) error {
 
 		case "field_mask":
 
-			if v, ok := interface{}(&m.FieldMask).(interface{ ValidateFields(...string) error }); ok {
+			if v, ok := interface{}(m.GetFieldMask()).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return GetEndDeviceModelRequestValidationError{
 						field:  "field_mask",
@@ -833,9 +833,9 @@ var _ interface {
 	ErrorName() string
 } = GetEndDeviceModelRequestValidationError{}
 
-var _GetEndDeviceModelRequest_BrandID_Pattern = regexp.MustCompile("^[a-z0-9](?:[-]?[a-z0-9]){2,}$")
+var _GetEndDeviceModelRequest_BrandId_Pattern = regexp.MustCompile("^[a-z0-9](?:[-]?[a-z0-9]){2,}$")
 
-var _GetEndDeviceModelRequest_ModelID_Pattern = regexp.MustCompile("^[a-z0-9](?:[-]?[a-z0-9]){2,}$")
+var _GetEndDeviceModelRequest_ModelId_Pattern = regexp.MustCompile("^[a-z0-9](?:[-]?[a-z0-9]){2,}$")
 
 // ValidateFields checks the field values on ListEndDeviceModelsRequest with
 // the rules defined in the proto definition for this message. If any rules
@@ -854,7 +854,7 @@ func (m *ListEndDeviceModelsRequest) ValidateFields(paths ...string) error {
 		switch name {
 		case "application_ids":
 
-			if v, ok := interface{}(&m.ApplicationIDs).(interface{ ValidateFields(...string) error }); ok {
+			if v, ok := interface{}(&m.ApplicationIds).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return ListEndDeviceModelsRequestValidationError{
 						field:  "application_ids",
@@ -866,14 +866,14 @@ func (m *ListEndDeviceModelsRequest) ValidateFields(paths ...string) error {
 
 		case "brand_id":
 
-			if utf8.RuneCountInString(m.GetBrandID()) > 36 {
+			if utf8.RuneCountInString(m.GetBrandId()) > 36 {
 				return ListEndDeviceModelsRequestValidationError{
 					field:  "brand_id",
 					reason: "value length must be at most 36 runes",
 				}
 			}
 
-			if !_ListEndDeviceModelsRequest_BrandID_Pattern.MatchString(m.GetBrandID()) {
+			if !_ListEndDeviceModelsRequest_BrandId_Pattern.MatchString(m.GetBrandId()) {
 				return ListEndDeviceModelsRequestValidationError{
 					field:  "brand_id",
 					reason: "value does not match regex pattern \"^([a-z0-9](?:[-]?[a-z0-9]){2,}|)?$\"",
@@ -911,7 +911,7 @@ func (m *ListEndDeviceModelsRequest) ValidateFields(paths ...string) error {
 
 		case "field_mask":
 
-			if v, ok := interface{}(&m.FieldMask).(interface{ ValidateFields(...string) error }); ok {
+			if v, ok := interface{}(m.GetFieldMask()).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return ListEndDeviceModelsRequestValidationError{
 						field:  "field_mask",
@@ -988,7 +988,7 @@ var _ interface {
 	ErrorName() string
 } = ListEndDeviceModelsRequestValidationError{}
 
-var _ListEndDeviceModelsRequest_BrandID_Pattern = regexp.MustCompile("^([a-z0-9](?:[-]?[a-z0-9]){2,}|)?$")
+var _ListEndDeviceModelsRequest_BrandId_Pattern = regexp.MustCompile("^([a-z0-9](?:[-]?[a-z0-9]){2,}|)?$")
 
 var _ListEndDeviceModelsRequest_OrderBy_InLookup = map[string]struct{}{
 	"":          {},
@@ -1017,7 +1017,7 @@ func (m *GetTemplateRequest) ValidateFields(paths ...string) error {
 		switch name {
 		case "application_ids":
 
-			if v, ok := interface{}(&m.ApplicationIDs).(interface{ ValidateFields(...string) error }); ok {
+			if v, ok := interface{}(&m.ApplicationIds).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return GetTemplateRequestValidationError{
 						field:  "application_ids",
@@ -1029,7 +1029,7 @@ func (m *GetTemplateRequest) ValidateFields(paths ...string) error {
 
 		case "version_ids":
 
-			if v, ok := interface{}(m.GetVersionIDs()).(interface{ ValidateFields(...string) error }); ok {
+			if v, ok := interface{}(m.GetVersionIds()).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return GetTemplateRequestValidationError{
 						field:  "version_ids",
@@ -1122,7 +1122,7 @@ func (m *GetPayloadFormatterRequest) ValidateFields(paths ...string) error {
 		switch name {
 		case "application_ids":
 
-			if v, ok := interface{}(&m.ApplicationIDs).(interface{ ValidateFields(...string) error }); ok {
+			if v, ok := interface{}(&m.ApplicationIds).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return GetPayloadFormatterRequestValidationError{
 						field:  "application_ids",
@@ -1134,7 +1134,7 @@ func (m *GetPayloadFormatterRequest) ValidateFields(paths ...string) error {
 
 		case "version_ids":
 
-			if v, ok := interface{}(m.GetVersionIDs()).(interface{ ValidateFields(...string) error }); ok {
+			if v, ok := interface{}(m.GetVersionIds()).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return GetPayloadFormatterRequestValidationError{
 						field:  "version_ids",
@@ -1146,7 +1146,7 @@ func (m *GetPayloadFormatterRequest) ValidateFields(paths ...string) error {
 
 		case "field_mask":
 
-			if v, ok := interface{}(&m.FieldMask).(interface{ ValidateFields(...string) error }); ok {
+			if v, ok := interface{}(m.GetFieldMask()).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return GetPayloadFormatterRequestValidationError{
 						field:  "field_mask",
@@ -1446,7 +1446,7 @@ func (m *EncodedMessagePayload) ValidateFields(paths ...string) error {
 			}
 
 		case "frm_payload":
-			// no validation rules for FRMPayload
+			// no validation rules for FrmPayload
 		case "warnings":
 
 			for idx, item := range m.GetWarnings() {
@@ -1690,14 +1690,14 @@ func (m *MessagePayloadDecoder) ValidateFields(paths ...string) error {
 			// no validation rules for FormatterParameter
 		case "codec_id":
 
-			if utf8.RuneCountInString(m.GetCodecID()) > 36 {
+			if utf8.RuneCountInString(m.GetCodecId()) > 36 {
 				return MessagePayloadDecoderValidationError{
 					field:  "codec_id",
 					reason: "value length must be at most 36 runes",
 				}
 			}
 
-			if !_MessagePayloadDecoder_CodecID_Pattern.MatchString(m.GetCodecID()) {
+			if !_MessagePayloadDecoder_CodecId_Pattern.MatchString(m.GetCodecId()) {
 				return MessagePayloadDecoderValidationError{
 					field:  "codec_id",
 					reason: "value does not match regex pattern \"^([a-z0-9](?:[-]?[a-z0-9]){2,}|)?$\"",
@@ -1794,7 +1794,7 @@ var _ interface {
 	ErrorName() string
 } = MessagePayloadDecoderValidationError{}
 
-var _MessagePayloadDecoder_CodecID_Pattern = regexp.MustCompile("^([a-z0-9](?:[-]?[a-z0-9]){2,}|)?$")
+var _MessagePayloadDecoder_CodecId_Pattern = regexp.MustCompile("^([a-z0-9](?:[-]?[a-z0-9]){2,}|)?$")
 
 // ValidateFields checks the field values on MessagePayloadEncoder with the
 // rules defined in the proto definition for this message. If any rules are
@@ -1824,14 +1824,14 @@ func (m *MessagePayloadEncoder) ValidateFields(paths ...string) error {
 			// no validation rules for FormatterParameter
 		case "codec_id":
 
-			if utf8.RuneCountInString(m.GetCodecID()) > 36 {
+			if utf8.RuneCountInString(m.GetCodecId()) > 36 {
 				return MessagePayloadEncoderValidationError{
 					field:  "codec_id",
 					reason: "value length must be at most 36 runes",
 				}
 			}
 
-			if !_MessagePayloadEncoder_CodecID_Pattern.MatchString(m.GetCodecID()) {
+			if !_MessagePayloadEncoder_CodecId_Pattern.MatchString(m.GetCodecId()) {
 				return MessagePayloadEncoderValidationError{
 					field:  "codec_id",
 					reason: "value does not match regex pattern \"^([a-z0-9](?:[-]?[a-z0-9]){2,}|)?$\"",
@@ -1928,7 +1928,7 @@ var _ interface {
 	ErrorName() string
 } = MessagePayloadEncoderValidationError{}
 
-var _MessagePayloadEncoder_CodecID_Pattern = regexp.MustCompile("^([a-z0-9](?:[-]?[a-z0-9]){2,}|)?$")
+var _MessagePayloadEncoder_CodecId_Pattern = regexp.MustCompile("^([a-z0-9](?:[-]?[a-z0-9]){2,}|)?$")
 
 // ValidateFields checks the field values on EndDeviceModel_HardwareVersion
 // with the rules defined in the proto definition for this message. If any
@@ -2646,7 +2646,7 @@ func (m *EndDeviceModel_Reseller) ValidateFields(paths ...string) error {
 		case "region":
 
 		case "url":
-			// no validation rules for URL
+			// no validation rules for Url
 		default:
 			return EndDeviceModel_ResellerValidationError{
 				field:  name,
@@ -2844,12 +2844,14 @@ func (m *EndDeviceModel_FirmwareVersion_Profile) ValidateFields(paths ...string)
 	for name, subs := range _processPaths(append(paths[:0:0], paths...)) {
 		_ = subs
 		switch name {
+		case "vendor_id":
+			// no validation rules for VendorId
 		case "profile_id":
-			// no validation rules for ProfileID
+			// no validation rules for ProfileId
 		case "lorawan_certified":
-			// no validation rules for LoRaWANCertified
+			// no validation rules for LorawanCertified
 		case "codec_id":
-			// no validation rules for CodecID
+			// no validation rules for CodecId
 		default:
 			return EndDeviceModel_FirmwareVersion_ProfileValidationError{
 				field:  name,

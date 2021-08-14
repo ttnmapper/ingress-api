@@ -2,11 +2,7 @@
 
 package ttnpb
 
-import (
-	fmt "fmt"
-
-	types "github.com/gogo/protobuf/types"
-)
+import fmt "fmt"
 
 func (dst *SearchApplicationsRequest) SetFields(src *SearchApplicationsRequest, paths ...string) error {
 	for name, subs := range _processPaths(paths) {
@@ -16,10 +12,10 @@ func (dst *SearchApplicationsRequest) SetFields(src *SearchApplicationsRequest, 
 				return fmt.Errorf("'id_contains' has no subfields, but %s were specified", subs)
 			}
 			if src != nil {
-				dst.IDContains = src.IDContains
+				dst.IdContains = src.IdContains
 			} else {
 				var zero string
-				dst.IDContains = zero
+				dst.IdContains = zero
 			}
 		case "name_contains":
 			if len(subs) > 0 {
@@ -57,8 +53,7 @@ func (dst *SearchApplicationsRequest) SetFields(src *SearchApplicationsRequest, 
 			if src != nil {
 				dst.FieldMask = src.FieldMask
 			} else {
-				var zero types.FieldMask
-				dst.FieldMask = zero
+				dst.FieldMask = nil
 			}
 		case "order":
 			if len(subs) > 0 {
@@ -116,10 +111,10 @@ func (dst *SearchClientsRequest) SetFields(src *SearchClientsRequest, paths ...s
 				return fmt.Errorf("'id_contains' has no subfields, but %s were specified", subs)
 			}
 			if src != nil {
-				dst.IDContains = src.IDContains
+				dst.IdContains = src.IdContains
 			} else {
 				var zero string
-				dst.IDContains = zero
+				dst.IdContains = zero
 			}
 		case "name_contains":
 			if len(subs) > 0 {
@@ -166,8 +161,7 @@ func (dst *SearchClientsRequest) SetFields(src *SearchClientsRequest, paths ...s
 			if src != nil {
 				dst.FieldMask = src.FieldMask
 			} else {
-				var zero types.FieldMask
-				dst.FieldMask = zero
+				dst.FieldMask = nil
 			}
 		case "order":
 			if len(subs) > 0 {
@@ -225,10 +219,10 @@ func (dst *SearchGatewaysRequest) SetFields(src *SearchGatewaysRequest, paths ..
 				return fmt.Errorf("'id_contains' has no subfields, but %s were specified", subs)
 			}
 			if src != nil {
-				dst.IDContains = src.IDContains
+				dst.IdContains = src.IdContains
 			} else {
 				var zero string
-				dst.IDContains = zero
+				dst.IdContains = zero
 			}
 		case "name_contains":
 			if len(subs) > 0 {
@@ -264,10 +258,10 @@ func (dst *SearchGatewaysRequest) SetFields(src *SearchGatewaysRequest, paths ..
 				return fmt.Errorf("'eui_contains' has no subfields, but %s were specified", subs)
 			}
 			if src != nil {
-				dst.EUIContains = src.EUIContains
+				dst.EuiContains = src.EuiContains
 			} else {
 				var zero string
-				dst.EUIContains = zero
+				dst.EuiContains = zero
 			}
 		case "field_mask":
 			if len(subs) > 0 {
@@ -276,8 +270,7 @@ func (dst *SearchGatewaysRequest) SetFields(src *SearchGatewaysRequest, paths ..
 			if src != nil {
 				dst.FieldMask = src.FieldMask
 			} else {
-				var zero types.FieldMask
-				dst.FieldMask = zero
+				dst.FieldMask = nil
 			}
 		case "order":
 			if len(subs) > 0 {
@@ -335,10 +328,10 @@ func (dst *SearchOrganizationsRequest) SetFields(src *SearchOrganizationsRequest
 				return fmt.Errorf("'id_contains' has no subfields, but %s were specified", subs)
 			}
 			if src != nil {
-				dst.IDContains = src.IDContains
+				dst.IdContains = src.IdContains
 			} else {
 				var zero string
-				dst.IDContains = zero
+				dst.IdContains = zero
 			}
 		case "name_contains":
 			if len(subs) > 0 {
@@ -376,8 +369,7 @@ func (dst *SearchOrganizationsRequest) SetFields(src *SearchOrganizationsRequest
 			if src != nil {
 				dst.FieldMask = src.FieldMask
 			} else {
-				var zero types.FieldMask
-				dst.FieldMask = zero
+				dst.FieldMask = nil
 			}
 		case "order":
 			if len(subs) > 0 {
@@ -435,10 +427,10 @@ func (dst *SearchUsersRequest) SetFields(src *SearchUsersRequest, paths ...strin
 				return fmt.Errorf("'id_contains' has no subfields, but %s were specified", subs)
 			}
 			if src != nil {
-				dst.IDContains = src.IDContains
+				dst.IdContains = src.IdContains
 			} else {
 				var zero string
-				dst.IDContains = zero
+				dst.IdContains = zero
 			}
 		case "name_contains":
 			if len(subs) > 0 {
@@ -485,8 +477,7 @@ func (dst *SearchUsersRequest) SetFields(src *SearchUsersRequest, paths ...strin
 			if src != nil {
 				dst.FieldMask = src.FieldMask
 			} else {
-				var zero types.FieldMask
-				dst.FieldMask = zero
+				dst.FieldMask = nil
 			}
 		case "order":
 			if len(subs) > 0 {
@@ -562,10 +553,10 @@ func (dst *SearchEndDevicesRequest) SetFields(src *SearchEndDevicesRequest, path
 				return fmt.Errorf("'id_contains' has no subfields, but %s were specified", subs)
 			}
 			if src != nil {
-				dst.IDContains = src.IDContains
+				dst.IdContains = src.IdContains
 			} else {
 				var zero string
-				dst.IDContains = zero
+				dst.IdContains = zero
 			}
 		case "name_contains":
 			if len(subs) > 0 {
@@ -601,20 +592,20 @@ func (dst *SearchEndDevicesRequest) SetFields(src *SearchEndDevicesRequest, path
 				return fmt.Errorf("'dev_eui_contains' has no subfields, but %s were specified", subs)
 			}
 			if src != nil {
-				dst.DevEUIContains = src.DevEUIContains
+				dst.DevEuiContains = src.DevEuiContains
 			} else {
 				var zero string
-				dst.DevEUIContains = zero
+				dst.DevEuiContains = zero
 			}
 		case "join_eui_contains":
 			if len(subs) > 0 {
 				return fmt.Errorf("'join_eui_contains' has no subfields, but %s were specified", subs)
 			}
 			if src != nil {
-				dst.JoinEUIContains = src.JoinEUIContains
+				dst.JoinEuiContains = src.JoinEuiContains
 			} else {
 				var zero string
-				dst.JoinEUIContains = zero
+				dst.JoinEuiContains = zero
 			}
 		case "dev_addr_contains":
 			if len(subs) > 0 {
@@ -633,8 +624,7 @@ func (dst *SearchEndDevicesRequest) SetFields(src *SearchEndDevicesRequest, path
 			if src != nil {
 				dst.FieldMask = src.FieldMask
 			} else {
-				var zero types.FieldMask
-				dst.FieldMask = zero
+				dst.FieldMask = nil
 			}
 		case "order":
 			if len(subs) > 0 {

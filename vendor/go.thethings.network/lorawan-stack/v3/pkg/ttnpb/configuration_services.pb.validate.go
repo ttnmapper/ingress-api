@@ -135,9 +135,9 @@ func (m *FrequencyPlanDescription) ValidateFields(paths ...string) error {
 		_ = subs
 		switch name {
 		case "id":
-			// no validation rules for ID
+			// no validation rules for Id
 		case "base_id":
-			// no validation rules for BaseID
+			// no validation rules for BaseId
 		case "name":
 			// no validation rules for Name
 		case "base_frequency":

@@ -6,23 +6,18 @@ package ttnpb
 import (
 	context "context"
 	fmt "fmt"
-	io "io"
-	math "math"
-	math_bits "math/bits"
-	reflect "reflect"
-	strings "strings"
-	time "time"
-
 	_ "github.com/envoyproxy/protoc-gen-validate/validate"
 	_ "github.com/gogo/protobuf/gogoproto"
 	proto "github.com/gogo/protobuf/proto"
-	github_com_gogo_protobuf_types "github.com/gogo/protobuf/types"
 	types "github.com/gogo/protobuf/types"
 	golang_proto "github.com/golang/protobuf/proto"
 	_ "google.golang.org/genproto/googleapis/api/annotations"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
+	math "math"
+	reflect "reflect"
+	strings "strings"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -30,7 +25,6 @@ var _ = proto.Marshal
 var _ = golang_proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
-var _ = time.Kitchen
 
 // This is a compile-time assertion to ensure that this generated file
 // is compatible with the proto package it is being compiled against.
@@ -40,24 +34,26 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 type GetStoredApplicationUpRequest struct {
 	// Query upstream messages from all end devices of an application. Cannot be used in conjunction with end_device_ids.
-	ApplicationIDs *ApplicationIdentifiers `protobuf:"bytes,1,opt,name=application_ids,json=applicationIds,proto3" json:"application_ids,omitempty"`
+	ApplicationIds *ApplicationIdentifiers `protobuf:"bytes,1,opt,name=application_ids,json=applicationIds,proto3" json:"application_ids,omitempty"`
 	// Query upstream messages from a single end device. Cannot be used in conjunction with application_ids.
-	EndDeviceIDs *EndDeviceIdentifiers `protobuf:"bytes,2,opt,name=end_device_ids,json=endDeviceIds,proto3" json:"end_device_ids,omitempty"`
+	EndDeviceIds *EndDeviceIdentifiers `protobuf:"bytes,2,opt,name=end_device_ids,json=endDeviceIds,proto3" json:"end_device_ids,omitempty"`
 	// Query upstream messages of a specific type. If not set, then all upstream messages are returned.
 	Type string `protobuf:"bytes,3,opt,name=type,proto3" json:"type,omitempty"`
 	// Limit number of results.
 	Limit *types.UInt32Value `protobuf:"bytes,4,opt,name=limit,proto3" json:"limit,omitempty"`
-	// Query upstream messages after this timestamp only.
-	After *time.Time `protobuf:"bytes,5,opt,name=after,proto3,stdtime" json:"after,omitempty"`
-	// Query upstream messages before this timestamp only.
-	Before *time.Time `protobuf:"bytes,6,opt,name=before,proto3,stdtime" json:"before,omitempty"`
+	// Query upstream messages after this timestamp only. Cannot be used in conjunction with last.
+	After *types.Timestamp `protobuf:"bytes,5,opt,name=after,proto3" json:"after,omitempty"`
+	// Query upstream messages before this timestamp only. Cannot be used in conjunction with last.
+	Before *types.Timestamp `protobuf:"bytes,6,opt,name=before,proto3" json:"before,omitempty"`
 	// Query uplinks on a specific FPort only.
 	FPort *types.UInt32Value `protobuf:"bytes,7,opt,name=f_port,json=fPort,proto3" json:"f_port,omitempty"`
 	// Order results.
 	Order string `protobuf:"bytes,8,opt,name=order,proto3" json:"order,omitempty"`
 	// The names of the upstream message fields that should be returned. See the API reference
 	// for allowed field names for each type of upstream message.
-	FieldMask            types.FieldMask `protobuf:"bytes,9,opt,name=field_mask,json=fieldMask,proto3" json:"field_mask"`
+	FieldMask *types.FieldMask `protobuf:"bytes,9,opt,name=field_mask,json=fieldMask,proto3" json:"field_mask,omitempty"`
+	// Query upstream messages that have arrived in the last minutes or hours. Cannot be used in conjunction with after and before.
+	Last                 *types.Duration `protobuf:"bytes,10,opt,name=last,proto3" json:"last,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}        `json:"-"`
 	XXX_sizecache        int32           `json:"-"`
 }
@@ -68,25 +64,16 @@ func (*GetStoredApplicationUpRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_6ff0e9f52f73d254, []int{0}
 }
 func (m *GetStoredApplicationUpRequest) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	return xxx_messageInfo_GetStoredApplicationUpRequest.Unmarshal(m, b)
 }
 func (m *GetStoredApplicationUpRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_GetStoredApplicationUpRequest.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	return xxx_messageInfo_GetStoredApplicationUpRequest.Marshal(b, m, deterministic)
 }
 func (m *GetStoredApplicationUpRequest) XXX_Merge(src proto.Message) {
 	xxx_messageInfo_GetStoredApplicationUpRequest.Merge(m, src)
 }
 func (m *GetStoredApplicationUpRequest) XXX_Size() int {
-	return m.Size()
+	return xxx_messageInfo_GetStoredApplicationUpRequest.Size(m)
 }
 func (m *GetStoredApplicationUpRequest) XXX_DiscardUnknown() {
 	xxx_messageInfo_GetStoredApplicationUpRequest.DiscardUnknown(m)
@@ -94,16 +81,16 @@ func (m *GetStoredApplicationUpRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_GetStoredApplicationUpRequest proto.InternalMessageInfo
 
-func (m *GetStoredApplicationUpRequest) GetApplicationIDs() *ApplicationIdentifiers {
+func (m *GetStoredApplicationUpRequest) GetApplicationIds() *ApplicationIdentifiers {
 	if m != nil {
-		return m.ApplicationIDs
+		return m.ApplicationIds
 	}
 	return nil
 }
 
-func (m *GetStoredApplicationUpRequest) GetEndDeviceIDs() *EndDeviceIdentifiers {
+func (m *GetStoredApplicationUpRequest) GetEndDeviceIds() *EndDeviceIdentifiers {
 	if m != nil {
-		return m.EndDeviceIDs
+		return m.EndDeviceIds
 	}
 	return nil
 }
@@ -122,14 +109,14 @@ func (m *GetStoredApplicationUpRequest) GetLimit() *types.UInt32Value {
 	return nil
 }
 
-func (m *GetStoredApplicationUpRequest) GetAfter() *time.Time {
+func (m *GetStoredApplicationUpRequest) GetAfter() *types.Timestamp {
 	if m != nil {
 		return m.After
 	}
 	return nil
 }
 
-func (m *GetStoredApplicationUpRequest) GetBefore() *time.Time {
+func (m *GetStoredApplicationUpRequest) GetBefore() *types.Timestamp {
 	if m != nil {
 		return m.Before
 	}
@@ -150,11 +137,18 @@ func (m *GetStoredApplicationUpRequest) GetOrder() string {
 	return ""
 }
 
-func (m *GetStoredApplicationUpRequest) GetFieldMask() types.FieldMask {
+func (m *GetStoredApplicationUpRequest) GetFieldMask() *types.FieldMask {
 	if m != nil {
 		return m.FieldMask
 	}
-	return types.FieldMask{}
+	return nil
+}
+
+func (m *GetStoredApplicationUpRequest) GetLast() *types.Duration {
+	if m != nil {
+		return m.Last
+	}
+	return nil
 }
 
 func init() {
@@ -170,61 +164,56 @@ func init() {
 }
 
 var fileDescriptor_6ff0e9f52f73d254 = []byte{
-	// 862 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x94, 0x54, 0x3d, 0x6c, 0x1c, 0x45,
-	0x14, 0x9e, 0x31, 0xb6, 0x89, 0xd7, 0xc7, 0x59, 0x5a, 0x45, 0xd1, 0xe9, 0x14, 0xcf, 0x59, 0x06,
-	0xa1, 0x34, 0xb7, 0x8b, 0x7c, 0x0d, 0x42, 0x08, 0x94, 0x93, 0x01, 0x59, 0x08, 0x09, 0x4d, 0x30,
-	0x45, 0x9a, 0x65, 0x6e, 0xf7, 0xed, 0x7a, 0xb8, 0xbd, 0x99, 0xcd, 0xcc, 0xdc, 0x19, 0xcb, 0xb2,
-	0x14, 0x51, 0xa5, 0x23, 0x12, 0x0d, 0x25, 0x0d, 0x92, 0x25, 0x0a, 0x52, 0xa6, 0xa0, 0x48, 0x41,
-	0x61, 0x51, 0x05, 0x21, 0xa4, 0x54, 0x26, 0xb7, 0x4b, 0x91, 0x32, 0x65, 0x94, 0x0a, 0xdd, 0xee,
-	0x9e, 0xef, 0x8f, 0x04, 0xe8, 0xe6, 0xcd, 0xfb, 0xbe, 0xf7, 0x9e, 0xde, 0x7b, 0xdf, 0xb3, 0xde,
-	0x8b, 0xa5, 0x62, 0x87, 0x4c, 0x34, 0xb5, 0x61, 0x7e, 0xd7, 0x65, 0x09, 0x77, 0x59, 0x92, 0xc4,
-	0xdc, 0x67, 0x86, 0x4b, 0xa1, 0x41, 0x0d, 0x40, 0x79, 0x5c, 0x18, 0x88, 0x54, 0xf1, 0xe3, 0x69,
-	0x23, 0x15, 0x8b, 0xc0, 0x49, 0x94, 0x34, 0xd2, 0xae, 0x1a, 0x23, 0x9c, 0x32, 0x86, 0x33, 0x68,
-	0xd5, 0xaf, 0x47, 0xdc, 0x1c, 0xf4, 0x3b, 0x8e, 0x2f, 0x7b, 0x2e, 0x88, 0x81, 0x3c, 0x4a, 0x94,
-	0xfc, 0xea, 0xc8, 0xcd, 0xc1, 0x7e, 0x33, 0x02, 0xd1, 0x1c, 0xb0, 0x98, 0x07, 0xcc, 0x80, 0xbb,
-	0xf0, 0x28, 0x42, 0xd6, 0x9b, 0x53, 0x21, 0x22, 0x19, 0xc9, 0x82, 0xdc, 0xe9, 0x87, 0xb9, 0x95,
-	0x1b, 0xf9, 0xab, 0x84, 0x5f, 0x8d, 0xa4, 0x8c, 0x62, 0x28, 0x4a, 0x17, 0x42, 0x9a, 0xa2, 0xce,
-	0xd2, 0xbb, 0x55, 0x7a, 0x2f, 0x62, 0x84, 0x1c, 0xe2, 0xc0, 0xeb, 0x31, 0xdd, 0x2d, 0x11, 0x8d,
-	0x79, 0x84, 0xe1, 0x3d, 0xd0, 0x86, 0xf5, 0x92, 0x12, 0x40, 0xe6, 0x01, 0x87, 0x8a, 0x25, 0x09,
-	0xa8, 0x71, 0x8a, 0xd7, 0x17, 0x5b, 0xc8, 0x03, 0x10, 0x86, 0x87, 0x7c, 0x02, 0xda, 0x5a, 0x04,
-	0xf5, 0x40, 0x6b, 0x16, 0x41, 0x89, 0xd8, 0xfe, 0x66, 0xd5, 0xda, 0xfc, 0x08, 0xcc, 0x0d, 0x23,
-	0x15, 0x04, 0xd7, 0x27, 0x33, 0xd8, 0x4f, 0x28, 0xdc, 0xea, 0x83, 0x36, 0x76, 0x64, 0x6d, 0x4c,
-	0xcd, 0xc6, 0xe3, 0x81, 0xae, 0xe1, 0x2d, 0x7c, 0x6d, 0x7d, 0xe7, 0x4d, 0x67, 0x76, 0x0a, 0xce,
-	0x14, 0x7d, 0x6f, 0x52, 0x4a, 0xfb, 0xca, 0xd9, 0x79, 0x03, 0xa7, 0xe7, 0x8d, 0xea, 0xb4, 0x7f,
-	0x57, 0xd3, 0x2a, 0x9b, 0xc6, 0x6b, 0xfb, 0x0b, 0xab, 0x0a, 0x22, 0xf0, 0x02, 0x18, 0x70, 0x1f,
-	0xf2, 0x3c, 0x4b, 0x79, 0x9e, 0x37, 0xe6, 0xf3, 0x7c, 0x20, 0x82, 0xdd, 0x1c, 0x34, 0x9d, 0xe5,
-	0x72, 0x99, 0xa5, 0x32, 0xf1, 0xee, 0x6a, 0x5a, 0x81, 0x09, 0x56, 0xdb, 0xbf, 0x60, 0x6b, 0xd9,
-	0x1c, 0x25, 0x50, 0x7b, 0x65, 0x0b, 0x5f, 0x5b, 0x6b, 0xff, 0x84, 0x9f, 0xb7, 0x7f, 0xc4, 0xea,
-	0x14, 0x53, 0x44, 0xab, 0xfd, 0x24, 0xe6, 0xa2, 0xeb, 0x95, 0xed, 0xa1, 0xeb, 0x5f, 0x4a, 0x2e,
-	0x3c, 0xe6, 0xfb, 0x90, 0x18, 0x5a, 0x09, 0xe4, 0xa1, 0xc8, 0xdd, 0xcc, 0xef, 0xd2, 0xd7, 0x2e,
-	0x2c, 0x31, 0x6b, 0x6a, 0x10, 0x86, 0x6e, 0x5c, 0x98, 0x21, 0xe3, 0x31, 0x04, 0x53, 0x1f, 0xb7,
-	0xfa, 0xd0, 0x87, 0x80, 0xd6, 0x67, 0x3f, 0x3c, 0x2e, 0xc6, 0xab, 0x18, 0xd0, 0x8d, 0x58, 0x96,
-	0x7d, 0xd6, 0x32, 0x1e, 0x40, 0x40, 0x2b, 0x23, 0x31, 0x8c, 0xfa, 0x11, 0x30, 0xc3, 0x68, 0x5e,
-	0xbd, 0xbd, 0x63, 0xad, 0xc4, 0xbc, 0xc7, 0x4d, 0x6d, 0x39, 0xef, 0xcf, 0x55, 0xa7, 0x58, 0x15,
-	0x67, 0xbc, 0x2a, 0xce, 0xfe, 0x9e, 0x30, 0xad, 0x9d, 0xcf, 0x59, 0xdc, 0x07, 0x5a, 0x40, 0xed,
-	0x77, 0xac, 0x15, 0x16, 0x1a, 0x50, 0xb5, 0x95, 0x9c, 0x53, 0x5f, 0xe0, 0x7c, 0x36, 0xde, 0xbf,
-	0xf6, 0xa5, 0x51, 0x27, 0xef, 0xfe, 0xd9, 0xc0, 0xb4, 0xa0, 0xd8, 0xef, 0x5a, 0xab, 0x1d, 0x08,
-	0xa5, 0x82, 0xda, 0xea, 0xff, 0x20, 0x97, 0x1c, 0xbb, 0x65, 0xad, 0x86, 0x5e, 0x22, 0x95, 0xa9,
-	0xbd, 0xfa, 0x5f, 0xca, 0x0d, 0x3f, 0x95, 0xca, 0xd8, 0x6f, 0x5b, 0x2b, 0x52, 0x05, 0xa0, 0x6a,
-	0x97, 0xf2, 0x49, 0x6d, 0x3f, 0x6f, 0x37, 0xd4, 0x26, 0x45, 0xb4, 0xd2, 0x54, 0xe0, 0x03, 0x1f,
-	0x40, 0xe0, 0x31, 0x43, 0xd7, 0xa7, 0x8d, 0x82, 0x60, 0xbf, 0x6f, 0x59, 0x13, 0xb1, 0xd5, 0xd6,
-	0x5e, 0x50, 0xf0, 0x87, 0x23, 0xc8, 0x27, 0x4c, 0x77, 0xdb, 0xcb, 0x67, 0xe7, 0x0d, 0x44, 0xd7,
-	0xc2, 0xf1, 0xc7, 0xce, 0x1f, 0x4b, 0xd6, 0xe5, 0x19, 0x21, 0xdc, 0x28, 0x4e, 0x8f, 0xfd, 0xf3,
-	0x92, 0x75, 0xe5, 0x9f, 0xa5, 0x62, 0x37, 0xe7, 0x57, 0xf4, 0xa5, 0x92, 0xaa, 0x6f, 0xbe, 0x44,
-	0x39, 0xfb, 0xc9, 0xf6, 0x6f, 0xf8, 0xeb, 0xdf, 0xff, 0xfa, 0x76, 0xe9, 0x57, 0x6c, 0x1f, 0xbb,
-	0x4c, 0xcf, 0x5c, 0x46, 0xf7, 0x78, 0x56, 0x22, 0xce, 0x9c, 0x34, 0xe7, 0xec, 0x13, 0xb7, 0x80,
-	0x2e, 0xf2, 0x2e, 0x9e, 0x27, 0x6e, 0xc2, 0xfc, 0xee, 0xe8, 0x22, 0xb8, 0xe5, 0x8d, 0x75, 0x8f,
-	0x47, 0x5b, 0x76, 0x72, 0xf3, 0x63, 0x7b, 0x6f, 0x31, 0xfd, 0xbf, 0xe5, 0x7b, 0x41, 0xb0, 0xb7,
-	0x70, 0xfb, 0x07, 0x7c, 0x36, 0x24, 0xf8, 0xe1, 0x90, 0xe0, 0x47, 0x43, 0x82, 0x1e, 0x0f, 0x09,
-	0x7a, 0x32, 0x24, 0xe8, 0xe9, 0x90, 0xa0, 0x67, 0x43, 0x82, 0x6f, 0xa7, 0x04, 0xdf, 0x49, 0x09,
-	0x3a, 0x4d, 0x09, 0xbe, 0x97, 0x12, 0x74, 0x3f, 0x25, 0xe8, 0x41, 0x4a, 0xd0, 0x59, 0x4a, 0xf0,
-	0xc3, 0x94, 0xe0, 0x47, 0x29, 0x41, 0x8f, 0x53, 0x82, 0x9f, 0xa4, 0x04, 0x3d, 0x4d, 0x09, 0x7e,
-	0x96, 0x12, 0x74, 0x3b, 0x23, 0xe8, 0x4e, 0x46, 0xf0, 0xdd, 0x8c, 0xa0, 0xef, 0x32, 0x82, 0xbf,
-	0xcf, 0x08, 0x3a, 0xcd, 0x08, 0xba, 0x97, 0x11, 0x7c, 0x3f, 0x23, 0xf8, 0x41, 0x46, 0xf0, 0x4d,
-	0x37, 0x92, 0x8e, 0x39, 0x00, 0x73, 0xc0, 0x45, 0xa4, 0x1d, 0x01, 0xe6, 0x50, 0xaa, 0xae, 0x3b,
-	0x7b, 0x17, 0x07, 0x2d, 0x37, 0xe9, 0x46, 0xae, 0x31, 0x22, 0xe9, 0x74, 0x56, 0xf3, 0x25, 0x69,
-	0xfd, 0x1d, 0x00, 0x00, 0xff, 0xff, 0x91, 0xe5, 0x01, 0x0e, 0xa4, 0x06, 0x00, 0x00,
+	// 772 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x8c, 0x54, 0xbf, 0x6f, 0xe4, 0x44,
+	0x14, 0x5e, 0x87, 0x6c, 0x20, 0x93, 0x90, 0x48, 0x16, 0x42, 0x66, 0x75, 0x71, 0xa2, 0x80, 0xd0,
+	0x35, 0x6b, 0x9f, 0x76, 0x1b, 0xa0, 0x40, 0xba, 0xe8, 0x00, 0x05, 0x74, 0x02, 0xcd, 0x11, 0x8a,
+	0x6b, 0xac, 0x59, 0xcf, 0xb3, 0x33, 0xd8, 0x3b, 0x33, 0x37, 0xf3, 0xec, 0x25, 0x8a, 0x22, 0x21,
+	0xfe, 0x02, 0x24, 0xfe, 0x01, 0xca, 0x93, 0x28, 0x68, 0x29, 0x28, 0x28, 0xa8, 0xe8, 0x10, 0x42,
+	0xa2, 0x65, 0x8f, 0x82, 0x92, 0xfa, 0x44, 0x81, 0xd6, 0xf6, 0xfe, 0x26, 0x97, 0xeb, 0xe6, 0xbd,
+	0xf9, 0xbe, 0xcf, 0xcf, 0xf3, 0xde, 0xf7, 0xc8, 0xbb, 0xb9, 0x32, 0x6c, 0xc4, 0x64, 0xd7, 0x22,
+	0x8b, 0xb3, 0x90, 0x69, 0x11, 0x32, 0xad, 0x73, 0x11, 0x33, 0x14, 0x4a, 0x5a, 0x30, 0x25, 0x98,
+	0x48, 0x48, 0x84, 0xd4, 0xd4, 0x99, 0xc8, 0xa2, 0x32, 0x2c, 0x85, 0x40, 0x1b, 0x85, 0xca, 0xdd,
+	0x43, 0x94, 0x41, 0xa3, 0x11, 0x94, 0xfd, 0xce, 0xdd, 0x54, 0xe0, 0x79, 0x31, 0x08, 0x62, 0x35,
+	0x0c, 0x41, 0x96, 0xea, 0x42, 0x1b, 0xf5, 0xc5, 0x45, 0x58, 0x81, 0xe3, 0x6e, 0x0a, 0xb2, 0x5b,
+	0xb2, 0x5c, 0x70, 0x86, 0x10, 0xae, 0x1d, 0x6a, 0xc9, 0x4e, 0x77, 0x41, 0x22, 0x55, 0xa9, 0xaa,
+	0xc9, 0x83, 0x22, 0xa9, 0xa2, 0x2a, 0xa8, 0x4e, 0x0d, 0xfc, 0x56, 0xaa, 0x54, 0x9a, 0x43, 0x5d,
+	0xba, 0x94, 0x0a, 0xeb, 0x3a, 0x9b, 0xdb, 0xa3, 0xe6, 0x76, 0xa6, 0x91, 0x08, 0xc8, 0x79, 0x34,
+	0x64, 0x36, 0x6b, 0x10, 0x87, 0xab, 0x08, 0x14, 0x43, 0xb0, 0xc8, 0x86, 0xba, 0x01, 0xf8, 0xab,
+	0x00, 0x5e, 0xd4, 0x6f, 0x71, 0xdd, 0xfd, 0xc8, 0x30, 0xad, 0xc1, 0x4c, 0x4b, 0x78, 0x7d, 0xfd,
+	0x89, 0x05, 0x07, 0x89, 0x22, 0x11, 0x73, 0xd0, 0xd1, 0x3a, 0x68, 0x08, 0xd6, 0xb2, 0x14, 0x1a,
+	0xc4, 0xf1, 0xbf, 0x6d, 0x72, 0xf0, 0x01, 0xe0, 0x03, 0x54, 0x06, 0xf8, 0xdd, 0x79, 0x8f, 0xce,
+	0x34, 0x85, 0x47, 0x05, 0x58, 0x74, 0x3f, 0x26, 0xfb, 0x0b, 0xbd, 0x8b, 0x04, 0xb7, 0x9e, 0x73,
+	0xe4, 0xdc, 0xde, 0xe9, 0xbd, 0x19, 0x2c, 0x77, 0x29, 0x58, 0xa0, 0x9f, 0xce, 0x4b, 0xa1, 0x7b,
+	0x6c, 0x31, 0x6f, 0xdd, 0x0f, 0xc9, 0x1e, 0x48, 0x1e, 0x71, 0x28, 0x45, 0x0c, 0x95, 0xde, 0x46,
+	0xa5, 0xf7, 0xc6, 0xaa, 0xde, 0x7b, 0x92, 0xdf, 0xab, 0x40, 0x8b, 0x6a, 0xbb, 0x30, 0xcf, 0x5a,
+	0xf7, 0x67, 0x87, 0x6c, 0xe2, 0x85, 0x06, 0xef, 0x85, 0x23, 0xe7, 0xf6, 0xf6, 0xc9, 0xf7, 0xce,
+	0xd3, 0x93, 0xef, 0x1c, 0xf3, 0xd8, 0xa1, 0x2d, 0xba, 0x57, 0xe8, 0x5c, 0xc8, 0x2c, 0x6a, 0x7e,
+	0x98, 0xee, 0x7c, 0xae, 0x84, 0x8c, 0x58, 0x1c, 0x83, 0x46, 0xba, 0xcb, 0xd5, 0x48, 0x56, 0xd7,
+	0x2c, 0xce, 0xe8, 0xcb, 0xb3, 0x48, 0x2e, 0x87, 0x16, 0x24, 0xd2, 0xfd, 0x59, 0x98, 0x30, 0x91,
+	0x03, 0x5f, 0x48, 0x3c, 0x2a, 0xa0, 0x00, 0x4e, 0x3b, 0xcb, 0x89, 0x48, 0xc8, 0xe9, 0xf0, 0x71,
+	0xba, 0x9f, 0xab, 0xe6, 0xe5, 0xac, 0xca, 0x4b, 0xe0, 0x74, 0x77, 0x32, 0xfe, 0x93, 0x3f, 0xe7,
+	0x0c, 0x19, 0xad, 0xaa, 0x77, 0x7b, 0xa4, 0x9d, 0x8b, 0xa1, 0x40, 0x6f, 0xb3, 0x7a, 0x89, 0x5b,
+	0x41, 0xdd, 0xfc, 0x60, 0xda, 0xfc, 0xe0, 0xec, 0x54, 0x62, 0xbf, 0xf7, 0x19, 0xcb, 0x0b, 0xa0,
+	0x35, 0xd4, 0xbd, 0x43, 0xda, 0x2c, 0x41, 0x30, 0x5e, 0xbb, 0xe2, 0x74, 0xd6, 0x38, 0x9f, 0x4e,
+	0x27, 0x8e, 0xd6, 0x40, 0xb7, 0x47, 0xb6, 0x06, 0x90, 0x28, 0x03, 0xde, 0xd6, 0x8d, 0x94, 0x06,
+	0xe9, 0xf6, 0xc9, 0x56, 0x12, 0x69, 0x65, 0xd0, 0x7b, 0xf1, 0x79, 0x4a, 0x4b, 0x3e, 0x51, 0x06,
+	0xdd, 0xb7, 0x48, 0x5b, 0x19, 0x0e, 0xc6, 0x7b, 0xa9, 0xea, 0xca, 0xf1, 0xd3, 0x93, 0x43, 0x73,
+	0x40, 0x5b, 0x74, 0xb7, 0x6b, 0x20, 0x06, 0x51, 0x02, 0x8f, 0x18, 0xd2, 0x9d, 0xc5, 0xa0, 0x26,
+	0xb8, 0x6f, 0x13, 0x32, 0xb7, 0x92, 0xb7, 0x7d, 0x4d, 0x99, 0xef, 0x4f, 0x20, 0xf7, 0x99, 0xcd,
+	0xe8, 0x76, 0x32, 0x3d, 0xba, 0x5d, 0xb2, 0x99, 0x33, 0x8b, 0x1e, 0xa9, 0x48, 0xaf, 0xad, 0x91,
+	0xee, 0x35, 0xfe, 0xa2, 0x15, 0xec, 0x9d, 0xcd, 0x1f, 0xbe, 0x3d, 0x74, 0x7a, 0xbf, 0x6f, 0x90,
+	0x57, 0x96, 0xa6, 0xfe, 0x41, 0xbd, 0x87, 0xdc, 0x1f, 0x37, 0xc8, 0xab, 0xff, 0xef, 0x0b, 0xb7,
+	0xbb, 0x3a, 0xa7, 0xcf, 0xf4, 0x4f, 0xe7, 0xe0, 0x19, 0x36, 0x39, 0xd3, 0xc7, 0xbf, 0x3a, 0x5f,
+	0xfd, 0xf6, 0xd7, 0x37, 0x1b, 0xbf, 0x38, 0xee, 0x65, 0xc8, 0xec, 0xd2, 0x9a, 0x0c, 0x2f, 0x97,
+	0x7d, 0x12, 0xac, 0xf8, 0x70, 0x25, 0xbe, 0x0a, 0x6b, 0xe8, 0x3a, 0x6f, 0x76, 0xbc, 0x0a, 0x35,
+	0x8b, 0xb3, 0x89, 0xfd, 0xc3, 0x66, 0xe1, 0x86, 0x97, 0x93, 0x01, 0xbc, 0x7a, 0xf8, 0x91, 0x7b,
+	0xba, 0xfe, 0xf9, 0x9b, 0xbe, 0x77, 0x8d, 0xd8, 0x1d, 0xe7, 0xe4, 0xfe, 0x1f, 0x7f, 0xfa, 0xad,
+	0x2f, 0xc7, 0xbe, 0xf3, 0x78, 0xec, 0x3b, 0x7f, 0x8f, 0xfd, 0xd6, 0x3f, 0x63, 0xdf, 0xf9, 0xfa,
+	0x89, 0xdf, 0xfa, 0xe9, 0x89, 0xef, 0x3c, 0x0c, 0x53, 0x15, 0xe0, 0x39, 0xe0, 0xb9, 0x90, 0xa9,
+	0x0d, 0x24, 0xe0, 0x48, 0x99, 0x2c, 0x5c, 0xde, 0x55, 0x65, 0x3f, 0xd4, 0x59, 0x1a, 0x22, 0x4a,
+	0x3d, 0x18, 0x6c, 0x55, 0x5d, 0xec, 0xff, 0x17, 0x00, 0x00, 0xff, 0xff, 0x20, 0x50, 0x16, 0x6a,
+	0x58, 0x06, 0x00, 0x00,
 }
 
 func (this *GetStoredApplicationUpRequest) Equal(that interface{}) bool {
@@ -246,10 +235,10 @@ func (this *GetStoredApplicationUpRequest) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if !this.ApplicationIDs.Equal(that1.ApplicationIDs) {
+	if !this.ApplicationIds.Equal(that1.ApplicationIds) {
 		return false
 	}
-	if !this.EndDeviceIDs.Equal(that1.EndDeviceIDs) {
+	if !this.EndDeviceIds.Equal(that1.EndDeviceIds) {
 		return false
 	}
 	if this.Type != that1.Type {
@@ -258,18 +247,10 @@ func (this *GetStoredApplicationUpRequest) Equal(that interface{}) bool {
 	if !this.Limit.Equal(that1.Limit) {
 		return false
 	}
-	if that1.After == nil {
-		if this.After != nil {
-			return false
-		}
-	} else if !this.After.Equal(*that1.After) {
+	if !this.After.Equal(that1.After) {
 		return false
 	}
-	if that1.Before == nil {
-		if this.Before != nil {
-			return false
-		}
-	} else if !this.Before.Equal(*that1.Before) {
+	if !this.Before.Equal(that1.Before) {
 		return false
 	}
 	if !this.FPort.Equal(that1.FPort) {
@@ -278,7 +259,10 @@ func (this *GetStoredApplicationUpRequest) Equal(that interface{}) bool {
 	if this.Order != that1.Order {
 		return false
 	}
-	if !this.FieldMask.Equal(&that1.FieldMask) {
+	if !this.FieldMask.Equal(that1.FieldMask) {
+		return false
+	}
+	if !this.Last.Equal(that1.Last) {
 		return false
 	}
 	return true
@@ -393,156 +377,34 @@ var _ApplicationUpStorage_serviceDesc = grpc.ServiceDesc{
 	Metadata: "lorawan-stack/api/applicationserver_integrations_storage.proto",
 }
 
-func (m *GetStoredApplicationUpRequest) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *GetStoredApplicationUpRequest) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *GetStoredApplicationUpRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	{
-		size, err := m.FieldMask.MarshalToSizedBuffer(dAtA[:i])
-		if err != nil {
-			return 0, err
-		}
-		i -= size
-		i = encodeVarintApplicationserverIntegrationsStorage(dAtA, i, uint64(size))
-	}
-	i--
-	dAtA[i] = 0x4a
-	if len(m.Order) > 0 {
-		i -= len(m.Order)
-		copy(dAtA[i:], m.Order)
-		i = encodeVarintApplicationserverIntegrationsStorage(dAtA, i, uint64(len(m.Order)))
-		i--
-		dAtA[i] = 0x42
-	}
-	if m.FPort != nil {
-		{
-			size, err := m.FPort.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintApplicationserverIntegrationsStorage(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x3a
-	}
-	if m.Before != nil {
-		n3, err3 := github_com_gogo_protobuf_types.StdTimeMarshalTo(*m.Before, dAtA[i-github_com_gogo_protobuf_types.SizeOfStdTime(*m.Before):])
-		if err3 != nil {
-			return 0, err3
-		}
-		i -= n3
-		i = encodeVarintApplicationserverIntegrationsStorage(dAtA, i, uint64(n3))
-		i--
-		dAtA[i] = 0x32
-	}
-	if m.After != nil {
-		n4, err4 := github_com_gogo_protobuf_types.StdTimeMarshalTo(*m.After, dAtA[i-github_com_gogo_protobuf_types.SizeOfStdTime(*m.After):])
-		if err4 != nil {
-			return 0, err4
-		}
-		i -= n4
-		i = encodeVarintApplicationserverIntegrationsStorage(dAtA, i, uint64(n4))
-		i--
-		dAtA[i] = 0x2a
-	}
-	if m.Limit != nil {
-		{
-			size, err := m.Limit.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintApplicationserverIntegrationsStorage(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x22
-	}
-	if len(m.Type) > 0 {
-		i -= len(m.Type)
-		copy(dAtA[i:], m.Type)
-		i = encodeVarintApplicationserverIntegrationsStorage(dAtA, i, uint64(len(m.Type)))
-		i--
-		dAtA[i] = 0x1a
-	}
-	if m.EndDeviceIDs != nil {
-		{
-			size, err := m.EndDeviceIDs.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintApplicationserverIntegrationsStorage(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x12
-	}
-	if m.ApplicationIDs != nil {
-		{
-			size, err := m.ApplicationIDs.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintApplicationserverIntegrationsStorage(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
-}
-
-func encodeVarintApplicationserverIntegrationsStorage(dAtA []byte, offset int, v uint64) int {
-	offset -= sovApplicationserverIntegrationsStorage(v)
-	base := offset
-	for v >= 1<<7 {
-		dAtA[offset] = uint8(v&0x7f | 0x80)
-		v >>= 7
-		offset++
-	}
-	dAtA[offset] = uint8(v)
-	return base
-}
 func NewPopulatedGetStoredApplicationUpRequest(r randyApplicationserverIntegrationsStorage, easy bool) *GetStoredApplicationUpRequest {
 	this := &GetStoredApplicationUpRequest{}
 	if r.Intn(5) != 0 {
-		this.ApplicationIDs = NewPopulatedApplicationIdentifiers(r, easy)
+		this.ApplicationIds = NewPopulatedApplicationIdentifiers(r, easy)
 	}
 	if r.Intn(5) != 0 {
-		this.EndDeviceIDs = NewPopulatedEndDeviceIdentifiers(r, easy)
+		this.EndDeviceIds = NewPopulatedEndDeviceIdentifiers(r, easy)
 	}
-	this.Type = randStringApplicationserverIntegrationsStorage(r)
+	this.Type = string(randStringApplicationserverIntegrationsStorage(r))
 	if r.Intn(5) != 0 {
 		this.Limit = types.NewPopulatedUInt32Value(r, easy)
 	}
 	if r.Intn(5) != 0 {
-		this.After = github_com_gogo_protobuf_types.NewPopulatedStdTime(r, easy)
+		this.After = types.NewPopulatedTimestamp(r, easy)
 	}
 	if r.Intn(5) != 0 {
-		this.Before = github_com_gogo_protobuf_types.NewPopulatedStdTime(r, easy)
+		this.Before = types.NewPopulatedTimestamp(r, easy)
 	}
 	if r.Intn(5) != 0 {
 		this.FPort = types.NewPopulatedUInt32Value(r, easy)
 	}
-	this.Order = randStringApplicationserverIntegrationsStorage(r)
-	v1 := types.NewPopulatedFieldMask(r, easy)
-	this.FieldMask = *v1
+	this.Order = string(randStringApplicationserverIntegrationsStorage(r))
+	if r.Intn(5) != 0 {
+		this.FieldMask = types.NewPopulatedFieldMask(r, easy)
+	}
+	if r.Intn(5) != 0 {
+		this.Last = types.NewPopulatedDuration(r, easy)
+	}
 	if !easy && r.Intn(10) != 0 {
 	}
 	return this
@@ -567,9 +429,9 @@ func randUTF8RuneApplicationserverIntegrationsStorage(r randyApplicationserverIn
 	return rune(ru + 61)
 }
 func randStringApplicationserverIntegrationsStorage(r randyApplicationserverIntegrationsStorage) string {
-	v2 := r.Intn(100)
-	tmps := make([]rune, v2)
-	for i := 0; i < v2; i++ {
+	v1 := r.Intn(100)
+	tmps := make([]rune, v1)
+	for i := 0; i < v1; i++ {
 		tmps[i] = randUTF8RuneApplicationserverIntegrationsStorage(r)
 	}
 	return string(tmps)
@@ -591,11 +453,11 @@ func randFieldApplicationserverIntegrationsStorage(dAtA []byte, r randyApplicati
 	switch wire {
 	case 0:
 		dAtA = encodeVarintPopulateApplicationserverIntegrationsStorage(dAtA, uint64(key))
-		v3 := r.Int63()
+		v2 := r.Int63()
 		if r.Intn(2) == 0 {
-			v3 *= -1
+			v2 *= -1
 		}
-		dAtA = encodeVarintPopulateApplicationserverIntegrationsStorage(dAtA, uint64(v3))
+		dAtA = encodeVarintPopulateApplicationserverIntegrationsStorage(dAtA, uint64(v2))
 	case 1:
 		dAtA = encodeVarintPopulateApplicationserverIntegrationsStorage(dAtA, uint64(key))
 		dAtA = append(dAtA, byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)))
@@ -614,75 +476,27 @@ func randFieldApplicationserverIntegrationsStorage(dAtA []byte, r randyApplicati
 }
 func encodeVarintPopulateApplicationserverIntegrationsStorage(dAtA []byte, v uint64) []byte {
 	for v >= 1<<7 {
-		dAtA = append(dAtA, uint8(v&0x7f|0x80))
+		dAtA = append(dAtA, uint8(uint64(v)&0x7f|0x80))
 		v >>= 7
 	}
 	dAtA = append(dAtA, uint8(v))
 	return dAtA
-}
-func (m *GetStoredApplicationUpRequest) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.ApplicationIDs != nil {
-		l = m.ApplicationIDs.Size()
-		n += 1 + l + sovApplicationserverIntegrationsStorage(uint64(l))
-	}
-	if m.EndDeviceIDs != nil {
-		l = m.EndDeviceIDs.Size()
-		n += 1 + l + sovApplicationserverIntegrationsStorage(uint64(l))
-	}
-	l = len(m.Type)
-	if l > 0 {
-		n += 1 + l + sovApplicationserverIntegrationsStorage(uint64(l))
-	}
-	if m.Limit != nil {
-		l = m.Limit.Size()
-		n += 1 + l + sovApplicationserverIntegrationsStorage(uint64(l))
-	}
-	if m.After != nil {
-		l = github_com_gogo_protobuf_types.SizeOfStdTime(*m.After)
-		n += 1 + l + sovApplicationserverIntegrationsStorage(uint64(l))
-	}
-	if m.Before != nil {
-		l = github_com_gogo_protobuf_types.SizeOfStdTime(*m.Before)
-		n += 1 + l + sovApplicationserverIntegrationsStorage(uint64(l))
-	}
-	if m.FPort != nil {
-		l = m.FPort.Size()
-		n += 1 + l + sovApplicationserverIntegrationsStorage(uint64(l))
-	}
-	l = len(m.Order)
-	if l > 0 {
-		n += 1 + l + sovApplicationserverIntegrationsStorage(uint64(l))
-	}
-	l = m.FieldMask.Size()
-	n += 1 + l + sovApplicationserverIntegrationsStorage(uint64(l))
-	return n
-}
-
-func sovApplicationserverIntegrationsStorage(x uint64) (n int) {
-	return (math_bits.Len64(x|1) + 6) / 7
-}
-func sozApplicationserverIntegrationsStorage(x uint64) (n int) {
-	return sovApplicationserverIntegrationsStorage((x << 1) ^ uint64((int64(x) >> 63)))
 }
 func (this *GetStoredApplicationUpRequest) String() string {
 	if this == nil {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GetStoredApplicationUpRequest{`,
-		`ApplicationIDs:` + strings.Replace(fmt.Sprintf("%v", this.ApplicationIDs), "ApplicationIdentifiers", "ApplicationIdentifiers", 1) + `,`,
-		`EndDeviceIDs:` + strings.Replace(fmt.Sprintf("%v", this.EndDeviceIDs), "EndDeviceIdentifiers", "EndDeviceIdentifiers", 1) + `,`,
+		`ApplicationIds:` + strings.Replace(fmt.Sprintf("%v", this.ApplicationIds), "ApplicationIdentifiers", "ApplicationIdentifiers", 1) + `,`,
+		`EndDeviceIds:` + strings.Replace(fmt.Sprintf("%v", this.EndDeviceIds), "EndDeviceIdentifiers", "EndDeviceIdentifiers", 1) + `,`,
 		`Type:` + fmt.Sprintf("%v", this.Type) + `,`,
 		`Limit:` + strings.Replace(fmt.Sprintf("%v", this.Limit), "UInt32Value", "types.UInt32Value", 1) + `,`,
 		`After:` + strings.Replace(fmt.Sprintf("%v", this.After), "Timestamp", "types.Timestamp", 1) + `,`,
 		`Before:` + strings.Replace(fmt.Sprintf("%v", this.Before), "Timestamp", "types.Timestamp", 1) + `,`,
 		`FPort:` + strings.Replace(fmt.Sprintf("%v", this.FPort), "UInt32Value", "types.UInt32Value", 1) + `,`,
 		`Order:` + fmt.Sprintf("%v", this.Order) + `,`,
-		`FieldMask:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.FieldMask), "FieldMask", "types.FieldMask", 1), `&`, ``, 1) + `,`,
+		`FieldMask:` + strings.Replace(fmt.Sprintf("%v", this.FieldMask), "FieldMask", "types.FieldMask", 1) + `,`,
+		`Last:` + strings.Replace(fmt.Sprintf("%v", this.Last), "Duration", "types.Duration", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -695,453 +509,3 @@ func valueToStringApplicationserverIntegrationsStorage(v interface{}) string {
 	pv := reflect.Indirect(rv).Interface()
 	return fmt.Sprintf("*%v", pv)
 }
-func (m *GetStoredApplicationUpRequest) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowApplicationserverIntegrationsStorage
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: GetStoredApplicationUpRequest: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: GetStoredApplicationUpRequest: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ApplicationIDs", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApplicationserverIntegrationsStorage
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthApplicationserverIntegrationsStorage
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthApplicationserverIntegrationsStorage
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.ApplicationIDs == nil {
-				m.ApplicationIDs = &ApplicationIdentifiers{}
-			}
-			if err := m.ApplicationIDs.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field EndDeviceIDs", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApplicationserverIntegrationsStorage
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthApplicationserverIntegrationsStorage
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthApplicationserverIntegrationsStorage
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.EndDeviceIDs == nil {
-				m.EndDeviceIDs = &EndDeviceIdentifiers{}
-			}
-			if err := m.EndDeviceIDs.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Type", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApplicationserverIntegrationsStorage
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthApplicationserverIntegrationsStorage
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthApplicationserverIntegrationsStorage
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Type = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 4:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Limit", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApplicationserverIntegrationsStorage
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthApplicationserverIntegrationsStorage
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthApplicationserverIntegrationsStorage
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Limit == nil {
-				m.Limit = &types.UInt32Value{}
-			}
-			if err := m.Limit.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 5:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field After", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApplicationserverIntegrationsStorage
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthApplicationserverIntegrationsStorage
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthApplicationserverIntegrationsStorage
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.After == nil {
-				m.After = new(time.Time)
-			}
-			if err := github_com_gogo_protobuf_types.StdTimeUnmarshal(m.After, dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 6:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Before", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApplicationserverIntegrationsStorage
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthApplicationserverIntegrationsStorage
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthApplicationserverIntegrationsStorage
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Before == nil {
-				m.Before = new(time.Time)
-			}
-			if err := github_com_gogo_protobuf_types.StdTimeUnmarshal(m.Before, dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 7:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field FPort", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApplicationserverIntegrationsStorage
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthApplicationserverIntegrationsStorage
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthApplicationserverIntegrationsStorage
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.FPort == nil {
-				m.FPort = &types.UInt32Value{}
-			}
-			if err := m.FPort.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 8:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Order", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApplicationserverIntegrationsStorage
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthApplicationserverIntegrationsStorage
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthApplicationserverIntegrationsStorage
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Order = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 9:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field FieldMask", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApplicationserverIntegrationsStorage
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthApplicationserverIntegrationsStorage
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthApplicationserverIntegrationsStorage
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := m.FieldMask.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipApplicationserverIntegrationsStorage(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthApplicationserverIntegrationsStorage
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthApplicationserverIntegrationsStorage
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func skipApplicationserverIntegrationsStorage(dAtA []byte) (n int, err error) {
-	l := len(dAtA)
-	iNdEx := 0
-	depth := 0
-	for iNdEx < l {
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return 0, ErrIntOverflowApplicationserverIntegrationsStorage
-			}
-			if iNdEx >= l {
-				return 0, io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		wireType := int(wire & 0x7)
-		switch wireType {
-		case 0:
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return 0, ErrIntOverflowApplicationserverIntegrationsStorage
-				}
-				if iNdEx >= l {
-					return 0, io.ErrUnexpectedEOF
-				}
-				iNdEx++
-				if dAtA[iNdEx-1] < 0x80 {
-					break
-				}
-			}
-		case 1:
-			iNdEx += 8
-		case 2:
-			var length int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return 0, ErrIntOverflowApplicationserverIntegrationsStorage
-				}
-				if iNdEx >= l {
-					return 0, io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				length |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if length < 0 {
-				return 0, ErrInvalidLengthApplicationserverIntegrationsStorage
-			}
-			iNdEx += length
-		case 3:
-			depth++
-		case 4:
-			if depth == 0 {
-				return 0, ErrUnexpectedEndOfGroupApplicationserverIntegrationsStorage
-			}
-			depth--
-		case 5:
-			iNdEx += 4
-		default:
-			return 0, fmt.Errorf("proto: illegal wireType %d", wireType)
-		}
-		if iNdEx < 0 {
-			return 0, ErrInvalidLengthApplicationserverIntegrationsStorage
-		}
-		if depth == 0 {
-			return iNdEx, nil
-		}
-	}
-	return 0, io.ErrUnexpectedEOF
-}
-
-var (
-	ErrInvalidLengthApplicationserverIntegrationsStorage        = fmt.Errorf("proto: negative length found during unmarshaling")
-	ErrIntOverflowApplicationserverIntegrationsStorage          = fmt.Errorf("proto: integer overflow")
-	ErrUnexpectedEndOfGroupApplicationserverIntegrationsStorage = fmt.Errorf("proto: unexpected end of group")
-)

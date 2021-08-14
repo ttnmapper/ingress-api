@@ -6,14 +6,6 @@ package ttnpb
 import (
 	context "context"
 	fmt "fmt"
-	io "io"
-	math "math"
-	math_bits "math/bits"
-	reflect "reflect"
-	strconv "strconv"
-	strings "strings"
-	time "time"
-
 	_ "github.com/envoyproxy/protoc-gen-validate/validate"
 	_ "github.com/gogo/protobuf/gogoproto"
 	proto "github.com/gogo/protobuf/proto"
@@ -24,6 +16,11 @@ import (
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
+	math "math"
+	reflect "reflect"
+	strconv "strconv"
+	strings "strings"
+	time "time"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -106,25 +103,16 @@ func (*ContactInfo) Descriptor() ([]byte, []int) {
 	return fileDescriptor_3baa36b7c4d52524, []int{0}
 }
 func (m *ContactInfo) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	return xxx_messageInfo_ContactInfo.Unmarshal(m, b)
 }
 func (m *ContactInfo) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_ContactInfo.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	return xxx_messageInfo_ContactInfo.Marshal(b, m, deterministic)
 }
 func (m *ContactInfo) XXX_Merge(src proto.Message) {
 	xxx_messageInfo_ContactInfo.Merge(m, src)
 }
 func (m *ContactInfo) XXX_Size() int {
-	return m.Size()
+	return xxx_messageInfo_ContactInfo.Size(m)
 }
 func (m *ContactInfo) XXX_DiscardUnknown() {
 	xxx_messageInfo_ContactInfo.DiscardUnknown(m)
@@ -168,7 +156,7 @@ func (m *ContactInfo) GetValidatedAt() *time.Time {
 }
 
 type ContactInfoValidation struct {
-	ID                   string             `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	Id                   string             `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
 	Token                string             `protobuf:"bytes,2,opt,name=token,proto3" json:"token,omitempty"`
 	Entity               *EntityIdentifiers `protobuf:"bytes,3,opt,name=entity,proto3" json:"entity,omitempty"`
 	ContactInfo          []*ContactInfo     `protobuf:"bytes,4,rep,name=contact_info,json=contactInfo,proto3" json:"contact_info,omitempty"`
@@ -184,25 +172,16 @@ func (*ContactInfoValidation) Descriptor() ([]byte, []int) {
 	return fileDescriptor_3baa36b7c4d52524, []int{1}
 }
 func (m *ContactInfoValidation) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	return xxx_messageInfo_ContactInfoValidation.Unmarshal(m, b)
 }
 func (m *ContactInfoValidation) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_ContactInfoValidation.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	return xxx_messageInfo_ContactInfoValidation.Marshal(b, m, deterministic)
 }
 func (m *ContactInfoValidation) XXX_Merge(src proto.Message) {
 	xxx_messageInfo_ContactInfoValidation.Merge(m, src)
 }
 func (m *ContactInfoValidation) XXX_Size() int {
-	return m.Size()
+	return xxx_messageInfo_ContactInfoValidation.Size(m)
 }
 func (m *ContactInfoValidation) XXX_DiscardUnknown() {
 	xxx_messageInfo_ContactInfoValidation.DiscardUnknown(m)
@@ -210,9 +189,9 @@ func (m *ContactInfoValidation) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_ContactInfoValidation proto.InternalMessageInfo
 
-func (m *ContactInfoValidation) GetID() string {
+func (m *ContactInfoValidation) GetId() string {
 	if m != nil {
-		return m.ID
+		return m.Id
 	}
 	return ""
 }
@@ -271,59 +250,54 @@ func init() {
 }
 
 var fileDescriptor_3baa36b7c4d52524 = []byte{
-	// 824 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x94, 0x54, 0x3d, 0x6c, 0xdb, 0x46,
-	0x14, 0xbe, 0xa3, 0x65, 0xd7, 0x3e, 0xc5, 0x86, 0xca, 0xb6, 0x06, 0xc1, 0xd4, 0x67, 0xd5, 0x6d,
-	0x01, 0x21, 0x80, 0x49, 0x40, 0x9e, 0xba, 0xb4, 0x25, 0x15, 0xa2, 0x12, 0x60, 0xcb, 0x01, 0xcb,
-	0x16, 0x68, 0x17, 0x83, 0xa2, 0xce, 0xd4, 0x41, 0xd2, 0x1d, 0x4b, 0x9d, 0x94, 0x70, 0xaa, 0x91,
-	0x2e, 0x1e, 0x03, 0x74, 0xe9, 0x58, 0xa0, 0x2d, 0x90, 0x31, 0x63, 0xc6, 0x8c, 0x19, 0x83, 0x76,
-	0xc9, 0xd4, 0x46, 0x64, 0x87, 0x8c, 0x19, 0x83, 0x4c, 0x85, 0x48, 0xea, 0x2f, 0x82, 0xdb, 0x74,
-	0xbb, 0x7b, 0xdf, 0x7b, 0xdf, 0xbb, 0xfb, 0xbe, 0x87, 0x87, 0x3e, 0xea, 0xf1, 0xd0, 0xbd, 0xed,
-	0xb2, 0xc3, 0x81, 0x70, 0xbd, 0xae, 0xee, 0x06, 0x54, 0xf7, 0x38, 0x13, 0xae, 0x27, 0xce, 0x28,
-	0x3b, 0xe7, 0x5a, 0x10, 0x72, 0xc1, 0xe5, 0x1d, 0x21, 0x98, 0x96, 0x67, 0x6a, 0xa3, 0x23, 0xd5,
-	0xf0, 0xa9, 0xe8, 0x0c, 0x5b, 0x9a, 0xc7, 0xfb, 0x3a, 0x61, 0x23, 0x1e, 0x05, 0x21, 0xbf, 0x13,
-	0xe9, 0x69, 0xb2, 0x77, 0xe8, 0x13, 0x76, 0x38, 0x72, 0x7b, 0xb4, 0xed, 0x0a, 0xa2, 0xaf, 0x1c,
-	0x32, 0x4a, 0xf5, 0x70, 0x81, 0xc2, 0xe7, 0x3e, 0xcf, 0x8a, 0x5b, 0xc3, 0xf3, 0xf4, 0x96, 0x5e,
-	0xd2, 0x53, 0x9e, 0xfe, 0xbe, 0xcf, 0xb9, 0xdf, 0x23, 0xe9, 0x03, 0x5d, 0xc6, 0xb8, 0x70, 0x05,
-	0xe5, 0x6c, 0x90, 0xa3, 0xd7, 0x73, 0x74, 0xc6, 0x41, 0xfa, 0x81, 0x88, 0x72, 0x70, 0xff, 0x75,
-	0x50, 0xd0, 0x3e, 0x19, 0x08, 0xb7, 0x1f, 0xe4, 0x09, 0x1f, 0xae, 0x6a, 0x40, 0xdb, 0x84, 0x09,
-	0x7a, 0x4e, 0x49, 0x98, 0xb7, 0x38, 0xf8, 0x55, 0x42, 0xc5, 0x5a, 0xa6, 0x4c, 0x83, 0x9d, 0x73,
-	0xb9, 0x8e, 0xae, 0x4d, 0x85, 0x12, 0x51, 0x40, 0x14, 0x58, 0x86, 0x95, 0x9d, 0xea, 0x75, 0x6d,
-	0x59, 0x29, 0x2d, 0x2f, 0x71, 0xa2, 0x80, 0x98, 0x9b, 0xaf, 0xcc, 0xf5, 0xbb, 0x50, 0x2a, 0x41,
-	0xbb, 0xe8, 0xcd, 0xc3, 0x72, 0x13, 0xed, 0x4c, 0x99, 0xfa, 0x44, 0x74, 0x78, 0x5b, 0x91, 0x52,
-	0xae, 0xbd, 0x2b, 0xb8, 0x4e, 0xd2, 0xa4, 0x05, 0xb6, 0x6d, 0x6f, 0x11, 0x90, 0x31, 0x5a, 0x1f,
-	0xb9, 0xbd, 0x21, 0x51, 0xd6, 0xca, 0xb0, 0xb2, 0x95, 0xe6, 0x85, 0x6b, 0xca, 0x85, 0x64, 0x67,
-	0x61, 0x79, 0x17, 0x6d, 0x04, 0xc3, 0x56, 0x8f, 0x7a, 0x4a, 0xa1, 0x0c, 0x2b, 0x9b, 0x76, 0x7e,
-	0x93, 0x6b, 0xe8, 0xda, 0xd4, 0xa3, 0xf6, 0x99, 0x2b, 0x94, 0xf5, 0x32, 0xac, 0x14, 0xab, 0xaa,
-	0x96, 0xc9, 0xa7, 0x4d, 0xe5, 0xd3, 0x9c, 0xa9, 0x7c, 0x66, 0xe1, 0xde, 0x5f, 0xfb, 0xd0, 0x2e,
-	0xce, 0xaa, 0x0c, 0x71, 0xf0, 0xbb, 0x84, 0xde, 0x5b, 0x90, 0xe9, 0xeb, 0x0c, 0xa2, 0x9c, 0xc9,
-	0x7b, 0x48, 0xa2, 0xed, 0x54, 0xa6, 0x2d, 0x73, 0xfb, 0x95, 0x59, 0x08, 0x25, 0xe5, 0xf3, 0xf8,
-	0xcf, 0x7d, 0xa9, 0x71, 0xd3, 0x96, 0x68, 0x5b, 0xde, 0x43, 0xeb, 0x82, 0x77, 0x09, 0x4b, 0x3f,
-	0xbf, 0x65, 0xbe, 0x95, 0x67, 0xd8, 0x59, 0x54, 0xfe, 0x04, 0x6d, 0x4c, 0x1c, 0x11, 0x51, 0xfa,
-	0xab, 0x62, 0xf5, 0x83, 0xd7, 0xc5, 0xb1, 0x52, 0xb4, 0x31, 0xf7, 0xcd, 0xce, 0x0b, 0xe4, 0x4f,
-	0xe7, 0x4e, 0x4d, 0x46, 0x5a, 0x29, 0x94, 0xd7, 0x2a, 0xc5, 0x2b, 0x9d, 0x9a, 0xbc, 0x7a, 0xe6,
-	0x4f, 0xea, 0xf4, 0x67, 0x08, 0x79, 0x21, 0xf9, 0xbf, 0xaa, 0x6c, 0xe5, 0x35, 0x86, 0x98, 0x10,
-	0x90, 0x3b, 0x01, 0x0d, 0xc9, 0x60, 0x42, 0xb0, 0xf1, 0xa6, 0x04, 0x79, 0x8d, 0x21, 0x6e, 0x44,
-	0xb3, 0xd1, 0x4b, 0x07, 0x66, 0x17, 0xc9, 0xb5, 0xd3, 0xa6, 0x63, 0xd4, 0x9c, 0x33, 0xe7, 0x9b,
-	0x5b, 0xd6, 0xd9, 0xa9, 0x53, 0xb7, 0xec, 0x12, 0x58, 0x89, 0x1b, 0xe6, 0x57, 0x5f, 0x5a, 0x25,
-	0x28, 0x2b, 0xe8, 0xdd, 0xa5, 0xb8, 0xd9, 0x38, 0x3e, 0x6e, 0x34, 0xbf, 0x28, 0x49, 0xb2, 0x8a,
-	0x76, 0x97, 0x10, 0xc7, 0xaa, 0xd5, 0x9b, 0x8d, 0x9a, 0x71, 0x5c, 0x5a, 0x53, 0x0b, 0x97, 0xbf,
-	0x60, 0x70, 0xc3, 0x43, 0xdb, 0x4b, 0x63, 0xb7, 0x48, 0x76, 0x62, 0x39, 0xf5, 0xd3, 0x9b, 0xb3,
-	0xf6, 0xab, 0x88, 0x75, 0x62, 0x34, 0x8e, 0x97, 0x1f, 0x90, 0x23, 0xb7, 0xea, 0xa7, 0x4d, 0xab,
-	0x24, 0x65, 0x4d, 0xaa, 0x3f, 0x48, 0xe8, 0x9d, 0x45, 0xf9, 0x89, 0x4f, 0x07, 0x22, 0x8c, 0xe4,
-	0xef, 0xd1, 0xdb, 0x36, 0xf9, 0x6e, 0x48, 0x06, 0x62, 0x61, 0x8e, 0xfe, 0xdb, 0x79, 0xf5, 0xe3,
-	0x7f, 0xf1, 0x76, 0xce, 0x74, 0x50, 0xbe, 0xfb, 0xc7, 0xdf, 0x3f, 0x4a, 0xea, 0x81, 0xb2, 0xb4,
-	0xf2, 0xa6, 0x8b, 0x6a, 0xd2, 0xab, 0x8b, 0x36, 0xf3, 0x7c, 0x22, 0xbf, 0x19, 0xa9, 0xba, 0xbb,
-	0x62, 0xac, 0x35, 0xd9, 0x45, 0xd3, 0x66, 0xd5, 0x2b, 0x9b, 0x99, 0xbf, 0xc1, 0xc7, 0x63, 0x0c,
-	0x9f, 0x8c, 0x31, 0x7c, 0x3a, 0xc6, 0xe0, 0xd9, 0x18, 0x83, 0xe7, 0x63, 0x0c, 0x5e, 0x8c, 0x31,
-	0x78, 0x39, 0xc6, 0xf0, 0x22, 0xc6, 0xf0, 0x32, 0xc6, 0xe0, 0x7e, 0x8c, 0xe1, 0x83, 0x18, 0x83,
-	0x87, 0x31, 0x06, 0x8f, 0x62, 0x0c, 0x1e, 0xc7, 0x18, 0x3e, 0x89, 0x31, 0x7c, 0x1a, 0x63, 0xf0,
-	0x2c, 0xc6, 0xf0, 0x79, 0x8c, 0xc1, 0x8b, 0x18, 0xc3, 0x97, 0x31, 0x06, 0x17, 0x09, 0x06, 0x97,
-	0x09, 0x86, 0xf7, 0x12, 0x0c, 0x7e, 0x4a, 0x30, 0xfc, 0x39, 0xc1, 0xe0, 0x7e, 0x82, 0xc1, 0x83,
-	0x04, 0xc3, 0x87, 0x09, 0x86, 0x8f, 0x12, 0x0c, 0xbf, 0xd5, 0x7d, 0xae, 0x89, 0x0e, 0x11, 0x1d,
-	0xca, 0xfc, 0x81, 0xc6, 0x88, 0xb8, 0xcd, 0xc3, 0xae, 0xbe, 0xbc, 0x12, 0x47, 0x47, 0x7a, 0xd0,
-	0xf5, 0x75, 0x21, 0x58, 0xd0, 0x6a, 0x6d, 0xa4, 0x3f, 0x3b, 0xfa, 0x27, 0x00, 0x00, 0xff, 0xff,
-	0x4b, 0xa6, 0x92, 0x11, 0x3b, 0x06, 0x00, 0x00,
+	// 744 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x94, 0x54, 0xcf, 0x6f, 0xda, 0x48,
+	0x18, 0xc5, 0xe6, 0xc7, 0x26, 0x43, 0x12, 0xb1, 0xde, 0x5d, 0xd6, 0x72, 0x36, 0x0e, 0xcb, 0xee,
+	0x4a, 0x28, 0x12, 0xb6, 0x44, 0x4e, 0xbb, 0x87, 0xdd, 0xb5, 0xa9, 0x55, 0x90, 0xf8, 0x11, 0xb9,
+	0x6e, 0xa5, 0xf6, 0x82, 0x8c, 0x19, 0xcc, 0x08, 0x98, 0x71, 0xcd, 0x40, 0xe2, 0x53, 0xa3, 0xf4,
+	0xd2, 0x63, 0xa4, 0xfe, 0x03, 0x95, 0x7a, 0xa9, 0xfa, 0x17, 0xf4, 0xd8, 0x3f, 0xa0, 0xb7, 0x5e,
+	0x7a, 0xab, 0x4a, 0x7a, 0xe8, 0xb1, 0xe7, 0x9c, 0x2a, 0x6c, 0x03, 0x26, 0x28, 0x6d, 0x7a, 0xf3,
+	0x7c, 0xef, 0x7d, 0xef, 0x1b, 0xbf, 0xf7, 0x69, 0xc0, 0x9f, 0x03, 0xe2, 0x9a, 0xc7, 0x26, 0x2e,
+	0x8e, 0xa8, 0x69, 0xf5, 0x65, 0xd3, 0x41, 0xb2, 0x45, 0x30, 0x35, 0x2d, 0xda, 0x42, 0xb8, 0x4b,
+	0x24, 0xc7, 0x25, 0x94, 0x70, 0x3b, 0x94, 0x62, 0x29, 0x64, 0x4a, 0x93, 0x43, 0x41, 0xb1, 0x11,
+	0xed, 0x8d, 0xdb, 0x92, 0x45, 0x86, 0x32, 0xc4, 0x13, 0xe2, 0x39, 0x2e, 0x39, 0xf1, 0x64, 0x9f,
+	0x6c, 0x15, 0x6d, 0x88, 0x8b, 0x13, 0x73, 0x80, 0x3a, 0x26, 0x85, 0xf2, 0xda, 0x47, 0x20, 0x29,
+	0x14, 0x23, 0x12, 0x36, 0xb1, 0x49, 0xd0, 0xdc, 0x1e, 0x77, 0xfd, 0x93, 0x7f, 0xf0, 0xbf, 0x42,
+	0xfa, 0x6f, 0x36, 0x21, 0xf6, 0x00, 0xfa, 0x17, 0x34, 0x31, 0x26, 0xd4, 0xa4, 0x88, 0xe0, 0x51,
+	0x88, 0xee, 0x86, 0xe8, 0x42, 0x03, 0x0e, 0x1d, 0xea, 0x85, 0xe0, 0xfe, 0x55, 0x90, 0xa2, 0x21,
+	0x1c, 0x51, 0x73, 0xe8, 0x84, 0x84, 0x3f, 0xd6, 0x3d, 0x40, 0x1d, 0x88, 0x29, 0xea, 0x22, 0xe8,
+	0x86, 0x23, 0xf2, 0x2f, 0x59, 0x90, 0x2e, 0x07, 0xce, 0x54, 0x71, 0x97, 0x70, 0x15, 0xb0, 0x35,
+	0x37, 0x8a, 0x7a, 0x0e, 0xe4, 0x99, 0x1c, 0x53, 0xd8, 0x29, 0xed, 0x4a, 0xab, 0x4e, 0x49, 0x61,
+	0x8b, 0xe1, 0x39, 0x50, 0xdd, 0xb8, 0x54, 0x93, 0x67, 0x0c, 0x9b, 0x61, 0xf4, 0xb4, 0xb5, 0x2c,
+	0x73, 0x0d, 0xb0, 0x33, 0x57, 0x1a, 0x42, 0xda, 0x23, 0x1d, 0x9e, 0xf5, 0xb5, 0xf6, 0xae, 0xd1,
+	0xaa, 0xfb, 0xa4, 0x88, 0xda, 0xb6, 0x15, 0x05, 0x38, 0x11, 0x24, 0x27, 0xe6, 0x60, 0x0c, 0xf9,
+	0x78, 0x8e, 0x29, 0x6c, 0xfa, 0x3c, 0x37, 0xce, 0x9f, 0xb2, 0x7a, 0x50, 0xe6, 0xb2, 0x20, 0xe5,
+	0x8c, 0xdb, 0x03, 0x64, 0xf1, 0x89, 0x1c, 0x53, 0xd8, 0xd0, 0xc3, 0x13, 0x57, 0x06, 0x5b, 0xf3,
+	0x8c, 0x3a, 0x2d, 0x93, 0xf2, 0xc9, 0x1c, 0x53, 0x48, 0x97, 0x04, 0x29, 0xb0, 0x4f, 0x9a, 0xdb,
+	0x27, 0x19, 0x73, 0xfb, 0xd4, 0xc4, 0xf9, 0xfb, 0x7d, 0x46, 0x4f, 0x2f, 0xba, 0x14, 0xfa, 0x4f,
+	0xe2, 0xd5, 0xb3, 0x7d, 0x26, 0xff, 0x86, 0x05, 0xbf, 0x44, 0xcc, 0xba, 0x17, 0x10, 0x10, 0xc1,
+	0xdc, 0xaf, 0x80, 0x45, 0x1d, 0xdf, 0xac, 0x4d, 0xf5, 0x87, 0x4b, 0x35, 0xe1, 0xb2, 0xfc, 0xff,
+	0x3a, 0x8b, 0x3a, 0xdc, 0x1e, 0x48, 0x52, 0xd2, 0x87, 0xd8, 0xff, 0xf9, 0x08, 0x16, 0x54, 0xb9,
+	0xbf, 0x41, 0x6a, 0x96, 0x08, 0xf5, 0xfc, 0xbf, 0x4a, 0x97, 0x7e, 0xbf, 0x6a, 0x8e, 0xe6, 0xa3,
+	0xd5, 0x65, 0x6e, 0x7a, 0xd8, 0xc0, 0xfd, 0xbb, 0x4c, 0x6a, 0xb6, 0xd2, 0x7c, 0x22, 0x17, 0x2f,
+	0xa4, 0xaf, 0x4d, 0x6a, 0x76, 0xdf, 0x45, 0x3e, 0x7e, 0xd2, 0xff, 0x01, 0x60, 0xb9, 0xf0, 0x7b,
+	0x5d, 0xd9, 0x0c, 0x7b, 0x14, 0x3a, 0x13, 0x80, 0x27, 0x0e, 0x72, 0xe1, 0x68, 0x26, 0x90, 0xba,
+	0xa9, 0x40, 0xd8, 0xa3, 0xd0, 0x03, 0x6f, 0xb1, 0x7a, 0xfe, 0xc2, 0x64, 0x01, 0x57, 0x6e, 0x36,
+	0x0c, 0xa5, 0x6c, 0xb4, 0x8c, 0xfb, 0x47, 0x5a, 0xab, 0x69, 0x54, 0x34, 0x3d, 0x13, 0x5b, 0xab,
+	0x2b, 0xea, 0xdd, 0x3b, 0x5a, 0x86, 0xe1, 0x78, 0xf0, 0xf3, 0x4a, 0x5d, 0xad, 0xd6, 0x6a, 0xd5,
+	0xc6, 0xed, 0x0c, 0xcb, 0x09, 0x20, 0xbb, 0x82, 0x18, 0x5a, 0xb9, 0xd2, 0xa8, 0x96, 0x95, 0x5a,
+	0x26, 0x2e, 0x24, 0x9e, 0x3c, 0x17, 0x63, 0x07, 0x16, 0xd8, 0x5e, 0x59, 0xbb, 0xa8, 0x58, 0x5d,
+	0x33, 0x2a, 0xcd, 0x5b, 0x8b, 0xf1, 0xeb, 0x88, 0x56, 0x57, 0xaa, 0xb5, 0xd5, 0x0b, 0x84, 0xc8,
+	0x51, 0xa5, 0xd9, 0xd0, 0x32, 0x6c, 0x30, 0xa4, 0xf4, 0x98, 0x05, 0x3f, 0x45, 0xed, 0x87, 0x36,
+	0x1a, 0x51, 0xd7, 0xe3, 0x1e, 0x81, 0x1f, 0x75, 0xf8, 0x70, 0x0c, 0x47, 0x34, 0xb2, 0x41, 0xdf,
+	0x4e, 0x5e, 0xf8, 0xeb, 0x2b, 0xd9, 0x2e, 0x95, 0xf2, 0xb9, 0xb3, 0xb7, 0x1f, 0x9f, 0xb2, 0x42,
+	0x9e, 0x5f, 0x79, 0xf2, 0xe6, 0x0f, 0xd5, 0x6c, 0x56, 0x1f, 0x6c, 0x84, 0x7c, 0xc8, 0xdd, 0x4c,
+	0x54, 0xc8, 0xae, 0x05, 0xab, 0xcd, 0xde, 0xa2, 0xf9, 0xb0, 0xd2, 0xb5, 0xc3, 0xd4, 0xfa, 0xbb,
+	0x0f, 0x62, 0xec, 0x74, 0x2a, 0x32, 0x2f, 0xa6, 0x22, 0xf3, 0x69, 0x2a, 0xc6, 0x3e, 0x4f, 0x45,
+	0xe6, 0xfc, 0x42, 0x8c, 0xbd, 0xbe, 0x10, 0x99, 0x07, 0xb2, 0x4d, 0x24, 0xda, 0x83, 0xb4, 0x87,
+	0xb0, 0x3d, 0x92, 0x30, 0xa4, 0xc7, 0xc4, 0xed, 0xcb, 0xab, 0x2f, 0xd7, 0xe4, 0x50, 0x76, 0xfa,
+	0xb6, 0x4c, 0x29, 0x76, 0xda, 0xed, 0x94, 0x7f, 0x81, 0xc3, 0x2f, 0x01, 0x00, 0x00, 0xff, 0xff,
+	0xf6, 0xbf, 0xff, 0x27, 0xe2, 0x05, 0x00, 0x00,
 }
 
 func (x ContactType) String() string {
@@ -399,7 +373,7 @@ func (this *ContactInfoValidation) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if this.ID != that1.ID {
+	if this.Id != that1.Id {
 		return false
 	}
 	if this.Token != that1.Token {
@@ -553,193 +527,14 @@ var _ContactInfoRegistry_serviceDesc = grpc.ServiceDesc{
 	Metadata: "lorawan-stack/api/contact_info.proto",
 }
 
-func (m *ContactInfo) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *ContactInfo) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *ContactInfo) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.ValidatedAt != nil {
-		n1, err1 := github_com_gogo_protobuf_types.StdTimeMarshalTo(*m.ValidatedAt, dAtA[i-github_com_gogo_protobuf_types.SizeOfStdTime(*m.ValidatedAt):])
-		if err1 != nil {
-			return 0, err1
-		}
-		i -= n1
-		i = encodeVarintContactInfo(dAtA, i, uint64(n1))
-		i--
-		dAtA[i] = 0x2a
-	}
-	if m.Public {
-		i--
-		if m.Public {
-			dAtA[i] = 1
-		} else {
-			dAtA[i] = 0
-		}
-		i--
-		dAtA[i] = 0x20
-	}
-	if len(m.Value) > 0 {
-		i -= len(m.Value)
-		copy(dAtA[i:], m.Value)
-		i = encodeVarintContactInfo(dAtA, i, uint64(len(m.Value)))
-		i--
-		dAtA[i] = 0x1a
-	}
-	if m.ContactMethod != 0 {
-		i = encodeVarintContactInfo(dAtA, i, uint64(m.ContactMethod))
-		i--
-		dAtA[i] = 0x10
-	}
-	if m.ContactType != 0 {
-		i = encodeVarintContactInfo(dAtA, i, uint64(m.ContactType))
-		i--
-		dAtA[i] = 0x8
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *ContactInfoValidation) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *ContactInfoValidation) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *ContactInfoValidation) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.ExpiresAt != nil {
-		n2, err2 := github_com_gogo_protobuf_types.StdTimeMarshalTo(*m.ExpiresAt, dAtA[i-github_com_gogo_protobuf_types.SizeOfStdTime(*m.ExpiresAt):])
-		if err2 != nil {
-			return 0, err2
-		}
-		i -= n2
-		i = encodeVarintContactInfo(dAtA, i, uint64(n2))
-		i--
-		dAtA[i] = 0x32
-	}
-	if m.CreatedAt != nil {
-		n3, err3 := github_com_gogo_protobuf_types.StdTimeMarshalTo(*m.CreatedAt, dAtA[i-github_com_gogo_protobuf_types.SizeOfStdTime(*m.CreatedAt):])
-		if err3 != nil {
-			return 0, err3
-		}
-		i -= n3
-		i = encodeVarintContactInfo(dAtA, i, uint64(n3))
-		i--
-		dAtA[i] = 0x2a
-	}
-	if len(m.ContactInfo) > 0 {
-		for iNdEx := len(m.ContactInfo) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.ContactInfo[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintContactInfo(dAtA, i, uint64(size))
-			}
-			i--
-			dAtA[i] = 0x22
-		}
-	}
-	if m.Entity != nil {
-		{
-			size, err := m.Entity.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintContactInfo(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x1a
-	}
-	if len(m.Token) > 0 {
-		i -= len(m.Token)
-		copy(dAtA[i:], m.Token)
-		i = encodeVarintContactInfo(dAtA, i, uint64(len(m.Token)))
-		i--
-		dAtA[i] = 0x12
-	}
-	if len(m.ID) > 0 {
-		i -= len(m.ID)
-		copy(dAtA[i:], m.ID)
-		i = encodeVarintContactInfo(dAtA, i, uint64(len(m.ID)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
-}
-
-func encodeVarintContactInfo(dAtA []byte, offset int, v uint64) int {
-	offset -= sovContactInfo(v)
-	base := offset
-	for v >= 1<<7 {
-		dAtA[offset] = uint8(v&0x7f | 0x80)
-		v >>= 7
-		offset++
-	}
-	dAtA[offset] = uint8(v)
-	return base
-}
 func NewPopulatedContactInfo(r randyContactInfo, easy bool) *ContactInfo {
 	this := &ContactInfo{}
 	this.ContactType = ContactType([]int32{0, 1, 2, 3}[r.Intn(4)])
 	this.ContactMethod = ContactMethod([]int32{0, 1, 2}[r.Intn(3)])
-	this.Value = randStringContactInfo(r)
-	this.Public = bool(r.Intn(2) == 0)
+	this.Value = string(randStringContactInfo(r))
+	this.Public = bool(bool(r.Intn(2) == 0))
 	if r.Intn(5) != 0 {
 		this.ValidatedAt = github_com_gogo_protobuf_types.NewPopulatedStdTime(r, easy)
-	}
-	if !easy && r.Intn(10) != 0 {
-	}
-	return this
-}
-
-func NewPopulatedContactInfoValidation(r randyContactInfo, easy bool) *ContactInfoValidation {
-	this := &ContactInfoValidation{}
-	this.ID = randStringContactInfo(r)
-	this.Token = randStringContactInfo(r)
-	if r.Intn(5) != 0 {
-		this.Entity = NewPopulatedEntityIdentifiers(r, easy)
-	}
-	if r.Intn(5) != 0 {
-		v1 := r.Intn(5)
-		this.ContactInfo = make([]*ContactInfo, v1)
-		for i := 0; i < v1; i++ {
-			this.ContactInfo[i] = NewPopulatedContactInfo(r, easy)
-		}
-	}
-	if r.Intn(5) != 0 {
-		this.CreatedAt = github_com_gogo_protobuf_types.NewPopulatedStdTime(r, easy)
-	}
-	if r.Intn(5) != 0 {
-		this.ExpiresAt = github_com_gogo_protobuf_types.NewPopulatedStdTime(r, easy)
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
@@ -765,9 +560,9 @@ func randUTF8RuneContactInfo(r randyContactInfo) rune {
 	return rune(ru + 61)
 }
 func randStringContactInfo(r randyContactInfo) string {
-	v2 := r.Intn(100)
-	tmps := make([]rune, v2)
-	for i := 0; i < v2; i++ {
+	v1 := r.Intn(100)
+	tmps := make([]rune, v1)
+	for i := 0; i < v1; i++ {
 		tmps[i] = randUTF8RuneContactInfo(r)
 	}
 	return string(tmps)
@@ -789,11 +584,11 @@ func randFieldContactInfo(dAtA []byte, r randyContactInfo, fieldNumber int, wire
 	switch wire {
 	case 0:
 		dAtA = encodeVarintPopulateContactInfo(dAtA, uint64(key))
-		v3 := r.Int63()
+		v2 := r.Int63()
 		if r.Intn(2) == 0 {
-			v3 *= -1
+			v2 *= -1
 		}
-		dAtA = encodeVarintPopulateContactInfo(dAtA, uint64(v3))
+		dAtA = encodeVarintPopulateContactInfo(dAtA, uint64(v2))
 	case 1:
 		dAtA = encodeVarintPopulateContactInfo(dAtA, uint64(key))
 		dAtA = append(dAtA, byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)))
@@ -812,78 +607,11 @@ func randFieldContactInfo(dAtA []byte, r randyContactInfo, fieldNumber int, wire
 }
 func encodeVarintPopulateContactInfo(dAtA []byte, v uint64) []byte {
 	for v >= 1<<7 {
-		dAtA = append(dAtA, uint8(v&0x7f|0x80))
+		dAtA = append(dAtA, uint8(uint64(v)&0x7f|0x80))
 		v >>= 7
 	}
 	dAtA = append(dAtA, uint8(v))
 	return dAtA
-}
-func (m *ContactInfo) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.ContactType != 0 {
-		n += 1 + sovContactInfo(uint64(m.ContactType))
-	}
-	if m.ContactMethod != 0 {
-		n += 1 + sovContactInfo(uint64(m.ContactMethod))
-	}
-	l = len(m.Value)
-	if l > 0 {
-		n += 1 + l + sovContactInfo(uint64(l))
-	}
-	if m.Public {
-		n += 2
-	}
-	if m.ValidatedAt != nil {
-		l = github_com_gogo_protobuf_types.SizeOfStdTime(*m.ValidatedAt)
-		n += 1 + l + sovContactInfo(uint64(l))
-	}
-	return n
-}
-
-func (m *ContactInfoValidation) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.ID)
-	if l > 0 {
-		n += 1 + l + sovContactInfo(uint64(l))
-	}
-	l = len(m.Token)
-	if l > 0 {
-		n += 1 + l + sovContactInfo(uint64(l))
-	}
-	if m.Entity != nil {
-		l = m.Entity.Size()
-		n += 1 + l + sovContactInfo(uint64(l))
-	}
-	if len(m.ContactInfo) > 0 {
-		for _, e := range m.ContactInfo {
-			l = e.Size()
-			n += 1 + l + sovContactInfo(uint64(l))
-		}
-	}
-	if m.CreatedAt != nil {
-		l = github_com_gogo_protobuf_types.SizeOfStdTime(*m.CreatedAt)
-		n += 1 + l + sovContactInfo(uint64(l))
-	}
-	if m.ExpiresAt != nil {
-		l = github_com_gogo_protobuf_types.SizeOfStdTime(*m.ExpiresAt)
-		n += 1 + l + sovContactInfo(uint64(l))
-	}
-	return n
-}
-
-func sovContactInfo(x uint64) (n int) {
-	return (math_bits.Len64(x|1) + 6) / 7
-}
-func sozContactInfo(x uint64) (n int) {
-	return sovContactInfo((x << 1) ^ uint64((int64(x) >> 63)))
 }
 func (this *ContactInfo) String() string {
 	if this == nil {
@@ -909,7 +637,7 @@ func (this *ContactInfoValidation) String() string {
 	}
 	repeatedStringForContactInfo += "}"
 	s := strings.Join([]string{`&ContactInfoValidation{`,
-		`ID:` + fmt.Sprintf("%v", this.ID) + `,`,
+		`Id:` + fmt.Sprintf("%v", this.Id) + `,`,
 		`Token:` + fmt.Sprintf("%v", this.Token) + `,`,
 		`Entity:` + strings.Replace(fmt.Sprintf("%v", this.Entity), "EntityIdentifiers", "EntityIdentifiers", 1) + `,`,
 		`ContactInfo:` + repeatedStringForContactInfo + `,`,
@@ -927,525 +655,3 @@ func valueToStringContactInfo(v interface{}) string {
 	pv := reflect.Indirect(rv).Interface()
 	return fmt.Sprintf("*%v", pv)
 }
-func (m *ContactInfo) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowContactInfo
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: ContactInfo: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: ContactInfo: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ContactType", wireType)
-			}
-			m.ContactType = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowContactInfo
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.ContactType |= ContactType(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 2:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ContactMethod", wireType)
-			}
-			m.ContactMethod = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowContactInfo
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.ContactMethod |= ContactMethod(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Value", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowContactInfo
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthContactInfo
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthContactInfo
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Value = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 4:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Public", wireType)
-			}
-			var v int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowContactInfo
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				v |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			m.Public = bool(v != 0)
-		case 5:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ValidatedAt", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowContactInfo
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthContactInfo
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthContactInfo
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.ValidatedAt == nil {
-				m.ValidatedAt = new(time.Time)
-			}
-			if err := github_com_gogo_protobuf_types.StdTimeUnmarshal(m.ValidatedAt, dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipContactInfo(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthContactInfo
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthContactInfo
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *ContactInfoValidation) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowContactInfo
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: ContactInfoValidation: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: ContactInfoValidation: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ID", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowContactInfo
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthContactInfo
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthContactInfo
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.ID = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Token", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowContactInfo
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthContactInfo
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthContactInfo
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Token = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Entity", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowContactInfo
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthContactInfo
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthContactInfo
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Entity == nil {
-				m.Entity = &EntityIdentifiers{}
-			}
-			if err := m.Entity.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 4:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ContactInfo", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowContactInfo
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthContactInfo
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthContactInfo
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.ContactInfo = append(m.ContactInfo, &ContactInfo{})
-			if err := m.ContactInfo[len(m.ContactInfo)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 5:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field CreatedAt", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowContactInfo
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthContactInfo
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthContactInfo
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.CreatedAt == nil {
-				m.CreatedAt = new(time.Time)
-			}
-			if err := github_com_gogo_protobuf_types.StdTimeUnmarshal(m.CreatedAt, dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 6:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ExpiresAt", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowContactInfo
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthContactInfo
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthContactInfo
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.ExpiresAt == nil {
-				m.ExpiresAt = new(time.Time)
-			}
-			if err := github_com_gogo_protobuf_types.StdTimeUnmarshal(m.ExpiresAt, dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipContactInfo(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthContactInfo
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthContactInfo
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func skipContactInfo(dAtA []byte) (n int, err error) {
-	l := len(dAtA)
-	iNdEx := 0
-	depth := 0
-	for iNdEx < l {
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return 0, ErrIntOverflowContactInfo
-			}
-			if iNdEx >= l {
-				return 0, io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		wireType := int(wire & 0x7)
-		switch wireType {
-		case 0:
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return 0, ErrIntOverflowContactInfo
-				}
-				if iNdEx >= l {
-					return 0, io.ErrUnexpectedEOF
-				}
-				iNdEx++
-				if dAtA[iNdEx-1] < 0x80 {
-					break
-				}
-			}
-		case 1:
-			iNdEx += 8
-		case 2:
-			var length int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return 0, ErrIntOverflowContactInfo
-				}
-				if iNdEx >= l {
-					return 0, io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				length |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if length < 0 {
-				return 0, ErrInvalidLengthContactInfo
-			}
-			iNdEx += length
-		case 3:
-			depth++
-		case 4:
-			if depth == 0 {
-				return 0, ErrUnexpectedEndOfGroupContactInfo
-			}
-			depth--
-		case 5:
-			iNdEx += 4
-		default:
-			return 0, fmt.Errorf("proto: illegal wireType %d", wireType)
-		}
-		if iNdEx < 0 {
-			return 0, ErrInvalidLengthContactInfo
-		}
-		if depth == 0 {
-			return iNdEx, nil
-		}
-	}
-	return 0, io.ErrUnexpectedEOF
-}
-
-var (
-	ErrInvalidLengthContactInfo        = fmt.Errorf("proto: negative length found during unmarshaling")
-	ErrIntOverflowContactInfo          = fmt.Errorf("proto: integer overflow")
-	ErrUnexpectedEndOfGroupContactInfo = fmt.Errorf("proto: unexpected end of group")
-)

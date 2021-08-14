@@ -24,7 +24,7 @@ import (
 
 // IsZero returns true if all identifiers have zero-values.
 func (ids ApplicationIdentifiers) IsZero() bool {
-	return ids.ApplicationID == ""
+	return ids.ApplicationId == ""
 }
 
 // FieldIsZero returns whether path p is zero.
@@ -34,23 +34,23 @@ func (v *ApplicationIdentifiers) FieldIsZero(p string) bool {
 	}
 	switch p {
 	case "application_id":
-		return v.ApplicationID == ""
+		return v.ApplicationId == ""
 	}
 	panic(fmt.Sprintf("unknown path '%s'", p))
 }
 
 // IsZero returns true if all identifiers have zero-values.
 func (ids ClientIdentifiers) IsZero() bool {
-	return ids.ClientID == ""
+	return ids.ClientId == ""
 }
 
 // IsZero reports whether ids represent zero identifiers.
 func (ids EndDeviceIdentifiers) IsZero() bool {
-	return ids.GetDeviceID() == "" &&
-		ids.GetApplicationID() == "" &&
+	return ids.GetDeviceId() == "" &&
+		ids.GetApplicationId() == "" &&
 		(ids.DevAddr == nil || ids.DevAddr.IsZero()) &&
-		(ids.DevEUI == nil || ids.DevEUI.IsZero()) &&
-		ids.JoinEUI == nil
+		(ids.DevEui == nil || ids.DevEui.IsZero()) &&
+		ids.JoinEui == nil
 }
 
 // FieldIsZero returns whether path p is zero.
@@ -66,28 +66,28 @@ func (v *EndDeviceIdentifiers) FieldIsZero(p string) bool {
 	case "dev_addr":
 		return v.DevAddr == nil
 	case "dev_eui":
-		return v.DevEUI == nil
+		return v.DevEui == nil
 	case "device_id":
-		return v.DeviceID == ""
+		return v.DeviceId == ""
 	case "join_eui":
-		return v.JoinEUI == nil
+		return v.JoinEui == nil
 	}
 	panic(fmt.Sprintf("unknown path '%s'", p))
 }
 
 // IsZero returns true if all identifiers have zero-values.
 func (ids GatewayIdentifiers) IsZero() bool {
-	return ids.GatewayID == "" && ids.EUI == nil
+	return ids.GatewayId == "" && ids.Eui == nil
 }
 
 // IsZero returns true if all identifiers have zero-values.
 func (ids OrganizationIdentifiers) IsZero() bool {
-	return ids.OrganizationID == ""
+	return ids.OrganizationId == ""
 }
 
 // IsZero returns true if all identifiers have zero-values.
 func (ids UserIdentifiers) IsZero() bool {
-	return ids.UserID == "" && ids.Email == ""
+	return ids.UserId == "" && ids.Email == ""
 }
 
 // GetOrganizationOrUserIdentifiers returns the OrganizationIdentifiers as *OrganizationOrUserIdentifiers.
@@ -100,8 +100,8 @@ func (ids *OrganizationIdentifiers) GetOrganizationOrUserIdentifiers() *Organiza
 
 // OrganizationOrUserIdentifiers returns the OrganizationIdentifiers as *OrganizationOrUserIdentifiers.
 func (ids OrganizationIdentifiers) OrganizationOrUserIdentifiers() *OrganizationOrUserIdentifiers {
-	return &OrganizationOrUserIdentifiers{Ids: &OrganizationOrUserIdentifiers_OrganizationIDs{
-		OrganizationIDs: &ids,
+	return &OrganizationOrUserIdentifiers{Ids: &OrganizationOrUserIdentifiers_OrganizationIds{
+		OrganizationIds: &ids,
 	}}
 }
 
@@ -115,25 +115,25 @@ func (ids *UserIdentifiers) GetOrganizationOrUserIdentifiers() *OrganizationOrUs
 
 // OrganizationOrUserIdentifiers returns the UserIdentifiers as *OrganizationOrUserIdentifiers.
 func (ids UserIdentifiers) OrganizationOrUserIdentifiers() *OrganizationOrUserIdentifiers {
-	return &OrganizationOrUserIdentifiers{Ids: &OrganizationOrUserIdentifiers_UserIDs{
-		UserIDs: &ids,
+	return &OrganizationOrUserIdentifiers{Ids: &OrganizationOrUserIdentifiers_UserIds{
+		UserIds: &ids,
 	}}
 }
 
 // Copy stores a copy of ids in x and returns it.
 func (ids EndDeviceIdentifiers) Copy(x *EndDeviceIdentifiers) *EndDeviceIdentifiers {
 	*x = EndDeviceIdentifiers{
-		DeviceID: ids.DeviceID,
+		DeviceId: ids.DeviceId,
 		ApplicationIdentifiers: ApplicationIdentifiers{
-			ApplicationID: ids.ApplicationID,
+			ApplicationId: ids.ApplicationId,
 		},
 		XXX_sizecache: ids.XXX_sizecache,
 	}
-	if ids.DevEUI != nil {
-		x.DevEUI = ids.DevEUI.Copy(&types.EUI64{})
+	if ids.DevEui != nil {
+		x.DevEui = ids.DevEui.Copy(&types.EUI64{})
 	}
-	if ids.JoinEUI != nil {
-		x.JoinEUI = ids.JoinEUI.Copy(&types.EUI64{})
+	if ids.JoinEui != nil {
+		x.JoinEui = ids.JoinEui.Copy(&types.EUI64{})
 	}
 	if ids.DevAddr != nil {
 		x.DevAddr = ids.DevAddr.Copy(&types.DevAddr{})
@@ -165,6 +165,13 @@ func (ids *GatewayIdentifiers) ValidateContext(context.Context) error {
 		return errIdentifiers.WithCause(err)
 	}
 	return nil
+}
+
+func (ids *GatewayIdentifiers) GetEui() *types.EUI64 {
+	if ids == nil {
+		return nil
+	}
+	return ids.Eui
 }
 
 // ValidateContext wraps the generated validator with (optionally context-based) custom checks.

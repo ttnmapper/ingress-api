@@ -57,23 +57,6 @@ var GatewayRadioFieldPathsTopLevel = []string{
 	"rssi_offset",
 	"tx_configuration",
 }
-var GatewayVersionFieldPathsNested = []string{
-	"clock_source",
-	"ids",
-	"ids.brand_id",
-	"ids.firmware_version",
-	"ids.hardware_version",
-	"ids.model_id",
-	"photos",
-	"radios",
-}
-
-var GatewayVersionFieldPathsTopLevel = []string{
-	"clock_source",
-	"ids",
-	"photos",
-	"radios",
-}
 var GatewayClaimAuthenticationCodeFieldPathsNested = []string{
 	"secret",
 	"secret.key_id",
@@ -101,6 +84,7 @@ var GatewayFieldPathsNested = []string{
 	"created_at",
 	"deleted_at",
 	"description",
+	"disable_packet_broker_forwarding",
 	"downlink_path_constraint",
 	"enforce_duty_cycle",
 	"frequency_plan_id",
@@ -113,6 +97,8 @@ var GatewayFieldPathsNested = []string{
 	"lbs_lns_secret.key_id",
 	"lbs_lns_secret.value",
 	"location_public",
+	"lrfhss",
+	"lrfhss.supported",
 	"name",
 	"require_authenticated_connection",
 	"schedule_anytime_delay",
@@ -141,6 +127,7 @@ var GatewayFieldPathsTopLevel = []string{
 	"created_at",
 	"deleted_at",
 	"description",
+	"disable_packet_broker_forwarding",
 	"downlink_path_constraint",
 	"enforce_duty_cycle",
 	"frequency_plan_id",
@@ -149,6 +136,7 @@ var GatewayFieldPathsTopLevel = []string{
 	"ids",
 	"lbs_lns_secret",
 	"location_public",
+	"lrfhss",
 	"name",
 	"require_authenticated_connection",
 	"schedule_anytime_delay",
@@ -231,6 +219,7 @@ var CreateGatewayRequestFieldPathsNested = []string{
 	"gateway.created_at",
 	"gateway.deleted_at",
 	"gateway.description",
+	"gateway.disable_packet_broker_forwarding",
 	"gateway.downlink_path_constraint",
 	"gateway.enforce_duty_cycle",
 	"gateway.frequency_plan_id",
@@ -243,6 +232,8 @@ var CreateGatewayRequestFieldPathsNested = []string{
 	"gateway.lbs_lns_secret.key_id",
 	"gateway.lbs_lns_secret.value",
 	"gateway.location_public",
+	"gateway.lrfhss",
+	"gateway.lrfhss.supported",
 	"gateway.name",
 	"gateway.require_authenticated_connection",
 	"gateway.schedule_anytime_delay",
@@ -282,6 +273,7 @@ var UpdateGatewayRequestFieldPathsNested = []string{
 	"gateway.created_at",
 	"gateway.deleted_at",
 	"gateway.description",
+	"gateway.disable_packet_broker_forwarding",
 	"gateway.downlink_path_constraint",
 	"gateway.enforce_duty_cycle",
 	"gateway.frequency_plan_id",
@@ -294,6 +286,8 @@ var UpdateGatewayRequestFieldPathsNested = []string{
 	"gateway.lbs_lns_secret.key_id",
 	"gateway.lbs_lns_secret.value",
 	"gateway.location_public",
+	"gateway.lrfhss",
+	"gateway.lrfhss.supported",
 	"gateway.name",
 	"gateway.require_authenticated_connection",
 	"gateway.schedule_anytime_delay",
@@ -342,6 +336,7 @@ var GetGatewayAPIKeyRequestFieldPathsTopLevel = []string{
 	"key_id",
 }
 var CreateGatewayAPIKeyRequestFieldPathsNested = []string{
+	"expires_at",
 	"gateway_ids",
 	"gateway_ids.eui",
 	"gateway_ids.gateway_id",
@@ -350,6 +345,7 @@ var CreateGatewayAPIKeyRequestFieldPathsNested = []string{
 }
 
 var CreateGatewayAPIKeyRequestFieldPathsTopLevel = []string{
+	"expires_at",
 	"gateway_ids",
 	"name",
 	"rights",
@@ -357,11 +353,13 @@ var CreateGatewayAPIKeyRequestFieldPathsTopLevel = []string{
 var UpdateGatewayAPIKeyRequestFieldPathsNested = []string{
 	"api_key",
 	"api_key.created_at",
+	"api_key.expires_at",
 	"api_key.id",
 	"api_key.key",
 	"api_key.name",
 	"api_key.rights",
 	"api_key.updated_at",
+	"field_mask",
 	"gateway_ids",
 	"gateway_ids.eui",
 	"gateway_ids.gateway_id",
@@ -369,6 +367,7 @@ var UpdateGatewayAPIKeyRequestFieldPathsNested = []string{
 
 var UpdateGatewayAPIKeyRequestFieldPathsTopLevel = []string{
 	"api_key",
+	"field_mask",
 	"gateway_ids",
 }
 var ListGatewayCollaboratorsRequestFieldPathsNested = []string{
@@ -429,12 +428,14 @@ var GatewayAntennaFieldPathsNested = []string{
 	"location.latitude",
 	"location.longitude",
 	"location.source",
+	"placement",
 }
 
 var GatewayAntennaFieldPathsTopLevel = []string{
 	"attributes",
 	"gain",
 	"location",
+	"placement",
 }
 var GatewayStatusFieldPathsNested = []string{
 	"advanced",
@@ -501,6 +502,13 @@ var GatewayRadio_TxConfigurationFieldPathsTopLevel = []string{
 	"max_frequency",
 	"min_frequency",
 	"notch_frequency",
+}
+var Gateway_LRFHSSFieldPathsNested = []string{
+	"supported",
+}
+
+var Gateway_LRFHSSFieldPathsTopLevel = []string{
+	"supported",
 }
 var GatewayConnectionStats_RoundTripTimesFieldPathsNested = []string{
 	"count",

@@ -144,7 +144,7 @@ func (m *APIKey) ValidateFields(paths ...string) error {
 		_ = subs
 		switch name {
 		case "id":
-			// no validation rules for ID
+			// no validation rules for Id
 		case "key":
 			// no validation rules for Key
 		case "name":
@@ -192,6 +192,21 @@ func (m *APIKey) ValidateFields(paths ...string) error {
 						cause:  err,
 					}
 				}
+			}
+
+		case "expires_at":
+
+			if ts := m.GetExpiresAt(); ts != nil {
+
+				now := time.Now()
+
+				if ts.Sub(now) <= 0 {
+					return APIKeyValidationError{
+						field:  "expires_at",
+						reason: "value must be greater than now",
+					}
+				}
+
 			}
 
 		default:
@@ -275,7 +290,7 @@ func (m *APIKeys) ValidateFields(paths ...string) error {
 		switch name {
 		case "api_keys":
 
-			for idx, item := range m.GetAPIKeys() {
+			for idx, item := range m.GetApiKeys() {
 				_, _ = idx, item
 
 				if v, ok := interface{}(item).(interface{ ValidateFields(...string) error }); ok {

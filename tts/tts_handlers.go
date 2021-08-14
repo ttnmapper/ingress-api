@@ -10,7 +10,6 @@ import (
 	"math/rand"
 	"net/http"
 	"strconv"
-	"strings"
 	"ttnmapper-ingress-api/types"
 	"ttnmapper-ingress-api/utils"
 )
@@ -101,25 +100,12 @@ func (handlerContext *Context) PostV3Uplink(w http.ResponseWriter, r *http.Reque
 	}
 
 	/*
-		Determine the network
-		X-Tts-Domain suffix .cloud.thethings.network is The Things Stack Community Edition (The Things Network)
-		X-Tts-Domain suffix .cloud.thethings.industries is The Things Stack Cloud (The Things Industries)
-		home_network_net_id 000013 and home_network_tenant_id ttn is The Things Network
-		home_network_net_id 000013 with any other home_network_tenant_id can be anything: The Things Stack Cloud, The Things Stack Enterprise, The Things Stack Open Source, even ChirpStack using Passive Roaming and using address space of TTN
-
 		Packet Broker will combine tenant ID and cluster ID in the NSID (tenant-id@cluster-id) when it gets LoRaWAN Backend Interfaces 1.1 support.
 		TODO: Follow what happens on https://github.com/TheThingsNetwork/lorawan-stack/issues/4076
 	*/
-	if strings.HasSuffix(ttsDomain, ".cloud.thethings.network") {
-		ttsDomain = "ttn@000013"
-	}
-	if strings.HasSuffix(ttsDomain, ".cloud.thethings.industries") {
-		tenantId := strings.Split(ttsDomain, ".")[0]
-		ttsDomain = tenantId + "@000013"
-	}
-
-	packetOut.NetworkAddress = ttsDomain                                           // ttn@000013
-	packetOut.NetworkId = packetOut.NetworkType + "://" + packetOut.NetworkAddress // NS_TTS_V3://ttn@000013
+	packetOut.NetworkId = types.NS_TTS_V3 + "://" +
+		packetIn.GetUplinkMessage().NetworkIds.TenantId + "@" +
+		packetIn.GetUplinkMessage().NetworkIds.NetId.String()
 
 	// 1. Try to use the location from the metadata first. This is likely the location set on the console.
 	if packetIn.GetUplinkMessage().Locations["user"] != nil {
@@ -130,7 +116,7 @@ func (handlerContext *Context) PostV3Uplink(w http.ResponseWriter, r *http.Reque
 		packetOut.AccuracySource = packetIn.GetUplinkMessage().Locations["user"].Source.String()
 	}
 
-	// 2. If the packetIn contains a solved location, rather use that - TODO this is likely sent to the /location-solved endpoint
+	// 2. If the packetIn contains a solved location, rather use that - this is sent to the /location-solved endpoint, so useless here
 	if packetIn.GetLocationSolved() != nil {
 		packetOut.Latitude = packetIn.GetLocationSolved().Latitude
 		packetOut.Longitude = packetIn.GetLocationSolved().Longitude
@@ -171,7 +157,7 @@ func (handlerContext *Context) PostV3Uplink(w http.ResponseWriter, r *http.Reque
 	// Add metadata fields
 	CopyV3Fields(packetIn, &packetOut)
 
-	log.Print("["+i+"] Network: ", packetOut.NetworkType, "://", packetOut.NetworkAddress)
+	log.Print("["+i+"] Network: ", packetOut.NetworkId)
 	log.Print("["+i+"] Device: ", packetOut.AppID, " - ", packetOut.DevID)
 
 	// Push this new packet into the stack

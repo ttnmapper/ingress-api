@@ -63,7 +63,7 @@ func (m *ApplicationLink) ValidateFields(paths ...string) error {
 			}
 
 		case "tls":
-			// no validation rules for TLS
+			// no validation rules for Tls
 		case "skip_payload_crypto":
 
 			if v, ok := interface{}(m.GetSkipPayloadCrypto()).(interface{ ValidateFields(...string) error }); ok {
@@ -169,7 +169,7 @@ func (m *GetApplicationLinkRequest) ValidateFields(paths ...string) error {
 
 		case "field_mask":
 
-			if v, ok := interface{}(&m.FieldMask).(interface{ ValidateFields(...string) error }); ok {
+			if v, ok := interface{}(m.GetFieldMask()).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return GetApplicationLinkRequestValidationError{
 						field:  "field_mask",
@@ -287,7 +287,7 @@ func (m *SetApplicationLinkRequest) ValidateFields(paths ...string) error {
 
 		case "field_mask":
 
-			if v, ok := interface{}(&m.FieldMask).(interface{ ValidateFields(...string) error }); ok {
+			if v, ok := interface{}(m.GetFieldMask()).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return SetApplicationLinkRequestValidationError{
 						field:  "field_mask",
@@ -513,7 +513,7 @@ func (m *AsConfiguration) ValidateFields(paths ...string) error {
 		switch name {
 		case "pubsub":
 
-			if v, ok := interface{}(m.GetPubSub()).(interface{ ValidateFields(...string) error }); ok {
+			if v, ok := interface{}(m.GetPubsub()).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return AsConfigurationValidationError{
 						field:  "pubsub",
@@ -1667,11 +1667,9 @@ func (m *AsConfiguration_PubSub_Providers) ValidateFields(paths ...string) error
 		_ = subs
 		switch name {
 		case "mqtt":
-			// no validation rules for MQTT
+			// no validation rules for Mqtt
 		case "nats":
-			// no validation rules for NATS
-		case "aws_iot":
-			// no validation rules for AWSIoT
+			// no validation rules for Nats
 		default:
 			return AsConfiguration_PubSub_ProvidersValidationError{
 				field:  name,

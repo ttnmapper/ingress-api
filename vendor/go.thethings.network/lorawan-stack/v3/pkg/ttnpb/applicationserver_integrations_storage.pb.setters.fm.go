@@ -2,11 +2,7 @@
 
 package ttnpb
 
-import (
-	fmt "fmt"
-
-	types "github.com/gogo/protobuf/types"
-)
+import fmt "fmt"
 
 func (dst *GetStoredApplicationUpRequest) SetFields(src *GetStoredApplicationUpRequest, paths ...string) error {
 	for name, subs := range _processPaths(paths) {
@@ -14,51 +10,51 @@ func (dst *GetStoredApplicationUpRequest) SetFields(src *GetStoredApplicationUpR
 		case "application_ids":
 			if len(subs) > 0 {
 				var newDst, newSrc *ApplicationIdentifiers
-				if (src == nil || src.ApplicationIDs == nil) && dst.ApplicationIDs == nil {
+				if (src == nil || src.ApplicationIds == nil) && dst.ApplicationIds == nil {
 					continue
 				}
 				if src != nil {
-					newSrc = src.ApplicationIDs
+					newSrc = src.ApplicationIds
 				}
-				if dst.ApplicationIDs != nil {
-					newDst = dst.ApplicationIDs
+				if dst.ApplicationIds != nil {
+					newDst = dst.ApplicationIds
 				} else {
 					newDst = &ApplicationIdentifiers{}
-					dst.ApplicationIDs = newDst
+					dst.ApplicationIds = newDst
 				}
 				if err := newDst.SetFields(newSrc, subs...); err != nil {
 					return err
 				}
 			} else {
 				if src != nil {
-					dst.ApplicationIDs = src.ApplicationIDs
+					dst.ApplicationIds = src.ApplicationIds
 				} else {
-					dst.ApplicationIDs = nil
+					dst.ApplicationIds = nil
 				}
 			}
 		case "end_device_ids":
 			if len(subs) > 0 {
 				var newDst, newSrc *EndDeviceIdentifiers
-				if (src == nil || src.EndDeviceIDs == nil) && dst.EndDeviceIDs == nil {
+				if (src == nil || src.EndDeviceIds == nil) && dst.EndDeviceIds == nil {
 					continue
 				}
 				if src != nil {
-					newSrc = src.EndDeviceIDs
+					newSrc = src.EndDeviceIds
 				}
-				if dst.EndDeviceIDs != nil {
-					newDst = dst.EndDeviceIDs
+				if dst.EndDeviceIds != nil {
+					newDst = dst.EndDeviceIds
 				} else {
 					newDst = &EndDeviceIdentifiers{}
-					dst.EndDeviceIDs = newDst
+					dst.EndDeviceIds = newDst
 				}
 				if err := newDst.SetFields(newSrc, subs...); err != nil {
 					return err
 				}
 			} else {
 				if src != nil {
-					dst.EndDeviceIDs = src.EndDeviceIDs
+					dst.EndDeviceIds = src.EndDeviceIds
 				} else {
-					dst.EndDeviceIDs = nil
+					dst.EndDeviceIds = nil
 				}
 			}
 		case "type":
@@ -124,8 +120,16 @@ func (dst *GetStoredApplicationUpRequest) SetFields(src *GetStoredApplicationUpR
 			if src != nil {
 				dst.FieldMask = src.FieldMask
 			} else {
-				var zero types.FieldMask
-				dst.FieldMask = zero
+				dst.FieldMask = nil
+			}
+		case "last":
+			if len(subs) > 0 {
+				return fmt.Errorf("'last' has no subfields, but %s were specified", subs)
+			}
+			if src != nil {
+				dst.Last = src.Last
+			} else {
+				dst.Last = nil
 			}
 
 		default:

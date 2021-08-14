@@ -209,6 +209,15 @@ var FSKDataRateFieldPathsNested = []string{
 var FSKDataRateFieldPathsTopLevel = []string{
 	"bit_rate",
 }
+var LRFHSSDataRateFieldPathsNested = []string{
+	"modulation_type",
+	"operating_channel_width",
+}
+
+var LRFHSSDataRateFieldPathsTopLevel = []string{
+	"modulation_type",
+	"operating_channel_width",
+}
 var DataRateFieldPathsNested = []string{
 	"modulation",
 	"modulation.fsk",
@@ -216,6 +225,9 @@ var DataRateFieldPathsNested = []string{
 	"modulation.lora",
 	"modulation.lora.bandwidth",
 	"modulation.lora.spreading_factor",
+	"modulation.lrfhss",
+	"modulation.lrfhss.modulation_type",
+	"modulation.lrfhss.operating_channel_width",
 }
 
 var DataRateFieldPathsTopLevel = []string{
@@ -230,6 +242,9 @@ var TxSettingsFieldPathsNested = []string{
 	"data_rate.modulation.lora",
 	"data_rate.modulation.lora.bandwidth",
 	"data_rate.modulation.lora.spreading_factor",
+	"data_rate.modulation.lrfhss",
+	"data_rate.modulation.lrfhss.modulation_type",
+	"data_rate.modulation.lrfhss.operating_channel_width",
 	"data_rate_index",
 	"downlink",
 	"downlink.antenna_index",
@@ -298,6 +313,7 @@ var TxRequestFieldPathsNested = []string{
 	"class",
 	"downlink_paths",
 	"frequency_plan_id",
+	"lorawan_phy_version",
 	"priority",
 	"rx1_data_rate_index",
 	"rx1_delay",
@@ -312,6 +328,7 @@ var TxRequestFieldPathsTopLevel = []string{
 	"class",
 	"downlink_paths",
 	"frequency_plan_id",
+	"lorawan_phy_version",
 	"priority",
 	"rx1_data_rate_index",
 	"rx1_delay",
@@ -471,6 +488,13 @@ var ADRAckDelayExponentValueFieldPathsNested = []string{
 }
 
 var ADRAckDelayExponentValueFieldPathsTopLevel = []string{
+	"value",
+}
+var DeviceEIRPValueFieldPathsNested = []string{
+	"value",
+}
+
+var DeviceEIRPValueFieldPathsTopLevel = []string{
 	"value",
 }
 var TxSettings_DownlinkFieldPathsNested = []string{

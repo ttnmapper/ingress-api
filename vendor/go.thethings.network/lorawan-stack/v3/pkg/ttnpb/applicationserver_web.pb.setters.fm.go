@@ -5,8 +5,6 @@ package ttnpb
 import (
 	fmt "fmt"
 	time "time"
-
-	types "github.com/gogo/protobuf/types"
 )
 
 func (dst *ApplicationWebhookIdentifiers) SetFields(src *ApplicationWebhookIdentifiers, paths ...string) error {
@@ -35,10 +33,10 @@ func (dst *ApplicationWebhookIdentifiers) SetFields(src *ApplicationWebhookIdent
 				return fmt.Errorf("'webhook_id' has no subfields, but %s were specified", subs)
 			}
 			if src != nil {
-				dst.WebhookID = src.WebhookID
+				dst.WebhookId = src.WebhookId
 			} else {
 				var zero string
-				dst.WebhookID = zero
+				dst.WebhookId = zero
 			}
 
 		default:
@@ -56,10 +54,10 @@ func (dst *ApplicationWebhookTemplateIdentifiers) SetFields(src *ApplicationWebh
 				return fmt.Errorf("'template_id' has no subfields, but %s were specified", subs)
 			}
 			if src != nil {
-				dst.TemplateID = src.TemplateID
+				dst.TemplateId = src.TemplateId
 			} else {
 				var zero string
-				dst.TemplateID = zero
+				dst.TemplateId = zero
 			}
 
 		default:
@@ -77,10 +75,10 @@ func (dst *ApplicationWebhookTemplateField) SetFields(src *ApplicationWebhookTem
 				return fmt.Errorf("'id' has no subfields, but %s were specified", subs)
 			}
 			if src != nil {
-				dst.ID = src.ID
+				dst.Id = src.Id
 			} else {
 				var zero string
-				dst.ID = zero
+				dst.Id = zero
 			}
 		case "name":
 			if len(subs) > 0 {
@@ -186,40 +184,40 @@ func (dst *ApplicationWebhookTemplate) SetFields(src *ApplicationWebhookTemplate
 				return fmt.Errorf("'logo_url' has no subfields, but %s were specified", subs)
 			}
 			if src != nil {
-				dst.LogoURL = src.LogoURL
+				dst.LogoUrl = src.LogoUrl
 			} else {
 				var zero string
-				dst.LogoURL = zero
+				dst.LogoUrl = zero
 			}
 		case "info_url":
 			if len(subs) > 0 {
 				return fmt.Errorf("'info_url' has no subfields, but %s were specified", subs)
 			}
 			if src != nil {
-				dst.InfoURL = src.InfoURL
+				dst.InfoUrl = src.InfoUrl
 			} else {
 				var zero string
-				dst.InfoURL = zero
+				dst.InfoUrl = zero
 			}
 		case "documentation_url":
 			if len(subs) > 0 {
 				return fmt.Errorf("'documentation_url' has no subfields, but %s were specified", subs)
 			}
 			if src != nil {
-				dst.DocumentationURL = src.DocumentationURL
+				dst.DocumentationUrl = src.DocumentationUrl
 			} else {
 				var zero string
-				dst.DocumentationURL = zero
+				dst.DocumentationUrl = zero
 			}
 		case "base_url":
 			if len(subs) > 0 {
 				return fmt.Errorf("'base_url' has no subfields, but %s were specified", subs)
 			}
 			if src != nil {
-				dst.BaseURL = src.BaseURL
+				dst.BaseUrl = src.BaseUrl
 			} else {
 				var zero string
-				dst.BaseURL = zero
+				dst.BaseUrl = zero
 			}
 		case "headers":
 			if len(subs) > 0 {
@@ -254,10 +252,10 @@ func (dst *ApplicationWebhookTemplate) SetFields(src *ApplicationWebhookTemplate
 				return fmt.Errorf("'create_downlink_api_key' has no subfields, but %s were specified", subs)
 			}
 			if src != nil {
-				dst.CreateDownlinkAPIKey = src.CreateDownlinkAPIKey
+				dst.CreateDownlinkApiKey = src.CreateDownlinkApiKey
 			} else {
 				var zero bool
-				dst.CreateDownlinkAPIKey = zero
+				dst.CreateDownlinkApiKey = zero
 			}
 		case "uplink_message":
 			if len(subs) > 0 {
@@ -583,10 +581,10 @@ func (dst *ApplicationWebhook) SetFields(src *ApplicationWebhook, paths ...strin
 				return fmt.Errorf("'base_url' has no subfields, but %s were specified", subs)
 			}
 			if src != nil {
-				dst.BaseURL = src.BaseURL
+				dst.BaseUrl = src.BaseUrl
 			} else {
 				var zero string
-				dst.BaseURL = zero
+				dst.BaseUrl = zero
 			}
 		case "headers":
 			if len(subs) > 0 {
@@ -646,10 +644,10 @@ func (dst *ApplicationWebhook) SetFields(src *ApplicationWebhook, paths ...strin
 				return fmt.Errorf("'downlink_api_key' has no subfields, but %s were specified", subs)
 			}
 			if src != nil {
-				dst.DownlinkAPIKey = src.DownlinkAPIKey
+				dst.DownlinkApiKey = src.DownlinkApiKey
 			} else {
 				var zero string
-				dst.DownlinkAPIKey = zero
+				dst.DownlinkApiKey = zero
 			}
 		case "uplink_message":
 			if len(subs) > 0 {
@@ -977,8 +975,7 @@ func (dst *GetApplicationWebhookRequest) SetFields(src *GetApplicationWebhookReq
 			if src != nil {
 				dst.FieldMask = src.FieldMask
 			} else {
-				var zero types.FieldMask
-				dst.FieldMask = zero
+				dst.FieldMask = nil
 			}
 
 		default:
@@ -1016,8 +1013,7 @@ func (dst *ListApplicationWebhooksRequest) SetFields(src *ListApplicationWebhook
 			if src != nil {
 				dst.FieldMask = src.FieldMask
 			} else {
-				var zero types.FieldMask
-				dst.FieldMask = zero
+				dst.FieldMask = nil
 			}
 
 		default:
@@ -1055,8 +1051,7 @@ func (dst *SetApplicationWebhookRequest) SetFields(src *SetApplicationWebhookReq
 			if src != nil {
 				dst.FieldMask = src.FieldMask
 			} else {
-				var zero types.FieldMask
-				dst.FieldMask = zero
+				dst.FieldMask = nil
 			}
 
 		default:
@@ -1094,8 +1089,7 @@ func (dst *GetApplicationWebhookTemplateRequest) SetFields(src *GetApplicationWe
 			if src != nil {
 				dst.FieldMask = src.FieldMask
 			} else {
-				var zero types.FieldMask
-				dst.FieldMask = zero
+				dst.FieldMask = nil
 			}
 
 		default:
@@ -1115,8 +1109,7 @@ func (dst *ListApplicationWebhookTemplatesRequest) SetFields(src *ListApplicatio
 			if src != nil {
 				dst.FieldMask = src.FieldMask
 			} else {
-				var zero types.FieldMask
-				dst.FieldMask = zero
+				dst.FieldMask = nil
 			}
 
 		default:
