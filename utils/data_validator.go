@@ -60,8 +60,8 @@ func SanitizeData(packet *types.TtnMapperUplinkMessage) {
 	}
 
 	// handle overflow for a small range just below 2^16
-	if packet.Altitude > (2^16-1000) && packet.Altitude < 2^16 {
-		packet.Altitude = packet.Altitude - (2 ^ 16) // Negative altitude
+	if packet.Altitude > (math.Pow(2, 16)-1000) && packet.Altitude < math.Pow(2, 16) {
+		packet.Altitude = packet.Altitude - math.Pow(2, 16) // Negative altitude
 	}
 
 	// round lat to 6 decimal places?
