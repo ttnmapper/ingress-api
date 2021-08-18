@@ -99,8 +99,9 @@ func publishFromChannel() {
 			false,         // mandatory
 			false,         // immediate
 			amqp.Publishing{
-				ContentType: "text/plain",
-				Body:        []byte(data),
+				DeliveryMode: amqp.Persistent,
+				ContentType:  "text/plain",
+				Body:         []byte(data),
 			})
 		utils.FailOnError(err, "Failed to publish a message")
 	}
