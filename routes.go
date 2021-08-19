@@ -7,6 +7,7 @@ import (
 	"github.com/go-chi/render"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"ttnmapper-ingress-api/chirpstack"
+	"ttnmapper-ingress-api/helium"
 	"ttnmapper-ingress-api/ttn"
 	"ttnmapper-ingress-api/tts"
 	"ttnmapper-ingress-api/types"
@@ -32,6 +33,7 @@ func Routes(publishChannel chan types.TtnMapperUplinkMessage) *chi.Mux {
 	router.Mount("/android", AndroidRoutes())
 	router.Mount("/ios", IosRoutes())
 	router.Mount("/chirp", chirpstack.ChirpRoutes(publishChannel))
+	router.Mount("/helium", helium.HeliumRoutes(publishChannel))
 
 	return router
 }
