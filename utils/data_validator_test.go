@@ -110,6 +110,13 @@ func TestCheckData(t *testing.T) {
 	if err == nil {
 		t.Fatalf("didn't detect LGT-92 default location")
 	}
+
+	packet.Latitude = -33.9
+	packet.Longitude = 18.9
+	err = CheckData(packet)
+	if err != nil {
+		t.Fatalf("valid coordinates didn't pass")
+	}
 }
 
 func TestSanitizeData(t *testing.T) {
