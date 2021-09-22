@@ -50,6 +50,11 @@ func CheckData(packet types.TtnMapperUplinkMessage) error {
 		return errors.New("not accepting coordinates on null island")
 	}
 
+	// https://github.com/dragino/LGT-92_-LoRa_GPS_Tracker/issues/26
+	if packet.Latitude == 24.35 && packet.Longitude == 24.35 {
+		return errors.New("Dragino LGT-92 fallback location")
+	}
+
 	return nil
 }
 

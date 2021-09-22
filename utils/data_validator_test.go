@@ -103,6 +103,13 @@ func TestCheckData(t *testing.T) {
 	if err == nil {
 		t.Fatalf("didn't detect null island")
 	}
+
+	packet.Latitude = 24.35
+	packet.Longitude = 24.35
+	err = CheckData(packet)
+	if err == nil {
+		t.Fatalf("didn't detect LGT-92 default location")
+	}
 }
 
 func TestSanitizeData(t *testing.T) {
