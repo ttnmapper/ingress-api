@@ -145,10 +145,10 @@ func (handlerContext *Context) PostV3Uplink(w http.ResponseWriter, r *http.Reque
 	// TODO move the sanity check to where we insert the data into the db, as invalid data is still used to update gateway last seen
 	if packetOut.Experiment == "" {
 		if err := utils.CheckData(packetOut); err != nil {
-			//response["success"] = false
-			//response["message"] = err.Error()
+			response["success"] = false
+			response["message"] = err.Error()
 			log.Print("["+i+"] Data invalid: ", err.Error())
-			//return
+			return
 		}
 
 		utils.SanitizeData(&packetOut)

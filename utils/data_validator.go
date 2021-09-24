@@ -55,6 +55,11 @@ func CheckData(packet types.TtnMapperUplinkMessage) error {
 		return errors.New("Dragino LGT-92 fallback location")
 	}
 
+	// More strict Dragino filter: lat = lon
+	if packet.Latitude == packet.Longitude {
+		return errors.New("lat=lon very unlikely. Normally Dragino LGT-92")
+	}
+
 	return nil
 }
 

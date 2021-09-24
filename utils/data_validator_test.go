@@ -90,14 +90,14 @@ func TestCheckData(t *testing.T) {
 	}
 	packet.Hdop = 0
 
-	packet.Latitude = 0.5
+	packet.Latitude = 0.4
 	packet.Longitude = 0.5
 	err = CheckData(packet)
 	if err == nil {
 		t.Fatalf("didn't detect null island")
 	}
 
-	packet.Latitude = -0.5
+	packet.Latitude = -0.4
 	packet.Longitude = -0.5
 	err = CheckData(packet)
 	if err == nil {
@@ -109,6 +109,13 @@ func TestCheckData(t *testing.T) {
 	err = CheckData(packet)
 	if err == nil {
 		t.Fatalf("didn't detect LGT-92 default location")
+	}
+
+	packet.Latitude = 42.056000
+	packet.Longitude = 42.056000
+	err = CheckData(packet)
+	if err == nil {
+		t.Fatalf("didn't detect LGT-92 invalid location lat==lon")
 	}
 
 	packet.Latitude = -33.9
