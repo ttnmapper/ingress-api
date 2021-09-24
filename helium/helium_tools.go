@@ -65,6 +65,11 @@ func CopyHeliumFields(packetIn UplinkMessage, packetOut *types.TtnMapperUplinkMe
 			Description:                 "",
 		}
 
+		// If the gateway id is packetbroker, ignore
+		if gateway.GatewayId == "packetbroker" {
+			continue
+		}
+
 		packetOut.Gateways = append(packetOut.Gateways, gateway)
 	}
 }

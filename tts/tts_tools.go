@@ -213,6 +213,11 @@ func CopyV3Fields(packetIn ttnpb.ApplicationUp, packetOut *types.TtnMapperUplink
 			gatewayOut.NetworkId = packetOut.NetworkId
 		}
 
+		// If the gateway id is packetbroker, ignore
+		if gatewayOut.GatewayId == "packetbroker" {
+			continue
+		}
+
 		// If the GatewayId is eui-deadbeef, strip the prefix, capitalize and use as EUI
 		if strings.HasPrefix(gatewayOut.GatewayId, "eui-") && len(gatewayOut.GatewayId) == 20 {
 			eui := strings.TrimPrefix(gatewayOut.GatewayId, "eui-")

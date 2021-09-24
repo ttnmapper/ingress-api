@@ -57,6 +57,11 @@ func CopyChirpV3Fields(packetIn chirpstack.UplinkEvent, packetOut *types.TtnMapp
 		gatewayOut.GatewayEui = strings.ToUpper(gatewayEui)
 		// gatewayOut.Description = ... // TODO: Get Gateway Name
 
+		// If the gateway id is packetbroker, ignore
+		if gatewayOut.GatewayId == "packetbroker" {
+			continue
+		}
+
 		// gateway Time is the wall clock time
 		if gatewayIn.Time != nil {
 			gatewayOut.Time = int64(gatewayIn.Time.Nanos)

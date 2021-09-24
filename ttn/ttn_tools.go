@@ -100,6 +100,11 @@ func CopyTtnV2Fields(packetIn types2.UplinkMessage, packetOut *types.TtnMapperUp
 		gatewayOut.NetworkId = packetOut.NetworkId
 		gatewayOut.GatewayId = gatewayIn.GtwID
 
+		// If the gateway id is packetbroker, ignore
+		if gatewayOut.GatewayId == "packetbroker" {
+			continue
+		}
+
 		// If the id is eui-deadbeef, strip the prefix, capitalize and use as EUI
 		if strings.HasPrefix(gatewayIn.GtwID, "eui-") && len(gatewayIn.GtwID) == 20 {
 			eui := strings.TrimPrefix(gatewayIn.GtwID, "eui-")
