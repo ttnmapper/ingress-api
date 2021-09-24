@@ -29,11 +29,11 @@ func CheckData(packet types.TtnMapperUplinkMessage) error {
 		}
 	}
 
-	// Latitude
+	// Latitude - with a small buffer around the pole, as there are a lot of invalid points there
 	if IsZeroOfUnderlyingType(packet.Latitude) {
 		return errors.New("latitude not set")
 	}
-	if packet.Latitude >= 90 || packet.Latitude <= -90 {
+	if packet.Latitude >= 89 || packet.Latitude <= -89 {
 		return errors.New("latitude out of range")
 	}
 
