@@ -29,6 +29,13 @@ func CheckData(packet types.TtnMapperUplinkMessage) error {
 		}
 	}
 
+	// Too high satellite count indicates corruption
+	//if !IsZeroOfUnderlyingType(packet.Satellites) {
+	//	if packet.Satellites > 100 {
+	//		return errors.New("satellite count too high")
+	//	}
+	//}
+
 	// Latitude - with a small buffer around the pole, as there are a lot of invalid points there
 	if IsZeroOfUnderlyingType(packet.Latitude) {
 		return errors.New("latitude not set")
@@ -58,6 +65,10 @@ func CheckData(packet types.TtnMapperUplinkMessage) error {
 	// More strict Dragino filter: lat = lon
 	if packet.Latitude == packet.Longitude {
 		return errors.New("lat=lon very unlikely. Normally Dragino LGT-92")
+	}
+
+	if packet.Latitude == -39.096433 && packet.Longitude == -27.514306 {
+		return errors.New("invalid point in south atlantic")
 	}
 
 	return nil

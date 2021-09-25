@@ -923,3 +923,18 @@ array (
   'X-DOWNLINK-APIKEY' => 'NNSXS.IRXWTFFB5PIOUSV2CJDBOSOHQJ2FVKV6WPM37SY.DTWSLJ4FTMNTHCTUVZGQPA342D4DF64AM5M4WUBJQ6LDQCOCYBTQ',
   'AUTHORIZATION' => '',
 )
+
+2021-09-25
+{"end_device_ids":{"device_id":"cricket-002","application_ids":{"application_id":"jpm-crickets"},"dev_addr":"260BEAC2"},"correlation_ids":["as:up:01FGE2AS4V8YD4JW2A32159WNR","gs:conn:01FG16JFYWEFW77YZJ073WXE8D","gs:up:host:01FG16JG2D4N238T01E2G72EAQ","gs:uplink:01FGE2ARY4Q53RA2NNKA27MT27","ns:uplink:01FGE2ARY6FFG1G90V1JNXRTN9","rpc:/ttn.lorawan.v3.GsNs/HandleUplink:01FGE2ARY6DG8M57W3KSK6NPET","rpc:/ttn.lorawan.v3.NsAs/HandleUplink:01FGE2AS4VPZFPHNM9N36HXYD6"],"received_at":"2021-09-25T08:49:45.117100894Z","uplink_message":{"f_cnt":34565,"frm_payload":"","decoded_payload":{},"rx_metadata":[{"gateway_ids":{"gateway_id":"eui-60c5a8fffe71a964","eui":"60C5A8FFFE71A964"},"timestamp":2554194940,"rssi":-76,"channel_rssi":-76,"snr":9.8,"uplink_token":"CiIKIAoUZXVpLTYwYzVhOGZmZmU3MWE5NjQSCGDFqP/+calkEPzX98EJGgwIqMW7igYQupjBrQMg4KCHj6ueYg==","channel_index":5},{"gateway_ids":{"gateway_id":"eui-000080029c09dd87","eui":"000080029C09DD87"},"timestamp":391794547,"rssi":-25,"channel_rssi":-25,"snr":9,"location":{"latitude":-33.93667538260562,"longitude":18.871081173419956,"source":"SOURCE_REGISTRY"},"uplink_token":"CiIKIAoUZXVpLTAwMDA4MDAyOWMwOWRkODcSCAAAgAKcCd2HEPOe6boBGgwIqMW7igYQ/fufsAMguLKZxrPcYg=="},{"gateway_ids":{"gateway_id":"eui-58a0cbfffe80049a","eui":"58A0CBFFFE80049A"},"time":"2021-09-25T08:49:44.738001108Z","timestamp":3646073755,"rssi":-43,"channel_rssi":-43,"snr":9.75,"uplink_token":"CiIKIAoUZXVpLTU4YTBjYmZmZmU4MDA0OWESCFigy//+gASaEJvXysoNGgwIqMW7igYQsLeZvAMg+Kq5147eBA=="}],"settings":{"data_rate":{"lora":{"bandwidth":125000,"spreading_factor":7}},"data_rate_index":5,"coding_rate":"4/5","frequency":"868100000","timestamp":2554194940},"received_at":"2021-09-25T08:49:44.902797091Z","consumed_airtime":"0.041216s","network_ids":{"net_id":"000013","tenant_id":"ttn","cluster_id":"ttn-eu1"}}}
+
+array (
+  'HOST' => 'ttnmapper.org',
+  'ACCEPT-ENCODING' => 'gzip',
+  'X-DOWNLINK-REPLACE' => 'https://eu1.cloud.thethings.network/api/v3/as/applications/jpm-crickets/webhooks/webhook-test/devices/cricket-002/down/replace',
+  'X-DOWNLINK-PUSH' => 'https://eu1.cloud.thethings.network/api/v3/as/applications/jpm-crickets/webhooks/webhook-test/devices/cricket-002/down/push',
+  'X-DOWNLINK-APIKEY' => 'NNSXS.IRXWTFFB5PIOUSV2CJDBOSOHQJ2FVKV6WPM37SY.DTWSLJ4FTMNTHCTUVZGQPA342D4DF64AM5M4WUBJQ6LDQCOCYBTQ',
+  'TTNMAPPERORG-USER' => 'test-v3@jpmeijers.com',
+  'USER-AGENT' => 'TheThingsStack/3.15.0 (linux/amd64)',
+  'X-TTS-DOMAIN' => 'eu1.cloud.thethings.network',
+  'AUTHORIZATION' => '',
+)

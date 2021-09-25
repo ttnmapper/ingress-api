@@ -79,6 +79,13 @@ func (handlerContext *Context) PostV3Uplink(w http.ResponseWriter, r *http.Reque
 		return
 	}
 
+	if packetIn.GetUplinkMessage().FPort == 0 {
+		response["success"] = false
+		response["message"] = "fPort is 0"
+		log.Print("[" + i + "] fPort is 0")
+		return
+	}
+
 	if packetIn.GetUplinkMessage().DecodedPayload == nil {
 		response["success"] = false
 		response["message"] = "payload_fields not set"
