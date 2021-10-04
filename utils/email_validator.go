@@ -45,7 +45,7 @@ func ValidateEmail(email string) (err error) {
 	//$isValid = false;
 	//}
 	if !strings.Contains(email, "@") {
-		return errors.New("emails doesn't contain an @")
+		return errors.New("email doesn't contain an @")
 	}
 
 	//else

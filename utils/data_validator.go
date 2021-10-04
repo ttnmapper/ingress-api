@@ -57,6 +57,14 @@ func CheckData(packet types.TtnMapperUplinkMessage) error {
 		return errors.New("not accepting coordinates on null island")
 	}
 
+	// Either latitude = 0 or longitude = 0 is very unlikely and next to impossible. Let's ignore these.
+	if packet.Latitude == 0 {
+		return errors.New("latitude is exactly zero")
+	}
+	if packet.Longitude == 0 {
+		return errors.New("longitude is exactly zero")
+	}
+
 	// https://github.com/dragino/LGT-92_-LoRa_GPS_Tracker/issues/26
 	if packet.Latitude == 24.35 && packet.Longitude == 24.35 {
 		return errors.New("Dragino LGT-92 fallback location")
