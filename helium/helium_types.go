@@ -31,6 +31,6 @@ type Hotspot struct {
 	Snr        float32
 	Spreading  string
 
-	Latitude  float64 `json:"lat"`
-	Longitude float64 `json:"long"`
+	Latitude  interface{} `json:"lat"`
+	Longitude interface{} `json:"long"`
 }

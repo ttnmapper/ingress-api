@@ -43,6 +43,16 @@ func CopyHeliumFields(packetIn UplinkMessage, packetOut *types.TtnMapperUplinkMe
 		packetOut.Bitrate = 0
 		packetOut.CodingRate = ""
 
+		// The lat and lon fields can be either a float or string "unknown"
+		hotspotLatitude := 0.0
+		hotspotLongitude := 0.0
+		if i, ok := hotspot.Latitude.(float64); ok {
+			hotspotLatitude = i
+		}
+		if i, ok := hotspot.Longitude.(float64); ok {
+			hotspotLongitude = i
+		}
+
 		gateway := types.TtnMapperGateway{
 			NetworkId:                   packetOut.NetworkId,
 			GatewayId:                   hotspot.Name,
@@ -57,8 +67,8 @@ func CopyHeliumFields(packetIn UplinkMessage, packetOut *types.TtnMapperUplinkMe
 			Rssi:                        hotspot.Rssi,
 			SignalRssi:                  0,
 			Snr:                         hotspot.Snr,
-			Latitude:                    hotspot.Latitude,
-			Longitude:                   hotspot.Longitude,
+			Latitude:                    hotspotLatitude,
+			Longitude:                   hotspotLongitude,
 			Altitude:                    0,
 			LocationAccuracy:            0,
 			LocationSource:              "",
