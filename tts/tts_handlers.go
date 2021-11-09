@@ -201,7 +201,7 @@ func (handlerContext *Context) PostV3JoinAccept(w http.ResponseWriter, r *http.R
 	log.Println("Join Accept: ", string(body))
 
 	// TODO implement this endpoint
-	w.WriteHeader(http.StatusNotImplemented)
+	w.WriteHeader(http.StatusOK)
 }
 
 func (handlerContext *Context) PostV3LocationSolved(w http.ResponseWriter, r *http.Request) {
