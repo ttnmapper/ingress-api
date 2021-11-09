@@ -222,6 +222,6 @@ func (handlerContext *Context) PostV3LocationSolved(w http.ResponseWriter, r *ht
 	log.Println("Location Solved: ", string(body))
 
 	// TODO implement this endpoint
-	w.WriteHeader(http.StatusNotImplemented)
+	w.WriteHeader(http.StatusOK)
 
 }
