@@ -218,8 +218,8 @@ func CopyV3Fields(packetIn ttnpb.ApplicationUp, packetOut *types.TtnMapperUplink
 			continue
 		}
 
-		// If the GatewayId is eui-deadbeef, strip the prefix, capitalize and use as EUI
-		if strings.HasPrefix(gatewayOut.GatewayId, "eui-") && len(gatewayOut.GatewayId) == 20 {
+		// If the GatewayId is eui-deadbeef, strip the prefix, capitalize and use as EUI. Maybe not required for TTSv3
+		if gatewayOut.GatewayEui == "" && strings.HasPrefix(gatewayOut.GatewayId, "eui-") && len(gatewayOut.GatewayId) == 20 {
 			eui := strings.TrimPrefix(gatewayOut.GatewayId, "eui-")
 			eui = strings.ToUpper(eui)
 			gatewayOut.GatewayEui = eui
