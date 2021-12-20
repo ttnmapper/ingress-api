@@ -43,7 +43,7 @@ func (handlerContext *Context) PostHelium(w http.ResponseWriter, r *http.Request
 		response["success"] = false
 		response["message"] = "Can not parse json body"
 		log.Print("[" + i + "] " + err.Error())
-		log.Println(body)
+		log.Println(string(body))
 		return
 	}
 	log.Println(utils.PrettyPrint(packetIn))
