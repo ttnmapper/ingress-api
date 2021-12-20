@@ -46,7 +46,7 @@ func (handlerContext *Context) PostHelium(w http.ResponseWriter, r *http.Request
 		log.Println(string(body))
 		return
 	}
-	log.Println(utils.PrettyPrint(packetIn))
+	//log.Println(utils.PrettyPrint(packetIn))
 
 	var packetOut types.TtnMapperUplinkMessage
 
@@ -59,7 +59,7 @@ func (handlerContext *Context) PostHelium(w http.ResponseWriter, r *http.Request
 		if err := utils.ParsePayloadFields(int64(packetIn.Port), packetIn.Decoded.Payload, &packetOut); err != nil {
 			response["success"] = false
 			response["message"] = err.Error()
-			log.Print("[" + i + "] " + err.Error())
+			//log.Print("[" + i + "] " + err.Error())
 			//return // also accept invalid payload_fields, as the metadata is still useful
 		}
 	}

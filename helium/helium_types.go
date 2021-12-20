@@ -7,7 +7,7 @@ type UplinkMessage struct {
 	Fcnt    int64
 
 	Decoded struct {
-		Payload map[string]interface{}
+		Payload interface{}
 	}
 
 	Hotspots []Hotspot

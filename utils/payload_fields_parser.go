@@ -2,36 +2,50 @@ package utils
 
 import (
 	"errors"
+	"fmt"
 	"strconv"
 	"ttnmapper-ingress-api/types"
 )
 
 func ParsePayloadFields(port int64, payloadFieldsInterface interface{}, packetOut *types.TtnMapperUplinkMessage) error {
+	switch x := payloadFieldsInterface.(type) {
+	case []interface{}:
+		for _, v := range x {
+			return ParsePayloadFields(port, v, packetOut)
+		}
+	case map[string]interface{}:
+		fmt.Println("MyInterface:", x)
 
-	// Assume the decoded payload is a map[string]interface{}. This might fail.
-	payloadFields := payloadFieldsInterface.(map[string]interface{})
+		// Assume the decoded payload is a map[string]interface{}. This might fail.
+		payloadFields := payloadFieldsInterface.(map[string]interface{})
 
-	packetOut.AccuracySource = "payload_fields" // reset in case it was set by metadata location
+		packetOut.AccuracySource = "payload_fields" // reset in case it was set by metadata location
 
-	if err := parseCayenneLpp(packetOut, payloadFields); err != nil {
-		return err
-	}
+		if err := parseCayenneLpp(packetOut, payloadFields); err != nil {
+			return err
+		}
 
-	locationKeys := [...]string{"location", "gps"}
-	for _, v := range locationKeys {
-		if val, ok := payloadFields[v]; ok {
-			if locationObject, ok := val.(map[string]interface{}); ok {
-				if err := extractFromRoot(packetOut, locationObject); err != nil {
-					return err
+		locationKeys := [...]string{"location", "gps", "value"}
+		for _, v := range locationKeys {
+			if val, ok := payloadFields[v]; ok {
+				if locationObject, ok := val.(map[string]interface{}); ok {
+					if err := extractFromRoot(packetOut, locationObject); err != nil {
+						return err
+					}
 				}
 			}
 		}
-	}
 
-	if err := extractFromRoot(packetOut, payloadFields); err != nil {
-		return err
-	}
+		if err := extractFromRoot(packetOut, payloadFields); err != nil {
+			return err
+		}
 
+		return nil
+
+	default:
+		fmt.Printf("Unsupported type: %T\n", x)
+		return nil
+	}
 	return nil
 }
 
