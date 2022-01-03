@@ -46,7 +46,7 @@ func (handlerContext *Context) PostHelium(w http.ResponseWriter, r *http.Request
 		log.Println(string(body))
 		return
 	}
-	//log.Println(utils.PrettyPrint(packetIn))
+	log.Println(utils.PrettyPrint(packetIn))
 
 	var packetOut types.TtnMapperUplinkMessage
 
