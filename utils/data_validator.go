@@ -17,7 +17,7 @@ func CheckData(packet types.TtnMapperUplinkMessage) error {
 
 	// Accuracy value must be below 10 metre
 	if !IsZeroOfUnderlyingType(packet.AccuracyMeters) {
-		if packet.AccuracyMeters > 10 {
+		if packet.AccuracyMeters > 15 {
 			return errors.New("accuracy too low")
 		}
 	}
