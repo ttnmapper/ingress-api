@@ -67,6 +67,7 @@ func CopyHeliumFields(packetIn UplinkMessage, packetOut *types.TtnMapperUplinkMe
 			LocationAccuracy:            0,
 			LocationSource:              "",
 		}
+		gateway.Attributes = make(map[string]interface{}, 0)
 
 		// If the gateway id is packetbroker, ignore
 		if gateway.GatewayId == "packetbroker" {

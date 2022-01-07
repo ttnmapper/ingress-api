@@ -129,6 +129,7 @@ func CopyTtnV2Fields(packetIn types2.UplinkMessage, packetOut *types.TtnMapperUp
 		gatewayOut.Altitude = gatewayIn.Altitude
 		gatewayOut.LocationAccuracy = gatewayIn.Accuracy
 		gatewayOut.LocationSource = gatewayIn.Source
+		gatewayOut.Attributes = make(map[string]interface{}, 0)
 
 		packetOut.Gateways = append(packetOut.Gateways, gatewayOut)
 	}

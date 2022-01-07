@@ -169,6 +169,7 @@ func CopyV3Fields(packetIn ttnpb.ApplicationUp, packetOut *types.TtnMapperUplink
 			    }
 		*/
 		gatewayOut := types.TtnMapperGateway{}
+		gatewayOut.Attributes = make(map[string]interface{}, 0)
 
 		// The gateway's ID - unique per network
 		gatewayOut.GatewayId = gatewayIn.GatewayIdentifiers.GetGatewayId()
