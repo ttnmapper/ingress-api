@@ -35,8 +35,7 @@ func (handlerContext *Context) PostChirpV3Event(w http.ResponseWriter, r *http.R
 	}
 
 	var packetOut types.TtnMapperUplinkMessage
-	packetOut.NetworkType = types.NS_CHIRP
-	
+
 	// TODO ChirpStack should also provide us some unique identifier, along with the NetID, then we can do UUID@NetID to provide as a unique networkid
 	networkAddress := r.Header.Get("TTNMAPPERORG-NETWORK")
 	if err := utils.ValidateChirpNetworkAddress(networkAddress); err != nil {
@@ -46,8 +45,7 @@ func (handlerContext *Context) PostChirpV3Event(w http.ResponseWriter, r *http.R
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
-	packetOut.NetworkAddress = networkAddress                                      // my.network.name
-	packetOut.NetworkId = packetOut.NetworkType + "://" + packetOut.NetworkAddress // NS_CHIRP://my.network.name
+	packetOut.NetworkId = types.NS_CHIRP + "://" + networkAddress // NS_CHIRP://my.network.name
 
 	event := r.URL.Query().Get("event")
 
@@ -98,7 +96,7 @@ func (handlerContext *Context) PostChirpV3Event(w http.ResponseWriter, r *http.R
 	user := r.Header.Get("TTNMAPPERORG-USER")
 	packetOut.UserId = user // Default header is empty
 
-	log.Print("["+i+"] Network: ", packetOut.NetworkType, "://", networkAddress)
+	log.Print("["+i+"] Network: ", packetOut.NetworkId)
 	log.Print("["+i+"] Device: ", packetOut.AppID, " - ", packetOut.DevID)
 
 	// Push this new packet into the stack

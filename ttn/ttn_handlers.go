@@ -55,8 +55,6 @@ func (handlerContext *Context) PostTtnV2(w http.ResponseWriter, r *http.Request)
 	var packetOut types.TtnMapperUplinkMessage
 
 	// For ttnv2 we use the ip address of the originating stack to id the network
-	packetOut.NetworkType = types.NS_TTN_V2
-	packetOut.NetworkAddress = r.RemoteAddr      // IP address changes al the time for clusters
 	packetOut.NetworkId = "thethingsnetwork.org" //packetOut.NetworkType + "://" + packetOut.NetworkAddress
 
 	packetOut.UserAgent = r.Header.Get("USER-AGENT")
@@ -95,7 +93,7 @@ func (handlerContext *Context) PostTtnV2(w http.ResponseWriter, r *http.Request)
 	// Copy metadata fields
 	CopyTtnV2Fields(packetIn, &packetOut)
 
-	log.Print("["+i+"] Network: ", packetOut.NetworkType, "://", packetOut.NetworkAddress)
+	log.Print("["+i+"] Network: ", packetOut.NetworkId)
 	log.Print("["+i+"] Device: ", packetOut.AppID, " - ", packetOut.DevID)
 
 	handlerContext.PublishChannel <- packetOut

@@ -8,13 +8,6 @@ import (
 )
 
 func CopyHeliumFields(packetIn UplinkMessage, packetOut *types.TtnMapperUplinkMessage) {
-
-	packetOut.NetworkType = types.NS_HELIUM
-	/*
-		A hostname or IP address to uniquely identify the network server
-	*/
-	packetOut.NetworkAddress = "000024"
-
 	// Combine network type and network address into a single networkid field which is globally unique.
 	// We will start using a combination of the LoRaWAN NetID and a TenantID soon.
 	packetOut.NetworkId = types.NS_HELIUM + "://000024"
@@ -55,8 +48,9 @@ func CopyHeliumFields(packetIn UplinkMessage, packetOut *types.TtnMapperUplinkMe
 
 		gateway := types.TtnMapperGateway{
 			NetworkId:                   packetOut.NetworkId,
-			GatewayId:                   hotspot.Name,
+			GatewayId:                   hotspot.Id,
 			GatewayEui:                  "",
+			Name:                        hotspot.Name,
 			AntennaIndex:                0,
 			Time:                        hotspot.ReportedAt * 1000000, // ms to ns
 			Timestamp:                   0,
@@ -72,7 +66,6 @@ func CopyHeliumFields(packetIn UplinkMessage, packetOut *types.TtnMapperUplinkMe
 			Altitude:                    0,
 			LocationAccuracy:            0,
 			LocationSource:              "",
-			Description:                 "",
 		}
 
 		// If the gateway id is packetbroker, ignore

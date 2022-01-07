@@ -51,8 +51,7 @@ func PostAndroidV2(w http.ResponseWriter, r *http.Request) {
 
 	var resultPacket = types.TtnMapperUplinkMessage{}
 	CopyAndroidV2ToTtnMapper(receivedPacket, &resultPacket)
-	resultPacket.NetworkType = types.NS_TTN_V2
-	resultPacket.NetworkAddress = ""
+	resultPacket.NetworkId = "thethingsnetwork.org"
 
 	if resultPacket.Experiment == "" {
 		if err := utils.CheckData(resultPacket); err != nil {
@@ -97,8 +96,7 @@ func PostAndroidV3(w http.ResponseWriter, r *http.Request) {
 
 	var resultPacket = types.TtnMapperUplinkMessage{}
 	CopyAndroidV3ToTtnMapper(receivedPacket, &resultPacket)
-	resultPacket.NetworkType = types.NS_TTN_V2
-	resultPacket.NetworkAddress = ""
+	resultPacket.NetworkId = "thethingsnetwork.org"
 
 	if err := utils.CheckData(resultPacket); err != nil {
 		response["success"] = false
@@ -148,10 +146,6 @@ func PostAndroidV4(w http.ResponseWriter, r *http.Request) {
 		}
 		utils.SanitizeData(&receivedPacket)
 	}
-
-	// If the V3 server tenant is ttn, strip tenant part
-	// TODO follow same tenant@netid format
-	receivedPacket.NetworkAddress = strings.TrimPrefix(receivedPacket.NetworkAddress, "ttn.")
 
 	// Make sure frequency is sanitized
 	receivedPacket.Frequency = utils.SanitizeFrequency(float64(receivedPacket.Frequency))

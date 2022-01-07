@@ -49,6 +49,15 @@ func CopyV3Fields(packetIn ttnpb.ApplicationUp, packetOut *types.TtnMapperUplink
 		    "dev_addr" : "00BCB929"                  // Device address known by the Network Server
 		  },
 	*/
+
+	/*
+		Packet Broker will combine tenant ID and cluster ID in the NSID (tenant-id@cluster-id) when it gets LoRaWAN Backend Interfaces 1.1 support.
+		TODO: Follow what happens on https://github.com/TheThingsNetwork/lorawan-stack/issues/4076
+	*/
+	packetOut.NetworkId = types.NS_TTS_V3 + "://" +
+		packetIn.GetUplinkMessage().NetworkIds.TenantId + "@" +
+		packetIn.GetUplinkMessage().NetworkIds.NetId.String()
+
 	packetOut.AppID = packetIn.EndDeviceIdentifiers.ApplicationId
 	packetOut.DevID = packetIn.EndDeviceIdentifiers.DeviceId
 
@@ -197,6 +206,7 @@ func CopyV3Fields(packetIn ttnpb.ApplicationUp, packetOut *types.TtnMapperUplink
 				gatewayOut.NetworkId = "thethingsnetwork.org"
 			} else {
 				gatewayOut.NetworkId = types.NS_TTS_V3 + "://" + forwarderTenantId + "@" + forwarderNetId.String()
+				gatewayOut.Attributes["cluster_id"] = gatewayIn.PacketBroker.ForwarderClusterId
 			}
 
 			/*
@@ -210,10 +220,13 @@ func CopyV3Fields(packetIn ttnpb.ApplicationUp, packetOut *types.TtnMapperUplink
 			}
 
 		} else {
-			gatewayOut.NetworkId = packetOut.NetworkId
+			gatewayOut.NetworkId = types.NS_TTS_V3 + "://" +
+				packetIn.GetUplinkMessage().NetworkIds.TenantId + "@" +
+				packetIn.GetUplinkMessage().NetworkIds.NetId.String()
+			gatewayOut.Attributes["cluster_id"] = packetIn.GetUplinkMessage().NetworkIds.ClusterId
 		}
 
-		// If the gateway id is packetbroker, ignore
+		// If the gateway id is still packetbroker, ignore
 		if gatewayOut.GatewayId == "packetbroker" {
 			continue
 		}

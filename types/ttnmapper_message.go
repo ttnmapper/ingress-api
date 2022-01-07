@@ -11,11 +11,11 @@ type TtnMapperUplinkMessage struct {
 	/*
 		One of the constant network type strings from the above const()
 	*/
-	NetworkType string `json:"network_type,omitempty"`
+	//NetworkType string `json:"network_type,omitempty"`
 	/*
 		A hostname or IP address to uniquely identify the network server
 	*/
-	NetworkAddress string `json:"network_address,omitempty"`
+	//NetworkAddress string `json:"network_address,omitempty"`
 
 	// Combine network type and network address into a single networkid field which is globally unique.
 	// We will start using a combination of the LoRaWAN NetID and a TenantID soon.
@@ -95,5 +95,21 @@ type TtnMapperGateway struct {
 	LocationSource string `json:"location_source,omitempty"`
 
 	// Some sources of statuses provide the description
-	Description string `json:"description,omitempty"`
+	Name       string                 `json:"description,omitempty"`
+	Attributes map[string]interface{} `json:"attributes"`
+}
+
+type TtnMapperGatewayMoved struct {
+	NetworkId string `json:"network_id,omitempty"`
+	GatewayId string `json:"gtw_id"`
+
+	Time int64 `json:"time,omitempty"`
+
+	LatitudeOld  float64 `json:"latitude_old,omitempty"`
+	LongitudeOld float64 `json:"longitude_old,omitempty"`
+	AltitudeOld  int32   `json:"altitude_old,omitempty"`
+
+	LatitudeNew  float64 `json:"latitude_new,omitempty"`
+	LongitudeNew float64 `json:"longitude_new,omitempty"`
+	AltitudeNew  int32   `json:"altitude_new,omitempty"`
 }

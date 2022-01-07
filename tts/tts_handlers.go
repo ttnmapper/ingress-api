@@ -94,7 +94,6 @@ func (handlerContext *Context) PostV3Uplink(w http.ResponseWriter, r *http.Reque
 	}
 
 	var packetOut types.TtnMapperUplinkMessage
-	packetOut.NetworkType = types.NS_TTS_V3
 
 	// Use X-TTS-DOMAIN header to determine tenant and cluster
 	ttsDomain := r.Header.Get("X-TTS-DOMAIN")
@@ -105,14 +104,6 @@ func (handlerContext *Context) PostV3Uplink(w http.ResponseWriter, r *http.Reque
 		log.Print("[" + i + "] X-TTS-DOMAIN header not set")
 		return
 	}
-
-	/*
-		Packet Broker will combine tenant ID and cluster ID in the NSID (tenant-id@cluster-id) when it gets LoRaWAN Backend Interfaces 1.1 support.
-		TODO: Follow what happens on https://github.com/TheThingsNetwork/lorawan-stack/issues/4076
-	*/
-	packetOut.NetworkId = types.NS_TTS_V3 + "://" +
-		packetIn.GetUplinkMessage().NetworkIds.TenantId + "@" +
-		packetIn.GetUplinkMessage().NetworkIds.NetId.String()
 
 	// 1. Try to use the location from the metadata first. This is likely the location set on the console.
 	if packetIn.GetUplinkMessage().Locations["user"] != nil {

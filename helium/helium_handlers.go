@@ -78,7 +78,7 @@ func (handlerContext *Context) PostHelium(w http.ResponseWriter, r *http.Request
 	// Copy metadata fields
 	CopyHeliumFields(packetIn, &packetOut)
 
-	log.Print("["+i+"] Network: ", packetOut.NetworkType, "://", packetOut.NetworkAddress)
+	log.Print("["+i+"] Network: ", packetOut.NetworkId)
 	log.Print("["+i+"] Device: ", packetOut.AppID, " - ", packetOut.DevID)
 
 	handlerContext.PublishChannel <- packetOut
