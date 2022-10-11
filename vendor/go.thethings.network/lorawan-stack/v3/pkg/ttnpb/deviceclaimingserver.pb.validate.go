@@ -52,7 +52,14 @@ func (m *ClaimEndDeviceRequest) ValidateFields(paths ...string) error {
 		switch name {
 		case "target_application_ids":
 
-			if v, ok := interface{}(&m.TargetApplicationIds).(interface{ ValidateFields(...string) error }); ok {
+			if m.GetTargetApplicationIds() == nil {
+				return ClaimEndDeviceRequestValidationError{
+					field:  "target_application_ids",
+					reason: "value is required",
+				}
+			}
+
+			if v, ok := interface{}(m.GetTargetApplicationIds()).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return ClaimEndDeviceRequestValidationError{
 						field:  "target_application_ids",
@@ -124,7 +131,18 @@ func (m *ClaimEndDeviceRequest) ValidateFields(paths ...string) error {
 			}
 
 		case "target_net_id":
-			// no validation rules for TargetNetId
+
+			if len(m.GetTargetNetId()) > 0 {
+
+				if len(m.GetTargetNetId()) != 3 {
+					return ClaimEndDeviceRequestValidationError{
+						field:  "target_net_id",
+						reason: "value length must be 3 bytes",
+					}
+				}
+
+			}
+
 		case "invalidate_authentication_code":
 			// no validation rules for InvalidateAuthenticationCode
 		case "source_device":
@@ -262,7 +280,14 @@ func (m *AuthorizeApplicationRequest) ValidateFields(paths ...string) error {
 		switch name {
 		case "application_ids":
 
-			if v, ok := interface{}(&m.ApplicationIdentifiers).(interface{ ValidateFields(...string) error }); ok {
+			if m.GetApplicationIds() == nil {
+				return AuthorizeApplicationRequestValidationError{
+					field:  "application_ids",
+					reason: "value is required",
+				}
+			}
+
+			if v, ok := interface{}(m.GetApplicationIds()).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return AuthorizeApplicationRequestValidationError{
 						field:  "application_ids",
@@ -347,6 +372,335 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = AuthorizeApplicationRequestValidationError{}
+
+// ValidateFields checks the field values on GetInfoByJoinEUIRequest with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *GetInfoByJoinEUIRequest) ValidateFields(paths ...string) error {
+	if m == nil {
+		return nil
+	}
+
+	if len(paths) == 0 {
+		paths = GetInfoByJoinEUIRequestFieldPathsNested
+	}
+
+	for name, subs := range _processPaths(append(paths[:0:0], paths...)) {
+		_ = subs
+		switch name {
+		case "join_eui":
+
+			if len(m.GetJoinEui()) > 0 {
+
+				if len(m.GetJoinEui()) != 8 {
+					return GetInfoByJoinEUIRequestValidationError{
+						field:  "join_eui",
+						reason: "value length must be 8 bytes",
+					}
+				}
+
+			}
+
+		default:
+			return GetInfoByJoinEUIRequestValidationError{
+				field:  name,
+				reason: "invalid field path",
+			}
+		}
+	}
+	return nil
+}
+
+// GetInfoByJoinEUIRequestValidationError is the validation error returned by
+// GetInfoByJoinEUIRequest.ValidateFields if the designated constraints aren't met.
+type GetInfoByJoinEUIRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e GetInfoByJoinEUIRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e GetInfoByJoinEUIRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e GetInfoByJoinEUIRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e GetInfoByJoinEUIRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e GetInfoByJoinEUIRequestValidationError) ErrorName() string {
+	return "GetInfoByJoinEUIRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e GetInfoByJoinEUIRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sGetInfoByJoinEUIRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = GetInfoByJoinEUIRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = GetInfoByJoinEUIRequestValidationError{}
+
+// ValidateFields checks the field values on GetInfoByJoinEUIResponse with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *GetInfoByJoinEUIResponse) ValidateFields(paths ...string) error {
+	if m == nil {
+		return nil
+	}
+
+	if len(paths) == 0 {
+		paths = GetInfoByJoinEUIResponseFieldPathsNested
+	}
+
+	for name, subs := range _processPaths(append(paths[:0:0], paths...)) {
+		_ = subs
+		switch name {
+		case "join_eui":
+
+			if len(m.GetJoinEui()) > 0 {
+
+				if len(m.GetJoinEui()) != 8 {
+					return GetInfoByJoinEUIResponseValidationError{
+						field:  "join_eui",
+						reason: "value length must be 8 bytes",
+					}
+				}
+
+			}
+
+		case "supports_claiming":
+			// no validation rules for SupportsClaiming
+		default:
+			return GetInfoByJoinEUIResponseValidationError{
+				field:  name,
+				reason: "invalid field path",
+			}
+		}
+	}
+	return nil
+}
+
+// GetInfoByJoinEUIResponseValidationError is the validation error returned by
+// GetInfoByJoinEUIResponse.ValidateFields if the designated constraints
+// aren't met.
+type GetInfoByJoinEUIResponseValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e GetInfoByJoinEUIResponseValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e GetInfoByJoinEUIResponseValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e GetInfoByJoinEUIResponseValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e GetInfoByJoinEUIResponseValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e GetInfoByJoinEUIResponseValidationError) ErrorName() string {
+	return "GetInfoByJoinEUIResponseValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e GetInfoByJoinEUIResponseValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sGetInfoByJoinEUIResponse.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = GetInfoByJoinEUIResponseValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = GetInfoByJoinEUIResponseValidationError{}
+
+// ValidateFields checks the field values on GetClaimStatusResponse with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *GetClaimStatusResponse) ValidateFields(paths ...string) error {
+	if m == nil {
+		return nil
+	}
+
+	if len(paths) == 0 {
+		paths = GetClaimStatusResponseFieldPathsNested
+	}
+
+	for name, subs := range _processPaths(append(paths[:0:0], paths...)) {
+		_ = subs
+		switch name {
+		case "end_device_ids":
+
+			if m.GetEndDeviceIds() == nil {
+				return GetClaimStatusResponseValidationError{
+					field:  "end_device_ids",
+					reason: "value is required",
+				}
+			}
+
+			if v, ok := interface{}(m.GetEndDeviceIds()).(interface{ ValidateFields(...string) error }); ok {
+				if err := v.ValidateFields(subs...); err != nil {
+					return GetClaimStatusResponseValidationError{
+						field:  "end_device_ids",
+						reason: "embedded message failed validation",
+						cause:  err,
+					}
+				}
+			}
+
+		case "home_net_id":
+
+			if len(m.GetHomeNetId()) > 0 {
+
+				if len(m.GetHomeNetId()) != 3 {
+					return GetClaimStatusResponseValidationError{
+						field:  "home_net_id",
+						reason: "value length must be 3 bytes",
+					}
+				}
+
+			}
+
+		case "home_ns_id":
+
+			if len(m.GetHomeNsId()) > 0 {
+
+				if len(m.GetHomeNsId()) != 8 {
+					return GetClaimStatusResponseValidationError{
+						field:  "home_ns_id",
+						reason: "value length must be 8 bytes",
+					}
+				}
+
+			}
+
+		case "vendor_specific":
+
+			if v, ok := interface{}(m.GetVendorSpecific()).(interface{ ValidateFields(...string) error }); ok {
+				if err := v.ValidateFields(subs...); err != nil {
+					return GetClaimStatusResponseValidationError{
+						field:  "vendor_specific",
+						reason: "embedded message failed validation",
+						cause:  err,
+					}
+				}
+			}
+
+		default:
+			return GetClaimStatusResponseValidationError{
+				field:  name,
+				reason: "invalid field path",
+			}
+		}
+	}
+	return nil
+}
+
+// GetClaimStatusResponseValidationError is the validation error returned by
+// GetClaimStatusResponse.ValidateFields if the designated constraints aren't met.
+type GetClaimStatusResponseValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e GetClaimStatusResponseValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e GetClaimStatusResponseValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e GetClaimStatusResponseValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e GetClaimStatusResponseValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e GetClaimStatusResponseValidationError) ErrorName() string {
+	return "GetClaimStatusResponseValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e GetClaimStatusResponseValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sGetClaimStatusResponse.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = GetClaimStatusResponseValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = GetClaimStatusResponseValidationError{}
 
 // ValidateFields checks the field values on CUPSRedirection with the rules
 // defined in the proto definition for this message. If any rules are
@@ -526,7 +880,14 @@ func (m *ClaimGatewayRequest) ValidateFields(paths ...string) error {
 		switch name {
 		case "collaborator":
 
-			if v, ok := interface{}(&m.Collaborator).(interface{ ValidateFields(...string) error }); ok {
+			if m.GetCollaborator() == nil {
+				return ClaimGatewayRequestValidationError{
+					field:  "collaborator",
+					reason: "value is required",
+				}
+			}
+
+			if v, ok := interface{}(m.GetCollaborator()).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return ClaimGatewayRequestValidationError{
 						field:  "collaborator",
@@ -715,7 +1076,14 @@ func (m *AuthorizeGatewayRequest) ValidateFields(paths ...string) error {
 		switch name {
 		case "gateway_ids":
 
-			if v, ok := interface{}(&m.GatewayIdentifiers).(interface{ ValidateFields(...string) error }); ok {
+			if m.GetGatewayIds() == nil {
+				return AuthorizeGatewayRequestValidationError{
+					field:  "gateway_ids",
+					reason: "value is required",
+				}
+			}
+
+			if v, ok := interface{}(m.GetGatewayIds()).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return AuthorizeGatewayRequestValidationError{
 						field:  "gateway_ids",
@@ -817,9 +1185,31 @@ func (m *ClaimEndDeviceRequest_AuthenticatedIdentifiers) ValidateFields(paths ..
 		_ = subs
 		switch name {
 		case "join_eui":
-			// no validation rules for JoinEui
+
+			if len(m.GetJoinEui()) > 0 {
+
+				if len(m.GetJoinEui()) != 8 {
+					return ClaimEndDeviceRequest_AuthenticatedIdentifiersValidationError{
+						field:  "join_eui",
+						reason: "value length must be 8 bytes",
+					}
+				}
+
+			}
+
 		case "dev_eui":
-			// no validation rules for DevEui
+
+			if len(m.GetDevEui()) > 0 {
+
+				if len(m.GetDevEui()) != 8 {
+					return ClaimEndDeviceRequest_AuthenticatedIdentifiersValidationError{
+						field:  "dev_eui",
+						reason: "value length must be 8 bytes",
+					}
+				}
+
+			}
+
 		case "authentication_code":
 
 			if !_ClaimEndDeviceRequest_AuthenticatedIdentifiers_AuthenticationCode_Pattern.MatchString(m.GetAuthenticationCode()) {
@@ -900,6 +1290,102 @@ var _ interface {
 } = ClaimEndDeviceRequest_AuthenticatedIdentifiersValidationError{}
 
 var _ClaimEndDeviceRequest_AuthenticatedIdentifiers_AuthenticationCode_Pattern = regexp.MustCompile("^[A-Z0-9]{1,32}$")
+
+// ValidateFields checks the field values on
+// GetClaimStatusResponse_VendorSpecific with the rules defined in the proto
+// definition for this message. If any rules are violated, an error is returned.
+func (m *GetClaimStatusResponse_VendorSpecific) ValidateFields(paths ...string) error {
+	if m == nil {
+		return nil
+	}
+
+	if len(paths) == 0 {
+		paths = GetClaimStatusResponse_VendorSpecificFieldPathsNested
+	}
+
+	for name, subs := range _processPaths(append(paths[:0:0], paths...)) {
+		_ = subs
+		switch name {
+		case "organization_unique_identifier":
+			// no validation rules for OrganizationUniqueIdentifier
+		case "data":
+
+			if v, ok := interface{}(m.GetData()).(interface{ ValidateFields(...string) error }); ok {
+				if err := v.ValidateFields(subs...); err != nil {
+					return GetClaimStatusResponse_VendorSpecificValidationError{
+						field:  "data",
+						reason: "embedded message failed validation",
+						cause:  err,
+					}
+				}
+			}
+
+		default:
+			return GetClaimStatusResponse_VendorSpecificValidationError{
+				field:  name,
+				reason: "invalid field path",
+			}
+		}
+	}
+	return nil
+}
+
+// GetClaimStatusResponse_VendorSpecificValidationError is the validation error
+// returned by GetClaimStatusResponse_VendorSpecific.ValidateFields if the
+// designated constraints aren't met.
+type GetClaimStatusResponse_VendorSpecificValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e GetClaimStatusResponse_VendorSpecificValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e GetClaimStatusResponse_VendorSpecificValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e GetClaimStatusResponse_VendorSpecificValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e GetClaimStatusResponse_VendorSpecificValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e GetClaimStatusResponse_VendorSpecificValidationError) ErrorName() string {
+	return "GetClaimStatusResponse_VendorSpecificValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e GetClaimStatusResponse_VendorSpecificValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sGetClaimStatusResponse_VendorSpecific.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = GetClaimStatusResponse_VendorSpecificValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = GetClaimStatusResponse_VendorSpecificValidationError{}
 
 // ValidateFields checks the field values on CUPSRedirection_ClientTLS with the
 // rules defined in the proto definition for this message. If any rules are
@@ -1017,7 +1503,18 @@ func (m *ClaimGatewayRequest_AuthenticatedIdentifiers) ValidateFields(paths ...s
 		_ = subs
 		switch name {
 		case "gateway_eui":
-			// no validation rules for GatewayEui
+
+			if len(m.GetGatewayEui()) > 0 {
+
+				if len(m.GetGatewayEui()) != 8 {
+					return ClaimGatewayRequest_AuthenticatedIdentifiersValidationError{
+						field:  "gateway_eui",
+						reason: "value length must be 8 bytes",
+					}
+				}
+
+			}
+
 		case "authentication_code":
 
 			if len(m.GetAuthenticationCode()) > 2048 {

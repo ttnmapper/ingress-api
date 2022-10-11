@@ -17,43 +17,8 @@ package ttnpb
 import (
 	"fmt"
 	"sort"
-	"strconv"
 	"strings"
 )
-
-// MarshalText implements encoding.TextMarshaler interface.
-func (v Right) MarshalText() ([]byte, error) {
-	return []byte(v.String()), nil
-}
-
-// UnmarshalText implements encoding.TextUnmarshaler interface.
-func (v *Right) UnmarshalText(b []byte) error {
-	s := string(b)
-	if i, ok := Right_value[s]; ok {
-		*v = Right(i)
-		return nil
-	}
-	if !strings.HasPrefix(s, "RIGHT_") {
-		if i, ok := Right_value["RIGHT_"+s]; ok {
-			*v = Right(i)
-			return nil
-		}
-	}
-	return errCouldNotParse("Right")(string(b))
-}
-
-// UnmarshalJSON implements json.Unmarshaler interface.
-func (v *Right) UnmarshalJSON(b []byte) error {
-	if len(b) > 2 && b[0] == '"' && b[len(b)-1] == '"' {
-		return v.UnmarshalText(b[1 : len(b)-1])
-	}
-	i, err := strconv.Atoi(string(b))
-	if err != nil {
-		return errCouldNotParse("Right")(string(b)).WithCause(err)
-	}
-	*v = Right(i)
-	return nil
-}
 
 var (
 	AllUserRights         = &Rights{}
@@ -106,26 +71,33 @@ func init() {
 func (r Right) Implied() *Rights {
 	// NOTE: Changes here require the documentation in rights.proto to be updated.
 	switch r {
-	case RIGHT_USER_ALL:
+	case Right_RIGHT_USER_ALL:
 		return AllUserRights
-	case RIGHT_APPLICATION_ALL:
+	case Right_RIGHT_APPLICATION_ALL:
 		return AllApplicationRights
-	case RIGHT_APPLICATION_LINK:
+	case Right_RIGHT_APPLICATION_LINK:
 		return RightsFrom(
-			RIGHT_APPLICATION_INFO,
-			RIGHT_APPLICATION_TRAFFIC_READ,
-			RIGHT_APPLICATION_TRAFFIC_DOWN_WRITE,
+			Right_RIGHT_APPLICATION_INFO,
+			Right_RIGHT_APPLICATION_TRAFFIC_READ,
+			Right_RIGHT_APPLICATION_TRAFFIC_DOWN_WRITE,
 		)
-	case RIGHT_GATEWAY_ALL:
+	case Right_RIGHT_GATEWAY_ALL:
 		return AllGatewayRights
-	case RIGHT_GATEWAY_LINK:
+	case Right_RIGHT_GATEWAY_LINK:
 		return RightsFrom(
-			RIGHT_GATEWAY_INFO,
+			Right_RIGHT_GATEWAY_INFO,
 		)
-	case RIGHT_ORGANIZATION_ALL:
+	case Right_RIGHT_ORGANIZATION_ALL:
 		return AllOrganizationRights
-	case RIGHT_ALL:
+	case Right_RIGHT_ALL:
 		return AllRights
+	case Right_RIGHT_CLIENT_ALL:
+		return RightsFrom(
+			Right_RIGHT_CLIENT_INFO,
+			Right_RIGHT_CLIENT_SETTINGS_BASIC,
+			Right_RIGHT_CLIENT_SETTINGS_COLLABORATORS,
+			Right_RIGHT_CLIENT_DELETE,
+		)
 	}
 	return RightsFrom(r)
 }
@@ -157,11 +129,11 @@ func (s rightsSet) rights() *Rights {
 	return &Rights{Rights: res}
 }
 
-type rightsByString Rights
+type rightsByString []Right
 
-func (r rightsByString) Len() int           { return len(r.Rights) }
-func (r rightsByString) Less(i, j int) bool { return r.Rights[i].String() < r.Rights[j].String() }
-func (r rightsByString) Swap(i, j int)      { r.Rights[i], r.Rights[j] = r.Rights[j], r.Rights[i] }
+func (r rightsByString) Len() int           { return len(r) }
+func (r rightsByString) Less(i, j int) bool { return r[i].String() < r[j].String() }
+func (r rightsByString) Swap(i, j int)      { r[i], r[j] = r[j], r[i] }
 
 // Sorted returns a sorted rights list by string value.
 // The original rights list is not mutated.
@@ -169,10 +141,10 @@ func (r *Rights) Sorted() *Rights {
 	if r == nil {
 		return &Rights{}
 	}
-	res := Rights{Rights: make([]Right, len(r.Rights))}
+	res := &Rights{Rights: make([]Right, len(r.Rights))}
 	copy(res.Rights, r.Rights)
-	sort.Sort(rightsByString(res))
-	return &res
+	sort.Sort(rightsByString(res.Rights))
+	return res
 }
 
 // Unique removes all duplicate rights from the rights list.

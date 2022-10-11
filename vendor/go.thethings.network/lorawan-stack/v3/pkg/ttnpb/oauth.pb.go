@@ -8,12 +8,9 @@ import (
 	_ "github.com/envoyproxy/protoc-gen-validate/validate"
 	_ "github.com/gogo/protobuf/gogoproto"
 	proto "github.com/gogo/protobuf/proto"
-	_ "github.com/gogo/protobuf/types"
+	types "github.com/gogo/protobuf/types"
 	golang_proto "github.com/golang/protobuf/proto"
 	math "math"
-	reflect "reflect"
-	strings "strings"
-	time "time"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -21,7 +18,6 @@ var _ = proto.Marshal
 var _ = golang_proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
-var _ = time.Kitchen
 
 // This is a compile-time assertion to ensure that this generated file
 // is compatible with the proto package it is being compiled against.
@@ -30,14 +26,16 @@ var _ = time.Kitchen
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 type OAuthClientAuthorizationIdentifiers struct {
-	UserIds              UserIdentifiers   `protobuf:"bytes,1,opt,name=user_ids,json=userIds,proto3" json:"user_ids"`
-	ClientIds            ClientIdentifiers `protobuf:"bytes,2,opt,name=client_ids,json=clientIds,proto3" json:"client_ids"`
-	XXX_NoUnkeyedLiteral struct{}          `json:"-"`
-	XXX_sizecache        int32             `json:"-"`
+	UserIds              *UserIdentifiers   `protobuf:"bytes,1,opt,name=user_ids,json=userIds,proto3" json:"user_ids,omitempty"`
+	ClientIds            *ClientIdentifiers `protobuf:"bytes,2,opt,name=client_ids,json=clientIds,proto3" json:"client_ids,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}           `json:"-"`
+	XXX_unrecognized     []byte             `json:"-"`
+	XXX_sizecache        int32              `json:"-"`
 }
 
-func (m *OAuthClientAuthorizationIdentifiers) Reset()      { *m = OAuthClientAuthorizationIdentifiers{} }
-func (*OAuthClientAuthorizationIdentifiers) ProtoMessage() {}
+func (m *OAuthClientAuthorizationIdentifiers) Reset()         { *m = OAuthClientAuthorizationIdentifiers{} }
+func (m *OAuthClientAuthorizationIdentifiers) String() string { return proto.CompactTextString(m) }
+func (*OAuthClientAuthorizationIdentifiers) ProtoMessage()    {}
 func (*OAuthClientAuthorizationIdentifiers) Descriptor() ([]byte, []int) {
 	return fileDescriptor_1454904971eaa7d7, []int{0}
 }
@@ -59,32 +57,34 @@ func (m *OAuthClientAuthorizationIdentifiers) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_OAuthClientAuthorizationIdentifiers proto.InternalMessageInfo
 
-func (m *OAuthClientAuthorizationIdentifiers) GetUserIds() UserIdentifiers {
+func (m *OAuthClientAuthorizationIdentifiers) GetUserIds() *UserIdentifiers {
 	if m != nil {
 		return m.UserIds
 	}
-	return UserIdentifiers{}
+	return nil
 }
 
-func (m *OAuthClientAuthorizationIdentifiers) GetClientIds() ClientIdentifiers {
+func (m *OAuthClientAuthorizationIdentifiers) GetClientIds() *ClientIdentifiers {
 	if m != nil {
 		return m.ClientIds
 	}
-	return ClientIdentifiers{}
+	return nil
 }
 
 type OAuthClientAuthorization struct {
-	UserIds              UserIdentifiers   `protobuf:"bytes,1,opt,name=user_ids,json=userIds,proto3" json:"user_ids"`
-	ClientIds            ClientIdentifiers `protobuf:"bytes,2,opt,name=client_ids,json=clientIds,proto3" json:"client_ids"`
-	Rights               []Right           `protobuf:"varint,3,rep,packed,name=rights,proto3,enum=ttn.lorawan.v3.Right" json:"rights,omitempty"`
-	CreatedAt            time.Time         `protobuf:"bytes,4,opt,name=created_at,json=createdAt,proto3,stdtime" json:"created_at"`
-	UpdatedAt            time.Time         `protobuf:"bytes,5,opt,name=updated_at,json=updatedAt,proto3,stdtime" json:"updated_at"`
-	XXX_NoUnkeyedLiteral struct{}          `json:"-"`
-	XXX_sizecache        int32             `json:"-"`
+	UserIds              *UserIdentifiers   `protobuf:"bytes,1,opt,name=user_ids,json=userIds,proto3" json:"user_ids,omitempty"`
+	ClientIds            *ClientIdentifiers `protobuf:"bytes,2,opt,name=client_ids,json=clientIds,proto3" json:"client_ids,omitempty"`
+	Rights               []Right            `protobuf:"varint,3,rep,packed,name=rights,proto3,enum=ttn.lorawan.v3.Right" json:"rights,omitempty"`
+	CreatedAt            *types.Timestamp   `protobuf:"bytes,4,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
+	UpdatedAt            *types.Timestamp   `protobuf:"bytes,5,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}           `json:"-"`
+	XXX_unrecognized     []byte             `json:"-"`
+	XXX_sizecache        int32              `json:"-"`
 }
 
-func (m *OAuthClientAuthorization) Reset()      { *m = OAuthClientAuthorization{} }
-func (*OAuthClientAuthorization) ProtoMessage() {}
+func (m *OAuthClientAuthorization) Reset()         { *m = OAuthClientAuthorization{} }
+func (m *OAuthClientAuthorization) String() string { return proto.CompactTextString(m) }
+func (*OAuthClientAuthorization) ProtoMessage()    {}
 func (*OAuthClientAuthorization) Descriptor() ([]byte, []int) {
 	return fileDescriptor_1454904971eaa7d7, []int{1}
 }
@@ -106,18 +106,18 @@ func (m *OAuthClientAuthorization) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_OAuthClientAuthorization proto.InternalMessageInfo
 
-func (m *OAuthClientAuthorization) GetUserIds() UserIdentifiers {
+func (m *OAuthClientAuthorization) GetUserIds() *UserIdentifiers {
 	if m != nil {
 		return m.UserIds
 	}
-	return UserIdentifiers{}
+	return nil
 }
 
-func (m *OAuthClientAuthorization) GetClientIds() ClientIdentifiers {
+func (m *OAuthClientAuthorization) GetClientIds() *ClientIdentifiers {
 	if m != nil {
 		return m.ClientIds
 	}
-	return ClientIdentifiers{}
+	return nil
 }
 
 func (m *OAuthClientAuthorization) GetRights() []Right {
@@ -127,28 +127,30 @@ func (m *OAuthClientAuthorization) GetRights() []Right {
 	return nil
 }
 
-func (m *OAuthClientAuthorization) GetCreatedAt() time.Time {
+func (m *OAuthClientAuthorization) GetCreatedAt() *types.Timestamp {
 	if m != nil {
 		return m.CreatedAt
 	}
-	return time.Time{}
+	return nil
 }
 
-func (m *OAuthClientAuthorization) GetUpdatedAt() time.Time {
+func (m *OAuthClientAuthorization) GetUpdatedAt() *types.Timestamp {
 	if m != nil {
 		return m.UpdatedAt
 	}
-	return time.Time{}
+	return nil
 }
 
 type OAuthClientAuthorizations struct {
 	Authorizations       []*OAuthClientAuthorization `protobuf:"bytes,1,rep,name=authorizations,proto3" json:"authorizations,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}                    `json:"-"`
+	XXX_unrecognized     []byte                      `json:"-"`
 	XXX_sizecache        int32                       `json:"-"`
 }
 
-func (m *OAuthClientAuthorizations) Reset()      { *m = OAuthClientAuthorizations{} }
-func (*OAuthClientAuthorizations) ProtoMessage() {}
+func (m *OAuthClientAuthorizations) Reset()         { *m = OAuthClientAuthorizations{} }
+func (m *OAuthClientAuthorizations) String() string { return proto.CompactTextString(m) }
+func (*OAuthClientAuthorizations) ProtoMessage()    {}
 func (*OAuthClientAuthorizations) Descriptor() ([]byte, []int) {
 	return fileDescriptor_1454904971eaa7d7, []int{2}
 }
@@ -178,7 +180,7 @@ func (m *OAuthClientAuthorizations) GetAuthorizations() []*OAuthClientAuthorizat
 }
 
 type ListOAuthClientAuthorizationsRequest struct {
-	UserIdentifiers `protobuf:"bytes,1,opt,name=user_ids,json=userIds,proto3,embedded=user_ids" json:"user_ids"`
+	UserIds *UserIdentifiers `protobuf:"bytes,1,opt,name=user_ids,json=userIds,proto3" json:"user_ids,omitempty"`
 	// Order the results by this field path (must be present in the field mask).
 	// Default ordering is by ID. Prepend with a minus (-) to reverse the order.
 	Order string `protobuf:"bytes,2,opt,name=order,proto3" json:"order,omitempty"`
@@ -187,11 +189,13 @@ type ListOAuthClientAuthorizationsRequest struct {
 	// Page number for pagination. 0 is interpreted as 1.
 	Page                 uint32   `protobuf:"varint,4,opt,name=page,proto3" json:"page,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *ListOAuthClientAuthorizationsRequest) Reset()      { *m = ListOAuthClientAuthorizationsRequest{} }
-func (*ListOAuthClientAuthorizationsRequest) ProtoMessage() {}
+func (m *ListOAuthClientAuthorizationsRequest) Reset()         { *m = ListOAuthClientAuthorizationsRequest{} }
+func (m *ListOAuthClientAuthorizationsRequest) String() string { return proto.CompactTextString(m) }
+func (*ListOAuthClientAuthorizationsRequest) ProtoMessage()    {}
 func (*ListOAuthClientAuthorizationsRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_1454904971eaa7d7, []int{3}
 }
@@ -212,6 +216,13 @@ func (m *ListOAuthClientAuthorizationsRequest) XXX_DiscardUnknown() {
 }
 
 var xxx_messageInfo_ListOAuthClientAuthorizationsRequest proto.InternalMessageInfo
+
+func (m *ListOAuthClientAuthorizationsRequest) GetUserIds() *UserIdentifiers {
+	if m != nil {
+		return m.UserIds
+	}
+	return nil
+}
 
 func (m *ListOAuthClientAuthorizationsRequest) GetOrder() string {
 	if m != nil {
@@ -235,21 +246,23 @@ func (m *ListOAuthClientAuthorizationsRequest) GetPage() uint32 {
 }
 
 type OAuthAuthorizationCode struct {
-	UserIds              UserIdentifiers   `protobuf:"bytes,1,opt,name=user_ids,json=userIds,proto3" json:"user_ids"`
-	UserSessionId        string            `protobuf:"bytes,9,opt,name=user_session_id,json=userSessionId,proto3" json:"user_session_id,omitempty"`
-	ClientIds            ClientIdentifiers `protobuf:"bytes,2,opt,name=client_ids,json=clientIds,proto3" json:"client_ids"`
-	Rights               []Right           `protobuf:"varint,3,rep,packed,name=rights,proto3,enum=ttn.lorawan.v3.Right" json:"rights,omitempty"`
-	Code                 string            `protobuf:"bytes,4,opt,name=code,proto3" json:"code,omitempty"`
-	RedirectUri          string            `protobuf:"bytes,5,opt,name=redirect_uri,json=redirectUri,proto3" json:"redirect_uri,omitempty"`
-	State                string            `protobuf:"bytes,6,opt,name=state,proto3" json:"state,omitempty"`
-	CreatedAt            time.Time         `protobuf:"bytes,7,opt,name=created_at,json=createdAt,proto3,stdtime" json:"created_at"`
-	ExpiresAt            time.Time         `protobuf:"bytes,8,opt,name=expires_at,json=expiresAt,proto3,stdtime" json:"expires_at"`
-	XXX_NoUnkeyedLiteral struct{}          `json:"-"`
-	XXX_sizecache        int32             `json:"-"`
+	UserIds              *UserIdentifiers   `protobuf:"bytes,1,opt,name=user_ids,json=userIds,proto3" json:"user_ids,omitempty"`
+	UserSessionId        string             `protobuf:"bytes,9,opt,name=user_session_id,json=userSessionId,proto3" json:"user_session_id,omitempty"`
+	ClientIds            *ClientIdentifiers `protobuf:"bytes,2,opt,name=client_ids,json=clientIds,proto3" json:"client_ids,omitempty"`
+	Rights               []Right            `protobuf:"varint,3,rep,packed,name=rights,proto3,enum=ttn.lorawan.v3.Right" json:"rights,omitempty"`
+	Code                 string             `protobuf:"bytes,4,opt,name=code,proto3" json:"code,omitempty"`
+	RedirectUri          string             `protobuf:"bytes,5,opt,name=redirect_uri,json=redirectUri,proto3" json:"redirect_uri,omitempty"`
+	State                string             `protobuf:"bytes,6,opt,name=state,proto3" json:"state,omitempty"`
+	CreatedAt            *types.Timestamp   `protobuf:"bytes,7,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
+	ExpiresAt            *types.Timestamp   `protobuf:"bytes,8,opt,name=expires_at,json=expiresAt,proto3" json:"expires_at,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}           `json:"-"`
+	XXX_unrecognized     []byte             `json:"-"`
+	XXX_sizecache        int32              `json:"-"`
 }
 
-func (m *OAuthAuthorizationCode) Reset()      { *m = OAuthAuthorizationCode{} }
-func (*OAuthAuthorizationCode) ProtoMessage() {}
+func (m *OAuthAuthorizationCode) Reset()         { *m = OAuthAuthorizationCode{} }
+func (m *OAuthAuthorizationCode) String() string { return proto.CompactTextString(m) }
+func (*OAuthAuthorizationCode) ProtoMessage()    {}
 func (*OAuthAuthorizationCode) Descriptor() ([]byte, []int) {
 	return fileDescriptor_1454904971eaa7d7, []int{4}
 }
@@ -271,11 +284,11 @@ func (m *OAuthAuthorizationCode) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_OAuthAuthorizationCode proto.InternalMessageInfo
 
-func (m *OAuthAuthorizationCode) GetUserIds() UserIdentifiers {
+func (m *OAuthAuthorizationCode) GetUserIds() *UserIdentifiers {
 	if m != nil {
 		return m.UserIds
 	}
-	return UserIdentifiers{}
+	return nil
 }
 
 func (m *OAuthAuthorizationCode) GetUserSessionId() string {
@@ -285,11 +298,11 @@ func (m *OAuthAuthorizationCode) GetUserSessionId() string {
 	return ""
 }
 
-func (m *OAuthAuthorizationCode) GetClientIds() ClientIdentifiers {
+func (m *OAuthAuthorizationCode) GetClientIds() *ClientIdentifiers {
 	if m != nil {
 		return m.ClientIds
 	}
-	return ClientIdentifiers{}
+	return nil
 }
 
 func (m *OAuthAuthorizationCode) GetRights() []Right {
@@ -320,30 +333,32 @@ func (m *OAuthAuthorizationCode) GetState() string {
 	return ""
 }
 
-func (m *OAuthAuthorizationCode) GetCreatedAt() time.Time {
+func (m *OAuthAuthorizationCode) GetCreatedAt() *types.Timestamp {
 	if m != nil {
 		return m.CreatedAt
 	}
-	return time.Time{}
+	return nil
 }
 
-func (m *OAuthAuthorizationCode) GetExpiresAt() time.Time {
+func (m *OAuthAuthorizationCode) GetExpiresAt() *types.Timestamp {
 	if m != nil {
 		return m.ExpiresAt
 	}
-	return time.Time{}
+	return nil
 }
 
 type OAuthAccessTokenIdentifiers struct {
-	UserIds              UserIdentifiers   `protobuf:"bytes,1,opt,name=user_ids,json=userIds,proto3" json:"user_ids"`
-	ClientIds            ClientIdentifiers `protobuf:"bytes,2,opt,name=client_ids,json=clientIds,proto3" json:"client_ids"`
-	Id                   string            `protobuf:"bytes,3,opt,name=id,proto3" json:"id,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}          `json:"-"`
-	XXX_sizecache        int32             `json:"-"`
+	UserIds              *UserIdentifiers   `protobuf:"bytes,1,opt,name=user_ids,json=userIds,proto3" json:"user_ids,omitempty"`
+	ClientIds            *ClientIdentifiers `protobuf:"bytes,2,opt,name=client_ids,json=clientIds,proto3" json:"client_ids,omitempty"`
+	Id                   string             `protobuf:"bytes,3,opt,name=id,proto3" json:"id,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}           `json:"-"`
+	XXX_unrecognized     []byte             `json:"-"`
+	XXX_sizecache        int32              `json:"-"`
 }
 
-func (m *OAuthAccessTokenIdentifiers) Reset()      { *m = OAuthAccessTokenIdentifiers{} }
-func (*OAuthAccessTokenIdentifiers) ProtoMessage() {}
+func (m *OAuthAccessTokenIdentifiers) Reset()         { *m = OAuthAccessTokenIdentifiers{} }
+func (m *OAuthAccessTokenIdentifiers) String() string { return proto.CompactTextString(m) }
+func (*OAuthAccessTokenIdentifiers) ProtoMessage()    {}
 func (*OAuthAccessTokenIdentifiers) Descriptor() ([]byte, []int) {
 	return fileDescriptor_1454904971eaa7d7, []int{5}
 }
@@ -365,18 +380,18 @@ func (m *OAuthAccessTokenIdentifiers) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_OAuthAccessTokenIdentifiers proto.InternalMessageInfo
 
-func (m *OAuthAccessTokenIdentifiers) GetUserIds() UserIdentifiers {
+func (m *OAuthAccessTokenIdentifiers) GetUserIds() *UserIdentifiers {
 	if m != nil {
 		return m.UserIds
 	}
-	return UserIdentifiers{}
+	return nil
 }
 
-func (m *OAuthAccessTokenIdentifiers) GetClientIds() ClientIdentifiers {
+func (m *OAuthAccessTokenIdentifiers) GetClientIds() *ClientIdentifiers {
 	if m != nil {
 		return m.ClientIds
 	}
-	return ClientIdentifiers{}
+	return nil
 }
 
 func (m *OAuthAccessTokenIdentifiers) GetId() string {
@@ -387,21 +402,23 @@ func (m *OAuthAccessTokenIdentifiers) GetId() string {
 }
 
 type OAuthAccessToken struct {
-	UserIds              UserIdentifiers   `protobuf:"bytes,1,opt,name=user_ids,json=userIds,proto3" json:"user_ids"`
-	UserSessionId        string            `protobuf:"bytes,9,opt,name=user_session_id,json=userSessionId,proto3" json:"user_session_id,omitempty"`
-	ClientIds            ClientIdentifiers `protobuf:"bytes,2,opt,name=client_ids,json=clientIds,proto3" json:"client_ids"`
-	Id                   string            `protobuf:"bytes,3,opt,name=id,proto3" json:"id,omitempty"`
-	AccessToken          string            `protobuf:"bytes,4,opt,name=access_token,json=accessToken,proto3" json:"access_token,omitempty"`
-	RefreshToken         string            `protobuf:"bytes,5,opt,name=refresh_token,json=refreshToken,proto3" json:"refresh_token,omitempty"`
-	Rights               []Right           `protobuf:"varint,6,rep,packed,name=rights,proto3,enum=ttn.lorawan.v3.Right" json:"rights,omitempty"`
-	CreatedAt            time.Time         `protobuf:"bytes,7,opt,name=created_at,json=createdAt,proto3,stdtime" json:"created_at"`
-	ExpiresAt            time.Time         `protobuf:"bytes,8,opt,name=expires_at,json=expiresAt,proto3,stdtime" json:"expires_at"`
-	XXX_NoUnkeyedLiteral struct{}          `json:"-"`
-	XXX_sizecache        int32             `json:"-"`
+	UserIds              *UserIdentifiers   `protobuf:"bytes,1,opt,name=user_ids,json=userIds,proto3" json:"user_ids,omitempty"`
+	UserSessionId        string             `protobuf:"bytes,9,opt,name=user_session_id,json=userSessionId,proto3" json:"user_session_id,omitempty"`
+	ClientIds            *ClientIdentifiers `protobuf:"bytes,2,opt,name=client_ids,json=clientIds,proto3" json:"client_ids,omitempty"`
+	Id                   string             `protobuf:"bytes,3,opt,name=id,proto3" json:"id,omitempty"`
+	AccessToken          string             `protobuf:"bytes,4,opt,name=access_token,json=accessToken,proto3" json:"access_token,omitempty"`
+	RefreshToken         string             `protobuf:"bytes,5,opt,name=refresh_token,json=refreshToken,proto3" json:"refresh_token,omitempty"`
+	Rights               []Right            `protobuf:"varint,6,rep,packed,name=rights,proto3,enum=ttn.lorawan.v3.Right" json:"rights,omitempty"`
+	CreatedAt            *types.Timestamp   `protobuf:"bytes,7,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
+	ExpiresAt            *types.Timestamp   `protobuf:"bytes,8,opt,name=expires_at,json=expiresAt,proto3" json:"expires_at,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}           `json:"-"`
+	XXX_unrecognized     []byte             `json:"-"`
+	XXX_sizecache        int32              `json:"-"`
 }
 
-func (m *OAuthAccessToken) Reset()      { *m = OAuthAccessToken{} }
-func (*OAuthAccessToken) ProtoMessage() {}
+func (m *OAuthAccessToken) Reset()         { *m = OAuthAccessToken{} }
+func (m *OAuthAccessToken) String() string { return proto.CompactTextString(m) }
+func (*OAuthAccessToken) ProtoMessage()    {}
 func (*OAuthAccessToken) Descriptor() ([]byte, []int) {
 	return fileDescriptor_1454904971eaa7d7, []int{6}
 }
@@ -423,11 +440,11 @@ func (m *OAuthAccessToken) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_OAuthAccessToken proto.InternalMessageInfo
 
-func (m *OAuthAccessToken) GetUserIds() UserIdentifiers {
+func (m *OAuthAccessToken) GetUserIds() *UserIdentifiers {
 	if m != nil {
 		return m.UserIds
 	}
-	return UserIdentifiers{}
+	return nil
 }
 
 func (m *OAuthAccessToken) GetUserSessionId() string {
@@ -437,11 +454,11 @@ func (m *OAuthAccessToken) GetUserSessionId() string {
 	return ""
 }
 
-func (m *OAuthAccessToken) GetClientIds() ClientIdentifiers {
+func (m *OAuthAccessToken) GetClientIds() *ClientIdentifiers {
 	if m != nil {
 		return m.ClientIds
 	}
-	return ClientIdentifiers{}
+	return nil
 }
 
 func (m *OAuthAccessToken) GetId() string {
@@ -472,28 +489,30 @@ func (m *OAuthAccessToken) GetRights() []Right {
 	return nil
 }
 
-func (m *OAuthAccessToken) GetCreatedAt() time.Time {
+func (m *OAuthAccessToken) GetCreatedAt() *types.Timestamp {
 	if m != nil {
 		return m.CreatedAt
 	}
-	return time.Time{}
+	return nil
 }
 
-func (m *OAuthAccessToken) GetExpiresAt() time.Time {
+func (m *OAuthAccessToken) GetExpiresAt() *types.Timestamp {
 	if m != nil {
 		return m.ExpiresAt
 	}
-	return time.Time{}
+	return nil
 }
 
 type OAuthAccessTokens struct {
 	Tokens               []*OAuthAccessToken `protobuf:"bytes,1,rep,name=tokens,proto3" json:"tokens,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}            `json:"-"`
+	XXX_unrecognized     []byte              `json:"-"`
 	XXX_sizecache        int32               `json:"-"`
 }
 
-func (m *OAuthAccessTokens) Reset()      { *m = OAuthAccessTokens{} }
-func (*OAuthAccessTokens) ProtoMessage() {}
+func (m *OAuthAccessTokens) Reset()         { *m = OAuthAccessTokens{} }
+func (m *OAuthAccessTokens) String() string { return proto.CompactTextString(m) }
+func (*OAuthAccessTokens) ProtoMessage()    {}
 func (*OAuthAccessTokens) Descriptor() ([]byte, []int) {
 	return fileDescriptor_1454904971eaa7d7, []int{7}
 }
@@ -523,8 +542,8 @@ func (m *OAuthAccessTokens) GetTokens() []*OAuthAccessToken {
 }
 
 type ListOAuthAccessTokensRequest struct {
-	UserIds   UserIdentifiers   `protobuf:"bytes,1,opt,name=user_ids,json=userIds,proto3" json:"user_ids"`
-	ClientIds ClientIdentifiers `protobuf:"bytes,2,opt,name=client_ids,json=clientIds,proto3" json:"client_ids"`
+	UserIds   *UserIdentifiers   `protobuf:"bytes,1,opt,name=user_ids,json=userIds,proto3" json:"user_ids,omitempty"`
+	ClientIds *ClientIdentifiers `protobuf:"bytes,2,opt,name=client_ids,json=clientIds,proto3" json:"client_ids,omitempty"`
 	// Order the results by this field path (must be present in the field mask).
 	// Default ordering is by ID. Prepend with a minus (-) to reverse the order.
 	Order string `protobuf:"bytes,3,opt,name=order,proto3" json:"order,omitempty"`
@@ -533,11 +552,13 @@ type ListOAuthAccessTokensRequest struct {
 	// Page number for pagination. 0 is interpreted as 1.
 	Page                 uint32   `protobuf:"varint,5,opt,name=page,proto3" json:"page,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *ListOAuthAccessTokensRequest) Reset()      { *m = ListOAuthAccessTokensRequest{} }
-func (*ListOAuthAccessTokensRequest) ProtoMessage() {}
+func (m *ListOAuthAccessTokensRequest) Reset()         { *m = ListOAuthAccessTokensRequest{} }
+func (m *ListOAuthAccessTokensRequest) String() string { return proto.CompactTextString(m) }
+func (*ListOAuthAccessTokensRequest) ProtoMessage()    {}
 func (*ListOAuthAccessTokensRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_1454904971eaa7d7, []int{8}
 }
@@ -559,18 +580,18 @@ func (m *ListOAuthAccessTokensRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_ListOAuthAccessTokensRequest proto.InternalMessageInfo
 
-func (m *ListOAuthAccessTokensRequest) GetUserIds() UserIdentifiers {
+func (m *ListOAuthAccessTokensRequest) GetUserIds() *UserIdentifiers {
 	if m != nil {
 		return m.UserIds
 	}
-	return UserIdentifiers{}
+	return nil
 }
 
-func (m *ListOAuthAccessTokensRequest) GetClientIds() ClientIdentifiers {
+func (m *ListOAuthAccessTokensRequest) GetClientIds() *ClientIdentifiers {
 	if m != nil {
 		return m.ClientIds
 	}
-	return ClientIdentifiers{}
+	return nil
 }
 
 func (m *ListOAuthAccessTokensRequest) GetOrder() string {
@@ -621,526 +642,53 @@ func init() {
 }
 
 var fileDescriptor_1454904971eaa7d7 = []byte{
-	// 816 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xdc, 0x56, 0xcf, 0x8f, 0xe3, 0x34,
-	0x14, 0xae, 0x9b, 0xb6, 0xd3, 0xba, 0x3f, 0x18, 0x2c, 0x40, 0x61, 0x96, 0x4d, 0xbb, 0x19, 0x0e,
-	0x15, 0xa8, 0x89, 0x34, 0x23, 0x21, 0x8e, 0x34, 0x73, 0x61, 0xa5, 0x5d, 0x40, 0x66, 0xf7, 0xc2,
-	0xa5, 0x72, 0x13, 0x4f, 0x6a, 0xb5, 0x8d, 0x83, 0xed, 0x74, 0x77, 0x39, 0x71, 0xe6, 0x34, 0x7f,
-	0x04, 0x07, 0xfe, 0x0b, 0xb8, 0xc1, 0x91, 0x23, 0xa7, 0x05, 0xba, 0x97, 0xbd, 0x80, 0x90, 0xb8,
-	0xf5, 0x84, 0xea, 0xa4, 0xdb, 0x34, 0x43, 0x91, 0xba, 0x42, 0xda, 0x85, 0x9b, 0xed, 0xf7, 0xbd,
-	0xcf, 0xf9, 0xfc, 0x3e, 0xfb, 0x05, 0xde, 0x9c, 0x71, 0x41, 0x1e, 0x90, 0x68, 0x20, 0x15, 0xf1,
-	0xa7, 0x2e, 0x89, 0x99, 0xcb, 0x49, 0xa2, 0x26, 0x4e, 0x2c, 0xb8, 0xe2, 0xa8, 0xa3, 0x54, 0xe4,
-	0x64, 0x10, 0x67, 0x71, 0x7e, 0x32, 0x0c, 0x99, 0x9a, 0x24, 0x63, 0xc7, 0xe7, 0x73, 0x97, 0x46,
-	0x0b, 0xfe, 0x28, 0x16, 0xfc, 0xe1, 0x23, 0x57, 0x83, 0xfd, 0x41, 0x48, 0xa3, 0xc1, 0x82, 0xcc,
-	0x58, 0x40, 0x14, 0x75, 0xaf, 0x0d, 0x52, 0xca, 0x93, 0x41, 0x8e, 0x22, 0xe4, 0x21, 0x4f, 0x93,
-	0xc7, 0xc9, 0xa5, 0x9e, 0xe9, 0x89, 0x1e, 0x65, 0xf0, 0x6e, 0xc8, 0x79, 0x38, 0xa3, 0x5b, 0x94,
-	0x62, 0x73, 0x2a, 0x15, 0x99, 0xc7, 0x19, 0xe0, 0xf4, 0xba, 0x02, 0x16, 0xd0, 0x48, 0xb1, 0x4b,
-	0x46, 0x85, 0xcc, 0x40, 0xd6, 0x75, 0x90, 0x60, 0xe1, 0x44, 0x65, 0x71, 0xfb, 0x5b, 0x00, 0x4f,
-	0x3f, 0x1e, 0x26, 0x6a, 0x72, 0x31, 0x63, 0x34, 0x52, 0xeb, 0x11, 0x17, 0xec, 0x0b, 0xa2, 0x18,
-	0x8f, 0x6e, 0x6f, 0xd9, 0xd0, 0x87, 0xb0, 0x9e, 0x48, 0x2a, 0x46, 0x2c, 0x90, 0x26, 0xe8, 0x81,
-	0x7e, 0xf3, 0xac, 0xeb, 0xec, 0x1e, 0x91, 0x73, 0x5f, 0x52, 0x91, 0x4b, 0xf1, 0x5a, 0x2b, 0xaf,
-	0xfa, 0x15, 0x28, 0x1f, 0x83, 0x1f, 0x1e, 0x77, 0x4b, 0xf8, 0x28, 0xd1, 0x61, 0x89, 0x3e, 0x82,
-	0xd0, 0xd7, 0x7b, 0x69, 0xae, 0xb2, 0xe6, 0xba, 0x55, 0xe4, 0x4a, 0xbf, 0x66, 0x3f, 0x5b, 0xc3,
-	0xcf, 0x00, 0xd2, 0xfe, 0xad, 0x0c, 0xcd, 0x7d, 0x0a, 0x5e, 0xde, 0xcf, 0x46, 0x03, 0x58, 0x4b,
-	0x0b, 0x61, 0x1a, 0x3d, 0xa3, 0xdf, 0x39, 0x7b, 0xbd, 0xc8, 0x85, 0xd7, 0x51, 0x9c, 0x81, 0xd0,
-	0x05, 0x84, 0xbe, 0xa0, 0x44, 0xd1, 0x60, 0x44, 0x94, 0x59, 0xd1, 0xdb, 0x9f, 0x38, 0xa9, 0x45,
-	0x9c, 0x8d, 0x45, 0x9c, 0x7b, 0x1b, 0x8b, 0x78, 0xf5, 0xf5, 0x7e, 0x57, 0x3f, 0x77, 0x01, 0x6e,
-	0x64, 0x79, 0x43, 0xb5, 0x26, 0x49, 0xe2, 0x60, 0x43, 0x52, 0x3d, 0x84, 0x24, 0xcb, 0x1b, 0x2a,
-	0x7b, 0x0e, 0xdf, 0xdc, 0x77, 0xdc, 0x12, 0x7d, 0x02, 0x3b, 0x64, 0x67, 0xc5, 0x04, 0x3d, 0xa3,
-	0xdf, 0x3c, 0xeb, 0x17, 0xd5, 0xed, 0xa3, 0xc0, 0x85, 0x7c, 0xfb, 0x17, 0x00, 0xdf, 0xbe, 0xc3,
-	0xa4, 0xda, 0xbb, 0x27, 0xa6, 0x9f, 0x27, 0x54, 0x2a, 0x74, 0xe7, 0xf0, 0x52, 0x1f, 0xe7, 0x8b,
-	0xf3, 0xe3, 0xe3, 0x2e, 0xd8, 0x96, 0xfb, 0x3d, 0x58, 0xe5, 0x22, 0xa0, 0x42, 0x57, 0xba, 0xe1,
-	0xf5, 0x56, 0xde, 0x4d, 0x71, 0x03, 0x97, 0x70, 0xae, 0x0a, 0xb8, 0x39, 0xc8, 0x4d, 0x52, 0x38,
-	0xb2, 0x60, 0x75, 0xc6, 0xe6, 0x4c, 0x99, 0x46, 0x0f, 0xf4, 0xdb, 0x5e, 0x7d, 0xe5, 0x55, 0xdf,
-	0x31, 0xcc, 0xa7, 0x47, 0x38, 0x5d, 0x46, 0x08, 0x56, 0x62, 0x12, 0x52, 0x5d, 0xc1, 0x36, 0xd6,
-	0x63, 0xfb, 0x4f, 0x03, 0xbe, 0xa1, 0xe5, 0xed, 0x08, 0xbb, 0xe0, 0x01, 0xfd, 0x17, 0xfd, 0xeb,
-	0xc2, 0x57, 0x34, 0x93, 0xa4, 0x52, 0x32, 0x1e, 0x8d, 0x58, 0x60, 0x36, 0xb4, 0xb4, 0xa3, 0x95,
-	0x57, 0x11, 0x65, 0xf3, 0x03, 0xdc, 0x5e, 0xc7, 0x3f, 0x4d, 0xc3, 0xb7, 0x83, 0x17, 0x6d, 0x78,
-	0x04, 0x2b, 0x3e, 0x0f, 0xd2, 0x83, 0x6a, 0x60, 0x3d, 0x46, 0xef, 0xc2, 0x96, 0xa0, 0x01, 0x13,
-	0xd4, 0x57, 0xa3, 0x44, 0x30, 0xed, 0xe0, 0x86, 0x3e, 0x63, 0x61, 0x5c, 0x01, 0x80, 0x9b, 0x9b,
-	0xe8, 0x7d, 0xc1, 0xd0, 0x6b, 0xb0, 0x2a, 0x15, 0x51, 0xd4, 0xac, 0x69, 0x86, 0x74, 0x52, 0xb8,
-	0x47, 0x47, 0xcf, 0x7d, 0x8f, 0xe8, 0xc3, 0x98, 0x09, 0x2a, 0xd7, 0x24, 0xf5, 0x43, 0x48, 0xb2,
-	0xbc, 0xa1, 0xb2, 0xbf, 0x07, 0xf0, 0x46, 0x5a, 0x75, 0xdf, 0xa7, 0x52, 0xde, 0xe3, 0x53, 0xfa,
-	0xdf, 0x78, 0x71, 0x51, 0x07, 0x96, 0x59, 0xa0, 0x0d, 0xde, 0xc0, 0x65, 0x16, 0xd8, 0xbf, 0x1b,
-	0xf0, 0xb8, 0xa8, 0xe4, 0xff, 0xe4, 0xdc, 0x82, 0x5e, 0x74, 0x0b, 0xb6, 0x88, 0x56, 0x3a, 0x52,
-	0x6b, 0xa9, 0x99, 0x45, 0x9b, 0x24, 0xa7, 0xfe, 0x14, 0xb6, 0x05, 0xbd, 0x14, 0x54, 0x4e, 0x32,
-	0x8c, 0xb6, 0x2a, 0x6e, 0x65, 0x8b, 0x29, 0x68, 0x7b, 0x23, 0x6a, 0x87, 0xb7, 0x80, 0x17, 0x69,
-	0xdd, 0xbb, 0xf0, 0xd5, 0x62, 0xbd, 0x25, 0x7a, 0x1f, 0xd6, 0xb4, 0xd4, 0xcd, 0x93, 0xdf, 0xfb,
-	0xdb, 0x27, 0x3f, 0x97, 0x82, 0x33, 0xbc, 0xfd, 0x75, 0x19, 0xbe, 0xf5, 0xec, 0x89, 0xcf, 0x73,
-	0x6e, 0x9e, 0xf6, 0x97, 0xf7, 0x2a, 0x3c, 0x6b, 0x13, 0xc6, 0x73, 0xb6, 0x89, 0xca, 0x3f, 0xb7,
-	0x89, 0xea, 0xb6, 0x4d, 0x78, 0x77, 0x7f, 0xfa, 0xd5, 0x2a, 0x7d, 0xb9, 0xb4, 0xc0, 0x37, 0x4b,
-	0x0b, 0x3c, 0x5d, 0x5a, 0xa5, 0x3f, 0x96, 0x16, 0xb8, 0x7a, 0x62, 0x95, 0xbe, 0x7b, 0x62, 0x81,
-	0xcf, 0xdc, 0x90, 0x3b, 0x6a, 0x42, 0xd5, 0x84, 0x45, 0xa1, 0x74, 0x22, 0xaa, 0x1e, 0x70, 0x31,
-	0x75, 0x77, 0xff, 0xfe, 0x16, 0xe7, 0x6e, 0x3c, 0x0d, 0x5d, 0xa5, 0xa2, 0x78, 0x3c, 0xae, 0xe9,
-	0x6a, 0x9f, 0xff, 0x15, 0x00, 0x00, 0xff, 0xff, 0x80, 0x45, 0x27, 0x0b, 0x09, 0x0b, 0x00, 0x00,
-}
-
-func (this *OAuthClientAuthorizationIdentifiers) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*OAuthClientAuthorizationIdentifiers)
-	if !ok {
-		that2, ok := that.(OAuthClientAuthorizationIdentifiers)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.UserIds.Equal(&that1.UserIds) {
-		return false
-	}
-	if !this.ClientIds.Equal(&that1.ClientIds) {
-		return false
-	}
-	return true
-}
-func (this *OAuthClientAuthorization) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*OAuthClientAuthorization)
-	if !ok {
-		that2, ok := that.(OAuthClientAuthorization)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.UserIds.Equal(&that1.UserIds) {
-		return false
-	}
-	if !this.ClientIds.Equal(&that1.ClientIds) {
-		return false
-	}
-	if len(this.Rights) != len(that1.Rights) {
-		return false
-	}
-	for i := range this.Rights {
-		if this.Rights[i] != that1.Rights[i] {
-			return false
-		}
-	}
-	if !this.CreatedAt.Equal(that1.CreatedAt) {
-		return false
-	}
-	if !this.UpdatedAt.Equal(that1.UpdatedAt) {
-		return false
-	}
-	return true
-}
-func (this *OAuthClientAuthorizations) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*OAuthClientAuthorizations)
-	if !ok {
-		that2, ok := that.(OAuthClientAuthorizations)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if len(this.Authorizations) != len(that1.Authorizations) {
-		return false
-	}
-	for i := range this.Authorizations {
-		if !this.Authorizations[i].Equal(that1.Authorizations[i]) {
-			return false
-		}
-	}
-	return true
-}
-func (this *ListOAuthClientAuthorizationsRequest) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ListOAuthClientAuthorizationsRequest)
-	if !ok {
-		that2, ok := that.(ListOAuthClientAuthorizationsRequest)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.UserIdentifiers.Equal(&that1.UserIdentifiers) {
-		return false
-	}
-	if this.Order != that1.Order {
-		return false
-	}
-	if this.Limit != that1.Limit {
-		return false
-	}
-	if this.Page != that1.Page {
-		return false
-	}
-	return true
-}
-func (this *OAuthAuthorizationCode) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*OAuthAuthorizationCode)
-	if !ok {
-		that2, ok := that.(OAuthAuthorizationCode)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.UserIds.Equal(&that1.UserIds) {
-		return false
-	}
-	if this.UserSessionId != that1.UserSessionId {
-		return false
-	}
-	if !this.ClientIds.Equal(&that1.ClientIds) {
-		return false
-	}
-	if len(this.Rights) != len(that1.Rights) {
-		return false
-	}
-	for i := range this.Rights {
-		if this.Rights[i] != that1.Rights[i] {
-			return false
-		}
-	}
-	if this.Code != that1.Code {
-		return false
-	}
-	if this.RedirectUri != that1.RedirectUri {
-		return false
-	}
-	if this.State != that1.State {
-		return false
-	}
-	if !this.CreatedAt.Equal(that1.CreatedAt) {
-		return false
-	}
-	if !this.ExpiresAt.Equal(that1.ExpiresAt) {
-		return false
-	}
-	return true
-}
-func (this *OAuthAccessTokenIdentifiers) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*OAuthAccessTokenIdentifiers)
-	if !ok {
-		that2, ok := that.(OAuthAccessTokenIdentifiers)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.UserIds.Equal(&that1.UserIds) {
-		return false
-	}
-	if !this.ClientIds.Equal(&that1.ClientIds) {
-		return false
-	}
-	if this.Id != that1.Id {
-		return false
-	}
-	return true
-}
-func (this *OAuthAccessToken) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*OAuthAccessToken)
-	if !ok {
-		that2, ok := that.(OAuthAccessToken)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.UserIds.Equal(&that1.UserIds) {
-		return false
-	}
-	if this.UserSessionId != that1.UserSessionId {
-		return false
-	}
-	if !this.ClientIds.Equal(&that1.ClientIds) {
-		return false
-	}
-	if this.Id != that1.Id {
-		return false
-	}
-	if this.AccessToken != that1.AccessToken {
-		return false
-	}
-	if this.RefreshToken != that1.RefreshToken {
-		return false
-	}
-	if len(this.Rights) != len(that1.Rights) {
-		return false
-	}
-	for i := range this.Rights {
-		if this.Rights[i] != that1.Rights[i] {
-			return false
-		}
-	}
-	if !this.CreatedAt.Equal(that1.CreatedAt) {
-		return false
-	}
-	if !this.ExpiresAt.Equal(that1.ExpiresAt) {
-		return false
-	}
-	return true
-}
-func (this *OAuthAccessTokens) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*OAuthAccessTokens)
-	if !ok {
-		that2, ok := that.(OAuthAccessTokens)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if len(this.Tokens) != len(that1.Tokens) {
-		return false
-	}
-	for i := range this.Tokens {
-		if !this.Tokens[i].Equal(that1.Tokens[i]) {
-			return false
-		}
-	}
-	return true
-}
-func (this *ListOAuthAccessTokensRequest) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ListOAuthAccessTokensRequest)
-	if !ok {
-		that2, ok := that.(ListOAuthAccessTokensRequest)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.UserIds.Equal(&that1.UserIds) {
-		return false
-	}
-	if !this.ClientIds.Equal(&that1.ClientIds) {
-		return false
-	}
-	if this.Order != that1.Order {
-		return false
-	}
-	if this.Limit != that1.Limit {
-		return false
-	}
-	if this.Page != that1.Page {
-		return false
-	}
-	return true
-}
-func (this *OAuthClientAuthorizationIdentifiers) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&OAuthClientAuthorizationIdentifiers{`,
-		`UserIds:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.UserIds), "UserIdentifiers", "UserIdentifiers", 1), `&`, ``, 1) + `,`,
-		`ClientIds:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.ClientIds), "ClientIdentifiers", "ClientIdentifiers", 1), `&`, ``, 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *OAuthClientAuthorization) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&OAuthClientAuthorization{`,
-		`UserIds:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.UserIds), "UserIdentifiers", "UserIdentifiers", 1), `&`, ``, 1) + `,`,
-		`ClientIds:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.ClientIds), "ClientIdentifiers", "ClientIdentifiers", 1), `&`, ``, 1) + `,`,
-		`Rights:` + fmt.Sprintf("%v", this.Rights) + `,`,
-		`CreatedAt:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.CreatedAt), "Timestamp", "types.Timestamp", 1), `&`, ``, 1) + `,`,
-		`UpdatedAt:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.UpdatedAt), "Timestamp", "types.Timestamp", 1), `&`, ``, 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *OAuthClientAuthorizations) String() string {
-	if this == nil {
-		return "nil"
-	}
-	repeatedStringForAuthorizations := "[]*OAuthClientAuthorization{"
-	for _, f := range this.Authorizations {
-		repeatedStringForAuthorizations += strings.Replace(f.String(), "OAuthClientAuthorization", "OAuthClientAuthorization", 1) + ","
-	}
-	repeatedStringForAuthorizations += "}"
-	s := strings.Join([]string{`&OAuthClientAuthorizations{`,
-		`Authorizations:` + repeatedStringForAuthorizations + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *ListOAuthClientAuthorizationsRequest) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&ListOAuthClientAuthorizationsRequest{`,
-		`UserIdentifiers:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.UserIdentifiers), "UserIdentifiers", "UserIdentifiers", 1), `&`, ``, 1) + `,`,
-		`Order:` + fmt.Sprintf("%v", this.Order) + `,`,
-		`Limit:` + fmt.Sprintf("%v", this.Limit) + `,`,
-		`Page:` + fmt.Sprintf("%v", this.Page) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *OAuthAuthorizationCode) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&OAuthAuthorizationCode{`,
-		`UserIds:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.UserIds), "UserIdentifiers", "UserIdentifiers", 1), `&`, ``, 1) + `,`,
-		`UserSessionId:` + fmt.Sprintf("%v", this.UserSessionId) + `,`,
-		`ClientIds:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.ClientIds), "ClientIdentifiers", "ClientIdentifiers", 1), `&`, ``, 1) + `,`,
-		`Rights:` + fmt.Sprintf("%v", this.Rights) + `,`,
-		`Code:` + fmt.Sprintf("%v", this.Code) + `,`,
-		`RedirectUri:` + fmt.Sprintf("%v", this.RedirectUri) + `,`,
-		`State:` + fmt.Sprintf("%v", this.State) + `,`,
-		`CreatedAt:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.CreatedAt), "Timestamp", "types.Timestamp", 1), `&`, ``, 1) + `,`,
-		`ExpiresAt:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.ExpiresAt), "Timestamp", "types.Timestamp", 1), `&`, ``, 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *OAuthAccessTokenIdentifiers) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&OAuthAccessTokenIdentifiers{`,
-		`UserIds:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.UserIds), "UserIdentifiers", "UserIdentifiers", 1), `&`, ``, 1) + `,`,
-		`ClientIds:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.ClientIds), "ClientIdentifiers", "ClientIdentifiers", 1), `&`, ``, 1) + `,`,
-		`Id:` + fmt.Sprintf("%v", this.Id) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *OAuthAccessToken) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&OAuthAccessToken{`,
-		`UserIds:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.UserIds), "UserIdentifiers", "UserIdentifiers", 1), `&`, ``, 1) + `,`,
-		`UserSessionId:` + fmt.Sprintf("%v", this.UserSessionId) + `,`,
-		`ClientIds:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.ClientIds), "ClientIdentifiers", "ClientIdentifiers", 1), `&`, ``, 1) + `,`,
-		`Id:` + fmt.Sprintf("%v", this.Id) + `,`,
-		`AccessToken:` + fmt.Sprintf("%v", this.AccessToken) + `,`,
-		`RefreshToken:` + fmt.Sprintf("%v", this.RefreshToken) + `,`,
-		`Rights:` + fmt.Sprintf("%v", this.Rights) + `,`,
-		`CreatedAt:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.CreatedAt), "Timestamp", "types.Timestamp", 1), `&`, ``, 1) + `,`,
-		`ExpiresAt:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.ExpiresAt), "Timestamp", "types.Timestamp", 1), `&`, ``, 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *OAuthAccessTokens) String() string {
-	if this == nil {
-		return "nil"
-	}
-	repeatedStringForTokens := "[]*OAuthAccessToken{"
-	for _, f := range this.Tokens {
-		repeatedStringForTokens += strings.Replace(f.String(), "OAuthAccessToken", "OAuthAccessToken", 1) + ","
-	}
-	repeatedStringForTokens += "}"
-	s := strings.Join([]string{`&OAuthAccessTokens{`,
-		`Tokens:` + repeatedStringForTokens + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *ListOAuthAccessTokensRequest) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&ListOAuthAccessTokensRequest{`,
-		`UserIds:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.UserIds), "UserIdentifiers", "UserIdentifiers", 1), `&`, ``, 1) + `,`,
-		`ClientIds:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.ClientIds), "ClientIdentifiers", "ClientIdentifiers", 1), `&`, ``, 1) + `,`,
-		`Order:` + fmt.Sprintf("%v", this.Order) + `,`,
-		`Limit:` + fmt.Sprintf("%v", this.Limit) + `,`,
-		`Page:` + fmt.Sprintf("%v", this.Page) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func valueToStringOauth(v interface{}) string {
-	rv := reflect.ValueOf(v)
-	if rv.IsNil() {
-		return "nil"
-	}
-	pv := reflect.Indirect(rv).Interface()
-	return fmt.Sprintf("*%v", pv)
+	// 758 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xdc, 0x56, 0xcd, 0x6e, 0xd3, 0x4a,
+	0x14, 0xbe, 0x8e, 0xf3, 0xd3, 0x4c, 0x9a, 0xdc, 0x5e, 0xeb, 0x82, 0x4c, 0x4b, 0xdb, 0xd4, 0x65,
+	0x11, 0x81, 0x62, 0x4b, 0xad, 0x40, 0xb0, 0x23, 0x29, 0x9b, 0x22, 0x10, 0x68, 0x68, 0x37, 0x6c,
+	0xa2, 0x89, 0x3d, 0x75, 0x46, 0x49, 0x3c, 0x66, 0xe6, 0x38, 0x6d, 0x79, 0x04, 0x56, 0x3c, 0x00,
+	0xef, 0xc1, 0x12, 0x5e, 0x01, 0x36, 0xb0, 0x67, 0xc3, 0x33, 0x74, 0x85, 0x32, 0x76, 0x9a, 0xc4,
+	0x6d, 0xa8, 0x8a, 0x22, 0xa8, 0xd8, 0xcd, 0xcc, 0xf9, 0xce, 0x37, 0xf3, 0x9d, 0xf3, 0xf9, 0xc8,
+	0x68, 0xb5, 0xc7, 0x05, 0x39, 0x24, 0x41, 0x5d, 0x02, 0x71, 0xbb, 0x0e, 0x09, 0x99, 0xc3, 0x49,
+	0x04, 0x1d, 0x3b, 0x14, 0x1c, 0xb8, 0x51, 0x01, 0x08, 0xec, 0x04, 0x62, 0x0f, 0xb6, 0x97, 0x1b,
+	0x3e, 0x83, 0x4e, 0xd4, 0xb6, 0x5d, 0xde, 0x77, 0x68, 0x30, 0xe0, 0xc7, 0xa1, 0xe0, 0x47, 0xc7,
+	0x8e, 0x02, 0xbb, 0x75, 0x9f, 0x06, 0xf5, 0x01, 0xe9, 0x31, 0x8f, 0x00, 0x75, 0xce, 0x2c, 0x62,
+	0xca, 0xe5, 0xfa, 0x04, 0x85, 0xcf, 0x7d, 0x1e, 0x27, 0xb7, 0xa3, 0x03, 0xb5, 0x53, 0x1b, 0xb5,
+	0x4a, 0xe0, 0xeb, 0x3e, 0xe7, 0x7e, 0x8f, 0x8e, 0x51, 0xc0, 0xfa, 0x54, 0x02, 0xe9, 0x87, 0x09,
+	0x60, 0xf3, 0xac, 0x02, 0xe6, 0xd1, 0x00, 0xd8, 0x01, 0xa3, 0x42, 0x26, 0xa0, 0xb5, 0xb3, 0x20,
+	0xc1, 0xfc, 0x0e, 0x24, 0x71, 0xeb, 0xbd, 0x86, 0x36, 0x9f, 0x35, 0x22, 0xe8, 0xec, 0xf4, 0x18,
+	0x0d, 0x60, 0xb8, 0xe2, 0x82, 0xbd, 0x26, 0xc0, 0x78, 0xb0, 0x3b, 0x66, 0x33, 0x1e, 0xa1, 0x85,
+	0x48, 0x52, 0xd1, 0x62, 0x9e, 0x34, 0xb5, 0xaa, 0x56, 0x2b, 0x6d, 0xad, 0xdb, 0xd3, 0x25, 0xb2,
+	0xf7, 0x25, 0x15, 0x13, 0x29, 0xcd, 0x85, 0x93, 0x66, 0xee, 0x8d, 0x96, 0x59, 0xd2, 0x70, 0x21,
+	0x52, 0x21, 0x69, 0x3c, 0x46, 0xc8, 0x55, 0xf7, 0x28, 0x9e, 0x8c, 0xe2, 0xd9, 0x48, 0xf3, 0xc4,
+	0x2f, 0x39, 0x9f, 0xa9, 0xe8, 0x26, 0x41, 0x69, 0x7d, 0xca, 0x20, 0x73, 0xd6, 0xcb, 0xaf, 0xde,
+	0x73, 0x8d, 0x3a, 0xca, 0xc7, 0x85, 0x37, 0xf5, 0xaa, 0x5e, 0xab, 0x6c, 0x5d, 0x4b, 0xf3, 0xe0,
+	0x61, 0x14, 0x27, 0x20, 0xe3, 0x01, 0x42, 0xae, 0xa0, 0x04, 0xa8, 0xd7, 0x22, 0x60, 0x66, 0xd5,
+	0xd5, 0xcb, 0x76, 0x6c, 0x09, 0x7b, 0x64, 0x09, 0x7b, 0x6f, 0x64, 0x09, 0x5c, 0x4c, 0xd0, 0x0d,
+	0x18, 0xa6, 0x46, 0xa1, 0x37, 0x4a, 0xcd, 0x5d, 0x9c, 0x9a, 0xa0, 0x1b, 0x60, 0xf5, 0xd1, 0x8d,
+	0x59, 0x25, 0x95, 0xc6, 0x73, 0x54, 0x21, 0x53, 0x27, 0xa6, 0x56, 0xd5, 0x6b, 0xa5, 0xad, 0x5a,
+	0x5a, 0xc9, 0x2c, 0x0a, 0x9c, 0xca, 0xb7, 0xbe, 0x6a, 0xe8, 0xd6, 0x13, 0x26, 0x61, 0xe6, 0x9d,
+	0x98, 0xbe, 0x8a, 0xa8, 0x84, 0x39, 0xb5, 0xf3, 0x1e, 0xca, 0x71, 0xe1, 0x51, 0xa1, 0x3a, 0x59,
+	0x6c, 0x56, 0x4f, 0x9a, 0xab, 0x62, 0x05, 0xff, 0x83, 0x27, 0x2a, 0x8d, 0x4b, 0xf5, 0x89, 0x4d,
+	0x0c, 0x37, 0xd6, 0x50, 0xae, 0xc7, 0xfa, 0x0c, 0x4c, 0xbd, 0xaa, 0xd5, 0xca, 0x8a, 0xf9, 0xb6,
+	0x6e, 0x7e, 0x2f, 0xe0, 0xf8, 0xd8, 0x30, 0x50, 0x36, 0x24, 0x3e, 0x55, 0x5d, 0x2a, 0x63, 0xb5,
+	0xb6, 0xbe, 0xe8, 0xe8, 0xba, 0x92, 0x35, 0x25, 0x68, 0x87, 0x7b, 0x74, 0x4e, 0x62, 0x1c, 0xf4,
+	0xaf, 0x62, 0x91, 0x54, 0x4a, 0xc6, 0x83, 0x16, 0xf3, 0xcc, 0xa2, 0x92, 0x55, 0x38, 0x69, 0x66,
+	0x45, 0xc6, 0x7c, 0x88, 0xcb, 0xc3, 0xf8, 0x8b, 0x38, 0xbc, 0xeb, 0xfd, 0x49, 0x33, 0x1b, 0x28,
+	0xeb, 0x72, 0x2f, 0x2e, 0x50, 0x11, 0xab, 0xb5, 0x71, 0x07, 0x2d, 0x0a, 0xea, 0x31, 0x41, 0x5d,
+	0x68, 0x45, 0x82, 0x29, 0x9f, 0x16, 0xd5, 0x6d, 0x42, 0x7f, 0xab, 0x69, 0xb8, 0x34, 0x8a, 0xee,
+	0x0b, 0x66, 0xfc, 0x8f, 0x72, 0x12, 0x08, 0x50, 0x33, 0xaf, 0x18, 0xe2, 0x4d, 0xea, 0x1b, 0x29,
+	0x5c, 0xf2, 0x1b, 0xa1, 0x47, 0x21, 0x13, 0x54, 0x0e, 0x53, 0x17, 0x2e, 0x4e, 0x4d, 0xd0, 0x0d,
+	0xb0, 0x3e, 0x68, 0x68, 0x25, 0xee, 0xac, 0xeb, 0x52, 0x29, 0xf7, 0x78, 0x97, 0x5e, 0xed, 0x49,
+	0x69, 0x54, 0x50, 0x86, 0x79, 0xca, 0xbc, 0x45, 0x9c, 0x61, 0x9e, 0xf5, 0x59, 0x47, 0x4b, 0x69,
+	0x05, 0x7f, 0x83, 0x2b, 0x53, 0x3a, 0x8d, 0x0d, 0xb4, 0x48, 0x94, 0xc2, 0x16, 0x0c, 0x25, 0x26,
+	0xf6, 0x2b, 0x91, 0x09, 0xd5, 0x9b, 0xa8, 0x2c, 0xe8, 0x81, 0xa0, 0xb2, 0x93, 0x60, 0x94, 0x0d,
+	0xf1, 0x62, 0x72, 0x18, 0x83, 0xc6, 0x6e, 0xcf, 0x5f, 0x7e, 0x74, 0xff, 0x2e, 0x5b, 0x3e, 0x45,
+	0xff, 0xa5, 0x7b, 0x2a, 0x8d, 0xfb, 0x28, 0xaf, 0x64, 0x8d, 0x46, 0x75, 0xf5, 0xdc, 0x51, 0x3d,
+	0x91, 0x82, 0x13, 0xbc, 0xf5, 0x2e, 0x83, 0x6e, 0x9e, 0x8e, 0xe6, 0x49, 0xce, 0xf9, 0x8e, 0xe4,
+	0x79, 0xb6, 0xff, 0x74, 0xbc, 0xeb, 0xbf, 0x38, 0xde, 0xb3, 0x3f, 0x1f, 0xef, 0xb9, 0xf1, 0x78,
+	0x6f, 0xde, 0xfd, 0xf8, 0x6d, 0x4d, 0x7b, 0xe9, 0xf8, 0xdc, 0x86, 0x0e, 0x85, 0x0e, 0x0b, 0x7c,
+	0x69, 0x07, 0x14, 0x0e, 0xb9, 0xe8, 0x3a, 0xd3, 0x7f, 0x5c, 0x83, 0x6d, 0x27, 0xec, 0xfa, 0x0e,
+	0x40, 0x10, 0xb6, 0xdb, 0x79, 0xd5, 0xc3, 0xed, 0x1f, 0x01, 0x00, 0x00, 0xff, 0xff, 0xab, 0x13,
+	0xf3, 0xb5, 0x7d, 0x0a, 0x00, 0x00,
 }

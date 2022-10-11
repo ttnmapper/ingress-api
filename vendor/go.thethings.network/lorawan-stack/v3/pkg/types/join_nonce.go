@@ -1,4 +1,4 @@
-// Copyright © 2019 The Things Network Foundation, The Things Industries B.V.
+// Copyright © 2022 The Things Network Foundation, The Things Industries B.V.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -16,8 +16,14 @@ package types
 
 import (
 	"encoding/hex"
+	"fmt"
 	"strings"
+
+	"github.com/TheThingsIndustries/protoc-gen-go-json/jsonplugin"
+	"go.thethings.network/lorawan-stack/v3/pkg/errors"
 )
+
+var errInvalidJoinNonce = errors.DefineInvalidArgument("invalid_join_nonce", "invalid JoinNonce")
 
 // JoinNonce is Join Server nonce used in the join procedure.
 // - If LoRaWAN version <1.1 - it is randomly generated.
@@ -27,17 +33,54 @@ type JoinNonce [3]byte
 // IsZero returns true iff the type is zero.
 func (jn JoinNonce) IsZero() bool { return jn == [3]byte{} }
 
-// String implements the Stringer interface.
 func (jn JoinNonce) String() string { return strings.ToUpper(hex.EncodeToString(jn[:])) }
 
-// GoString implements the GoStringer interface.
 func (jn JoinNonce) GoString() string { return jn.String() }
 
-// Size implements the Sizer interface.
-func (jn JoinNonce) Size() int { return 3 }
+func (jn JoinNonce) Bytes() []byte {
+	b := make([]byte, 3)
+	copy(b, jn[:])
+	return b
+}
+
+// GetJoinNonce gets a typed JoinNonce from the bytes.
+// It returns nil, nil if b is nil.
+// It returns an error if unmarshaling fails.
+func GetJoinNonce(b []byte) (*JoinNonce, error) {
+	if b == nil {
+		return nil, nil
+	}
+	var t JoinNonce
+	if err := t.UnmarshalBinary(b); err != nil {
+		return nil, err
+	}
+	return &t, nil
+}
+
+// MustJoinNonce returns a typed JoinNonce from the bytes.
+// It returns nil, nil if b is nil.
+// It panics if unmarshaling results in an error.
+func MustJoinNonce(b []byte) *JoinNonce {
+	t, err := GetJoinNonce(b)
+	if err != nil {
+		panic(err)
+	}
+	return t
+}
+
+// OrZero returns the nonce value, or a zero value if the nonce was nil.
+func (jn *JoinNonce) OrZero() JoinNonce {
+	if jn != nil {
+		return *jn
+	}
+	return JoinNonce{}
+}
 
 // Equal returns true iff nonces are equal.
 func (jn JoinNonce) Equal(other JoinNonce) bool { return jn == other }
+
+// Size implements the Sizer interface.
+func (jn JoinNonce) Size() int { return 3 }
 
 // Marshal implements the proto.Marshaler interface.
 func (jn JoinNonce) Marshal() ([]byte, error) { return jn.MarshalBinary() }
@@ -54,7 +97,34 @@ func (jn JoinNonce) MarshalJSON() ([]byte, error) { return marshalJSONHexBytes(j
 // UnmarshalJSON implements the json.Unmarshaler interface.
 func (jn *JoinNonce) UnmarshalJSON(data []byte) error {
 	*jn = [3]byte{}
-	return unmarshalJSONHexBytes(jn[:], data)
+	if err := unmarshalJSONHexBytes(jn[:], data); err != nil {
+		return errInvalidJoinNonce.WithCause(err)
+	}
+	return nil
+}
+
+// MarshalProtoJSON implements the jsonplugin.Marshaler interface.
+func (jn *JoinNonce) MarshalProtoJSON(s *jsonplugin.MarshalState) {
+	if jn == nil {
+		s.WriteNil()
+		return
+	}
+	s.WriteString(fmt.Sprintf("%X", jn[:]))
+}
+
+// UnmarshalProtoJSON implements the jsonplugin.Unmarshaler interface.
+func (jn *JoinNonce) UnmarshalProtoJSON(s *jsonplugin.UnmarshalState) {
+	*jn = [3]byte{}
+	b, err := hex.DecodeString(s.ReadString())
+	if err != nil {
+		s.SetError(err)
+		return
+	}
+	if len(b) != 3 {
+		s.SetError(errInvalidDevAddr.WithCause(errInvalidLength.WithAttributes("want", 3, "got", len(b))))
+		return
+	}
+	copy(jn[:], b)
 }
 
 // MarshalBinary implements the encoding.BinaryMarshaler interface.
@@ -63,7 +133,10 @@ func (jn JoinNonce) MarshalBinary() ([]byte, error) { return marshalBinaryBytes(
 // UnmarshalBinary implements the encoding.BinaryUnmarshaler interface.
 func (jn *JoinNonce) UnmarshalBinary(data []byte) error {
 	*jn = [3]byte{}
-	return unmarshalBinaryBytes(jn[:], data)
+	if err := unmarshalBinaryBytes(jn[:], data); err != nil {
+		return errInvalidJoinNonce.WithCause(err)
+	}
+	return nil
 }
 
 // MarshalText implements the encoding.TextMarshaler interface.
@@ -72,5 +145,8 @@ func (jn JoinNonce) MarshalText() ([]byte, error) { return marshalTextBytes(jn[:
 // UnmarshalText implements the encoding.TextUnmarshaler interface.
 func (jn *JoinNonce) UnmarshalText(data []byte) error {
 	*jn = [3]byte{}
-	return unmarshalTextBytes(jn[:], data)
+	if err := unmarshalTextBytes(jn[:], data); err != nil {
+		return errInvalidJoinNonce.WithCause(err)
+	}
+	return nil
 }

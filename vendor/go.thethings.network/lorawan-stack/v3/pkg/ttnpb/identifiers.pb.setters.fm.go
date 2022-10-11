@@ -62,19 +62,26 @@ func (dst *EndDeviceIdentifiers) SetFields(src *EndDeviceIdentifiers, paths ...s
 		case "application_ids":
 			if len(subs) > 0 {
 				var newDst, newSrc *ApplicationIdentifiers
-				if src != nil {
-					newSrc = &src.ApplicationIdentifiers
+				if (src == nil || src.ApplicationIds == nil) && dst.ApplicationIds == nil {
+					continue
 				}
-				newDst = &dst.ApplicationIdentifiers
+				if src != nil {
+					newSrc = src.ApplicationIds
+				}
+				if dst.ApplicationIds != nil {
+					newDst = dst.ApplicationIds
+				} else {
+					newDst = &ApplicationIdentifiers{}
+					dst.ApplicationIds = newDst
+				}
 				if err := newDst.SetFields(newSrc, subs...); err != nil {
 					return err
 				}
 			} else {
 				if src != nil {
-					dst.ApplicationIdentifiers = src.ApplicationIdentifiers
+					dst.ApplicationIds = src.ApplicationIds
 				} else {
-					var zero ApplicationIdentifiers
-					dst.ApplicationIdentifiers = zero
+					dst.ApplicationIds = nil
 				}
 			}
 		case "dev_eui":
@@ -214,66 +221,72 @@ func (dst *OrganizationOrUserIdentifiers) SetFields(src *OrganizationOrUserIdent
 			for oneofName, oneofSubs := range subPathMap {
 				switch oneofName {
 				case "organization_ids":
-					_, srcOk := src.Ids.(*OrganizationOrUserIdentifiers_OrganizationIds)
-					if !srcOk && src.Ids != nil {
+					var srcTypeOk bool
+					if src != nil {
+						_, srcTypeOk = src.Ids.(*OrganizationOrUserIdentifiers_OrganizationIds)
+					}
+					if srcValid := srcTypeOk || src == nil || src.Ids == nil || len(oneofSubs) == 0; !srcValid {
 						return fmt.Errorf("attempt to set oneof 'organization_ids', while different oneof is set in source")
 					}
-					_, dstOk := dst.Ids.(*OrganizationOrUserIdentifiers_OrganizationIds)
-					if !dstOk && dst.Ids != nil {
+					_, dstTypeOk := dst.Ids.(*OrganizationOrUserIdentifiers_OrganizationIds)
+					if dstValid := dstTypeOk || dst.Ids == nil || len(oneofSubs) == 0; !dstValid {
 						return fmt.Errorf("attempt to set oneof 'organization_ids', while different oneof is set in destination")
 					}
 					if len(oneofSubs) > 0 {
 						var newDst, newSrc *OrganizationIdentifiers
-						if !srcOk && !dstOk {
-							continue
-						}
-						if srcOk {
+						if srcTypeOk {
 							newSrc = src.Ids.(*OrganizationOrUserIdentifiers_OrganizationIds).OrganizationIds
 						}
-						if dstOk {
+						if dstTypeOk {
 							newDst = dst.Ids.(*OrganizationOrUserIdentifiers_OrganizationIds).OrganizationIds
-						} else {
+						} else if srcTypeOk {
 							newDst = &OrganizationIdentifiers{}
 							dst.Ids = &OrganizationOrUserIdentifiers_OrganizationIds{OrganizationIds: newDst}
+						} else {
+							dst.Ids = nil
+							continue
 						}
 						if err := newDst.SetFields(newSrc, oneofSubs...); err != nil {
 							return err
 						}
 					} else {
-						if src != nil {
+						if srcTypeOk {
 							dst.Ids = src.Ids
 						} else {
 							dst.Ids = nil
 						}
 					}
 				case "user_ids":
-					_, srcOk := src.Ids.(*OrganizationOrUserIdentifiers_UserIds)
-					if !srcOk && src.Ids != nil {
+					var srcTypeOk bool
+					if src != nil {
+						_, srcTypeOk = src.Ids.(*OrganizationOrUserIdentifiers_UserIds)
+					}
+					if srcValid := srcTypeOk || src == nil || src.Ids == nil || len(oneofSubs) == 0; !srcValid {
 						return fmt.Errorf("attempt to set oneof 'user_ids', while different oneof is set in source")
 					}
-					_, dstOk := dst.Ids.(*OrganizationOrUserIdentifiers_UserIds)
-					if !dstOk && dst.Ids != nil {
+					_, dstTypeOk := dst.Ids.(*OrganizationOrUserIdentifiers_UserIds)
+					if dstValid := dstTypeOk || dst.Ids == nil || len(oneofSubs) == 0; !dstValid {
 						return fmt.Errorf("attempt to set oneof 'user_ids', while different oneof is set in destination")
 					}
 					if len(oneofSubs) > 0 {
 						var newDst, newSrc *UserIdentifiers
-						if !srcOk && !dstOk {
-							continue
-						}
-						if srcOk {
+						if srcTypeOk {
 							newSrc = src.Ids.(*OrganizationOrUserIdentifiers_UserIds).UserIds
 						}
-						if dstOk {
+						if dstTypeOk {
 							newDst = dst.Ids.(*OrganizationOrUserIdentifiers_UserIds).UserIds
-						} else {
+						} else if srcTypeOk {
 							newDst = &UserIdentifiers{}
 							dst.Ids = &OrganizationOrUserIdentifiers_UserIds{UserIds: newDst}
+						} else {
+							dst.Ids = nil
+							continue
 						}
 						if err := newDst.SetFields(newSrc, oneofSubs...); err != nil {
 							return err
 						}
 					} else {
-						if src != nil {
+						if srcTypeOk {
 							dst.Ids = src.Ids
 						} else {
 							dst.Ids = nil
@@ -312,198 +325,216 @@ func (dst *EntityIdentifiers) SetFields(src *EntityIdentifiers, paths ...string)
 			for oneofName, oneofSubs := range subPathMap {
 				switch oneofName {
 				case "application_ids":
-					_, srcOk := src.Ids.(*EntityIdentifiers_ApplicationIds)
-					if !srcOk && src.Ids != nil {
+					var srcTypeOk bool
+					if src != nil {
+						_, srcTypeOk = src.Ids.(*EntityIdentifiers_ApplicationIds)
+					}
+					if srcValid := srcTypeOk || src == nil || src.Ids == nil || len(oneofSubs) == 0; !srcValid {
 						return fmt.Errorf("attempt to set oneof 'application_ids', while different oneof is set in source")
 					}
-					_, dstOk := dst.Ids.(*EntityIdentifiers_ApplicationIds)
-					if !dstOk && dst.Ids != nil {
+					_, dstTypeOk := dst.Ids.(*EntityIdentifiers_ApplicationIds)
+					if dstValid := dstTypeOk || dst.Ids == nil || len(oneofSubs) == 0; !dstValid {
 						return fmt.Errorf("attempt to set oneof 'application_ids', while different oneof is set in destination")
 					}
 					if len(oneofSubs) > 0 {
 						var newDst, newSrc *ApplicationIdentifiers
-						if !srcOk && !dstOk {
-							continue
-						}
-						if srcOk {
+						if srcTypeOk {
 							newSrc = src.Ids.(*EntityIdentifiers_ApplicationIds).ApplicationIds
 						}
-						if dstOk {
+						if dstTypeOk {
 							newDst = dst.Ids.(*EntityIdentifiers_ApplicationIds).ApplicationIds
-						} else {
+						} else if srcTypeOk {
 							newDst = &ApplicationIdentifiers{}
 							dst.Ids = &EntityIdentifiers_ApplicationIds{ApplicationIds: newDst}
+						} else {
+							dst.Ids = nil
+							continue
 						}
 						if err := newDst.SetFields(newSrc, oneofSubs...); err != nil {
 							return err
 						}
 					} else {
-						if src != nil {
+						if srcTypeOk {
 							dst.Ids = src.Ids
 						} else {
 							dst.Ids = nil
 						}
 					}
 				case "client_ids":
-					_, srcOk := src.Ids.(*EntityIdentifiers_ClientIds)
-					if !srcOk && src.Ids != nil {
+					var srcTypeOk bool
+					if src != nil {
+						_, srcTypeOk = src.Ids.(*EntityIdentifiers_ClientIds)
+					}
+					if srcValid := srcTypeOk || src == nil || src.Ids == nil || len(oneofSubs) == 0; !srcValid {
 						return fmt.Errorf("attempt to set oneof 'client_ids', while different oneof is set in source")
 					}
-					_, dstOk := dst.Ids.(*EntityIdentifiers_ClientIds)
-					if !dstOk && dst.Ids != nil {
+					_, dstTypeOk := dst.Ids.(*EntityIdentifiers_ClientIds)
+					if dstValid := dstTypeOk || dst.Ids == nil || len(oneofSubs) == 0; !dstValid {
 						return fmt.Errorf("attempt to set oneof 'client_ids', while different oneof is set in destination")
 					}
 					if len(oneofSubs) > 0 {
 						var newDst, newSrc *ClientIdentifiers
-						if !srcOk && !dstOk {
-							continue
-						}
-						if srcOk {
+						if srcTypeOk {
 							newSrc = src.Ids.(*EntityIdentifiers_ClientIds).ClientIds
 						}
-						if dstOk {
+						if dstTypeOk {
 							newDst = dst.Ids.(*EntityIdentifiers_ClientIds).ClientIds
-						} else {
+						} else if srcTypeOk {
 							newDst = &ClientIdentifiers{}
 							dst.Ids = &EntityIdentifiers_ClientIds{ClientIds: newDst}
+						} else {
+							dst.Ids = nil
+							continue
 						}
 						if err := newDst.SetFields(newSrc, oneofSubs...); err != nil {
 							return err
 						}
 					} else {
-						if src != nil {
+						if srcTypeOk {
 							dst.Ids = src.Ids
 						} else {
 							dst.Ids = nil
 						}
 					}
 				case "device_ids":
-					_, srcOk := src.Ids.(*EntityIdentifiers_DeviceIds)
-					if !srcOk && src.Ids != nil {
+					var srcTypeOk bool
+					if src != nil {
+						_, srcTypeOk = src.Ids.(*EntityIdentifiers_DeviceIds)
+					}
+					if srcValid := srcTypeOk || src == nil || src.Ids == nil || len(oneofSubs) == 0; !srcValid {
 						return fmt.Errorf("attempt to set oneof 'device_ids', while different oneof is set in source")
 					}
-					_, dstOk := dst.Ids.(*EntityIdentifiers_DeviceIds)
-					if !dstOk && dst.Ids != nil {
+					_, dstTypeOk := dst.Ids.(*EntityIdentifiers_DeviceIds)
+					if dstValid := dstTypeOk || dst.Ids == nil || len(oneofSubs) == 0; !dstValid {
 						return fmt.Errorf("attempt to set oneof 'device_ids', while different oneof is set in destination")
 					}
 					if len(oneofSubs) > 0 {
 						var newDst, newSrc *EndDeviceIdentifiers
-						if !srcOk && !dstOk {
-							continue
-						}
-						if srcOk {
+						if srcTypeOk {
 							newSrc = src.Ids.(*EntityIdentifiers_DeviceIds).DeviceIds
 						}
-						if dstOk {
+						if dstTypeOk {
 							newDst = dst.Ids.(*EntityIdentifiers_DeviceIds).DeviceIds
-						} else {
+						} else if srcTypeOk {
 							newDst = &EndDeviceIdentifiers{}
 							dst.Ids = &EntityIdentifiers_DeviceIds{DeviceIds: newDst}
+						} else {
+							dst.Ids = nil
+							continue
 						}
 						if err := newDst.SetFields(newSrc, oneofSubs...); err != nil {
 							return err
 						}
 					} else {
-						if src != nil {
+						if srcTypeOk {
 							dst.Ids = src.Ids
 						} else {
 							dst.Ids = nil
 						}
 					}
 				case "gateway_ids":
-					_, srcOk := src.Ids.(*EntityIdentifiers_GatewayIds)
-					if !srcOk && src.Ids != nil {
+					var srcTypeOk bool
+					if src != nil {
+						_, srcTypeOk = src.Ids.(*EntityIdentifiers_GatewayIds)
+					}
+					if srcValid := srcTypeOk || src == nil || src.Ids == nil || len(oneofSubs) == 0; !srcValid {
 						return fmt.Errorf("attempt to set oneof 'gateway_ids', while different oneof is set in source")
 					}
-					_, dstOk := dst.Ids.(*EntityIdentifiers_GatewayIds)
-					if !dstOk && dst.Ids != nil {
+					_, dstTypeOk := dst.Ids.(*EntityIdentifiers_GatewayIds)
+					if dstValid := dstTypeOk || dst.Ids == nil || len(oneofSubs) == 0; !dstValid {
 						return fmt.Errorf("attempt to set oneof 'gateway_ids', while different oneof is set in destination")
 					}
 					if len(oneofSubs) > 0 {
 						var newDst, newSrc *GatewayIdentifiers
-						if !srcOk && !dstOk {
-							continue
-						}
-						if srcOk {
+						if srcTypeOk {
 							newSrc = src.Ids.(*EntityIdentifiers_GatewayIds).GatewayIds
 						}
-						if dstOk {
+						if dstTypeOk {
 							newDst = dst.Ids.(*EntityIdentifiers_GatewayIds).GatewayIds
-						} else {
+						} else if srcTypeOk {
 							newDst = &GatewayIdentifiers{}
 							dst.Ids = &EntityIdentifiers_GatewayIds{GatewayIds: newDst}
+						} else {
+							dst.Ids = nil
+							continue
 						}
 						if err := newDst.SetFields(newSrc, oneofSubs...); err != nil {
 							return err
 						}
 					} else {
-						if src != nil {
+						if srcTypeOk {
 							dst.Ids = src.Ids
 						} else {
 							dst.Ids = nil
 						}
 					}
 				case "organization_ids":
-					_, srcOk := src.Ids.(*EntityIdentifiers_OrganizationIds)
-					if !srcOk && src.Ids != nil {
+					var srcTypeOk bool
+					if src != nil {
+						_, srcTypeOk = src.Ids.(*EntityIdentifiers_OrganizationIds)
+					}
+					if srcValid := srcTypeOk || src == nil || src.Ids == nil || len(oneofSubs) == 0; !srcValid {
 						return fmt.Errorf("attempt to set oneof 'organization_ids', while different oneof is set in source")
 					}
-					_, dstOk := dst.Ids.(*EntityIdentifiers_OrganizationIds)
-					if !dstOk && dst.Ids != nil {
+					_, dstTypeOk := dst.Ids.(*EntityIdentifiers_OrganizationIds)
+					if dstValid := dstTypeOk || dst.Ids == nil || len(oneofSubs) == 0; !dstValid {
 						return fmt.Errorf("attempt to set oneof 'organization_ids', while different oneof is set in destination")
 					}
 					if len(oneofSubs) > 0 {
 						var newDst, newSrc *OrganizationIdentifiers
-						if !srcOk && !dstOk {
-							continue
-						}
-						if srcOk {
+						if srcTypeOk {
 							newSrc = src.Ids.(*EntityIdentifiers_OrganizationIds).OrganizationIds
 						}
-						if dstOk {
+						if dstTypeOk {
 							newDst = dst.Ids.(*EntityIdentifiers_OrganizationIds).OrganizationIds
-						} else {
+						} else if srcTypeOk {
 							newDst = &OrganizationIdentifiers{}
 							dst.Ids = &EntityIdentifiers_OrganizationIds{OrganizationIds: newDst}
+						} else {
+							dst.Ids = nil
+							continue
 						}
 						if err := newDst.SetFields(newSrc, oneofSubs...); err != nil {
 							return err
 						}
 					} else {
-						if src != nil {
+						if srcTypeOk {
 							dst.Ids = src.Ids
 						} else {
 							dst.Ids = nil
 						}
 					}
 				case "user_ids":
-					_, srcOk := src.Ids.(*EntityIdentifiers_UserIds)
-					if !srcOk && src.Ids != nil {
+					var srcTypeOk bool
+					if src != nil {
+						_, srcTypeOk = src.Ids.(*EntityIdentifiers_UserIds)
+					}
+					if srcValid := srcTypeOk || src == nil || src.Ids == nil || len(oneofSubs) == 0; !srcValid {
 						return fmt.Errorf("attempt to set oneof 'user_ids', while different oneof is set in source")
 					}
-					_, dstOk := dst.Ids.(*EntityIdentifiers_UserIds)
-					if !dstOk && dst.Ids != nil {
+					_, dstTypeOk := dst.Ids.(*EntityIdentifiers_UserIds)
+					if dstValid := dstTypeOk || dst.Ids == nil || len(oneofSubs) == 0; !dstValid {
 						return fmt.Errorf("attempt to set oneof 'user_ids', while different oneof is set in destination")
 					}
 					if len(oneofSubs) > 0 {
 						var newDst, newSrc *UserIdentifiers
-						if !srcOk && !dstOk {
-							continue
-						}
-						if srcOk {
+						if srcTypeOk {
 							newSrc = src.Ids.(*EntityIdentifiers_UserIds).UserIds
 						}
-						if dstOk {
+						if dstTypeOk {
 							newDst = dst.Ids.(*EntityIdentifiers_UserIds).UserIds
-						} else {
+						} else if srcTypeOk {
 							newDst = &UserIdentifiers{}
 							dst.Ids = &EntityIdentifiers_UserIds{UserIds: newDst}
+						} else {
+							dst.Ids = nil
+							continue
 						}
 						if err := newDst.SetFields(newSrc, oneofSubs...); err != nil {
 							return err
 						}
 					} else {
-						if src != nil {
+						if srcTypeOk {
 							dst.Ids = src.Ids
 						} else {
 							dst.Ids = nil
@@ -575,6 +606,36 @@ func (dst *EndDeviceVersionIdentifiers) SetFields(src *EndDeviceVersionIdentifie
 				var zero string
 				dst.BandId = zero
 			}
+		case "vendor_id":
+			if len(subs) > 0 {
+				return fmt.Errorf("'vendor_id' has no subfields, but %s were specified", subs)
+			}
+			if src != nil {
+				dst.VendorId = src.VendorId
+			} else {
+				var zero uint32
+				dst.VendorId = zero
+			}
+		case "vendor_profile_id":
+			if len(subs) > 0 {
+				return fmt.Errorf("'vendor_profile_id' has no subfields, but %s were specified", subs)
+			}
+			if src != nil {
+				dst.VendorProfileId = src.VendorProfileId
+			} else {
+				var zero uint32
+				dst.VendorProfileId = zero
+			}
+		case "serial_number":
+			if len(subs) > 0 {
+				return fmt.Errorf("'serial_number' has no subfields, but %s were specified", subs)
+			}
+			if src != nil {
+				dst.SerialNumber = src.SerialNumber
+			} else {
+				var zero string
+				dst.SerialNumber = zero
+			}
 
 		default:
 			return fmt.Errorf("invalid field: '%s'", name)
@@ -614,6 +675,26 @@ func (dst *NetworkIdentifiers) SetFields(src *NetworkIdentifiers, paths ...strin
 			} else {
 				var zero string
 				dst.ClusterId = zero
+			}
+		case "cluster_address":
+			if len(subs) > 0 {
+				return fmt.Errorf("'cluster_address' has no subfields, but %s were specified", subs)
+			}
+			if src != nil {
+				dst.ClusterAddress = src.ClusterAddress
+			} else {
+				var zero string
+				dst.ClusterAddress = zero
+			}
+		case "tenant_address":
+			if len(subs) > 0 {
+				return fmt.Errorf("'tenant_address' has no subfields, but %s were specified", subs)
+			}
+			if src != nil {
+				dst.TenantAddress = src.TenantAddress
+			} else {
+				var zero string
+				dst.TenantAddress = zero
 			}
 
 		default:

@@ -266,7 +266,14 @@ func (m *EndDeviceIdentifiers) ValidateFields(paths ...string) error {
 
 		case "application_ids":
 
-			if v, ok := interface{}(&m.ApplicationIdentifiers).(interface{ ValidateFields(...string) error }); ok {
+			if m.GetApplicationIds() == nil {
+				return EndDeviceIdentifiersValidationError{
+					field:  "application_ids",
+					reason: "value is required",
+				}
+			}
+
+			if v, ok := interface{}(m.GetApplicationIds()).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return EndDeviceIdentifiersValidationError{
 						field:  "application_ids",
@@ -277,11 +284,44 @@ func (m *EndDeviceIdentifiers) ValidateFields(paths ...string) error {
 			}
 
 		case "dev_eui":
-			// no validation rules for DevEui
+
+			if len(m.GetDevEui()) > 0 {
+
+				if len(m.GetDevEui()) != 8 {
+					return EndDeviceIdentifiersValidationError{
+						field:  "dev_eui",
+						reason: "value length must be 8 bytes",
+					}
+				}
+
+			}
+
 		case "join_eui":
-			// no validation rules for JoinEui
+
+			if len(m.GetJoinEui()) > 0 {
+
+				if len(m.GetJoinEui()) != 8 {
+					return EndDeviceIdentifiersValidationError{
+						field:  "join_eui",
+						reason: "value length must be 8 bytes",
+					}
+				}
+
+			}
+
 		case "dev_addr":
-			// no validation rules for DevAddr
+
+			if len(m.GetDevAddr()) > 0 {
+
+				if len(m.GetDevAddr()) != 4 {
+					return EndDeviceIdentifiersValidationError{
+						field:  "dev_addr",
+						reason: "value length must be 4 bytes",
+					}
+				}
+
+			}
+
 		default:
 			return EndDeviceIdentifiersValidationError{
 				field:  name,
@@ -382,7 +422,18 @@ func (m *GatewayIdentifiers) ValidateFields(paths ...string) error {
 			}
 
 		case "eui":
-			// no validation rules for Eui
+
+			if len(m.GetEui()) > 0 {
+
+				if len(m.GetEui()) != 8 {
+					return GatewayIdentifiersValidationError{
+						field:  "eui",
+						reason: "value length must be 8 bytes",
+					}
+				}
+
+			}
+
 		default:
 			return GatewayIdentifiersValidationError{
 				field:  name,
@@ -1056,6 +1107,30 @@ func (m *EndDeviceVersionIdentifiers) ValidateFields(paths ...string) error {
 				}
 			}
 
+		case "vendor_id":
+			// no validation rules for VendorId
+		case "vendor_profile_id":
+			// no validation rules for VendorProfileId
+		case "serial_number":
+
+			if m.GetSerialNumber() != "" {
+
+				if utf8.RuneCountInString(m.GetSerialNumber()) > 36 {
+					return EndDeviceVersionIdentifiersValidationError{
+						field:  "serial_number",
+						reason: "value length must be at most 36 runes",
+					}
+				}
+
+				if !_EndDeviceVersionIdentifiers_SerialNumber_Pattern.MatchString(m.GetSerialNumber()) {
+					return EndDeviceVersionIdentifiersValidationError{
+						field:  "serial_number",
+						reason: "value does not match regex pattern \"^[a-z0-9](?:[-]?[a-z0-9]){2,}$\"",
+					}
+				}
+
+			}
+
 		default:
 			return EndDeviceVersionIdentifiersValidationError{
 				field:  name,
@@ -1127,6 +1202,8 @@ var _EndDeviceVersionIdentifiers_BrandId_Pattern = regexp.MustCompile("^[a-z0-9]
 
 var _EndDeviceVersionIdentifiers_ModelId_Pattern = regexp.MustCompile("^[a-z0-9](?:[-]?[a-z0-9]){2,}$")
 
+var _EndDeviceVersionIdentifiers_SerialNumber_Pattern = regexp.MustCompile("^[a-z0-9](?:[-]?[a-z0-9]){2,}$")
+
 // ValidateFields checks the field values on NetworkIdentifiers with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, an error is returned.
@@ -1143,7 +1220,18 @@ func (m *NetworkIdentifiers) ValidateFields(paths ...string) error {
 		_ = subs
 		switch name {
 		case "net_id":
-			// no validation rules for NetId
+
+			if len(m.GetNetId()) > 0 {
+
+				if len(m.GetNetId()) != 3 {
+					return NetworkIdentifiersValidationError{
+						field:  "net_id",
+						reason: "value length must be 3 bytes",
+					}
+				}
+
+			}
+
 		case "tenant_id":
 
 			if utf8.RuneCountInString(m.GetTenantId()) > 36 {
@@ -1166,6 +1254,24 @@ func (m *NetworkIdentifiers) ValidateFields(paths ...string) error {
 				return NetworkIdentifiersValidationError{
 					field:  "cluster_id",
 					reason: "value length must be at most 64 runes",
+				}
+			}
+
+		case "cluster_address":
+
+			if utf8.RuneCountInString(m.GetClusterAddress()) > 256 {
+				return NetworkIdentifiersValidationError{
+					field:  "cluster_address",
+					reason: "value length must be at most 256 runes",
+				}
+			}
+
+		case "tenant_address":
+
+			if utf8.RuneCountInString(m.GetTenantAddress()) > 256 {
+				return NetworkIdentifiersValidationError{
+					field:  "tenant_address",
+					reason: "value length must be at most 256 runes",
 				}
 			}
 

@@ -101,10 +101,18 @@ func (dst *GenerateEndDeviceQRCodeRequest) SetFields(src *GenerateEndDeviceQRCod
 		case "end_device":
 			if len(subs) > 0 {
 				var newDst, newSrc *EndDevice
-				if src != nil {
-					newSrc = &src.EndDevice
+				if (src == nil || src.EndDevice == nil) && dst.EndDevice == nil {
+					continue
 				}
-				newDst = &dst.EndDevice
+				if src != nil {
+					newSrc = src.EndDevice
+				}
+				if dst.EndDevice != nil {
+					newDst = dst.EndDevice
+				} else {
+					newDst = &EndDevice{}
+					dst.EndDevice = newDst
+				}
 				if err := newDst.SetFields(newSrc, subs...); err != nil {
 					return err
 				}
@@ -112,8 +120,7 @@ func (dst *GenerateEndDeviceQRCodeRequest) SetFields(src *GenerateEndDeviceQRCod
 				if src != nil {
 					dst.EndDevice = src.EndDevice
 				} else {
-					var zero EndDevice
-					dst.EndDevice = zero
+					dst.EndDevice = nil
 				}
 			}
 		case "image":
@@ -185,6 +192,82 @@ func (dst *GenerateQRCodeResponse) SetFields(src *GenerateQRCodeResponse, paths 
 					dst.Image = src.Image
 				} else {
 					dst.Image = nil
+				}
+			}
+
+		default:
+			return fmt.Errorf("invalid field: '%s'", name)
+		}
+	}
+	return nil
+}
+
+func (dst *ParseEndDeviceQRCodeRequest) SetFields(src *ParseEndDeviceQRCodeRequest, paths ...string) error {
+	for name, subs := range _processPaths(paths) {
+		switch name {
+		case "format_id":
+			if len(subs) > 0 {
+				return fmt.Errorf("'format_id' has no subfields, but %s were specified", subs)
+			}
+			if src != nil {
+				dst.FormatId = src.FormatId
+			} else {
+				var zero string
+				dst.FormatId = zero
+			}
+		case "qr_code":
+			if len(subs) > 0 {
+				return fmt.Errorf("'qr_code' has no subfields, but %s were specified", subs)
+			}
+			if src != nil {
+				dst.QrCode = src.QrCode
+			} else {
+				dst.QrCode = nil
+			}
+
+		default:
+			return fmt.Errorf("invalid field: '%s'", name)
+		}
+	}
+	return nil
+}
+
+func (dst *ParseEndDeviceQRCodeResponse) SetFields(src *ParseEndDeviceQRCodeResponse, paths ...string) error {
+	for name, subs := range _processPaths(paths) {
+		switch name {
+		case "format_id":
+			if len(subs) > 0 {
+				return fmt.Errorf("'format_id' has no subfields, but %s were specified", subs)
+			}
+			if src != nil {
+				dst.FormatId = src.FormatId
+			} else {
+				var zero string
+				dst.FormatId = zero
+			}
+		case "end_device_template":
+			if len(subs) > 0 {
+				var newDst, newSrc *EndDeviceTemplate
+				if (src == nil || src.EndDeviceTemplate == nil) && dst.EndDeviceTemplate == nil {
+					continue
+				}
+				if src != nil {
+					newSrc = src.EndDeviceTemplate
+				}
+				if dst.EndDeviceTemplate != nil {
+					newDst = dst.EndDeviceTemplate
+				} else {
+					newDst = &EndDeviceTemplate{}
+					dst.EndDeviceTemplate = newDst
+				}
+				if err := newDst.SetFields(newSrc, subs...); err != nil {
+					return err
+				}
+			} else {
+				if src != nil {
+					dst.EndDeviceTemplate = src.EndDeviceTemplate
+				} else {
+					dst.EndDeviceTemplate = nil
 				}
 			}
 

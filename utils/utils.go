@@ -2,6 +2,7 @@ package utils
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"os"
 	"reflect"
@@ -35,4 +36,8 @@ func AppendToFile(filename string, line string) error {
 func PrettyPrint(i interface{}) string {
 	s, _ := json.MarshalIndent(i, "", "\t")
 	return string(s)
+}
+
+func NetIdToString(netId []byte) string {
+	return fmt.Sprintf("%06X", netId)
 }

@@ -17,8 +17,14 @@ package ttnpb
 import (
 	"strings"
 
+	"github.com/gogo/protobuf/types"
 	"go.thethings.network/lorawan-stack/v3/pkg/errors"
 )
+
+// FieldMask returns a FieldMask with the given paths.
+func FieldMask(paths ...string) *types.FieldMask {
+	return &types.FieldMask{Paths: paths}
+}
 
 // TopLevelFields returns the unique top level fields of the given paths.
 func TopLevelFields(paths []string) []string {
@@ -72,6 +78,12 @@ nextRequested:
 
 // HasAnyField returns whether the given requested paths contain any of the given fields.
 // The requested fields (i.e. `a.b`) may be of a higher level than the search path (i.e. `a.b.c`).
+//
+// Note that this function may have unexpected results when non bottom search fields are used,
+// as HasAnyField([]string{"a.b"}, "a") is false.
+//
+// If all possibilities are `[a, a.b, a.c]`, and we have `[a.b]`, then requesting `[a]`
+// should be false because if it would be true, then `a.c` can be expected.
 func HasAnyField(requested []string, search ...string) bool {
 	for _, requested := range requested {
 		for _, search := range search {
@@ -88,19 +100,34 @@ func HasAnyField(requested []string, search ...string) bool {
 func FlattenPaths(paths, flatten []string) []string {
 	res := make([]string, 0, len(paths))
 	flattened := make(map[string]bool)
+nextPath:
 	for _, path := range paths {
+		var found bool
 		for _, flatten := range flatten {
 			if flatten == path || strings.HasPrefix(path, flatten+".") {
 				if !flattened[flatten] {
 					res = append(res, flatten)
 					flattened[flatten] = true
 				}
-			} else {
-				res = append(res, path)
+				continue nextPath
 			}
+		}
+		if !found {
+			res = append(res, path)
 		}
 	}
 	return res
+}
+
+// NonZeroFields returns the fields which are not zero in the provided message.
+func NonZeroFields(msg interface{ FieldIsZero(string) bool }, fields ...string) []string {
+	nonZeroFields := make([]string, 0, len(fields))
+	for _, field := range fields {
+		if !msg.FieldIsZero(field) {
+			nonZeroFields = append(nonZeroFields, field)
+		}
+	}
+	return nonZeroFields
 }
 
 var errMissingField = errors.Define("missing_field", "field `{field}` is missing")
@@ -165,6 +192,20 @@ outer:
 		}
 	}
 	return selectedPaths
+}
+
+// AllowedReachableBottomLevelFields returns the reachable bottom level paths from the given paths that are in the allowed paths.
+// Reachability in this context means that all of the intermediary paths between the given paths and the bottom level paths
+// are not zero. Using only reachable paths ensures that no redundant bottom level paths are included.
+func AllowedReachableBottomLevelFields(paths, allowedPaths []string, isZero func(string) bool) []string {
+	nonZeroAllowedPaths := make([]string, 0, len(allowedPaths))
+	for _, allowedPath := range allowedPaths {
+		if isZero(allowedPath) {
+			continue
+		}
+		nonZeroAllowedPaths = append(nonZeroAllowedPaths, allowedPath)
+	}
+	return AllowedBottomLevelFields(paths, nonZeroAllowedPaths)
 }
 
 // ExcludeFields returns the given paths without the given search paths to exclude.
@@ -275,4 +316,18 @@ func ApplySessionKeysFieldMask(dst, src *SessionKeys, paths ...string) (*Session
 // FilterGetSessionKeys returns a new SessionKeys with only implicit fields and the ones specified by paths set.
 func FilterGetSessionKeys(pb *SessionKeys, paths ...string) (*SessionKeys, error) {
 	return ApplySessionKeysFieldMask(nil, pb, AddImplicitSessionKeysGetFields(paths...)...)
+}
+
+// IncludeFields returns the given paths with the given search paths to include.
+func IncludeFields(paths []string, includePaths ...string) []string {
+	if len(paths) == 0 {
+		return paths
+	}
+	included := make([]string, 0, len(paths))
+	for _, path := range paths {
+		if HasAnyField(includePaths, path) {
+			included = append(included, path)
+		}
+	}
+	return included
 }

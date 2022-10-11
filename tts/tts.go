@@ -2,7 +2,6 @@ package tts
 
 import (
 	"github.com/go-chi/chi"
-	_ "go.thethings.network/lorawan-stack/v3/pkg/ttnpb"
 	_ "time"
 	"ttnmapper-ingress-api/types"
 )

@@ -71,6 +71,13 @@ var GatewayClaimAuthenticationCodeFieldPathsTopLevel = []string{
 	"valid_to",
 }
 var GatewayFieldPathsNested = []string{
+	"administrative_contact",
+	"administrative_contact.ids",
+	"administrative_contact.ids.organization_ids",
+	"administrative_contact.ids.organization_ids.organization_id",
+	"administrative_contact.ids.user_ids",
+	"administrative_contact.ids.user_ids.email",
+	"administrative_contact.ids.user_ids.user_id",
 	"antennas",
 	"attributes",
 	"auto_update",
@@ -108,6 +115,13 @@ var GatewayFieldPathsNested = []string{
 	"target_cups_key.key_id",
 	"target_cups_key.value",
 	"target_cups_uri",
+	"technical_contact",
+	"technical_contact.ids",
+	"technical_contact.ids.organization_ids",
+	"technical_contact.ids.organization_ids.organization_id",
+	"technical_contact.ids.user_ids",
+	"technical_contact.ids.user_ids.email",
+	"technical_contact.ids.user_ids.user_id",
 	"update_channel",
 	"update_location_from_status",
 	"updated_at",
@@ -119,6 +133,7 @@ var GatewayFieldPathsNested = []string{
 }
 
 var GatewayFieldPathsTopLevel = []string{
+	"administrative_contact",
 	"antennas",
 	"attributes",
 	"auto_update",
@@ -144,6 +159,7 @@ var GatewayFieldPathsTopLevel = []string{
 	"status_public",
 	"target_cups_key",
 	"target_cups_uri",
+	"technical_contact",
 	"update_channel",
 	"update_location_from_status",
 	"updated_at",
@@ -206,6 +222,13 @@ var CreateGatewayRequestFieldPathsNested = []string{
 	"collaborator.ids.user_ids.email",
 	"collaborator.ids.user_ids.user_id",
 	"gateway",
+	"gateway.administrative_contact",
+	"gateway.administrative_contact.ids",
+	"gateway.administrative_contact.ids.organization_ids",
+	"gateway.administrative_contact.ids.organization_ids.organization_id",
+	"gateway.administrative_contact.ids.user_ids",
+	"gateway.administrative_contact.ids.user_ids.email",
+	"gateway.administrative_contact.ids.user_ids.user_id",
 	"gateway.antennas",
 	"gateway.attributes",
 	"gateway.auto_update",
@@ -243,6 +266,13 @@ var CreateGatewayRequestFieldPathsNested = []string{
 	"gateway.target_cups_key.key_id",
 	"gateway.target_cups_key.value",
 	"gateway.target_cups_uri",
+	"gateway.technical_contact",
+	"gateway.technical_contact.ids",
+	"gateway.technical_contact.ids.organization_ids",
+	"gateway.technical_contact.ids.organization_ids.organization_id",
+	"gateway.technical_contact.ids.user_ids",
+	"gateway.technical_contact.ids.user_ids.email",
+	"gateway.technical_contact.ids.user_ids.user_id",
 	"gateway.update_channel",
 	"gateway.update_location_from_status",
 	"gateway.updated_at",
@@ -260,6 +290,13 @@ var CreateGatewayRequestFieldPathsTopLevel = []string{
 var UpdateGatewayRequestFieldPathsNested = []string{
 	"field_mask",
 	"gateway",
+	"gateway.administrative_contact",
+	"gateway.administrative_contact.ids",
+	"gateway.administrative_contact.ids.organization_ids",
+	"gateway.administrative_contact.ids.organization_ids.organization_id",
+	"gateway.administrative_contact.ids.user_ids",
+	"gateway.administrative_contact.ids.user_ids.email",
+	"gateway.administrative_contact.ids.user_ids.user_id",
 	"gateway.antennas",
 	"gateway.attributes",
 	"gateway.auto_update",
@@ -297,6 +334,13 @@ var UpdateGatewayRequestFieldPathsNested = []string{
 	"gateway.target_cups_key.key_id",
 	"gateway.target_cups_key.value",
 	"gateway.target_cups_uri",
+	"gateway.technical_contact",
+	"gateway.technical_contact.ids",
+	"gateway.technical_contact.ids.organization_ids",
+	"gateway.technical_contact.ids.organization_ids.organization_id",
+	"gateway.technical_contact.ids.user_ids",
+	"gateway.technical_contact.ids.user_ids.email",
+	"gateway.technical_contact.ids.user_ids.user_id",
 	"gateway.update_channel",
 	"gateway.update_location_from_status",
 	"gateway.updated_at",
@@ -316,12 +360,14 @@ var ListGatewayAPIKeysRequestFieldPathsNested = []string{
 	"gateway_ids.eui",
 	"gateway_ids.gateway_id",
 	"limit",
+	"order",
 	"page",
 }
 
 var ListGatewayAPIKeysRequestFieldPathsTopLevel = []string{
 	"gateway_ids",
 	"limit",
+	"order",
 	"page",
 }
 var GetGatewayAPIKeyRequestFieldPathsNested = []string{
@@ -375,12 +421,14 @@ var ListGatewayCollaboratorsRequestFieldPathsNested = []string{
 	"gateway_ids.eui",
 	"gateway_ids.gateway_id",
 	"limit",
+	"order",
 	"page",
 }
 
 var ListGatewayCollaboratorsRequestFieldPathsTopLevel = []string{
 	"gateway_ids",
 	"limit",
+	"order",
 	"page",
 }
 var GetGatewayCollaboratorRequestFieldPathsNested = []string{
@@ -456,9 +504,19 @@ var GatewayStatusFieldPathsTopLevel = []string{
 	"time",
 	"versions",
 }
+var GatewayRemoteAddressFieldPathsNested = []string{
+	"ip",
+}
+
+var GatewayRemoteAddressFieldPathsTopLevel = []string{
+	"ip",
+}
 var GatewayConnectionStatsFieldPathsNested = []string{
 	"connected_at",
+	"disconnected_at",
 	"downlink_count",
+	"gateway_remote_address",
+	"gateway_remote_address.ip",
 	"last_downlink_received_at",
 	"last_status",
 	"last_status.advanced",
@@ -482,7 +540,9 @@ var GatewayConnectionStatsFieldPathsNested = []string{
 
 var GatewayConnectionStatsFieldPathsTopLevel = []string{
 	"connected_at",
+	"disconnected_at",
 	"downlink_count",
+	"gateway_remote_address",
 	"last_downlink_received_at",
 	"last_status",
 	"last_status_received_at",

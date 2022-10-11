@@ -41,6 +41,56 @@ func (dst *PacketBrokerGateway) SetFields(src *PacketBrokerGateway, paths ...str
 			} else {
 				dst.ContactInfo = nil
 			}
+		case "administrative_contact":
+			if len(subs) > 0 {
+				var newDst, newSrc *OrganizationOrUserIdentifiers
+				if (src == nil || src.AdministrativeContact == nil) && dst.AdministrativeContact == nil {
+					continue
+				}
+				if src != nil {
+					newSrc = src.AdministrativeContact
+				}
+				if dst.AdministrativeContact != nil {
+					newDst = dst.AdministrativeContact
+				} else {
+					newDst = &OrganizationOrUserIdentifiers{}
+					dst.AdministrativeContact = newDst
+				}
+				if err := newDst.SetFields(newSrc, subs...); err != nil {
+					return err
+				}
+			} else {
+				if src != nil {
+					dst.AdministrativeContact = src.AdministrativeContact
+				} else {
+					dst.AdministrativeContact = nil
+				}
+			}
+		case "technical_contact":
+			if len(subs) > 0 {
+				var newDst, newSrc *OrganizationOrUserIdentifiers
+				if (src == nil || src.TechnicalContact == nil) && dst.TechnicalContact == nil {
+					continue
+				}
+				if src != nil {
+					newSrc = src.TechnicalContact
+				}
+				if dst.TechnicalContact != nil {
+					newDst = dst.TechnicalContact
+				} else {
+					newDst = &OrganizationOrUserIdentifiers{}
+					dst.TechnicalContact = newDst
+				}
+				if err := newDst.SetFields(newSrc, subs...); err != nil {
+					return err
+				}
+			} else {
+				if src != nil {
+					dst.TechnicalContact = src.TechnicalContact
+				} else {
+					dst.TechnicalContact = nil
+				}
+			}
 		case "antennas":
 			if len(subs) > 0 {
 				return fmt.Errorf("'antennas' has no subfields, but %s were specified", subs)
@@ -323,6 +373,56 @@ func (dst *PacketBrokerNetwork) SetFields(src *PacketBrokerNetwork, paths ...str
 			} else {
 				dst.ContactInfo = nil
 			}
+		case "administrative_contact":
+			if len(subs) > 0 {
+				var newDst, newSrc *ContactInfo
+				if (src == nil || src.AdministrativeContact == nil) && dst.AdministrativeContact == nil {
+					continue
+				}
+				if src != nil {
+					newSrc = src.AdministrativeContact
+				}
+				if dst.AdministrativeContact != nil {
+					newDst = dst.AdministrativeContact
+				} else {
+					newDst = &ContactInfo{}
+					dst.AdministrativeContact = newDst
+				}
+				if err := newDst.SetFields(newSrc, subs...); err != nil {
+					return err
+				}
+			} else {
+				if src != nil {
+					dst.AdministrativeContact = src.AdministrativeContact
+				} else {
+					dst.AdministrativeContact = nil
+				}
+			}
+		case "technical_contact":
+			if len(subs) > 0 {
+				var newDst, newSrc *ContactInfo
+				if (src == nil || src.TechnicalContact == nil) && dst.TechnicalContact == nil {
+					continue
+				}
+				if src != nil {
+					newSrc = src.TechnicalContact
+				}
+				if dst.TechnicalContact != nil {
+					newDst = dst.TechnicalContact
+				} else {
+					newDst = &ContactInfo{}
+					dst.TechnicalContact = newDst
+				}
+				if err := newDst.SetFields(newSrc, subs...); err != nil {
+					return err
+				}
+			} else {
+				if src != nil {
+					dst.TechnicalContact = src.TechnicalContact
+				} else {
+					dst.TechnicalContact = nil
+				}
+			}
 		case "listed":
 			if len(subs) > 0 {
 				return fmt.Errorf("'listed' has no subfields, but %s were specified", subs)
@@ -408,6 +508,36 @@ func (dst *PacketBrokerInfo) SetFields(src *PacketBrokerInfo, paths ...string) e
 			} else {
 				var zero bool
 				dst.HomeNetworkEnabled = zero
+			}
+		case "register_enabled":
+			if len(subs) > 0 {
+				return fmt.Errorf("'register_enabled' has no subfields, but %s were specified", subs)
+			}
+			if src != nil {
+				dst.RegisterEnabled = src.RegisterEnabled
+			} else {
+				var zero bool
+				dst.RegisterEnabled = zero
+			}
+
+		default:
+			return fmt.Errorf("invalid field: '%s'", name)
+		}
+	}
+	return nil
+}
+
+func (dst *PacketBrokerRegisterRequest) SetFields(src *PacketBrokerRegisterRequest, paths ...string) error {
+	for name, subs := range _processPaths(paths) {
+		switch name {
+		case "listed":
+			if len(subs) > 0 {
+				return fmt.Errorf("'listed' has no subfields, but %s were specified", subs)
+			}
+			if src != nil {
+				dst.Listed = src.Listed
+			} else {
+				dst.Listed = nil
 			}
 
 		default:
@@ -897,6 +1027,178 @@ func (dst *SetPacketBrokerRoutingPolicyRequest) SetFields(src *SetPacketBrokerRo
 					dst.Downlink = src.Downlink
 				} else {
 					dst.Downlink = nil
+				}
+			}
+
+		default:
+			return fmt.Errorf("invalid field: '%s'", name)
+		}
+	}
+	return nil
+}
+
+func (dst *PacketBrokerGatewayVisibility) SetFields(src *PacketBrokerGatewayVisibility, paths ...string) error {
+	for name, subs := range _processPaths(paths) {
+		switch name {
+		case "location":
+			if len(subs) > 0 {
+				return fmt.Errorf("'location' has no subfields, but %s were specified", subs)
+			}
+			if src != nil {
+				dst.Location = src.Location
+			} else {
+				var zero bool
+				dst.Location = zero
+			}
+		case "antenna_placement":
+			if len(subs) > 0 {
+				return fmt.Errorf("'antenna_placement' has no subfields, but %s were specified", subs)
+			}
+			if src != nil {
+				dst.AntennaPlacement = src.AntennaPlacement
+			} else {
+				var zero bool
+				dst.AntennaPlacement = zero
+			}
+		case "antenna_count":
+			if len(subs) > 0 {
+				return fmt.Errorf("'antenna_count' has no subfields, but %s were specified", subs)
+			}
+			if src != nil {
+				dst.AntennaCount = src.AntennaCount
+			} else {
+				var zero bool
+				dst.AntennaCount = zero
+			}
+		case "fine_timestamps":
+			if len(subs) > 0 {
+				return fmt.Errorf("'fine_timestamps' has no subfields, but %s were specified", subs)
+			}
+			if src != nil {
+				dst.FineTimestamps = src.FineTimestamps
+			} else {
+				var zero bool
+				dst.FineTimestamps = zero
+			}
+		case "contact_info":
+			if len(subs) > 0 {
+				return fmt.Errorf("'contact_info' has no subfields, but %s were specified", subs)
+			}
+			if src != nil {
+				dst.ContactInfo = src.ContactInfo
+			} else {
+				var zero bool
+				dst.ContactInfo = zero
+			}
+		case "status":
+			if len(subs) > 0 {
+				return fmt.Errorf("'status' has no subfields, but %s were specified", subs)
+			}
+			if src != nil {
+				dst.Status = src.Status
+			} else {
+				var zero bool
+				dst.Status = zero
+			}
+		case "frequency_plan":
+			if len(subs) > 0 {
+				return fmt.Errorf("'frequency_plan' has no subfields, but %s were specified", subs)
+			}
+			if src != nil {
+				dst.FrequencyPlan = src.FrequencyPlan
+			} else {
+				var zero bool
+				dst.FrequencyPlan = zero
+			}
+		case "packet_rates":
+			if len(subs) > 0 {
+				return fmt.Errorf("'packet_rates' has no subfields, but %s were specified", subs)
+			}
+			if src != nil {
+				dst.PacketRates = src.PacketRates
+			} else {
+				var zero bool
+				dst.PacketRates = zero
+			}
+
+		default:
+			return fmt.Errorf("invalid field: '%s'", name)
+		}
+	}
+	return nil
+}
+
+func (dst *PacketBrokerDefaultGatewayVisibility) SetFields(src *PacketBrokerDefaultGatewayVisibility, paths ...string) error {
+	for name, subs := range _processPaths(paths) {
+		switch name {
+		case "updated_at":
+			if len(subs) > 0 {
+				return fmt.Errorf("'updated_at' has no subfields, but %s were specified", subs)
+			}
+			if src != nil {
+				dst.UpdatedAt = src.UpdatedAt
+			} else {
+				dst.UpdatedAt = nil
+			}
+		case "visibility":
+			if len(subs) > 0 {
+				var newDst, newSrc *PacketBrokerGatewayVisibility
+				if (src == nil || src.Visibility == nil) && dst.Visibility == nil {
+					continue
+				}
+				if src != nil {
+					newSrc = src.Visibility
+				}
+				if dst.Visibility != nil {
+					newDst = dst.Visibility
+				} else {
+					newDst = &PacketBrokerGatewayVisibility{}
+					dst.Visibility = newDst
+				}
+				if err := newDst.SetFields(newSrc, subs...); err != nil {
+					return err
+				}
+			} else {
+				if src != nil {
+					dst.Visibility = src.Visibility
+				} else {
+					dst.Visibility = nil
+				}
+			}
+
+		default:
+			return fmt.Errorf("invalid field: '%s'", name)
+		}
+	}
+	return nil
+}
+
+func (dst *SetPacketBrokerDefaultGatewayVisibilityRequest) SetFields(src *SetPacketBrokerDefaultGatewayVisibilityRequest, paths ...string) error {
+	for name, subs := range _processPaths(paths) {
+		switch name {
+		case "visibility":
+			if len(subs) > 0 {
+				var newDst, newSrc *PacketBrokerGatewayVisibility
+				if (src == nil || src.Visibility == nil) && dst.Visibility == nil {
+					continue
+				}
+				if src != nil {
+					newSrc = src.Visibility
+				}
+				if dst.Visibility != nil {
+					newDst = dst.Visibility
+				} else {
+					newDst = &PacketBrokerGatewayVisibility{}
+					dst.Visibility = newDst
+				}
+				if err := newDst.SetFields(newSrc, subs...); err != nil {
+					return err
+				}
+			} else {
+				if src != nil {
+					dst.Visibility = src.Visibility
+				} else {
+					dst.Visibility = nil
 				}
 			}
 

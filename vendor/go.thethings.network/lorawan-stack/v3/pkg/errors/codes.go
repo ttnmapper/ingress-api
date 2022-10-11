@@ -16,6 +16,7 @@ package errors
 
 import (
 	"context"
+	"errors"
 
 	"google.golang.org/grpc/codes"
 )
@@ -27,7 +28,10 @@ type coder interface {
 // Code of the error.
 // If the code is invalid or unknown, this tries to get the code from the cause of this error.
 // This code is consistent with google.golang.org/genproto/googleapis/rpc/code and google.golang.org/grpc/codes.
-func (e Error) Code() uint32 {
+func (e *Error) Code() uint32 {
+	if e == nil {
+		return 0
+	}
 	if e.code != 0 && e.code != uint32(codes.Unknown) {
 		return e.code
 	}
@@ -38,14 +42,14 @@ func (e Error) Code() uint32 {
 }
 
 func code(err error) uint32 {
-	switch err {
-	case context.Canceled:
+	switch {
+	case errors.Is(err, context.Canceled):
 		return uint32(codes.Canceled)
-	case context.DeadlineExceeded:
+	case errors.Is(err, context.DeadlineExceeded):
 		return uint32(codes.DeadlineExceeded)
 	}
-	if c, ok := err.(coder); ok {
-		return c.Code()
+	if codeErr := (coder)(nil); errors.As(err, &codeErr) {
+		return codeErr.Code()
 	}
 	if ttnErr, ok := From(err); ok {
 		return ttnErr.Code()

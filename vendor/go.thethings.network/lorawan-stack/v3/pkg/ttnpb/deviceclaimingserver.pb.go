@@ -4,22 +4,20 @@
 package ttnpb
 
 import (
-	bytes "bytes"
 	context "context"
 	fmt "fmt"
+	_ "github.com/TheThingsIndustries/protoc-gen-go-json/annotations"
 	_ "github.com/envoyproxy/protoc-gen-validate/validate"
 	_ "github.com/gogo/protobuf/gogoproto"
 	proto "github.com/gogo/protobuf/proto"
 	types "github.com/gogo/protobuf/types"
 	golang_proto "github.com/golang/protobuf/proto"
-	go_thethings_network_lorawan_stack_v3_pkg_types "go.thethings.network/lorawan-stack/v3/pkg/types"
+	_ "github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-openapiv2/options"
 	_ "google.golang.org/genproto/googleapis/api/annotations"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
 	math "math"
-	reflect "reflect"
-	strings "strings"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -40,7 +38,7 @@ type ClaimEndDeviceRequest struct {
 	//	*ClaimEndDeviceRequest_QrCode
 	SourceDevice isClaimEndDeviceRequest_SourceDevice `protobuf_oneof:"source_device"`
 	// Application identifiers of the target end device.
-	TargetApplicationIds ApplicationIdentifiers `protobuf:"bytes,3,opt,name=target_application_ids,json=targetApplicationIds,proto3" json:"target_application_ids"`
+	TargetApplicationIds *ApplicationIdentifiers `protobuf:"bytes,3,opt,name=target_application_ids,json=targetApplicationIds,proto3" json:"target_application_ids,omitempty"`
 	// End device ID of the target end device. If empty, use the source device ID.
 	TargetDeviceId string `protobuf:"bytes,4,opt,name=target_device_id,json=targetDeviceId,proto3" json:"target_device_id,omitempty"`
 	// The address of the Network Server where the device will be registered.
@@ -58,15 +56,17 @@ type ClaimEndDeviceRequest struct {
 	// The AS-ID of the Application Server to use.
 	TargetApplicationServerId string `protobuf:"bytes,11,opt,name=target_application_server_id,json=targetApplicationServerId,proto3" json:"target_application_server_id,omitempty"`
 	// Home NetID.
-	TargetNetId *go_thethings_network_lorawan_stack_v3_pkg_types.NetID `protobuf:"bytes,13,opt,name=target_net_id,json=targetNetId,proto3,customtype=go.thethings.network/lorawan-stack/v3/pkg/types.NetID" json:"target_net_id,omitempty"`
+	TargetNetId []byte `protobuf:"bytes,13,opt,name=target_net_id,json=targetNetId,proto3" json:"target_net_id,omitempty"`
 	// If set, invalidate the authentication code with which the device gets claimed. This prohibits subsequent claiming requests.
 	InvalidateAuthenticationCode bool     `protobuf:"varint,5,opt,name=invalidate_authentication_code,json=invalidateAuthenticationCode,proto3" json:"invalidate_authentication_code,omitempty"`
 	XXX_NoUnkeyedLiteral         struct{} `json:"-"`
+	XXX_unrecognized             []byte   `json:"-"`
 	XXX_sizecache                int32    `json:"-"`
 }
 
-func (m *ClaimEndDeviceRequest) Reset()      { *m = ClaimEndDeviceRequest{} }
-func (*ClaimEndDeviceRequest) ProtoMessage() {}
+func (m *ClaimEndDeviceRequest) Reset()         { *m = ClaimEndDeviceRequest{} }
+func (m *ClaimEndDeviceRequest) String() string { return proto.CompactTextString(m) }
+func (*ClaimEndDeviceRequest) ProtoMessage()    {}
 func (*ClaimEndDeviceRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_e8a7f6d184fc3dc3, []int{0}
 }
@@ -90,7 +90,6 @@ var xxx_messageInfo_ClaimEndDeviceRequest proto.InternalMessageInfo
 
 type isClaimEndDeviceRequest_SourceDevice interface {
 	isClaimEndDeviceRequest_SourceDevice()
-	Equal(interface{}) bool
 }
 
 type ClaimEndDeviceRequest_AuthenticatedIdentifiers_ struct {
@@ -124,11 +123,11 @@ func (m *ClaimEndDeviceRequest) GetQrCode() []byte {
 	return nil
 }
 
-func (m *ClaimEndDeviceRequest) GetTargetApplicationIds() ApplicationIdentifiers {
+func (m *ClaimEndDeviceRequest) GetTargetApplicationIds() *ApplicationIdentifiers {
 	if m != nil {
 		return m.TargetApplicationIds
 	}
-	return ApplicationIdentifiers{}
+	return nil
 }
 
 func (m *ClaimEndDeviceRequest) GetTargetDeviceId() string {
@@ -173,6 +172,13 @@ func (m *ClaimEndDeviceRequest) GetTargetApplicationServerId() string {
 	return ""
 }
 
+func (m *ClaimEndDeviceRequest) GetTargetNetId() []byte {
+	if m != nil {
+		return m.TargetNetId
+	}
+	return nil
+}
+
 func (m *ClaimEndDeviceRequest) GetInvalidateAuthenticationCode() bool {
 	if m != nil {
 		return m.InvalidateAuthenticationCode
@@ -190,18 +196,22 @@ func (*ClaimEndDeviceRequest) XXX_OneofWrappers() []interface{} {
 
 type ClaimEndDeviceRequest_AuthenticatedIdentifiers struct {
 	// JoinEUI (or AppEUI) of the device to claim.
-	JoinEui go_thethings_network_lorawan_stack_v3_pkg_types.EUI64 `protobuf:"bytes,1,opt,name=join_eui,json=joinEui,proto3,customtype=go.thethings.network/lorawan-stack/v3/pkg/types.EUI64" json:"join_eui"`
+	JoinEui []byte `protobuf:"bytes,1,opt,name=join_eui,json=joinEui,proto3" json:"join_eui,omitempty"`
 	// DevEUI of the device to claim.
-	DevEui go_thethings_network_lorawan_stack_v3_pkg_types.EUI64 `protobuf:"bytes,2,opt,name=dev_eui,json=devEui,proto3,customtype=go.thethings.network/lorawan-stack/v3/pkg/types.EUI64" json:"dev_eui"`
+	DevEui []byte `protobuf:"bytes,2,opt,name=dev_eui,json=devEui,proto3" json:"dev_eui,omitempty"`
 	// Authentication code to prove ownership.
 	// In the LoRa Alliance TR005 specification, this equals the OwnerToken.
 	AuthenticationCode   string   `protobuf:"bytes,3,opt,name=authentication_code,json=authenticationCode,proto3" json:"authentication_code,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
 func (m *ClaimEndDeviceRequest_AuthenticatedIdentifiers) Reset() {
 	*m = ClaimEndDeviceRequest_AuthenticatedIdentifiers{}
+}
+func (m *ClaimEndDeviceRequest_AuthenticatedIdentifiers) String() string {
+	return proto.CompactTextString(m)
 }
 func (*ClaimEndDeviceRequest_AuthenticatedIdentifiers) ProtoMessage() {}
 func (*ClaimEndDeviceRequest_AuthenticatedIdentifiers) Descriptor() ([]byte, []int) {
@@ -225,6 +235,20 @@ func (m *ClaimEndDeviceRequest_AuthenticatedIdentifiers) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_ClaimEndDeviceRequest_AuthenticatedIdentifiers proto.InternalMessageInfo
 
+func (m *ClaimEndDeviceRequest_AuthenticatedIdentifiers) GetJoinEui() []byte {
+	if m != nil {
+		return m.JoinEui
+	}
+	return nil
+}
+
+func (m *ClaimEndDeviceRequest_AuthenticatedIdentifiers) GetDevEui() []byte {
+	if m != nil {
+		return m.DevEui
+	}
+	return nil
+}
+
 func (m *ClaimEndDeviceRequest_AuthenticatedIdentifiers) GetAuthenticationCode() string {
 	if m != nil {
 		return m.AuthenticationCode
@@ -233,14 +257,16 @@ func (m *ClaimEndDeviceRequest_AuthenticatedIdentifiers) GetAuthenticationCode()
 }
 
 type AuthorizeApplicationRequest struct {
-	ApplicationIdentifiers `protobuf:"bytes,1,opt,name=application_ids,json=applicationIds,proto3,embedded=application_ids" json:"application_ids"`
-	ApiKey                 string   `protobuf:"bytes,2,opt,name=api_key,json=apiKey,proto3" json:"api_key,omitempty"`
-	XXX_NoUnkeyedLiteral   struct{} `json:"-"`
-	XXX_sizecache          int32    `json:"-"`
+	ApplicationIds       *ApplicationIdentifiers `protobuf:"bytes,1,opt,name=application_ids,json=applicationIds,proto3" json:"application_ids,omitempty"`
+	ApiKey               string                  `protobuf:"bytes,2,opt,name=api_key,json=apiKey,proto3" json:"api_key,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}                `json:"-"`
+	XXX_unrecognized     []byte                  `json:"-"`
+	XXX_sizecache        int32                   `json:"-"`
 }
 
-func (m *AuthorizeApplicationRequest) Reset()      { *m = AuthorizeApplicationRequest{} }
-func (*AuthorizeApplicationRequest) ProtoMessage() {}
+func (m *AuthorizeApplicationRequest) Reset()         { *m = AuthorizeApplicationRequest{} }
+func (m *AuthorizeApplicationRequest) String() string { return proto.CompactTextString(m) }
+func (*AuthorizeApplicationRequest) ProtoMessage()    {}
 func (*AuthorizeApplicationRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_e8a7f6d184fc3dc3, []int{1}
 }
@@ -262,11 +288,212 @@ func (m *AuthorizeApplicationRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_AuthorizeApplicationRequest proto.InternalMessageInfo
 
+func (m *AuthorizeApplicationRequest) GetApplicationIds() *ApplicationIdentifiers {
+	if m != nil {
+		return m.ApplicationIds
+	}
+	return nil
+}
+
 func (m *AuthorizeApplicationRequest) GetApiKey() string {
 	if m != nil {
 		return m.ApiKey
 	}
 	return ""
+}
+
+type GetInfoByJoinEUIRequest struct {
+	JoinEui              []byte   `protobuf:"bytes,1,opt,name=join_eui,json=joinEui,proto3" json:"join_eui,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *GetInfoByJoinEUIRequest) Reset()         { *m = GetInfoByJoinEUIRequest{} }
+func (m *GetInfoByJoinEUIRequest) String() string { return proto.CompactTextString(m) }
+func (*GetInfoByJoinEUIRequest) ProtoMessage()    {}
+func (*GetInfoByJoinEUIRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_e8a7f6d184fc3dc3, []int{2}
+}
+func (m *GetInfoByJoinEUIRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_GetInfoByJoinEUIRequest.Unmarshal(m, b)
+}
+func (m *GetInfoByJoinEUIRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_GetInfoByJoinEUIRequest.Marshal(b, m, deterministic)
+}
+func (m *GetInfoByJoinEUIRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetInfoByJoinEUIRequest.Merge(m, src)
+}
+func (m *GetInfoByJoinEUIRequest) XXX_Size() int {
+	return xxx_messageInfo_GetInfoByJoinEUIRequest.Size(m)
+}
+func (m *GetInfoByJoinEUIRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetInfoByJoinEUIRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GetInfoByJoinEUIRequest proto.InternalMessageInfo
+
+func (m *GetInfoByJoinEUIRequest) GetJoinEui() []byte {
+	if m != nil {
+		return m.JoinEui
+	}
+	return nil
+}
+
+type GetInfoByJoinEUIResponse struct {
+	JoinEui []byte `protobuf:"bytes,1,opt,name=join_eui,json=joinEui,proto3" json:"join_eui,omitempty"`
+	// If set, this Join EUI is available for claiming on one of the configured Join Servers.
+	SupportsClaiming     bool     `protobuf:"varint,2,opt,name=supports_claiming,json=supportsClaiming,proto3" json:"supports_claiming,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *GetInfoByJoinEUIResponse) Reset()         { *m = GetInfoByJoinEUIResponse{} }
+func (m *GetInfoByJoinEUIResponse) String() string { return proto.CompactTextString(m) }
+func (*GetInfoByJoinEUIResponse) ProtoMessage()    {}
+func (*GetInfoByJoinEUIResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_e8a7f6d184fc3dc3, []int{3}
+}
+func (m *GetInfoByJoinEUIResponse) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_GetInfoByJoinEUIResponse.Unmarshal(m, b)
+}
+func (m *GetInfoByJoinEUIResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_GetInfoByJoinEUIResponse.Marshal(b, m, deterministic)
+}
+func (m *GetInfoByJoinEUIResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetInfoByJoinEUIResponse.Merge(m, src)
+}
+func (m *GetInfoByJoinEUIResponse) XXX_Size() int {
+	return xxx_messageInfo_GetInfoByJoinEUIResponse.Size(m)
+}
+func (m *GetInfoByJoinEUIResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetInfoByJoinEUIResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GetInfoByJoinEUIResponse proto.InternalMessageInfo
+
+func (m *GetInfoByJoinEUIResponse) GetJoinEui() []byte {
+	if m != nil {
+		return m.JoinEui
+	}
+	return nil
+}
+
+func (m *GetInfoByJoinEUIResponse) GetSupportsClaiming() bool {
+	if m != nil {
+		return m.SupportsClaiming
+	}
+	return false
+}
+
+type GetClaimStatusResponse struct {
+	EndDeviceIds         *EndDeviceIdentifiers                  `protobuf:"bytes,1,opt,name=end_device_ids,json=endDeviceIds,proto3" json:"end_device_ids,omitempty"`
+	HomeNetId            []byte                                 `protobuf:"bytes,2,opt,name=home_net_id,json=homeNetId,proto3" json:"home_net_id,omitempty"`
+	HomeNsId             []byte                                 `protobuf:"bytes,3,opt,name=home_ns_id,json=homeNsId,proto3" json:"home_ns_id,omitempty"`
+	VendorSpecific       *GetClaimStatusResponse_VendorSpecific `protobuf:"bytes,4,opt,name=vendor_specific,json=vendorSpecific,proto3" json:"vendor_specific,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}                               `json:"-"`
+	XXX_unrecognized     []byte                                 `json:"-"`
+	XXX_sizecache        int32                                  `json:"-"`
+}
+
+func (m *GetClaimStatusResponse) Reset()         { *m = GetClaimStatusResponse{} }
+func (m *GetClaimStatusResponse) String() string { return proto.CompactTextString(m) }
+func (*GetClaimStatusResponse) ProtoMessage()    {}
+func (*GetClaimStatusResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_e8a7f6d184fc3dc3, []int{4}
+}
+func (m *GetClaimStatusResponse) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_GetClaimStatusResponse.Unmarshal(m, b)
+}
+func (m *GetClaimStatusResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_GetClaimStatusResponse.Marshal(b, m, deterministic)
+}
+func (m *GetClaimStatusResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetClaimStatusResponse.Merge(m, src)
+}
+func (m *GetClaimStatusResponse) XXX_Size() int {
+	return xxx_messageInfo_GetClaimStatusResponse.Size(m)
+}
+func (m *GetClaimStatusResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetClaimStatusResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GetClaimStatusResponse proto.InternalMessageInfo
+
+func (m *GetClaimStatusResponse) GetEndDeviceIds() *EndDeviceIdentifiers {
+	if m != nil {
+		return m.EndDeviceIds
+	}
+	return nil
+}
+
+func (m *GetClaimStatusResponse) GetHomeNetId() []byte {
+	if m != nil {
+		return m.HomeNetId
+	}
+	return nil
+}
+
+func (m *GetClaimStatusResponse) GetHomeNsId() []byte {
+	if m != nil {
+		return m.HomeNsId
+	}
+	return nil
+}
+
+func (m *GetClaimStatusResponse) GetVendorSpecific() *GetClaimStatusResponse_VendorSpecific {
+	if m != nil {
+		return m.VendorSpecific
+	}
+	return nil
+}
+
+type GetClaimStatusResponse_VendorSpecific struct {
+	OrganizationUniqueIdentifier uint32 `protobuf:"varint,1,opt,name=organization_unique_identifier,json=organizationUniqueIdentifier,proto3" json:"organization_unique_identifier,omitempty"`
+	// Vendor Specific data in JSON format.
+	Data                 *types.Struct `protobuf:"bytes,2,opt,name=data,proto3" json:"data,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}      `json:"-"`
+	XXX_unrecognized     []byte        `json:"-"`
+	XXX_sizecache        int32         `json:"-"`
+}
+
+func (m *GetClaimStatusResponse_VendorSpecific) Reset()         { *m = GetClaimStatusResponse_VendorSpecific{} }
+func (m *GetClaimStatusResponse_VendorSpecific) String() string { return proto.CompactTextString(m) }
+func (*GetClaimStatusResponse_VendorSpecific) ProtoMessage()    {}
+func (*GetClaimStatusResponse_VendorSpecific) Descriptor() ([]byte, []int) {
+	return fileDescriptor_e8a7f6d184fc3dc3, []int{4, 0}
+}
+func (m *GetClaimStatusResponse_VendorSpecific) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_GetClaimStatusResponse_VendorSpecific.Unmarshal(m, b)
+}
+func (m *GetClaimStatusResponse_VendorSpecific) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_GetClaimStatusResponse_VendorSpecific.Marshal(b, m, deterministic)
+}
+func (m *GetClaimStatusResponse_VendorSpecific) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetClaimStatusResponse_VendorSpecific.Merge(m, src)
+}
+func (m *GetClaimStatusResponse_VendorSpecific) XXX_Size() int {
+	return xxx_messageInfo_GetClaimStatusResponse_VendorSpecific.Size(m)
+}
+func (m *GetClaimStatusResponse_VendorSpecific) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetClaimStatusResponse_VendorSpecific.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GetClaimStatusResponse_VendorSpecific proto.InternalMessageInfo
+
+func (m *GetClaimStatusResponse_VendorSpecific) GetOrganizationUniqueIdentifier() uint32 {
+	if m != nil {
+		return m.OrganizationUniqueIdentifier
+	}
+	return 0
+}
+
+func (m *GetClaimStatusResponse_VendorSpecific) GetData() *types.Struct {
+	if m != nil {
+		return m.Data
+	}
+	return nil
 }
 
 type CUPSRedirection struct {
@@ -283,13 +510,15 @@ type CUPSRedirection struct {
 	//	*CUPSRedirection_AuthToken
 	GatewayCredentials   isCUPSRedirection_GatewayCredentials `protobuf_oneof:"gateway_credentials"`
 	XXX_NoUnkeyedLiteral struct{}                             `json:"-"`
+	XXX_unrecognized     []byte                               `json:"-"`
 	XXX_sizecache        int32                                `json:"-"`
 }
 
-func (m *CUPSRedirection) Reset()      { *m = CUPSRedirection{} }
-func (*CUPSRedirection) ProtoMessage() {}
+func (m *CUPSRedirection) Reset()         { *m = CUPSRedirection{} }
+func (m *CUPSRedirection) String() string { return proto.CompactTextString(m) }
+func (*CUPSRedirection) ProtoMessage()    {}
 func (*CUPSRedirection) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e8a7f6d184fc3dc3, []int{2}
+	return fileDescriptor_e8a7f6d184fc3dc3, []int{5}
 }
 func (m *CUPSRedirection) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_CUPSRedirection.Unmarshal(m, b)
@@ -311,7 +540,6 @@ var xxx_messageInfo_CUPSRedirection proto.InternalMessageInfo
 
 type isCUPSRedirection_GatewayCredentials interface {
 	isCUPSRedirection_GatewayCredentials()
-	Equal(interface{}) bool
 }
 
 type CUPSRedirection_ClientTls struct {
@@ -380,13 +608,15 @@ type CUPSRedirection_ClientTLS struct {
 	// PEM encoded Client Private Key.
 	Key                  []byte   `protobuf:"bytes,2,opt,name=key,proto3" json:"key,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *CUPSRedirection_ClientTLS) Reset()      { *m = CUPSRedirection_ClientTLS{} }
-func (*CUPSRedirection_ClientTLS) ProtoMessage() {}
+func (m *CUPSRedirection_ClientTLS) Reset()         { *m = CUPSRedirection_ClientTLS{} }
+func (m *CUPSRedirection_ClientTLS) String() string { return proto.CompactTextString(m) }
+func (*CUPSRedirection_ClientTLS) ProtoMessage()    {}
 func (*CUPSRedirection_ClientTLS) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e8a7f6d184fc3dc3, []int{2, 0}
+	return fileDescriptor_e8a7f6d184fc3dc3, []int{5, 0}
 }
 func (m *CUPSRedirection_ClientTLS) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_CUPSRedirection_ClientTLS.Unmarshal(m, b)
@@ -426,7 +656,7 @@ type ClaimGatewayRequest struct {
 	//	*ClaimGatewayRequest_QrCode
 	SourceGateway isClaimGatewayRequest_SourceGateway `protobuf_oneof:"source_gateway"`
 	// Collaborator to grant all rights on the target gateway.
-	Collaborator OrganizationOrUserIdentifiers `protobuf:"bytes,3,opt,name=collaborator,proto3" json:"collaborator"`
+	Collaborator *OrganizationOrUserIdentifiers `protobuf:"bytes,3,opt,name=collaborator,proto3" json:"collaborator,omitempty"`
 	// Gateway ID for the target gateway. This must be a unique value.
 	// If this is not set, the target ID for the target gateway will be set to `<gateway-eui>`.
 	TargetGatewayId string `protobuf:"bytes,4,opt,name=target_gateway_id,json=targetGatewayId,proto3" json:"target_gateway_id,omitempty"`
@@ -438,13 +668,15 @@ type ClaimGatewayRequest struct {
 	// This equals the first element of the frequency_plan_ids field.
 	TargetFrequencyPlanId string   `protobuf:"bytes,7,opt,name=target_frequency_plan_id,json=targetFrequencyPlanId,proto3" json:"target_frequency_plan_id,omitempty"`
 	XXX_NoUnkeyedLiteral  struct{} `json:"-"`
+	XXX_unrecognized      []byte   `json:"-"`
 	XXX_sizecache         int32    `json:"-"`
 }
 
-func (m *ClaimGatewayRequest) Reset()      { *m = ClaimGatewayRequest{} }
-func (*ClaimGatewayRequest) ProtoMessage() {}
+func (m *ClaimGatewayRequest) Reset()         { *m = ClaimGatewayRequest{} }
+func (m *ClaimGatewayRequest) String() string { return proto.CompactTextString(m) }
+func (*ClaimGatewayRequest) ProtoMessage()    {}
 func (*ClaimGatewayRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e8a7f6d184fc3dc3, []int{3}
+	return fileDescriptor_e8a7f6d184fc3dc3, []int{6}
 }
 func (m *ClaimGatewayRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ClaimGatewayRequest.Unmarshal(m, b)
@@ -466,7 +698,6 @@ var xxx_messageInfo_ClaimGatewayRequest proto.InternalMessageInfo
 
 type isClaimGatewayRequest_SourceGateway interface {
 	isClaimGatewayRequest_SourceGateway()
-	Equal(interface{}) bool
 }
 
 type ClaimGatewayRequest_AuthenticatedIdentifiers_ struct {
@@ -500,11 +731,11 @@ func (m *ClaimGatewayRequest) GetQrCode() []byte {
 	return nil
 }
 
-func (m *ClaimGatewayRequest) GetCollaborator() OrganizationOrUserIdentifiers {
+func (m *ClaimGatewayRequest) GetCollaborator() *OrganizationOrUserIdentifiers {
 	if m != nil {
 		return m.Collaborator
 	}
-	return OrganizationOrUserIdentifiers{}
+	return nil
 }
 
 func (m *ClaimGatewayRequest) GetTargetGatewayId() string {
@@ -544,18 +775,22 @@ func (*ClaimGatewayRequest) XXX_OneofWrappers() []interface{} {
 }
 
 type ClaimGatewayRequest_AuthenticatedIdentifiers struct {
-	GatewayEui           go_thethings_network_lorawan_stack_v3_pkg_types.EUI64 `protobuf:"bytes,1,opt,name=gateway_eui,json=gatewayEui,proto3,customtype=go.thethings.network/lorawan-stack/v3/pkg/types.EUI64" json:"gateway_eui"`
-	AuthenticationCode   []byte                                                `protobuf:"bytes,2,opt,name=authentication_code,json=authenticationCode,proto3" json:"authentication_code,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}                                              `json:"-"`
-	XXX_sizecache        int32                                                 `json:"-"`
+	GatewayEui           []byte   `protobuf:"bytes,1,opt,name=gateway_eui,json=gatewayEui,proto3" json:"gateway_eui,omitempty"`
+	AuthenticationCode   []byte   `protobuf:"bytes,2,opt,name=authentication_code,json=authenticationCode,proto3" json:"authentication_code,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
 }
 
 func (m *ClaimGatewayRequest_AuthenticatedIdentifiers) Reset() {
 	*m = ClaimGatewayRequest_AuthenticatedIdentifiers{}
 }
+func (m *ClaimGatewayRequest_AuthenticatedIdentifiers) String() string {
+	return proto.CompactTextString(m)
+}
 func (*ClaimGatewayRequest_AuthenticatedIdentifiers) ProtoMessage() {}
 func (*ClaimGatewayRequest_AuthenticatedIdentifiers) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e8a7f6d184fc3dc3, []int{3, 0}
+	return fileDescriptor_e8a7f6d184fc3dc3, []int{6, 0}
 }
 func (m *ClaimGatewayRequest_AuthenticatedIdentifiers) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ClaimGatewayRequest_AuthenticatedIdentifiers.Unmarshal(m, b)
@@ -575,6 +810,13 @@ func (m *ClaimGatewayRequest_AuthenticatedIdentifiers) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_ClaimGatewayRequest_AuthenticatedIdentifiers proto.InternalMessageInfo
 
+func (m *ClaimGatewayRequest_AuthenticatedIdentifiers) GetGatewayEui() []byte {
+	if m != nil {
+		return m.GatewayEui
+	}
+	return nil
+}
+
 func (m *ClaimGatewayRequest_AuthenticatedIdentifiers) GetAuthenticationCode() []byte {
 	if m != nil {
 		return m.AuthenticationCode
@@ -583,16 +825,18 @@ func (m *ClaimGatewayRequest_AuthenticatedIdentifiers) GetAuthenticationCode() [
 }
 
 type AuthorizeGatewayRequest struct {
-	GatewayIdentifiers   `protobuf:"bytes,1,opt,name=gateway_ids,json=gatewayIds,proto3,embedded=gateway_ids" json:"gateway_ids"`
-	ApiKey               string   `protobuf:"bytes,2,opt,name=api_key,json=apiKey,proto3" json:"api_key,omitempty"`
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
+	GatewayIds           *GatewayIdentifiers `protobuf:"bytes,1,opt,name=gateway_ids,json=gatewayIds,proto3" json:"gateway_ids,omitempty"`
+	ApiKey               string              `protobuf:"bytes,2,opt,name=api_key,json=apiKey,proto3" json:"api_key,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}            `json:"-"`
+	XXX_unrecognized     []byte              `json:"-"`
+	XXX_sizecache        int32               `json:"-"`
 }
 
-func (m *AuthorizeGatewayRequest) Reset()      { *m = AuthorizeGatewayRequest{} }
-func (*AuthorizeGatewayRequest) ProtoMessage() {}
+func (m *AuthorizeGatewayRequest) Reset()         { *m = AuthorizeGatewayRequest{} }
+func (m *AuthorizeGatewayRequest) String() string { return proto.CompactTextString(m) }
+func (*AuthorizeGatewayRequest) ProtoMessage()    {}
 func (*AuthorizeGatewayRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e8a7f6d184fc3dc3, []int{4}
+	return fileDescriptor_e8a7f6d184fc3dc3, []int{7}
 }
 func (m *AuthorizeGatewayRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_AuthorizeGatewayRequest.Unmarshal(m, b)
@@ -612,6 +856,13 @@ func (m *AuthorizeGatewayRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_AuthorizeGatewayRequest proto.InternalMessageInfo
 
+func (m *AuthorizeGatewayRequest) GetGatewayIds() *GatewayIdentifiers {
+	if m != nil {
+		return m.GatewayIds
+	}
+	return nil
+}
+
 func (m *AuthorizeGatewayRequest) GetApiKey() string {
 	if m != nil {
 		return m.ApiKey
@@ -626,6 +877,14 @@ func init() {
 	golang_proto.RegisterType((*ClaimEndDeviceRequest_AuthenticatedIdentifiers)(nil), "ttn.lorawan.v3.ClaimEndDeviceRequest.AuthenticatedIdentifiers")
 	proto.RegisterType((*AuthorizeApplicationRequest)(nil), "ttn.lorawan.v3.AuthorizeApplicationRequest")
 	golang_proto.RegisterType((*AuthorizeApplicationRequest)(nil), "ttn.lorawan.v3.AuthorizeApplicationRequest")
+	proto.RegisterType((*GetInfoByJoinEUIRequest)(nil), "ttn.lorawan.v3.GetInfoByJoinEUIRequest")
+	golang_proto.RegisterType((*GetInfoByJoinEUIRequest)(nil), "ttn.lorawan.v3.GetInfoByJoinEUIRequest")
+	proto.RegisterType((*GetInfoByJoinEUIResponse)(nil), "ttn.lorawan.v3.GetInfoByJoinEUIResponse")
+	golang_proto.RegisterType((*GetInfoByJoinEUIResponse)(nil), "ttn.lorawan.v3.GetInfoByJoinEUIResponse")
+	proto.RegisterType((*GetClaimStatusResponse)(nil), "ttn.lorawan.v3.GetClaimStatusResponse")
+	golang_proto.RegisterType((*GetClaimStatusResponse)(nil), "ttn.lorawan.v3.GetClaimStatusResponse")
+	proto.RegisterType((*GetClaimStatusResponse_VendorSpecific)(nil), "ttn.lorawan.v3.GetClaimStatusResponse.VendorSpecific")
+	golang_proto.RegisterType((*GetClaimStatusResponse_VendorSpecific)(nil), "ttn.lorawan.v3.GetClaimStatusResponse.VendorSpecific")
 	proto.RegisterType((*CUPSRedirection)(nil), "ttn.lorawan.v3.CUPSRedirection")
 	golang_proto.RegisterType((*CUPSRedirection)(nil), "ttn.lorawan.v3.CUPSRedirection")
 	proto.RegisterType((*CUPSRedirection_ClientTLS)(nil), "ttn.lorawan.v3.CUPSRedirection.ClientTLS")
@@ -646,535 +905,132 @@ func init() {
 }
 
 var fileDescriptor_e8a7f6d184fc3dc3 = []byte{
-	// 1589 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xcc, 0x57, 0x5d, 0x6f, 0x13, 0xc7,
-	0x1a, 0xf6, 0xc4, 0x49, 0x9c, 0x4c, 0xbe, 0xcc, 0xe6, 0x83, 0xc5, 0xe4, 0x38, 0xc1, 0x49, 0x0e,
-	0x49, 0x4e, 0xbc, 0x3e, 0x38, 0x07, 0x74, 0xc8, 0x81, 0x13, 0xb2, 0x21, 0xe7, 0x24, 0x81, 0x02,
-	0x5a, 0x12, 0x54, 0x11, 0x92, 0xd5, 0x64, 0x77, 0x70, 0x16, 0x2f, 0xbb, 0x66, 0x76, 0x6c, 0xea,
-	0x84, 0xa8, 0x51, 0x5b, 0xa9, 0x2d, 0x17, 0xfd, 0x94, 0xf8, 0x05, 0x45, 0xea, 0x1f, 0xe8, 0x7d,
-	0x7b, 0xd7, 0xcb, 0xaa, 0xbd, 0xa9, 0xb8, 0x40, 0x6a, 0xe8, 0x45, 0x2f, 0x7b, 0x59, 0xf9, 0xaa,
-	0x9a, 0xd9, 0xb5, 0xbd, 0xde, 0xd8, 0x10, 0x10, 0x95, 0xb8, 0x9b, 0xdd, 0x79, 0xe7, 0x99, 0xe7,
-	0xfd, 0x98, 0xe7, 0x9d, 0x81, 0x53, 0xa6, 0x4d, 0xd0, 0x7d, 0x64, 0x25, 0x1d, 0x8a, 0xb4, 0x6c,
-	0x0a, 0xe5, 0x8c, 0x94, 0x8e, 0x0b, 0x86, 0x86, 0x35, 0x13, 0x19, 0x77, 0x0d, 0x2b, 0xe3, 0x60,
-	0x52, 0xc0, 0x44, 0xca, 0x11, 0x9b, 0xda, 0x42, 0x37, 0xa5, 0x96, 0xe4, 0xad, 0x90, 0x0a, 0xd3,
-	0xb1, 0xb9, 0x8c, 0x41, 0xb7, 0xf2, 0x9b, 0x92, 0x66, 0xdf, 0x4d, 0x61, 0xab, 0x60, 0x17, 0x73,
-	0xc4, 0x7e, 0xa7, 0x98, 0xe2, 0xc6, 0x5a, 0x32, 0x83, 0xad, 0x64, 0x01, 0x99, 0x86, 0x8e, 0x28,
-	0x4e, 0x1d, 0x18, 0xb8, 0x90, 0xb1, 0xa4, 0x0f, 0x22, 0x63, 0x67, 0x6c, 0x77, 0xf1, 0x66, 0xfe,
-	0x36, 0xff, 0xe2, 0x1f, 0x7c, 0xe4, 0x99, 0x0f, 0x66, 0x6c, 0x3b, 0x63, 0x62, 0x4e, 0x14, 0x59,
-	0x96, 0x4d, 0x11, 0x35, 0x6c, 0xcb, 0xf1, 0x66, 0x8f, 0x7b, 0xb3, 0x15, 0x0c, 0x7c, 0x37, 0x47,
-	0x8b, 0xde, 0xe4, 0xc8, 0x41, 0x57, 0x0d, 0x1d, 0x5b, 0xd4, 0xb8, 0x6d, 0x60, 0xe2, 0x21, 0x24,
-	0xde, 0xef, 0x84, 0xfd, 0xf3, 0xcc, 0xf5, 0x05, 0x4b, 0xbf, 0xc8, 0x03, 0xa1, 0xe0, 0x7b, 0x79,
-	0xec, 0x50, 0x61, 0x17, 0x1e, 0x43, 0x79, 0xba, 0xc5, 0x16, 0x68, 0x88, 0x62, 0x5d, 0xf5, 0x2d,
-	0x16, 0xc1, 0x30, 0x18, 0xef, 0x48, 0xff, 0x57, 0xaa, 0x8d, 0x8f, 0x54, 0x17, 0x49, 0x9a, 0xf3,
-	0xc3, 0x2c, 0x55, 0x51, 0x16, 0x43, 0x8a, 0x88, 0x1a, 0xcc, 0x09, 0x63, 0x30, 0x72, 0x8f, 0xa8,
-	0x9a, 0xad, 0x63, 0xb1, 0x69, 0x18, 0x8c, 0x77, 0xca, 0xb0, 0x24, 0x47, 0xb6, 0x5b, 0xa2, 0x21,
-	0x71, 0xaf, 0x6d, 0x31, 0xa4, 0xb4, 0xde, 0x23, 0xf3, 0xb6, 0x8e, 0x85, 0x3b, 0x70, 0x80, 0x22,
-	0x92, 0xc1, 0x54, 0x45, 0xb9, 0x9c, 0xc9, 0x60, 0x0c, 0xdb, 0x52, 0x0d, 0xdd, 0x11, 0xc3, 0x9c,
-	0xe2, 0xdf, 0x83, 0x14, 0xe7, 0xaa, 0x66, 0xbe, 0xed, 0xe4, 0xce, 0x92, 0xdc, 0xf2, 0x10, 0x34,
-	0x45, 0xc1, 0xf7, 0x4f, 0x87, 0x42, 0x4a, 0x9f, 0x8b, 0x59, 0x63, 0xeb, 0x08, 0x2b, 0x30, 0xea,
-	0xed, 0xe5, 0x96, 0x8c, 0x6a, 0xe8, 0x62, 0xf3, 0x30, 0x18, 0x6f, 0x97, 0x27, 0x4b, 0xf2, 0x49,
-	0x32, 0x26, 0x8e, 0xa6, 0x4f, 0x6c, 0xac, 0xa1, 0xe4, 0xf6, 0x3f, 0x93, 0x67, 0xd7, 0xc7, 0x67,
-	0x67, 0xd6, 0x92, 0xeb, 0xb3, 0xe5, 0xcf, 0x89, 0x9d, 0xf4, 0xd4, 0xee, 0xe8, 0x83, 0x8d, 0x51,
-	0xa5, 0xdb, 0xc5, 0x70, 0x43, 0xb4, 0xa4, 0x0b, 0x3f, 0x02, 0xf8, 0x37, 0x0f, 0xd6, 0xc2, 0xf4,
-	0xbe, 0x4d, 0xb2, 0xaa, 0x5b, 0x83, 0x2a, 0xd2, 0x75, 0x82, 0x1d, 0x47, 0x8c, 0xf0, 0x3d, 0x3e,
-	0x01, 0x25, 0xf9, 0x21, 0x20, 0x1f, 0x82, 0xf4, 0x07, 0x60, 0x63, 0x7c, 0x76, 0x86, 0x6d, 0x80,
-	0x92, 0xdb, 0x73, 0xc9, 0x9b, 0x0c, 0xff, 0x81, 0x6f, 0x5c, 0x1d, 0xde, 0x4a, 0xae, 0x4f, 0xfa,
-	0x26, 0x26, 0x6e, 0x49, 0x13, 0x93, 0x6c, 0xdd, 0x5c, 0xf2, 0xa6, 0xc7, 0xeb, 0x81, 0x6f, 0x5c,
-	0x1d, 0xf2, 0x75, 0xd5, 0x89, 0x89, 0xf1, 0xd9, 0x99, 0x99, 0x35, 0x36, 0xda, 0x39, 0x35, 0x75,
-	0x7a, 0x77, 0x62, 0x96, 0x3b, 0x12, 0x73, 0x59, 0x5f, 0x71, 0x49, 0x5f, 0xe7, 0x9c, 0xe7, 0x5c,
-	0xca, 0xc2, 0x15, 0x38, 0x54, 0xdf, 0xa7, 0x2c, 0xce, 0xaa, 0x26, 0xda, 0xc4, 0xa6, 0xd8, 0xc6,
-	0xbd, 0x6a, 0x2b, 0xc9, 0x2d, 0x24, 0x2c, 0xee, 0x45, 0x95, 0xe3, 0x75, 0xe0, 0x2e, 0xe1, 0xec,
-	0x65, 0x66, 0x2c, 0x3c, 0x01, 0xf0, 0x44, 0x9d, 0x3c, 0x07, 0x02, 0xd5, 0xfe, 0x66, 0x06, 0x2a,
-	0x7e, 0xa0, 0x9a, 0x6a, 0x83, 0x75, 0x03, 0x8e, 0x34, 0xf6, 0xad, 0x1a, 0x30, 0x18, 0x08, 0xd8,
-	0x50, 0x03, 0xd8, 0x4a, 0xd0, 0x16, 0xe1, 0x60, 0x63, 0x5c, 0x43, 0x17, 0x3b, 0x38, 0x60, 0xa4,
-	0x24, 0x37, 0x93, 0x26, 0x51, 0x57, 0x8e, 0x35, 0xc0, 0x5b, 0xd2, 0x85, 0x75, 0xd8, 0x55, 0x4d,
-	0x27, 0x5b, 0xda, 0xc5, 0x8f, 0xe4, 0xd9, 0x27, 0x4f, 0x87, 0x4e, 0x67, 0x6c, 0x89, 0x6e, 0x61,
-	0xba, 0xc5, 0xb4, 0x53, 0xf2, 0xb2, 0x9d, 0xaa, 0x95, 0x9e, 0xc2, 0x74, 0x2a, 0x97, 0xcd, 0xa4,
-	0x68, 0x31, 0x87, 0x1d, 0xe9, 0x0a, 0xa6, 0x4b, 0x17, 0x95, 0x8e, 0x4a, 0xb6, 0x97, 0x74, 0xe1,
-	0x22, 0x8c, 0x1b, 0x56, 0x59, 0x27, 0x55, 0x9f, 0x24, 0x30, 0xbe, 0x5c, 0x02, 0x5a, 0x86, 0xc1,
-	0x78, 0x9b, 0x32, 0x58, 0xb5, 0x9a, 0xab, 0x31, 0x62, 0x52, 0x10, 0x7b, 0xd4, 0x04, 0xc5, 0x46,
-	0x52, 0x23, 0xbc, 0x0d, 0xdb, 0xee, 0xd8, 0x86, 0xa5, 0xe2, 0xbc, 0xc1, 0xc5, 0xab, 0x53, 0x3e,
-	0xcf, 0x4e, 0xfa, 0xab, 0x38, 0xb0, 0xb0, 0xba, 0x74, 0xe6, 0x5f, 0x4a, 0x84, 0xc1, 0x2d, 0xe4,
-	0x0d, 0xe1, 0x06, 0x8c, 0xe8, 0xb8, 0xc0, 0x81, 0x9b, 0x5e, 0x07, 0x70, 0xab, 0x8e, 0x0b, 0x0c,
-	0x77, 0x11, 0xf6, 0xd6, 0x8b, 0x44, 0x98, 0x27, 0xed, 0x68, 0x49, 0xee, 0x23, 0x42, 0x3a, 0xba,
-	0xb1, 0xe6, 0x55, 0xec, 0xce, 0xa9, 0xa9, 0xe9, 0xf4, 0xee, 0xa8, 0x22, 0xa0, 0x03, 0x81, 0x91,
-	0xfb, 0x60, 0x97, 0x63, 0xe7, 0x89, 0x86, 0x3d, 0xdd, 0x12, 0xc2, 0x7f, 0xc8, 0x60, 0xb9, 0xb9,
-	0xad, 0x35, 0x1a, 0x59, 0x6e, 0x6e, 0xeb, 0x8c, 0x76, 0x25, 0x1e, 0x03, 0x78, 0x9c, 0x85, 0xce,
-	0x26, 0xc6, 0x36, 0xf6, 0x15, 0x40, 0xb9, 0x17, 0x20, 0xd8, 0x13, 0x94, 0x57, 0xf0, 0x52, 0xf2,
-	0x1a, 0xf5, 0xcb, 0xeb, 0x0f, 0x4f, 0x87, 0x80, 0xd2, 0x8d, 0x6a, 0xc5, 0x75, 0x04, 0x46, 0x50,
-	0xce, 0x50, 0xb3, 0xb8, 0xc8, 0xc3, 0xd8, 0xce, 0xf5, 0x9e, 0xb4, 0x44, 0x81, 0xb8, 0x07, 0x94,
-	0x56, 0x94, 0x33, 0x2e, 0xe1, 0x62, 0xe2, 0xe3, 0x30, 0xec, 0x99, 0x5f, 0xbd, 0x76, 0x5d, 0xc1,
-	0xba, 0x41, 0xb0, 0xc6, 0xd6, 0x0a, 0xff, 0x81, 0x3d, 0x5e, 0x6d, 0x6a, 0xf9, 0x9c, 0xa3, 0xe6,
-	0x89, 0x9b, 0xe0, 0x76, 0xb9, 0xb7, 0x24, 0x47, 0x49, 0xb7, 0xb8, 0xd7, 0x94, 0x6e, 0xdd, 0xd8,
-	0xa2, 0x34, 0xe7, 0x7c, 0x04, 0x80, 0xe2, 0xd5, 0xf1, 0x7c, 0x3e, 0xe7, 0xac, 0x12, 0x43, 0xf8,
-	0x37, 0xec, 0xd5, 0xf2, 0x84, 0x60, 0x8b, 0xaa, 0x19, 0x44, 0xf1, 0x7d, 0x54, 0xf4, 0x31, 0xa8,
-	0x1e, 0xb5, 0x23, 0x9e, 0xd1, 0xff, 0x5d, 0x9b, 0x4b, 0xb8, 0x28, 0x4c, 0xc2, 0x23, 0xfe, 0x6d,
-	0x29, 0xc9, 0x3b, 0x94, 0x27, 0xa7, 0x53, 0xe9, 0xa9, 0xee, 0xb1, 0xc2, 0x7e, 0x0b, 0xcb, 0x10,
-	0x6a, 0xa6, 0xc1, 0x36, 0xa1, 0xa6, 0xc3, 0x5b, 0x46, 0x47, 0x7a, 0xe2, 0x40, 0xef, 0xac, 0xf5,
-	0x4b, 0x9a, 0xe7, 0x2b, 0x56, 0x2e, 0x5f, 0x5f, 0x0c, 0x29, 0xed, 0xee, 0xf2, 0x15, 0xd3, 0x11,
-	0x26, 0x20, 0x64, 0x29, 0x56, 0xa9, 0x9d, 0xc5, 0x16, 0x3f, 0x17, 0x3e, 0xa2, 0xcc, 0x94, 0xcd,
-	0xae, 0xb0, 0xc9, 0xd8, 0x02, 0x6c, 0xaf, 0x80, 0x08, 0x83, 0xb0, 0x59, 0xc3, 0x84, 0x7a, 0xc5,
-	0xcf, 0x56, 0x6c, 0x87, 0xc5, 0xbd, 0x0b, 0x0a, 0xff, 0x2b, 0xc4, 0x60, 0xb8, 0xec, 0xb7, 0x7f,
-	0x92, 0xfd, 0x94, 0xfb, 0x61, 0x6f, 0x39, 0x36, 0x1a, 0xc1, 0x3c, 0xa9, 0xc8, 0x74, 0x12, 0x5f,
-	0x45, 0x60, 0x2f, 0xef, 0xf7, 0x5e, 0x50, 0xca, 0xb5, 0xb2, 0xf3, 0xe2, 0x7b, 0xc3, 0xb9, 0xba,
-	0xf7, 0x86, 0x5a, 0x9c, 0xbf, 0xf4, 0xd6, 0xa0, 0xc2, 0x4e, 0xcd, 0x36, 0x4d, 0xb4, 0x69, 0x13,
-	0x44, 0x6d, 0xe2, 0xdd, 0x15, 0x92, 0x41, 0x5a, 0x57, 0x49, 0x06, 0x59, 0xc6, 0x36, 0xaf, 0xd1,
-	0xab, 0x64, 0xd5, 0x61, 0x5a, 0xd8, 0xe8, 0xca, 0x50, 0x03, 0x28, 0xdc, 0xa8, 0x54, 0x47, 0x39,
-	0x74, 0xaf, 0x74, 0x57, 0xf0, 0x2a, 0xc9, 0x8b, 0x4c, 0xed, 0x65, 0xa1, 0x0c, 0x1c, 0xe8, 0x81,
-	0x2d, 0x6f, 0xf4, 0x65, 0xc1, 0xf3, 0xa4, 0xb6, 0xff, 0x2d, 0xc3, 0x28, 0x3f, 0x43, 0xa4, 0x5a,
-	0xfd, 0x62, 0x2b, 0xcf, 0xc8, 0xd0, 0x0b, 0x0e, 0x89, 0xd2, 0xc3, 0x16, 0xfa, 0xd5, 0xe0, 0x02,
-	0x14, 0xbd, 0xf8, 0xdc, 0x26, 0xac, 0x90, 0x2c, 0xad, 0xa8, 0xe6, 0x4c, 0xc4, 0x34, 0xcb, 0xbb,
-	0x47, 0x79, 0xfd, 0xee, 0x82, 0xd2, 0xef, 0x1a, 0xfe, 0xaf, 0x6c, 0x77, 0xcd, 0x44, 0xd6, 0x92,
-	0x1e, 0xfb, 0x06, 0x3c, 0xa7, 0x8d, 0x6c, 0xc0, 0x8e, 0x72, 0xdc, 0x5f, 0x5b, 0x27, 0x81, 0x1e,
-	0x22, 0x13, 0xfd, 0xb3, 0xf5, 0x45, 0xbf, 0xf6, 0x5c, 0x46, 0xeb, 0xaa, 0x7c, 0x3f, 0xec, 0xf6,
-	0x54, 0xde, 0xc3, 0xe3, 0x32, 0x9f, 0xf8, 0x02, 0xc0, 0xa3, 0x15, 0x69, 0x0f, 0x1c, 0xd5, 0xd5,
-	0xaa, 0x37, 0x55, 0x49, 0x4f, 0x04, 0x63, 0x5e, 0xa9, 0xbe, 0xe7, 0xc9, 0x79, 0xd9, 0x09, 0x26,
-	0xe5, 0xc3, 0x41, 0x29, 0x77, 0x43, 0x1e, 0xad, 0xe8, 0x78, 0xfa, 0xbb, 0x30, 0x3c, 0x5a, 0x79,
-	0x26, 0xcc, 0x7b, 0x2f, 0x2f, 0xb7, 0x28, 0x04, 0x13, 0xb6, 0xf0, 0x3f, 0xc2, 0xd8, 0xa1, 0x5e,
-	0x17, 0xb1, 0xd1, 0xa0, 0x59, 0xc5, 0xc2, 0xc7, 0x38, 0x31, 0xf0, 0xde, 0x4f, 0xbf, 0x7e, 0xd9,
-	0x14, 0x4d, 0x74, 0xa4, 0xb0, 0xae, 0x39, 0x29, 0xfe, 0xda, 0x9b, 0x01, 0x93, 0xc2, 0x63, 0x00,
-	0xfb, 0xea, 0x75, 0x3e, 0xe1, 0x1f, 0x07, 0x3a, 0x5b, 0xe3, 0xfe, 0x18, 0x1b, 0x90, 0xdc, 0x87,
-	0x98, 0x54, 0x7e, 0x88, 0x49, 0x0b, 0xec, 0x21, 0x96, 0x58, 0xe4, 0xbb, 0xca, 0x89, 0xf3, 0xee,
-	0xae, 0xbe, 0x96, 0xe7, 0xa4, 0x76, 0x02, 0x1d, 0x55, 0xaa, 0xfd, 0xde, 0x4d, 0xa1, 0xf2, 0x86,
-	0x8c, 0xe7, 0xa7, 0x00, 0x0e, 0xac, 0x5a, 0xa8, 0x1e, 0xd3, 0x43, 0xf6, 0xe0, 0x86, 0x24, 0x4f,
-	0x73, 0x92, 0xa9, 0xc9, 0xe4, 0x8b, 0x49, 0xfa, 0x48, 0xa5, 0x1f, 0x85, 0x61, 0xbf, 0x57, 0x1a,
-	0x81, 0x0c, 0x6e, 0x95, 0x33, 0x38, 0x72, 0x08, 0x9d, 0x8f, 0x1d, 0xa2, 0xde, 0x7c, 0xd9, 0xcb,
-	0x68, 0xa6, 0x2f, 0x7b, 0x9f, 0x03, 0x18, 0x0d, 0x16, 0xb7, 0x70, 0xb2, 0x61, 0xe6, 0x02, 0x3b,
-	0x37, 0x0a, 0xc8, 0x39, 0xbe, 0xdb, 0x99, 0xc4, 0x29, 0x77, 0x37, 0xaf, 0xb2, 0x9d, 0xd4, 0x8e,
-	0xef, 0xb0, 0x48, 0xd5, 0x71, 0x20, 0x53, 0xef, 0x42, 0xc1, 0x97, 0xa8, 0x32, 0xa9, 0x43, 0x78,
-	0xd9, 0x90, 0x4f, 0x92, 0xf3, 0x39, 0x39, 0x39, 0xd6, 0x98, 0x8f, 0x8f, 0x83, 0xfc, 0xd6, 0xcf,
-	0xbf, 0xc4, 0x43, 0x7b, 0xfb, 0x71, 0xf0, 0xf5, 0x7e, 0x1c, 0xfc, 0xb6, 0x1f, 0x0f, 0xfd, 0xbe,
-	0x1f, 0x07, 0x9f, 0x3d, 0x8b, 0x87, 0xbe, 0x7d, 0x16, 0x07, 0x37, 0x53, 0x2f, 0x21, 0x52, 0xd4,
-	0xca, 0x6d, 0x6e, 0xb6, 0x72, 0x36, 0xd3, 0x7f, 0x06, 0x00, 0x00, 0xff, 0xff, 0x28, 0xda, 0x66,
-	0x8c, 0x3a, 0x11, 0x00, 0x00,
-}
-
-func (this *ClaimEndDeviceRequest) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ClaimEndDeviceRequest)
-	if !ok {
-		that2, ok := that.(ClaimEndDeviceRequest)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if that1.SourceDevice == nil {
-		if this.SourceDevice != nil {
-			return false
-		}
-	} else if this.SourceDevice == nil {
-		return false
-	} else if !this.SourceDevice.Equal(that1.SourceDevice) {
-		return false
-	}
-	if !this.TargetApplicationIds.Equal(&that1.TargetApplicationIds) {
-		return false
-	}
-	if this.TargetDeviceId != that1.TargetDeviceId {
-		return false
-	}
-	if this.TargetNetworkServerAddress != that1.TargetNetworkServerAddress {
-		return false
-	}
-	if this.TargetNetworkServerKekLabel != that1.TargetNetworkServerKekLabel {
-		return false
-	}
-	if this.TargetApplicationServerAddress != that1.TargetApplicationServerAddress {
-		return false
-	}
-	if this.TargetApplicationServerKekLabel != that1.TargetApplicationServerKekLabel {
-		return false
-	}
-	if this.TargetApplicationServerId != that1.TargetApplicationServerId {
-		return false
-	}
-	if that1.TargetNetId == nil {
-		if this.TargetNetId != nil {
-			return false
-		}
-	} else if !this.TargetNetId.Equal(*that1.TargetNetId) {
-		return false
-	}
-	if this.InvalidateAuthenticationCode != that1.InvalidateAuthenticationCode {
-		return false
-	}
-	return true
-}
-func (this *ClaimEndDeviceRequest_AuthenticatedIdentifiers_) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ClaimEndDeviceRequest_AuthenticatedIdentifiers_)
-	if !ok {
-		that2, ok := that.(ClaimEndDeviceRequest_AuthenticatedIdentifiers_)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.AuthenticatedIdentifiers.Equal(that1.AuthenticatedIdentifiers) {
-		return false
-	}
-	return true
-}
-func (this *ClaimEndDeviceRequest_QrCode) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ClaimEndDeviceRequest_QrCode)
-	if !ok {
-		that2, ok := that.(ClaimEndDeviceRequest_QrCode)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !bytes.Equal(this.QrCode, that1.QrCode) {
-		return false
-	}
-	return true
-}
-func (this *ClaimEndDeviceRequest_AuthenticatedIdentifiers) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ClaimEndDeviceRequest_AuthenticatedIdentifiers)
-	if !ok {
-		that2, ok := that.(ClaimEndDeviceRequest_AuthenticatedIdentifiers)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.JoinEui.Equal(that1.JoinEui) {
-		return false
-	}
-	if !this.DevEui.Equal(that1.DevEui) {
-		return false
-	}
-	if this.AuthenticationCode != that1.AuthenticationCode {
-		return false
-	}
-	return true
-}
-func (this *AuthorizeApplicationRequest) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*AuthorizeApplicationRequest)
-	if !ok {
-		that2, ok := that.(AuthorizeApplicationRequest)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.ApplicationIdentifiers.Equal(&that1.ApplicationIdentifiers) {
-		return false
-	}
-	if this.ApiKey != that1.ApiKey {
-		return false
-	}
-	return true
-}
-func (this *CUPSRedirection) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*CUPSRedirection)
-	if !ok {
-		that2, ok := that.(CUPSRedirection)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.TargetCupsUri != that1.TargetCupsUri {
-		return false
-	}
-	if this.CurrentGatewayKey != that1.CurrentGatewayKey {
-		return false
-	}
-	if !bytes.Equal(this.TargetCupsTrust, that1.TargetCupsTrust) {
-		return false
-	}
-	if that1.GatewayCredentials == nil {
-		if this.GatewayCredentials != nil {
-			return false
-		}
-	} else if this.GatewayCredentials == nil {
-		return false
-	} else if !this.GatewayCredentials.Equal(that1.GatewayCredentials) {
-		return false
-	}
-	return true
-}
-func (this *CUPSRedirection_ClientTls) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*CUPSRedirection_ClientTls)
-	if !ok {
-		that2, ok := that.(CUPSRedirection_ClientTls)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.ClientTls.Equal(that1.ClientTls) {
-		return false
-	}
-	return true
-}
-func (this *CUPSRedirection_AuthToken) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*CUPSRedirection_AuthToken)
-	if !ok {
-		that2, ok := that.(CUPSRedirection_AuthToken)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.AuthToken != that1.AuthToken {
-		return false
-	}
-	return true
-}
-func (this *CUPSRedirection_ClientTLS) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*CUPSRedirection_ClientTLS)
-	if !ok {
-		that2, ok := that.(CUPSRedirection_ClientTLS)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !bytes.Equal(this.Cert, that1.Cert) {
-		return false
-	}
-	if !bytes.Equal(this.Key, that1.Key) {
-		return false
-	}
-	return true
-}
-func (this *ClaimGatewayRequest) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ClaimGatewayRequest)
-	if !ok {
-		that2, ok := that.(ClaimGatewayRequest)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if that1.SourceGateway == nil {
-		if this.SourceGateway != nil {
-			return false
-		}
-	} else if this.SourceGateway == nil {
-		return false
-	} else if !this.SourceGateway.Equal(that1.SourceGateway) {
-		return false
-	}
-	if !this.Collaborator.Equal(&that1.Collaborator) {
-		return false
-	}
-	if this.TargetGatewayId != that1.TargetGatewayId {
-		return false
-	}
-	if this.TargetGatewayServerAddress != that1.TargetGatewayServerAddress {
-		return false
-	}
-	if !this.CupsRedirection.Equal(that1.CupsRedirection) {
-		return false
-	}
-	if this.TargetFrequencyPlanId != that1.TargetFrequencyPlanId {
-		return false
-	}
-	return true
-}
-func (this *ClaimGatewayRequest_AuthenticatedIdentifiers_) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ClaimGatewayRequest_AuthenticatedIdentifiers_)
-	if !ok {
-		that2, ok := that.(ClaimGatewayRequest_AuthenticatedIdentifiers_)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.AuthenticatedIdentifiers.Equal(that1.AuthenticatedIdentifiers) {
-		return false
-	}
-	return true
-}
-func (this *ClaimGatewayRequest_QrCode) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ClaimGatewayRequest_QrCode)
-	if !ok {
-		that2, ok := that.(ClaimGatewayRequest_QrCode)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !bytes.Equal(this.QrCode, that1.QrCode) {
-		return false
-	}
-	return true
-}
-func (this *ClaimGatewayRequest_AuthenticatedIdentifiers) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ClaimGatewayRequest_AuthenticatedIdentifiers)
-	if !ok {
-		that2, ok := that.(ClaimGatewayRequest_AuthenticatedIdentifiers)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.GatewayEui.Equal(that1.GatewayEui) {
-		return false
-	}
-	if !bytes.Equal(this.AuthenticationCode, that1.AuthenticationCode) {
-		return false
-	}
-	return true
-}
-func (this *AuthorizeGatewayRequest) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*AuthorizeGatewayRequest)
-	if !ok {
-		that2, ok := that.(AuthorizeGatewayRequest)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.GatewayIdentifiers.Equal(&that1.GatewayIdentifiers) {
-		return false
-	}
-	if this.ApiKey != that1.ApiKey {
-		return false
-	}
-	return true
+	// 1986 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xdc, 0x58, 0xdd, 0x4f, 0x1b, 0xd9,
+	0x15, 0xcf, 0xb5, 0x01, 0x9b, 0x0b, 0x18, 0xef, 0x10, 0x60, 0xe2, 0xd0, 0x84, 0x4c, 0xc8, 0x06,
+	0x48, 0x3c, 0x26, 0x46, 0x74, 0x77, 0xe9, 0xb6, 0xc4, 0x03, 0x34, 0x40, 0xf6, 0x4b, 0x03, 0x44,
+	0x6d, 0xd8, 0x60, 0x5d, 0x66, 0x2e, 0xf6, 0x2c, 0x66, 0x66, 0x72, 0xef, 0xb5, 0x53, 0x43, 0x50,
+	0x51, 0xda, 0xaa, 0xdb, 0x3c, 0xb4, 0xea, 0x56, 0xaa, 0xd4, 0x95, 0xfa, 0x52, 0xa9, 0x52, 0xb5,
+	0x0f, 0x7d, 0xea, 0x1f, 0xd0, 0xf7, 0x4a, 0x6d, 0xd5, 0x95, 0xfa, 0xd0, 0xd7, 0xee, 0x53, 0xd5,
+	0x3f, 0x60, 0xc5, 0x53, 0x75, 0xef, 0xcc, 0xd8, 0xe3, 0xaf, 0xe2, 0xdd, 0xaa, 0x52, 0xb2, 0x6f,
+	0x77, 0x7c, 0xcf, 0x3d, 0xf7, 0x77, 0x3e, 0xee, 0x39, 0xbf, 0x63, 0x78, 0xbb, 0xe4, 0x10, 0xf4,
+	0x04, 0xd9, 0x69, 0xca, 0x90, 0x71, 0x90, 0x41, 0xae, 0x95, 0x31, 0x71, 0xc5, 0x32, 0xb0, 0x51,
+	0x42, 0xd6, 0xa1, 0x65, 0x17, 0x28, 0x26, 0x15, 0x4c, 0x54, 0x97, 0x38, 0xcc, 0x91, 0x12, 0x8c,
+	0xd9, 0xaa, 0x7f, 0x42, 0xad, 0xcc, 0xa7, 0x72, 0x05, 0x8b, 0x15, 0xcb, 0x7b, 0xaa, 0xe1, 0x1c,
+	0x66, 0xb0, 0x5d, 0x71, 0xaa, 0x2e, 0x71, 0xbe, 0x57, 0xcd, 0x08, 0x61, 0x23, 0x5d, 0xc0, 0x76,
+	0xba, 0x82, 0x4a, 0x96, 0x89, 0x18, 0xce, 0xb4, 0x2c, 0x3c, 0x95, 0xa9, 0x74, 0x48, 0x45, 0xc1,
+	0x29, 0x38, 0xde, 0xe1, 0xbd, 0xf2, 0xbe, 0xf8, 0x12, 0x1f, 0x62, 0xe5, 0x8b, 0x4f, 0x14, 0x1c,
+	0xa7, 0x50, 0xc2, 0x02, 0x28, 0xb2, 0x6d, 0x87, 0x21, 0x66, 0x39, 0x36, 0x6d, 0xda, 0xad, 0xe9,
+	0xa0, 0x8c, 0x94, 0x0d, 0xe6, 0xef, 0x5e, 0x6e, 0xde, 0xc5, 0x87, 0x2e, 0xab, 0xfa, 0x9b, 0xd7,
+	0x5b, 0x1d, 0x61, 0x99, 0xd8, 0x66, 0xd6, 0xbe, 0x85, 0x49, 0xa0, 0x7f, 0x39, 0x04, 0x76, 0xab,
+	0x88, 0xb7, 0x8a, 0xdc, 0x41, 0xeb, 0xb6, 0x59, 0xa6, 0x8c, 0x58, 0x98, 0x86, 0x0d, 0x2f, 0x38,
+	0xe9, 0x0f, 0xa8, 0x63, 0xb7, 0x01, 0xa9, 0x86, 0xa4, 0x1c, 0x17, 0xdb, 0xc8, 0xb5, 0x2a, 0xd9,
+	0x8c, 0xe3, 0x0a, 0x99, 0x56, 0x79, 0xe5, 0xb3, 0x04, 0x1c, 0x5d, 0xe6, 0xd1, 0x58, 0xb5, 0xcd,
+	0x15, 0x11, 0x1b, 0x1d, 0x3f, 0x2e, 0x63, 0xca, 0xa4, 0x13, 0x78, 0x09, 0x95, 0x59, 0x91, 0xa3,
+	0x34, 0x10, 0xc3, 0x66, 0x3e, 0x84, 0x58, 0x06, 0x93, 0x60, 0x7a, 0x20, 0xfb, 0x2d, 0xb5, 0x31,
+	0x64, 0x6a, 0x5b, 0x4d, 0x6a, 0x2e, 0xac, 0x66, 0xbd, 0xae, 0x65, 0xed, 0x82, 0x2e, 0xa3, 0x0e,
+	0x7b, 0xd2, 0x0d, 0x18, 0x7b, 0x4c, 0xf2, 0x86, 0x63, 0x62, 0x39, 0x32, 0x09, 0xa6, 0x07, 0x35,
+	0x78, 0xa6, 0xc5, 0x8e, 0x7a, 0x93, 0x17, 0xe4, 0xd3, 0xf8, 0xda, 0x05, 0xbd, 0xef, 0x31, 0x59,
+	0x76, 0x4c, 0x2c, 0xed, 0xc3, 0x31, 0x86, 0x48, 0x01, 0xb3, 0x3c, 0x72, 0xdd, 0x12, 0x57, 0x63,
+	0x39, 0x76, 0xde, 0x32, 0xa9, 0x1c, 0x15, 0x10, 0x5f, 0x6d, 0x86, 0x98, 0xab, 0x8b, 0x85, 0xae,
+	0xd3, 0xe2, 0x67, 0x5a, 0xef, 0x73, 0x10, 0x49, 0x02, 0xfd, 0xa2, 0xa7, 0xaf, 0x41, 0x8e, 0x4a,
+	0x5b, 0x30, 0xe9, 0xdf, 0xe3, 0x65, 0x70, 0xde, 0x32, 0xe5, 0x9e, 0x49, 0x30, 0xdd, 0xaf, 0xcd,
+	0x9e, 0x69, 0x37, 0xc9, 0x0d, 0x79, 0x2a, 0x7b, 0x6d, 0x77, 0x07, 0xa5, 0x8f, 0xe6, 0xd2, 0x6f,
+	0x3c, 0x9a, 0x5e, 0x5a, 0xdc, 0x49, 0x3f, 0x5a, 0x0a, 0x3e, 0x67, 0x8e, 0xb3, 0xb7, 0x4f, 0xa6,
+	0x9e, 0xee, 0x4e, 0xe9, 0x09, 0x4f, 0x87, 0xe7, 0x9e, 0x75, 0x53, 0xfa, 0x1b, 0x80, 0x5f, 0xf3,
+	0xd5, 0xda, 0x98, 0x3d, 0x71, 0xc8, 0x41, 0xde, 0x7b, 0x12, 0x79, 0x64, 0x9a, 0x04, 0x53, 0x2a,
+	0xc7, 0xc4, 0x1d, 0x3f, 0x05, 0x67, 0xda, 0x73, 0x40, 0x7e, 0x0c, 0xb2, 0x3f, 0x04, 0xbb, 0xd3,
+	0x4b, 0x8b, 0xfc, 0x02, 0x94, 0x3e, 0xca, 0xa5, 0x1f, 0x72, 0xfd, 0x4f, 0x43, 0xeb, 0xfa, 0xf2,
+	0xfd, 0xf4, 0xa3, 0xd9, 0xd0, 0xc6, 0xcc, 0xfb, 0xea, 0xcc, 0x2c, 0x3f, 0x97, 0x4b, 0x3f, 0xf4,
+	0x71, 0x3d, 0x0d, 0xad, 0xeb, 0x4b, 0x71, 0xae, 0xbe, 0x31, 0x33, 0xbd, 0xb4, 0xb8, 0xb8, 0xc3,
+	0x57, 0xc7, 0x77, 0x6e, 0x2f, 0x9c, 0xcc, 0x2c, 0x09, 0x43, 0x52, 0x1e, 0xea, 0x77, 0x3c, 0xd0,
+	0x9b, 0x02, 0x73, 0xce, 0x83, 0x2c, 0xbd, 0x03, 0xaf, 0xb6, 0xb7, 0xe9, 0x00, 0x1f, 0xe4, 0x4b,
+	0x68, 0x0f, 0x97, 0xe4, 0xb8, 0xb0, 0x8a, 0xfb, 0x9c, 0x44, 0xe5, 0xd3, 0xa4, 0x7e, 0xb9, 0x8d,
+	0xba, 0xfb, 0xf8, 0xe0, 0x2d, 0x2e, 0x2c, 0xfd, 0x03, 0xc0, 0x6b, 0x6d, 0x62, 0xdc, 0xe4, 0xa8,
+	0xfe, 0x17, 0xd3, 0x51, 0x57, 0x5a, 0xb2, 0xa9, 0xd1, 0x59, 0x0f, 0xe0, 0xf5, 0xce, 0xb6, 0xd5,
+	0x1d, 0x06, 0x9b, 0x1c, 0x76, 0xb5, 0x83, 0xda, 0x9a, 0xd3, 0xd6, 0xe0, 0x44, 0x67, 0xbd, 0x96,
+	0x29, 0x0f, 0x08, 0x85, 0xb1, 0x33, 0xad, 0x87, 0x44, 0x64, 0x53, 0xbf, 0xd4, 0x41, 0xdf, 0xba,
+	0x29, 0xfd, 0x05, 0xc0, 0xa1, 0x7a, 0x3c, 0xf9, 0xd9, 0x21, 0xf1, 0x1e, 0x3f, 0x01, 0x1f, 0xe5,
+	0xc6, 0x37, 0xe2, 0xca, 0xdc, 0xdc, 0xdc, 0xdc, 0x9d, 0x79, 0xe5, 0xe3, 0x08, 0x88, 0xfd, 0x26,
+	0xd2, 0xc7, 0x6b, 0x95, 0x5d, 0x38, 0xd3, 0xfa, 0x8e, 0x7a, 0x8a, 0x51, 0x17, 0xfc, 0xeb, 0x93,
+	0x4b, 0xcf, 0x00, 0x5c, 0x2a, 0x38, 0x2a, 0x2b, 0x62, 0x26, 0x2a, 0x9a, 0xea, 0x67, 0x45, 0xa6,
+	0xb1, 0x26, 0x56, 0xe6, 0x33, 0xee, 0x41, 0x21, 0xc3, 0xaa, 0x2e, 0xa6, 0xea, 0xdb, 0x88, 0xd0,
+	0x22, 0x2a, 0xad, 0xad, 0x7e, 0x47, 0xab, 0x32, 0x4c, 0xa5, 0x2f, 0xac, 0x60, 0xdb, 0x3e, 0xf4,
+	0x54, 0xcc, 0x0b, 0x05, 0xfa, 0x40, 0x2d, 0xc1, 0xd6, 0x4d, 0x69, 0x05, 0x5e, 0xb1, 0xec, 0xa0,
+	0x53, 0xe4, 0x43, 0x15, 0x88, 0xbb, 0x48, 0x54, 0x9c, 0xde, 0x49, 0x30, 0x1d, 0xd7, 0x27, 0xea,
+	0x52, 0xb9, 0x06, 0x21, 0x5e, 0x79, 0x52, 0x1f, 0xf6, 0x40, 0xb9, 0x53, 0x65, 0x93, 0xfe, 0x0a,
+	0x60, 0xfc, 0x03, 0xc7, 0xb2, 0xf3, 0xb8, 0x6c, 0x89, 0x62, 0x39, 0xa8, 0xfd, 0x01, 0x7c, 0x94,
+	0xbb, 0xb6, 0x21, 0x29, 0xaf, 0xcd, 0x69, 0xf3, 0x2b, 0x0b, 0xaf, 0xad, 0xae, 0xcc, 0xcd, 0xcd,
+	0xe5, 0xb4, 0xe5, 0x95, 0x76, 0x9e, 0x8b, 0xbf, 0x00, 0x9e, 0x7b, 0xdd, 0xf3, 0x5c, 0x8c, 0x9b,
+	0xb1, 0x5a, 0xb6, 0xa4, 0x3f, 0x03, 0x18, 0x33, 0x71, 0x45, 0x58, 0x14, 0x79, 0x99, 0x2d, 0xea,
+	0x33, 0x71, 0x85, 0x1b, 0xb4, 0x06, 0x47, 0xda, 0xc5, 0x3e, 0x2a, 0x5e, 0xc6, 0xf8, 0x99, 0x76,
+	0x91, 0x48, 0xd9, 0xe4, 0xee, 0x8e, 0x5f, 0x16, 0x8e, 0xef, 0xdc, 0x9e, 0xcf, 0x9e, 0x4c, 0xe9,
+	0x12, 0x6a, 0x49, 0x05, 0xed, 0x22, 0x1c, 0xa2, 0x4e, 0x99, 0x18, 0xd8, 0x6f, 0x0e, 0x52, 0xf4,
+	0x73, 0x0d, 0x6c, 0xf4, 0xc4, 0xfb, 0x92, 0xb1, 0x8d, 0x9e, 0xf8, 0x60, 0x72, 0x48, 0xf9, 0x35,
+	0x80, 0x97, 0x79, 0xb2, 0x38, 0xc4, 0x3a, 0xc2, 0xa1, 0x57, 0x16, 0x34, 0xdb, 0xef, 0xc2, 0xe1,
+	0xe6, 0xfe, 0x05, 0xbe, 0x64, 0xff, 0x4a, 0xa0, 0xc6, 0xce, 0x75, 0x1d, 0xc6, 0x90, 0x6b, 0xe5,
+	0x0f, 0x70, 0x55, 0x84, 0xad, 0x5f, 0x34, 0x52, 0xd2, 0x9b, 0x04, 0xf2, 0x29, 0xd0, 0xfb, 0x90,
+	0x6b, 0xdd, 0xc7, 0x55, 0xe5, 0xdf, 0x00, 0x8e, 0xdf, 0xc3, 0x6c, 0xdd, 0xde, 0x77, 0xb4, 0xea,
+	0x06, 0x8f, 0xf8, 0xf6, 0x7a, 0x80, 0xed, 0xab, 0x97, 0xcb, 0xca, 0xc7, 0x11, 0x28, 0xb7, 0x9a,
+	0x4b, 0x5d, 0xc7, 0xa6, 0xf8, 0xab, 0xf8, 0x76, 0x6f, 0xc1, 0x57, 0x68, 0xd9, 0x75, 0x1d, 0xc2,
+	0x68, 0x3e, 0xe0, 0xde, 0x22, 0x1b, 0xe2, 0x7a, 0x32, 0xd8, 0x58, 0xf6, 0x7f, 0x57, 0x3e, 0xef,
+	0x85, 0x63, 0xf7, 0x30, 0x13, 0xdf, 0x9b, 0x0c, 0xb1, 0x32, 0xad, 0xb9, 0x66, 0x0b, 0x26, 0xb0,
+	0x6d, 0xd6, 0x29, 0x50, 0x90, 0xa5, 0x53, 0xcd, 0x59, 0x5a, 0xe3, 0x80, 0xed, 0x73, 0x74, 0x10,
+	0xd7, 0xf7, 0xa9, 0xf4, 0x27, 0x00, 0x07, 0x8a, 0xce, 0x21, 0x0e, 0xfa, 0x4b, 0xe4, 0xe5, 0xeb,
+	0x2f, 0xfd, 0x1c, 0xbf, 0xd7, 0x5d, 0x3e, 0x05, 0x10, 0x7a, 0xd6, 0x50, 0x6e, 0x4c, 0xf4, 0x65,
+	0x4e, 0xa0, 0xb8, 0x30, 0x8b, 0xae, 0x9b, 0xd2, 0x2e, 0x1c, 0xae, 0x60, 0xdb, 0x74, 0x48, 0x9e,
+	0xba, 0xd8, 0xb0, 0xf6, 0x2d, 0x43, 0xd0, 0xdf, 0x81, 0xec, 0x42, 0x73, 0xe8, 0xdb, 0xa7, 0x8e,
+	0xfa, 0x40, 0x9c, 0xde, 0xf4, 0x0f, 0xeb, 0x89, 0x4a, 0xc3, 0x77, 0xea, 0x07, 0x00, 0x26, 0x1a,
+	0x45, 0x78, 0x9b, 0x76, 0x48, 0x01, 0xd9, 0xd6, 0x91, 0x57, 0x14, 0xcb, 0xb6, 0xf5, 0xb8, 0x8c,
+	0x43, 0x63, 0x88, 0x48, 0xbe, 0x21, 0x7d, 0x22, 0x2c, 0xb5, 0x2d, 0x84, 0xea, 0x59, 0x27, 0xdd,
+	0x82, 0x3d, 0x26, 0x62, 0x48, 0x24, 0xd5, 0x40, 0x76, 0x5c, 0xf5, 0xc6, 0x34, 0x35, 0x18, 0xd3,
+	0xd4, 0x4d, 0x31, 0xc4, 0xe9, 0x42, 0x48, 0xf9, 0x49, 0x14, 0x0e, 0x2f, 0x6f, 0xbf, 0xb7, 0xa9,
+	0x63, 0xd3, 0x22, 0xd8, 0xe0, 0x0a, 0xa5, 0x6f, 0xc0, 0x61, 0x9f, 0xfe, 0x18, 0x65, 0x97, 0xe6,
+	0xcb, 0xc4, 0x2b, 0x0a, 0xfd, 0xda, 0xc8, 0x99, 0x96, 0x24, 0x09, 0xf9, 0x34, 0x92, 0xed, 0xdb,
+	0x2d, 0x32, 0xe6, 0xd2, 0x0f, 0x01, 0xd0, 0x7d, 0xaa, 0xb4, 0x5c, 0x76, 0xe9, 0x36, 0xb1, 0xa4,
+	0xd7, 0xe1, 0x88, 0x51, 0x26, 0x04, 0xdb, 0x2c, 0x5f, 0x40, 0x0c, 0x3f, 0x41, 0xd5, 0x50, 0x21,
+	0xae, 0xd3, 0xb9, 0x57, 0x7c, 0xa1, 0x7b, 0x9e, 0xcc, 0x7d, 0x5c, 0x95, 0x66, 0xe1, 0x2b, 0xe1,
+	0x6b, 0x19, 0x29, 0x53, 0xe6, 0x25, 0x93, 0x3e, 0x5c, 0xbf, 0x63, 0x8b, 0xff, 0x2c, 0x6d, 0x40,
+	0x68, 0x94, 0x2c, 0x7e, 0x09, 0x2b, 0x51, 0x3f, 0x2e, 0x33, 0x2d, 0xb3, 0x59, 0xa3, 0x5d, 0xea,
+	0xb2, 0x38, 0xb1, 0xf5, 0xd6, 0xe6, 0xda, 0x05, 0xbd, 0xdf, 0x3b, 0xbe, 0x55, 0xa2, 0xd2, 0x0c,
+	0x84, 0xbc, 0xc3, 0xe5, 0x99, 0x73, 0x80, 0x6d, 0x41, 0x84, 0x42, 0x40, 0xb9, 0x28, 0xdf, 0xdd,
+	0xe2, 0x9b, 0xa9, 0x55, 0xd8, 0x5f, 0x53, 0x22, 0x4d, 0xc0, 0x1e, 0x03, 0x13, 0xe6, 0x17, 0x4c,
+	0x7e, 0xe2, 0x28, 0x2a, 0x9f, 0xde, 0xd5, 0xc5, 0xaf, 0x52, 0x0a, 0x46, 0x03, 0xbb, 0xc3, 0x9b,
+	0xfc, 0x47, 0x6d, 0x14, 0x8e, 0x04, 0xbe, 0x31, 0x08, 0x16, 0x91, 0x43, 0x25, 0xaa, 0xfc, 0x2a,
+	0x0e, 0x47, 0x44, 0x22, 0xf9, 0x4e, 0x09, 0xda, 0xd1, 0xf1, 0xf9, 0x73, 0xe9, 0x9b, 0x6d, 0xe7,
+	0xd2, 0x46, 0x3d, 0xff, 0xd7, 0xa9, 0x74, 0x07, 0x0e, 0x1a, 0x4e, 0xa9, 0x84, 0xf6, 0x1c, 0x82,
+	0x98, 0x43, 0xfc, 0x59, 0x34, 0xdd, 0x0c, 0xeb, 0xdd, 0x50, 0xe2, 0xbe, 0x4b, 0xb6, 0x29, 0xe7,
+	0xdb, 0x6d, 0xcb, 0x65, 0x58, 0x99, 0xf4, 0xa0, 0x96, 0x19, 0x81, 0xdb, 0xbe, 0xd4, 0x2c, 0xea,
+	0x67, 0x91, 0xef, 0x95, 0xc6, 0x61, 0x34, 0x50, 0xdc, 0x34, 0x63, 0xf5, 0xbe, 0xd0, 0xc3, 0xa8,
+	0x6f, 0x49, 0xe3, 0x7c, 0xb5, 0x01, 0x93, 0xe2, 0xfd, 0x90, 0x7a, 0xe6, 0xcb, 0x7d, 0x22, 0x1a,
+	0x57, 0xcf, 0x79, 0x20, 0xfa, 0x30, 0x3f, 0x18, 0xae, 0x04, 0x77, 0xa1, 0xec, 0xfb, 0x67, 0x9f,
+	0xf0, 0x24, 0xb2, 0x8d, 0x6a, 0xde, 0x2d, 0x21, 0x4e, 0xd7, 0xfc, 0x39, 0xdd, 0x9f, 0xa7, 0xee,
+	0xea, 0xa3, 0x9e, 0xe0, 0xb7, 0x03, 0xb9, 0xf7, 0x4a, 0xc8, 0x5e, 0x37, 0x53, 0xbf, 0x8f, 0xfc,
+	0x97, 0x99, 0xe1, 0xef, 0x00, 0x0e, 0x04, 0x8e, 0x7f, 0xe9, 0xa9, 0x07, 0xf4, 0x2d, 0xe1, 0xec,
+	0xe3, 0x8d, 0xf6, 0x44, 0xbb, 0xb1, 0x18, 0x24, 0xdb, 0x32, 0xeb, 0x51, 0x98, 0xf0, 0x99, 0xb5,
+	0xaf, 0x4f, 0x50, 0x6b, 0xe5, 0x39, 0x80, 0xe3, 0x35, 0x3a, 0xdd, 0x54, 0x1f, 0xde, 0xae, 0x7b,
+	0xb1, 0x4e, 0x50, 0x94, 0x96, 0x2e, 0x15, 0xa4, 0x7d, 0xbb, 0xf7, 0x16, 0x80, 0xe7, 0xe4, 0x64,
+	0xb2, 0x99, 0x3e, 0x7b, 0x31, 0x4e, 0xd6, 0xb8, 0x73, 0xf6, 0x47, 0x31, 0x38, 0x5e, 0xe3, 0x3b,
+	0x01, 0x8b, 0xf2, 0xb2, 0x50, 0x2a, 0xc1, 0x5e, 0xf1, 0x8b, 0x74, 0xa3, 0xab, 0xbf, 0xca, 0x52,
+	0x5d, 0x11, 0x29, 0x65, 0xec, 0xd9, 0xa7, 0x9f, 0xfd, 0x22, 0x92, 0x54, 0x06, 0x32, 0xd8, 0x34,
+	0x68, 0x46, 0x30, 0xba, 0x45, 0x30, 0x2b, 0xfd, 0x1c, 0xc0, 0xd8, 0xb6, 0x2d, 0x3e, 0xa5, 0xae,
+	0x34, 0xa5, 0xc6, 0x5a, 0xfa, 0xe1, 0xea, 0xa1, 0xcb, 0xaa, 0xca, 0x9a, 0xb8, 0x41, 0x9b, 0xbd,
+	0x1b, 0xba, 0x21, 0x73, 0xdc, 0x34, 0xa2, 0xa8, 0x8d, 0xdf, 0x27, 0xfe, 0x9f, 0xbb, 0x34, 0x73,
+	0x5c, 0x23, 0x88, 0x27, 0xd2, 0x33, 0x00, 0x93, 0xcd, 0x54, 0x5b, 0xba, 0xd9, 0x86, 0x34, 0xb4,
+	0x9b, 0x3d, 0x52, 0xd3, 0xe7, 0x0b, 0x7a, 0xfc, 0x42, 0xb9, 0x2c, 0x10, 0x8f, 0x2a, 0xc9, 0x30,
+	0x62, 0xcb, 0xde, 0x77, 0xb8, 0x63, 0x7e, 0x07, 0x60, 0xa2, 0x91, 0x97, 0x74, 0xe9, 0x9f, 0x57,
+	0xbb, 0x63, 0x37, 0x81, 0xbf, 0xa4, 0xff, 0xdd, 0x5f, 0xbf, 0x05, 0xf0, 0x62, 0xbb, 0x49, 0x51,
+	0xba, 0xd5, 0x32, 0x09, 0x76, 0x9e, 0x27, 0xcf, 0x8b, 0xab, 0xf2, 0x4d, 0x0f, 0x67, 0x08, 0x10,
+	0x3d, 0x1f, 0x2e, 0x0a, 0x2e, 0xe4, 0x2e, 0xfd, 0x19, 0x80, 0x63, 0xdb, 0x36, 0x6a, 0x87, 0xb4,
+	0xcb, 0x99, 0xb5, 0x23, 0xc8, 0x05, 0x01, 0x32, 0x33, 0x9b, 0x3e, 0x1f, 0x64, 0x08, 0x54, 0xf6,
+	0x97, 0x51, 0x38, 0xea, 0x3f, 0xeb, 0xa6, 0x57, 0x58, 0x0c, 0x5e, 0xe1, 0xf5, 0x2e, 0x88, 0x41,
+	0xaa, 0x8b, 0x5a, 0x11, 0x7a, 0x81, 0x05, 0xa3, 0xd4, 0xf8, 0x02, 0x93, 0xcd, 0x85, 0xa9, 0x35,
+	0xdb, 0x3b, 0x94, 0xae, 0x8e, 0x0e, 0x79, 0x53, 0xdc, 0xf6, 0x75, 0xe5, 0x8e, 0x77, 0x9b, 0x5f,
+	0x9d, 0x68, 0xe6, 0x38, 0x54, 0xe8, 0xd4, 0xfa, 0xba, 0x29, 0x52, 0xdf, 0x87, 0x52, 0x28, 0x50,
+	0x01, 0xa8, 0x2e, 0xac, 0xec, 0x88, 0x27, 0x2d, 0xf0, 0xdc, 0x9c, 0xbd, 0xd1, 0x19, 0x4f, 0x08,
+	0x83, 0xb6, 0xf0, 0xc7, 0x7f, 0x5e, 0x01, 0x0f, 0x33, 0x5f, 0xa0, 0xa5, 0x30, 0xdb, 0xdd, 0xdb,
+	0xeb, 0x13, 0xb7, 0xce, 0xff, 0x27, 0x00, 0x00, 0xff, 0xff, 0x12, 0x84, 0x26, 0xef, 0x46, 0x1a,
+	0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -1189,8 +1045,14 @@ const _ = grpc.SupportPackageIsVersion4
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type EndDeviceClaimingServerClient interface {
-	// Claims the end device by claim authentication code or QR code and transfers the device to the target application.
+	// Claims the end device on a Join Server by claim authentication code or QR code.
 	Claim(ctx context.Context, in *ClaimEndDeviceRequest, opts ...grpc.CallOption) (*EndDeviceIdentifiers, error)
+	// Unclaims the end device on a Join Server.
+	Unclaim(ctx context.Context, in *EndDeviceIdentifiers, opts ...grpc.CallOption) (*types.Empty, error)
+	// Return whether claiming is available for a given JoinEUI.
+	GetInfoByJoinEUI(ctx context.Context, in *GetInfoByJoinEUIRequest, opts ...grpc.CallOption) (*GetInfoByJoinEUIResponse, error)
+	// Gets the claim status of an end device.
+	GetClaimStatus(ctx context.Context, in *EndDeviceIdentifiers, opts ...grpc.CallOption) (*GetClaimStatusResponse, error)
 	// Authorize the End Device Claiming Server to claim devices registered in the given application. The application
 	// identifiers are the source application, where the devices are registered before they are claimed.
 	// The API key is used to access the application, find the device, verify the claim request and delete the end device
@@ -1218,6 +1080,33 @@ func (c *endDeviceClaimingServerClient) Claim(ctx context.Context, in *ClaimEndD
 	return out, nil
 }
 
+func (c *endDeviceClaimingServerClient) Unclaim(ctx context.Context, in *EndDeviceIdentifiers, opts ...grpc.CallOption) (*types.Empty, error) {
+	out := new(types.Empty)
+	err := c.cc.Invoke(ctx, "/ttn.lorawan.v3.EndDeviceClaimingServer/Unclaim", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *endDeviceClaimingServerClient) GetInfoByJoinEUI(ctx context.Context, in *GetInfoByJoinEUIRequest, opts ...grpc.CallOption) (*GetInfoByJoinEUIResponse, error) {
+	out := new(GetInfoByJoinEUIResponse)
+	err := c.cc.Invoke(ctx, "/ttn.lorawan.v3.EndDeviceClaimingServer/GetInfoByJoinEUI", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *endDeviceClaimingServerClient) GetClaimStatus(ctx context.Context, in *EndDeviceIdentifiers, opts ...grpc.CallOption) (*GetClaimStatusResponse, error) {
+	out := new(GetClaimStatusResponse)
+	err := c.cc.Invoke(ctx, "/ttn.lorawan.v3.EndDeviceClaimingServer/GetClaimStatus", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *endDeviceClaimingServerClient) AuthorizeApplication(ctx context.Context, in *AuthorizeApplicationRequest, opts ...grpc.CallOption) (*types.Empty, error) {
 	out := new(types.Empty)
 	err := c.cc.Invoke(ctx, "/ttn.lorawan.v3.EndDeviceClaimingServer/AuthorizeApplication", in, out, opts...)
@@ -1238,8 +1127,14 @@ func (c *endDeviceClaimingServerClient) UnauthorizeApplication(ctx context.Conte
 
 // EndDeviceClaimingServerServer is the server API for EndDeviceClaimingServer service.
 type EndDeviceClaimingServerServer interface {
-	// Claims the end device by claim authentication code or QR code and transfers the device to the target application.
+	// Claims the end device on a Join Server by claim authentication code or QR code.
 	Claim(context.Context, *ClaimEndDeviceRequest) (*EndDeviceIdentifiers, error)
+	// Unclaims the end device on a Join Server.
+	Unclaim(context.Context, *EndDeviceIdentifiers) (*types.Empty, error)
+	// Return whether claiming is available for a given JoinEUI.
+	GetInfoByJoinEUI(context.Context, *GetInfoByJoinEUIRequest) (*GetInfoByJoinEUIResponse, error)
+	// Gets the claim status of an end device.
+	GetClaimStatus(context.Context, *EndDeviceIdentifiers) (*GetClaimStatusResponse, error)
 	// Authorize the End Device Claiming Server to claim devices registered in the given application. The application
 	// identifiers are the source application, where the devices are registered before they are claimed.
 	// The API key is used to access the application, find the device, verify the claim request and delete the end device
@@ -1256,6 +1151,15 @@ type UnimplementedEndDeviceClaimingServerServer struct {
 
 func (*UnimplementedEndDeviceClaimingServerServer) Claim(ctx context.Context, req *ClaimEndDeviceRequest) (*EndDeviceIdentifiers, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Claim not implemented")
+}
+func (*UnimplementedEndDeviceClaimingServerServer) Unclaim(ctx context.Context, req *EndDeviceIdentifiers) (*types.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Unclaim not implemented")
+}
+func (*UnimplementedEndDeviceClaimingServerServer) GetInfoByJoinEUI(ctx context.Context, req *GetInfoByJoinEUIRequest) (*GetInfoByJoinEUIResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetInfoByJoinEUI not implemented")
+}
+func (*UnimplementedEndDeviceClaimingServerServer) GetClaimStatus(ctx context.Context, req *EndDeviceIdentifiers) (*GetClaimStatusResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetClaimStatus not implemented")
 }
 func (*UnimplementedEndDeviceClaimingServerServer) AuthorizeApplication(ctx context.Context, req *AuthorizeApplicationRequest) (*types.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AuthorizeApplication not implemented")
@@ -1282,6 +1186,60 @@ func _EndDeviceClaimingServer_Claim_Handler(srv interface{}, ctx context.Context
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(EndDeviceClaimingServerServer).Claim(ctx, req.(*ClaimEndDeviceRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _EndDeviceClaimingServer_Unclaim_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(EndDeviceIdentifiers)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(EndDeviceClaimingServerServer).Unclaim(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/ttn.lorawan.v3.EndDeviceClaimingServer/Unclaim",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(EndDeviceClaimingServerServer).Unclaim(ctx, req.(*EndDeviceIdentifiers))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _EndDeviceClaimingServer_GetInfoByJoinEUI_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetInfoByJoinEUIRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(EndDeviceClaimingServerServer).GetInfoByJoinEUI(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/ttn.lorawan.v3.EndDeviceClaimingServer/GetInfoByJoinEUI",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(EndDeviceClaimingServerServer).GetInfoByJoinEUI(ctx, req.(*GetInfoByJoinEUIRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _EndDeviceClaimingServer_GetClaimStatus_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(EndDeviceIdentifiers)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(EndDeviceClaimingServerServer).GetClaimStatus(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/ttn.lorawan.v3.EndDeviceClaimingServer/GetClaimStatus",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(EndDeviceClaimingServerServer).GetClaimStatus(ctx, req.(*EndDeviceIdentifiers))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -1329,6 +1287,18 @@ var _EndDeviceClaimingServer_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Claim",
 			Handler:    _EndDeviceClaimingServer_Claim_Handler,
+		},
+		{
+			MethodName: "Unclaim",
+			Handler:    _EndDeviceClaimingServer_Unclaim_Handler,
+		},
+		{
+			MethodName: "GetInfoByJoinEUI",
+			Handler:    _EndDeviceClaimingServer_GetInfoByJoinEUI_Handler,
+		},
+		{
+			MethodName: "GetClaimStatus",
+			Handler:    _EndDeviceClaimingServer_GetClaimStatus_Handler,
 		},
 		{
 			MethodName: "AuthorizeApplication",
@@ -1491,176 +1461,4 @@ var _GatewayClaimingServer_serviceDesc = grpc.ServiceDesc{
 	},
 	Streams:  []grpc.StreamDesc{},
 	Metadata: "lorawan-stack/api/deviceclaimingserver.proto",
-}
-
-func (this *ClaimEndDeviceRequest) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&ClaimEndDeviceRequest{`,
-		`SourceDevice:` + fmt.Sprintf("%v", this.SourceDevice) + `,`,
-		`TargetApplicationIds:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.TargetApplicationIds), "ApplicationIdentifiers", "ApplicationIdentifiers", 1), `&`, ``, 1) + `,`,
-		`TargetDeviceId:` + fmt.Sprintf("%v", this.TargetDeviceId) + `,`,
-		`TargetNetworkServerAddress:` + fmt.Sprintf("%v", this.TargetNetworkServerAddress) + `,`,
-		`TargetNetworkServerKekLabel:` + fmt.Sprintf("%v", this.TargetNetworkServerKekLabel) + `,`,
-		`TargetApplicationServerAddress:` + fmt.Sprintf("%v", this.TargetApplicationServerAddress) + `,`,
-		`TargetApplicationServerKekLabel:` + fmt.Sprintf("%v", this.TargetApplicationServerKekLabel) + `,`,
-		`TargetApplicationServerId:` + fmt.Sprintf("%v", this.TargetApplicationServerId) + `,`,
-		`TargetNetId:` + fmt.Sprintf("%v", this.TargetNetId) + `,`,
-		`InvalidateAuthenticationCode:` + fmt.Sprintf("%v", this.InvalidateAuthenticationCode) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *ClaimEndDeviceRequest_AuthenticatedIdentifiers_) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&ClaimEndDeviceRequest_AuthenticatedIdentifiers_{`,
-		`AuthenticatedIdentifiers:` + strings.Replace(fmt.Sprintf("%v", this.AuthenticatedIdentifiers), "ClaimEndDeviceRequest_AuthenticatedIdentifiers", "ClaimEndDeviceRequest_AuthenticatedIdentifiers", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *ClaimEndDeviceRequest_QrCode) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&ClaimEndDeviceRequest_QrCode{`,
-		`QrCode:` + fmt.Sprintf("%v", this.QrCode) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *ClaimEndDeviceRequest_AuthenticatedIdentifiers) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&ClaimEndDeviceRequest_AuthenticatedIdentifiers{`,
-		`JoinEui:` + fmt.Sprintf("%v", this.JoinEui) + `,`,
-		`DevEui:` + fmt.Sprintf("%v", this.DevEui) + `,`,
-		`AuthenticationCode:` + fmt.Sprintf("%v", this.AuthenticationCode) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *AuthorizeApplicationRequest) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&AuthorizeApplicationRequest{`,
-		`ApplicationIdentifiers:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.ApplicationIdentifiers), "ApplicationIdentifiers", "ApplicationIdentifiers", 1), `&`, ``, 1) + `,`,
-		`ApiKey:` + fmt.Sprintf("%v", this.ApiKey) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *CUPSRedirection) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&CUPSRedirection{`,
-		`TargetCupsUri:` + fmt.Sprintf("%v", this.TargetCupsUri) + `,`,
-		`CurrentGatewayKey:` + fmt.Sprintf("%v", this.CurrentGatewayKey) + `,`,
-		`TargetCupsTrust:` + fmt.Sprintf("%v", this.TargetCupsTrust) + `,`,
-		`GatewayCredentials:` + fmt.Sprintf("%v", this.GatewayCredentials) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *CUPSRedirection_ClientTls) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&CUPSRedirection_ClientTls{`,
-		`ClientTls:` + strings.Replace(fmt.Sprintf("%v", this.ClientTls), "CUPSRedirection_ClientTLS", "CUPSRedirection_ClientTLS", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *CUPSRedirection_AuthToken) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&CUPSRedirection_AuthToken{`,
-		`AuthToken:` + fmt.Sprintf("%v", this.AuthToken) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *CUPSRedirection_ClientTLS) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&CUPSRedirection_ClientTLS{`,
-		`Cert:` + fmt.Sprintf("%v", this.Cert) + `,`,
-		`Key:` + fmt.Sprintf("%v", this.Key) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *ClaimGatewayRequest) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&ClaimGatewayRequest{`,
-		`SourceGateway:` + fmt.Sprintf("%v", this.SourceGateway) + `,`,
-		`Collaborator:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.Collaborator), "OrganizationOrUserIdentifiers", "OrganizationOrUserIdentifiers", 1), `&`, ``, 1) + `,`,
-		`TargetGatewayId:` + fmt.Sprintf("%v", this.TargetGatewayId) + `,`,
-		`TargetGatewayServerAddress:` + fmt.Sprintf("%v", this.TargetGatewayServerAddress) + `,`,
-		`CupsRedirection:` + strings.Replace(this.CupsRedirection.String(), "CUPSRedirection", "CUPSRedirection", 1) + `,`,
-		`TargetFrequencyPlanId:` + fmt.Sprintf("%v", this.TargetFrequencyPlanId) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *ClaimGatewayRequest_AuthenticatedIdentifiers_) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&ClaimGatewayRequest_AuthenticatedIdentifiers_{`,
-		`AuthenticatedIdentifiers:` + strings.Replace(fmt.Sprintf("%v", this.AuthenticatedIdentifiers), "ClaimGatewayRequest_AuthenticatedIdentifiers", "ClaimGatewayRequest_AuthenticatedIdentifiers", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *ClaimGatewayRequest_QrCode) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&ClaimGatewayRequest_QrCode{`,
-		`QrCode:` + fmt.Sprintf("%v", this.QrCode) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *ClaimGatewayRequest_AuthenticatedIdentifiers) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&ClaimGatewayRequest_AuthenticatedIdentifiers{`,
-		`GatewayEui:` + fmt.Sprintf("%v", this.GatewayEui) + `,`,
-		`AuthenticationCode:` + fmt.Sprintf("%v", this.AuthenticationCode) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *AuthorizeGatewayRequest) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&AuthorizeGatewayRequest{`,
-		`GatewayIdentifiers:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.GatewayIdentifiers), "GatewayIdentifiers", "GatewayIdentifiers", 1), `&`, ``, 1) + `,`,
-		`ApiKey:` + fmt.Sprintf("%v", this.ApiKey) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func valueToStringDeviceclaimingserver(v interface{}) string {
-	rv := reflect.ValueOf(v)
-	if rv.IsNil() {
-		return "nil"
-	}
-	pv := reflect.Indirect(rv).Interface()
-	return fmt.Sprintf("*%v", pv)
 }

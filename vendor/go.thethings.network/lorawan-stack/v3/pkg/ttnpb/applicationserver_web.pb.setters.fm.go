@@ -2,10 +2,7 @@
 
 package ttnpb
 
-import (
-	fmt "fmt"
-	time "time"
-)
+import fmt "fmt"
 
 func (dst *ApplicationWebhookIdentifiers) SetFields(src *ApplicationWebhookIdentifiers, paths ...string) error {
 	for name, subs := range _processPaths(paths) {
@@ -13,19 +10,26 @@ func (dst *ApplicationWebhookIdentifiers) SetFields(src *ApplicationWebhookIdent
 		case "application_ids":
 			if len(subs) > 0 {
 				var newDst, newSrc *ApplicationIdentifiers
-				if src != nil {
-					newSrc = &src.ApplicationIdentifiers
+				if (src == nil || src.ApplicationIds == nil) && dst.ApplicationIds == nil {
+					continue
 				}
-				newDst = &dst.ApplicationIdentifiers
+				if src != nil {
+					newSrc = src.ApplicationIds
+				}
+				if dst.ApplicationIds != nil {
+					newDst = dst.ApplicationIds
+				} else {
+					newDst = &ApplicationIdentifiers{}
+					dst.ApplicationIds = newDst
+				}
 				if err := newDst.SetFields(newSrc, subs...); err != nil {
 					return err
 				}
 			} else {
 				if src != nil {
-					dst.ApplicationIdentifiers = src.ApplicationIdentifiers
+					dst.ApplicationIds = src.ApplicationIds
 				} else {
-					var zero ApplicationIdentifiers
-					dst.ApplicationIdentifiers = zero
+					dst.ApplicationIds = nil
 				}
 			}
 		case "webhook_id":
@@ -144,19 +148,26 @@ func (dst *ApplicationWebhookTemplate) SetFields(src *ApplicationWebhookTemplate
 		case "ids":
 			if len(subs) > 0 {
 				var newDst, newSrc *ApplicationWebhookTemplateIdentifiers
-				if src != nil {
-					newSrc = &src.ApplicationWebhookTemplateIdentifiers
+				if (src == nil || src.Ids == nil) && dst.Ids == nil {
+					continue
 				}
-				newDst = &dst.ApplicationWebhookTemplateIdentifiers
+				if src != nil {
+					newSrc = src.Ids
+				}
+				if dst.Ids != nil {
+					newDst = dst.Ids
+				} else {
+					newDst = &ApplicationWebhookTemplateIdentifiers{}
+					dst.Ids = newDst
+				}
 				if err := newDst.SetFields(newSrc, subs...); err != nil {
 					return err
 				}
 			} else {
 				if src != nil {
-					dst.ApplicationWebhookTemplateIdentifiers = src.ApplicationWebhookTemplateIdentifiers
+					dst.Ids = src.Ids
 				} else {
-					var zero ApplicationWebhookTemplateIdentifiers
-					dst.ApplicationWebhookTemplateIdentifiers = zero
+					dst.Ids = nil
 				}
 			}
 		case "name":
@@ -282,6 +293,31 @@ func (dst *ApplicationWebhookTemplate) SetFields(src *ApplicationWebhookTemplate
 					dst.UplinkMessage = nil
 				}
 			}
+		case "uplink_normalized":
+			if len(subs) > 0 {
+				var newDst, newSrc *ApplicationWebhookTemplate_Message
+				if (src == nil || src.UplinkNormalized == nil) && dst.UplinkNormalized == nil {
+					continue
+				}
+				if src != nil {
+					newSrc = src.UplinkNormalized
+				}
+				if dst.UplinkNormalized != nil {
+					newDst = dst.UplinkNormalized
+				} else {
+					newDst = &ApplicationWebhookTemplate_Message{}
+					dst.UplinkNormalized = newDst
+				}
+				if err := newDst.SetFields(newSrc, subs...); err != nil {
+					return err
+				}
+			} else {
+				if src != nil {
+					dst.UplinkNormalized = src.UplinkNormalized
+				} else {
+					dst.UplinkNormalized = nil
+				}
+			}
 		case "join_accept":
 			if len(subs) > 0 {
 				var newDst, newSrc *ApplicationWebhookTemplate_Message
@@ -507,6 +543,15 @@ func (dst *ApplicationWebhookTemplate) SetFields(src *ApplicationWebhookTemplate
 					dst.ServiceData = nil
 				}
 			}
+		case "field_mask":
+			if len(subs) > 0 {
+				return fmt.Errorf("'field_mask' has no subfields, but %s were specified", subs)
+			}
+			if src != nil {
+				dst.FieldMask = src.FieldMask
+			} else {
+				dst.FieldMask = nil
+			}
 
 		default:
 			return fmt.Errorf("invalid field: '%s'", name)
@@ -535,25 +580,136 @@ func (dst *ApplicationWebhookTemplates) SetFields(src *ApplicationWebhookTemplat
 	return nil
 }
 
+func (dst *ApplicationWebhookHealth) SetFields(src *ApplicationWebhookHealth, paths ...string) error {
+	for name, subs := range _processPaths(paths) {
+		switch name {
+
+		case "status":
+			if len(subs) == 0 && src == nil {
+				dst.Status = nil
+				continue
+			} else if len(subs) == 0 {
+				dst.Status = src.Status
+				continue
+			}
+
+			subPathMap := _processPaths(subs)
+			if len(subPathMap) > 1 {
+				return fmt.Errorf("more than one field specified for oneof field '%s'", name)
+			}
+			for oneofName, oneofSubs := range subPathMap {
+				switch oneofName {
+				case "healthy":
+					var srcTypeOk bool
+					if src != nil {
+						_, srcTypeOk = src.Status.(*ApplicationWebhookHealth_Healthy)
+					}
+					if srcValid := srcTypeOk || src == nil || src.Status == nil || len(oneofSubs) == 0; !srcValid {
+						return fmt.Errorf("attempt to set oneof 'healthy', while different oneof is set in source")
+					}
+					_, dstTypeOk := dst.Status.(*ApplicationWebhookHealth_Healthy)
+					if dstValid := dstTypeOk || dst.Status == nil || len(oneofSubs) == 0; !dstValid {
+						return fmt.Errorf("attempt to set oneof 'healthy', while different oneof is set in destination")
+					}
+					if len(oneofSubs) > 0 {
+						var newDst, newSrc *ApplicationWebhookHealth_WebhookHealthStatusHealthy
+						if srcTypeOk {
+							newSrc = src.Status.(*ApplicationWebhookHealth_Healthy).Healthy
+						}
+						if dstTypeOk {
+							newDst = dst.Status.(*ApplicationWebhookHealth_Healthy).Healthy
+						} else if srcTypeOk {
+							newDst = &ApplicationWebhookHealth_WebhookHealthStatusHealthy{}
+							dst.Status = &ApplicationWebhookHealth_Healthy{Healthy: newDst}
+						} else {
+							dst.Status = nil
+							continue
+						}
+						if err := newDst.SetFields(newSrc, oneofSubs...); err != nil {
+							return err
+						}
+					} else {
+						if srcTypeOk {
+							dst.Status = src.Status
+						} else {
+							dst.Status = nil
+						}
+					}
+				case "unhealthy":
+					var srcTypeOk bool
+					if src != nil {
+						_, srcTypeOk = src.Status.(*ApplicationWebhookHealth_Unhealthy)
+					}
+					if srcValid := srcTypeOk || src == nil || src.Status == nil || len(oneofSubs) == 0; !srcValid {
+						return fmt.Errorf("attempt to set oneof 'unhealthy', while different oneof is set in source")
+					}
+					_, dstTypeOk := dst.Status.(*ApplicationWebhookHealth_Unhealthy)
+					if dstValid := dstTypeOk || dst.Status == nil || len(oneofSubs) == 0; !dstValid {
+						return fmt.Errorf("attempt to set oneof 'unhealthy', while different oneof is set in destination")
+					}
+					if len(oneofSubs) > 0 {
+						var newDst, newSrc *ApplicationWebhookHealth_WebhookHealthStatusUnhealthy
+						if srcTypeOk {
+							newSrc = src.Status.(*ApplicationWebhookHealth_Unhealthy).Unhealthy
+						}
+						if dstTypeOk {
+							newDst = dst.Status.(*ApplicationWebhookHealth_Unhealthy).Unhealthy
+						} else if srcTypeOk {
+							newDst = &ApplicationWebhookHealth_WebhookHealthStatusUnhealthy{}
+							dst.Status = &ApplicationWebhookHealth_Unhealthy{Unhealthy: newDst}
+						} else {
+							dst.Status = nil
+							continue
+						}
+						if err := newDst.SetFields(newSrc, oneofSubs...); err != nil {
+							return err
+						}
+					} else {
+						if srcTypeOk {
+							dst.Status = src.Status
+						} else {
+							dst.Status = nil
+						}
+					}
+
+				default:
+					return fmt.Errorf("invalid oneof field: '%s.%s'", name, oneofName)
+				}
+			}
+
+		default:
+			return fmt.Errorf("invalid field: '%s'", name)
+		}
+	}
+	return nil
+}
+
 func (dst *ApplicationWebhook) SetFields(src *ApplicationWebhook, paths ...string) error {
 	for name, subs := range _processPaths(paths) {
 		switch name {
 		case "ids":
 			if len(subs) > 0 {
 				var newDst, newSrc *ApplicationWebhookIdentifiers
-				if src != nil {
-					newSrc = &src.ApplicationWebhookIdentifiers
+				if (src == nil || src.Ids == nil) && dst.Ids == nil {
+					continue
 				}
-				newDst = &dst.ApplicationWebhookIdentifiers
+				if src != nil {
+					newSrc = src.Ids
+				}
+				if dst.Ids != nil {
+					newDst = dst.Ids
+				} else {
+					newDst = &ApplicationWebhookIdentifiers{}
+					dst.Ids = newDst
+				}
 				if err := newDst.SetFields(newSrc, subs...); err != nil {
 					return err
 				}
 			} else {
 				if src != nil {
-					dst.ApplicationWebhookIdentifiers = src.ApplicationWebhookIdentifiers
+					dst.Ids = src.Ids
 				} else {
-					var zero ApplicationWebhookIdentifiers
-					dst.ApplicationWebhookIdentifiers = zero
+					dst.Ids = nil
 				}
 			}
 		case "created_at":
@@ -563,8 +719,7 @@ func (dst *ApplicationWebhook) SetFields(src *ApplicationWebhook, paths ...strin
 			if src != nil {
 				dst.CreatedAt = src.CreatedAt
 			} else {
-				var zero time.Time
-				dst.CreatedAt = zero
+				dst.CreatedAt = nil
 			}
 		case "updated_at":
 			if len(subs) > 0 {
@@ -573,8 +728,7 @@ func (dst *ApplicationWebhook) SetFields(src *ApplicationWebhook, paths ...strin
 			if src != nil {
 				dst.UpdatedAt = src.UpdatedAt
 			} else {
-				var zero time.Time
-				dst.UpdatedAt = zero
+				dst.UpdatedAt = nil
 			}
 		case "base_url":
 			if len(subs) > 0 {
@@ -608,26 +762,26 @@ func (dst *ApplicationWebhook) SetFields(src *ApplicationWebhook, paths ...strin
 		case "template_ids":
 			if len(subs) > 0 {
 				var newDst, newSrc *ApplicationWebhookTemplateIdentifiers
-				if (src == nil || src.ApplicationWebhookTemplateIdentifiers == nil) && dst.ApplicationWebhookTemplateIdentifiers == nil {
+				if (src == nil || src.TemplateIds == nil) && dst.TemplateIds == nil {
 					continue
 				}
 				if src != nil {
-					newSrc = src.ApplicationWebhookTemplateIdentifiers
+					newSrc = src.TemplateIds
 				}
-				if dst.ApplicationWebhookTemplateIdentifiers != nil {
-					newDst = dst.ApplicationWebhookTemplateIdentifiers
+				if dst.TemplateIds != nil {
+					newDst = dst.TemplateIds
 				} else {
 					newDst = &ApplicationWebhookTemplateIdentifiers{}
-					dst.ApplicationWebhookTemplateIdentifiers = newDst
+					dst.TemplateIds = newDst
 				}
 				if err := newDst.SetFields(newSrc, subs...); err != nil {
 					return err
 				}
 			} else {
 				if src != nil {
-					dst.ApplicationWebhookTemplateIdentifiers = src.ApplicationWebhookTemplateIdentifiers
+					dst.TemplateIds = src.TemplateIds
 				} else {
-					dst.ApplicationWebhookTemplateIdentifiers = nil
+					dst.TemplateIds = nil
 				}
 			}
 		case "template_fields":
@@ -674,6 +828,31 @@ func (dst *ApplicationWebhook) SetFields(src *ApplicationWebhook, paths ...strin
 					dst.UplinkMessage = nil
 				}
 			}
+		case "uplink_normalized":
+			if len(subs) > 0 {
+				var newDst, newSrc *ApplicationWebhook_Message
+				if (src == nil || src.UplinkNormalized == nil) && dst.UplinkNormalized == nil {
+					continue
+				}
+				if src != nil {
+					newSrc = src.UplinkNormalized
+				}
+				if dst.UplinkNormalized != nil {
+					newDst = dst.UplinkNormalized
+				} else {
+					newDst = &ApplicationWebhook_Message{}
+					dst.UplinkNormalized = newDst
+				}
+				if err := newDst.SetFields(newSrc, subs...); err != nil {
+					return err
+				}
+			} else {
+				if src != nil {
+					dst.UplinkNormalized = src.UplinkNormalized
+				} else {
+					dst.UplinkNormalized = nil
+				}
+			}
 		case "join_accept":
 			if len(subs) > 0 {
 				var newDst, newSrc *ApplicationWebhook_Message
@@ -898,6 +1077,40 @@ func (dst *ApplicationWebhook) SetFields(src *ApplicationWebhook, paths ...strin
 				} else {
 					dst.ServiceData = nil
 				}
+			}
+		case "health_status":
+			if len(subs) > 0 {
+				var newDst, newSrc *ApplicationWebhookHealth
+				if (src == nil || src.HealthStatus == nil) && dst.HealthStatus == nil {
+					continue
+				}
+				if src != nil {
+					newSrc = src.HealthStatus
+				}
+				if dst.HealthStatus != nil {
+					newDst = dst.HealthStatus
+				} else {
+					newDst = &ApplicationWebhookHealth{}
+					dst.HealthStatus = newDst
+				}
+				if err := newDst.SetFields(newSrc, subs...); err != nil {
+					return err
+				}
+			} else {
+				if src != nil {
+					dst.HealthStatus = src.HealthStatus
+				} else {
+					dst.HealthStatus = nil
+				}
+			}
+		case "field_mask":
+			if len(subs) > 0 {
+				return fmt.Errorf("'field_mask' has no subfields, but %s were specified", subs)
+			}
+			if src != nil {
+				dst.FieldMask = src.FieldMask
+			} else {
+				dst.FieldMask = nil
 			}
 
 		default:
@@ -953,19 +1166,26 @@ func (dst *GetApplicationWebhookRequest) SetFields(src *GetApplicationWebhookReq
 		case "ids":
 			if len(subs) > 0 {
 				var newDst, newSrc *ApplicationWebhookIdentifiers
-				if src != nil {
-					newSrc = &src.ApplicationWebhookIdentifiers
+				if (src == nil || src.Ids == nil) && dst.Ids == nil {
+					continue
 				}
-				newDst = &dst.ApplicationWebhookIdentifiers
+				if src != nil {
+					newSrc = src.Ids
+				}
+				if dst.Ids != nil {
+					newDst = dst.Ids
+				} else {
+					newDst = &ApplicationWebhookIdentifiers{}
+					dst.Ids = newDst
+				}
 				if err := newDst.SetFields(newSrc, subs...); err != nil {
 					return err
 				}
 			} else {
 				if src != nil {
-					dst.ApplicationWebhookIdentifiers = src.ApplicationWebhookIdentifiers
+					dst.Ids = src.Ids
 				} else {
-					var zero ApplicationWebhookIdentifiers
-					dst.ApplicationWebhookIdentifiers = zero
+					dst.Ids = nil
 				}
 			}
 		case "field_mask":
@@ -991,19 +1211,26 @@ func (dst *ListApplicationWebhooksRequest) SetFields(src *ListApplicationWebhook
 		case "application_ids":
 			if len(subs) > 0 {
 				var newDst, newSrc *ApplicationIdentifiers
-				if src != nil {
-					newSrc = &src.ApplicationIdentifiers
+				if (src == nil || src.ApplicationIds == nil) && dst.ApplicationIds == nil {
+					continue
 				}
-				newDst = &dst.ApplicationIdentifiers
+				if src != nil {
+					newSrc = src.ApplicationIds
+				}
+				if dst.ApplicationIds != nil {
+					newDst = dst.ApplicationIds
+				} else {
+					newDst = &ApplicationIdentifiers{}
+					dst.ApplicationIds = newDst
+				}
 				if err := newDst.SetFields(newSrc, subs...); err != nil {
 					return err
 				}
 			} else {
 				if src != nil {
-					dst.ApplicationIdentifiers = src.ApplicationIdentifiers
+					dst.ApplicationIds = src.ApplicationIds
 				} else {
-					var zero ApplicationIdentifiers
-					dst.ApplicationIdentifiers = zero
+					dst.ApplicationIds = nil
 				}
 			}
 		case "field_mask":
@@ -1029,19 +1256,26 @@ func (dst *SetApplicationWebhookRequest) SetFields(src *SetApplicationWebhookReq
 		case "webhook":
 			if len(subs) > 0 {
 				var newDst, newSrc *ApplicationWebhook
-				if src != nil {
-					newSrc = &src.ApplicationWebhook
+				if (src == nil || src.Webhook == nil) && dst.Webhook == nil {
+					continue
 				}
-				newDst = &dst.ApplicationWebhook
+				if src != nil {
+					newSrc = src.Webhook
+				}
+				if dst.Webhook != nil {
+					newDst = dst.Webhook
+				} else {
+					newDst = &ApplicationWebhook{}
+					dst.Webhook = newDst
+				}
 				if err := newDst.SetFields(newSrc, subs...); err != nil {
 					return err
 				}
 			} else {
 				if src != nil {
-					dst.ApplicationWebhook = src.ApplicationWebhook
+					dst.Webhook = src.Webhook
 				} else {
-					var zero ApplicationWebhook
-					dst.ApplicationWebhook = zero
+					dst.Webhook = nil
 				}
 			}
 		case "field_mask":
@@ -1067,19 +1301,26 @@ func (dst *GetApplicationWebhookTemplateRequest) SetFields(src *GetApplicationWe
 		case "ids":
 			if len(subs) > 0 {
 				var newDst, newSrc *ApplicationWebhookTemplateIdentifiers
-				if src != nil {
-					newSrc = &src.ApplicationWebhookTemplateIdentifiers
+				if (src == nil || src.Ids == nil) && dst.Ids == nil {
+					continue
 				}
-				newDst = &dst.ApplicationWebhookTemplateIdentifiers
+				if src != nil {
+					newSrc = src.Ids
+				}
+				if dst.Ids != nil {
+					newDst = dst.Ids
+				} else {
+					newDst = &ApplicationWebhookTemplateIdentifiers{}
+					dst.Ids = newDst
+				}
 				if err := newDst.SetFields(newSrc, subs...); err != nil {
 					return err
 				}
 			} else {
 				if src != nil {
-					dst.ApplicationWebhookTemplateIdentifiers = src.ApplicationWebhookTemplateIdentifiers
+					dst.Ids = src.Ids
 				} else {
-					var zero ApplicationWebhookTemplateIdentifiers
-					dst.ApplicationWebhookTemplateIdentifiers = zero
+					dst.Ids = nil
 				}
 			}
 		case "field_mask":
@@ -1131,6 +1372,68 @@ func (dst *ApplicationWebhookTemplate_Message) SetFields(src *ApplicationWebhook
 			} else {
 				var zero string
 				dst.Path = zero
+			}
+
+		default:
+			return fmt.Errorf("invalid field: '%s'", name)
+		}
+	}
+	return nil
+}
+
+func (dst *ApplicationWebhookHealth_WebhookHealthStatusHealthy) SetFields(src *ApplicationWebhookHealth_WebhookHealthStatusHealthy, paths ...string) error {
+	if len(paths) != 0 {
+		return fmt.Errorf("message ApplicationWebhookHealth_WebhookHealthStatusHealthy has no fields, but paths %s were specified", paths)
+	}
+	return nil
+}
+
+func (dst *ApplicationWebhookHealth_WebhookHealthStatusUnhealthy) SetFields(src *ApplicationWebhookHealth_WebhookHealthStatusUnhealthy, paths ...string) error {
+	for name, subs := range _processPaths(paths) {
+		switch name {
+		case "failed_attempts":
+			if len(subs) > 0 {
+				return fmt.Errorf("'failed_attempts' has no subfields, but %s were specified", subs)
+			}
+			if src != nil {
+				dst.FailedAttempts = src.FailedAttempts
+			} else {
+				var zero uint64
+				dst.FailedAttempts = zero
+			}
+		case "last_failed_attempt_at":
+			if len(subs) > 0 {
+				return fmt.Errorf("'last_failed_attempt_at' has no subfields, but %s were specified", subs)
+			}
+			if src != nil {
+				dst.LastFailedAttemptAt = src.LastFailedAttemptAt
+			} else {
+				dst.LastFailedAttemptAt = nil
+			}
+		case "last_failed_attempt_details":
+			if len(subs) > 0 {
+				var newDst, newSrc *ErrorDetails
+				if (src == nil || src.LastFailedAttemptDetails == nil) && dst.LastFailedAttemptDetails == nil {
+					continue
+				}
+				if src != nil {
+					newSrc = src.LastFailedAttemptDetails
+				}
+				if dst.LastFailedAttemptDetails != nil {
+					newDst = dst.LastFailedAttemptDetails
+				} else {
+					newDst = &ErrorDetails{}
+					dst.LastFailedAttemptDetails = newDst
+				}
+				if err := newDst.SetFields(newSrc, subs...); err != nil {
+					return err
+				}
+			} else {
+				if src != nil {
+					dst.LastFailedAttemptDetails = src.LastFailedAttemptDetails
+				} else {
+					dst.LastFailedAttemptDetails = nil
+				}
 			}
 
 		default:

@@ -5,14 +5,14 @@ package ttnpb
 
 import (
 	fmt "fmt"
+	_ "github.com/TheThingsIndustries/protoc-gen-go-flags/annotations"
+	_ "github.com/TheThingsIndustries/protoc-gen-go-json/annotations"
 	_ "github.com/envoyproxy/protoc-gen-validate/validate"
 	_ "github.com/gogo/protobuf/gogoproto"
 	proto "github.com/gogo/protobuf/proto"
 	golang_proto "github.com/golang/protobuf/proto"
-	go_thethings_network_lorawan_stack_v3_pkg_types "go.thethings.network/lorawan-stack/v3/pkg/types"
+	_ "github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-openapiv2/options"
 	math "math"
-	reflect "reflect"
-	strings "strings"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -30,11 +30,13 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 type ApplicationIdentifiers struct {
 	ApplicationId        string   `protobuf:"bytes,1,opt,name=application_id,json=applicationId,proto3" json:"application_id,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *ApplicationIdentifiers) Reset()      { *m = ApplicationIdentifiers{} }
-func (*ApplicationIdentifiers) ProtoMessage() {}
+func (m *ApplicationIdentifiers) Reset()         { *m = ApplicationIdentifiers{} }
+func (m *ApplicationIdentifiers) String() string { return proto.CompactTextString(m) }
+func (*ApplicationIdentifiers) ProtoMessage()    {}
 func (*ApplicationIdentifiers) Descriptor() ([]byte, []int) {
 	return fileDescriptor_6da1fbfdea4d7423, []int{0}
 }
@@ -66,11 +68,13 @@ func (m *ApplicationIdentifiers) GetApplicationId() string {
 type ClientIdentifiers struct {
 	ClientId             string   `protobuf:"bytes,1,opt,name=client_id,json=clientId,proto3" json:"client_id,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *ClientIdentifiers) Reset()      { *m = ClientIdentifiers{} }
-func (*ClientIdentifiers) ProtoMessage() {}
+func (m *ClientIdentifiers) Reset()         { *m = ClientIdentifiers{} }
+func (m *ClientIdentifiers) String() string { return proto.CompactTextString(m) }
+func (*ClientIdentifiers) ProtoMessage()    {}
 func (*ClientIdentifiers) Descriptor() ([]byte, []int) {
 	return fileDescriptor_6da1fbfdea4d7423, []int{1}
 }
@@ -100,20 +104,22 @@ func (m *ClientIdentifiers) GetClientId() string {
 }
 
 type EndDeviceIdentifiers struct {
-	DeviceId               string `protobuf:"bytes,1,opt,name=device_id,json=deviceId,proto3" json:"device_id,omitempty"`
-	ApplicationIdentifiers `protobuf:"bytes,2,opt,name=application_ids,json=applicationIds,proto3,embedded=application_ids" json:"application_ids"`
+	DeviceId       string                  `protobuf:"bytes,1,opt,name=device_id,json=deviceId,proto3" json:"device_id,omitempty"`
+	ApplicationIds *ApplicationIdentifiers `protobuf:"bytes,2,opt,name=application_ids,json=applicationIds,proto3" json:"application_ids,omitempty"`
 	// The LoRaWAN DevEUI.
-	DevEui *go_thethings_network_lorawan_stack_v3_pkg_types.EUI64 `protobuf:"bytes,4,opt,name=dev_eui,json=devEui,proto3,customtype=go.thethings.network/lorawan-stack/v3/pkg/types.EUI64" json:"dev_eui,omitempty"`
+	DevEui []byte `protobuf:"bytes,4,opt,name=dev_eui,json=devEui,proto3" json:"dev_eui,omitempty"`
 	// The LoRaWAN JoinEUI (AppEUI until LoRaWAN 1.0.3 end devices).
-	JoinEui *go_thethings_network_lorawan_stack_v3_pkg_types.EUI64 `protobuf:"bytes,5,opt,name=join_eui,json=joinEui,proto3,customtype=go.thethings.network/lorawan-stack/v3/pkg/types.EUI64" json:"join_eui,omitempty"`
+	JoinEui []byte `protobuf:"bytes,5,opt,name=join_eui,json=joinEui,proto3" json:"join_eui,omitempty"`
 	// The LoRaWAN DevAddr.
-	DevAddr              *go_thethings_network_lorawan_stack_v3_pkg_types.DevAddr `protobuf:"bytes,6,opt,name=dev_addr,json=devAddr,proto3,customtype=go.thethings.network/lorawan-stack/v3/pkg/types.DevAddr" json:"dev_addr,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}                                                 `json:"-"`
-	XXX_sizecache        int32                                                    `json:"-"`
+	DevAddr              []byte   `protobuf:"bytes,6,opt,name=dev_addr,json=devAddr,proto3" json:"dev_addr,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *EndDeviceIdentifiers) Reset()      { *m = EndDeviceIdentifiers{} }
-func (*EndDeviceIdentifiers) ProtoMessage() {}
+func (m *EndDeviceIdentifiers) Reset()         { *m = EndDeviceIdentifiers{} }
+func (m *EndDeviceIdentifiers) String() string { return proto.CompactTextString(m) }
+func (*EndDeviceIdentifiers) ProtoMessage()    {}
 func (*EndDeviceIdentifiers) Descriptor() ([]byte, []int) {
 	return fileDescriptor_6da1fbfdea4d7423, []int{2}
 }
@@ -142,16 +148,46 @@ func (m *EndDeviceIdentifiers) GetDeviceId() string {
 	return ""
 }
 
+func (m *EndDeviceIdentifiers) GetApplicationIds() *ApplicationIdentifiers {
+	if m != nil {
+		return m.ApplicationIds
+	}
+	return nil
+}
+
+func (m *EndDeviceIdentifiers) GetDevEui() []byte {
+	if m != nil {
+		return m.DevEui
+	}
+	return nil
+}
+
+func (m *EndDeviceIdentifiers) GetJoinEui() []byte {
+	if m != nil {
+		return m.JoinEui
+	}
+	return nil
+}
+
+func (m *EndDeviceIdentifiers) GetDevAddr() []byte {
+	if m != nil {
+		return m.DevAddr
+	}
+	return nil
+}
+
 type GatewayIdentifiers struct {
 	GatewayId string `protobuf:"bytes,1,opt,name=gateway_id,json=gatewayId,proto3" json:"gateway_id,omitempty"`
 	// Secondary identifier, which can only be used in specific requests.
-	Eui                  *go_thethings_network_lorawan_stack_v3_pkg_types.EUI64 `protobuf:"bytes,2,opt,name=eui,proto3,customtype=go.thethings.network/lorawan-stack/v3/pkg/types.EUI64" json:"eui,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}                                               `json:"-"`
-	XXX_sizecache        int32                                                  `json:"-"`
+	Eui                  []byte   `protobuf:"bytes,2,opt,name=eui,proto3" json:"eui,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *GatewayIdentifiers) Reset()      { *m = GatewayIdentifiers{} }
-func (*GatewayIdentifiers) ProtoMessage() {}
+func (m *GatewayIdentifiers) Reset()         { *m = GatewayIdentifiers{} }
+func (m *GatewayIdentifiers) String() string { return proto.CompactTextString(m) }
+func (*GatewayIdentifiers) ProtoMessage()    {}
 func (*GatewayIdentifiers) Descriptor() ([]byte, []int) {
 	return fileDescriptor_6da1fbfdea4d7423, []int{3}
 }
@@ -180,15 +216,24 @@ func (m *GatewayIdentifiers) GetGatewayId() string {
 	return ""
 }
 
+func (m *GatewayIdentifiers) GetEui() []byte {
+	if m != nil {
+		return m.Eui
+	}
+	return nil
+}
+
 type OrganizationIdentifiers struct {
 	// This ID shares namespace with user IDs.
 	OrganizationId       string   `protobuf:"bytes,1,opt,name=organization_id,json=organizationId,proto3" json:"organization_id,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *OrganizationIdentifiers) Reset()      { *m = OrganizationIdentifiers{} }
-func (*OrganizationIdentifiers) ProtoMessage() {}
+func (m *OrganizationIdentifiers) Reset()         { *m = OrganizationIdentifiers{} }
+func (m *OrganizationIdentifiers) String() string { return proto.CompactTextString(m) }
+func (*OrganizationIdentifiers) ProtoMessage()    {}
 func (*OrganizationIdentifiers) Descriptor() ([]byte, []int) {
 	return fileDescriptor_6da1fbfdea4d7423, []int{4}
 }
@@ -223,11 +268,13 @@ type UserIdentifiers struct {
 	// Secondary identifier, which can only be used in specific requests.
 	Email                string   `protobuf:"bytes,2,opt,name=email,proto3" json:"email,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *UserIdentifiers) Reset()      { *m = UserIdentifiers{} }
-func (*UserIdentifiers) ProtoMessage() {}
+func (m *UserIdentifiers) Reset()         { *m = UserIdentifiers{} }
+func (m *UserIdentifiers) String() string { return proto.CompactTextString(m) }
+func (*UserIdentifiers) ProtoMessage()    {}
 func (*UserIdentifiers) Descriptor() ([]byte, []int) {
 	return fileDescriptor_6da1fbfdea4d7423, []int{5}
 }
@@ -270,11 +317,13 @@ type OrganizationOrUserIdentifiers struct {
 	//	*OrganizationOrUserIdentifiers_UserIds
 	Ids                  isOrganizationOrUserIdentifiers_Ids `protobuf_oneof:"ids"`
 	XXX_NoUnkeyedLiteral struct{}                            `json:"-"`
+	XXX_unrecognized     []byte                              `json:"-"`
 	XXX_sizecache        int32                               `json:"-"`
 }
 
-func (m *OrganizationOrUserIdentifiers) Reset()      { *m = OrganizationOrUserIdentifiers{} }
-func (*OrganizationOrUserIdentifiers) ProtoMessage() {}
+func (m *OrganizationOrUserIdentifiers) Reset()         { *m = OrganizationOrUserIdentifiers{} }
+func (m *OrganizationOrUserIdentifiers) String() string { return proto.CompactTextString(m) }
+func (*OrganizationOrUserIdentifiers) ProtoMessage()    {}
 func (*OrganizationOrUserIdentifiers) Descriptor() ([]byte, []int) {
 	return fileDescriptor_6da1fbfdea4d7423, []int{6}
 }
@@ -298,7 +347,6 @@ var xxx_messageInfo_OrganizationOrUserIdentifiers proto.InternalMessageInfo
 
 type isOrganizationOrUserIdentifiers_Ids interface {
 	isOrganizationOrUserIdentifiers_Ids()
-	Equal(interface{}) bool
 }
 
 type OrganizationOrUserIdentifiers_OrganizationIds struct {
@@ -351,11 +399,13 @@ type EntityIdentifiers struct {
 	//	*EntityIdentifiers_UserIds
 	Ids                  isEntityIdentifiers_Ids `protobuf_oneof:"ids"`
 	XXX_NoUnkeyedLiteral struct{}                `json:"-"`
+	XXX_unrecognized     []byte                  `json:"-"`
 	XXX_sizecache        int32                   `json:"-"`
 }
 
-func (m *EntityIdentifiers) Reset()      { *m = EntityIdentifiers{} }
-func (*EntityIdentifiers) ProtoMessage() {}
+func (m *EntityIdentifiers) Reset()         { *m = EntityIdentifiers{} }
+func (m *EntityIdentifiers) String() string { return proto.CompactTextString(m) }
+func (*EntityIdentifiers) ProtoMessage()    {}
 func (*EntityIdentifiers) Descriptor() ([]byte, []int) {
 	return fileDescriptor_6da1fbfdea4d7423, []int{7}
 }
@@ -379,7 +429,6 @@ var xxx_messageInfo_EntityIdentifiers proto.InternalMessageInfo
 
 type isEntityIdentifiers_Ids interface {
 	isEntityIdentifiers_Ids()
-	Equal(interface{}) bool
 }
 
 type EntityIdentifiers_ApplicationIds struct {
@@ -471,17 +520,24 @@ func (*EntityIdentifiers) XXX_OneofWrappers() []interface{} {
 
 // Identifies an end device model with version information.
 type EndDeviceVersionIdentifiers struct {
-	BrandId              string   `protobuf:"bytes,1,opt,name=brand_id,json=brandId,proto3" json:"brand_id,omitempty"`
-	ModelId              string   `protobuf:"bytes,2,opt,name=model_id,json=modelId,proto3" json:"model_id,omitempty"`
-	HardwareVersion      string   `protobuf:"bytes,3,opt,name=hardware_version,json=hardwareVersion,proto3" json:"hardware_version,omitempty"`
-	FirmwareVersion      string   `protobuf:"bytes,4,opt,name=firmware_version,json=firmwareVersion,proto3" json:"firmware_version,omitempty"`
-	BandId               string   `protobuf:"bytes,5,opt,name=band_id,json=bandId,proto3" json:"band_id,omitempty"`
+	BrandId         string `protobuf:"bytes,1,opt,name=brand_id,json=brandId,proto3" json:"brand_id,omitempty"`
+	ModelId         string `protobuf:"bytes,2,opt,name=model_id,json=modelId,proto3" json:"model_id,omitempty"`
+	HardwareVersion string `protobuf:"bytes,3,opt,name=hardware_version,json=hardwareVersion,proto3" json:"hardware_version,omitempty"`
+	FirmwareVersion string `protobuf:"bytes,4,opt,name=firmware_version,json=firmwareVersion,proto3" json:"firmware_version,omitempty"`
+	BandId          string `protobuf:"bytes,5,opt,name=band_id,json=bandId,proto3" json:"band_id,omitempty"`
+	// VendorID managed by the LoRa Alliance, as defined in TR005.
+	VendorId uint32 `protobuf:"varint,6,opt,name=vendor_id,json=vendorId,proto3" json:"vendor_id,omitempty"`
+	// ID of the LoRaWAN end device profile assigned by the vendor.
+	VendorProfileId      uint32   `protobuf:"varint,7,opt,name=vendor_profile_id,json=vendorProfileId,proto3" json:"vendor_profile_id,omitempty"`
+	SerialNumber         string   `protobuf:"bytes,8,opt,name=serial_number,json=serialNumber,proto3" json:"serial_number,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *EndDeviceVersionIdentifiers) Reset()      { *m = EndDeviceVersionIdentifiers{} }
-func (*EndDeviceVersionIdentifiers) ProtoMessage() {}
+func (m *EndDeviceVersionIdentifiers) Reset()         { *m = EndDeviceVersionIdentifiers{} }
+func (m *EndDeviceVersionIdentifiers) String() string { return proto.CompactTextString(m) }
+func (*EndDeviceVersionIdentifiers) ProtoMessage()    {}
 func (*EndDeviceVersionIdentifiers) Descriptor() ([]byte, []int) {
 	return fileDescriptor_6da1fbfdea4d7423, []int{8}
 }
@@ -538,20 +594,47 @@ func (m *EndDeviceVersionIdentifiers) GetBandId() string {
 	return ""
 }
 
+func (m *EndDeviceVersionIdentifiers) GetVendorId() uint32 {
+	if m != nil {
+		return m.VendorId
+	}
+	return 0
+}
+
+func (m *EndDeviceVersionIdentifiers) GetVendorProfileId() uint32 {
+	if m != nil {
+		return m.VendorProfileId
+	}
+	return 0
+}
+
+func (m *EndDeviceVersionIdentifiers) GetSerialNumber() string {
+	if m != nil {
+		return m.SerialNumber
+	}
+	return ""
+}
+
 // Identifies a Network Server.
 type NetworkIdentifiers struct {
 	// LoRa Alliance NetID.
-	NetId *go_thethings_network_lorawan_stack_v3_pkg_types.NetID `protobuf:"bytes,1,opt,name=net_id,json=netId,proto3,customtype=go.thethings.network/lorawan-stack/v3/pkg/types.NetID" json:"net_id,omitempty"`
+	NetId []byte `protobuf:"bytes,1,opt,name=net_id,json=netId,proto3" json:"net_id,omitempty"`
 	// Optional tenant identifier for multi-tenant deployments.
 	TenantId string `protobuf:"bytes,2,opt,name=tenant_id,json=tenantId,proto3" json:"tenant_id,omitempty"`
 	// Cluster identifier of the Network Server.
-	ClusterId            string   `protobuf:"bytes,3,opt,name=cluster_id,json=clusterId,proto3" json:"cluster_id,omitempty"`
+	ClusterId string `protobuf:"bytes,3,opt,name=cluster_id,json=clusterId,proto3" json:"cluster_id,omitempty"`
+	// Cluster address of the Network Server.
+	ClusterAddress string `protobuf:"bytes,4,opt,name=cluster_address,json=clusterAddress,proto3" json:"cluster_address,omitempty"`
+	// Optional tenant address for multi-tenant deployments.
+	TenantAddress        string   `protobuf:"bytes,5,opt,name=tenant_address,json=tenantAddress,proto3" json:"tenant_address,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *NetworkIdentifiers) Reset()      { *m = NetworkIdentifiers{} }
-func (*NetworkIdentifiers) ProtoMessage() {}
+func (m *NetworkIdentifiers) Reset()         { *m = NetworkIdentifiers{} }
+func (m *NetworkIdentifiers) String() string { return proto.CompactTextString(m) }
+func (*NetworkIdentifiers) ProtoMessage()    {}
 func (*NetworkIdentifiers) Descriptor() ([]byte, []int) {
 	return fileDescriptor_6da1fbfdea4d7423, []int{9}
 }
@@ -573,6 +656,13 @@ func (m *NetworkIdentifiers) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_NetworkIdentifiers proto.InternalMessageInfo
 
+func (m *NetworkIdentifiers) GetNetId() []byte {
+	if m != nil {
+		return m.NetId
+	}
+	return nil
+}
+
 func (m *NetworkIdentifiers) GetTenantId() string {
 	if m != nil {
 		return m.TenantId
@@ -583,6 +673,20 @@ func (m *NetworkIdentifiers) GetTenantId() string {
 func (m *NetworkIdentifiers) GetClusterId() string {
 	if m != nil {
 		return m.ClusterId
+	}
+	return ""
+}
+
+func (m *NetworkIdentifiers) GetClusterAddress() string {
+	if m != nil {
+		return m.ClusterAddress
+	}
+	return ""
+}
+
+func (m *NetworkIdentifiers) GetTenantAddress() string {
+	if m != nil {
+		return m.TenantAddress
 	}
 	return ""
 }
@@ -618,858 +722,83 @@ func init() {
 }
 
 var fileDescriptor_6da1fbfdea4d7423 = []byte{
-	// 917 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xac, 0x96, 0xcf, 0x6f, 0x1b, 0x45,
-	0x14, 0xc7, 0x3d, 0x76, 0xfc, 0xeb, 0x05, 0xe2, 0x74, 0x55, 0x81, 0x55, 0x84, 0xed, 0x2e, 0xa6,
-	0x0d, 0x08, 0xef, 0x82, 0xc3, 0x0f, 0xb5, 0x20, 0xb5, 0x59, 0x62, 0x6a, 0x0b, 0x91, 0xc2, 0xaa,
-	0xad, 0x04, 0x55, 0x1b, 0x8d, 0x3d, 0x93, 0xf5, 0x10, 0x67, 0xd6, 0x9a, 0x1d, 0x6f, 0x48, 0x01,
-	0x89, 0x33, 0x27, 0xfe, 0x04, 0x8e, 0xf0, 0x1f, 0x20, 0x71, 0x00, 0x6e, 0x1c, 0x7b, 0xac, 0x2a,
-	0x11, 0x89, 0xf4, 0xc2, 0x91, 0x23, 0xca, 0x09, 0xed, 0xac, 0xd7, 0xf1, 0xae, 0x03, 0xc8, 0x0e,
-	0xb7, 0x9d, 0xdd, 0xf7, 0x3e, 0xfb, 0xde, 0xf7, 0xf9, 0xfb, 0xd6, 0xf0, 0xc2, 0xc0, 0x15, 0x78,
-	0x1f, 0xf3, 0x86, 0x27, 0x71, 0x6f, 0xd7, 0xc4, 0x43, 0x66, 0x32, 0x42, 0xb9, 0x64, 0x3b, 0x8c,
-	0x0a, 0xcf, 0x18, 0x0a, 0x57, 0xba, 0xda, 0x8a, 0x94, 0xdc, 0x18, 0x07, 0x1a, 0xfe, 0xfa, 0x85,
-	0x0d, 0x87, 0xc9, 0xfe, 0xa8, 0x6b, 0xf4, 0xdc, 0x3d, 0x93, 0x72, 0xdf, 0x3d, 0x18, 0x0a, 0xf7,
-	0xb3, 0x03, 0x53, 0x05, 0xf7, 0x1a, 0x0e, 0xe5, 0x0d, 0x1f, 0x0f, 0x18, 0xc1, 0x92, 0x9a, 0x33,
-	0x17, 0x21, 0xf2, 0x42, 0x63, 0x0a, 0xe1, 0xb8, 0x8e, 0x1b, 0x26, 0x77, 0x47, 0x3b, 0xea, 0xa4,
-	0x0e, 0xea, 0x2a, 0x0c, 0xd7, 0xfb, 0xf0, 0xcc, 0xc6, 0x70, 0x38, 0x60, 0x3d, 0x2c, 0x99, 0xcb,
-	0x3b, 0x27, 0x15, 0x6a, 0x5b, 0xb0, 0x82, 0x4f, 0x9e, 0x6c, 0x33, 0x52, 0x46, 0x35, 0xb4, 0x56,
-	0xb4, 0x2e, 0x1f, 0x5b, 0x75, 0xa1, 0x97, 0xeb, 0xcd, 0xca, 0xfd, 0xbb, 0xb8, 0xf1, 0xe0, 0xd5,
-	0xc6, 0x95, 0x7b, 0x6b, 0xd7, 0xae, 0xde, 0x6d, 0xdc, 0xbb, 0x16, 0x1d, 0x5f, 0xfa, 0xbc, 0xf9,
-	0xca, 0x97, 0x75, 0xfb, 0x69, 0x3c, 0x0d, 0xd6, 0x3f, 0x86, 0x73, 0xef, 0x0e, 0x18, 0xe5, 0x72,
-	0xfa, 0x25, 0x9b, 0x50, 0xec, 0xa9, 0x9b, 0x0b, 0xf0, 0x0b, 0xbd, 0x31, 0x4e, 0xff, 0x25, 0x03,
-	0xe7, 0x5b, 0x9c, 0x6c, 0x52, 0x9f, 0xf5, 0x68, 0x02, 0x4f, 0xd4, 0xcd, 0x45, 0xf0, 0x64, 0x8c,
-	0xd3, 0x30, 0x94, 0xe2, 0x4a, 0x78, 0xe5, 0x74, 0x0d, 0xad, 0x2d, 0x37, 0x2f, 0x19, 0xf1, 0xf9,
-	0x19, 0xa7, 0x4b, 0x69, 0xad, 0x1e, 0x5b, 0xd9, 0xaf, 0x51, 0x7a, 0x15, 0xfd, 0x7a, 0x58, 0x4d,
-	0x3d, 0x3c, 0xac, 0x22, 0x7b, 0x25, 0xa6, 0x8d, 0xa7, 0xd9, 0x90, 0x27, 0xd4, 0xdf, 0xa6, 0x23,
-	0x56, 0x5e, 0xaa, 0xa1, 0xb5, 0xa7, 0xac, 0x2b, 0x8f, 0x0f, 0xab, 0x6f, 0x38, 0xae, 0x21, 0xfb,
-	0x54, 0xf6, 0x19, 0x77, 0x3c, 0x83, 0x53, 0xb9, 0xef, 0x8a, 0x5d, 0x33, 0xfe, 0xbb, 0xf2, 0xd7,
-	0xcd, 0xe1, 0xae, 0x63, 0xca, 0x83, 0x21, 0xf5, 0x8c, 0xd6, 0xed, 0xce, 0x9b, 0xaf, 0xdb, 0x39,
-	0x42, 0xfd, 0xd6, 0x88, 0x69, 0xb7, 0xa0, 0xf0, 0xa9, 0xcb, 0xb8, 0x82, 0x66, 0xcf, 0x0a, 0xcd,
-	0x07, 0xa8, 0x80, 0x7a, 0x07, 0x02, 0x61, 0xb6, 0x31, 0x21, 0xa2, 0x9c, 0x53, 0xd4, 0xb7, 0x1f,
-	0x1f, 0x56, 0xdf, 0x9a, 0x97, 0xba, 0x49, 0xfd, 0x0d, 0x42, 0x84, 0x1d, 0xb4, 0x1d, 0x5c, 0xe8,
-	0xdf, 0x23, 0xd0, 0x6e, 0x60, 0x49, 0xf7, 0xf1, 0xc1, 0xf4, 0x04, 0xdf, 0x03, 0x70, 0xc2, 0xbb,
-	0x0b, 0x8c, 0xb0, 0xe8, 0x44, 0x40, 0xed, 0x7d, 0xc8, 0x04, 0x3a, 0xa4, 0xcf, 0xaa, 0x43, 0x40,
-	0xd1, 0x77, 0xe1, 0xd9, 0x9b, 0xc2, 0xc1, 0x9c, 0x3d, 0x98, 0x71, 0xcd, 0x87, 0x50, 0x72, 0xa7,
-	0x1e, 0x2d, 0x50, 0xf4, 0x8a, 0x1b, 0x43, 0xeb, 0x0c, 0x4a, 0xb7, 0x3d, 0x2a, 0xa6, 0x5f, 0x72,
-	0x1d, 0xf2, 0x23, 0x8f, 0x8a, 0xf9, 0xe0, 0xaf, 0x05, 0xf0, 0xdc, 0x48, 0xa1, 0xb4, 0xf3, 0x90,
-	0xa5, 0x7b, 0x98, 0x0d, 0x94, 0x20, 0x45, 0x3b, 0x3c, 0xe8, 0x3f, 0x21, 0x78, 0x7e, 0xba, 0xb1,
-	0x9b, 0x22, 0xf9, 0xe6, 0x5b, 0xb0, 0x9a, 0x68, 0xcf, 0x53, 0x25, 0x2c, 0x37, 0x2f, 0x27, 0xbd,
-	0xf0, 0x0f, 0x0a, 0xb5, 0x53, 0x76, 0x29, 0xde, 0xa1, 0xa7, 0xbd, 0x03, 0x85, 0x71, 0x3f, 0x91,
-	0xb3, 0xaa, 0x49, 0x5a, 0xa2, 0x90, 0x76, 0xca, 0xce, 0x87, 0xad, 0x78, 0x16, 0x40, 0x86, 0x11,
-	0x4f, 0xcb, 0xfc, 0x65, 0x21, 0xfd, 0x51, 0x06, 0xce, 0xb5, 0xb8, 0x64, 0x32, 0xf6, 0x23, 0xfa,
-	0x68, 0xd6, 0xc0, 0x68, 0x1e, 0x03, 0xb7, 0x53, 0x33, 0x86, 0xb5, 0x00, 0x26, 0x8b, 0x2b, 0x2a,
-	0xfa, 0x62, 0x92, 0x36, 0xb3, 0xef, 0xda, 0x29, 0xbb, 0x18, 0x6d, 0x2d, 0x4f, 0x6b, 0x01, 0x4c,
-	0xb6, 0x93, 0x57, 0xce, 0x28, 0x46, 0x3d, 0xc9, 0x38, 0x6d, 0xaf, 0x05, 0x98, 0x68, 0x3b, 0x05,
-	0x98, 0xe5, 0x13, 0x8b, 0x78, 0x6a, 0x7f, 0x2c, 0x37, 0xf5, 0x24, 0x67, 0xd6, 0x5b, 0xed, 0x94,
-	0x0d, 0x13, 0x83, 0x9c, 0x3e, 0xda, 0xec, 0xff, 0x3a, 0xda, 0xdc, 0x99, 0x46, 0xfb, 0x63, 0x1a,
-	0x9e, 0x9b, 0x88, 0x71, 0x87, 0x0a, 0x2f, 0xe1, 0xbc, 0x16, 0x14, 0xba, 0x02, 0x73, 0x72, 0xe2,
-	0x8a, 0x97, 0x8f, 0xad, 0xcb, 0xe2, 0xc5, 0xff, 0xb6, 0xdc, 0x43, 0x84, 0xec, 0xbc, 0xca, 0xed,
-	0x90, 0x00, 0xb3, 0xe7, 0x12, 0x3a, 0x08, 0x30, 0xe9, 0xf9, 0x31, 0x2a, 0xb7, 0x43, 0xb4, 0x26,
-	0xac, 0xf6, 0xb1, 0x20, 0xfb, 0x58, 0xd0, 0x6d, 0x3f, 0x2c, 0x56, 0x4d, 0xb8, 0x68, 0xe5, 0x8f,
-	0xad, 0x25, 0x91, 0x2e, 0xd7, 0xec, 0x52, 0x14, 0x30, 0x6e, 0x26, 0xc8, 0xd9, 0x61, 0x62, 0x2f,
-	0x96, 0xb3, 0x94, 0xc8, 0x89, 0x02, 0xa2, 0x9c, 0x1a, 0xe4, 0xbb, 0xe3, 0xa6, 0xb3, 0xf1, 0xd0,
-	0x5c, 0x57, 0x35, 0x74, 0x75, 0xe9, 0x87, 0x6f, 0xab, 0x48, 0xff, 0x0d, 0x81, 0xb6, 0x15, 0x2e,
-	0xb9, 0xf8, 0xba, 0xca, 0x71, 0x3a, 0xf9, 0xf8, 0x2e, 0xb8, 0x19, 0xb7, 0xa8, 0xec, 0x6c, 0xda,
-	0x59, 0x4e, 0x65, 0x87, 0x68, 0x37, 0xa0, 0x28, 0x29, 0xc7, 0xe1, 0x17, 0x3d, 0x21, 0xe0, 0xc5,
-	0x7f, 0x17, 0xf0, 0x8b, 0xfb, 0x75, 0xbb, 0x10, 0x26, 0x77, 0x88, 0x76, 0x29, 0x70, 0xd8, 0xc8,
-	0x93, 0xe1, 0x9e, 0x8b, 0x69, 0x77, 0x3d, 0x70, 0x91, 0x7a, 0x14, 0xf5, 0x67, 0x7d, 0xf0, 0xe8,
-	0xf7, 0x4a, 0xea, 0xab, 0xa3, 0x0a, 0xfa, 0xee, 0xa8, 0x82, 0xfe, 0x38, 0xaa, 0xa4, 0xfe, 0x3c,
-	0xaa, 0xa0, 0x6f, 0x9e, 0x54, 0x52, 0x3f, 0x3f, 0xa9, 0xa0, 0x4f, 0xcc, 0x39, 0x5a, 0x92, 0x7c,
-	0xd8, 0xed, 0xe6, 0xd4, 0xbf, 0xa3, 0xf5, 0xbf, 0x03, 0x00, 0x00, 0xff, 0xff, 0xc5, 0xec, 0x7a,
-	0x9d, 0xc6, 0x09, 0x00, 0x00,
-}
-
-func (this *ApplicationIdentifiers) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ApplicationIdentifiers)
-	if !ok {
-		that2, ok := that.(ApplicationIdentifiers)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.ApplicationId != that1.ApplicationId {
-		return false
-	}
-	return true
-}
-func (this *ClientIdentifiers) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ClientIdentifiers)
-	if !ok {
-		that2, ok := that.(ClientIdentifiers)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.ClientId != that1.ClientId {
-		return false
-	}
-	return true
-}
-func (this *EndDeviceIdentifiers) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*EndDeviceIdentifiers)
-	if !ok {
-		that2, ok := that.(EndDeviceIdentifiers)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.DeviceId != that1.DeviceId {
-		return false
-	}
-	if !this.ApplicationIdentifiers.Equal(&that1.ApplicationIdentifiers) {
-		return false
-	}
-	if that1.DevEui == nil {
-		if this.DevEui != nil {
-			return false
-		}
-	} else if !this.DevEui.Equal(*that1.DevEui) {
-		return false
-	}
-	if that1.JoinEui == nil {
-		if this.JoinEui != nil {
-			return false
-		}
-	} else if !this.JoinEui.Equal(*that1.JoinEui) {
-		return false
-	}
-	if that1.DevAddr == nil {
-		if this.DevAddr != nil {
-			return false
-		}
-	} else if !this.DevAddr.Equal(*that1.DevAddr) {
-		return false
-	}
-	return true
-}
-func (this *GatewayIdentifiers) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*GatewayIdentifiers)
-	if !ok {
-		that2, ok := that.(GatewayIdentifiers)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.GatewayId != that1.GatewayId {
-		return false
-	}
-	if that1.Eui == nil {
-		if this.Eui != nil {
-			return false
-		}
-	} else if !this.Eui.Equal(*that1.Eui) {
-		return false
-	}
-	return true
-}
-func (this *OrganizationIdentifiers) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*OrganizationIdentifiers)
-	if !ok {
-		that2, ok := that.(OrganizationIdentifiers)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.OrganizationId != that1.OrganizationId {
-		return false
-	}
-	return true
-}
-func (this *UserIdentifiers) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*UserIdentifiers)
-	if !ok {
-		that2, ok := that.(UserIdentifiers)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.UserId != that1.UserId {
-		return false
-	}
-	if this.Email != that1.Email {
-		return false
-	}
-	return true
-}
-func (this *OrganizationOrUserIdentifiers) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*OrganizationOrUserIdentifiers)
-	if !ok {
-		that2, ok := that.(OrganizationOrUserIdentifiers)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if that1.Ids == nil {
-		if this.Ids != nil {
-			return false
-		}
-	} else if this.Ids == nil {
-		return false
-	} else if !this.Ids.Equal(that1.Ids) {
-		return false
-	}
-	return true
-}
-func (this *OrganizationOrUserIdentifiers_OrganizationIds) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*OrganizationOrUserIdentifiers_OrganizationIds)
-	if !ok {
-		that2, ok := that.(OrganizationOrUserIdentifiers_OrganizationIds)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.OrganizationIds.Equal(that1.OrganizationIds) {
-		return false
-	}
-	return true
-}
-func (this *OrganizationOrUserIdentifiers_UserIds) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*OrganizationOrUserIdentifiers_UserIds)
-	if !ok {
-		that2, ok := that.(OrganizationOrUserIdentifiers_UserIds)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.UserIds.Equal(that1.UserIds) {
-		return false
-	}
-	return true
-}
-func (this *EntityIdentifiers) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*EntityIdentifiers)
-	if !ok {
-		that2, ok := that.(EntityIdentifiers)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if that1.Ids == nil {
-		if this.Ids != nil {
-			return false
-		}
-	} else if this.Ids == nil {
-		return false
-	} else if !this.Ids.Equal(that1.Ids) {
-		return false
-	}
-	return true
-}
-func (this *EntityIdentifiers_ApplicationIds) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*EntityIdentifiers_ApplicationIds)
-	if !ok {
-		that2, ok := that.(EntityIdentifiers_ApplicationIds)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.ApplicationIds.Equal(that1.ApplicationIds) {
-		return false
-	}
-	return true
-}
-func (this *EntityIdentifiers_ClientIds) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*EntityIdentifiers_ClientIds)
-	if !ok {
-		that2, ok := that.(EntityIdentifiers_ClientIds)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.ClientIds.Equal(that1.ClientIds) {
-		return false
-	}
-	return true
-}
-func (this *EntityIdentifiers_DeviceIds) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*EntityIdentifiers_DeviceIds)
-	if !ok {
-		that2, ok := that.(EntityIdentifiers_DeviceIds)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.DeviceIds.Equal(that1.DeviceIds) {
-		return false
-	}
-	return true
-}
-func (this *EntityIdentifiers_GatewayIds) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*EntityIdentifiers_GatewayIds)
-	if !ok {
-		that2, ok := that.(EntityIdentifiers_GatewayIds)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.GatewayIds.Equal(that1.GatewayIds) {
-		return false
-	}
-	return true
-}
-func (this *EntityIdentifiers_OrganizationIds) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*EntityIdentifiers_OrganizationIds)
-	if !ok {
-		that2, ok := that.(EntityIdentifiers_OrganizationIds)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.OrganizationIds.Equal(that1.OrganizationIds) {
-		return false
-	}
-	return true
-}
-func (this *EntityIdentifiers_UserIds) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*EntityIdentifiers_UserIds)
-	if !ok {
-		that2, ok := that.(EntityIdentifiers_UserIds)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.UserIds.Equal(that1.UserIds) {
-		return false
-	}
-	return true
-}
-func (this *EndDeviceVersionIdentifiers) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*EndDeviceVersionIdentifiers)
-	if !ok {
-		that2, ok := that.(EndDeviceVersionIdentifiers)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.BrandId != that1.BrandId {
-		return false
-	}
-	if this.ModelId != that1.ModelId {
-		return false
-	}
-	if this.HardwareVersion != that1.HardwareVersion {
-		return false
-	}
-	if this.FirmwareVersion != that1.FirmwareVersion {
-		return false
-	}
-	if this.BandId != that1.BandId {
-		return false
-	}
-	return true
-}
-func (this *NetworkIdentifiers) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*NetworkIdentifiers)
-	if !ok {
-		that2, ok := that.(NetworkIdentifiers)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if that1.NetId == nil {
-		if this.NetId != nil {
-			return false
-		}
-	} else if !this.NetId.Equal(*that1.NetId) {
-		return false
-	}
-	if this.TenantId != that1.TenantId {
-		return false
-	}
-	if this.ClusterId != that1.ClusterId {
-		return false
-	}
-	return true
-}
-func NewPopulatedEndDeviceVersionIdentifiers(r randyIdentifiers, easy bool) *EndDeviceVersionIdentifiers {
-	this := &EndDeviceVersionIdentifiers{}
-	this.BrandId = string(randStringIdentifiers(r))
-	this.ModelId = string(randStringIdentifiers(r))
-	this.HardwareVersion = string(randStringIdentifiers(r))
-	this.FirmwareVersion = string(randStringIdentifiers(r))
-	this.BandId = string(randStringIdentifiers(r))
-	if !easy && r.Intn(10) != 0 {
-	}
-	return this
-}
-
-func NewPopulatedNetworkIdentifiers(r randyIdentifiers, easy bool) *NetworkIdentifiers {
-	this := &NetworkIdentifiers{}
-	this.NetId = go_thethings_network_lorawan_stack_v3_pkg_types.NewPopulatedNetID(r)
-	this.TenantId = string(randStringIdentifiers(r))
-	this.ClusterId = string(randStringIdentifiers(r))
-	if !easy && r.Intn(10) != 0 {
-	}
-	return this
-}
-
-type randyIdentifiers interface {
-	Float32() float32
-	Float64() float64
-	Int63() int64
-	Int31() int32
-	Uint32() uint32
-	Intn(n int) int
-}
-
-func randUTF8RuneIdentifiers(r randyIdentifiers) rune {
-	ru := r.Intn(62)
-	if ru < 10 {
-		return rune(ru + 48)
-	} else if ru < 36 {
-		return rune(ru + 55)
-	}
-	return rune(ru + 61)
-}
-func randStringIdentifiers(r randyIdentifiers) string {
-	v1 := r.Intn(100)
-	tmps := make([]rune, v1)
-	for i := 0; i < v1; i++ {
-		tmps[i] = randUTF8RuneIdentifiers(r)
-	}
-	return string(tmps)
-}
-func randUnrecognizedIdentifiers(r randyIdentifiers, maxFieldNumber int) (dAtA []byte) {
-	l := r.Intn(5)
-	for i := 0; i < l; i++ {
-		wire := r.Intn(4)
-		if wire == 3 {
-			wire = 5
-		}
-		fieldNumber := maxFieldNumber + r.Intn(100)
-		dAtA = randFieldIdentifiers(dAtA, r, fieldNumber, wire)
-	}
-	return dAtA
-}
-func randFieldIdentifiers(dAtA []byte, r randyIdentifiers, fieldNumber int, wire int) []byte {
-	key := uint32(fieldNumber)<<3 | uint32(wire)
-	switch wire {
-	case 0:
-		dAtA = encodeVarintPopulateIdentifiers(dAtA, uint64(key))
-		v2 := r.Int63()
-		if r.Intn(2) == 0 {
-			v2 *= -1
-		}
-		dAtA = encodeVarintPopulateIdentifiers(dAtA, uint64(v2))
-	case 1:
-		dAtA = encodeVarintPopulateIdentifiers(dAtA, uint64(key))
-		dAtA = append(dAtA, byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)))
-	case 2:
-		dAtA = encodeVarintPopulateIdentifiers(dAtA, uint64(key))
-		ll := r.Intn(100)
-		dAtA = encodeVarintPopulateIdentifiers(dAtA, uint64(ll))
-		for j := 0; j < ll; j++ {
-			dAtA = append(dAtA, byte(r.Intn(256)))
-		}
-	default:
-		dAtA = encodeVarintPopulateIdentifiers(dAtA, uint64(key))
-		dAtA = append(dAtA, byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)))
-	}
-	return dAtA
-}
-func encodeVarintPopulateIdentifiers(dAtA []byte, v uint64) []byte {
-	for v >= 1<<7 {
-		dAtA = append(dAtA, uint8(uint64(v)&0x7f|0x80))
-		v >>= 7
-	}
-	dAtA = append(dAtA, uint8(v))
-	return dAtA
-}
-func (this *ApplicationIdentifiers) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&ApplicationIdentifiers{`,
-		`ApplicationId:` + fmt.Sprintf("%v", this.ApplicationId) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *ClientIdentifiers) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&ClientIdentifiers{`,
-		`ClientId:` + fmt.Sprintf("%v", this.ClientId) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *EndDeviceIdentifiers) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&EndDeviceIdentifiers{`,
-		`DeviceId:` + fmt.Sprintf("%v", this.DeviceId) + `,`,
-		`ApplicationIdentifiers:` + strings.Replace(strings.Replace(this.ApplicationIdentifiers.String(), "ApplicationIdentifiers", "ApplicationIdentifiers", 1), `&`, ``, 1) + `,`,
-		`DevEui:` + fmt.Sprintf("%v", this.DevEui) + `,`,
-		`JoinEui:` + fmt.Sprintf("%v", this.JoinEui) + `,`,
-		`DevAddr:` + fmt.Sprintf("%v", this.DevAddr) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *GatewayIdentifiers) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&GatewayIdentifiers{`,
-		`GatewayId:` + fmt.Sprintf("%v", this.GatewayId) + `,`,
-		`Eui:` + fmt.Sprintf("%v", this.Eui) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *OrganizationIdentifiers) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&OrganizationIdentifiers{`,
-		`OrganizationId:` + fmt.Sprintf("%v", this.OrganizationId) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *UserIdentifiers) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&UserIdentifiers{`,
-		`UserId:` + fmt.Sprintf("%v", this.UserId) + `,`,
-		`Email:` + fmt.Sprintf("%v", this.Email) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *OrganizationOrUserIdentifiers) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&OrganizationOrUserIdentifiers{`,
-		`Ids:` + fmt.Sprintf("%v", this.Ids) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *OrganizationOrUserIdentifiers_OrganizationIds) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&OrganizationOrUserIdentifiers_OrganizationIds{`,
-		`OrganizationIds:` + strings.Replace(fmt.Sprintf("%v", this.OrganizationIds), "OrganizationIdentifiers", "OrganizationIdentifiers", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *OrganizationOrUserIdentifiers_UserIds) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&OrganizationOrUserIdentifiers_UserIds{`,
-		`UserIds:` + strings.Replace(fmt.Sprintf("%v", this.UserIds), "UserIdentifiers", "UserIdentifiers", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *EntityIdentifiers) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&EntityIdentifiers{`,
-		`Ids:` + fmt.Sprintf("%v", this.Ids) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *EntityIdentifiers_ApplicationIds) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&EntityIdentifiers_ApplicationIds{`,
-		`ApplicationIds:` + strings.Replace(fmt.Sprintf("%v", this.ApplicationIds), "ApplicationIdentifiers", "ApplicationIdentifiers", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *EntityIdentifiers_ClientIds) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&EntityIdentifiers_ClientIds{`,
-		`ClientIds:` + strings.Replace(fmt.Sprintf("%v", this.ClientIds), "ClientIdentifiers", "ClientIdentifiers", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *EntityIdentifiers_DeviceIds) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&EntityIdentifiers_DeviceIds{`,
-		`DeviceIds:` + strings.Replace(fmt.Sprintf("%v", this.DeviceIds), "EndDeviceIdentifiers", "EndDeviceIdentifiers", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *EntityIdentifiers_GatewayIds) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&EntityIdentifiers_GatewayIds{`,
-		`GatewayIds:` + strings.Replace(fmt.Sprintf("%v", this.GatewayIds), "GatewayIdentifiers", "GatewayIdentifiers", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *EntityIdentifiers_OrganizationIds) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&EntityIdentifiers_OrganizationIds{`,
-		`OrganizationIds:` + strings.Replace(fmt.Sprintf("%v", this.OrganizationIds), "OrganizationIdentifiers", "OrganizationIdentifiers", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *EntityIdentifiers_UserIds) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&EntityIdentifiers_UserIds{`,
-		`UserIds:` + strings.Replace(fmt.Sprintf("%v", this.UserIds), "UserIdentifiers", "UserIdentifiers", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *EndDeviceVersionIdentifiers) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&EndDeviceVersionIdentifiers{`,
-		`BrandId:` + fmt.Sprintf("%v", this.BrandId) + `,`,
-		`ModelId:` + fmt.Sprintf("%v", this.ModelId) + `,`,
-		`HardwareVersion:` + fmt.Sprintf("%v", this.HardwareVersion) + `,`,
-		`FirmwareVersion:` + fmt.Sprintf("%v", this.FirmwareVersion) + `,`,
-		`BandId:` + fmt.Sprintf("%v", this.BandId) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *NetworkIdentifiers) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&NetworkIdentifiers{`,
-		`NetId:` + fmt.Sprintf("%v", this.NetId) + `,`,
-		`TenantId:` + fmt.Sprintf("%v", this.TenantId) + `,`,
-		`ClusterId:` + fmt.Sprintf("%v", this.ClusterId) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func valueToStringIdentifiers(v interface{}) string {
-	rv := reflect.ValueOf(v)
-	if rv.IsNil() {
-		return "nil"
-	}
-	pv := reflect.Indirect(rv).Interface()
-	return fmt.Sprintf("*%v", pv)
+	// 1246 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x57, 0xcf, 0x6f, 0x1b, 0xc5,
+	0x17, 0xcf, 0xae, 0x7f, 0xad, 0x27, 0x4d, 0x9c, 0xae, 0xbe, 0xfa, 0xd6, 0x49, 0xa1, 0xa4, 0x26,
+	0xb4, 0xa1, 0xc2, 0x5e, 0xd7, 0x6e, 0x29, 0x54, 0x48, 0xad, 0xb7, 0x71, 0x1b, 0x57, 0x22, 0x2d,
+	0xab, 0x16, 0x01, 0x55, 0x1b, 0x8d, 0x77, 0x26, 0xeb, 0x69, 0xd7, 0xb3, 0xab, 0x99, 0xb1, 0xd3,
+	0xb4, 0x20, 0x21, 0x8e, 0x1c, 0x7b, 0xe4, 0x02, 0xe2, 0x98, 0xbf, 0x82, 0x2b, 0x27, 0xe0, 0x80,
+	0x44, 0x0f, 0x9c, 0x38, 0x20, 0x21, 0xb8, 0x14, 0x21, 0xa1, 0x9c, 0xd0, 0xce, 0xae, 0x93, 0xf5,
+	0x3a, 0x05, 0x1c, 0x12, 0xa9, 0x87, 0xde, 0x76, 0x67, 0xde, 0xfb, 0xbc, 0x79, 0x9f, 0x37, 0xef,
+	0xc7, 0x80, 0x97, 0x5d, 0x8f, 0xc1, 0x75, 0x48, 0xcb, 0x5c, 0x40, 0xfb, 0x9e, 0x01, 0x7d, 0x62,
+	0x10, 0x84, 0xa9, 0x20, 0x6b, 0x04, 0x33, 0x5e, 0xf1, 0x99, 0x27, 0x3c, 0x7d, 0x5a, 0x08, 0x5a,
+	0x89, 0x04, 0x2b, 0xfd, 0xfa, 0x5c, 0xc3, 0x21, 0xa2, 0xd3, 0x6b, 0x57, 0x6c, 0xaf, 0x6b, 0x60,
+	0xda, 0xf7, 0x36, 0x7c, 0xe6, 0xdd, 0xdf, 0x30, 0xa4, 0xb0, 0x5d, 0x76, 0x30, 0x2d, 0xf7, 0xa1,
+	0x4b, 0x10, 0x14, 0xd8, 0x18, 0xf9, 0x08, 0x21, 0xe7, 0xca, 0x31, 0x08, 0xc7, 0x73, 0xbc, 0x50,
+	0xb9, 0xdd, 0x5b, 0x93, 0x7f, 0xf2, 0x47, 0x7e, 0x45, 0xe2, 0x4b, 0x31, 0xf1, 0x1b, 0x1d, 0x7c,
+	0xa3, 0x43, 0xa8, 0xc3, 0x5b, 0x14, 0xf5, 0xb8, 0x60, 0x04, 0xf3, 0xb8, 0x69, 0xc7, 0x2b, 0xaf,
+	0xb9, 0xd0, 0xe1, 0x06, 0xa4, 0xd4, 0x13, 0x50, 0x10, 0x8f, 0x46, 0x7e, 0xcc, 0x5d, 0x1a, 0x0b,
+	0xe5, 0x2e, 0xf7, 0xe8, 0x2e, 0x20, 0x95, 0x98, 0x94, 0xe7, 0x63, 0x0a, 0x7d, 0xd2, 0xaf, 0x19,
+	0x9e, 0x2f, 0x65, 0x46, 0xe5, 0x4b, 0x0c, 0xfc, 0xbf, 0xe1, 0xfb, 0x2e, 0xb1, 0xe5, 0x6a, 0x6b,
+	0x87, 0x5c, 0x7d, 0x05, 0x4c, 0xc3, 0x9d, 0x9d, 0x55, 0x82, 0x8a, 0xca, 0xbc, 0xb2, 0x98, 0x37,
+	0x4f, 0x6e, 0x99, 0x0b, 0xac, 0x54, 0x5c, 0xa8, 0x1d, 0xbb, 0x73, 0x0b, 0x96, 0x1f, 0x54, 0xcb,
+	0x6f, 0xde, 0x5e, 0xbc, 0x70, 0xfe, 0x56, 0xf9, 0xf6, 0x85, 0xc1, 0xef, 0xab, 0x0f, 0x6b, 0xaf,
+	0x7d, 0xb4, 0x60, 0x4d, 0xc1, 0x38, 0xf0, 0x79, 0xed, 0xc9, 0xe6, 0x6c, 0x5a, 0x53, 0x66, 0x94,
+	0x92, 0x0d, 0x0e, 0x5f, 0x72, 0x09, 0xa6, 0x22, 0x6e, 0x6e, 0x09, 0xe4, 0x6d, 0xb9, 0xb8, 0x07,
+	0x4b, 0x9a, 0x1d, 0xc1, 0xc5, 0x8c, 0x7c, 0x0e, 0xc0, 0xff, 0x9a, 0x14, 0x2d, 0xe1, 0x3e, 0xb1,
+	0x71, 0xc2, 0x10, 0x92, 0x8b, 0x7b, 0x31, 0x84, 0x22, 0x38, 0xfd, 0x7d, 0x50, 0x18, 0x66, 0x87,
+	0x17, 0xd5, 0x79, 0x65, 0x71, 0xb2, 0x76, 0xa2, 0x32, 0x7c, 0x1d, 0x2b, 0xbb, 0xd3, 0x6b, 0x6a,
+	0x5b, 0x66, 0xe6, 0x53, 0x45, 0x9d, 0x51, 0xac, 0xe9, 0x21, 0x9e, 0xb8, 0xfe, 0xbb, 0x0a, 0x72,
+	0x08, 0xf7, 0x57, 0x71, 0x8f, 0x14, 0xd3, 0xf3, 0xca, 0xe2, 0x21, 0xf3, 0xb1, 0xfa, 0xa8, 0x71,
+	0xfc, 0xaa, 0x5e, 0x3a, 0x57, 0x35, 0xeb, 0x4b, 0x67, 0xcf, 0x35, 0x97, 0xaa, 0xd5, 0x6a, 0xc3,
+	0xbc, 0xb4, 0x54, 0xfa, 0x4c, 0x55, 0x72, 0x5f, 0xaa, 0xd9, 0xe0, 0x82, 0x50, 0x67, 0xcb, 0xcc,
+	0x3e, 0x48, 0x77, 0x34, 0x5f, 0xf9, 0x65, 0x73, 0xf6, 0x13, 0x05, 0x5c, 0x70, 0xbc, 0x8a, 0xe8,
+	0x60, 0x21, 0xaf, 0x51, 0x85, 0x62, 0xb1, 0xee, 0xb1, 0x7b, 0xc6, 0x70, 0x42, 0xf5, 0xeb, 0x86,
+	0x7f, 0xcf, 0x31, 0xc4, 0x86, 0x8f, 0x79, 0xe5, 0x6d, 0xc8, 0x78, 0x07, 0xba, 0xcb, 0xcd, 0xf7,
+	0xcc, 0x0d, 0x81, 0xb9, 0x3e, 0x36, 0xc0, 0x4d, 0xda, 0x0d, 0x21, 0xde, 0x90, 0x00, 0x4f, 0x36,
+	0x67, 0xbf, 0x50, 0xe6, 0x56, 0xfe, 0x1d, 0x8a, 0xdd, 0x45, 0x86, 0x10, 0xb4, 0xec, 0xae, 0x97,
+	0x6d, 0x97, 0x18, 0x76, 0x8f, 0x0b, 0xaf, 0x2b, 0x33, 0xa5, 0xb2, 0x82, 0xd7, 0x43, 0xc0, 0xcb,
+	0x2e, 0x74, 0x4a, 0xff, 0x1d, 0xef, 0x0a, 0x16, 0xcd, 0xfb, 0xd0, 0x16, 0x12, 0xd3, 0xca, 0x22,
+	0xdc, 0x6f, 0xf6, 0x88, 0xfe, 0x87, 0x0a, 0xb4, 0xbb, 0x1e, 0xa1, 0x92, 0xf6, 0xcc, 0x73, 0xda,
+	0x0f, 0x98, 0xf6, 0x5c, 0xc0, 0x75, 0xc0, 0xfb, 0x6f, 0x2a, 0x08, 0xb2, 0x6a, 0x15, 0x22, 0xc4,
+	0x8a, 0x59, 0xc9, 0xfb, 0x77, 0xea, 0xa3, 0xc6, 0xec, 0x55, 0x50, 0xaa, 0xbd, 0xfe, 0x74, 0xbe,
+	0xd3, 0xcf, 0x00, 0xdf, 0x67, 0xf6, 0x9b, 0xef, 0x33, 0x07, 0xc8, 0x37, 0xc2, 0xfd, 0x06, 0x42,
+	0x2c, 0x56, 0x21, 0xbf, 0x4f, 0x01, 0xfd, 0x0a, 0x14, 0x78, 0x1d, 0x6e, 0xc4, 0xeb, 0xe3, 0x65,
+	0x00, 0x9c, 0x70, 0x75, 0x0f, 0x05, 0x32, 0xef, 0x0c, 0x00, 0xf5, 0x5f, 0x55, 0x90, 0x0a, 0x72,
+	0x49, 0x7d, 0x9e, 0x4b, 0x07, 0x9c, 0x4b, 0x01, 0xcd, 0xb1, 0xb8, 0xf6, 0xc0, 0x91, 0x6b, 0xcc,
+	0x81, 0x94, 0x3c, 0x18, 0xe9, 0xe9, 0xd7, 0x41, 0xc1, 0x8b, 0x6d, 0xed, 0x21, 0xc0, 0xd3, 0xde,
+	0x10, 0x74, 0xcc, 0xec, 0x43, 0x50, 0xb8, 0xc9, 0x31, 0x8b, 0x9b, 0xbb, 0x08, 0x72, 0x3d, 0x8e,
+	0xd9, 0x78, 0x66, 0x4e, 0x07, 0x66, 0xb2, 0x3d, 0x09, 0xa5, 0xbf, 0x00, 0x32, 0xb8, 0x0b, 0x89,
+	0x2b, 0x6f, 0x51, 0xde, 0xcc, 0x3e, 0xd9, 0x9c, 0x55, 0x17, 0x15, 0x2b, 0x5c, 0x8c, 0x19, 0xff,
+	0x5a, 0x01, 0x2f, 0xc6, 0x9d, 0xbe, 0xc6, 0x92, 0x67, 0xb9, 0x01, 0x66, 0x12, 0xae, 0x73, 0x79,
+	0xa8, 0xc9, 0xda, 0xc9, 0x64, 0xc7, 0x7e, 0x0a, 0x7b, 0xcb, 0x13, 0x56, 0x61, 0xd8, 0x7b, 0xae,
+	0xbf, 0x05, 0xb4, 0xc8, 0xc3, 0x41, 0xff, 0x7f, 0x29, 0x89, 0x96, 0x38, 0xc8, 0xf2, 0x84, 0x95,
+	0x0b, 0x9d, 0xe3, 0x3b, 0xe7, 0x37, 0x01, 0x48, 0x11, 0xc4, 0xf5, 0xd4, 0x9f, 0xa6, 0x52, 0xfa,
+	0x21, 0x05, 0x0e, 0x37, 0xa9, 0x20, 0x62, 0x28, 0x2d, 0xdf, 0x19, 0x1d, 0x38, 0x94, 0x71, 0x06,
+	0x8e, 0xe5, 0x89, 0x91, 0x41, 0xc3, 0x04, 0x60, 0x7b, 0xe4, 0x1a, 0x1c, 0xff, 0x78, 0x12, 0x6d,
+	0x64, 0x52, 0x5b, 0x9e, 0xb0, 0xf2, 0x83, 0x79, 0x8b, 0xeb, 0x4d, 0x00, 0xb6, 0xa7, 0x29, 0x5e,
+	0x4c, 0x49, 0x8c, 0x85, 0x24, 0xc6, 0x6e, 0x73, 0x58, 0x00, 0x33, 0x98, 0xa6, 0x02, 0x98, 0xc9,
+	0x9d, 0xa2, 0xc3, 0xe5, 0xd8, 0x33, 0x59, 0x2b, 0x25, 0x71, 0x46, 0xab, 0xd5, 0xf2, 0x84, 0x05,
+	0xb6, 0x4b, 0xce, 0xee, 0x41, 0xce, 0xec, 0x6b, 0x90, 0xb3, 0xe3, 0x06, 0x79, 0x28, 0xb4, 0x8f,
+	0x53, 0xe0, 0xe8, 0x36, 0x19, 0xef, 0x62, 0xc6, 0x13, 0xf9, 0xd9, 0x04, 0x5a, 0x9b, 0x41, 0x8a,
+	0x76, 0x32, 0xe6, 0xd4, 0x96, 0x79, 0x92, 0xbd, 0xf2, 0xcf, 0x89, 0xf9, 0xad, 0xa2, 0x58, 0x39,
+	0xa9, 0xdb, 0x42, 0x01, 0x4c, 0xd7, 0x43, 0xd8, 0x0d, 0x60, 0xd4, 0xf1, 0x61, 0xa4, 0x6e, 0x0b,
+	0xe9, 0x35, 0x30, 0xd3, 0x81, 0x0c, 0xad, 0x43, 0x86, 0x57, 0xfb, 0xe1, 0x61, 0x65, 0x84, 0xf3,
+	0x66, 0x6e, 0xcb, 0x4c, 0x33, 0xb5, 0x38, 0x6f, 0x15, 0x06, 0x02, 0x91, 0x33, 0x81, 0xce, 0x1a,
+	0x61, 0xdd, 0x21, 0x9d, 0x74, 0x42, 0x67, 0x20, 0x30, 0xd0, 0x99, 0x07, 0xb9, 0x76, 0xe4, 0x74,
+	0x66, 0x58, 0x34, 0xdb, 0x0e, 0x1d, 0x3a, 0x0a, 0xf2, 0x7d, 0x4c, 0x91, 0x27, 0x4b, 0x49, 0x10,
+	0x82, 0x29, 0x4b, 0x0b, 0x17, 0x5a, 0x48, 0x3f, 0x05, 0x0e, 0x47, 0x9b, 0x3e, 0xf3, 0xd6, 0x88,
+	0x2b, 0x07, 0xfb, 0x9c, 0x14, 0x2a, 0x84, 0x1b, 0xd7, 0xc3, 0xf5, 0x16, 0xd2, 0xaf, 0x81, 0x29,
+	0x8e, 0x19, 0x81, 0xee, 0x2a, 0xed, 0x75, 0xdb, 0x98, 0x15, 0xb5, 0xb1, 0xe9, 0x39, 0x14, 0x02,
+	0xac, 0x48, 0xfd, 0x58, 0x09, 0xfa, 0x31, 0x0d, 0xf4, 0x95, 0xb0, 0x96, 0xc7, 0x43, 0xfa, 0xb3,
+	0x0a, 0xb2, 0x14, 0x6f, 0xbf, 0x6a, 0x0e, 0x99, 0xdf, 0xa8, 0x8f, 0x1a, 0x47, 0xae, 0x6a, 0xa5,
+	0x6a, 0xb5, 0x5a, 0x3d, 0x5d, 0xdf, 0xad, 0xff, 0xa5, 0x9e, 0x81, 0xfe, 0x57, 0xdf, 0xef, 0xfe,
+	0x57, 0x3f, 0xb8, 0xfe, 0x97, 0xa1, 0x58, 0xb4, 0x90, 0x7e, 0x05, 0xe4, 0x05, 0xa6, 0x30, 0x7c,
+	0x41, 0x26, 0xae, 0xfd, 0xf1, 0xbf, 0x8f, 0xeb, 0x87, 0x77, 0x16, 0x2c, 0x2d, 0x54, 0x6e, 0x21,
+	0xfd, 0x44, 0x50, 0x17, 0x7b, 0x5c, 0x84, 0x9d, 0x6b, 0xe8, 0xc6, 0x5f, 0x0c, 0x6a, 0x9f, 0xdc,
+	0x6a, 0x21, 0xfd, 0x34, 0x28, 0x0c, 0xe4, 0x82, 0xe9, 0x15, 0x73, 0x1e, 0x5d, 0xf5, 0xe0, 0x6d,
+	0xc7, 0x52, 0xc5, 0x8f, 0x55, 0x6b, 0x3a, 0x12, 0x68, 0x84, 0xfb, 0xba, 0x01, 0xa6, 0xa3, 0x33,
+	0x0e, 0x34, 0x32, 0x09, 0x8d, 0xa9, 0x70, 0x3f, 0x52, 0xd8, 0xbe, 0x5f, 0x13, 0xe6, 0xd9, 0xaf,
+	0x7e, 0x3a, 0xa6, 0x7c, 0x60, 0x8c, 0x11, 0x51, 0x41, 0xfd, 0x76, 0x3b, 0x2b, 0xdf, 0xf9, 0xf5,
+	0xbf, 0x02, 0x00, 0x00, 0xff, 0xff, 0xee, 0xbd, 0x75, 0x68, 0x4b, 0x11, 0x00, 0x00,
 }

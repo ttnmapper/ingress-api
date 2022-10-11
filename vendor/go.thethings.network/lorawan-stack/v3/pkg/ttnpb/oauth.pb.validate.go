@@ -52,7 +52,14 @@ func (m *OAuthClientAuthorizationIdentifiers) ValidateFields(paths ...string) er
 		switch name {
 		case "user_ids":
 
-			if v, ok := interface{}(&m.UserIds).(interface{ ValidateFields(...string) error }); ok {
+			if m.GetUserIds() == nil {
+				return OAuthClientAuthorizationIdentifiersValidationError{
+					field:  "user_ids",
+					reason: "value is required",
+				}
+			}
+
+			if v, ok := interface{}(m.GetUserIds()).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return OAuthClientAuthorizationIdentifiersValidationError{
 						field:  "user_ids",
@@ -64,7 +71,14 @@ func (m *OAuthClientAuthorizationIdentifiers) ValidateFields(paths ...string) er
 
 		case "client_ids":
 
-			if v, ok := interface{}(&m.ClientIds).(interface{ ValidateFields(...string) error }); ok {
+			if m.GetClientIds() == nil {
+				return OAuthClientAuthorizationIdentifiersValidationError{
+					field:  "client_ids",
+					reason: "value is required",
+				}
+			}
+
+			if v, ok := interface{}(m.GetClientIds()).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return OAuthClientAuthorizationIdentifiersValidationError{
 						field:  "client_ids",
@@ -158,7 +172,14 @@ func (m *OAuthClientAuthorization) ValidateFields(paths ...string) error {
 		switch name {
 		case "user_ids":
 
-			if v, ok := interface{}(&m.UserIds).(interface{ ValidateFields(...string) error }); ok {
+			if m.GetUserIds() == nil {
+				return OAuthClientAuthorizationValidationError{
+					field:  "user_ids",
+					reason: "value is required",
+				}
+			}
+
+			if v, ok := interface{}(m.GetUserIds()).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return OAuthClientAuthorizationValidationError{
 						field:  "user_ids",
@@ -170,7 +191,14 @@ func (m *OAuthClientAuthorization) ValidateFields(paths ...string) error {
 
 		case "client_ids":
 
-			if v, ok := interface{}(&m.ClientIds).(interface{ ValidateFields(...string) error }); ok {
+			if m.GetClientIds() == nil {
+				return OAuthClientAuthorizationValidationError{
+					field:  "client_ids",
+					reason: "value is required",
+				}
+			}
+
+			if v, ok := interface{}(m.GetClientIds()).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return OAuthClientAuthorizationValidationError{
 						field:  "client_ids",
@@ -184,7 +212,7 @@ func (m *OAuthClientAuthorization) ValidateFields(paths ...string) error {
 
 		case "created_at":
 
-			if v, ok := interface{}(&m.CreatedAt).(interface{ ValidateFields(...string) error }); ok {
+			if v, ok := interface{}(m.GetCreatedAt()).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return OAuthClientAuthorizationValidationError{
 						field:  "created_at",
@@ -196,7 +224,7 @@ func (m *OAuthClientAuthorization) ValidateFields(paths ...string) error {
 
 		case "updated_at":
 
-			if v, ok := interface{}(&m.UpdatedAt).(interface{ ValidateFields(...string) error }); ok {
+			if v, ok := interface{}(m.GetUpdatedAt()).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return OAuthClientAuthorizationValidationError{
 						field:  "updated_at",
@@ -389,7 +417,14 @@ func (m *ListOAuthClientAuthorizationsRequest) ValidateFields(paths ...string) e
 		switch name {
 		case "user_ids":
 
-			if v, ok := interface{}(&m.UserIdentifiers).(interface{ ValidateFields(...string) error }); ok {
+			if m.GetUserIds() == nil {
+				return ListOAuthClientAuthorizationsRequestValidationError{
+					field:  "user_ids",
+					reason: "value is required",
+				}
+			}
+
+			if v, ok := interface{}(m.GetUserIds()).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return ListOAuthClientAuthorizationsRequestValidationError{
 						field:  "user_ids",
@@ -509,7 +544,14 @@ func (m *OAuthAuthorizationCode) ValidateFields(paths ...string) error {
 		switch name {
 		case "user_ids":
 
-			if v, ok := interface{}(&m.UserIds).(interface{ ValidateFields(...string) error }); ok {
+			if m.GetUserIds() == nil {
+				return OAuthAuthorizationCodeValidationError{
+					field:  "user_ids",
+					reason: "value is required",
+				}
+			}
+
+			if v, ok := interface{}(m.GetUserIds()).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return OAuthAuthorizationCodeValidationError{
 						field:  "user_ids",
@@ -530,7 +572,14 @@ func (m *OAuthAuthorizationCode) ValidateFields(paths ...string) error {
 
 		case "client_ids":
 
-			if v, ok := interface{}(&m.ClientIds).(interface{ ValidateFields(...string) error }); ok {
+			if m.GetClientIds() == nil {
+				return OAuthAuthorizationCodeValidationError{
+					field:  "client_ids",
+					reason: "value is required",
+				}
+			}
+
+			if v, ok := interface{}(m.GetClientIds()).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return OAuthAuthorizationCodeValidationError{
 						field:  "client_ids",
@@ -558,7 +607,7 @@ func (m *OAuthAuthorizationCode) ValidateFields(paths ...string) error {
 			// no validation rules for State
 		case "created_at":
 
-			if v, ok := interface{}(&m.CreatedAt).(interface{ ValidateFields(...string) error }); ok {
+			if v, ok := interface{}(m.GetCreatedAt()).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return OAuthAuthorizationCodeValidationError{
 						field:  "created_at",
@@ -570,7 +619,7 @@ func (m *OAuthAuthorizationCode) ValidateFields(paths ...string) error {
 
 		case "expires_at":
 
-			if v, ok := interface{}(&m.ExpiresAt).(interface{ ValidateFields(...string) error }); ok {
+			if v, ok := interface{}(m.GetExpiresAt()).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return OAuthAuthorizationCodeValidationError{
 						field:  "expires_at",
@@ -663,7 +712,14 @@ func (m *OAuthAccessTokenIdentifiers) ValidateFields(paths ...string) error {
 		switch name {
 		case "user_ids":
 
-			if v, ok := interface{}(&m.UserIds).(interface{ ValidateFields(...string) error }); ok {
+			if m.GetUserIds() == nil {
+				return OAuthAccessTokenIdentifiersValidationError{
+					field:  "user_ids",
+					reason: "value is required",
+				}
+			}
+
+			if v, ok := interface{}(m.GetUserIds()).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return OAuthAccessTokenIdentifiersValidationError{
 						field:  "user_ids",
@@ -675,7 +731,14 @@ func (m *OAuthAccessTokenIdentifiers) ValidateFields(paths ...string) error {
 
 		case "client_ids":
 
-			if v, ok := interface{}(&m.ClientIds).(interface{ ValidateFields(...string) error }); ok {
+			if m.GetClientIds() == nil {
+				return OAuthAccessTokenIdentifiersValidationError{
+					field:  "client_ids",
+					reason: "value is required",
+				}
+			}
+
+			if v, ok := interface{}(m.GetClientIds()).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return OAuthAccessTokenIdentifiersValidationError{
 						field:  "client_ids",
@@ -771,7 +834,14 @@ func (m *OAuthAccessToken) ValidateFields(paths ...string) error {
 		switch name {
 		case "user_ids":
 
-			if v, ok := interface{}(&m.UserIds).(interface{ ValidateFields(...string) error }); ok {
+			if m.GetUserIds() == nil {
+				return OAuthAccessTokenValidationError{
+					field:  "user_ids",
+					reason: "value is required",
+				}
+			}
+
+			if v, ok := interface{}(m.GetUserIds()).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return OAuthAccessTokenValidationError{
 						field:  "user_ids",
@@ -792,7 +862,14 @@ func (m *OAuthAccessToken) ValidateFields(paths ...string) error {
 
 		case "client_ids":
 
-			if v, ok := interface{}(&m.ClientIds).(interface{ ValidateFields(...string) error }); ok {
+			if m.GetClientIds() == nil {
+				return OAuthAccessTokenValidationError{
+					field:  "client_ids",
+					reason: "value is required",
+				}
+			}
+
+			if v, ok := interface{}(m.GetClientIds()).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return OAuthAccessTokenValidationError{
 						field:  "client_ids",
@@ -812,7 +889,7 @@ func (m *OAuthAccessToken) ValidateFields(paths ...string) error {
 
 		case "created_at":
 
-			if v, ok := interface{}(&m.CreatedAt).(interface{ ValidateFields(...string) error }); ok {
+			if v, ok := interface{}(m.GetCreatedAt()).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return OAuthAccessTokenValidationError{
 						field:  "created_at",
@@ -824,7 +901,7 @@ func (m *OAuthAccessToken) ValidateFields(paths ...string) error {
 
 		case "expires_at":
 
-			if v, ok := interface{}(&m.ExpiresAt).(interface{ ValidateFields(...string) error }); ok {
+			if v, ok := interface{}(m.GetExpiresAt()).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return OAuthAccessTokenValidationError{
 						field:  "expires_at",
@@ -1013,7 +1090,14 @@ func (m *ListOAuthAccessTokensRequest) ValidateFields(paths ...string) error {
 		switch name {
 		case "user_ids":
 
-			if v, ok := interface{}(&m.UserIds).(interface{ ValidateFields(...string) error }); ok {
+			if m.GetUserIds() == nil {
+				return ListOAuthAccessTokensRequestValidationError{
+					field:  "user_ids",
+					reason: "value is required",
+				}
+			}
+
+			if v, ok := interface{}(m.GetUserIds()).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return ListOAuthAccessTokensRequestValidationError{
 						field:  "user_ids",
@@ -1025,7 +1109,14 @@ func (m *ListOAuthAccessTokensRequest) ValidateFields(paths ...string) error {
 
 		case "client_ids":
 
-			if v, ok := interface{}(&m.ClientIds).(interface{ ValidateFields(...string) error }); ok {
+			if m.GetClientIds() == nil {
+				return ListOAuthAccessTokensRequestValidationError{
+					field:  "client_ids",
+					reason: "value is required",
+				}
+			}
+
+			if v, ok := interface{}(m.GetClientIds()).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return ListOAuthAccessTokensRequestValidationError{
 						field:  "client_ids",

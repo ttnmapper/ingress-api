@@ -51,10 +51,28 @@ func (m *Session) ValidateFields(paths ...string) error {
 		_ = subs
 		switch name {
 		case "dev_addr":
-			// no validation rules for DevAddr
+
+			if len(m.GetDevAddr()) > 0 {
+
+				if len(m.GetDevAddr()) != 4 {
+					return SessionValidationError{
+						field:  "dev_addr",
+						reason: "value length must be 4 bytes",
+					}
+				}
+
+			}
+
 		case "keys":
 
-			if v, ok := interface{}(&m.SessionKeys).(interface{ ValidateFields(...string) error }); ok {
+			if m.GetKeys() == nil {
+				return SessionValidationError{
+					field:  "keys",
+					reason: "value is required",
+				}
+			}
+
+			if v, ok := interface{}(m.GetKeys()).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return SessionValidationError{
 						field:  "keys",
@@ -74,7 +92,7 @@ func (m *Session) ValidateFields(paths ...string) error {
 			// no validation rules for LastConfFCntDown
 		case "started_at":
 
-			if v, ok := interface{}(&m.StartedAt).(interface{ ValidateFields(...string) error }); ok {
+			if v, ok := interface{}(m.GetStartedAt()).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return SessionValidationError{
 						field:  "started_at",
@@ -542,7 +560,14 @@ func (m *EndDeviceVersion) ValidateFields(paths ...string) error {
 		switch name {
 		case "ids":
 
-			if v, ok := interface{}(&m.EndDeviceVersionIdentifiers).(interface{ ValidateFields(...string) error }); ok {
+			if m.GetIds() == nil {
+				return EndDeviceVersionValidationError{
+					field:  "ids",
+					reason: "value is required",
+				}
+			}
+
+			if v, ok := interface{}(m.GetIds()).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return EndDeviceVersionValidationError{
 						field:  "ids",
@@ -614,7 +639,14 @@ func (m *EndDeviceVersion) ValidateFields(paths ...string) error {
 			// no validation rules for ResetsJoinNonces
 		case "default_formatters":
 
-			if v, ok := interface{}(&m.DefaultFormatters).(interface{ ValidateFields(...string) error }); ok {
+			if m.GetDefaultFormatters() == nil {
+				return EndDeviceVersionValidationError{
+					field:  "default_formatters",
+					reason: "value is required",
+				}
+			}
+
+			if v, ok := interface{}(m.GetDefaultFormatters()).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return EndDeviceVersionValidationError{
 						field:  "default_formatters",
@@ -687,6 +719,144 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = EndDeviceVersionValidationError{}
+
+// ValidateFields checks the field values on ADRSettings with the rules defined
+// in the proto definition for this message. If any rules are violated, an
+// error is returned.
+func (m *ADRSettings) ValidateFields(paths ...string) error {
+	if m == nil {
+		return nil
+	}
+
+	if len(paths) == 0 {
+		paths = ADRSettingsFieldPathsNested
+	}
+
+	for name, subs := range _processPaths(append(paths[:0:0], paths...)) {
+		_ = subs
+		switch name {
+		case "mode":
+			if len(subs) == 0 {
+				subs = []string{
+					"static", "dynamic", "disabled",
+				}
+			}
+			for name, subs := range _processPaths(subs) {
+				_ = subs
+				switch name {
+				case "static":
+					w, ok := m.Mode.(*ADRSettings_Static)
+					if !ok || w == nil {
+						continue
+					}
+
+					if v, ok := interface{}(m.GetStatic()).(interface{ ValidateFields(...string) error }); ok {
+						if err := v.ValidateFields(subs...); err != nil {
+							return ADRSettingsValidationError{
+								field:  "static",
+								reason: "embedded message failed validation",
+								cause:  err,
+							}
+						}
+					}
+
+				case "dynamic":
+					w, ok := m.Mode.(*ADRSettings_Dynamic)
+					if !ok || w == nil {
+						continue
+					}
+
+					if v, ok := interface{}(m.GetDynamic()).(interface{ ValidateFields(...string) error }); ok {
+						if err := v.ValidateFields(subs...); err != nil {
+							return ADRSettingsValidationError{
+								field:  "dynamic",
+								reason: "embedded message failed validation",
+								cause:  err,
+							}
+						}
+					}
+
+				case "disabled":
+					w, ok := m.Mode.(*ADRSettings_Disabled)
+					if !ok || w == nil {
+						continue
+					}
+
+					if v, ok := interface{}(m.GetDisabled()).(interface{ ValidateFields(...string) error }); ok {
+						if err := v.ValidateFields(subs...); err != nil {
+							return ADRSettingsValidationError{
+								field:  "disabled",
+								reason: "embedded message failed validation",
+								cause:  err,
+							}
+						}
+					}
+
+				}
+			}
+		default:
+			return ADRSettingsValidationError{
+				field:  name,
+				reason: "invalid field path",
+			}
+		}
+	}
+	return nil
+}
+
+// ADRSettingsValidationError is the validation error returned by
+// ADRSettings.ValidateFields if the designated constraints aren't met.
+type ADRSettingsValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ADRSettingsValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ADRSettingsValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ADRSettingsValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ADRSettingsValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ADRSettingsValidationError) ErrorName() string { return "ADRSettingsValidationError" }
+
+// Error satisfies the builtin error interface
+func (e ADRSettingsValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sADRSettings.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ADRSettingsValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ADRSettingsValidationError{}
 
 // ValidateFields checks the field values on MACSettings with the rules defined
 // in the proto definition for this message. If any rules are violated, an
@@ -1048,6 +1218,66 @@ func (m *MACSettings) ValidateFields(paths ...string) error {
 				}
 			}
 
+		case "class_b_c_downlink_interval":
+
+			if v, ok := interface{}(m.GetClassBCDownlinkInterval()).(interface{ ValidateFields(...string) error }); ok {
+				if err := v.ValidateFields(subs...); err != nil {
+					return MACSettingsValidationError{
+						field:  "class_b_c_downlink_interval",
+						reason: "embedded message failed validation",
+						cause:  err,
+					}
+				}
+			}
+
+		case "uplink_dwell_time":
+
+			if v, ok := interface{}(m.GetUplinkDwellTime()).(interface{ ValidateFields(...string) error }); ok {
+				if err := v.ValidateFields(subs...); err != nil {
+					return MACSettingsValidationError{
+						field:  "uplink_dwell_time",
+						reason: "embedded message failed validation",
+						cause:  err,
+					}
+				}
+			}
+
+		case "downlink_dwell_time":
+
+			if v, ok := interface{}(m.GetDownlinkDwellTime()).(interface{ ValidateFields(...string) error }); ok {
+				if err := v.ValidateFields(subs...); err != nil {
+					return MACSettingsValidationError{
+						field:  "downlink_dwell_time",
+						reason: "embedded message failed validation",
+						cause:  err,
+					}
+				}
+			}
+
+		case "adr":
+
+			if v, ok := interface{}(m.GetAdr()).(interface{ ValidateFields(...string) error }); ok {
+				if err := v.ValidateFields(subs...); err != nil {
+					return MACSettingsValidationError{
+						field:  "adr",
+						reason: "embedded message failed validation",
+						cause:  err,
+					}
+				}
+			}
+
+		case "schedule_downlinks":
+
+			if v, ok := interface{}(m.GetScheduleDownlinks()).(interface{ ValidateFields(...string) error }); ok {
+				if err := v.ValidateFields(subs...); err != nil {
+					return MACSettingsValidationError{
+						field:  "schedule_downlinks",
+						reason: "embedded message failed validation",
+						cause:  err,
+					}
+				}
+			}
+
 		default:
 			return MACSettingsValidationError{
 				field:  name,
@@ -1129,7 +1359,14 @@ func (m *MACState) ValidateFields(paths ...string) error {
 		switch name {
 		case "current_parameters":
 
-			if v, ok := interface{}(&m.CurrentParameters).(interface{ ValidateFields(...string) error }); ok {
+			if m.GetCurrentParameters() == nil {
+				return MACStateValidationError{
+					field:  "current_parameters",
+					reason: "value is required",
+				}
+			}
+
+			if v, ok := interface{}(m.GetCurrentParameters()).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return MACStateValidationError{
 						field:  "current_parameters",
@@ -1141,7 +1378,14 @@ func (m *MACState) ValidateFields(paths ...string) error {
 
 		case "desired_parameters":
 
-			if v, ok := interface{}(&m.DesiredParameters).(interface{ ValidateFields(...string) error }); ok {
+			if m.GetDesiredParameters() == nil {
+				return MACStateValidationError{
+					field:  "desired_parameters",
+					reason: "value is required",
+				}
+			}
+
+			if v, ok := interface{}(m.GetDesiredParameters()).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return MACStateValidationError{
 						field:  "desired_parameters",
@@ -1402,6 +1646,8 @@ func (m *MACState) ValidateFields(paths ...string) error {
 
 		case "last_adr_change_f_cnt_up":
 			// no validation rules for LastAdrChangeFCntUp
+		case "recent_mac_command_identifiers":
+
 		default:
 			return MACStateValidationError{
 				field:  name,
@@ -1486,7 +1732,7 @@ func (m *EndDeviceAuthenticationCode) ValidateFields(paths ...string) error {
 			if !_EndDeviceAuthenticationCode_Value_Pattern.MatchString(m.GetValue()) {
 				return EndDeviceAuthenticationCodeValidationError{
 					field:  "value",
-					reason: "value does not match regex pattern \"^[A-Z0-9]{1,32}$\"",
+					reason: "value does not match regex pattern \"^[a-zA-Z0-9]{1,32}$\"",
 				}
 			}
 
@@ -1581,7 +1827,7 @@ var _ interface {
 	ErrorName() string
 } = EndDeviceAuthenticationCodeValidationError{}
 
-var _EndDeviceAuthenticationCode_Value_Pattern = regexp.MustCompile("^[A-Z0-9]{1,32}$")
+var _EndDeviceAuthenticationCode_Value_Pattern = regexp.MustCompile("^[a-zA-Z0-9]{1,32}$")
 
 // ValidateFields checks the field values on EndDevice with the rules defined
 // in the proto definition for this message. If any rules are violated, an
@@ -1600,7 +1846,14 @@ func (m *EndDevice) ValidateFields(paths ...string) error {
 		switch name {
 		case "ids":
 
-			if v, ok := interface{}(&m.EndDeviceIdentifiers).(interface{ ValidateFields(...string) error }); ok {
+			if m.GetIds() == nil {
+				return EndDeviceValidationError{
+					field:  "ids",
+					reason: "value is required",
+				}
+			}
+
+			if v, ok := interface{}(m.GetIds()).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return EndDeviceValidationError{
 						field:  "ids",
@@ -1612,7 +1865,7 @@ func (m *EndDevice) ValidateFields(paths ...string) error {
 
 		case "created_at":
 
-			if v, ok := interface{}(&m.CreatedAt).(interface{ ValidateFields(...string) error }); ok {
+			if v, ok := interface{}(m.GetCreatedAt()).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return EndDeviceValidationError{
 						field:  "created_at",
@@ -1624,7 +1877,7 @@ func (m *EndDevice) ValidateFields(paths ...string) error {
 
 		case "updated_at":
 
-			if v, ok := interface{}(&m.UpdatedAt).(interface{ ValidateFields(...string) error }); ok {
+			if v, ok := interface{}(m.GetUpdatedAt()).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return EndDeviceValidationError{
 						field:  "updated_at",
@@ -1857,7 +2110,18 @@ func (m *EndDevice) ValidateFields(paths ...string) error {
 			}
 
 		case "net_id":
-			// no validation rules for NetId
+
+			if len(m.GetNetId()) > 0 {
+
+				if len(m.GetNetId()) != 3 {
+					return EndDeviceValidationError{
+						field:  "net_id",
+						reason: "value length must be 3 bytes",
+					}
+				}
+
+			}
+
 		case "mac_settings":
 
 			if v, ok := interface{}(m.GetMacSettings()).(interface{ ValidateFields(...string) error }); ok {
@@ -2061,6 +2325,18 @@ func (m *EndDevice) ValidateFields(paths ...string) error {
 				}
 			}
 
+		case "last_seen_at":
+
+			if v, ok := interface{}(m.GetLastSeenAt()).(interface{ ValidateFields(...string) error }); ok {
+				if err := v.ValidateFields(subs...); err != nil {
+					return EndDeviceValidationError{
+						field:  "last_seen_at",
+						reason: "embedded message failed validation",
+						cause:  err,
+					}
+				}
+			}
+
 		default:
 			return EndDeviceValidationError{
 				field:  name,
@@ -2249,7 +2525,18 @@ func (m *DevAddrPrefix) ValidateFields(paths ...string) error {
 		_ = subs
 		switch name {
 		case "dev_addr":
-			// no validation rules for DevAddr
+
+			if len(m.GetDevAddr()) > 0 {
+
+				if len(m.GetDevAddr()) != 4 {
+					return DevAddrPrefixValidationError{
+						field:  "dev_addr",
+						reason: "value length must be 4 bytes",
+					}
+				}
+
+			}
+
 		case "length":
 			// no validation rules for Length
 		default:
@@ -2333,7 +2620,14 @@ func (m *CreateEndDeviceRequest) ValidateFields(paths ...string) error {
 		switch name {
 		case "end_device":
 
-			if v, ok := interface{}(&m.EndDevice).(interface{ ValidateFields(...string) error }); ok {
+			if m.GetEndDevice() == nil {
+				return CreateEndDeviceRequestValidationError{
+					field:  "end_device",
+					reason: "value is required",
+				}
+			}
+
+			if v, ok := interface{}(m.GetEndDevice()).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return CreateEndDeviceRequestValidationError{
 						field:  "end_device",
@@ -2426,7 +2720,14 @@ func (m *UpdateEndDeviceRequest) ValidateFields(paths ...string) error {
 		switch name {
 		case "end_device":
 
-			if v, ok := interface{}(&m.EndDevice).(interface{ ValidateFields(...string) error }); ok {
+			if m.GetEndDevice() == nil {
+				return UpdateEndDeviceRequestValidationError{
+					field:  "end_device",
+					reason: "value is required",
+				}
+			}
+
+			if v, ok := interface{}(m.GetEndDevice()).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return UpdateEndDeviceRequestValidationError{
 						field:  "end_device",
@@ -2514,6 +2815,105 @@ var _ interface {
 	ErrorName() string
 } = UpdateEndDeviceRequestValidationError{}
 
+// ValidateFields checks the field values on
+// BatchUpdateEndDeviceLastSeenRequest with the rules defined in the proto
+// definition for this message. If any rules are violated, an error is returned.
+func (m *BatchUpdateEndDeviceLastSeenRequest) ValidateFields(paths ...string) error {
+	if m == nil {
+		return nil
+	}
+
+	if len(paths) == 0 {
+		paths = BatchUpdateEndDeviceLastSeenRequestFieldPathsNested
+	}
+
+	for name, subs := range _processPaths(append(paths[:0:0], paths...)) {
+		_ = subs
+		switch name {
+		case "updates":
+
+			for idx, item := range m.GetUpdates() {
+				_, _ = idx, item
+
+				if v, ok := interface{}(item).(interface{ ValidateFields(...string) error }); ok {
+					if err := v.ValidateFields(subs...); err != nil {
+						return BatchUpdateEndDeviceLastSeenRequestValidationError{
+							field:  fmt.Sprintf("updates[%v]", idx),
+							reason: "embedded message failed validation",
+							cause:  err,
+						}
+					}
+				}
+
+			}
+
+		default:
+			return BatchUpdateEndDeviceLastSeenRequestValidationError{
+				field:  name,
+				reason: "invalid field path",
+			}
+		}
+	}
+	return nil
+}
+
+// BatchUpdateEndDeviceLastSeenRequestValidationError is the validation error
+// returned by BatchUpdateEndDeviceLastSeenRequest.ValidateFields if the
+// designated constraints aren't met.
+type BatchUpdateEndDeviceLastSeenRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e BatchUpdateEndDeviceLastSeenRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e BatchUpdateEndDeviceLastSeenRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e BatchUpdateEndDeviceLastSeenRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e BatchUpdateEndDeviceLastSeenRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e BatchUpdateEndDeviceLastSeenRequestValidationError) ErrorName() string {
+	return "BatchUpdateEndDeviceLastSeenRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e BatchUpdateEndDeviceLastSeenRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sBatchUpdateEndDeviceLastSeenRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = BatchUpdateEndDeviceLastSeenRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = BatchUpdateEndDeviceLastSeenRequestValidationError{}
+
 // ValidateFields checks the field values on GetEndDeviceRequest with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, an error is returned.
@@ -2531,7 +2931,14 @@ func (m *GetEndDeviceRequest) ValidateFields(paths ...string) error {
 		switch name {
 		case "end_device_ids":
 
-			if v, ok := interface{}(&m.EndDeviceIdentifiers).(interface{ ValidateFields(...string) error }); ok {
+			if m.GetEndDeviceIds() == nil {
+				return GetEndDeviceRequestValidationError{
+					field:  "end_device_ids",
+					reason: "value is required",
+				}
+			}
+
+			if v, ok := interface{}(m.GetEndDeviceIds()).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return GetEndDeviceRequestValidationError{
 						field:  "end_device_ids",
@@ -2635,9 +3042,31 @@ func (m *GetEndDeviceIdentifiersForEUIsRequest) ValidateFields(paths ...string) 
 		_ = subs
 		switch name {
 		case "join_eui":
-			// no validation rules for JoinEui
+
+			if len(m.GetJoinEui()) > 0 {
+
+				if len(m.GetJoinEui()) != 8 {
+					return GetEndDeviceIdentifiersForEUIsRequestValidationError{
+						field:  "join_eui",
+						reason: "value length must be 8 bytes",
+					}
+				}
+
+			}
+
 		case "dev_eui":
-			// no validation rules for DevEui
+
+			if len(m.GetDevEui()) > 0 {
+
+				if len(m.GetDevEui()) != 8 {
+					return GetEndDeviceIdentifiersForEUIsRequestValidationError{
+						field:  "dev_eui",
+						reason: "value length must be 8 bytes",
+					}
+				}
+
+			}
+
 		default:
 			return GetEndDeviceIdentifiersForEUIsRequestValidationError{
 				field:  name,
@@ -2722,7 +3151,7 @@ func (m *ListEndDevicesRequest) ValidateFields(paths ...string) error {
 		switch name {
 		case "application_ids":
 
-			if v, ok := interface{}(&m.ApplicationIdentifiers).(interface{ ValidateFields(...string) error }); ok {
+			if v, ok := interface{}(m.GetApplicationIds()).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return ListEndDevicesRequestValidationError{
 						field:  "application_ids",
@@ -2863,7 +3292,14 @@ func (m *SetEndDeviceRequest) ValidateFields(paths ...string) error {
 		switch name {
 		case "end_device":
 
-			if v, ok := interface{}(&m.EndDevice).(interface{ ValidateFields(...string) error }); ok {
+			if m.GetEndDevice() == nil {
+				return SetEndDeviceRequestValidationError{
+					field:  "end_device",
+					reason: "value is required",
+				}
+			}
+
+			if v, ok := interface{}(m.GetEndDevice()).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return SetEndDeviceRequestValidationError{
 						field:  "end_device",
@@ -2968,7 +3404,14 @@ func (m *ResetAndGetEndDeviceRequest) ValidateFields(paths ...string) error {
 		switch name {
 		case "end_device_ids":
 
-			if v, ok := interface{}(&m.EndDeviceIdentifiers).(interface{ ValidateFields(...string) error }); ok {
+			if m.GetEndDeviceIds() == nil {
+				return ResetAndGetEndDeviceRequestValidationError{
+					field:  "end_device_ids",
+					reason: "value is required",
+				}
+			}
+
+			if v, ok := interface{}(m.GetEndDeviceIds()).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return ResetAndGetEndDeviceRequestValidationError{
 						field:  "end_device_ids",
@@ -3074,7 +3517,14 @@ func (m *EndDeviceTemplate) ValidateFields(paths ...string) error {
 		switch name {
 		case "end_device":
 
-			if v, ok := interface{}(&m.EndDevice).(interface{ ValidateFields(...string) error }); ok {
+			if m.GetEndDevice() == nil {
+				return EndDeviceTemplateValidationError{
+					field:  "end_device",
+					reason: "value is required",
+				}
+			}
+
+			if v, ok := interface{}(m.GetEndDevice()).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return EndDeviceTemplateValidationError{
 						field:  "end_device",
@@ -3452,6 +3902,18 @@ func (m *ConvertEndDeviceTemplateRequest) ValidateFields(paths ...string) error 
 
 		case "data":
 			// no validation rules for Data
+		case "end_device_version_ids":
+
+			if v, ok := interface{}(m.GetEndDeviceVersionIds()).(interface{ ValidateFields(...string) error }); ok {
+				if err := v.ValidateFields(subs...); err != nil {
+					return ConvertEndDeviceTemplateRequestValidationError{
+						field:  "end_device_version_ids",
+						reason: "embedded message failed validation",
+						cause:  err,
+					}
+				}
+			}
+
 		default:
 			return ConvertEndDeviceTemplateRequestValidationError{
 				field:  name,
@@ -3640,6 +4102,350 @@ var _ interface {
 	ErrorName() string
 } = MACParameters_ChannelValidationError{}
 
+// ValidateFields checks the field values on ADRSettings_StaticMode with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *ADRSettings_StaticMode) ValidateFields(paths ...string) error {
+	if m == nil {
+		return nil
+	}
+
+	if len(paths) == 0 {
+		paths = ADRSettings_StaticModeFieldPathsNested
+	}
+
+	for name, subs := range _processPaths(append(paths[:0:0], paths...)) {
+		_ = subs
+		switch name {
+		case "data_rate_index":
+
+			if _, ok := DataRateIndex_name[int32(m.GetDataRateIndex())]; !ok {
+				return ADRSettings_StaticModeValidationError{
+					field:  "data_rate_index",
+					reason: "value must be one of the defined enum values",
+				}
+			}
+
+		case "tx_power_index":
+
+			if m.GetTxPowerIndex() > 15 {
+				return ADRSettings_StaticModeValidationError{
+					field:  "tx_power_index",
+					reason: "value must be less than or equal to 15",
+				}
+			}
+
+		case "nb_trans":
+
+			if val := m.GetNbTrans(); val < 1 || val > 15 {
+				return ADRSettings_StaticModeValidationError{
+					field:  "nb_trans",
+					reason: "value must be inside range [1, 15]",
+				}
+			}
+
+		default:
+			return ADRSettings_StaticModeValidationError{
+				field:  name,
+				reason: "invalid field path",
+			}
+		}
+	}
+	return nil
+}
+
+// ADRSettings_StaticModeValidationError is the validation error returned by
+// ADRSettings_StaticMode.ValidateFields if the designated constraints aren't met.
+type ADRSettings_StaticModeValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ADRSettings_StaticModeValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ADRSettings_StaticModeValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ADRSettings_StaticModeValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ADRSettings_StaticModeValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ADRSettings_StaticModeValidationError) ErrorName() string {
+	return "ADRSettings_StaticModeValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e ADRSettings_StaticModeValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sADRSettings_StaticMode.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ADRSettings_StaticModeValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ADRSettings_StaticModeValidationError{}
+
+// ValidateFields checks the field values on ADRSettings_DynamicMode with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *ADRSettings_DynamicMode) ValidateFields(paths ...string) error {
+	if m == nil {
+		return nil
+	}
+
+	if len(paths) == 0 {
+		paths = ADRSettings_DynamicModeFieldPathsNested
+	}
+
+	for name, subs := range _processPaths(append(paths[:0:0], paths...)) {
+		_ = subs
+		switch name {
+		case "margin":
+
+			if v, ok := interface{}(m.GetMargin()).(interface{ ValidateFields(...string) error }); ok {
+				if err := v.ValidateFields(subs...); err != nil {
+					return ADRSettings_DynamicModeValidationError{
+						field:  "margin",
+						reason: "embedded message failed validation",
+						cause:  err,
+					}
+				}
+			}
+
+		case "min_data_rate_index":
+
+			if v, ok := interface{}(m.GetMinDataRateIndex()).(interface{ ValidateFields(...string) error }); ok {
+				if err := v.ValidateFields(subs...); err != nil {
+					return ADRSettings_DynamicModeValidationError{
+						field:  "min_data_rate_index",
+						reason: "embedded message failed validation",
+						cause:  err,
+					}
+				}
+			}
+
+		case "max_data_rate_index":
+
+			if v, ok := interface{}(m.GetMaxDataRateIndex()).(interface{ ValidateFields(...string) error }); ok {
+				if err := v.ValidateFields(subs...); err != nil {
+					return ADRSettings_DynamicModeValidationError{
+						field:  "max_data_rate_index",
+						reason: "embedded message failed validation",
+						cause:  err,
+					}
+				}
+			}
+
+		case "min_tx_power_index":
+
+			if wrapper := m.GetMinTxPowerIndex(); wrapper != nil {
+
+				if wrapper.GetValue() > 15 {
+					return ADRSettings_DynamicModeValidationError{
+						field:  "min_tx_power_index",
+						reason: "value must be less than or equal to 15",
+					}
+				}
+
+			}
+
+		case "max_tx_power_index":
+
+			if wrapper := m.GetMaxTxPowerIndex(); wrapper != nil {
+
+				if wrapper.GetValue() > 15 {
+					return ADRSettings_DynamicModeValidationError{
+						field:  "max_tx_power_index",
+						reason: "value must be less than or equal to 15",
+					}
+				}
+
+			}
+
+		case "min_nb_trans":
+
+			if wrapper := m.GetMinNbTrans(); wrapper != nil {
+
+				if val := wrapper.GetValue(); val < 1 || val > 3 {
+					return ADRSettings_DynamicModeValidationError{
+						field:  "min_nb_trans",
+						reason: "value must be inside range [1, 3]",
+					}
+				}
+
+			}
+
+		case "max_nb_trans":
+
+			if wrapper := m.GetMaxNbTrans(); wrapper != nil {
+
+				if val := wrapper.GetValue(); val < 1 || val > 3 {
+					return ADRSettings_DynamicModeValidationError{
+						field:  "max_nb_trans",
+						reason: "value must be inside range [1, 3]",
+					}
+				}
+
+			}
+
+		default:
+			return ADRSettings_DynamicModeValidationError{
+				field:  name,
+				reason: "invalid field path",
+			}
+		}
+	}
+	return nil
+}
+
+// ADRSettings_DynamicModeValidationError is the validation error returned by
+// ADRSettings_DynamicMode.ValidateFields if the designated constraints aren't met.
+type ADRSettings_DynamicModeValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ADRSettings_DynamicModeValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ADRSettings_DynamicModeValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ADRSettings_DynamicModeValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ADRSettings_DynamicModeValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ADRSettings_DynamicModeValidationError) ErrorName() string {
+	return "ADRSettings_DynamicModeValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e ADRSettings_DynamicModeValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sADRSettings_DynamicMode.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ADRSettings_DynamicModeValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ADRSettings_DynamicModeValidationError{}
+
+// ValidateFields checks the field values on ADRSettings_DisabledMode with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *ADRSettings_DisabledMode) ValidateFields(paths ...string) error {
+	if len(paths) > 0 {
+		return fmt.Errorf("message ADRSettings_DisabledMode has no fields, but paths %s were specified", paths)
+	}
+	return nil
+}
+
+// ADRSettings_DisabledModeValidationError is the validation error returned by
+// ADRSettings_DisabledMode.ValidateFields if the designated constraints
+// aren't met.
+type ADRSettings_DisabledModeValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ADRSettings_DisabledModeValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ADRSettings_DisabledModeValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ADRSettings_DisabledModeValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ADRSettings_DisabledModeValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ADRSettings_DisabledModeValidationError) ErrorName() string {
+	return "ADRSettings_DisabledModeValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e ADRSettings_DisabledModeValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sADRSettings_DisabledMode.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ADRSettings_DisabledModeValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ADRSettings_DisabledModeValidationError{}
+
 // ValidateFields checks the field values on MACState_JoinRequest with the
 // rules defined in the proto definition for this message. If any rules are
 // violated, an error is returned.
@@ -3657,7 +4463,14 @@ func (m *MACState_JoinRequest) ValidateFields(paths ...string) error {
 		switch name {
 		case "downlink_settings":
 
-			if v, ok := interface{}(&m.DownlinkSettings).(interface{ ValidateFields(...string) error }); ok {
+			if m.GetDownlinkSettings() == nil {
+				return MACState_JoinRequestValidationError{
+					field:  "downlink_settings",
+					reason: "value is required",
+				}
+			}
+
+			if v, ok := interface{}(m.GetDownlinkSettings()).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return MACState_JoinRequestValidationError{
 						field:  "downlink_settings",
@@ -3780,7 +4593,14 @@ func (m *MACState_JoinAccept) ValidateFields(paths ...string) error {
 
 		case "request":
 
-			if v, ok := interface{}(&m.Request).(interface{ ValidateFields(...string) error }); ok {
+			if m.GetRequest() == nil {
+				return MACState_JoinAcceptValidationError{
+					field:  "request",
+					reason: "value is required",
+				}
+			}
+
+			if v, ok := interface{}(m.GetRequest()).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return MACState_JoinAcceptValidationError{
 						field:  "request",
@@ -3792,7 +4612,14 @@ func (m *MACState_JoinAccept) ValidateFields(paths ...string) error {
 
 		case "keys":
 
-			if v, ok := interface{}(&m.Keys).(interface{ ValidateFields(...string) error }); ok {
+			if m.GetKeys() == nil {
+				return MACState_JoinAcceptValidationError{
+					field:  "keys",
+					reason: "value is required",
+				}
+			}
+
+			if v, ok := interface{}(m.GetKeys()).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return MACState_JoinAcceptValidationError{
 						field:  "keys",
@@ -3817,9 +4644,31 @@ func (m *MACState_JoinAccept) ValidateFields(paths ...string) error {
 			}
 
 		case "dev_addr":
-			// no validation rules for DevAddr
+
+			if len(m.GetDevAddr()) > 0 {
+
+				if len(m.GetDevAddr()) != 4 {
+					return MACState_JoinAcceptValidationError{
+						field:  "dev_addr",
+						reason: "value length must be 4 bytes",
+					}
+				}
+
+			}
+
 		case "net_id":
-			// no validation rules for NetId
+
+			if len(m.GetNetId()) > 0 {
+
+				if len(m.GetNetId()) != 3 {
+					return MACState_JoinAcceptValidationError{
+						field:  "net_id",
+						reason: "value length must be 3 bytes",
+					}
+				}
+
+			}
+
 		default:
 			return MACState_JoinAcceptValidationError{
 				field:  name,
@@ -3885,6 +4734,285 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = MACState_JoinAcceptValidationError{}
+
+// ValidateFields checks the field values on MACState_UplinkMessage with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *MACState_UplinkMessage) ValidateFields(paths ...string) error {
+	if m == nil {
+		return nil
+	}
+
+	if len(paths) == 0 {
+		paths = MACState_UplinkMessageFieldPathsNested
+	}
+
+	for name, subs := range _processPaths(append(paths[:0:0], paths...)) {
+		_ = subs
+		switch name {
+		case "payload":
+
+			if m.GetPayload() == nil {
+				return MACState_UplinkMessageValidationError{
+					field:  "payload",
+					reason: "value is required",
+				}
+			}
+
+			if v, ok := interface{}(m.GetPayload()).(interface{ ValidateFields(...string) error }); ok {
+				if err := v.ValidateFields(subs...); err != nil {
+					return MACState_UplinkMessageValidationError{
+						field:  "payload",
+						reason: "embedded message failed validation",
+						cause:  err,
+					}
+				}
+			}
+
+		case "settings":
+
+			if m.GetSettings() == nil {
+				return MACState_UplinkMessageValidationError{
+					field:  "settings",
+					reason: "value is required",
+				}
+			}
+
+			if v, ok := interface{}(m.GetSettings()).(interface{ ValidateFields(...string) error }); ok {
+				if err := v.ValidateFields(subs...); err != nil {
+					return MACState_UplinkMessageValidationError{
+						field:  "settings",
+						reason: "embedded message failed validation",
+						cause:  err,
+					}
+				}
+			}
+
+		case "rx_metadata":
+
+			for idx, item := range m.GetRxMetadata() {
+				_, _ = idx, item
+
+				if v, ok := interface{}(item).(interface{ ValidateFields(...string) error }); ok {
+					if err := v.ValidateFields(subs...); err != nil {
+						return MACState_UplinkMessageValidationError{
+							field:  fmt.Sprintf("rx_metadata[%v]", idx),
+							reason: "embedded message failed validation",
+							cause:  err,
+						}
+					}
+				}
+
+			}
+
+		case "received_at":
+
+			if v, ok := interface{}(m.GetReceivedAt()).(interface{ ValidateFields(...string) error }); ok {
+				if err := v.ValidateFields(subs...); err != nil {
+					return MACState_UplinkMessageValidationError{
+						field:  "received_at",
+						reason: "embedded message failed validation",
+						cause:  err,
+					}
+				}
+			}
+
+		case "correlation_ids":
+
+			for idx, item := range m.GetCorrelationIds() {
+				_, _ = idx, item
+
+				if utf8.RuneCountInString(item) > 100 {
+					return MACState_UplinkMessageValidationError{
+						field:  fmt.Sprintf("correlation_ids[%v]", idx),
+						reason: "value length must be at most 100 runes",
+					}
+				}
+
+			}
+
+		case "device_channel_index":
+
+			if m.GetDeviceChannelIndex() > 255 {
+				return MACState_UplinkMessageValidationError{
+					field:  "device_channel_index",
+					reason: "value must be less than or equal to 255",
+				}
+			}
+
+		default:
+			return MACState_UplinkMessageValidationError{
+				field:  name,
+				reason: "invalid field path",
+			}
+		}
+	}
+	return nil
+}
+
+// MACState_UplinkMessageValidationError is the validation error returned by
+// MACState_UplinkMessage.ValidateFields if the designated constraints aren't met.
+type MACState_UplinkMessageValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e MACState_UplinkMessageValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e MACState_UplinkMessageValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e MACState_UplinkMessageValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e MACState_UplinkMessageValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e MACState_UplinkMessageValidationError) ErrorName() string {
+	return "MACState_UplinkMessageValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e MACState_UplinkMessageValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sMACState_UplinkMessage.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = MACState_UplinkMessageValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = MACState_UplinkMessageValidationError{}
+
+// ValidateFields checks the field values on MACState_DownlinkMessage with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *MACState_DownlinkMessage) ValidateFields(paths ...string) error {
+	if m == nil {
+		return nil
+	}
+
+	if len(paths) == 0 {
+		paths = MACState_DownlinkMessageFieldPathsNested
+	}
+
+	for name, subs := range _processPaths(append(paths[:0:0], paths...)) {
+		_ = subs
+		switch name {
+		case "payload":
+
+			if v, ok := interface{}(m.GetPayload()).(interface{ ValidateFields(...string) error }); ok {
+				if err := v.ValidateFields(subs...); err != nil {
+					return MACState_DownlinkMessageValidationError{
+						field:  "payload",
+						reason: "embedded message failed validation",
+						cause:  err,
+					}
+				}
+			}
+
+		case "correlation_ids":
+
+			for idx, item := range m.GetCorrelationIds() {
+				_, _ = idx, item
+
+				if utf8.RuneCountInString(item) > 100 {
+					return MACState_DownlinkMessageValidationError{
+						field:  fmt.Sprintf("correlation_ids[%v]", idx),
+						reason: "value length must be at most 100 runes",
+					}
+				}
+
+			}
+
+		default:
+			return MACState_DownlinkMessageValidationError{
+				field:  name,
+				reason: "invalid field path",
+			}
+		}
+	}
+	return nil
+}
+
+// MACState_DownlinkMessageValidationError is the validation error returned by
+// MACState_DownlinkMessage.ValidateFields if the designated constraints
+// aren't met.
+type MACState_DownlinkMessageValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e MACState_DownlinkMessageValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e MACState_DownlinkMessageValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e MACState_DownlinkMessageValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e MACState_DownlinkMessageValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e MACState_DownlinkMessageValidationError) ErrorName() string {
+	return "MACState_DownlinkMessageValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e MACState_DownlinkMessageValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sMACState_DownlinkMessage.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = MACState_DownlinkMessageValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = MACState_DownlinkMessageValidationError{}
 
 // ValidateFields checks the field values on MACState_DataRateRange with the
 // rules defined in the proto definition for this message. If any rules are
@@ -4089,3 +5217,730 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = MACState_DataRateRangesValidationError{}
+
+// ValidateFields checks the field values on MACState_UplinkMessage_TxSettings
+// with the rules defined in the proto definition for this message. If any
+// rules are violated, an error is returned.
+func (m *MACState_UplinkMessage_TxSettings) ValidateFields(paths ...string) error {
+	if m == nil {
+		return nil
+	}
+
+	if len(paths) == 0 {
+		paths = MACState_UplinkMessage_TxSettingsFieldPathsNested
+	}
+
+	for name, subs := range _processPaths(append(paths[:0:0], paths...)) {
+		_ = subs
+		switch name {
+		case "data_rate":
+
+			if m.GetDataRate() == nil {
+				return MACState_UplinkMessage_TxSettingsValidationError{
+					field:  "data_rate",
+					reason: "value is required",
+				}
+			}
+
+			if v, ok := interface{}(m.GetDataRate()).(interface{ ValidateFields(...string) error }); ok {
+				if err := v.ValidateFields(subs...); err != nil {
+					return MACState_UplinkMessage_TxSettingsValidationError{
+						field:  "data_rate",
+						reason: "embedded message failed validation",
+						cause:  err,
+					}
+				}
+			}
+
+		default:
+			return MACState_UplinkMessage_TxSettingsValidationError{
+				field:  name,
+				reason: "invalid field path",
+			}
+		}
+	}
+	return nil
+}
+
+// MACState_UplinkMessage_TxSettingsValidationError is the validation error
+// returned by MACState_UplinkMessage_TxSettings.ValidateFields if the
+// designated constraints aren't met.
+type MACState_UplinkMessage_TxSettingsValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e MACState_UplinkMessage_TxSettingsValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e MACState_UplinkMessage_TxSettingsValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e MACState_UplinkMessage_TxSettingsValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e MACState_UplinkMessage_TxSettingsValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e MACState_UplinkMessage_TxSettingsValidationError) ErrorName() string {
+	return "MACState_UplinkMessage_TxSettingsValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e MACState_UplinkMessage_TxSettingsValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sMACState_UplinkMessage_TxSettings.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = MACState_UplinkMessage_TxSettingsValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = MACState_UplinkMessage_TxSettingsValidationError{}
+
+// ValidateFields checks the field values on MACState_UplinkMessage_RxMetadata
+// with the rules defined in the proto definition for this message. If any
+// rules are violated, an error is returned.
+func (m *MACState_UplinkMessage_RxMetadata) ValidateFields(paths ...string) error {
+	if m == nil {
+		return nil
+	}
+
+	if len(paths) == 0 {
+		paths = MACState_UplinkMessage_RxMetadataFieldPathsNested
+	}
+
+	for name, subs := range _processPaths(append(paths[:0:0], paths...)) {
+		_ = subs
+		switch name {
+		case "gateway_ids":
+
+			if m.GetGatewayIds() == nil {
+				return MACState_UplinkMessage_RxMetadataValidationError{
+					field:  "gateway_ids",
+					reason: "value is required",
+				}
+			}
+
+			if v, ok := interface{}(m.GetGatewayIds()).(interface{ ValidateFields(...string) error }); ok {
+				if err := v.ValidateFields(subs...); err != nil {
+					return MACState_UplinkMessage_RxMetadataValidationError{
+						field:  "gateway_ids",
+						reason: "embedded message failed validation",
+						cause:  err,
+					}
+				}
+			}
+
+		case "channel_rssi":
+			// no validation rules for ChannelRssi
+		case "snr":
+			// no validation rules for Snr
+		case "downlink_path_constraint":
+
+			if _, ok := DownlinkPathConstraint_name[int32(m.GetDownlinkPathConstraint())]; !ok {
+				return MACState_UplinkMessage_RxMetadataValidationError{
+					field:  "downlink_path_constraint",
+					reason: "value must be one of the defined enum values",
+				}
+			}
+
+		case "uplink_token":
+			// no validation rules for UplinkToken
+		case "packet_broker":
+
+			if v, ok := interface{}(m.GetPacketBroker()).(interface{ ValidateFields(...string) error }); ok {
+				if err := v.ValidateFields(subs...); err != nil {
+					return MACState_UplinkMessage_RxMetadataValidationError{
+						field:  "packet_broker",
+						reason: "embedded message failed validation",
+						cause:  err,
+					}
+				}
+			}
+
+		default:
+			return MACState_UplinkMessage_RxMetadataValidationError{
+				field:  name,
+				reason: "invalid field path",
+			}
+		}
+	}
+	return nil
+}
+
+// MACState_UplinkMessage_RxMetadataValidationError is the validation error
+// returned by MACState_UplinkMessage_RxMetadata.ValidateFields if the
+// designated constraints aren't met.
+type MACState_UplinkMessage_RxMetadataValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e MACState_UplinkMessage_RxMetadataValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e MACState_UplinkMessage_RxMetadataValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e MACState_UplinkMessage_RxMetadataValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e MACState_UplinkMessage_RxMetadataValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e MACState_UplinkMessage_RxMetadataValidationError) ErrorName() string {
+	return "MACState_UplinkMessage_RxMetadataValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e MACState_UplinkMessage_RxMetadataValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sMACState_UplinkMessage_RxMetadata.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = MACState_UplinkMessage_RxMetadataValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = MACState_UplinkMessage_RxMetadataValidationError{}
+
+// ValidateFields checks the field values on
+// MACState_UplinkMessage_RxMetadata_PacketBrokerMetadata with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *MACState_UplinkMessage_RxMetadata_PacketBrokerMetadata) ValidateFields(paths ...string) error {
+	if len(paths) > 0 {
+		return fmt.Errorf("message MACState_UplinkMessage_RxMetadata_PacketBrokerMetadata has no fields, but paths %s were specified", paths)
+	}
+	return nil
+}
+
+// MACState_UplinkMessage_RxMetadata_PacketBrokerMetadataValidationError is the
+// validation error returned by
+// MACState_UplinkMessage_RxMetadata_PacketBrokerMetadata.ValidateFields if
+// the designated constraints aren't met.
+type MACState_UplinkMessage_RxMetadata_PacketBrokerMetadataValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e MACState_UplinkMessage_RxMetadata_PacketBrokerMetadataValidationError) Field() string {
+	return e.field
+}
+
+// Reason function returns reason value.
+func (e MACState_UplinkMessage_RxMetadata_PacketBrokerMetadataValidationError) Reason() string {
+	return e.reason
+}
+
+// Cause function returns cause value.
+func (e MACState_UplinkMessage_RxMetadata_PacketBrokerMetadataValidationError) Cause() error {
+	return e.cause
+}
+
+// Key function returns key value.
+func (e MACState_UplinkMessage_RxMetadata_PacketBrokerMetadataValidationError) Key() bool {
+	return e.key
+}
+
+// ErrorName returns error name.
+func (e MACState_UplinkMessage_RxMetadata_PacketBrokerMetadataValidationError) ErrorName() string {
+	return "MACState_UplinkMessage_RxMetadata_PacketBrokerMetadataValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e MACState_UplinkMessage_RxMetadata_PacketBrokerMetadataValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sMACState_UplinkMessage_RxMetadata_PacketBrokerMetadata.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = MACState_UplinkMessage_RxMetadata_PacketBrokerMetadataValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = MACState_UplinkMessage_RxMetadata_PacketBrokerMetadataValidationError{}
+
+// ValidateFields checks the field values on MACState_DownlinkMessage_Message
+// with the rules defined in the proto definition for this message. If any
+// rules are violated, an error is returned.
+func (m *MACState_DownlinkMessage_Message) ValidateFields(paths ...string) error {
+	if m == nil {
+		return nil
+	}
+
+	if len(paths) == 0 {
+		paths = MACState_DownlinkMessage_MessageFieldPathsNested
+	}
+
+	for name, subs := range _processPaths(append(paths[:0:0], paths...)) {
+		_ = subs
+		switch name {
+		case "m_hdr":
+
+			if m.GetMHdr() == nil {
+				return MACState_DownlinkMessage_MessageValidationError{
+					field:  "m_hdr",
+					reason: "value is required",
+				}
+			}
+
+			if v, ok := interface{}(m.GetMHdr()).(interface{ ValidateFields(...string) error }); ok {
+				if err := v.ValidateFields(subs...); err != nil {
+					return MACState_DownlinkMessage_MessageValidationError{
+						field:  "m_hdr",
+						reason: "embedded message failed validation",
+						cause:  err,
+					}
+				}
+			}
+
+		case "mac_payload":
+
+			if v, ok := interface{}(m.GetMacPayload()).(interface{ ValidateFields(...string) error }); ok {
+				if err := v.ValidateFields(subs...); err != nil {
+					return MACState_DownlinkMessage_MessageValidationError{
+						field:  "mac_payload",
+						reason: "embedded message failed validation",
+						cause:  err,
+					}
+				}
+			}
+
+		default:
+			return MACState_DownlinkMessage_MessageValidationError{
+				field:  name,
+				reason: "invalid field path",
+			}
+		}
+	}
+	return nil
+}
+
+// MACState_DownlinkMessage_MessageValidationError is the validation error
+// returned by MACState_DownlinkMessage_Message.ValidateFields if the
+// designated constraints aren't met.
+type MACState_DownlinkMessage_MessageValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e MACState_DownlinkMessage_MessageValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e MACState_DownlinkMessage_MessageValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e MACState_DownlinkMessage_MessageValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e MACState_DownlinkMessage_MessageValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e MACState_DownlinkMessage_MessageValidationError) ErrorName() string {
+	return "MACState_DownlinkMessage_MessageValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e MACState_DownlinkMessage_MessageValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sMACState_DownlinkMessage_Message.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = MACState_DownlinkMessage_MessageValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = MACState_DownlinkMessage_MessageValidationError{}
+
+// ValidateFields checks the field values on
+// MACState_DownlinkMessage_Message_MHDR with the rules defined in the proto
+// definition for this message. If any rules are violated, an error is returned.
+func (m *MACState_DownlinkMessage_Message_MHDR) ValidateFields(paths ...string) error {
+	if m == nil {
+		return nil
+	}
+
+	if len(paths) == 0 {
+		paths = MACState_DownlinkMessage_Message_MHDRFieldPathsNested
+	}
+
+	for name, subs := range _processPaths(append(paths[:0:0], paths...)) {
+		_ = subs
+		switch name {
+		case "m_type":
+
+			if _, ok := MType_name[int32(m.GetMType())]; !ok {
+				return MACState_DownlinkMessage_Message_MHDRValidationError{
+					field:  "m_type",
+					reason: "value must be one of the defined enum values",
+				}
+			}
+
+		default:
+			return MACState_DownlinkMessage_Message_MHDRValidationError{
+				field:  name,
+				reason: "invalid field path",
+			}
+		}
+	}
+	return nil
+}
+
+// MACState_DownlinkMessage_Message_MHDRValidationError is the validation error
+// returned by MACState_DownlinkMessage_Message_MHDR.ValidateFields if the
+// designated constraints aren't met.
+type MACState_DownlinkMessage_Message_MHDRValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e MACState_DownlinkMessage_Message_MHDRValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e MACState_DownlinkMessage_Message_MHDRValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e MACState_DownlinkMessage_Message_MHDRValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e MACState_DownlinkMessage_Message_MHDRValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e MACState_DownlinkMessage_Message_MHDRValidationError) ErrorName() string {
+	return "MACState_DownlinkMessage_Message_MHDRValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e MACState_DownlinkMessage_Message_MHDRValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sMACState_DownlinkMessage_Message_MHDR.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = MACState_DownlinkMessage_Message_MHDRValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = MACState_DownlinkMessage_Message_MHDRValidationError{}
+
+// ValidateFields checks the field values on
+// MACState_DownlinkMessage_Message_MACPayload with the rules defined in the
+// proto definition for this message. If any rules are violated, an error is returned.
+func (m *MACState_DownlinkMessage_Message_MACPayload) ValidateFields(paths ...string) error {
+	if m == nil {
+		return nil
+	}
+
+	if len(paths) == 0 {
+		paths = MACState_DownlinkMessage_Message_MACPayloadFieldPathsNested
+	}
+
+	for name, subs := range _processPaths(append(paths[:0:0], paths...)) {
+		_ = subs
+		switch name {
+		case "f_port":
+
+			if m.GetFPort() > 255 {
+				return MACState_DownlinkMessage_Message_MACPayloadValidationError{
+					field:  "f_port",
+					reason: "value must be less than or equal to 255",
+				}
+			}
+
+		case "full_f_cnt":
+			// no validation rules for FullFCnt
+		default:
+			return MACState_DownlinkMessage_Message_MACPayloadValidationError{
+				field:  name,
+				reason: "invalid field path",
+			}
+		}
+	}
+	return nil
+}
+
+// MACState_DownlinkMessage_Message_MACPayloadValidationError is the validation
+// error returned by
+// MACState_DownlinkMessage_Message_MACPayload.ValidateFields if the
+// designated constraints aren't met.
+type MACState_DownlinkMessage_Message_MACPayloadValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e MACState_DownlinkMessage_Message_MACPayloadValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e MACState_DownlinkMessage_Message_MACPayloadValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e MACState_DownlinkMessage_Message_MACPayloadValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e MACState_DownlinkMessage_Message_MACPayloadValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e MACState_DownlinkMessage_Message_MACPayloadValidationError) ErrorName() string {
+	return "MACState_DownlinkMessage_Message_MACPayloadValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e MACState_DownlinkMessage_Message_MACPayloadValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sMACState_DownlinkMessage_Message_MACPayload.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = MACState_DownlinkMessage_Message_MACPayloadValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = MACState_DownlinkMessage_Message_MACPayloadValidationError{}
+
+// ValidateFields checks the field values on
+// BatchUpdateEndDeviceLastSeenRequest_EndDeviceLastSeenUpdate with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *BatchUpdateEndDeviceLastSeenRequest_EndDeviceLastSeenUpdate) ValidateFields(paths ...string) error {
+	if m == nil {
+		return nil
+	}
+
+	if len(paths) == 0 {
+		paths = BatchUpdateEndDeviceLastSeenRequest_EndDeviceLastSeenUpdateFieldPathsNested
+	}
+
+	for name, subs := range _processPaths(append(paths[:0:0], paths...)) {
+		_ = subs
+		switch name {
+		case "ids":
+
+			if m.GetIds() == nil {
+				return BatchUpdateEndDeviceLastSeenRequest_EndDeviceLastSeenUpdateValidationError{
+					field:  "ids",
+					reason: "value is required",
+				}
+			}
+
+			if v, ok := interface{}(m.GetIds()).(interface{ ValidateFields(...string) error }); ok {
+				if err := v.ValidateFields(subs...); err != nil {
+					return BatchUpdateEndDeviceLastSeenRequest_EndDeviceLastSeenUpdateValidationError{
+						field:  "ids",
+						reason: "embedded message failed validation",
+						cause:  err,
+					}
+				}
+			}
+
+		case "last_seen_at":
+
+			if v, ok := interface{}(m.GetLastSeenAt()).(interface{ ValidateFields(...string) error }); ok {
+				if err := v.ValidateFields(subs...); err != nil {
+					return BatchUpdateEndDeviceLastSeenRequest_EndDeviceLastSeenUpdateValidationError{
+						field:  "last_seen_at",
+						reason: "embedded message failed validation",
+						cause:  err,
+					}
+				}
+			}
+
+		default:
+			return BatchUpdateEndDeviceLastSeenRequest_EndDeviceLastSeenUpdateValidationError{
+				field:  name,
+				reason: "invalid field path",
+			}
+		}
+	}
+	return nil
+}
+
+// BatchUpdateEndDeviceLastSeenRequest_EndDeviceLastSeenUpdateValidationError
+// is the validation error returned by
+// BatchUpdateEndDeviceLastSeenRequest_EndDeviceLastSeenUpdate.ValidateFields
+// if the designated constraints aren't met.
+type BatchUpdateEndDeviceLastSeenRequest_EndDeviceLastSeenUpdateValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e BatchUpdateEndDeviceLastSeenRequest_EndDeviceLastSeenUpdateValidationError) Field() string {
+	return e.field
+}
+
+// Reason function returns reason value.
+func (e BatchUpdateEndDeviceLastSeenRequest_EndDeviceLastSeenUpdateValidationError) Reason() string {
+	return e.reason
+}
+
+// Cause function returns cause value.
+func (e BatchUpdateEndDeviceLastSeenRequest_EndDeviceLastSeenUpdateValidationError) Cause() error {
+	return e.cause
+}
+
+// Key function returns key value.
+func (e BatchUpdateEndDeviceLastSeenRequest_EndDeviceLastSeenUpdateValidationError) Key() bool {
+	return e.key
+}
+
+// ErrorName returns error name.
+func (e BatchUpdateEndDeviceLastSeenRequest_EndDeviceLastSeenUpdateValidationError) ErrorName() string {
+	return "BatchUpdateEndDeviceLastSeenRequest_EndDeviceLastSeenUpdateValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e BatchUpdateEndDeviceLastSeenRequest_EndDeviceLastSeenUpdateValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sBatchUpdateEndDeviceLastSeenRequest_EndDeviceLastSeenUpdate.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = BatchUpdateEndDeviceLastSeenRequest_EndDeviceLastSeenUpdateValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = BatchUpdateEndDeviceLastSeenRequest_EndDeviceLastSeenUpdateValidationError{}

@@ -52,7 +52,14 @@ func (m *Message) ValidateFields(paths ...string) error {
 		switch name {
 		case "m_hdr":
 
-			if v, ok := interface{}(&m.MHDR).(interface{ ValidateFields(...string) error }); ok {
+			if m.GetMHdr() == nil {
+				return MessageValidationError{
+					field:  "m_hdr",
+					reason: "value is required",
+				}
+			}
+
+			if v, ok := interface{}(m.GetMHdr()).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return MessageValidationError{
 						field:  "m_hdr",
@@ -329,7 +336,14 @@ func (m *MACPayload) ValidateFields(paths ...string) error {
 		switch name {
 		case "f_hdr":
 
-			if v, ok := interface{}(&m.FHDR).(interface{ ValidateFields(...string) error }); ok {
+			if m.GetFHdr() == nil {
+				return MACPayloadValidationError{
+					field:  "f_hdr",
+					reason: "value is required",
+				}
+			}
+
+			if v, ok := interface{}(m.GetFHdr()).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return MACPayloadValidationError{
 						field:  "f_hdr",
@@ -443,10 +457,28 @@ func (m *FHDR) ValidateFields(paths ...string) error {
 		_ = subs
 		switch name {
 		case "dev_addr":
-			// no validation rules for DevAddr
+
+			if len(m.GetDevAddr()) > 0 {
+
+				if len(m.GetDevAddr()) != 4 {
+					return FHDRValidationError{
+						field:  "dev_addr",
+						reason: "value length must be 4 bytes",
+					}
+				}
+
+			}
+
 		case "f_ctrl":
 
-			if v, ok := interface{}(&m.FCtrl).(interface{ ValidateFields(...string) error }); ok {
+			if m.GetFCtrl() == nil {
+				return FHDRValidationError{
+					field:  "f_ctrl",
+					reason: "value is required",
+				}
+			}
+
+			if v, ok := interface{}(m.GetFCtrl()).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return FHDRValidationError{
 						field:  "f_ctrl",
@@ -643,11 +675,44 @@ func (m *JoinRequestPayload) ValidateFields(paths ...string) error {
 		_ = subs
 		switch name {
 		case "join_eui":
-			// no validation rules for JoinEui
+
+			if len(m.GetJoinEui()) > 0 {
+
+				if len(m.GetJoinEui()) != 8 {
+					return JoinRequestPayloadValidationError{
+						field:  "join_eui",
+						reason: "value length must be 8 bytes",
+					}
+				}
+
+			}
+
 		case "dev_eui":
-			// no validation rules for DevEui
+
+			if len(m.GetDevEui()) > 0 {
+
+				if len(m.GetDevEui()) != 8 {
+					return JoinRequestPayloadValidationError{
+						field:  "dev_eui",
+						reason: "value length must be 8 bytes",
+					}
+				}
+
+			}
+
 		case "dev_nonce":
-			// no validation rules for DevNonce
+
+			if len(m.GetDevNonce()) > 0 {
+
+				if len(m.GetDevNonce()) != 2 {
+					return JoinRequestPayloadValidationError{
+						field:  "dev_nonce",
+						reason: "value length must be 2 bytes",
+					}
+				}
+
+			}
+
 		default:
 			return JoinRequestPayloadValidationError{
 				field:  name,
@@ -739,11 +804,44 @@ func (m *RejoinRequestPayload) ValidateFields(paths ...string) error {
 			}
 
 		case "net_id":
-			// no validation rules for NetId
+
+			if len(m.GetNetId()) > 0 {
+
+				if len(m.GetNetId()) != 3 {
+					return RejoinRequestPayloadValidationError{
+						field:  "net_id",
+						reason: "value length must be 3 bytes",
+					}
+				}
+
+			}
+
 		case "join_eui":
-			// no validation rules for JoinEui
+
+			if len(m.GetJoinEui()) > 0 {
+
+				if len(m.GetJoinEui()) != 8 {
+					return RejoinRequestPayloadValidationError{
+						field:  "join_eui",
+						reason: "value length must be 8 bytes",
+					}
+				}
+
+			}
+
 		case "dev_eui":
-			// no validation rules for DevEui
+
+			if len(m.GetDevEui()) > 0 {
+
+				if len(m.GetDevEui()) != 8 {
+					return RejoinRequestPayloadValidationError{
+						field:  "dev_eui",
+						reason: "value length must be 8 bytes",
+					}
+				}
+
+			}
+
 		case "rejoin_cnt":
 			// no validation rules for RejoinCnt
 		default:
@@ -830,14 +928,54 @@ func (m *JoinAcceptPayload) ValidateFields(paths ...string) error {
 		case "encrypted":
 			// no validation rules for Encrypted
 		case "join_nonce":
-			// no validation rules for JoinNonce
+
+			if len(m.GetJoinNonce()) > 0 {
+
+				if len(m.GetJoinNonce()) != 3 {
+					return JoinAcceptPayloadValidationError{
+						field:  "join_nonce",
+						reason: "value length must be 3 bytes",
+					}
+				}
+
+			}
+
 		case "net_id":
-			// no validation rules for NetId
+
+			if len(m.GetNetId()) > 0 {
+
+				if len(m.GetNetId()) != 3 {
+					return JoinAcceptPayloadValidationError{
+						field:  "net_id",
+						reason: "value length must be 3 bytes",
+					}
+				}
+
+			}
+
 		case "dev_addr":
-			// no validation rules for DevAddr
+
+			if len(m.GetDevAddr()) > 0 {
+
+				if len(m.GetDevAddr()) != 4 {
+					return JoinAcceptPayloadValidationError{
+						field:  "dev_addr",
+						reason: "value length must be 4 bytes",
+					}
+				}
+
+			}
+
 		case "dl_settings":
 
-			if v, ok := interface{}(&m.DLSettings).(interface{ ValidateFields(...string) error }); ok {
+			if m.GetDlSettings() == nil {
+				return JoinAcceptPayloadValidationError{
+					field:  "dl_settings",
+					reason: "value is required",
+				}
+			}
+
+			if v, ok := interface{}(m.GetDlSettings()).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return JoinAcceptPayloadValidationError{
 						field:  "dl_settings",
@@ -1144,6 +1282,8 @@ func (m *LoRaDataRate) ValidateFields(paths ...string) error {
 			// no validation rules for Bandwidth
 		case "spreading_factor":
 			// no validation rules for SpreadingFactor
+		case "coding_rate":
+			// no validation rules for CodingRate
 		default:
 			return LoRaDataRateValidationError{
 				field:  name,
@@ -1308,6 +1448,8 @@ func (m *LRFHSSDataRate) ValidateFields(paths ...string) error {
 			// no validation rules for ModulationType
 		case "operating_channel_width":
 			// no validation rules for OperatingChannelWidth
+		case "coding_rate":
+			// no validation rules for CodingRate
 		default:
 			return LRFHSSDataRateValidationError{
 				field:  name,
@@ -1533,7 +1675,14 @@ func (m *TxSettings) ValidateFields(paths ...string) error {
 		switch name {
 		case "data_rate":
 
-			if v, ok := interface{}(&m.DataRate).(interface{ ValidateFields(...string) error }); ok {
+			if m.GetDataRate() == nil {
+				return TxSettingsValidationError{
+					field:  "data_rate",
+					reason: "value is required",
+				}
+			}
+
+			if v, ok := interface{}(m.GetDataRate()).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return TxSettingsValidationError{
 						field:  "data_rate",
@@ -1543,17 +1692,6 @@ func (m *TxSettings) ValidateFields(paths ...string) error {
 				}
 			}
 
-		case "data_rate_index":
-
-			if _, ok := DataRateIndex_name[int32(m.GetDataRateIndex())]; !ok {
-				return TxSettingsValidationError{
-					field:  "data_rate_index",
-					reason: "value must be one of the defined enum values",
-				}
-			}
-
-		case "coding_rate":
-			// no validation rules for CodingRate
 		case "frequency":
 			// no validation rules for Frequency
 		case "enable_crc":
@@ -1584,6 +1722,8 @@ func (m *TxSettings) ValidateFields(paths ...string) error {
 				}
 			}
 
+		case "concentrator_timestamp":
+			// no validation rules for ConcentratorTimestamp
 		default:
 			return TxSettingsValidationError{
 				field:  name,
@@ -1665,7 +1805,14 @@ func (m *GatewayAntennaIdentifiers) ValidateFields(paths ...string) error {
 		switch name {
 		case "gateway_ids":
 
-			if v, ok := interface{}(&m.GatewayIdentifiers).(interface{ ValidateFields(...string) error }); ok {
+			if m.GetGatewayIds() == nil {
+				return GatewayAntennaIdentifiersValidationError{
+					field:  "gateway_ids",
+					reason: "value is required",
+				}
+			}
+
+			if v, ok := interface{}(m.GetGatewayIds()).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return GatewayAntennaIdentifiersValidationError{
 						field:  "gateway_ids",
@@ -1744,6 +1891,111 @@ var _ interface {
 	ErrorName() string
 } = GatewayAntennaIdentifiersValidationError{}
 
+// ValidateFields checks the field values on ClassBCGatewayIdentifiers with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *ClassBCGatewayIdentifiers) ValidateFields(paths ...string) error {
+	if m == nil {
+		return nil
+	}
+
+	if len(paths) == 0 {
+		paths = ClassBCGatewayIdentifiersFieldPathsNested
+	}
+
+	for name, subs := range _processPaths(append(paths[:0:0], paths...)) {
+		_ = subs
+		switch name {
+		case "gateway_ids":
+
+			if m.GetGatewayIds() == nil {
+				return ClassBCGatewayIdentifiersValidationError{
+					field:  "gateway_ids",
+					reason: "value is required",
+				}
+			}
+
+			if v, ok := interface{}(m.GetGatewayIds()).(interface{ ValidateFields(...string) error }); ok {
+				if err := v.ValidateFields(subs...); err != nil {
+					return ClassBCGatewayIdentifiersValidationError{
+						field:  "gateway_ids",
+						reason: "embedded message failed validation",
+						cause:  err,
+					}
+				}
+			}
+
+		case "antenna_index":
+			// no validation rules for AntennaIndex
+		case "group_index":
+			// no validation rules for GroupIndex
+		default:
+			return ClassBCGatewayIdentifiersValidationError{
+				field:  name,
+				reason: "invalid field path",
+			}
+		}
+	}
+	return nil
+}
+
+// ClassBCGatewayIdentifiersValidationError is the validation error returned by
+// ClassBCGatewayIdentifiers.ValidateFields if the designated constraints
+// aren't met.
+type ClassBCGatewayIdentifiersValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ClassBCGatewayIdentifiersValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ClassBCGatewayIdentifiersValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ClassBCGatewayIdentifiersValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ClassBCGatewayIdentifiersValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ClassBCGatewayIdentifiersValidationError) ErrorName() string {
+	return "ClassBCGatewayIdentifiersValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e ClassBCGatewayIdentifiersValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sClassBCGatewayIdentifiers.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ClassBCGatewayIdentifiersValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ClassBCGatewayIdentifiersValidationError{}
+
 // ValidateFields checks the field values on UplinkToken with the rules defined
 // in the proto definition for this message. If any rules are violated, an
 // error is returned.
@@ -1761,7 +2013,14 @@ func (m *UplinkToken) ValidateFields(paths ...string) error {
 		switch name {
 		case "ids":
 
-			if v, ok := interface{}(&m.GatewayAntennaIdentifiers).(interface{ ValidateFields(...string) error }); ok {
+			if m.GetIds() == nil {
+				return UplinkTokenValidationError{
+					field:  "ids",
+					reason: "value is required",
+				}
+			}
+
+			if v, ok := interface{}(m.GetIds()).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return UplinkTokenValidationError{
 						field:  "ids",
@@ -1775,7 +2034,7 @@ func (m *UplinkToken) ValidateFields(paths ...string) error {
 			// no validation rules for Timestamp
 		case "server_time":
 
-			if v, ok := interface{}(&m.ServerTime).(interface{ ValidateFields(...string) error }); ok {
+			if v, ok := interface{}(m.GetServerTime()).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return UplinkTokenValidationError{
 						field:  "server_time",
@@ -1787,6 +2046,18 @@ func (m *UplinkToken) ValidateFields(paths ...string) error {
 
 		case "concentrator_time":
 			// no validation rules for ConcentratorTime
+		case "gateway_time":
+
+			if v, ok := interface{}(m.GetGatewayTime()).(interface{ ValidateFields(...string) error }); ok {
+				if err := v.ValidateFields(subs...); err != nil {
+					return UplinkTokenValidationError{
+						field:  "gateway_time",
+						reason: "embedded message failed validation",
+						cause:  err,
+					}
+				}
+			}
+
 		default:
 			return UplinkTokenValidationError{
 				field:  name,
@@ -2012,23 +2283,29 @@ func (m *TxRequest) ValidateFields(paths ...string) error {
 				}
 			}
 
-		case "rx1_data_rate_index":
+		case "rx1_data_rate":
 
-			if _, ok := DataRateIndex_name[int32(m.GetRx1DataRateIndex())]; !ok {
-				return TxRequestValidationError{
-					field:  "rx1_data_rate_index",
-					reason: "value must be one of the defined enum values",
+			if v, ok := interface{}(m.GetRx1DataRate()).(interface{ ValidateFields(...string) error }); ok {
+				if err := v.ValidateFields(subs...); err != nil {
+					return TxRequestValidationError{
+						field:  "rx1_data_rate",
+						reason: "embedded message failed validation",
+						cause:  err,
+					}
 				}
 			}
 
 		case "rx1_frequency":
 			// no validation rules for Rx1Frequency
-		case "rx2_data_rate_index":
+		case "rx2_data_rate":
 
-			if _, ok := DataRateIndex_name[int32(m.GetRx2DataRateIndex())]; !ok {
-				return TxRequestValidationError{
-					field:  "rx2_data_rate_index",
-					reason: "value must be one of the defined enum values",
+			if v, ok := interface{}(m.GetRx2DataRate()).(interface{ ValidateFields(...string) error }); ok {
+				if err := v.ValidateFields(subs...); err != nil {
+					return TxRequestValidationError{
+						field:  "rx2_data_rate",
+						reason: "embedded message failed validation",
+						cause:  err,
+					}
 				}
 			}
 
@@ -2061,15 +2338,6 @@ func (m *TxRequest) ValidateFields(paths ...string) error {
 				return TxRequestValidationError{
 					field:  "frequency_plan_id",
 					reason: "value length must be at most 64 runes",
-				}
-			}
-
-		case "lorawan_phy_version":
-
-			if _, ok := PHYVersion_name[int32(m.GetLorawanPhyVersion())]; !ok {
-				return TxRequestValidationError{
-					field:  "lorawan_phy_version",
-					reason: "value must be one of the defined enum values",
 				}
 			}
 
@@ -2744,6 +3012,102 @@ var _ interface {
 var _MACCommand_Cid_NotInLookup = map[MACCommandIdentifier]struct{}{
 	0: {},
 }
+
+// ValidateFields checks the field values on MACCommands with the rules defined
+// in the proto definition for this message. If any rules are violated, an
+// error is returned.
+func (m *MACCommands) ValidateFields(paths ...string) error {
+	if m == nil {
+		return nil
+	}
+
+	if len(paths) == 0 {
+		paths = MACCommandsFieldPathsNested
+	}
+
+	for name, subs := range _processPaths(append(paths[:0:0], paths...)) {
+		_ = subs
+		switch name {
+		case "commands":
+
+			for idx, item := range m.GetCommands() {
+				_, _ = idx, item
+
+				if v, ok := interface{}(item).(interface{ ValidateFields(...string) error }); ok {
+					if err := v.ValidateFields(subs...); err != nil {
+						return MACCommandsValidationError{
+							field:  fmt.Sprintf("commands[%v]", idx),
+							reason: "embedded message failed validation",
+							cause:  err,
+						}
+					}
+				}
+
+			}
+
+		default:
+			return MACCommandsValidationError{
+				field:  name,
+				reason: "invalid field path",
+			}
+		}
+	}
+	return nil
+}
+
+// MACCommandsValidationError is the validation error returned by
+// MACCommands.ValidateFields if the designated constraints aren't met.
+type MACCommandsValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e MACCommandsValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e MACCommandsValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e MACCommandsValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e MACCommandsValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e MACCommandsValidationError) ErrorName() string { return "MACCommandsValidationError" }
+
+// Error satisfies the builtin error interface
+func (e MACCommandsValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sMACCommands.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = MACCommandsValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = MACCommandsValidationError{}
 
 // ValidateFields checks the field values on FrequencyValue with the rules
 // defined in the proto definition for this message. If any rules are
@@ -5409,6 +5773,13 @@ func (m *MACCommand_DeviceTimeAns) ValidateFields(paths ...string) error {
 		_ = subs
 		switch name {
 		case "time":
+
+			if m.GetTime() == nil {
+				return MACCommand_DeviceTimeAnsValidationError{
+					field:  "time",
+					reason: "value is required",
+				}
+			}
 
 		default:
 			return MACCommand_DeviceTimeAnsValidationError{

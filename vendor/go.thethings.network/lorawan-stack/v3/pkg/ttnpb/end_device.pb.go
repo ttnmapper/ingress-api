@@ -4,21 +4,16 @@
 package ttnpb
 
 import (
-	bytes "bytes"
 	fmt "fmt"
+	_ "github.com/TheThingsIndustries/protoc-gen-go-flags/annotations"
+	_ "github.com/TheThingsIndustries/protoc-gen-go-json/annotations"
 	_ "github.com/envoyproxy/protoc-gen-validate/validate"
 	_ "github.com/gogo/protobuf/gogoproto"
 	proto "github.com/gogo/protobuf/proto"
-	github_com_gogo_protobuf_sortkeys "github.com/gogo/protobuf/sortkeys"
-	github_com_gogo_protobuf_types "github.com/gogo/protobuf/types"
 	types "github.com/gogo/protobuf/types"
 	golang_proto "github.com/golang/protobuf/proto"
-	go_thethings_network_lorawan_stack_v3_pkg_types "go.thethings.network/lorawan-stack/v3/pkg/types"
+	_ "github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-openapiv2/options"
 	math "math"
-	reflect "reflect"
-	strconv "strconv"
-	strings "strings"
-	time "time"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -26,7 +21,6 @@ var _ = proto.Marshal
 var _ = golang_proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
-var _ = time.Kitchen
 
 // This is a compile-time assertion to ensure that this generated file
 // is compatible with the proto package it is being compiled against.
@@ -55,6 +49,10 @@ var PowerState_value = map[string]int32{
 	"POWER_EXTERNAL": 2,
 }
 
+func (x PowerState) String() string {
+	return proto.EnumName(PowerState_name, int32(x))
+}
+
 func (PowerState) EnumDescriptor() ([]byte, []int) {
 	return fileDescriptor_a656ee0551c94a80, []int{0}
 }
@@ -62,8 +60,8 @@ func (PowerState) EnumDescriptor() ([]byte, []int) {
 type Session struct {
 	// Device Address, issued by the Network Server or chosen by device manufacturer in case of testing range (beginning with 00-03).
 	// Known by Network Server, Application Server and Join Server. Owned by Network Server.
-	DevAddr     go_thethings_network_lorawan_stack_v3_pkg_types.DevAddr `protobuf:"bytes,2,opt,name=dev_addr,json=devAddr,proto3,customtype=go.thethings.network/lorawan-stack/v3/pkg/types.DevAddr" json:"dev_addr"`
-	SessionKeys `protobuf:"bytes,3,opt,name=keys,proto3,embedded=keys" json:"keys"`
+	DevAddr []byte       `protobuf:"bytes,2,opt,name=dev_addr,json=devAddr,proto3" json:"dev_addr,omitempty"`
+	Keys    *SessionKeys `protobuf:"bytes,3,opt,name=keys,proto3" json:"keys,omitempty"`
 	// Last uplink frame counter value used. Network Server only. Application Server assumes the Network Server checked it.
 	LastFCntUp uint32 `protobuf:"varint,4,opt,name=last_f_cnt_up,json=lastFCntUp,proto3" json:"last_f_cnt_up,omitempty"`
 	// Last network downlink frame counter value used. Network Server only.
@@ -73,15 +71,17 @@ type Session struct {
 	// Frame counter of the last confirmed downlink message sent. Network Server only.
 	LastConfFCntDown uint32 `protobuf:"varint,7,opt,name=last_conf_f_cnt_down,json=lastConfFCntDown,proto3" json:"last_conf_f_cnt_down,omitempty"`
 	// Time when the session started. Network Server only.
-	StartedAt time.Time `protobuf:"bytes,8,opt,name=started_at,json=startedAt,proto3,stdtime" json:"started_at"`
+	StartedAt *types.Timestamp `protobuf:"bytes,8,opt,name=started_at,json=startedAt,proto3" json:"started_at,omitempty"`
 	// Queued Application downlink messages. Stored in Application Server and Network Server.
 	QueuedApplicationDownlinks []*ApplicationDownlink `protobuf:"bytes,9,rep,name=queued_application_downlinks,json=queuedApplicationDownlinks,proto3" json:"queued_application_downlinks,omitempty"`
 	XXX_NoUnkeyedLiteral       struct{}               `json:"-"`
+	XXX_unrecognized           []byte                 `json:"-"`
 	XXX_sizecache              int32                  `json:"-"`
 }
 
-func (m *Session) Reset()      { *m = Session{} }
-func (*Session) ProtoMessage() {}
+func (m *Session) Reset()         { *m = Session{} }
+func (m *Session) String() string { return proto.CompactTextString(m) }
+func (*Session) ProtoMessage()    {}
 func (*Session) Descriptor() ([]byte, []int) {
 	return fileDescriptor_a656ee0551c94a80, []int{0}
 }
@@ -102,6 +102,20 @@ func (m *Session) XXX_DiscardUnknown() {
 }
 
 var xxx_messageInfo_Session proto.InternalMessageInfo
+
+func (m *Session) GetDevAddr() []byte {
+	if m != nil {
+		return m.DevAddr
+	}
+	return nil
+}
+
+func (m *Session) GetKeys() *SessionKeys {
+	if m != nil {
+		return m.Keys
+	}
+	return nil
+}
 
 func (m *Session) GetLastFCntUp() uint32 {
 	if m != nil {
@@ -131,11 +145,11 @@ func (m *Session) GetLastConfFCntDown() uint32 {
 	return 0
 }
 
-func (m *Session) GetStartedAt() time.Time {
+func (m *Session) GetStartedAt() *types.Timestamp {
 	if m != nil {
 		return m.StartedAt
 	}
-	return time.Time{}
+	return nil
 }
 
 func (m *Session) GetQueuedApplicationDownlinks() []*ApplicationDownlink {
@@ -148,11 +162,13 @@ func (m *Session) GetQueuedApplicationDownlinks() []*ApplicationDownlink {
 type BoolValue struct {
 	Value                bool     `protobuf:"varint,1,opt,name=value,proto3" json:"value,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *BoolValue) Reset()      { *m = BoolValue{} }
-func (*BoolValue) ProtoMessage() {}
+func (m *BoolValue) Reset()         { *m = BoolValue{} }
+func (m *BoolValue) String() string { return proto.CompactTextString(m) }
+func (*BoolValue) ProtoMessage()    {}
 func (*BoolValue) Descriptor() ([]byte, []int) {
 	return fileDescriptor_a656ee0551c94a80, []int{1}
 }
@@ -234,11 +250,13 @@ type MACParameters struct {
 	// Data rate index of the class B ping slot.
 	PingSlotDataRateIndexValue *DataRateIndexValue `protobuf:"bytes,24,opt,name=ping_slot_data_rate_index_value,json=pingSlotDataRateIndexValue,proto3" json:"ping_slot_data_rate_index_value,omitempty"`
 	XXX_NoUnkeyedLiteral       struct{}            `json:"-"`
+	XXX_unrecognized           []byte              `json:"-"`
 	XXX_sizecache              int32               `json:"-"`
 }
 
-func (m *MACParameters) Reset()      { *m = MACParameters{} }
-func (*MACParameters) ProtoMessage() {}
+func (m *MACParameters) Reset()         { *m = MACParameters{} }
+func (m *MACParameters) String() string { return proto.CompactTextString(m) }
+func (*MACParameters) ProtoMessage()    {}
 func (*MACParameters) Descriptor() ([]byte, []int) {
 	return fileDescriptor_a656ee0551c94a80, []int{2}
 }
@@ -271,7 +289,7 @@ func (m *MACParameters) GetAdrDataRateIndex() DataRateIndex {
 	if m != nil {
 		return m.AdrDataRateIndex
 	}
-	return DATA_RATE_0
+	return DataRateIndex_DATA_RATE_0
 }
 
 func (m *MACParameters) GetAdrTxPowerIndex() uint32 {
@@ -308,7 +326,7 @@ func (m *MACParameters) GetRx1Delay() RxDelay {
 	if m != nil {
 		return m.Rx1Delay
 	}
-	return RX_DELAY_0
+	return RxDelay_RX_DELAY_0
 }
 
 func (m *MACParameters) GetRx1DataRateOffset() DataRateOffset {
@@ -322,7 +340,7 @@ func (m *MACParameters) GetRx2DataRateIndex() DataRateIndex {
 	if m != nil {
 		return m.Rx2DataRateIndex
 	}
-	return DATA_RATE_0
+	return DataRateIndex_DATA_RATE_0
 }
 
 func (m *MACParameters) GetRx2Frequency() uint64 {
@@ -336,21 +354,21 @@ func (m *MACParameters) GetMaxDutyCycle() AggregatedDutyCycle {
 	if m != nil {
 		return m.MaxDutyCycle
 	}
-	return DUTY_CYCLE_1
+	return AggregatedDutyCycle_DUTY_CYCLE_1
 }
 
 func (m *MACParameters) GetRejoinTimePeriodicity() RejoinTimeExponent {
 	if m != nil {
 		return m.RejoinTimePeriodicity
 	}
-	return REJOIN_TIME_0
+	return RejoinTimeExponent_REJOIN_TIME_0
 }
 
 func (m *MACParameters) GetRejoinCountPeriodicity() RejoinCountExponent {
 	if m != nil {
 		return m.RejoinCountPeriodicity
 	}
-	return REJOIN_COUNT_16
+	return RejoinCountExponent_REJOIN_COUNT_16
 }
 
 func (m *MACParameters) GetPingSlotFrequency() uint64 {
@@ -365,7 +383,7 @@ func (m *MACParameters) GetPingSlotDataRateIndex() DataRateIndex {
 	if m != nil {
 		return m.PingSlotDataRateIndex
 	}
-	return DATA_RATE_0
+	return DataRateIndex_DATA_RATE_0
 }
 
 func (m *MACParameters) GetBeaconFrequency() uint64 {
@@ -429,11 +447,13 @@ type MACParameters_Channel struct {
 	// Channel can be used by device for uplink.
 	EnableUplink         bool     `protobuf:"varint,5,opt,name=enable_uplink,json=enableUplink,proto3" json:"enable_uplink,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *MACParameters_Channel) Reset()      { *m = MACParameters_Channel{} }
-func (*MACParameters_Channel) ProtoMessage() {}
+func (m *MACParameters_Channel) Reset()         { *m = MACParameters_Channel{} }
+func (m *MACParameters_Channel) String() string { return proto.CompactTextString(m) }
+func (*MACParameters_Channel) ProtoMessage()    {}
 func (*MACParameters_Channel) Descriptor() ([]byte, []int) {
 	return fileDescriptor_a656ee0551c94a80, []int{2, 0}
 }
@@ -473,14 +493,14 @@ func (m *MACParameters_Channel) GetMinDataRateIndex() DataRateIndex {
 	if m != nil {
 		return m.MinDataRateIndex
 	}
-	return DATA_RATE_0
+	return DataRateIndex_DATA_RATE_0
 }
 
 func (m *MACParameters_Channel) GetMaxDataRateIndex() DataRateIndex {
 	if m != nil {
 		return m.MaxDataRateIndex
 	}
-	return DATA_RATE_0
+	return DataRateIndex_DATA_RATE_0
 }
 
 func (m *MACParameters_Channel) GetEnableUplink() bool {
@@ -493,7 +513,7 @@ func (m *MACParameters_Channel) GetEnableUplink() bool {
 // Template for creating end devices.
 type EndDeviceVersion struct {
 	// Version identifiers.
-	EndDeviceVersionIdentifiers `protobuf:"bytes,1,opt,name=ids,proto3,embedded=ids" json:"ids"`
+	Ids *EndDeviceVersionIdentifiers `protobuf:"bytes,1,opt,name=ids,proto3" json:"ids,omitempty"`
 	// LoRaWAN MAC version.
 	LorawanVersion MACVersion `protobuf:"varint,2,opt,name=lorawan_version,json=lorawanVersion,proto3,enum=ttn.lorawan.v3.MACVersion" json:"lorawan_version,omitempty"`
 	// LoRaWAN PHY version.
@@ -517,13 +537,15 @@ type EndDeviceVersion struct {
 	// Whether the device resets the join and dev nonces (not LoRaWAN compliant).
 	ResetsJoinNonces bool `protobuf:"varint,12,opt,name=resets_join_nonces,json=resetsJoinNonces,proto3" json:"resets_join_nonces,omitempty"`
 	// Default formatters defining the payload formats for this end device.
-	DefaultFormatters    MessagePayloadFormatters `protobuf:"bytes,13,opt,name=default_formatters,json=defaultFormatters,proto3" json:"default_formatters"`
-	XXX_NoUnkeyedLiteral struct{}                 `json:"-"`
-	XXX_sizecache        int32                    `json:"-"`
+	DefaultFormatters    *MessagePayloadFormatters `protobuf:"bytes,13,opt,name=default_formatters,json=defaultFormatters,proto3" json:"default_formatters,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}                  `json:"-"`
+	XXX_unrecognized     []byte                    `json:"-"`
+	XXX_sizecache        int32                     `json:"-"`
 }
 
-func (m *EndDeviceVersion) Reset()      { *m = EndDeviceVersion{} }
-func (*EndDeviceVersion) ProtoMessage() {}
+func (m *EndDeviceVersion) Reset()         { *m = EndDeviceVersion{} }
+func (m *EndDeviceVersion) String() string { return proto.CompactTextString(m) }
+func (*EndDeviceVersion) ProtoMessage()    {}
 func (*EndDeviceVersion) Descriptor() ([]byte, []int) {
 	return fileDescriptor_a656ee0551c94a80, []int{3}
 }
@@ -545,18 +567,25 @@ func (m *EndDeviceVersion) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_EndDeviceVersion proto.InternalMessageInfo
 
+func (m *EndDeviceVersion) GetIds() *EndDeviceVersionIdentifiers {
+	if m != nil {
+		return m.Ids
+	}
+	return nil
+}
+
 func (m *EndDeviceVersion) GetLorawanVersion() MACVersion {
 	if m != nil {
 		return m.LorawanVersion
 	}
-	return MAC_UNKNOWN
+	return MACVersion_MAC_UNKNOWN
 }
 
 func (m *EndDeviceVersion) GetLorawanPhyVersion() PHYVersion {
 	if m != nil {
 		return m.LorawanPhyVersion
 	}
-	return PHY_UNKNOWN
+	return PHYVersion_PHY_UNKNOWN
 }
 
 func (m *EndDeviceVersion) GetFrequencyPlanId() string {
@@ -622,17 +651,300 @@ func (m *EndDeviceVersion) GetResetsJoinNonces() bool {
 	return false
 }
 
-func (m *EndDeviceVersion) GetDefaultFormatters() MessagePayloadFormatters {
+func (m *EndDeviceVersion) GetDefaultFormatters() *MessagePayloadFormatters {
 	if m != nil {
 		return m.DefaultFormatters
 	}
-	return MessagePayloadFormatters{}
+	return nil
 }
+
+// Adaptive Data Rate settings.
+type ADRSettings struct {
+	// Types that are valid to be assigned to Mode:
+	//	*ADRSettings_Static
+	//	*ADRSettings_Dynamic
+	//	*ADRSettings_Disabled
+	Mode                 isADRSettings_Mode `protobuf_oneof:"mode"`
+	XXX_NoUnkeyedLiteral struct{}           `json:"-"`
+	XXX_unrecognized     []byte             `json:"-"`
+	XXX_sizecache        int32              `json:"-"`
+}
+
+func (m *ADRSettings) Reset()         { *m = ADRSettings{} }
+func (m *ADRSettings) String() string { return proto.CompactTextString(m) }
+func (*ADRSettings) ProtoMessage()    {}
+func (*ADRSettings) Descriptor() ([]byte, []int) {
+	return fileDescriptor_a656ee0551c94a80, []int{4}
+}
+func (m *ADRSettings) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_ADRSettings.Unmarshal(m, b)
+}
+func (m *ADRSettings) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_ADRSettings.Marshal(b, m, deterministic)
+}
+func (m *ADRSettings) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ADRSettings.Merge(m, src)
+}
+func (m *ADRSettings) XXX_Size() int {
+	return xxx_messageInfo_ADRSettings.Size(m)
+}
+func (m *ADRSettings) XXX_DiscardUnknown() {
+	xxx_messageInfo_ADRSettings.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ADRSettings proto.InternalMessageInfo
+
+type isADRSettings_Mode interface {
+	isADRSettings_Mode()
+}
+
+type ADRSettings_Static struct {
+	Static *ADRSettings_StaticMode `protobuf:"bytes,1,opt,name=static,proto3,oneof" json:"static,omitempty"`
+}
+type ADRSettings_Dynamic struct {
+	Dynamic *ADRSettings_DynamicMode `protobuf:"bytes,2,opt,name=dynamic,proto3,oneof" json:"dynamic,omitempty"`
+}
+type ADRSettings_Disabled struct {
+	Disabled *ADRSettings_DisabledMode `protobuf:"bytes,3,opt,name=disabled,proto3,oneof" json:"disabled,omitempty"`
+}
+
+func (*ADRSettings_Static) isADRSettings_Mode()   {}
+func (*ADRSettings_Dynamic) isADRSettings_Mode()  {}
+func (*ADRSettings_Disabled) isADRSettings_Mode() {}
+
+func (m *ADRSettings) GetMode() isADRSettings_Mode {
+	if m != nil {
+		return m.Mode
+	}
+	return nil
+}
+
+func (m *ADRSettings) GetStatic() *ADRSettings_StaticMode {
+	if x, ok := m.GetMode().(*ADRSettings_Static); ok {
+		return x.Static
+	}
+	return nil
+}
+
+func (m *ADRSettings) GetDynamic() *ADRSettings_DynamicMode {
+	if x, ok := m.GetMode().(*ADRSettings_Dynamic); ok {
+		return x.Dynamic
+	}
+	return nil
+}
+
+func (m *ADRSettings) GetDisabled() *ADRSettings_DisabledMode {
+	if x, ok := m.GetMode().(*ADRSettings_Disabled); ok {
+		return x.Disabled
+	}
+	return nil
+}
+
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*ADRSettings) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
+		(*ADRSettings_Static)(nil),
+		(*ADRSettings_Dynamic)(nil),
+		(*ADRSettings_Disabled)(nil),
+	}
+}
+
+// Configuration options for static ADR.
+type ADRSettings_StaticMode struct {
+	// Data rate index to use.
+	DataRateIndex DataRateIndex `protobuf:"varint,1,opt,name=data_rate_index,json=dataRateIndex,proto3,enum=ttn.lorawan.v3.DataRateIndex" json:"data_rate_index,omitempty"`
+	// Transmission power index to use.
+	TxPowerIndex uint32 `protobuf:"varint,2,opt,name=tx_power_index,json=txPowerIndex,proto3" json:"tx_power_index,omitempty"`
+	// Number of retransmissions.
+	NbTrans              uint32   `protobuf:"varint,3,opt,name=nb_trans,json=nbTrans,proto3" json:"nb_trans,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *ADRSettings_StaticMode) Reset()         { *m = ADRSettings_StaticMode{} }
+func (m *ADRSettings_StaticMode) String() string { return proto.CompactTextString(m) }
+func (*ADRSettings_StaticMode) ProtoMessage()    {}
+func (*ADRSettings_StaticMode) Descriptor() ([]byte, []int) {
+	return fileDescriptor_a656ee0551c94a80, []int{4, 0}
+}
+func (m *ADRSettings_StaticMode) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_ADRSettings_StaticMode.Unmarshal(m, b)
+}
+func (m *ADRSettings_StaticMode) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_ADRSettings_StaticMode.Marshal(b, m, deterministic)
+}
+func (m *ADRSettings_StaticMode) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ADRSettings_StaticMode.Merge(m, src)
+}
+func (m *ADRSettings_StaticMode) XXX_Size() int {
+	return xxx_messageInfo_ADRSettings_StaticMode.Size(m)
+}
+func (m *ADRSettings_StaticMode) XXX_DiscardUnknown() {
+	xxx_messageInfo_ADRSettings_StaticMode.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ADRSettings_StaticMode proto.InternalMessageInfo
+
+func (m *ADRSettings_StaticMode) GetDataRateIndex() DataRateIndex {
+	if m != nil {
+		return m.DataRateIndex
+	}
+	return DataRateIndex_DATA_RATE_0
+}
+
+func (m *ADRSettings_StaticMode) GetTxPowerIndex() uint32 {
+	if m != nil {
+		return m.TxPowerIndex
+	}
+	return 0
+}
+
+func (m *ADRSettings_StaticMode) GetNbTrans() uint32 {
+	if m != nil {
+		return m.NbTrans
+	}
+	return 0
+}
+
+// Configuration options for dynamic ADR.
+type ADRSettings_DynamicMode struct {
+	// The ADR margin (dB) tells the network server how much margin it should add in ADR requests.
+	// A bigger margin is less efficient, but gives a better chance of successful reception.
+	// If unset, the default value from Network Server configuration will be used.
+	Margin *types.FloatValue `protobuf:"bytes,1,opt,name=margin,proto3" json:"margin,omitempty"`
+	// Minimum data rate index.
+	// If unset, the default value from Network Server configuration will be used.
+	MinDataRateIndex *DataRateIndexValue `protobuf:"bytes,2,opt,name=min_data_rate_index,json=minDataRateIndex,proto3" json:"min_data_rate_index,omitempty"`
+	// Maximum data rate index.
+	// If unset, the default value from Network Server configuration will be used.
+	MaxDataRateIndex *DataRateIndexValue `protobuf:"bytes,3,opt,name=max_data_rate_index,json=maxDataRateIndex,proto3" json:"max_data_rate_index,omitempty"`
+	// Minimum transmission power index.
+	// If unset, the default value from Network Server configuration will be used.
+	MinTxPowerIndex *types.UInt32Value `protobuf:"bytes,4,opt,name=min_tx_power_index,json=minTxPowerIndex,proto3" json:"min_tx_power_index,omitempty"`
+	// Maximum transmission power index.
+	// If unset, the default value from Network Server configuration will be used.
+	MaxTxPowerIndex *types.UInt32Value `protobuf:"bytes,5,opt,name=max_tx_power_index,json=maxTxPowerIndex,proto3" json:"max_tx_power_index,omitempty"`
+	// Minimum number of retransmissions.
+	// If unset, the default value from Network Server configuration will be used.
+	MinNbTrans *types.UInt32Value `protobuf:"bytes,6,opt,name=min_nb_trans,json=minNbTrans,proto3" json:"min_nb_trans,omitempty"`
+	// Maximum number of retransmissions.
+	// If unset, the default value from Network Server configuration will be used.
+	MaxNbTrans           *types.UInt32Value `protobuf:"bytes,7,opt,name=max_nb_trans,json=maxNbTrans,proto3" json:"max_nb_trans,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}           `json:"-"`
+	XXX_unrecognized     []byte             `json:"-"`
+	XXX_sizecache        int32              `json:"-"`
+}
+
+func (m *ADRSettings_DynamicMode) Reset()         { *m = ADRSettings_DynamicMode{} }
+func (m *ADRSettings_DynamicMode) String() string { return proto.CompactTextString(m) }
+func (*ADRSettings_DynamicMode) ProtoMessage()    {}
+func (*ADRSettings_DynamicMode) Descriptor() ([]byte, []int) {
+	return fileDescriptor_a656ee0551c94a80, []int{4, 1}
+}
+func (m *ADRSettings_DynamicMode) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_ADRSettings_DynamicMode.Unmarshal(m, b)
+}
+func (m *ADRSettings_DynamicMode) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_ADRSettings_DynamicMode.Marshal(b, m, deterministic)
+}
+func (m *ADRSettings_DynamicMode) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ADRSettings_DynamicMode.Merge(m, src)
+}
+func (m *ADRSettings_DynamicMode) XXX_Size() int {
+	return xxx_messageInfo_ADRSettings_DynamicMode.Size(m)
+}
+func (m *ADRSettings_DynamicMode) XXX_DiscardUnknown() {
+	xxx_messageInfo_ADRSettings_DynamicMode.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ADRSettings_DynamicMode proto.InternalMessageInfo
+
+func (m *ADRSettings_DynamicMode) GetMargin() *types.FloatValue {
+	if m != nil {
+		return m.Margin
+	}
+	return nil
+}
+
+func (m *ADRSettings_DynamicMode) GetMinDataRateIndex() *DataRateIndexValue {
+	if m != nil {
+		return m.MinDataRateIndex
+	}
+	return nil
+}
+
+func (m *ADRSettings_DynamicMode) GetMaxDataRateIndex() *DataRateIndexValue {
+	if m != nil {
+		return m.MaxDataRateIndex
+	}
+	return nil
+}
+
+func (m *ADRSettings_DynamicMode) GetMinTxPowerIndex() *types.UInt32Value {
+	if m != nil {
+		return m.MinTxPowerIndex
+	}
+	return nil
+}
+
+func (m *ADRSettings_DynamicMode) GetMaxTxPowerIndex() *types.UInt32Value {
+	if m != nil {
+		return m.MaxTxPowerIndex
+	}
+	return nil
+}
+
+func (m *ADRSettings_DynamicMode) GetMinNbTrans() *types.UInt32Value {
+	if m != nil {
+		return m.MinNbTrans
+	}
+	return nil
+}
+
+func (m *ADRSettings_DynamicMode) GetMaxNbTrans() *types.UInt32Value {
+	if m != nil {
+		return m.MaxNbTrans
+	}
+	return nil
+}
+
+// Configuration options for cases in which ADR is to be disabled
+// completely.
+type ADRSettings_DisabledMode struct {
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *ADRSettings_DisabledMode) Reset()         { *m = ADRSettings_DisabledMode{} }
+func (m *ADRSettings_DisabledMode) String() string { return proto.CompactTextString(m) }
+func (*ADRSettings_DisabledMode) ProtoMessage()    {}
+func (*ADRSettings_DisabledMode) Descriptor() ([]byte, []int) {
+	return fileDescriptor_a656ee0551c94a80, []int{4, 2}
+}
+func (m *ADRSettings_DisabledMode) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_ADRSettings_DisabledMode.Unmarshal(m, b)
+}
+func (m *ADRSettings_DisabledMode) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_ADRSettings_DisabledMode.Marshal(b, m, deterministic)
+}
+func (m *ADRSettings_DisabledMode) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ADRSettings_DisabledMode.Merge(m, src)
+}
+func (m *ADRSettings_DisabledMode) XXX_Size() int {
+	return xxx_messageInfo_ADRSettings_DisabledMode.Size(m)
+}
+func (m *ADRSettings_DisabledMode) XXX_DiscardUnknown() {
+	xxx_messageInfo_ADRSettings_DisabledMode.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ADRSettings_DisabledMode proto.InternalMessageInfo
 
 type MACSettings struct {
 	// Maximum delay for the device to answer a MAC request or a confirmed downlink frame.
 	// If unset, the default value from Network Server configuration will be used.
-	ClassBTimeout *time.Duration `protobuf:"bytes,1,opt,name=class_b_timeout,json=classBTimeout,proto3,stdduration" json:"class_b_timeout,omitempty"`
+	ClassBTimeout *types.Duration `protobuf:"bytes,1,opt,name=class_b_timeout,json=classBTimeout,proto3" json:"class_b_timeout,omitempty"`
 	// Periodicity of the class B ping slot.
 	// If unset, the default value from Network Server configuration will be used.
 	PingSlotPeriodicity *PingSlotPeriodValue `protobuf:"bytes,2,opt,name=ping_slot_periodicity,json=pingSlotPeriodicity,proto3" json:"ping_slot_periodicity,omitempty"`
@@ -647,7 +959,7 @@ type MACSettings struct {
 	BeaconFrequency *FrequencyValue `protobuf:"bytes,25,opt,name=beacon_frequency,json=beaconFrequency,proto3" json:"beacon_frequency,omitempty"`
 	// Maximum delay for the device to answer a MAC request or a confirmed downlink frame.
 	// If unset, the default value from Network Server configuration will be used.
-	ClassCTimeout *time.Duration `protobuf:"bytes,5,opt,name=class_c_timeout,json=classCTimeout,proto3,stdduration" json:"class_c_timeout,omitempty"`
+	ClassCTimeout *types.Duration `protobuf:"bytes,5,opt,name=class_c_timeout,json=classCTimeout,proto3" json:"class_c_timeout,omitempty"`
 	// Class A Rx1 delay.
 	// If unset, the default value from Network Server configuration or regional parameters specification will be used.
 	Rx1Delay *RxDelayValue `protobuf:"bytes,6,opt,name=rx1_delay,json=rx1Delay,proto3" json:"rx1_delay,omitempty"`
@@ -669,18 +981,18 @@ type MACSettings struct {
 	// If unset, the default value from Network Server configuration will be used.
 	Supports_32BitFCnt *BoolValue `protobuf:"bytes,12,opt,name=supports_32_bit_f_cnt,json=supports32BitFCnt,proto3" json:"supports_32_bit_f_cnt,omitempty"`
 	// Whether the Network Server should use ADR for the device.
-	// If unset, the default value from Network Server configuration will be used.
-	UseAdr *BoolValue `protobuf:"bytes,13,opt,name=use_adr,json=useAdr,proto3" json:"use_adr,omitempty"`
-	// The ADR margin tells the network server how much margin it should add in ADR requests.
+	// This field is deprecated, use adr_settings instead.
+	UseAdr *BoolValue `protobuf:"bytes,13,opt,name=use_adr,json=useAdr,proto3" json:"use_adr,omitempty"` // Deprecated: Do not use.
+	// The ADR margin (dB) tells the network server how much margin it should add in ADR requests.
 	// A bigger margin is less efficient, but gives a better chance of successful reception.
-	// If unset, the default value from Network Server configuration will be used.
-	AdrMargin *types.FloatValue `protobuf:"bytes,14,opt,name=adr_margin,json=adrMargin,proto3" json:"adr_margin,omitempty"`
+	// This field is deprecated, use adr_settings.dynamic.margin instead.
+	AdrMargin *types.FloatValue `protobuf:"bytes,14,opt,name=adr_margin,json=adrMargin,proto3" json:"adr_margin,omitempty"` // Deprecated: Do not use.
 	// Whether the device resets the frame counters (not LoRaWAN compliant).
 	// If unset, the default value from Network Server configuration will be used.
 	ResetsFCnt *BoolValue `protobuf:"bytes,15,opt,name=resets_f_cnt,json=resetsFCnt,proto3" json:"resets_f_cnt,omitempty"`
 	// The interval after which a DevStatusReq MACCommand shall be sent.
 	// If unset, the default value from Network Server configuration will be used.
-	StatusTimePeriodicity *time.Duration `protobuf:"bytes,16,opt,name=status_time_periodicity,json=statusTimePeriodicity,proto3,stdduration" json:"status_time_periodicity,omitempty"`
+	StatusTimePeriodicity *types.Duration `protobuf:"bytes,16,opt,name=status_time_periodicity,json=statusTimePeriodicity,proto3" json:"status_time_periodicity,omitempty"`
 	// Number of uplink messages after which a DevStatusReq MACCommand shall be sent.
 	// If unset, the default value from Network Server configuration will be used.
 	StatusCountPeriodicity *types.UInt32Value `protobuf:"bytes,17,opt,name=status_count_periodicity,json=statusCountPeriodicity,proto3" json:"status_count_periodicity,omitempty"`
@@ -716,15 +1028,32 @@ type MACSettings struct {
 	DesiredBeaconFrequency *FrequencyValue `protobuf:"bytes,29,opt,name=desired_beacon_frequency,json=desiredBeaconFrequency,proto3" json:"desired_beacon_frequency,omitempty"`
 	// Maximum EIRP (dBm).
 	// If unset, the default value from regional parameters specification will be used.
-	DesiredMaxEirp       *DeviceEIRPValue `protobuf:"bytes,30,opt,name=desired_max_eirp,json=desiredMaxEirp,proto3" json:"desired_max_eirp,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}         `json:"-"`
-	XXX_sizecache        int32            `json:"-"`
+	DesiredMaxEirp *DeviceEIRPValue `protobuf:"bytes,30,opt,name=desired_max_eirp,json=desiredMaxEirp,proto3" json:"desired_max_eirp,omitempty"`
+	// The minimum duration passed before a network-initiated(e.g. Class B or C) downlink following an arbitrary downlink.
+	ClassBCDownlinkInterval *types.Duration `protobuf:"bytes,31,opt,name=class_b_c_downlink_interval,json=classBCDownlinkInterval,proto3" json:"class_b_c_downlink_interval,omitempty"`
+	// Whether uplink dwell time is set (400ms).
+	// If unset, the default value from Network Server configuration or regional parameters specification will be used.
+	UplinkDwellTime *BoolValue `protobuf:"bytes,32,opt,name=uplink_dwell_time,json=uplinkDwellTime,proto3" json:"uplink_dwell_time,omitempty"`
+	// Whether downlink dwell time is set (400ms).
+	// If unset, the default value from Network Server configuration or regional parameters specification will be used.
+	DownlinkDwellTime *BoolValue `protobuf:"bytes,33,opt,name=downlink_dwell_time,json=downlinkDwellTime,proto3" json:"downlink_dwell_time,omitempty"`
+	// Adaptive Data Rate settings.
+	// If unset, the default value from Network Server configuration or regional parameters specification will be used.
+	Adr *ADRSettings `protobuf:"bytes,34,opt,name=adr,proto3" json:"adr,omitempty"`
+	// Whether or not downlink messages should be scheduled.
+	// This option can be used in order to disable any downlink interaction with the end device. It will affect all types
+	// of downlink messages: data and MAC downlinks, and join accepts.
+	ScheduleDownlinks    *BoolValue `protobuf:"bytes,35,opt,name=schedule_downlinks,json=scheduleDownlinks,proto3" json:"schedule_downlinks,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}   `json:"-"`
+	XXX_unrecognized     []byte     `json:"-"`
+	XXX_sizecache        int32      `json:"-"`
 }
 
-func (m *MACSettings) Reset()      { *m = MACSettings{} }
-func (*MACSettings) ProtoMessage() {}
+func (m *MACSettings) Reset()         { *m = MACSettings{} }
+func (m *MACSettings) String() string { return proto.CompactTextString(m) }
+func (*MACSettings) ProtoMessage()    {}
 func (*MACSettings) Descriptor() ([]byte, []int) {
-	return fileDescriptor_a656ee0551c94a80, []int{4}
+	return fileDescriptor_a656ee0551c94a80, []int{5}
 }
 func (m *MACSettings) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_MACSettings.Unmarshal(m, b)
@@ -744,7 +1073,7 @@ func (m *MACSettings) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_MACSettings proto.InternalMessageInfo
 
-func (m *MACSettings) GetClassBTimeout() *time.Duration {
+func (m *MACSettings) GetClassBTimeout() *types.Duration {
 	if m != nil {
 		return m.ClassBTimeout
 	}
@@ -779,7 +1108,7 @@ func (m *MACSettings) GetBeaconFrequency() *FrequencyValue {
 	return nil
 }
 
-func (m *MACSettings) GetClassCTimeout() *time.Duration {
+func (m *MACSettings) GetClassCTimeout() *types.Duration {
 	if m != nil {
 		return m.ClassCTimeout
 	}
@@ -835,6 +1164,7 @@ func (m *MACSettings) GetSupports_32BitFCnt() *BoolValue {
 	return nil
 }
 
+// Deprecated: Do not use.
 func (m *MACSettings) GetUseAdr() *BoolValue {
 	if m != nil {
 		return m.UseAdr
@@ -842,6 +1172,7 @@ func (m *MACSettings) GetUseAdr() *BoolValue {
 	return nil
 }
 
+// Deprecated: Do not use.
 func (m *MACSettings) GetAdrMargin() *types.FloatValue {
 	if m != nil {
 		return m.AdrMargin
@@ -856,7 +1187,7 @@ func (m *MACSettings) GetResetsFCnt() *BoolValue {
 	return nil
 }
 
-func (m *MACSettings) GetStatusTimePeriodicity() *time.Duration {
+func (m *MACSettings) GetStatusTimePeriodicity() *types.Duration {
 	if m != nil {
 		return m.StatusTimePeriodicity
 	}
@@ -947,14 +1278,49 @@ func (m *MACSettings) GetDesiredMaxEirp() *DeviceEIRPValue {
 	return nil
 }
 
+func (m *MACSettings) GetClassBCDownlinkInterval() *types.Duration {
+	if m != nil {
+		return m.ClassBCDownlinkInterval
+	}
+	return nil
+}
+
+func (m *MACSettings) GetUplinkDwellTime() *BoolValue {
+	if m != nil {
+		return m.UplinkDwellTime
+	}
+	return nil
+}
+
+func (m *MACSettings) GetDownlinkDwellTime() *BoolValue {
+	if m != nil {
+		return m.DownlinkDwellTime
+	}
+	return nil
+}
+
+func (m *MACSettings) GetAdr() *ADRSettings {
+	if m != nil {
+		return m.Adr
+	}
+	return nil
+}
+
+func (m *MACSettings) GetScheduleDownlinks() *BoolValue {
+	if m != nil {
+		return m.ScheduleDownlinks
+	}
+	return nil
+}
+
 // MACState represents the state of MAC layer of the device.
 // MACState is reset on each join for OTAA or ResetInd for ABP devices.
 // This is used internally by the Network Server.
 type MACState struct {
 	// Current LoRaWAN MAC parameters.
-	CurrentParameters MACParameters `protobuf:"bytes,1,opt,name=current_parameters,json=currentParameters,proto3" json:"current_parameters"`
+	CurrentParameters *MACParameters `protobuf:"bytes,1,opt,name=current_parameters,json=currentParameters,proto3" json:"current_parameters,omitempty"`
 	// Desired LoRaWAN MAC parameters.
-	DesiredParameters MACParameters `protobuf:"bytes,2,opt,name=desired_parameters,json=desiredParameters,proto3" json:"desired_parameters"`
+	DesiredParameters *MACParameters `protobuf:"bytes,2,opt,name=desired_parameters,json=desiredParameters,proto3" json:"desired_parameters,omitempty"`
 	// Currently active LoRaWAN device class
 	// - Device class is A by default
 	// - If device sets ClassB bit in uplink, this will be set to B
@@ -963,7 +1329,7 @@ type MACState struct {
 	// LoRaWAN MAC version.
 	LorawanVersion MACVersion `protobuf:"varint,4,opt,name=lorawan_version,json=lorawanVersion,proto3,enum=ttn.lorawan.v3.MACVersion" json:"lorawan_version,omitempty"`
 	// Time when the last confirmed downlink message or MAC command was scheduled.
-	LastConfirmedDownlinkAt *time.Time `protobuf:"bytes,5,opt,name=last_confirmed_downlink_at,json=lastConfirmedDownlinkAt,proto3,stdtime" json:"last_confirmed_downlink_at,omitempty"`
+	LastConfirmedDownlinkAt *types.Timestamp `protobuf:"bytes,5,opt,name=last_confirmed_downlink_at,json=lastConfirmedDownlinkAt,proto3" json:"last_confirmed_downlink_at,omitempty"`
 	// Frame counter value of last uplink containing DevStatusAns.
 	LastDevStatusFCntUp uint32 `protobuf:"varint,6,opt,name=last_dev_status_f_cnt_up,json=lastDevStatusFCntUp,proto3" json:"last_dev_status_f_cnt_up,omitempty"`
 	// Periodicity of the class B ping slot.
@@ -988,12 +1354,12 @@ type MACState struct {
 	RxWindowsAvailable bool `protobuf:"varint,13,opt,name=rx_windows_available,json=rxWindowsAvailable,proto3" json:"rx_windows_available,omitempty"`
 	// Recent data uplink messages sorted by time.
 	// The number of messages stored may depend on configuration.
-	RecentUplinks []*UplinkMessage `protobuf:"bytes,14,rep,name=recent_uplinks,json=recentUplinks,proto3" json:"recent_uplinks,omitempty"`
+	RecentUplinks []*MACState_UplinkMessage `protobuf:"bytes,14,rep,name=recent_uplinks,json=recentUplinks,proto3" json:"recent_uplinks,omitempty"`
 	// Recent data downlink messages sorted by time.
 	// The number of messages stored may depend on configuration.
-	RecentDownlinks []*DownlinkMessage `protobuf:"bytes,15,rep,name=recent_downlinks,json=recentDownlinks,proto3" json:"recent_downlinks,omitempty"`
+	RecentDownlinks []*MACState_DownlinkMessage `protobuf:"bytes,15,rep,name=recent_downlinks,json=recentDownlinks,proto3" json:"recent_downlinks,omitempty"`
 	// Time when the last network-initiated downlink message was scheduled.
-	LastNetworkInitiatedDownlinkAt *time.Time `protobuf:"bytes,16,opt,name=last_network_initiated_downlink_at,json=lastNetworkInitiatedDownlinkAt,proto3,stdtime" json:"last_network_initiated_downlink_at,omitempty"`
+	LastNetworkInitiatedDownlinkAt *types.Timestamp `protobuf:"bytes,16,opt,name=last_network_initiated_downlink_at,json=lastNetworkInitiatedDownlinkAt,proto3" json:"last_network_initiated_downlink_at,omitempty"`
 	// ADR Data rate index values rejected by the device.
 	// Reset each time `current_parameters.channels` change.
 	// Elements are sorted in ascending order.
@@ -1004,19 +1370,25 @@ type MACState struct {
 	// Frequencies rejected by the device.
 	RejectedFrequencies []uint64 `protobuf:"varint,19,rep,packed,name=rejected_frequencies,json=rejectedFrequencies,proto3" json:"rejected_frequencies,omitempty"`
 	// Time when the last downlink message was scheduled.
-	LastDownlinkAt *time.Time `protobuf:"bytes,20,opt,name=last_downlink_at,json=lastDownlinkAt,proto3,stdtime" json:"last_downlink_at,omitempty"`
+	LastDownlinkAt *types.Timestamp `protobuf:"bytes,20,opt,name=last_downlink_at,json=lastDownlinkAt,proto3" json:"last_downlink_at,omitempty"`
 	// Data rate ranges rejected by the device per frequency.
 	RejectedDataRateRanges map[uint64]*MACState_DataRateRanges `protobuf:"bytes,21,rep,name=rejected_data_rate_ranges,json=rejectedDataRateRanges,proto3" json:"rejected_data_rate_ranges,omitempty" protobuf_key:"varint,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 	// Frame counter of uplink, which confirmed the last ADR parameter change.
-	LastAdrChangeFCntUp  uint32   `protobuf:"varint,22,opt,name=last_adr_change_f_cnt_up,json=lastAdrChangeFCntUp,proto3" json:"last_adr_change_f_cnt_up,omitempty"`
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
+	LastAdrChangeFCntUp uint32 `protobuf:"varint,22,opt,name=last_adr_change_f_cnt_up,json=lastAdrChangeFCntUp,proto3" json:"last_adr_change_f_cnt_up,omitempty"`
+	// MAC command identifiers sent by the end device in the last received uplink.
+	// The Network Server may choose to store only certain types of MAC
+	// command identifiers in the underlying implementation.
+	RecentMacCommandIdentifiers []MACCommandIdentifier `protobuf:"varint,23,rep,packed,name=recent_mac_command_identifiers,json=recentMacCommandIdentifiers,proto3,enum=ttn.lorawan.v3.MACCommandIdentifier" json:"recent_mac_command_identifiers,omitempty"`
+	XXX_NoUnkeyedLiteral        struct{}               `json:"-"`
+	XXX_unrecognized            []byte                 `json:"-"`
+	XXX_sizecache               int32                  `json:"-"`
 }
 
-func (m *MACState) Reset()      { *m = MACState{} }
-func (*MACState) ProtoMessage() {}
+func (m *MACState) Reset()         { *m = MACState{} }
+func (m *MACState) String() string { return proto.CompactTextString(m) }
+func (*MACState) ProtoMessage()    {}
 func (*MACState) Descriptor() ([]byte, []int) {
-	return fileDescriptor_a656ee0551c94a80, []int{5}
+	return fileDescriptor_a656ee0551c94a80, []int{6}
 }
 func (m *MACState) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_MACState.Unmarshal(m, b)
@@ -1036,35 +1408,35 @@ func (m *MACState) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_MACState proto.InternalMessageInfo
 
-func (m *MACState) GetCurrentParameters() MACParameters {
+func (m *MACState) GetCurrentParameters() *MACParameters {
 	if m != nil {
 		return m.CurrentParameters
 	}
-	return MACParameters{}
+	return nil
 }
 
-func (m *MACState) GetDesiredParameters() MACParameters {
+func (m *MACState) GetDesiredParameters() *MACParameters {
 	if m != nil {
 		return m.DesiredParameters
 	}
-	return MACParameters{}
+	return nil
 }
 
 func (m *MACState) GetDeviceClass() Class {
 	if m != nil {
 		return m.DeviceClass
 	}
-	return CLASS_A
+	return Class_CLASS_A
 }
 
 func (m *MACState) GetLorawanVersion() MACVersion {
 	if m != nil {
 		return m.LorawanVersion
 	}
-	return MAC_UNKNOWN
+	return MACVersion_MAC_UNKNOWN
 }
 
-func (m *MACState) GetLastConfirmedDownlinkAt() *time.Time {
+func (m *MACState) GetLastConfirmedDownlinkAt() *types.Timestamp {
 	if m != nil {
 		return m.LastConfirmedDownlinkAt
 	}
@@ -1127,21 +1499,21 @@ func (m *MACState) GetRxWindowsAvailable() bool {
 	return false
 }
 
-func (m *MACState) GetRecentUplinks() []*UplinkMessage {
+func (m *MACState) GetRecentUplinks() []*MACState_UplinkMessage {
 	if m != nil {
 		return m.RecentUplinks
 	}
 	return nil
 }
 
-func (m *MACState) GetRecentDownlinks() []*DownlinkMessage {
+func (m *MACState) GetRecentDownlinks() []*MACState_DownlinkMessage {
 	if m != nil {
 		return m.RecentDownlinks
 	}
 	return nil
 }
 
-func (m *MACState) GetLastNetworkInitiatedDownlinkAt() *time.Time {
+func (m *MACState) GetLastNetworkInitiatedDownlinkAt() *types.Timestamp {
 	if m != nil {
 		return m.LastNetworkInitiatedDownlinkAt
 	}
@@ -1169,7 +1541,7 @@ func (m *MACState) GetRejectedFrequencies() []uint64 {
 	return nil
 }
 
-func (m *MACState) GetLastDownlinkAt() *time.Time {
+func (m *MACState) GetLastDownlinkAt() *types.Timestamp {
 	if m != nil {
 		return m.LastDownlinkAt
 	}
@@ -1190,18 +1562,27 @@ func (m *MACState) GetLastAdrChangeFCntUp() uint32 {
 	return 0
 }
 
-type MACState_JoinRequest struct {
-	DownlinkSettings     DLSettings `protobuf:"bytes,6,opt,name=downlink_settings,json=downlinkSettings,proto3" json:"downlink_settings"`
-	RxDelay              RxDelay    `protobuf:"varint,7,opt,name=rx_delay,json=rxDelay,proto3,enum=ttn.lorawan.v3.RxDelay" json:"rx_delay,omitempty"`
-	CfList               *CFList    `protobuf:"bytes,8,opt,name=cf_list,json=cfList,proto3" json:"cf_list,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}   `json:"-"`
-	XXX_sizecache        int32      `json:"-"`
+func (m *MACState) GetRecentMacCommandIdentifiers() []MACCommandIdentifier {
+	if m != nil {
+		return m.RecentMacCommandIdentifiers
+	}
+	return nil
 }
 
-func (m *MACState_JoinRequest) Reset()      { *m = MACState_JoinRequest{} }
-func (*MACState_JoinRequest) ProtoMessage() {}
+type MACState_JoinRequest struct {
+	DownlinkSettings     *DLSettings `protobuf:"bytes,6,opt,name=downlink_settings,json=downlinkSettings,proto3" json:"downlink_settings,omitempty"`
+	RxDelay              RxDelay     `protobuf:"varint,7,opt,name=rx_delay,json=rxDelay,proto3,enum=ttn.lorawan.v3.RxDelay" json:"rx_delay,omitempty"`
+	CfList               *CFList     `protobuf:"bytes,8,opt,name=cf_list,json=cfList,proto3" json:"cf_list,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}    `json:"-"`
+	XXX_unrecognized     []byte      `json:"-"`
+	XXX_sizecache        int32       `json:"-"`
+}
+
+func (m *MACState_JoinRequest) Reset()         { *m = MACState_JoinRequest{} }
+func (m *MACState_JoinRequest) String() string { return proto.CompactTextString(m) }
+func (*MACState_JoinRequest) ProtoMessage()    {}
 func (*MACState_JoinRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_a656ee0551c94a80, []int{5, 0}
+	return fileDescriptor_a656ee0551c94a80, []int{6, 0}
 }
 func (m *MACState_JoinRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_MACState_JoinRequest.Unmarshal(m, b)
@@ -1221,18 +1602,18 @@ func (m *MACState_JoinRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_MACState_JoinRequest proto.InternalMessageInfo
 
-func (m *MACState_JoinRequest) GetDownlinkSettings() DLSettings {
+func (m *MACState_JoinRequest) GetDownlinkSettings() *DLSettings {
 	if m != nil {
 		return m.DownlinkSettings
 	}
-	return DLSettings{}
+	return nil
 }
 
 func (m *MACState_JoinRequest) GetRxDelay() RxDelay {
 	if m != nil {
 		return m.RxDelay
 	}
-	return RX_DELAY_0
+	return RxDelay_RX_DELAY_0
 }
 
 func (m *MACState_JoinRequest) GetCfList() *CFList {
@@ -1244,21 +1625,23 @@ func (m *MACState_JoinRequest) GetCfList() *CFList {
 
 type MACState_JoinAccept struct {
 	// Payload of the join-accept received from Join Server.
-	Payload []byte               `protobuf:"bytes,1,opt,name=payload,proto3" json:"payload,omitempty"`
-	Request MACState_JoinRequest `protobuf:"bytes,2,opt,name=request,proto3" json:"request"`
+	Payload []byte                `protobuf:"bytes,1,opt,name=payload,proto3" json:"payload,omitempty"`
+	Request *MACState_JoinRequest `protobuf:"bytes,2,opt,name=request,proto3" json:"request,omitempty"`
 	// Network session keys associated with the join.
-	Keys                 SessionKeys                                             `protobuf:"bytes,3,opt,name=keys,proto3" json:"keys"`
-	CorrelationIds       []string                                                `protobuf:"bytes,4,rep,name=correlation_ids,json=correlationIds,proto3" json:"correlation_ids,omitempty"`
-	DevAddr              go_thethings_network_lorawan_stack_v3_pkg_types.DevAddr `protobuf:"bytes,5,opt,name=dev_addr,json=devAddr,proto3,customtype=go.thethings.network/lorawan-stack/v3/pkg/types.DevAddr" json:"dev_addr"`
-	NetId                go_thethings_network_lorawan_stack_v3_pkg_types.NetID   `protobuf:"bytes,6,opt,name=net_id,json=netId,proto3,customtype=go.thethings.network/lorawan-stack/v3/pkg/types.NetID" json:"net_id"`
-	XXX_NoUnkeyedLiteral struct{}                                                `json:"-"`
-	XXX_sizecache        int32                                                   `json:"-"`
+	Keys                 *SessionKeys `protobuf:"bytes,3,opt,name=keys,proto3" json:"keys,omitempty"`
+	CorrelationIds       []string     `protobuf:"bytes,4,rep,name=correlation_ids,json=correlationIds,proto3" json:"correlation_ids,omitempty"`
+	DevAddr              []byte       `protobuf:"bytes,5,opt,name=dev_addr,json=devAddr,proto3" json:"dev_addr,omitempty"`
+	NetId                []byte       `protobuf:"bytes,6,opt,name=net_id,json=netId,proto3" json:"net_id,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}     `json:"-"`
+	XXX_unrecognized     []byte       `json:"-"`
+	XXX_sizecache        int32        `json:"-"`
 }
 
-func (m *MACState_JoinAccept) Reset()      { *m = MACState_JoinAccept{} }
-func (*MACState_JoinAccept) ProtoMessage() {}
+func (m *MACState_JoinAccept) Reset()         { *m = MACState_JoinAccept{} }
+func (m *MACState_JoinAccept) String() string { return proto.CompactTextString(m) }
+func (*MACState_JoinAccept) ProtoMessage()    {}
 func (*MACState_JoinAccept) Descriptor() ([]byte, []int) {
-	return fileDescriptor_a656ee0551c94a80, []int{5, 1}
+	return fileDescriptor_a656ee0551c94a80, []int{6, 1}
 }
 func (m *MACState_JoinAccept) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_MACState_JoinAccept.Unmarshal(m, b)
@@ -1285,18 +1668,18 @@ func (m *MACState_JoinAccept) GetPayload() []byte {
 	return nil
 }
 
-func (m *MACState_JoinAccept) GetRequest() MACState_JoinRequest {
+func (m *MACState_JoinAccept) GetRequest() *MACState_JoinRequest {
 	if m != nil {
 		return m.Request
 	}
-	return MACState_JoinRequest{}
+	return nil
 }
 
-func (m *MACState_JoinAccept) GetKeys() SessionKeys {
+func (m *MACState_JoinAccept) GetKeys() *SessionKeys {
 	if m != nil {
 		return m.Keys
 	}
-	return SessionKeys{}
+	return nil
 }
 
 func (m *MACState_JoinAccept) GetCorrelationIds() []string {
@@ -1306,17 +1689,445 @@ func (m *MACState_JoinAccept) GetCorrelationIds() []string {
 	return nil
 }
 
+func (m *MACState_JoinAccept) GetDevAddr() []byte {
+	if m != nil {
+		return m.DevAddr
+	}
+	return nil
+}
+
+func (m *MACState_JoinAccept) GetNetId() []byte {
+	if m != nil {
+		return m.NetId
+	}
+	return nil
+}
+
+// A minimal UplinkMessage definition which is binary compatible with the top level UplinkMessage message.
+// Used for type safe recent uplink storage.
+type MACState_UplinkMessage struct {
+	Payload              *Message                             `protobuf:"bytes,2,opt,name=payload,proto3" json:"payload,omitempty"`
+	Settings             *MACState_UplinkMessage_TxSettings   `protobuf:"bytes,4,opt,name=settings,proto3" json:"settings,omitempty"`
+	RxMetadata           []*MACState_UplinkMessage_RxMetadata `protobuf:"bytes,5,rep,name=rx_metadata,json=rxMetadata,proto3" json:"rx_metadata,omitempty"`
+	ReceivedAt           *types.Timestamp                     `protobuf:"bytes,6,opt,name=received_at,json=receivedAt,proto3" json:"received_at,omitempty"`
+	CorrelationIds       []string                             `protobuf:"bytes,7,rep,name=correlation_ids,json=correlationIds,proto3" json:"correlation_ids,omitempty"`
+	DeviceChannelIndex   uint32                               `protobuf:"varint,9,opt,name=device_channel_index,json=deviceChannelIndex,proto3" json:"device_channel_index,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}                             `json:"-"`
+	XXX_unrecognized     []byte                               `json:"-"`
+	XXX_sizecache        int32                                `json:"-"`
+}
+
+func (m *MACState_UplinkMessage) Reset()         { *m = MACState_UplinkMessage{} }
+func (m *MACState_UplinkMessage) String() string { return proto.CompactTextString(m) }
+func (*MACState_UplinkMessage) ProtoMessage()    {}
+func (*MACState_UplinkMessage) Descriptor() ([]byte, []int) {
+	return fileDescriptor_a656ee0551c94a80, []int{6, 2}
+}
+func (m *MACState_UplinkMessage) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_MACState_UplinkMessage.Unmarshal(m, b)
+}
+func (m *MACState_UplinkMessage) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_MACState_UplinkMessage.Marshal(b, m, deterministic)
+}
+func (m *MACState_UplinkMessage) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MACState_UplinkMessage.Merge(m, src)
+}
+func (m *MACState_UplinkMessage) XXX_Size() int {
+	return xxx_messageInfo_MACState_UplinkMessage.Size(m)
+}
+func (m *MACState_UplinkMessage) XXX_DiscardUnknown() {
+	xxx_messageInfo_MACState_UplinkMessage.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MACState_UplinkMessage proto.InternalMessageInfo
+
+func (m *MACState_UplinkMessage) GetPayload() *Message {
+	if m != nil {
+		return m.Payload
+	}
+	return nil
+}
+
+func (m *MACState_UplinkMessage) GetSettings() *MACState_UplinkMessage_TxSettings {
+	if m != nil {
+		return m.Settings
+	}
+	return nil
+}
+
+func (m *MACState_UplinkMessage) GetRxMetadata() []*MACState_UplinkMessage_RxMetadata {
+	if m != nil {
+		return m.RxMetadata
+	}
+	return nil
+}
+
+func (m *MACState_UplinkMessage) GetReceivedAt() *types.Timestamp {
+	if m != nil {
+		return m.ReceivedAt
+	}
+	return nil
+}
+
+func (m *MACState_UplinkMessage) GetCorrelationIds() []string {
+	if m != nil {
+		return m.CorrelationIds
+	}
+	return nil
+}
+
+func (m *MACState_UplinkMessage) GetDeviceChannelIndex() uint32 {
+	if m != nil {
+		return m.DeviceChannelIndex
+	}
+	return 0
+}
+
+type MACState_UplinkMessage_TxSettings struct {
+	DataRate             *DataRate `protobuf:"bytes,1,opt,name=data_rate,json=dataRate,proto3" json:"data_rate,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}  `json:"-"`
+	XXX_unrecognized     []byte    `json:"-"`
+	XXX_sizecache        int32     `json:"-"`
+}
+
+func (m *MACState_UplinkMessage_TxSettings) Reset()         { *m = MACState_UplinkMessage_TxSettings{} }
+func (m *MACState_UplinkMessage_TxSettings) String() string { return proto.CompactTextString(m) }
+func (*MACState_UplinkMessage_TxSettings) ProtoMessage()    {}
+func (*MACState_UplinkMessage_TxSettings) Descriptor() ([]byte, []int) {
+	return fileDescriptor_a656ee0551c94a80, []int{6, 2, 0}
+}
+func (m *MACState_UplinkMessage_TxSettings) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_MACState_UplinkMessage_TxSettings.Unmarshal(m, b)
+}
+func (m *MACState_UplinkMessage_TxSettings) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_MACState_UplinkMessage_TxSettings.Marshal(b, m, deterministic)
+}
+func (m *MACState_UplinkMessage_TxSettings) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MACState_UplinkMessage_TxSettings.Merge(m, src)
+}
+func (m *MACState_UplinkMessage_TxSettings) XXX_Size() int {
+	return xxx_messageInfo_MACState_UplinkMessage_TxSettings.Size(m)
+}
+func (m *MACState_UplinkMessage_TxSettings) XXX_DiscardUnknown() {
+	xxx_messageInfo_MACState_UplinkMessage_TxSettings.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MACState_UplinkMessage_TxSettings proto.InternalMessageInfo
+
+func (m *MACState_UplinkMessage_TxSettings) GetDataRate() *DataRate {
+	if m != nil {
+		return m.DataRate
+	}
+	return nil
+}
+
+type MACState_UplinkMessage_RxMetadata struct {
+	GatewayIds             *GatewayIdentifiers                                     `protobuf:"bytes,1,opt,name=gateway_ids,json=gatewayIds,proto3" json:"gateway_ids,omitempty"`
+	ChannelRssi            float32                                                 `protobuf:"fixed32,9,opt,name=channel_rssi,json=channelRssi,proto3" json:"channel_rssi,omitempty"`
+	Snr                    float32                                                 `protobuf:"fixed32,11,opt,name=snr,proto3" json:"snr,omitempty"`
+	DownlinkPathConstraint DownlinkPathConstraint                                  `protobuf:"varint,14,opt,name=downlink_path_constraint,json=downlinkPathConstraint,proto3,enum=ttn.lorawan.v3.DownlinkPathConstraint" json:"downlink_path_constraint,omitempty"`
+	UplinkToken            []byte                                                  `protobuf:"bytes,15,opt,name=uplink_token,json=uplinkToken,proto3" json:"uplink_token,omitempty"`
+	PacketBroker           *MACState_UplinkMessage_RxMetadata_PacketBrokerMetadata `protobuf:"bytes,18,opt,name=packet_broker,json=packetBroker,proto3" json:"packet_broker,omitempty"`
+	XXX_NoUnkeyedLiteral   struct{}                                                `json:"-"`
+	XXX_unrecognized       []byte                                                  `json:"-"`
+	XXX_sizecache          int32                                                   `json:"-"`
+}
+
+func (m *MACState_UplinkMessage_RxMetadata) Reset()         { *m = MACState_UplinkMessage_RxMetadata{} }
+func (m *MACState_UplinkMessage_RxMetadata) String() string { return proto.CompactTextString(m) }
+func (*MACState_UplinkMessage_RxMetadata) ProtoMessage()    {}
+func (*MACState_UplinkMessage_RxMetadata) Descriptor() ([]byte, []int) {
+	return fileDescriptor_a656ee0551c94a80, []int{6, 2, 1}
+}
+func (m *MACState_UplinkMessage_RxMetadata) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_MACState_UplinkMessage_RxMetadata.Unmarshal(m, b)
+}
+func (m *MACState_UplinkMessage_RxMetadata) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_MACState_UplinkMessage_RxMetadata.Marshal(b, m, deterministic)
+}
+func (m *MACState_UplinkMessage_RxMetadata) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MACState_UplinkMessage_RxMetadata.Merge(m, src)
+}
+func (m *MACState_UplinkMessage_RxMetadata) XXX_Size() int {
+	return xxx_messageInfo_MACState_UplinkMessage_RxMetadata.Size(m)
+}
+func (m *MACState_UplinkMessage_RxMetadata) XXX_DiscardUnknown() {
+	xxx_messageInfo_MACState_UplinkMessage_RxMetadata.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MACState_UplinkMessage_RxMetadata proto.InternalMessageInfo
+
+func (m *MACState_UplinkMessage_RxMetadata) GetGatewayIds() *GatewayIdentifiers {
+	if m != nil {
+		return m.GatewayIds
+	}
+	return nil
+}
+
+func (m *MACState_UplinkMessage_RxMetadata) GetChannelRssi() float32 {
+	if m != nil {
+		return m.ChannelRssi
+	}
+	return 0
+}
+
+func (m *MACState_UplinkMessage_RxMetadata) GetSnr() float32 {
+	if m != nil {
+		return m.Snr
+	}
+	return 0
+}
+
+func (m *MACState_UplinkMessage_RxMetadata) GetDownlinkPathConstraint() DownlinkPathConstraint {
+	if m != nil {
+		return m.DownlinkPathConstraint
+	}
+	return DownlinkPathConstraint_DOWNLINK_PATH_CONSTRAINT_NONE
+}
+
+func (m *MACState_UplinkMessage_RxMetadata) GetUplinkToken() []byte {
+	if m != nil {
+		return m.UplinkToken
+	}
+	return nil
+}
+
+func (m *MACState_UplinkMessage_RxMetadata) GetPacketBroker() *MACState_UplinkMessage_RxMetadata_PacketBrokerMetadata {
+	if m != nil {
+		return m.PacketBroker
+	}
+	return nil
+}
+
+type MACState_UplinkMessage_RxMetadata_PacketBrokerMetadata struct {
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *MACState_UplinkMessage_RxMetadata_PacketBrokerMetadata) Reset() {
+	*m = MACState_UplinkMessage_RxMetadata_PacketBrokerMetadata{}
+}
+func (m *MACState_UplinkMessage_RxMetadata_PacketBrokerMetadata) String() string {
+	return proto.CompactTextString(m)
+}
+func (*MACState_UplinkMessage_RxMetadata_PacketBrokerMetadata) ProtoMessage() {}
+func (*MACState_UplinkMessage_RxMetadata_PacketBrokerMetadata) Descriptor() ([]byte, []int) {
+	return fileDescriptor_a656ee0551c94a80, []int{6, 2, 1, 0}
+}
+func (m *MACState_UplinkMessage_RxMetadata_PacketBrokerMetadata) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_MACState_UplinkMessage_RxMetadata_PacketBrokerMetadata.Unmarshal(m, b)
+}
+func (m *MACState_UplinkMessage_RxMetadata_PacketBrokerMetadata) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_MACState_UplinkMessage_RxMetadata_PacketBrokerMetadata.Marshal(b, m, deterministic)
+}
+func (m *MACState_UplinkMessage_RxMetadata_PacketBrokerMetadata) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MACState_UplinkMessage_RxMetadata_PacketBrokerMetadata.Merge(m, src)
+}
+func (m *MACState_UplinkMessage_RxMetadata_PacketBrokerMetadata) XXX_Size() int {
+	return xxx_messageInfo_MACState_UplinkMessage_RxMetadata_PacketBrokerMetadata.Size(m)
+}
+func (m *MACState_UplinkMessage_RxMetadata_PacketBrokerMetadata) XXX_DiscardUnknown() {
+	xxx_messageInfo_MACState_UplinkMessage_RxMetadata_PacketBrokerMetadata.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MACState_UplinkMessage_RxMetadata_PacketBrokerMetadata proto.InternalMessageInfo
+
+// A minimal DownlinkMessage definition which is binary compatible with the top level DownlinkMessage message.
+// Used for type safe recent downlink storage.
+type MACState_DownlinkMessage struct {
+	Payload              *MACState_DownlinkMessage_Message `protobuf:"bytes,2,opt,name=payload,proto3" json:"payload,omitempty"`
+	CorrelationIds       []string                          `protobuf:"bytes,6,rep,name=correlation_ids,json=correlationIds,proto3" json:"correlation_ids,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}                          `json:"-"`
+	XXX_unrecognized     []byte                            `json:"-"`
+	XXX_sizecache        int32                             `json:"-"`
+}
+
+func (m *MACState_DownlinkMessage) Reset()         { *m = MACState_DownlinkMessage{} }
+func (m *MACState_DownlinkMessage) String() string { return proto.CompactTextString(m) }
+func (*MACState_DownlinkMessage) ProtoMessage()    {}
+func (*MACState_DownlinkMessage) Descriptor() ([]byte, []int) {
+	return fileDescriptor_a656ee0551c94a80, []int{6, 3}
+}
+func (m *MACState_DownlinkMessage) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_MACState_DownlinkMessage.Unmarshal(m, b)
+}
+func (m *MACState_DownlinkMessage) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_MACState_DownlinkMessage.Marshal(b, m, deterministic)
+}
+func (m *MACState_DownlinkMessage) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MACState_DownlinkMessage.Merge(m, src)
+}
+func (m *MACState_DownlinkMessage) XXX_Size() int {
+	return xxx_messageInfo_MACState_DownlinkMessage.Size(m)
+}
+func (m *MACState_DownlinkMessage) XXX_DiscardUnknown() {
+	xxx_messageInfo_MACState_DownlinkMessage.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MACState_DownlinkMessage proto.InternalMessageInfo
+
+func (m *MACState_DownlinkMessage) GetPayload() *MACState_DownlinkMessage_Message {
+	if m != nil {
+		return m.Payload
+	}
+	return nil
+}
+
+func (m *MACState_DownlinkMessage) GetCorrelationIds() []string {
+	if m != nil {
+		return m.CorrelationIds
+	}
+	return nil
+}
+
+type MACState_DownlinkMessage_Message struct {
+	MHdr                 *MACState_DownlinkMessage_Message_MHDR       `protobuf:"bytes,1,opt,name=m_hdr,json=mHdr,proto3" json:"m_hdr,omitempty"`
+	MacPayload           *MACState_DownlinkMessage_Message_MACPayload `protobuf:"bytes,3,opt,name=mac_payload,json=macPayload,proto3" json:"mac_payload,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}                                     `json:"-"`
+	XXX_unrecognized     []byte                                       `json:"-"`
+	XXX_sizecache        int32                                        `json:"-"`
+}
+
+func (m *MACState_DownlinkMessage_Message) Reset()         { *m = MACState_DownlinkMessage_Message{} }
+func (m *MACState_DownlinkMessage_Message) String() string { return proto.CompactTextString(m) }
+func (*MACState_DownlinkMessage_Message) ProtoMessage()    {}
+func (*MACState_DownlinkMessage_Message) Descriptor() ([]byte, []int) {
+	return fileDescriptor_a656ee0551c94a80, []int{6, 3, 0}
+}
+func (m *MACState_DownlinkMessage_Message) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_MACState_DownlinkMessage_Message.Unmarshal(m, b)
+}
+func (m *MACState_DownlinkMessage_Message) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_MACState_DownlinkMessage_Message.Marshal(b, m, deterministic)
+}
+func (m *MACState_DownlinkMessage_Message) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MACState_DownlinkMessage_Message.Merge(m, src)
+}
+func (m *MACState_DownlinkMessage_Message) XXX_Size() int {
+	return xxx_messageInfo_MACState_DownlinkMessage_Message.Size(m)
+}
+func (m *MACState_DownlinkMessage_Message) XXX_DiscardUnknown() {
+	xxx_messageInfo_MACState_DownlinkMessage_Message.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MACState_DownlinkMessage_Message proto.InternalMessageInfo
+
+func (m *MACState_DownlinkMessage_Message) GetMHdr() *MACState_DownlinkMessage_Message_MHDR {
+	if m != nil {
+		return m.MHdr
+	}
+	return nil
+}
+
+func (m *MACState_DownlinkMessage_Message) GetMacPayload() *MACState_DownlinkMessage_Message_MACPayload {
+	if m != nil {
+		return m.MacPayload
+	}
+	return nil
+}
+
+type MACState_DownlinkMessage_Message_MHDR struct {
+	MType                MType    `protobuf:"varint,1,opt,name=m_type,json=mType,proto3,enum=ttn.lorawan.v3.MType" json:"m_type,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *MACState_DownlinkMessage_Message_MHDR) Reset()         { *m = MACState_DownlinkMessage_Message_MHDR{} }
+func (m *MACState_DownlinkMessage_Message_MHDR) String() string { return proto.CompactTextString(m) }
+func (*MACState_DownlinkMessage_Message_MHDR) ProtoMessage()    {}
+func (*MACState_DownlinkMessage_Message_MHDR) Descriptor() ([]byte, []int) {
+	return fileDescriptor_a656ee0551c94a80, []int{6, 3, 0, 0}
+}
+func (m *MACState_DownlinkMessage_Message_MHDR) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_MACState_DownlinkMessage_Message_MHDR.Unmarshal(m, b)
+}
+func (m *MACState_DownlinkMessage_Message_MHDR) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_MACState_DownlinkMessage_Message_MHDR.Marshal(b, m, deterministic)
+}
+func (m *MACState_DownlinkMessage_Message_MHDR) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MACState_DownlinkMessage_Message_MHDR.Merge(m, src)
+}
+func (m *MACState_DownlinkMessage_Message_MHDR) XXX_Size() int {
+	return xxx_messageInfo_MACState_DownlinkMessage_Message_MHDR.Size(m)
+}
+func (m *MACState_DownlinkMessage_Message_MHDR) XXX_DiscardUnknown() {
+	xxx_messageInfo_MACState_DownlinkMessage_Message_MHDR.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MACState_DownlinkMessage_Message_MHDR proto.InternalMessageInfo
+
+func (m *MACState_DownlinkMessage_Message_MHDR) GetMType() MType {
+	if m != nil {
+		return m.MType
+	}
+	return MType_JOIN_REQUEST
+}
+
+type MACState_DownlinkMessage_Message_MACPayload struct {
+	FPort                uint32   `protobuf:"varint,2,opt,name=f_port,json=fPort,proto3" json:"f_port,omitempty"`
+	FullFCnt             uint32   `protobuf:"varint,5,opt,name=full_f_cnt,json=fullFCnt,proto3" json:"full_f_cnt,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *MACState_DownlinkMessage_Message_MACPayload) Reset() {
+	*m = MACState_DownlinkMessage_Message_MACPayload{}
+}
+func (m *MACState_DownlinkMessage_Message_MACPayload) String() string {
+	return proto.CompactTextString(m)
+}
+func (*MACState_DownlinkMessage_Message_MACPayload) ProtoMessage() {}
+func (*MACState_DownlinkMessage_Message_MACPayload) Descriptor() ([]byte, []int) {
+	return fileDescriptor_a656ee0551c94a80, []int{6, 3, 0, 1}
+}
+func (m *MACState_DownlinkMessage_Message_MACPayload) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_MACState_DownlinkMessage_Message_MACPayload.Unmarshal(m, b)
+}
+func (m *MACState_DownlinkMessage_Message_MACPayload) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_MACState_DownlinkMessage_Message_MACPayload.Marshal(b, m, deterministic)
+}
+func (m *MACState_DownlinkMessage_Message_MACPayload) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MACState_DownlinkMessage_Message_MACPayload.Merge(m, src)
+}
+func (m *MACState_DownlinkMessage_Message_MACPayload) XXX_Size() int {
+	return xxx_messageInfo_MACState_DownlinkMessage_Message_MACPayload.Size(m)
+}
+func (m *MACState_DownlinkMessage_Message_MACPayload) XXX_DiscardUnknown() {
+	xxx_messageInfo_MACState_DownlinkMessage_Message_MACPayload.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MACState_DownlinkMessage_Message_MACPayload proto.InternalMessageInfo
+
+func (m *MACState_DownlinkMessage_Message_MACPayload) GetFPort() uint32 {
+	if m != nil {
+		return m.FPort
+	}
+	return 0
+}
+
+func (m *MACState_DownlinkMessage_Message_MACPayload) GetFullFCnt() uint32 {
+	if m != nil {
+		return m.FullFCnt
+	}
+	return 0
+}
+
 type MACState_DataRateRange struct {
 	MinDataRateIndex     DataRateIndex `protobuf:"varint,1,opt,name=min_data_rate_index,json=minDataRateIndex,proto3,enum=ttn.lorawan.v3.DataRateIndex" json:"min_data_rate_index,omitempty"`
 	MaxDataRateIndex     DataRateIndex `protobuf:"varint,2,opt,name=max_data_rate_index,json=maxDataRateIndex,proto3,enum=ttn.lorawan.v3.DataRateIndex" json:"max_data_rate_index,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}      `json:"-"`
+	XXX_unrecognized     []byte        `json:"-"`
 	XXX_sizecache        int32         `json:"-"`
 }
 
-func (m *MACState_DataRateRange) Reset()      { *m = MACState_DataRateRange{} }
-func (*MACState_DataRateRange) ProtoMessage() {}
+func (m *MACState_DataRateRange) Reset()         { *m = MACState_DataRateRange{} }
+func (m *MACState_DataRateRange) String() string { return proto.CompactTextString(m) }
+func (*MACState_DataRateRange) ProtoMessage()    {}
 func (*MACState_DataRateRange) Descriptor() ([]byte, []int) {
-	return fileDescriptor_a656ee0551c94a80, []int{5, 2}
+	return fileDescriptor_a656ee0551c94a80, []int{6, 4}
 }
 func (m *MACState_DataRateRange) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_MACState_DataRateRange.Unmarshal(m, b)
@@ -1340,26 +2151,28 @@ func (m *MACState_DataRateRange) GetMinDataRateIndex() DataRateIndex {
 	if m != nil {
 		return m.MinDataRateIndex
 	}
-	return DATA_RATE_0
+	return DataRateIndex_DATA_RATE_0
 }
 
 func (m *MACState_DataRateRange) GetMaxDataRateIndex() DataRateIndex {
 	if m != nil {
 		return m.MaxDataRateIndex
 	}
-	return DATA_RATE_0
+	return DataRateIndex_DATA_RATE_0
 }
 
 type MACState_DataRateRanges struct {
 	Ranges               []*MACState_DataRateRange `protobuf:"bytes,1,rep,name=ranges,proto3" json:"ranges,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}                  `json:"-"`
+	XXX_unrecognized     []byte                    `json:"-"`
 	XXX_sizecache        int32                     `json:"-"`
 }
 
-func (m *MACState_DataRateRanges) Reset()      { *m = MACState_DataRateRanges{} }
-func (*MACState_DataRateRanges) ProtoMessage() {}
+func (m *MACState_DataRateRanges) Reset()         { *m = MACState_DataRateRanges{} }
+func (m *MACState_DataRateRanges) String() string { return proto.CompactTextString(m) }
+func (*MACState_DataRateRanges) ProtoMessage()    {}
 func (*MACState_DataRateRanges) Descriptor() ([]byte, []int) {
-	return fileDescriptor_a656ee0551c94a80, []int{5, 3}
+	return fileDescriptor_a656ee0551c94a80, []int{6, 5}
 }
 func (m *MACState_DataRateRanges) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_MACState_DataRateRanges.Unmarshal(m, b)
@@ -1388,17 +2201,19 @@ func (m *MACState_DataRateRanges) GetRanges() []*MACState_DataRateRange {
 
 // Authentication code for end devices.
 type EndDeviceAuthenticationCode struct {
-	Value                string     `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty"`
-	ValidFrom            *time.Time `protobuf:"bytes,2,opt,name=valid_from,json=validFrom,proto3,stdtime" json:"valid_from,omitempty"`
-	ValidTo              *time.Time `protobuf:"bytes,3,opt,name=valid_to,json=validTo,proto3,stdtime" json:"valid_to,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}   `json:"-"`
-	XXX_sizecache        int32      `json:"-"`
+	Value                string           `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty"`
+	ValidFrom            *types.Timestamp `protobuf:"bytes,2,opt,name=valid_from,json=validFrom,proto3" json:"valid_from,omitempty"`
+	ValidTo              *types.Timestamp `protobuf:"bytes,3,opt,name=valid_to,json=validTo,proto3" json:"valid_to,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}         `json:"-"`
+	XXX_unrecognized     []byte           `json:"-"`
+	XXX_sizecache        int32            `json:"-"`
 }
 
-func (m *EndDeviceAuthenticationCode) Reset()      { *m = EndDeviceAuthenticationCode{} }
-func (*EndDeviceAuthenticationCode) ProtoMessage() {}
+func (m *EndDeviceAuthenticationCode) Reset()         { *m = EndDeviceAuthenticationCode{} }
+func (m *EndDeviceAuthenticationCode) String() string { return proto.CompactTextString(m) }
+func (*EndDeviceAuthenticationCode) ProtoMessage()    {}
 func (*EndDeviceAuthenticationCode) Descriptor() ([]byte, []int) {
-	return fileDescriptor_a656ee0551c94a80, []int{6}
+	return fileDescriptor_a656ee0551c94a80, []int{7}
 }
 func (m *EndDeviceAuthenticationCode) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_EndDeviceAuthenticationCode.Unmarshal(m, b)
@@ -1425,14 +2240,14 @@ func (m *EndDeviceAuthenticationCode) GetValue() string {
 	return ""
 }
 
-func (m *EndDeviceAuthenticationCode) GetValidFrom() *time.Time {
+func (m *EndDeviceAuthenticationCode) GetValidFrom() *types.Timestamp {
 	if m != nil {
 		return m.ValidFrom
 	}
 	return nil
 }
 
-func (m *EndDeviceAuthenticationCode) GetValidTo() *time.Time {
+func (m *EndDeviceAuthenticationCode) GetValidTo() *types.Timestamp {
 	if m != nil {
 		return m.ValidTo
 	}
@@ -1443,9 +2258,9 @@ func (m *EndDeviceAuthenticationCode) GetValidTo() *time.Time {
 // The persistence of the EndDevice is divided between the Network Server, Application Server and Join Server.
 // SDKs are responsible for combining (if desired) the three.
 type EndDevice struct {
-	EndDeviceIdentifiers `protobuf:"bytes,1,opt,name=ids,proto3,embedded=ids" json:"ids"`
-	CreatedAt            time.Time `protobuf:"bytes,2,opt,name=created_at,json=createdAt,proto3,stdtime" json:"created_at"`
-	UpdatedAt            time.Time `protobuf:"bytes,3,opt,name=updated_at,json=updatedAt,proto3,stdtime" json:"updated_at"`
+	Ids       *EndDeviceIdentifiers `protobuf:"bytes,1,opt,name=ids,proto3" json:"ids,omitempty"`
+	CreatedAt *types.Timestamp      `protobuf:"bytes,2,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
+	UpdatedAt *types.Timestamp      `protobuf:"bytes,3,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
 	// Friendly name of the device. Stored in Entity Registry.
 	Name string `protobuf:"bytes,4,opt,name=name,proto3" json:"name,omitempty"`
 	// Description of the device. Stored in Entity Registry.
@@ -1520,7 +2335,7 @@ type EndDevice struct {
 	// Device root keys. Stored in Join Server.
 	RootKeys *RootKeys `protobuf:"bytes,22,opt,name=root_keys,json=rootKeys,proto3" json:"root_keys,omitempty"`
 	// Home NetID. Stored in Join Server.
-	NetId *go_thethings_network_lorawan_stack_v3_pkg_types.NetID `protobuf:"bytes,23,opt,name=net_id,json=netId,proto3,customtype=go.thethings.network/lorawan-stack/v3/pkg/types.NetID" json:"net_id,omitempty"`
+	NetId []byte `protobuf:"bytes,23,opt,name=net_id,json=netId,proto3" json:"net_id,omitempty"`
 	// Settings for how the Network Server handles MAC layer for this device. Stored in Network Server.
 	MacSettings *MACSettings `protobuf:"bytes,24,opt,name=mac_settings,json=macSettings,proto3" json:"mac_settings,omitempty"`
 	// MAC state of the device. Stored in Network Server.
@@ -1550,7 +2365,7 @@ type EndDevice struct {
 	LastRjCount_1 uint32 `protobuf:"varint,32,opt,name=last_rj_count_1,json=lastRjCount1,proto3" json:"last_rj_count_1,omitempty"`
 	// Time when last DevStatus MAC command was received.
 	// Stored in Network Server.
-	LastDevStatusReceivedAt *time.Time `protobuf:"bytes,33,opt,name=last_dev_status_received_at,json=lastDevStatusReceivedAt,proto3,stdtime" json:"last_dev_status_received_at,omitempty"`
+	LastDevStatusReceivedAt *types.Timestamp `protobuf:"bytes,33,opt,name=last_dev_status_received_at,json=lastDevStatusReceivedAt,proto3" json:"last_dev_status_received_at,omitempty"`
 	// The power state of the device; whether it is battery-powered or connected to an external power source.
 	// Received via the DevStatus MAC command at status_received_at.
 	// Stored in Network Server.
@@ -1576,7 +2391,10 @@ type EndDevice struct {
 	ProvisioningData *types.Struct `protobuf:"bytes,43,opt,name=provisioning_data,json=provisioningData,proto3" json:"provisioning_data,omitempty"`
 	// Indicates whether this device represents a multicast group.
 	Multicast bool `protobuf:"varint,45,opt,name=multicast,proto3" json:"multicast,omitempty"`
-	// Authentication code to claim ownership of the end device. Stored in Join Server.
+	// Authentication code to claim ownership of the end device.
+	// From TTS v3.21.0 this field is stored in the Identity Server.
+	// For TTS versions < 3.21.0, this field is stored in the Join Server.
+	// The value stored on the Identity Server takes precedence.
 	ClaimAuthenticationCode *EndDeviceAuthenticationCode `protobuf:"bytes,46,opt,name=claim_authentication_code,json=claimAuthenticationCode,proto3" json:"claim_authentication_code,omitempty"`
 	// Skip decryption of uplink payloads and encryption of downlink payloads.
 	// This field is deprecated, use skip_payload_crypto_override instead.
@@ -1590,15 +2408,20 @@ type EndDevice struct {
 	// The Application Server will use the field in order to avoid repeated
 	// calls to the Entity Registry.
 	// The field cannot be unset once set.
-	ActivatedAt          *time.Time `protobuf:"bytes,53,opt,name=activated_at,json=activatedAt,proto3,stdtime" json:"activated_at,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}   `json:"-"`
-	XXX_sizecache        int32      `json:"-"`
+	ActivatedAt *types.Timestamp `protobuf:"bytes,53,opt,name=activated_at,json=activatedAt,proto3" json:"activated_at,omitempty"`
+	// Timestamp when a device uplink has been last observed.
+	// This field is set by the Application Server and stored in the Identity Server.
+	LastSeenAt           *types.Timestamp `protobuf:"bytes,54,opt,name=last_seen_at,json=lastSeenAt,proto3" json:"last_seen_at,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}         `json:"-"`
+	XXX_unrecognized     []byte           `json:"-"`
+	XXX_sizecache        int32            `json:"-"`
 }
 
-func (m *EndDevice) Reset()      { *m = EndDevice{} }
-func (*EndDevice) ProtoMessage() {}
+func (m *EndDevice) Reset()         { *m = EndDevice{} }
+func (m *EndDevice) String() string { return proto.CompactTextString(m) }
+func (*EndDevice) ProtoMessage()    {}
 func (*EndDevice) Descriptor() ([]byte, []int) {
-	return fileDescriptor_a656ee0551c94a80, []int{7}
+	return fileDescriptor_a656ee0551c94a80, []int{8}
 }
 func (m *EndDevice) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_EndDevice.Unmarshal(m, b)
@@ -1618,18 +2441,25 @@ func (m *EndDevice) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_EndDevice proto.InternalMessageInfo
 
-func (m *EndDevice) GetCreatedAt() time.Time {
+func (m *EndDevice) GetIds() *EndDeviceIdentifiers {
+	if m != nil {
+		return m.Ids
+	}
+	return nil
+}
+
+func (m *EndDevice) GetCreatedAt() *types.Timestamp {
 	if m != nil {
 		return m.CreatedAt
 	}
-	return time.Time{}
+	return nil
 }
 
-func (m *EndDevice) GetUpdatedAt() time.Time {
+func (m *EndDevice) GetUpdatedAt() *types.Timestamp {
 	if m != nil {
 		return m.UpdatedAt
 	}
-	return time.Time{}
+	return nil
 }
 
 func (m *EndDevice) GetName() string {
@@ -1741,14 +2571,14 @@ func (m *EndDevice) GetLorawanVersion() MACVersion {
 	if m != nil {
 		return m.LorawanVersion
 	}
-	return MAC_UNKNOWN
+	return MACVersion_MAC_UNKNOWN
 }
 
 func (m *EndDevice) GetLorawanPhyVersion() PHYVersion {
 	if m != nil {
 		return m.LorawanPhyVersion
 	}
-	return PHY_UNKNOWN
+	return PHYVersion_PHY_UNKNOWN
 }
 
 func (m *EndDevice) GetFrequencyPlanId() string {
@@ -1789,6 +2619,13 @@ func (m *EndDevice) GetResetsJoinNonces() bool {
 func (m *EndDevice) GetRootKeys() *RootKeys {
 	if m != nil {
 		return m.RootKeys
+	}
+	return nil
+}
+
+func (m *EndDevice) GetNetId() []byte {
+	if m != nil {
+		return m.NetId
 	}
 	return nil
 }
@@ -1863,7 +2700,7 @@ func (m *EndDevice) GetLastRjCount_1() uint32 {
 	return 0
 }
 
-func (m *EndDevice) GetLastDevStatusReceivedAt() *time.Time {
+func (m *EndDevice) GetLastDevStatusReceivedAt() *types.Timestamp {
 	if m != nil {
 		return m.LastDevStatusReceivedAt
 	}
@@ -1947,9 +2784,16 @@ func (m *EndDevice) GetSkipPayloadCryptoOverride() *types.BoolValue {
 	return nil
 }
 
-func (m *EndDevice) GetActivatedAt() *time.Time {
+func (m *EndDevice) GetActivatedAt() *types.Timestamp {
 	if m != nil {
 		return m.ActivatedAt
+	}
+	return nil
+}
+
+func (m *EndDevice) GetLastSeenAt() *types.Timestamp {
+	if m != nil {
+		return m.LastSeenAt
 	}
 	return nil
 }
@@ -1957,13 +2801,15 @@ func (m *EndDevice) GetActivatedAt() *time.Time {
 type EndDevices struct {
 	EndDevices           []*EndDevice `protobuf:"bytes,1,rep,name=end_devices,json=endDevices,proto3" json:"end_devices,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}     `json:"-"`
+	XXX_unrecognized     []byte       `json:"-"`
 	XXX_sizecache        int32        `json:"-"`
 }
 
-func (m *EndDevices) Reset()      { *m = EndDevices{} }
-func (*EndDevices) ProtoMessage() {}
+func (m *EndDevices) Reset()         { *m = EndDevices{} }
+func (m *EndDevices) String() string { return proto.CompactTextString(m) }
+func (*EndDevices) ProtoMessage()    {}
 func (*EndDevices) Descriptor() ([]byte, []int) {
-	return fileDescriptor_a656ee0551c94a80, []int{8}
+	return fileDescriptor_a656ee0551c94a80, []int{9}
 }
 func (m *EndDevices) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_EndDevices.Unmarshal(m, b)
@@ -1992,17 +2838,19 @@ func (m *EndDevices) GetEndDevices() []*EndDevice {
 
 type DevAddrPrefix struct {
 	// DevAddr base.
-	DevAddr *go_thethings_network_lorawan_stack_v3_pkg_types.DevAddr `protobuf:"bytes,1,opt,name=dev_addr,json=devAddr,proto3,customtype=go.thethings.network/lorawan-stack/v3/pkg/types.DevAddr" json:"dev_addr,omitempty"`
+	DevAddr []byte `protobuf:"bytes,1,opt,name=dev_addr,json=devAddr,proto3" json:"dev_addr,omitempty"`
 	// Number of most significant bits from dev_addr that are used as prefix.
 	Length               uint32   `protobuf:"varint,2,opt,name=length,proto3" json:"length,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *DevAddrPrefix) Reset()      { *m = DevAddrPrefix{} }
-func (*DevAddrPrefix) ProtoMessage() {}
+func (m *DevAddrPrefix) Reset()         { *m = DevAddrPrefix{} }
+func (m *DevAddrPrefix) String() string { return proto.CompactTextString(m) }
+func (*DevAddrPrefix) ProtoMessage()    {}
 func (*DevAddrPrefix) Descriptor() ([]byte, []int) {
-	return fileDescriptor_a656ee0551c94a80, []int{9}
+	return fileDescriptor_a656ee0551c94a80, []int{10}
 }
 func (m *DevAddrPrefix) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_DevAddrPrefix.Unmarshal(m, b)
@@ -2022,6 +2870,13 @@ func (m *DevAddrPrefix) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_DevAddrPrefix proto.InternalMessageInfo
 
+func (m *DevAddrPrefix) GetDevAddr() []byte {
+	if m != nil {
+		return m.DevAddr
+	}
+	return nil
+}
+
 func (m *DevAddrPrefix) GetLength() uint32 {
 	if m != nil {
 		return m.Length
@@ -2030,15 +2885,17 @@ func (m *DevAddrPrefix) GetLength() uint32 {
 }
 
 type CreateEndDeviceRequest struct {
-	EndDevice            `protobuf:"bytes,1,opt,name=end_device,json=endDevice,proto3,embedded=end_device" json:"end_device"`
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
+	EndDevice            *EndDevice `protobuf:"bytes,1,opt,name=end_device,json=endDevice,proto3" json:"end_device,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}   `json:"-"`
+	XXX_unrecognized     []byte     `json:"-"`
+	XXX_sizecache        int32      `json:"-"`
 }
 
-func (m *CreateEndDeviceRequest) Reset()      { *m = CreateEndDeviceRequest{} }
-func (*CreateEndDeviceRequest) ProtoMessage() {}
+func (m *CreateEndDeviceRequest) Reset()         { *m = CreateEndDeviceRequest{} }
+func (m *CreateEndDeviceRequest) String() string { return proto.CompactTextString(m) }
+func (*CreateEndDeviceRequest) ProtoMessage()    {}
 func (*CreateEndDeviceRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_a656ee0551c94a80, []int{10}
+	return fileDescriptor_a656ee0551c94a80, []int{11}
 }
 func (m *CreateEndDeviceRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_CreateEndDeviceRequest.Unmarshal(m, b)
@@ -2058,19 +2915,28 @@ func (m *CreateEndDeviceRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_CreateEndDeviceRequest proto.InternalMessageInfo
 
+func (m *CreateEndDeviceRequest) GetEndDevice() *EndDevice {
+	if m != nil {
+		return m.EndDevice
+	}
+	return nil
+}
+
 type UpdateEndDeviceRequest struct {
-	EndDevice `protobuf:"bytes,1,opt,name=end_device,json=endDevice,proto3,embedded=end_device" json:"end_device"`
+	EndDevice *EndDevice `protobuf:"bytes,1,opt,name=end_device,json=endDevice,proto3" json:"end_device,omitempty"`
 	// The names of the end device fields that should be updated.
 	// See the API reference for which fields can be set on the different services.
 	FieldMask            *types.FieldMask `protobuf:"bytes,2,opt,name=field_mask,json=fieldMask,proto3" json:"field_mask,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}         `json:"-"`
+	XXX_unrecognized     []byte           `json:"-"`
 	XXX_sizecache        int32            `json:"-"`
 }
 
-func (m *UpdateEndDeviceRequest) Reset()      { *m = UpdateEndDeviceRequest{} }
-func (*UpdateEndDeviceRequest) ProtoMessage() {}
+func (m *UpdateEndDeviceRequest) Reset()         { *m = UpdateEndDeviceRequest{} }
+func (m *UpdateEndDeviceRequest) String() string { return proto.CompactTextString(m) }
+func (*UpdateEndDeviceRequest) ProtoMessage()    {}
 func (*UpdateEndDeviceRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_a656ee0551c94a80, []int{11}
+	return fileDescriptor_a656ee0551c94a80, []int{12}
 }
 func (m *UpdateEndDeviceRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_UpdateEndDeviceRequest.Unmarshal(m, b)
@@ -2090,6 +2956,13 @@ func (m *UpdateEndDeviceRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_UpdateEndDeviceRequest proto.InternalMessageInfo
 
+func (m *UpdateEndDeviceRequest) GetEndDevice() *EndDevice {
+	if m != nil {
+		return m.EndDevice
+	}
+	return nil
+}
+
 func (m *UpdateEndDeviceRequest) GetFieldMask() *types.FieldMask {
 	if m != nil {
 		return m.FieldMask
@@ -2097,19 +2970,110 @@ func (m *UpdateEndDeviceRequest) GetFieldMask() *types.FieldMask {
 	return nil
 }
 
+type BatchUpdateEndDeviceLastSeenRequest struct {
+	// The last seen timestamp needs to be set per end device.
+	Updates              []*BatchUpdateEndDeviceLastSeenRequest_EndDeviceLastSeenUpdate `protobuf:"bytes,1,rep,name=updates,proto3" json:"updates,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}                                                       `json:"-"`
+	XXX_unrecognized     []byte                                                         `json:"-"`
+	XXX_sizecache        int32                                                          `json:"-"`
+}
+
+func (m *BatchUpdateEndDeviceLastSeenRequest) Reset()         { *m = BatchUpdateEndDeviceLastSeenRequest{} }
+func (m *BatchUpdateEndDeviceLastSeenRequest) String() string { return proto.CompactTextString(m) }
+func (*BatchUpdateEndDeviceLastSeenRequest) ProtoMessage()    {}
+func (*BatchUpdateEndDeviceLastSeenRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_a656ee0551c94a80, []int{13}
+}
+func (m *BatchUpdateEndDeviceLastSeenRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_BatchUpdateEndDeviceLastSeenRequest.Unmarshal(m, b)
+}
+func (m *BatchUpdateEndDeviceLastSeenRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_BatchUpdateEndDeviceLastSeenRequest.Marshal(b, m, deterministic)
+}
+func (m *BatchUpdateEndDeviceLastSeenRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_BatchUpdateEndDeviceLastSeenRequest.Merge(m, src)
+}
+func (m *BatchUpdateEndDeviceLastSeenRequest) XXX_Size() int {
+	return xxx_messageInfo_BatchUpdateEndDeviceLastSeenRequest.Size(m)
+}
+func (m *BatchUpdateEndDeviceLastSeenRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_BatchUpdateEndDeviceLastSeenRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_BatchUpdateEndDeviceLastSeenRequest proto.InternalMessageInfo
+
+func (m *BatchUpdateEndDeviceLastSeenRequest) GetUpdates() []*BatchUpdateEndDeviceLastSeenRequest_EndDeviceLastSeenUpdate {
+	if m != nil {
+		return m.Updates
+	}
+	return nil
+}
+
+type BatchUpdateEndDeviceLastSeenRequest_EndDeviceLastSeenUpdate struct {
+	Ids                  *EndDeviceIdentifiers `protobuf:"bytes,1,opt,name=ids,proto3" json:"ids,omitempty"`
+	LastSeenAt           *types.Timestamp      `protobuf:"bytes,2,opt,name=last_seen_at,json=lastSeenAt,proto3" json:"last_seen_at,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}              `json:"-"`
+	XXX_unrecognized     []byte                `json:"-"`
+	XXX_sizecache        int32                 `json:"-"`
+}
+
+func (m *BatchUpdateEndDeviceLastSeenRequest_EndDeviceLastSeenUpdate) Reset() {
+	*m = BatchUpdateEndDeviceLastSeenRequest_EndDeviceLastSeenUpdate{}
+}
+func (m *BatchUpdateEndDeviceLastSeenRequest_EndDeviceLastSeenUpdate) String() string {
+	return proto.CompactTextString(m)
+}
+func (*BatchUpdateEndDeviceLastSeenRequest_EndDeviceLastSeenUpdate) ProtoMessage() {}
+func (*BatchUpdateEndDeviceLastSeenRequest_EndDeviceLastSeenUpdate) Descriptor() ([]byte, []int) {
+	return fileDescriptor_a656ee0551c94a80, []int{13, 0}
+}
+func (m *BatchUpdateEndDeviceLastSeenRequest_EndDeviceLastSeenUpdate) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_BatchUpdateEndDeviceLastSeenRequest_EndDeviceLastSeenUpdate.Unmarshal(m, b)
+}
+func (m *BatchUpdateEndDeviceLastSeenRequest_EndDeviceLastSeenUpdate) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_BatchUpdateEndDeviceLastSeenRequest_EndDeviceLastSeenUpdate.Marshal(b, m, deterministic)
+}
+func (m *BatchUpdateEndDeviceLastSeenRequest_EndDeviceLastSeenUpdate) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_BatchUpdateEndDeviceLastSeenRequest_EndDeviceLastSeenUpdate.Merge(m, src)
+}
+func (m *BatchUpdateEndDeviceLastSeenRequest_EndDeviceLastSeenUpdate) XXX_Size() int {
+	return xxx_messageInfo_BatchUpdateEndDeviceLastSeenRequest_EndDeviceLastSeenUpdate.Size(m)
+}
+func (m *BatchUpdateEndDeviceLastSeenRequest_EndDeviceLastSeenUpdate) XXX_DiscardUnknown() {
+	xxx_messageInfo_BatchUpdateEndDeviceLastSeenRequest_EndDeviceLastSeenUpdate.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_BatchUpdateEndDeviceLastSeenRequest_EndDeviceLastSeenUpdate proto.InternalMessageInfo
+
+func (m *BatchUpdateEndDeviceLastSeenRequest_EndDeviceLastSeenUpdate) GetIds() *EndDeviceIdentifiers {
+	if m != nil {
+		return m.Ids
+	}
+	return nil
+}
+
+func (m *BatchUpdateEndDeviceLastSeenRequest_EndDeviceLastSeenUpdate) GetLastSeenAt() *types.Timestamp {
+	if m != nil {
+		return m.LastSeenAt
+	}
+	return nil
+}
+
 type GetEndDeviceRequest struct {
-	EndDeviceIdentifiers `protobuf:"bytes,1,opt,name=end_device_ids,json=endDeviceIds,proto3,embedded=end_device_ids" json:"end_device_ids"`
+	EndDeviceIds *EndDeviceIdentifiers `protobuf:"bytes,1,opt,name=end_device_ids,json=endDeviceIds,proto3" json:"end_device_ids,omitempty"`
 	// The names of the end device fields that should be returned.
 	// See the API reference for which fields can be returned by the different services.
 	FieldMask            *types.FieldMask `protobuf:"bytes,2,opt,name=field_mask,json=fieldMask,proto3" json:"field_mask,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}         `json:"-"`
+	XXX_unrecognized     []byte           `json:"-"`
 	XXX_sizecache        int32            `json:"-"`
 }
 
-func (m *GetEndDeviceRequest) Reset()      { *m = GetEndDeviceRequest{} }
-func (*GetEndDeviceRequest) ProtoMessage() {}
+func (m *GetEndDeviceRequest) Reset()         { *m = GetEndDeviceRequest{} }
+func (m *GetEndDeviceRequest) String() string { return proto.CompactTextString(m) }
+func (*GetEndDeviceRequest) ProtoMessage()    {}
 func (*GetEndDeviceRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_a656ee0551c94a80, []int{12}
+	return fileDescriptor_a656ee0551c94a80, []int{14}
 }
 func (m *GetEndDeviceRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GetEndDeviceRequest.Unmarshal(m, b)
@@ -2129,6 +3093,13 @@ func (m *GetEndDeviceRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_GetEndDeviceRequest proto.InternalMessageInfo
 
+func (m *GetEndDeviceRequest) GetEndDeviceIds() *EndDeviceIdentifiers {
+	if m != nil {
+		return m.EndDeviceIds
+	}
+	return nil
+}
+
 func (m *GetEndDeviceRequest) GetFieldMask() *types.FieldMask {
 	if m != nil {
 		return m.FieldMask
@@ -2137,16 +3108,18 @@ func (m *GetEndDeviceRequest) GetFieldMask() *types.FieldMask {
 }
 
 type GetEndDeviceIdentifiersForEUIsRequest struct {
-	JoinEui              go_thethings_network_lorawan_stack_v3_pkg_types.EUI64 `protobuf:"bytes,1,opt,name=join_eui,json=joinEui,proto3,customtype=go.thethings.network/lorawan-stack/v3/pkg/types.EUI64" json:"join_eui"`
-	DevEui               go_thethings_network_lorawan_stack_v3_pkg_types.EUI64 `protobuf:"bytes,2,opt,name=dev_eui,json=devEui,proto3,customtype=go.thethings.network/lorawan-stack/v3/pkg/types.EUI64" json:"dev_eui"`
-	XXX_NoUnkeyedLiteral struct{}                                              `json:"-"`
-	XXX_sizecache        int32                                                 `json:"-"`
+	JoinEui              []byte   `protobuf:"bytes,1,opt,name=join_eui,json=joinEui,proto3" json:"join_eui,omitempty"`
+	DevEui               []byte   `protobuf:"bytes,2,opt,name=dev_eui,json=devEui,proto3" json:"dev_eui,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *GetEndDeviceIdentifiersForEUIsRequest) Reset()      { *m = GetEndDeviceIdentifiersForEUIsRequest{} }
-func (*GetEndDeviceIdentifiersForEUIsRequest) ProtoMessage() {}
+func (m *GetEndDeviceIdentifiersForEUIsRequest) Reset()         { *m = GetEndDeviceIdentifiersForEUIsRequest{} }
+func (m *GetEndDeviceIdentifiersForEUIsRequest) String() string { return proto.CompactTextString(m) }
+func (*GetEndDeviceIdentifiersForEUIsRequest) ProtoMessage()    {}
 func (*GetEndDeviceIdentifiersForEUIsRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_a656ee0551c94a80, []int{13}
+	return fileDescriptor_a656ee0551c94a80, []int{15}
 }
 func (m *GetEndDeviceIdentifiersForEUIsRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GetEndDeviceIdentifiersForEUIsRequest.Unmarshal(m, b)
@@ -2166,8 +3139,22 @@ func (m *GetEndDeviceIdentifiersForEUIsRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_GetEndDeviceIdentifiersForEUIsRequest proto.InternalMessageInfo
 
+func (m *GetEndDeviceIdentifiersForEUIsRequest) GetJoinEui() []byte {
+	if m != nil {
+		return m.JoinEui
+	}
+	return nil
+}
+
+func (m *GetEndDeviceIdentifiersForEUIsRequest) GetDevEui() []byte {
+	if m != nil {
+		return m.DevEui
+	}
+	return nil
+}
+
 type ListEndDevicesRequest struct {
-	ApplicationIdentifiers `protobuf:"bytes,1,opt,name=application_ids,json=applicationIds,proto3,embedded=application_ids" json:"application_ids"`
+	ApplicationIds *ApplicationIdentifiers `protobuf:"bytes,1,opt,name=application_ids,json=applicationIds,proto3" json:"application_ids,omitempty"`
 	// The names of the end device fields that should be returned.
 	// See the API reference for which fields can be returned by the different services.
 	FieldMask *types.FieldMask `protobuf:"bytes,2,opt,name=field_mask,json=fieldMask,proto3" json:"field_mask,omitempty"`
@@ -2179,13 +3166,15 @@ type ListEndDevicesRequest struct {
 	// Page number for pagination. 0 is interpreted as 1.
 	Page                 uint32   `protobuf:"varint,5,opt,name=page,proto3" json:"page,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *ListEndDevicesRequest) Reset()      { *m = ListEndDevicesRequest{} }
-func (*ListEndDevicesRequest) ProtoMessage() {}
+func (m *ListEndDevicesRequest) Reset()         { *m = ListEndDevicesRequest{} }
+func (m *ListEndDevicesRequest) String() string { return proto.CompactTextString(m) }
+func (*ListEndDevicesRequest) ProtoMessage()    {}
 func (*ListEndDevicesRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_a656ee0551c94a80, []int{14}
+	return fileDescriptor_a656ee0551c94a80, []int{16}
 }
 func (m *ListEndDevicesRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListEndDevicesRequest.Unmarshal(m, b)
@@ -2204,6 +3193,13 @@ func (m *ListEndDevicesRequest) XXX_DiscardUnknown() {
 }
 
 var xxx_messageInfo_ListEndDevicesRequest proto.InternalMessageInfo
+
+func (m *ListEndDevicesRequest) GetApplicationIds() *ApplicationIdentifiers {
+	if m != nil {
+		return m.ApplicationIds
+	}
+	return nil
+}
 
 func (m *ListEndDevicesRequest) GetFieldMask() *types.FieldMask {
 	if m != nil {
@@ -2234,18 +3230,20 @@ func (m *ListEndDevicesRequest) GetPage() uint32 {
 }
 
 type SetEndDeviceRequest struct {
-	EndDevice EndDevice `protobuf:"bytes,1,opt,name=end_device,json=endDevice,proto3" json:"end_device"`
+	EndDevice *EndDevice `protobuf:"bytes,1,opt,name=end_device,json=endDevice,proto3" json:"end_device,omitempty"`
 	// The names of the end device fields that should be updated.
 	// See the API reference for which fields can be set on the different services.
 	FieldMask            *types.FieldMask `protobuf:"bytes,2,opt,name=field_mask,json=fieldMask,proto3" json:"field_mask,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}         `json:"-"`
+	XXX_unrecognized     []byte           `json:"-"`
 	XXX_sizecache        int32            `json:"-"`
 }
 
-func (m *SetEndDeviceRequest) Reset()      { *m = SetEndDeviceRequest{} }
-func (*SetEndDeviceRequest) ProtoMessage() {}
+func (m *SetEndDeviceRequest) Reset()         { *m = SetEndDeviceRequest{} }
+func (m *SetEndDeviceRequest) String() string { return proto.CompactTextString(m) }
+func (*SetEndDeviceRequest) ProtoMessage()    {}
 func (*SetEndDeviceRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_a656ee0551c94a80, []int{15}
+	return fileDescriptor_a656ee0551c94a80, []int{17}
 }
 func (m *SetEndDeviceRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_SetEndDeviceRequest.Unmarshal(m, b)
@@ -2265,11 +3263,11 @@ func (m *SetEndDeviceRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_SetEndDeviceRequest proto.InternalMessageInfo
 
-func (m *SetEndDeviceRequest) GetEndDevice() EndDevice {
+func (m *SetEndDeviceRequest) GetEndDevice() *EndDevice {
 	if m != nil {
 		return m.EndDevice
 	}
-	return EndDevice{}
+	return nil
 }
 
 func (m *SetEndDeviceRequest) GetFieldMask() *types.FieldMask {
@@ -2280,18 +3278,20 @@ func (m *SetEndDeviceRequest) GetFieldMask() *types.FieldMask {
 }
 
 type ResetAndGetEndDeviceRequest struct {
-	EndDeviceIdentifiers `protobuf:"bytes,1,opt,name=end_device_ids,json=endDeviceIds,proto3,embedded=end_device_ids" json:"end_device_ids"`
+	EndDeviceIds *EndDeviceIdentifiers `protobuf:"bytes,1,opt,name=end_device_ids,json=endDeviceIds,proto3" json:"end_device_ids,omitempty"`
 	// The names of the end device fields that should be returned.
 	// See the API reference for which fields can be returned by the different services.
 	FieldMask            *types.FieldMask `protobuf:"bytes,2,opt,name=field_mask,json=fieldMask,proto3" json:"field_mask,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}         `json:"-"`
+	XXX_unrecognized     []byte           `json:"-"`
 	XXX_sizecache        int32            `json:"-"`
 }
 
-func (m *ResetAndGetEndDeviceRequest) Reset()      { *m = ResetAndGetEndDeviceRequest{} }
-func (*ResetAndGetEndDeviceRequest) ProtoMessage() {}
+func (m *ResetAndGetEndDeviceRequest) Reset()         { *m = ResetAndGetEndDeviceRequest{} }
+func (m *ResetAndGetEndDeviceRequest) String() string { return proto.CompactTextString(m) }
+func (*ResetAndGetEndDeviceRequest) ProtoMessage()    {}
 func (*ResetAndGetEndDeviceRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_a656ee0551c94a80, []int{16}
+	return fileDescriptor_a656ee0551c94a80, []int{18}
 }
 func (m *ResetAndGetEndDeviceRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ResetAndGetEndDeviceRequest.Unmarshal(m, b)
@@ -2311,6 +3311,13 @@ func (m *ResetAndGetEndDeviceRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_ResetAndGetEndDeviceRequest proto.InternalMessageInfo
 
+func (m *ResetAndGetEndDeviceRequest) GetEndDeviceIds() *EndDeviceIdentifiers {
+	if m != nil {
+		return m.EndDeviceIds
+	}
+	return nil
+}
+
 func (m *ResetAndGetEndDeviceRequest) GetFieldMask() *types.FieldMask {
 	if m != nil {
 		return m.FieldMask
@@ -2319,17 +3326,19 @@ func (m *ResetAndGetEndDeviceRequest) GetFieldMask() *types.FieldMask {
 }
 
 type EndDeviceTemplate struct {
-	EndDevice            EndDevice        `protobuf:"bytes,1,opt,name=end_device,json=endDevice,proto3" json:"end_device"`
+	EndDevice            *EndDevice       `protobuf:"bytes,1,opt,name=end_device,json=endDevice,proto3" json:"end_device,omitempty"`
 	FieldMask            *types.FieldMask `protobuf:"bytes,2,opt,name=field_mask,json=fieldMask,proto3" json:"field_mask,omitempty"`
 	MappingKey           string           `protobuf:"bytes,3,opt,name=mapping_key,json=mappingKey,proto3" json:"mapping_key,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}         `json:"-"`
+	XXX_unrecognized     []byte           `json:"-"`
 	XXX_sizecache        int32            `json:"-"`
 }
 
-func (m *EndDeviceTemplate) Reset()      { *m = EndDeviceTemplate{} }
-func (*EndDeviceTemplate) ProtoMessage() {}
+func (m *EndDeviceTemplate) Reset()         { *m = EndDeviceTemplate{} }
+func (m *EndDeviceTemplate) String() string { return proto.CompactTextString(m) }
+func (*EndDeviceTemplate) ProtoMessage()    {}
 func (*EndDeviceTemplate) Descriptor() ([]byte, []int) {
-	return fileDescriptor_a656ee0551c94a80, []int{17}
+	return fileDescriptor_a656ee0551c94a80, []int{19}
 }
 func (m *EndDeviceTemplate) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_EndDeviceTemplate.Unmarshal(m, b)
@@ -2349,11 +3358,11 @@ func (m *EndDeviceTemplate) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_EndDeviceTemplate proto.InternalMessageInfo
 
-func (m *EndDeviceTemplate) GetEndDevice() EndDevice {
+func (m *EndDeviceTemplate) GetEndDevice() *EndDevice {
 	if m != nil {
 		return m.EndDevice
 	}
-	return EndDevice{}
+	return nil
 }
 
 func (m *EndDeviceTemplate) GetFieldMask() *types.FieldMask {
@@ -2375,13 +3384,15 @@ type EndDeviceTemplateFormat struct {
 	Description          string   `protobuf:"bytes,2,opt,name=description,proto3" json:"description,omitempty"`
 	FileExtensions       []string `protobuf:"bytes,3,rep,name=file_extensions,json=fileExtensions,proto3" json:"file_extensions,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *EndDeviceTemplateFormat) Reset()      { *m = EndDeviceTemplateFormat{} }
-func (*EndDeviceTemplateFormat) ProtoMessage() {}
+func (m *EndDeviceTemplateFormat) Reset()         { *m = EndDeviceTemplateFormat{} }
+func (m *EndDeviceTemplateFormat) String() string { return proto.CompactTextString(m) }
+func (*EndDeviceTemplateFormat) ProtoMessage()    {}
 func (*EndDeviceTemplateFormat) Descriptor() ([]byte, []int) {
-	return fileDescriptor_a656ee0551c94a80, []int{18}
+	return fileDescriptor_a656ee0551c94a80, []int{20}
 }
 func (m *EndDeviceTemplateFormat) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_EndDeviceTemplateFormat.Unmarshal(m, b)
@@ -2425,13 +3436,15 @@ func (m *EndDeviceTemplateFormat) GetFileExtensions() []string {
 type EndDeviceTemplateFormats struct {
 	Formats              map[string]*EndDeviceTemplateFormat `protobuf:"bytes,1,rep,name=formats,proto3" json:"formats,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 	XXX_NoUnkeyedLiteral struct{}                            `json:"-"`
+	XXX_unrecognized     []byte                              `json:"-"`
 	XXX_sizecache        int32                               `json:"-"`
 }
 
-func (m *EndDeviceTemplateFormats) Reset()      { *m = EndDeviceTemplateFormats{} }
-func (*EndDeviceTemplateFormats) ProtoMessage() {}
+func (m *EndDeviceTemplateFormats) Reset()         { *m = EndDeviceTemplateFormats{} }
+func (m *EndDeviceTemplateFormats) String() string { return proto.CompactTextString(m) }
+func (*EndDeviceTemplateFormats) ProtoMessage()    {}
 func (*EndDeviceTemplateFormats) Descriptor() ([]byte, []int) {
-	return fileDescriptor_a656ee0551c94a80, []int{19}
+	return fileDescriptor_a656ee0551c94a80, []int{21}
 }
 func (m *EndDeviceTemplateFormats) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_EndDeviceTemplateFormats.Unmarshal(m, b)
@@ -2462,15 +3475,19 @@ type ConvertEndDeviceTemplateRequest struct {
 	// ID of the format.
 	FormatId string `protobuf:"bytes,1,opt,name=format_id,json=formatId,proto3" json:"format_id,omitempty"`
 	// Data to convert.
-	Data                 []byte   `protobuf:"bytes,2,opt,name=data,proto3" json:"data,omitempty"`
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
+	Data []byte `protobuf:"bytes,2,opt,name=data,proto3" json:"data,omitempty"`
+	// End device profile identifiers.
+	EndDeviceVersionIds  *EndDeviceVersionIdentifiers `protobuf:"bytes,3,opt,name=end_device_version_ids,json=endDeviceVersionIds,proto3" json:"end_device_version_ids,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}                     `json:"-"`
+	XXX_unrecognized     []byte                       `json:"-"`
+	XXX_sizecache        int32                        `json:"-"`
 }
 
-func (m *ConvertEndDeviceTemplateRequest) Reset()      { *m = ConvertEndDeviceTemplateRequest{} }
-func (*ConvertEndDeviceTemplateRequest) ProtoMessage() {}
+func (m *ConvertEndDeviceTemplateRequest) Reset()         { *m = ConvertEndDeviceTemplateRequest{} }
+func (m *ConvertEndDeviceTemplateRequest) String() string { return proto.CompactTextString(m) }
+func (*ConvertEndDeviceTemplateRequest) ProtoMessage()    {}
 func (*ConvertEndDeviceTemplateRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_a656ee0551c94a80, []int{20}
+	return fileDescriptor_a656ee0551c94a80, []int{22}
 }
 func (m *ConvertEndDeviceTemplateRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ConvertEndDeviceTemplateRequest.Unmarshal(m, b)
@@ -2504,6 +3521,13 @@ func (m *ConvertEndDeviceTemplateRequest) GetData() []byte {
 	return nil
 }
 
+func (m *ConvertEndDeviceTemplateRequest) GetEndDeviceVersionIds() *EndDeviceVersionIdentifiers {
+	if m != nil {
+		return m.EndDeviceVersionIds
+	}
+	return nil
+}
+
 func init() {
 	proto.RegisterEnum("ttn.lorawan.v3.PowerState", PowerState_name, PowerState_value)
 	golang_proto.RegisterEnum("ttn.lorawan.v3.PowerState", PowerState_name, PowerState_value)
@@ -2517,6 +3541,14 @@ func init() {
 	golang_proto.RegisterType((*MACParameters_Channel)(nil), "ttn.lorawan.v3.MACParameters.Channel")
 	proto.RegisterType((*EndDeviceVersion)(nil), "ttn.lorawan.v3.EndDeviceVersion")
 	golang_proto.RegisterType((*EndDeviceVersion)(nil), "ttn.lorawan.v3.EndDeviceVersion")
+	proto.RegisterType((*ADRSettings)(nil), "ttn.lorawan.v3.ADRSettings")
+	golang_proto.RegisterType((*ADRSettings)(nil), "ttn.lorawan.v3.ADRSettings")
+	proto.RegisterType((*ADRSettings_StaticMode)(nil), "ttn.lorawan.v3.ADRSettings.StaticMode")
+	golang_proto.RegisterType((*ADRSettings_StaticMode)(nil), "ttn.lorawan.v3.ADRSettings.StaticMode")
+	proto.RegisterType((*ADRSettings_DynamicMode)(nil), "ttn.lorawan.v3.ADRSettings.DynamicMode")
+	golang_proto.RegisterType((*ADRSettings_DynamicMode)(nil), "ttn.lorawan.v3.ADRSettings.DynamicMode")
+	proto.RegisterType((*ADRSettings_DisabledMode)(nil), "ttn.lorawan.v3.ADRSettings.DisabledMode")
+	golang_proto.RegisterType((*ADRSettings_DisabledMode)(nil), "ttn.lorawan.v3.ADRSettings.DisabledMode")
 	proto.RegisterType((*MACSettings)(nil), "ttn.lorawan.v3.MACSettings")
 	golang_proto.RegisterType((*MACSettings)(nil), "ttn.lorawan.v3.MACSettings")
 	proto.RegisterType((*MACState)(nil), "ttn.lorawan.v3.MACState")
@@ -2527,6 +3559,22 @@ func init() {
 	golang_proto.RegisterType((*MACState_JoinRequest)(nil), "ttn.lorawan.v3.MACState.JoinRequest")
 	proto.RegisterType((*MACState_JoinAccept)(nil), "ttn.lorawan.v3.MACState.JoinAccept")
 	golang_proto.RegisterType((*MACState_JoinAccept)(nil), "ttn.lorawan.v3.MACState.JoinAccept")
+	proto.RegisterType((*MACState_UplinkMessage)(nil), "ttn.lorawan.v3.MACState.UplinkMessage")
+	golang_proto.RegisterType((*MACState_UplinkMessage)(nil), "ttn.lorawan.v3.MACState.UplinkMessage")
+	proto.RegisterType((*MACState_UplinkMessage_TxSettings)(nil), "ttn.lorawan.v3.MACState.UplinkMessage.TxSettings")
+	golang_proto.RegisterType((*MACState_UplinkMessage_TxSettings)(nil), "ttn.lorawan.v3.MACState.UplinkMessage.TxSettings")
+	proto.RegisterType((*MACState_UplinkMessage_RxMetadata)(nil), "ttn.lorawan.v3.MACState.UplinkMessage.RxMetadata")
+	golang_proto.RegisterType((*MACState_UplinkMessage_RxMetadata)(nil), "ttn.lorawan.v3.MACState.UplinkMessage.RxMetadata")
+	proto.RegisterType((*MACState_UplinkMessage_RxMetadata_PacketBrokerMetadata)(nil), "ttn.lorawan.v3.MACState.UplinkMessage.RxMetadata.PacketBrokerMetadata")
+	golang_proto.RegisterType((*MACState_UplinkMessage_RxMetadata_PacketBrokerMetadata)(nil), "ttn.lorawan.v3.MACState.UplinkMessage.RxMetadata.PacketBrokerMetadata")
+	proto.RegisterType((*MACState_DownlinkMessage)(nil), "ttn.lorawan.v3.MACState.DownlinkMessage")
+	golang_proto.RegisterType((*MACState_DownlinkMessage)(nil), "ttn.lorawan.v3.MACState.DownlinkMessage")
+	proto.RegisterType((*MACState_DownlinkMessage_Message)(nil), "ttn.lorawan.v3.MACState.DownlinkMessage.Message")
+	golang_proto.RegisterType((*MACState_DownlinkMessage_Message)(nil), "ttn.lorawan.v3.MACState.DownlinkMessage.Message")
+	proto.RegisterType((*MACState_DownlinkMessage_Message_MHDR)(nil), "ttn.lorawan.v3.MACState.DownlinkMessage.Message.MHDR")
+	golang_proto.RegisterType((*MACState_DownlinkMessage_Message_MHDR)(nil), "ttn.lorawan.v3.MACState.DownlinkMessage.Message.MHDR")
+	proto.RegisterType((*MACState_DownlinkMessage_Message_MACPayload)(nil), "ttn.lorawan.v3.MACState.DownlinkMessage.Message.MACPayload")
+	golang_proto.RegisterType((*MACState_DownlinkMessage_Message_MACPayload)(nil), "ttn.lorawan.v3.MACState.DownlinkMessage.Message.MACPayload")
 	proto.RegisterType((*MACState_DataRateRange)(nil), "ttn.lorawan.v3.MACState.DataRateRange")
 	golang_proto.RegisterType((*MACState_DataRateRange)(nil), "ttn.lorawan.v3.MACState.DataRateRange")
 	proto.RegisterType((*MACState_DataRateRanges)(nil), "ttn.lorawan.v3.MACState.DataRateRanges")
@@ -2547,6 +3595,10 @@ func init() {
 	golang_proto.RegisterType((*CreateEndDeviceRequest)(nil), "ttn.lorawan.v3.CreateEndDeviceRequest")
 	proto.RegisterType((*UpdateEndDeviceRequest)(nil), "ttn.lorawan.v3.UpdateEndDeviceRequest")
 	golang_proto.RegisterType((*UpdateEndDeviceRequest)(nil), "ttn.lorawan.v3.UpdateEndDeviceRequest")
+	proto.RegisterType((*BatchUpdateEndDeviceLastSeenRequest)(nil), "ttn.lorawan.v3.BatchUpdateEndDeviceLastSeenRequest")
+	golang_proto.RegisterType((*BatchUpdateEndDeviceLastSeenRequest)(nil), "ttn.lorawan.v3.BatchUpdateEndDeviceLastSeenRequest")
+	proto.RegisterType((*BatchUpdateEndDeviceLastSeenRequest_EndDeviceLastSeenUpdate)(nil), "ttn.lorawan.v3.BatchUpdateEndDeviceLastSeenRequest.EndDeviceLastSeenUpdate")
+	golang_proto.RegisterType((*BatchUpdateEndDeviceLastSeenRequest_EndDeviceLastSeenUpdate)(nil), "ttn.lorawan.v3.BatchUpdateEndDeviceLastSeenRequest.EndDeviceLastSeenUpdate")
 	proto.RegisterType((*GetEndDeviceRequest)(nil), "ttn.lorawan.v3.GetEndDeviceRequest")
 	golang_proto.RegisterType((*GetEndDeviceRequest)(nil), "ttn.lorawan.v3.GetEndDeviceRequest")
 	proto.RegisterType((*GetEndDeviceIdentifiersForEUIsRequest)(nil), "ttn.lorawan.v3.GetEndDeviceIdentifiersForEUIsRequest")
@@ -2577,2235 +3629,380 @@ func init() {
 }
 
 var fileDescriptor_a656ee0551c94a80 = []byte{
-	// 4792 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xd4, 0x7b, 0x4b, 0x70, 0x1b, 0x47,
-	0x7a, 0x3f, 0x07, 0x04, 0x49, 0xe0, 0x23, 0x08, 0x80, 0xcd, 0xd7, 0x88, 0x94, 0x48, 0x0a, 0xa2,
-	0x24, 0x48, 0x16, 0x41, 0x13, 0xb2, 0xfc, 0x5f, 0xcb, 0x7f, 0xaf, 0x16, 0xe0, 0x63, 0x45, 0xea,
-	0x61, 0x7a, 0x44, 0xc9, 0xb6, 0x64, 0x69, 0x76, 0x38, 0xd3, 0xa4, 0xc6, 0x04, 0x66, 0x66, 0x7b,
-	0x1a, 0x14, 0x69, 0x5b, 0x55, 0xae, 0x4d, 0x36, 0x5b, 0xd9, 0x4a, 0x52, 0x5b, 0x3a, 0x6d, 0xed,
-	0x65, 0x7d, 0xcc, 0x29, 0x55, 0xb9, 0xa4, 0xf6, 0xb6, 0x9b, 0x43, 0xaa, 0x5c, 0xa9, 0xda, 0x2a,
-	0x1f, 0x93, 0x1c, 0x9c, 0x8a, 0xf7, 0xb2, 0xa7, 0x54, 0xce, 0x3c, 0xa4, 0x52, 0xdd, 0xd3, 0xf3,
-	0x00, 0x06, 0x20, 0x41, 0x4b, 0xae, 0x6c, 0x4e, 0x1c, 0x74, 0x7f, 0xdf, 0xaf, 0x7b, 0xfa, 0x7b,
-	0xf4, 0xf7, 0x18, 0x42, 0xa1, 0x66, 0x13, 0xed, 0x99, 0x66, 0xcd, 0xbb, 0x54, 0xd3, 0x77, 0x17,
-	0x34, 0xc7, 0x5c, 0xc0, 0x96, 0xa1, 0x1a, 0x78, 0xcf, 0xd4, 0x71, 0xc9, 0x21, 0x36, 0xb5, 0x51,
-	0x96, 0x52, 0xab, 0x24, 0xe8, 0x4a, 0x7b, 0x57, 0x27, 0x2b, 0x3b, 0x26, 0x7d, 0xda, 0xd8, 0x2a,
-	0xe9, 0x76, 0x7d, 0x01, 0x5b, 0x7b, 0xf6, 0x81, 0x43, 0xec, 0xfd, 0x83, 0x05, 0x4e, 0xac, 0xcf,
-	0xef, 0x60, 0x6b, 0x7e, 0x4f, 0xab, 0x99, 0x86, 0x46, 0xf1, 0x42, 0xec, 0xc1, 0x83, 0x9c, 0x9c,
-	0x8f, 0x40, 0xec, 0xd8, 0x3b, 0xb6, 0xc7, 0xbc, 0xd5, 0xd8, 0xe6, 0xbf, 0xf8, 0x0f, 0xfe, 0x24,
-	0xc8, 0xa7, 0x77, 0x6c, 0x7b, 0xa7, 0x86, 0x43, 0x2a, 0xa3, 0x41, 0x34, 0x6a, 0xda, 0x96, 0x98,
-	0x9f, 0x6d, 0x9d, 0xdf, 0x36, 0x71, 0xcd, 0x50, 0xeb, 0x9a, 0xbb, 0x2b, 0x28, 0x4e, 0xb7, 0x52,
-	0xb8, 0x94, 0x34, 0x74, 0x2a, 0x66, 0x67, 0x5a, 0x67, 0xa9, 0x59, 0xc7, 0x2e, 0xd5, 0xea, 0x4e,
-	0xa7, 0x0d, 0x3c, 0x23, 0x9a, 0xe3, 0x60, 0xe2, 0x8a, 0xf9, 0x73, 0xf1, 0x63, 0x34, 0x0d, 0x6c,
-	0x51, 0x73, 0xdb, 0x0c, 0x89, 0x4e, 0xc7, 0x89, 0x76, 0xf1, 0x81, 0x3f, 0x3b, 0x13, 0x9f, 0xf5,
-	0xcf, 0x5c, 0xbc, 0x64, 0x9c, 0xa0, 0x8e, 0x5d, 0x57, 0xdb, 0xc1, 0x47, 0x40, 0x38, 0xa6, 0x4e,
-	0x1b, 0x04, 0x1f, 0x05, 0x41, 0x35, 0x43, 0xa3, 0x9a, 0x47, 0x51, 0xf8, 0x59, 0x12, 0x06, 0xee,
-	0x61, 0xd7, 0x35, 0x6d, 0x0b, 0x3d, 0x84, 0x94, 0x81, 0xf7, 0x54, 0xcd, 0x30, 0x88, 0x9c, 0x98,
-	0x95, 0x8a, 0x99, 0xea, 0x8d, 0x2f, 0xbf, 0x9e, 0xe9, 0xf9, 0xb7, 0xaf, 0x67, 0xfe, 0xdf, 0x8e,
-	0x5d, 0xa2, 0x4f, 0x31, 0x7d, 0x6a, 0x5a, 0x3b, 0x6e, 0xc9, 0xc2, 0xf4, 0x99, 0x4d, 0x76, 0x17,
-	0x9a, 0xc1, 0xf7, 0xae, 0x2e, 0x38, 0xbb, 0x3b, 0x0b, 0xf4, 0xc0, 0xc1, 0x6e, 0x69, 0x19, 0xef,
-	0x55, 0x0c, 0x83, 0x28, 0x03, 0x86, 0xf7, 0x80, 0x2a, 0x90, 0x64, 0xef, 0x2e, 0xf7, 0xce, 0x4a,
-	0xc5, 0xc1, 0xf2, 0x54, 0xa9, 0x59, 0xc5, 0x4a, 0x62, 0x0b, 0xb7, 0xf0, 0x81, 0x5b, 0xcd, 0x1f,
-	0x56, 0xfb, 0x7e, 0x2e, 0x25, 0xf2, 0x12, 0x5b, 0xfc, 0xab, 0xaf, 0x67, 0x24, 0x85, 0xb3, 0xa2,
-	0xb3, 0x30, 0x54, 0xd3, 0x5c, 0xaa, 0x6e, 0xab, 0xba, 0x45, 0xd5, 0x86, 0x23, 0x27, 0x67, 0xa5,
-	0xe2, 0x90, 0x02, 0x6c, 0x70, 0x75, 0xc9, 0xa2, 0xf7, 0x1d, 0x54, 0x84, 0x61, 0x4e, 0x62, 0x09,
-	0x22, 0xc3, 0x7e, 0x66, 0xc9, 0x7d, 0x9c, 0x8c, 0xf3, 0xde, 0x65, 0x74, 0xcb, 0xf6, 0x33, 0x2b,
-	0xa0, 0xd4, 0xa2, 0x94, 0xfd, 0x21, 0x65, 0x25, 0xa0, 0x2c, 0xc1, 0x28, 0xa7, 0xd4, 0x6d, 0x6b,
-	0x3b, 0x4a, 0x3c, 0xc0, 0x89, 0xf3, 0x6c, 0x6e, 0xc9, 0xb6, 0xb6, 0x03, 0xfa, 0x25, 0x00, 0x97,
-	0x6a, 0x84, 0x62, 0x43, 0xd5, 0xa8, 0x9c, 0xe2, 0xef, 0x3b, 0x59, 0xf2, 0xf4, 0xa9, 0xe4, 0xeb,
-	0x53, 0x69, 0xd3, 0x57, 0xb8, 0x6a, 0x8a, 0xbd, 0xe6, 0x2f, 0xfe, 0x7d, 0x46, 0x52, 0xd2, 0x82,
-	0xaf, 0x42, 0x11, 0x86, 0xd3, 0x3f, 0x6e, 0xe0, 0x06, 0xc3, 0x70, 0x9c, 0x9a, 0xa9, 0x73, 0xe5,
-	0xe7, 0xeb, 0xd6, 0x4c, 0x6b, 0xd7, 0x95, 0xd3, 0xb3, 0xbd, 0xc5, 0xc1, 0xf2, 0xb9, 0xd6, 0x63,
-	0xac, 0x84, 0xc4, 0xcb, 0x82, 0x56, 0x99, 0xf4, 0x80, 0xda, 0x4c, 0xb9, 0xd7, 0x93, 0xbf, 0xf9,
-	0x62, 0x46, 0x5a, 0x4f, 0xa6, 0xa4, 0x7c, 0xa2, 0x70, 0x16, 0xd2, 0x55, 0xdb, 0xae, 0x3d, 0xd0,
-	0x6a, 0x0d, 0x8c, 0x46, 0xa1, 0x6f, 0x8f, 0x3d, 0xc8, 0xd2, 0xac, 0x54, 0x4c, 0x29, 0xde, 0x8f,
-	0xc2, 0xdf, 0xe7, 0x60, 0xe8, 0x4e, 0x65, 0x69, 0x43, 0x23, 0x5a, 0x1d, 0x53, 0x4c, 0x5c, 0x74,
-	0x0a, 0x52, 0x75, 0x6d, 0x5f, 0xc5, 0x26, 0x71, 0x38, 0x69, 0x42, 0x19, 0xa8, 0x6b, 0xfb, 0x2b,
-	0x26, 0x71, 0xd0, 0x03, 0x18, 0xd1, 0x0c, 0xa2, 0x32, 0x5d, 0x53, 0x89, 0x46, 0xb1, 0x6a, 0x5a,
-	0x06, 0xde, 0xe7, 0x42, 0xcb, 0x96, 0xcf, 0xb4, 0xee, 0x7c, 0x59, 0xa3, 0x9a, 0xa2, 0x51, 0xbc,
-	0xc6, 0x88, 0xaa, 0xa9, 0xc3, 0x6a, 0xdf, 0x4f, 0x98, 0x0a, 0x28, 0x79, 0xcd, 0x20, 0x4d, 0x73,
-	0xe8, 0x0d, 0x40, 0x0c, 0x97, 0xee, 0xab, 0x8e, 0xfd, 0x0c, 0x13, 0x01, 0xcb, 0x85, 0x5c, 0x1d,
-	0x38, 0xac, 0x26, 0x2f, 0x27, 0xe4, 0x9c, 0x92, 0xd3, 0x0c, 0xb2, 0xb9, 0xbf, 0xc1, 0x08, 0x3c,
-	0xae, 0x4b, 0x90, 0x61, 0x5c, 0xd6, 0x96, 0x4a, 0x89, 0x66, 0xb9, 0x9e, 0xa8, 0x43, 0x7a, 0xd0,
-	0x0c, 0x72, 0x77, 0x6b, 0x93, 0x4d, 0xa1, 0x0b, 0x30, 0xc4, 0x48, 0x35, 0x7d, 0x57, 0xad, 0x99,
-	0x75, 0x93, 0x7a, 0x92, 0xae, 0x26, 0x64, 0x49, 0x19, 0xd4, 0x0c, 0x52, 0xd1, 0x77, 0x6f, 0xb3,
-	0xe1, 0x28, 0x9d, 0x81, 0x6b, 0xda, 0x01, 0x97, 0x75, 0x13, 0xdd, 0x32, 0x1b, 0x46, 0xdf, 0x87,
-	0x34, 0xd9, 0x5f, 0x14, 0x34, 0x69, 0xfe, 0xfa, 0x13, 0xad, 0xaf, 0xaf, 0xec, 0x73, 0xda, 0xc8,
-	0x8b, 0xa7, 0xc8, 0xfe, 0xa2, 0xc7, 0xff, 0x21, 0x8c, 0x72, 0xfe, 0xe0, 0x20, 0xed, 0xed, 0x6d,
-	0x17, 0x53, 0x19, 0x38, 0xd4, 0x74, 0xa7, 0x93, 0x7c, 0x97, 0x53, 0x45, 0x10, 0x87, 0x19, 0x62,
-	0xd3, 0x24, 0x93, 0x11, 0xd9, 0x2f, 0xc7, 0x64, 0x34, 0x78, 0x42, 0x19, 0x91, 0xfd, 0x72, 0xb3,
-	0x8c, 0x4a, 0x30, 0xc4, 0x70, 0xb7, 0x09, 0xfe, 0x71, 0x03, 0x5b, 0xfa, 0x81, 0x9c, 0x99, 0x95,
-	0x8a, 0xc9, 0x6a, 0xfa, 0xb0, 0xda, 0x5f, 0x4e, 0x16, 0xbf, 0xf8, 0xeb, 0x7e, 0x25, 0x43, 0xf6,
-	0xcb, 0xab, 0xfe, 0x34, 0xba, 0x07, 0x59, 0xa6, 0x46, 0x46, 0x83, 0x1e, 0xa8, 0xfa, 0x81, 0x5e,
-	0xc3, 0xf2, 0x10, 0xdf, 0x42, 0x5c, 0xc1, 0x77, 0x76, 0x08, 0xde, 0xd1, 0x28, 0x36, 0x96, 0x1b,
-	0xf4, 0x60, 0x89, 0x91, 0x46, 0x36, 0x92, 0xa9, 0x6b, 0xfb, 0xc1, 0x38, 0x32, 0x60, 0x82, 0xe0,
-	0x8f, 0x6d, 0xd3, 0x52, 0x99, 0x77, 0x57, 0x1d, 0x4c, 0x4c, 0xdb, 0x30, 0x75, 0x93, 0x1e, 0xc8,
-	0x59, 0x8e, 0x5e, 0x88, 0x49, 0x81, 0x93, 0x33, 0xd3, 0x5c, 0xd9, 0x77, 0x6c, 0x0b, 0x5b, 0xd1,
-	0xe3, 0x1b, 0x23, 0xc1, 0xec, 0x46, 0x08, 0x85, 0x76, 0x40, 0x16, 0xab, 0xe8, 0x76, 0xc3, 0xa2,
-	0x4d, 0xcb, 0xe4, 0xda, 0xbf, 0x84, 0xb7, 0xcc, 0x12, 0x23, 0x6f, 0xb3, 0xce, 0x38, 0x09, 0xa7,
-	0xa3, 0x0b, 0xbd, 0x0d, 0x23, 0x8e, 0x69, 0xed, 0xa8, 0x6e, 0xcd, 0xa6, 0x91, 0x93, 0xcd, 0xf3,
-	0x93, 0x1d, 0x3c, 0xac, 0xa6, 0xca, 0xfd, 0x72, 0x0f, 0x3f, 0xdb, 0x61, 0x46, 0x77, 0xaf, 0x66,
-	0xd3, 0xf0, 0x80, 0x1f, 0xc1, 0xa9, 0x90, 0xb9, 0x55, 0xdc, 0xc3, 0xdd, 0x88, 0x9b, 0xa9, 0xf5,
-	0x98, 0x0f, 0xdc, 0x2c, 0xed, 0x37, 0x21, 0xbf, 0x85, 0x35, 0xdd, 0xb6, 0x22, 0xdb, 0x42, 0xf1,
-	0x6d, 0xe5, 0x3c, 0xa2, 0x70, 0x53, 0xb7, 0x20, 0xa5, 0x3f, 0xd5, 0x2c, 0x0b, 0xd7, 0x5c, 0x79,
-	0x84, 0x3b, 0xb4, 0xf3, 0xad, 0x7b, 0x68, 0xf2, 0x36, 0xa5, 0x25, 0x8f, 0x9a, 0x1f, 0xd6, 0x0b,
-	0x29, 0x91, 0x92, 0x94, 0x00, 0x00, 0xad, 0xc0, 0x70, 0xc3, 0x61, 0x5e, 0x4d, 0x35, 0x9e, 0xe1,
-	0x5a, 0x8d, 0xcb, 0x5c, 0x1e, 0xe5, 0xde, 0xf7, 0x54, 0x2b, 0x6a, 0xe0, 0xe7, 0x94, 0x9c, 0xc7,
-	0xb3, 0xcc, 0x58, 0x98, 0x64, 0xd1, 0x1a, 0x8c, 0xf8, 0x5e, 0x36, 0x0a, 0x34, 0x76, 0x1c, 0xd0,
-	0xb0, 0xcf, 0x15, 0x42, 0x3d, 0x86, 0xf1, 0x26, 0x3f, 0xa2, 0x62, 0x21, 0x6c, 0x79, 0x9c, 0xa3,
-	0x15, 0x63, 0xca, 0xbd, 0xac, 0xf8, 0xce, 0xc5, 0xd7, 0x0b, 0x0f, 0x7c, 0x24, 0xe2, 0x76, 0xfc,
-	0x99, 0x28, 0x3c, 0x77, 0x2d, 0x21, 0xfc, 0xc4, 0x51, 0xf0, 0xdc, 0xa7, 0xb4, 0x85, 0x6f, 0x9a,
-	0x41, 0x3b, 0x30, 0xd3, 0x51, 0x63, 0x54, 0xef, 0x6e, 0x90, 0xf9, 0x3a, 0x85, 0x23, 0xf5, 0xc6,
-	0x5b, 0x61, 0xb2, 0xad, 0xe2, 0xf0, 0xb9, 0xc9, 0xaf, 0x12, 0x30, 0x20, 0x04, 0xcb, 0x34, 0x49,
-	0x08, 0x31, 0xd4, 0x24, 0xa9, 0x8d, 0x26, 0x79, 0x44, 0xa1, 0x26, 0x7d, 0x0f, 0x50, 0x20, 0xb5,
-	0x90, 0x33, 0xd1, 0xea, 0x74, 0x02, 0x21, 0x85, 0x9c, 0x0f, 0x60, 0xa4, 0x6e, 0x5a, 0x31, 0x93,
-	0xe8, 0x3d, 0xa1, 0x07, 0xac, 0x9b, 0x56, 0xb3, 0x4d, 0x30, 0x5c, 0xe6, 0xd1, 0x5e, 0xf2, 0xf6,
-	0x63, 0x0e, 0xad, 0x09, 0xf7, 0x1c, 0x0c, 0x61, 0x4b, 0xdb, 0xaa, 0x61, 0xd5, 0x3b, 0x03, 0x7e,
-	0xf1, 0xa5, 0x94, 0x8c, 0x37, 0x78, 0x9f, 0x8f, 0xad, 0x27, 0x53, 0x89, 0x7c, 0xef, 0x7a, 0x32,
-	0xd5, 0x9b, 0x4f, 0x16, 0xfe, 0xa2, 0x1f, 0xf2, 0x2b, 0x96, 0xb1, 0xcc, 0x03, 0xfc, 0x07, 0x98,
-	0xf0, 0x48, 0xef, 0x5d, 0xe8, 0x35, 0x0d, 0x97, 0x1f, 0xed, 0x60, 0xf9, 0xb5, 0xd6, 0xdd, 0xb4,
-	0x92, 0xaf, 0x85, 0x91, 0x6d, 0x9b, 0xe0, 0x8c, 0x21, 0xa1, 0x3b, 0x90, 0x13, 0x00, 0xea, 0x9e,
-	0xc7, 0xc4, 0x4f, 0x3f, 0x5b, 0x9e, 0x6c, 0x63, 0xd1, 0x02, 0x36, 0xf2, 0x9e, 0x59, 0x41, 0xe0,
-	0xef, 0x6f, 0x13, 0x46, 0x7c, 0x38, 0xe7, 0xe9, 0x41, 0x00, 0xd9, 0xdb, 0x1e, 0x72, 0xe3, 0xe6,
-	0x87, 0x71, 0xc8, 0x61, 0x41, 0xb0, 0xf1, 0xf4, 0xc0, 0x47, 0xbd, 0x0a, 0xc3, 0x81, 0x72, 0xa8,
-	0x4e, 0x4d, 0xb3, 0x54, 0xd3, 0xe0, 0x12, 0x49, 0xf3, 0x40, 0x80, 0x24, 0xe4, 0x1f, 0x28, 0xb9,
-	0x80, 0x62, 0xa3, 0xa6, 0x59, 0x6b, 0x06, 0x9a, 0x85, 0x7e, 0xe7, 0xa9, 0x4d, 0x6d, 0x57, 0xee,
-	0x9b, 0xed, 0x2d, 0xa6, 0x7d, 0xdf, 0x93, 0x07, 0x45, 0x8c, 0xa3, 0x22, 0xe4, 0xdd, 0x86, 0xe3,
-	0xd8, 0x84, 0xba, 0xaa, 0x5e, 0xd3, 0x5c, 0x57, 0xdd, 0xe2, 0xe1, 0x45, 0x4a, 0xc9, 0xfa, 0xe3,
-	0x4b, 0x6c, 0xb8, 0xda, 0x86, 0x52, 0xe7, 0xc1, 0x45, 0x2b, 0xe5, 0x12, 0xba, 0x03, 0xa3, 0x06,
-	0xde, 0xd6, 0x1a, 0x35, 0xaa, 0xd6, 0x35, 0x5d, 0x75, 0x31, 0xa5, 0x2c, 0xf4, 0x16, 0xe1, 0xe4,
-	0x54, 0x9b, 0x43, 0xbd, 0x27, 0x48, 0x14, 0x24, 0x18, 0xef, 0x68, 0xba, 0x3f, 0xc6, 0xb4, 0x86,
-	0x69, 0x79, 0x68, 0x1a, 0x2c, 0x0c, 0x49, 0x2a, 0x99, 0xba, 0x19, 0x71, 0xc7, 0x8c, 0x48, 0xdb,
-	0x8f, 0x10, 0x81, 0x20, 0xd2, 0xf6, 0x9b, 0x88, 0x82, 0x57, 0x60, 0xd7, 0x14, 0x8f, 0x15, 0x52,
-	0x4a, 0xc6, 0x1f, 0x5c, 0xb7, 0x4d, 0x0b, 0x5d, 0x01, 0x44, 0xb0, 0x8b, 0x05, 0x89, 0x6a, 0xd9,
-	0x96, 0x8e, 0x5d, 0x1e, 0x03, 0xa4, 0x94, 0xbc, 0x37, 0xc3, 0xe8, 0xee, 0xf2, 0x71, 0x84, 0xc1,
-	0xdf, 0xb2, 0xba, 0x6d, 0x93, 0xba, 0x46, 0x99, 0xaf, 0xe7, 0x01, 0x40, 0x1b, 0x27, 0x76, 0xc7,
-	0xcb, 0x80, 0x36, 0xb4, 0x83, 0x9a, 0xad, 0x19, 0xab, 0x01, 0x7d, 0x35, 0x13, 0x55, 0x4c, 0x65,
-	0x58, 0x20, 0x86, 0x04, 0x85, 0xff, 0x44, 0x30, 0x18, 0x39, 0x27, 0xf4, 0x43, 0xc8, 0x09, 0x69,
-	0x71, 0x17, 0x6f, 0x37, 0xa8, 0xb0, 0x87, 0x53, 0xb1, 0x60, 0x7d, 0x59, 0x64, 0x9f, 0xd5, 0xe4,
-	0x2f, 0x59, 0x9c, 0x3e, 0xc4, 0xf9, 0xaa, 0x9b, 0x1e, 0x17, 0x7a, 0x1f, 0xc6, 0x42, 0x4f, 0x19,
-	0xbd, 0xfe, 0x13, 0x1c, 0x2e, 0x76, 0xfd, 0x6f, 0x08, 0x5f, 0xe8, 0x5d, 0xee, 0xc2, 0x05, 0x3b,
-	0x4d, 0x83, 0xde, 0x8d, 0xff, 0xd1, 0x51, 0x97, 0x76, 0x6f, 0xd7, 0xce, 0xb7, 0xc3, 0xad, 0x7d,
-	0xb7, 0x7d, 0x3c, 0x91, 0xe4, 0xb8, 0xb1, 0xa8, 0x32, 0xd0, 0x00, 0x71, 0xdd, 0xc5, 0x43, 0x8c,
-	0xb5, 0x36, 0x51, 0xc0, 0xa9, 0xae, 0xc0, 0x62, 0x81, 0x41, 0x20, 0x1a, 0x3d, 0x10, 0x4d, 0xdf,
-	0x49, 0x44, 0xb3, 0xe4, 0x8b, 0xe6, 0xad, 0x68, 0xe8, 0xdd, 0xcf, 0x21, 0x4e, 0x77, 0x08, 0xbd,
-	0xbd, 0xad, 0x84, 0x51, 0xf7, 0x66, 0x87, 0xa8, 0x7b, 0xa0, 0xbd, 0x50, 0x9b, 0x03, 0x6b, 0x71,
-	0x48, 0xf1, 0x80, 0xfb, 0xbd, 0xf6, 0x01, 0x77, 0xaa, 0x6b, 0x61, 0xc6, 0x63, 0xed, 0xa5, 0xd6,
-	0x58, 0x3b, 0xdd, 0xd5, 0xa1, 0x37, 0x07, 0xe0, 0xab, 0x30, 0xb9, 0xad, 0xe9, 0xd4, 0x26, 0x07,
-	0xaa, 0xc3, 0x0d, 0x34, 0xc0, 0x33, 0xb1, 0x2b, 0xc3, 0x6c, 0x6f, 0x31, 0x19, 0x78, 0xbe, 0x1f,
-	0x29, 0xb2, 0xa0, 0xdd, 0xe0, 0xa4, 0xab, 0x21, 0x25, 0xba, 0x1b, 0x0b, 0xe4, 0x07, 0x3b, 0x04,
-	0x23, 0xf1, 0x40, 0x5e, 0xec, 0xab, 0x29, 0x86, 0xbf, 0x05, 0x63, 0x81, 0xbb, 0xb9, 0x5a, 0x56,
-	0xb7, 0x4c, 0x91, 0xfe, 0x73, 0x67, 0x72, 0x74, 0x40, 0xe6, 0xf3, 0x5d, 0x2d, 0x57, 0x4d, 0x5e,
-	0x1f, 0x40, 0x65, 0x18, 0x68, 0xb8, 0x58, 0xd5, 0x0c, 0x22, 0xbc, 0xcb, 0x11, 0xec, 0xfd, 0x0d,
-	0x17, 0x57, 0x0c, 0x82, 0xae, 0x03, 0x4b, 0x0d, 0xd5, 0xba, 0x46, 0x76, 0x4c, 0x8b, 0xe7, 0x0d,
-	0xcc, 0xfd, 0xb6, 0x6a, 0xe1, 0x6a, 0xcd, 0xd6, 0x84, 0xd0, 0xd3, 0x9a, 0x41, 0xee, 0x70, 0x6a,
-	0xf4, 0x36, 0x64, 0x84, 0x1b, 0xf4, 0xf6, 0x9c, 0x3b, 0x6e, 0x51, 0xf0, 0xc8, 0xf9, 0x66, 0xdf,
-	0x87, 0x09, 0x97, 0x6a, 0xb4, 0xe1, 0xc6, 0xb3, 0x97, 0x7c, 0x77, 0xb6, 0x30, 0xe6, 0xf1, 0xb7,
-	0x26, 0x2c, 0x0f, 0x40, 0x16, 0xc0, 0xf1, 0x84, 0x65, 0x58, 0x98, 0x48, 0x2b, 0xf2, 0xfd, 0x35,
-	0x8b, 0x5e, 0x2d, 0x7b, 0x9b, 0x1c, 0xf7, 0xb8, 0x63, 0xf9, 0xc9, 0x4d, 0x18, 0x36, 0xb0, 0x6b,
-	0x12, 0x6c, 0xa8, 0xa1, 0xcd, 0xa1, 0x2e, 0x6c, 0x2e, 0x27, 0xd8, 0x14, 0xdf, 0xf4, 0x74, 0x38,
-	0xdd, 0x84, 0xd4, 0x6a, 0x82, 0x23, 0xdd, 0x9b, 0xa0, 0x1c, 0xc1, 0x6e, 0xb6, 0xc4, 0x1f, 0xc1,
-	0x54, 0xb8, 0x48, 0xdc, 0x22, 0x47, 0xbb, 0xb6, 0xc8, 0x89, 0x60, 0x89, 0x16, 0xc3, 0x54, 0x60,
-	0x2c, 0xba, 0x42, 0x68, 0xa0, 0x63, 0x5d, 0x19, 0xe8, 0x48, 0x88, 0x1b, 0xda, 0xe9, 0x63, 0x18,
-	0xf7, 0x31, 0x5b, 0xec, 0x6c, 0xfc, 0x84, 0x76, 0xe6, 0xc3, 0xdf, 0x89, 0x9a, 0x5b, 0x0d, 0xa6,
-	0x7d, 0xf8, 0x0e, 0xa9, 0xcb, 0xc4, 0x09, 0x53, 0x97, 0x49, 0x81, 0x57, 0x69, 0x93, 0xc1, 0xb4,
-	0x59, 0xad, 0x25, 0x93, 0x91, 0x4f, 0x98, 0xc9, 0x34, 0xaf, 0xd6, 0x9c, 0xd0, 0xec, 0xc2, 0x59,
-	0x7f, 0xb5, 0xce, 0xb7, 0xea, 0x54, 0xd7, 0x62, 0xf7, 0x55, 0x74, 0xa3, 0xed, 0xe5, 0xfa, 0x38,
-	0xd4, 0xae, 0x76, 0x97, 0xec, 0xe9, 0xae, 0x34, 0x40, 0x6e, 0x59, 0x22, 0x54, 0x83, 0x0f, 0xc0,
-	0x9f, 0x53, 0x63, 0x77, 0xee, 0x99, 0xae, 0xb0, 0x7d, 0x35, 0xaa, 0xb6, 0x5c, 0xbd, 0x6b, 0x90,
-	0x8f, 0x2a, 0x18, 0x2f, 0xec, 0x4d, 0x73, 0xc4, 0x99, 0xd8, 0xa1, 0xf0, 0x1c, 0x61, 0x65, 0x4d,
-	0xd9, 0xf0, 0x20, 0xb3, 0xa1, 0x46, 0xad, 0x98, 0xc4, 0x29, 0xfc, 0x7e, 0x1c, 0x52, 0x2c, 0xe0,
-	0xa2, 0x1a, 0xc5, 0xe8, 0x21, 0x20, 0xbd, 0x41, 0x08, 0x66, 0x0e, 0x27, 0x48, 0xe8, 0x45, 0xc0,
-	0x75, 0xe6, 0xc8, 0xac, 0xbf, 0x35, 0xb2, 0x13, 0x30, 0x91, 0x22, 0xe4, 0x43, 0x16, 0x40, 0x8a,
-	0xc3, 0x0e, 0xb1, 0x13, 0xdf, 0x02, 0xdb, 0x3f, 0xf0, 0x10, 0xbb, 0x0a, 0x19, 0xaf, 0x37, 0xe2,
-	0x05, 0xec, 0x22, 0x05, 0x19, 0x6b, 0x45, 0xf5, 0x02, 0xfc, 0x30, 0xfb, 0x18, 0xf4, 0x98, 0xf8,
-	0x70, 0xbb, 0xe4, 0x28, 0xf9, 0x12, 0xc9, 0xd1, 0x63, 0x98, 0x0c, 0x0a, 0xd2, 0x26, 0xa9, 0x63,
-	0x23, 0xa8, 0x0b, 0xab, 0x9a, 0x1f, 0x28, 0x1d, 0x55, 0x70, 0x4e, 0xf2, 0x62, 0xf3, 0x84, 0x5f,
-	0xb8, 0xe6, 0x10, 0x7e, 0x49, 0xb8, 0x42, 0xd1, 0x35, 0x90, 0x39, 0xbc, 0x81, 0xf7, 0x54, 0x71,
-	0x51, 0x04, 0x15, 0x77, 0xaf, 0x40, 0x3e, 0xc2, 0xe6, 0x97, 0xf1, 0xde, 0x3d, 0x3e, 0x2b, 0x4a,
-	0xef, 0x1d, 0xa3, 0xe0, 0x81, 0x97, 0x8c, 0x82, 0x31, 0x9c, 0x76, 0xb0, 0x65, 0x30, 0xec, 0x76,
-	0xb5, 0x70, 0x11, 0x3b, 0x75, 0x57, 0x0a, 0x17, 0x40, 0x6d, 0xe6, 0xd0, 0x0a, 0xe4, 0x45, 0xc5,
-	0x9d, 0x60, 0xd7, 0xb1, 0x2d, 0x17, 0xfb, 0x55, 0xf6, 0x76, 0x52, 0x5a, 0xb2, 0xeb, 0x75, 0xcd,
-	0x32, 0x94, 0x9c, 0xc7, 0xa3, 0xf8, 0x2c, 0x0c, 0xc6, 0xdf, 0x2d, 0xb7, 0x29, 0x97, 0x7a, 0xe1,
-	0xd3, 0x31, 0x30, 0x82, 0x47, 0x11, 0x2c, 0xe8, 0x3d, 0x40, 0x62, 0x37, 0x3c, 0x83, 0xd2, 0x74,
-	0x1d, 0x3b, 0x54, 0xc4, 0x52, 0xe7, 0xda, 0x65, 0x7f, 0xcc, 0xc8, 0x4a, 0x2c, 0xa9, 0xaa, 0x70,
-	0x52, 0x45, 0xbc, 0x4c, 0x38, 0x82, 0x1e, 0xc0, 0xa8, 0xbf, 0x33, 0x8e, 0x29, 0xb6, 0x27, 0x22,
-	0xa9, 0xb9, 0x23, 0x41, 0xc5, 0xbe, 0x14, 0x24, 0x10, 0x22, 0x63, 0xe8, 0x75, 0x16, 0x28, 0xab,
-	0xcf, 0x4c, 0xcb, 0xb0, 0x9f, 0xb9, 0xaa, 0xb6, 0xa7, 0x99, 0x35, 0x6d, 0x4b, 0x54, 0x70, 0x53,
-	0x0a, 0x22, 0xfb, 0xef, 0x7b, 0x53, 0x15, 0x7f, 0x06, 0x2d, 0x43, 0x96, 0x60, 0x1d, 0x73, 0x95,
-	0xf2, 0xda, 0x19, 0x59, 0x7e, 0x42, 0x31, 0x5b, 0xf5, 0xca, 0x19, 0x22, 0xe5, 0x53, 0x86, 0x3c,
-	0x26, 0x6f, 0xd0, 0x45, 0xeb, 0x90, 0x17, 0x28, 0x61, 0x5b, 0x24, 0xc7, 0x71, 0xe2, 0x9e, 0x4a,
-	0x10, 0xf8, 0x48, 0x39, 0x8f, 0x31, 0xe8, 0x83, 0xa0, 0x1a, 0x14, 0xbc, 0xbe, 0x91, 0xd7, 0xd9,
-	0x52, 0x4d, 0xcb, 0xa4, 0x26, 0xbb, 0x34, 0x9b, 0x4c, 0x2b, 0xdf, 0xa5, 0x69, 0x4d, 0xf3, 0x56,
-	0x93, 0x07, 0xb5, 0xe6, 0x23, 0x45, 0x2c, 0x8c, 0xc0, 0x34, 0xc1, 0x1f, 0x63, 0x9d, 0x8a, 0x8b,
-	0xaf, 0xe5, 0x12, 0xc2, 0xae, 0x3c, 0x3c, 0xdb, 0x7b, 0x7c, 0x99, 0x28, 0x77, 0x58, 0xcd, 0xbc,
-	0x90, 0xd2, 0xf9, 0x5c, 0x41, 0x38, 0x8a, 0x49, 0x1f, 0xb5, 0xd2, 0xd2, 0x33, 0xc1, 0x2e, 0xda,
-	0x80, 0x33, 0x4d, 0x6b, 0x36, 0xb7, 0x4f, 0xb0, 0x2b, 0xa3, 0xd9, 0xde, 0xe2, 0x50, 0x35, 0x7b,
-	0x58, 0x1d, 0x7c, 0x21, 0xa5, 0xf2, 0xb9, 0x82, 0xd7, 0x17, 0x39, 0x15, 0x81, 0x8c, 0xf6, 0x53,
-	0xb0, 0x8b, 0x2a, 0x30, 0x1a, 0x20, 0x46, 0x93, 0x85, 0x11, 0x9e, 0x2c, 0x08, 0xa0, 0x82, 0x5f,
-	0x7a, 0x1b, 0xf1, 0x69, 0xa3, 0xd9, 0xc2, 0x3a, 0xe4, 0x3d, 0x57, 0x13, 0x39, 0xe4, 0xd1, 0x2e,
-	0x0f, 0x39, 0xcb, 0x9d, 0x50, 0x78, 0xa8, 0x36, 0x04, 0x7b, 0x8d, 0x1c, 0x28, 0xd1, 0xac, 0x1d,
-	0xec, 0xca, 0x63, 0x5c, 0x2f, 0xde, 0xe8, 0xa8, 0xe3, 0x8a, 0xe0, 0xf4, 0x4f, 0x4d, 0xe1, 0x6c,
-	0x2b, 0x16, 0x25, 0x07, 0xbc, 0x1e, 0xdf, 0x66, 0x32, 0xf0, 0x93, 0xec, 0x34, 0xf5, 0xa7, 0x6c,
-	0x2c, 0xf4, 0x93, 0xe3, 0xa1, 0x9f, 0xac, 0x18, 0x64, 0x89, 0xcf, 0x7a, 0x7e, 0x72, 0xf2, 0xcf,
-	0x12, 0x30, 0x18, 0x35, 0x9f, 0xfb, 0x10, 0x54, 0x25, 0xc3, 0x32, 0x4f, 0xbf, 0x38, 0x84, 0x56,
-	0xf9, 0xdf, 0xf6, 0xab, 0x17, 0x2d, 0x17, 0x57, 0xde, 0x87, 0x08, 0xaa, 0x1b, 0xff, 0x1f, 0x52,
-	0x64, 0x5f, 0x04, 0xe1, 0x03, 0xdd, 0xf6, 0x9c, 0x06, 0x88, 0x37, 0x84, 0x16, 0x60, 0x40, 0xdf,
-	0x56, 0x6b, 0xa6, 0xeb, 0x37, 0x30, 0xc7, 0x63, 0x17, 0xde, 0xea, 0x6d, 0xd3, 0xa5, 0x4a, 0xbf,
-	0xbe, 0xcd, 0xfe, 0x46, 0x1b, 0x89, 0xd1, 0xea, 0xe3, 0x7a, 0x32, 0x95, 0xcc, 0xf7, 0xad, 0x27,
-	0x53, 0x7d, 0xf9, 0xfe, 0xf5, 0x64, 0x2a, 0x9d, 0x87, 0xf5, 0x64, 0x0a, 0xf2, 0x83, 0x93, 0xbf,
-	0xee, 0x05, 0x88, 0xf8, 0xa6, 0x73, 0x30, 0xe0, 0x78, 0x15, 0x1d, 0x1e, 0x12, 0x64, 0x78, 0xd1,
-	0xf6, 0x93, 0x64, 0x7e, 0x58, 0x3e, 0xab, 0xf8, 0x33, 0x68, 0x19, 0x06, 0x7c, 0x9f, 0x95, 0xe8,
-	0xde, 0x67, 0x55, 0x93, 0xfc, 0x84, 0x7c, 0x56, 0xf4, 0x4e, 0xf7, 0x8d, 0xe8, 0xe6, 0x33, 0xf6,
-	0x9a, 0xd0, 0xd7, 0x20, 0xa7, 0xdb, 0x84, 0xe0, 0x9a, 0x77, 0x0b, 0x99, 0x86, 0x2b, 0x27, 0x79,
-	0x5d, 0x30, 0x73, 0x58, 0x4d, 0xbf, 0x90, 0xfa, 0x0b, 0x49, 0x92, 0x90, 0x0d, 0x25, 0x1b, 0x21,
-	0x5a, 0x33, 0xdc, 0xa6, 0xd6, 0x7a, 0xdf, 0x2b, 0x6e, 0xad, 0x6f, 0x42, 0xbf, 0x85, 0xa9, 0x6a,
-	0x1a, 0x5c, 0x6d, 0x32, 0xd5, 0x77, 0x04, 0xf2, 0xb5, 0x93, 0x22, 0xdf, 0xc5, 0x74, 0x6d, 0x59,
-	0xe9, 0xb3, 0x30, 0x5d, 0x33, 0x26, 0x7f, 0x2b, 0xc1, 0x50, 0x93, 0xc6, 0x77, 0x2a, 0x95, 0x4b,
-	0xdf, 0x51, 0xa9, 0x3c, 0xf1, 0x92, 0xa5, 0xf2, 0xc9, 0x87, 0x90, 0x6d, 0x31, 0xd9, 0x9b, 0xd0,
-	0x2f, 0x1c, 0x82, 0xc4, 0x1d, 0xc2, 0x85, 0x8e, 0x0a, 0xd4, 0xc4, 0x18, 0xe9, 0x37, 0x09, 0xfe,
-	0x49, 0x02, 0x53, 0x47, 0xf8, 0x0c, 0x94, 0x87, 0xde, 0x5d, 0x2c, 0x5a, 0x17, 0x0a, 0x7b, 0x44,
-	0xef, 0xf8, 0x0d, 0x75, 0x4f, 0x75, 0x2f, 0x76, 0xb7, 0xb2, 0x2b, 0x3a, 0xef, 0xd7, 0x13, 0xdf,
-	0x93, 0x0a, 0xff, 0x2c, 0xc1, 0x54, 0x50, 0x9a, 0xaf, 0x34, 0xe8, 0x53, 0x6c, 0x51, 0x11, 0xc5,
-	0x2c, 0xd9, 0x06, 0x46, 0xf3, 0xd1, 0x9e, 0x7d, 0xba, 0x3a, 0x71, 0x58, 0x1d, 0x25, 0xa8, 0x9c,
-	0x7f, 0xf2, 0xa8, 0x32, 0xff, 0xf0, 0xf5, 0xf9, 0xb7, 0x1e, 0x7f, 0xba, 0x78, 0xe5, 0x6a, 0xf9,
-	0xf9, 0x9c, 0x80, 0x44, 0x37, 0x00, 0xf8, 0x47, 0x3a, 0xea, 0x36, 0xb1, 0xeb, 0x62, 0x5b, 0xc7,
-	0xbb, 0xdd, 0x34, 0xe7, 0x59, 0x25, 0x76, 0x1d, 0xbd, 0x0d, 0x29, 0x0f, 0x80, 0xda, 0xc2, 0x9a,
-	0x8e, 0x67, 0x1f, 0xe0, 0x1c, 0x9b, 0x76, 0xe1, 0x1f, 0xcf, 0x40, 0x3a, 0x78, 0x19, 0x74, 0x33,
-	0xda, 0x8f, 0x98, 0xeb, 0xd8, 0x8f, 0xe8, 0xa2, 0x11, 0xb1, 0x04, 0xa0, 0x13, 0xac, 0x89, 0xaf,
-	0x2f, 0x12, 0x27, 0xf9, 0xfa, 0x42, 0xf0, 0x55, 0x28, 0x03, 0x69, 0x38, 0x86, 0x0f, 0xd2, 0x7b,
-	0x12, 0x10, 0xc1, 0x57, 0xa1, 0x68, 0x0a, 0x92, 0x96, 0x56, 0xc7, 0xcd, 0x0d, 0x86, 0xb2, 0xc2,
-	0x07, 0xd1, 0x65, 0x18, 0x34, 0xb0, 0xab, 0x13, 0xd3, 0x61, 0xe2, 0xe3, 0x2e, 0xc1, 0x6b, 0x2d,
-	0x90, 0x5e, 0xf9, 0xab, 0x9c, 0x12, 0x9d, 0x44, 0x9f, 0x4b, 0x00, 0x1a, 0xa5, 0xc4, 0xdc, 0x6a,
-	0x50, 0xcc, 0xee, 0x06, 0xa6, 0xba, 0x97, 0x3a, 0x1e, 0x52, 0xa9, 0x12, 0xd0, 0x72, 0x65, 0xac,
-	0x5e, 0x3b, 0xac, 0x96, 0x7f, 0x25, 0x2d, 0xe4, 0xa1, 0x30, 0x47, 0x0a, 0xf2, 0x5c, 0x79, 0xfa,
-	0xc9, 0x23, 0x6d, 0xfe, 0x13, 0xa6, 0x11, 0xc5, 0x1b, 0xd7, 0x1f, 0xcd, 0x3f, 0xbe, 0xe1, 0xff,
-	0xbc, 0xf4, 0x69, 0xf9, 0xca, 0xf3, 0xb9, 0xcb, 0x6c, 0x0f, 0x5f, 0x4a, 0x4a, 0x64, 0x4d, 0x74,
-	0x1b, 0x06, 0x45, 0xe6, 0xc2, 0x3d, 0xde, 0xc0, 0x89, 0xfb, 0x46, 0x0a, 0xec, 0xf9, 0x63, 0xcc,
-	0x87, 0x22, 0x17, 0x13, 0x9e, 0x54, 0x39, 0xc4, 0xde, 0x36, 0x6b, 0x98, 0x39, 0xaf, 0x54, 0x73,
-	0x23, 0x26, 0x2f, 0x48, 0x36, 0x3c, 0x8a, 0x35, 0x03, 0xfd, 0x93, 0x04, 0xe3, 0x7e, 0x80, 0xc6,
-	0x26, 0x31, 0xe1, 0xfe, 0x14, 0xbb, 0x2e, 0x2f, 0x79, 0xa6, 0xab, 0x7f, 0x23, 0x1d, 0x56, 0x7f,
-	0x2e, 0x91, 0x9f, 0x49, 0xe5, 0x3f, 0x97, 0x9e, 0x14, 0x6f, 0x5c, 0x67, 0xaf, 0xa7, 0xcd, 0x7f,
-	0x22, 0xd4, 0xff, 0xb3, 0xc8, 0x73, 0xf8, 0xf8, 0xd1, 0xfc, 0xe3, 0xcb, 0x91, 0x89, 0x4b, 0x1f,
-	0x95, 0x2e, 0x5d, 0x66, 0x7c, 0x95, 0xf9, 0x87, 0xe2, 0x54, 0x3e, 0x8b, 0x3c, 0x87, 0x8f, 0x9c,
-	0x2f, 0x9c, 0xb8, 0x54, 0xbc, 0x71, 0xfd, 0xfa, 0x23, 0x61, 0x65, 0xd7, 0x9e, 0x5f, 0xba, 0x31,
-	0xf7, 0xd9, 0x93, 0x39, 0x65, 0x54, 0x6c, 0xf7, 0x1e, 0xdf, 0x6d, 0xc5, 0xdb, 0x2c, 0xaa, 0x80,
-	0xdc, 0xf2, 0x1a, 0xbb, 0x78, 0x57, 0xad, 0x69, 0x5b, 0xb8, 0x26, 0x2f, 0x44, 0x15, 0xe1, 0xf3,
-	0xbc, 0x32, 0xd6, 0x84, 0x70, 0x0b, 0xef, 0xde, 0x66, 0x64, 0xe8, 0xf7, 0x12, 0x4c, 0x46, 0x93,
-	0xa1, 0x96, 0xe3, 0x80, 0x3f, 0xcd, 0xe3, 0x90, 0x23, 0x5b, 0x6e, 0x3e, 0x92, 0x35, 0x38, 0xdd,
-	0xe6, 0x75, 0xc2, 0x63, 0x79, 0xbd, 0xe5, 0x58, 0x4e, 0xc5, 0x90, 0x82, 0xa3, 0x79, 0x1b, 0xc6,
-	0xda, 0x40, 0x99, 0x86, 0xbc, 0x18, 0xd5, 0x2f, 0x43, 0x19, 0x89, 0x41, 0xac, 0x19, 0xe8, 0xb7,
-	0x12, 0x8c, 0xf0, 0xe4, 0xa8, 0xe5, 0x40, 0x07, 0xff, 0x34, 0x0f, 0x74, 0x98, 0xed, 0xb5, 0xf9,
-	0x24, 0x29, 0xa4, 0x6b, 0xb6, 0xf7, 0x56, 0xae, 0x9c, 0xe1, 0xae, 0xa2, 0xd8, 0xd9, 0x55, 0xdc,
-	0xf6, 0x49, 0x3d, 0x4f, 0x71, 0xe5, 0xb0, 0x7a, 0xe9, 0x57, 0xd2, 0x85, 0xee, 0xfc, 0x84, 0x12,
-	0x2e, 0x84, 0x16, 0x61, 0x40, 0x7c, 0x78, 0x28, 0x97, 0xb9, 0x6f, 0x98, 0x88, 0xa7, 0xfb, 0x7c,
-	0x5a, 0xf1, 0xe9, 0xda, 0x76, 0x4d, 0x87, 0xba, 0xee, 0x9a, 0x66, 0x3b, 0x74, 0x4d, 0x63, 0x85,
-	0x96, 0xdc, 0xab, 0xef, 0x42, 0xe7, 0xbf, 0x83, 0x2e, 0xf4, 0xf0, 0x31, 0x5d, 0xe8, 0x58, 0x03,
-	0x17, 0x75, 0xd3, 0xc0, 0x1d, 0xe9, 0xa6, 0x81, 0x3b, 0xda, 0x75, 0x03, 0x77, 0xac, 0x43, 0x03,
-	0xf7, 0x1a, 0xa4, 0x89, 0x6d, 0x53, 0x95, 0xc7, 0xd5, 0x5e, 0x1d, 0x5a, 0x8e, 0x25, 0x1b, 0xb6,
-	0x4d, 0x59, 0x50, 0xad, 0xa4, 0x88, 0x78, 0x42, 0x1b, 0x41, 0xdc, 0x3a, 0xc1, 0xe3, 0xd6, 0xb7,
-	0x5e, 0x36, 0x66, 0x45, 0xdf, 0x87, 0x4c, 0x53, 0xb7, 0x5c, 0x3e, 0xbe, 0x5b, 0x3e, 0x58, 0x8f,
-	0xb4, 0xc9, 0xaf, 0x41, 0x9a, 0xf3, 0xb3, 0x40, 0x4c, 0xf4, 0x2e, 0xe5, 0x4e, 0x81, 0x9a, 0x92,
-	0x62, 0x9c, 0xbc, 0xb6, 0xb9, 0x0c, 0xc3, 0x7e, 0x65, 0x25, 0x64, 0xbf, 0x72, 0x0c, 0xbb, 0x5f,
-	0xf2, 0xb9, 0xe3, 0xa3, 0x2c, 0xc2, 0x80, 0xeb, 0x25, 0x1f, 0xf2, 0x64, 0x7b, 0x1b, 0x12, 0xb9,
-	0x89, 0xe2, 0xd3, 0xa1, 0x1f, 0x80, 0x8f, 0xa2, 0xfa, 0xac, 0x53, 0x47, 0xb3, 0x66, 0x05, 0xbd,
-	0xff, 0xc9, 0xef, 0x1c, 0x64, 0x83, 0x62, 0x1f, 0x97, 0x32, 0x2f, 0x4d, 0x0f, 0x29, 0x19, 0x51,
-	0xe2, 0xe3, 0x12, 0x46, 0x17, 0x20, 0xd7, 0x70, 0xb1, 0x11, 0x52, 0xb9, 0xf2, 0x99, 0xd9, 0xde,
-	0xe2, 0x90, 0x32, 0xc4, 0x86, 0x7d, 0x32, 0x97, 0xd1, 0x71, 0xb4, 0x50, 0x69, 0x78, 0xed, 0x58,
-	0x7c, 0x52, 0x1b, 0x68, 0x0c, 0x3a, 0x2f, 0xe8, 0xc8, 0xc7, 0xa2, 0x07, 0xf5, 0xba, 0x3c, 0x13,
-	0x2e, 0xab, 0x7c, 0xcc, 0x7b, 0x4b, 0xaf, 0xc7, 0xc9, 0x16, 0xe5, 0xd9, 0x18, 0xd9, 0x22, 0x7a,
-	0x02, 0x53, 0xad, 0x05, 0x4b, 0x82, 0x75, 0x6c, 0xee, 0x79, 0xe1, 0xdb, 0xd9, 0x93, 0x14, 0x44,
-	0x83, 0xaa, 0xa6, 0x22, 0x10, 0x2a, 0x14, 0xad, 0xc0, 0xa0, 0x57, 0x2a, 0xf1, 0x04, 0x5b, 0xe8,
-	0x60, 0xfe, 0x8c, 0x84, 0x4b, 0x32, 0x62, 0xfe, 0xe0, 0x04, 0xa3, 0xe8, 0x11, 0xa0, 0x2d, 0xfe,
-	0x29, 0xc2, 0x81, 0xea, 0x60, 0xa2, 0x63, 0x8b, 0x6a, 0x3b, 0x58, 0x3e, 0x77, 0x6c, 0x47, 0x91,
-	0xd7, 0x79, 0x00, 0xce, 0xf4, 0xf4, 0x7c, 0x7e, 0x63, 0xbe, 0xa7, 0xa7, 0xa7, 0x47, 0x19, 0x16,
-	0x38, 0x1b, 0x01, 0x0c, 0xba, 0x08, 0xb9, 0xa0, 0x8a, 0x20, 0x7a, 0x95, 0x73, 0xb3, 0x52, 0xb1,
-	0x4f, 0xc9, 0xfa, 0xc3, 0xa2, 0x27, 0x79, 0xdc, 0x87, 0xc5, 0xc5, 0x57, 0xf2, 0x61, 0x31, 0xba,
-	0x09, 0x10, 0xf9, 0x96, 0xe3, 0xd2, 0xc9, 0xbe, 0xe5, 0x50, 0x22, 0xbc, 0xe8, 0x3d, 0xc8, 0x3a,
-	0xc4, 0xde, 0x33, 0x99, 0xba, 0x7a, 0x17, 0xf9, 0x65, 0xee, 0x2b, 0x2f, 0x1f, 0x56, 0x2f, 0x92,
-	0xf3, 0xf2, 0x5c, 0xf9, 0xec, 0xd1, 0xd7, 0x14, 0xbb, 0x27, 0x87, 0x22, 0x08, 0x6b, 0x06, 0xb7,
-	0x57, 0x7f, 0x80, 0xd9, 0x0e, 0xcb, 0x3c, 0xe5, 0xd7, 0x84, 0xe1, 0xb4, 0x0a, 0xe2, 0x1e, 0xff,
-	0xbf, 0x01, 0x25, 0x1f, 0xe5, 0x60, 0x39, 0x1a, 0x3a, 0x0d, 0xe9, 0x7a, 0xa3, 0xc6, 0x32, 0x30,
-	0x97, 0xca, 0xf3, 0xdc, 0x35, 0x86, 0x03, 0x68, 0x07, 0x4e, 0xe9, 0x35, 0xcd, 0xac, 0xab, 0x5a,
-	0x53, 0xa2, 0xa6, 0xea, 0xb6, 0x81, 0xe5, 0xd2, 0x31, 0xf1, 0x73, 0x3c, 0xb9, 0x53, 0x26, 0x38,
-	0x5a, 0x9b, 0xac, 0xaf, 0x04, 0x23, 0xee, 0xae, 0xe9, 0xa8, 0xa2, 0x4a, 0xa2, 0xea, 0xe4, 0xc0,
-	0xa1, 0xb6, 0x7c, 0x95, 0x6f, 0x68, 0x98, 0x4d, 0x89, 0xf3, 0x5d, 0xe2, 0x13, 0xe8, 0x11, 0x9c,
-	0x6e, 0x43, 0xaf, 0xda, 0x7b, 0x98, 0x10, 0xd3, 0xc0, 0xf2, 0x1b, 0x1d, 0xcc, 0x25, 0xec, 0x52,
-	0x9f, 0x8a, 0x81, 0xbe, 0x2b, 0x98, 0xd1, 0x12, 0x64, 0x34, 0x9d, 0x9a, 0x7b, 0x7e, 0xea, 0x74,
-	0xad, 0x4b, 0xdb, 0x1b, 0x0c, 0xb8, 0x2a, 0x74, 0xf2, 0x1d, 0xc8, 0xb5, 0xa4, 0x30, 0xd1, 0x7c,
-	0x3a, 0xed, 0xe5, 0xd3, 0xa3, 0xd1, 0x7c, 0x3a, 0x1d, 0x49, 0x93, 0x27, 0x1f, 0x40, 0xb6, 0x39,
-	0xac, 0x69, 0xc3, 0x5d, 0x6a, 0xce, 0xc6, 0x63, 0x5e, 0xda, 0x07, 0x88, 0xe0, 0xae, 0x27, 0x53,
-	0xe7, 0xf3, 0x17, 0xd6, 0x93, 0xa9, 0x0b, 0xf9, 0x8b, 0xeb, 0xc9, 0xd4, 0xc5, 0x7c, 0xb1, 0x70,
-	0x13, 0x20, 0x10, 0x99, 0x8b, 0xae, 0xc3, 0x60, 0xf8, 0x9f, 0x34, 0x7e, 0x85, 0xe1, 0x54, 0x47,
-	0x19, 0x2b, 0x80, 0x03, 0xde, 0xc2, 0x4f, 0x25, 0x18, 0x12, 0x75, 0x9d, 0x0d, 0x82, 0xb7, 0xcd,
-	0x7d, 0xf4, 0x20, 0x52, 0x30, 0xf2, 0x4a, 0x62, 0x6f, 0xbf, 0x92, 0x62, 0xd1, 0x38, 0xf4, 0xd7,
-	0xb0, 0xb5, 0x43, 0x9f, 0xf2, 0x57, 0x1f, 0x52, 0xc4, 0x2f, 0xaf, 0x80, 0x57, 0x30, 0x60, 0x7c,
-	0x89, 0x67, 0xc1, 0xe1, 0x36, 0x45, 0xd9, 0x6c, 0x1d, 0x20, 0x7c, 0xbb, 0xe0, 0x43, 0xa9, 0x4e,
-	0x2f, 0xd7, 0x26, 0x3b, 0x4f, 0x07, 0xaf, 0x5b, 0xf8, 0xb5, 0x04, 0xe3, 0xf7, 0x79, 0x9e, 0xfc,
-	0x5d, 0x2e, 0x83, 0xde, 0x02, 0x08, 0xff, 0x2d, 0xa8, 0x63, 0x29, 0x60, 0x95, 0x91, 0xdc, 0xd1,
-	0xdc, 0x5d, 0x25, 0xbd, 0xed, 0x3f, 0x16, 0xfe, 0x4e, 0x82, 0x91, 0x1f, 0x62, 0x1a, 0xdb, 0xde,
-	0x47, 0x90, 0x0d, 0xb7, 0xa7, 0xbe, 0x7c, 0xc9, 0x22, 0x83, 0x43, 0x3a, 0xf7, 0x65, 0x36, 0xfc,
-	0xaf, 0x12, 0x9c, 0x8f, 0x6e, 0x38, 0xb2, 0xec, 0xaa, 0x4d, 0x56, 0xee, 0xaf, 0xb9, 0xfe, 0x2b,
-	0x7c, 0x00, 0x29, 0x7e, 0x3d, 0xe3, 0x86, 0x29, 0x14, 0xeb, 0x5b, 0xd7, 0x0b, 0x57, 0xee, 0xaf,
-	0xbd, 0xf9, 0x86, 0x32, 0xc0, 0xe0, 0x56, 0x1a, 0x26, 0x7a, 0x00, 0x4c, 0xcb, 0x38, 0x70, 0xe2,
-	0x55, 0x00, 0xf7, 0x1b, 0x78, 0x6f, 0xa5, 0x61, 0x16, 0xfe, 0xaa, 0x17, 0xc6, 0x6e, 0x9b, 0x6e,
-	0xf8, 0x72, 0xc1, 0xbb, 0x68, 0x90, 0x8b, 0xde, 0x62, 0xa1, 0x3c, 0x2e, 0x1c, 0x71, 0x7f, 0x1d,
-	0x2d, 0x91, 0xac, 0x16, 0xa5, 0x7c, 0x19, 0x99, 0xa0, 0x2f, 0x24, 0xe8, 0xb3, 0x89, 0x81, 0x09,
-	0xaf, 0x20, 0xa5, 0xab, 0x7f, 0x29, 0x1d, 0x56, 0x7f, 0x2a, 0x91, 0x9f, 0x48, 0x4a, 0x8f, 0x92,
-	0x0e, 0x54, 0x48, 0x81, 0xf9, 0xf0, 0x39, 0x10, 0x8d, 0x92, 0x9e, 0x0f, 0x1e, 0xfd, 0x53, 0x55,
-	0x52, 0xf3, 0xfe, 0x13, 0x2f, 0x22, 0x29, 0x7d, 0xf3, 0xfc, 0x4f, 0xb4, 0x58, 0xa4, 0x64, 0xe6,
-	0xa3, 0xbf, 0x22, 0xb5, 0x30, 0x65, 0x70, 0x3e, 0xf2, 0xc3, 0xdb, 0x18, 0x9a, 0x86, 0x3e, 0xef,
-	0x5f, 0x5c, 0xf8, 0xbf, 0x52, 0xf1, 0xc0, 0xe5, 0x72, 0xaf, 0xfc, 0xc7, 0x01, 0xc5, 0x1b, 0x46,
-	0x08, 0x92, 0x0e, 0x8b, 0x52, 0xbc, 0x7f, 0xa1, 0xe2, 0xcf, 0x85, 0x5f, 0x4a, 0x30, 0x72, 0xaf,
-	0x8d, 0x6d, 0xac, 0x9e, 0xcc, 0x74, 0x9b, 0x8b, 0xeb, 0xaf, 0xc6, 0x6c, 0xff, 0x41, 0x82, 0x29,
-	0x85, 0x65, 0x27, 0x15, 0xcb, 0xf8, 0x3f, 0x65, 0xbe, 0xbf, 0x93, 0x60, 0x38, 0x58, 0x73, 0x13,
-	0xd7, 0x9d, 0x1a, 0x8b, 0x18, 0xff, 0xf7, 0x4f, 0x14, 0x15, 0x61, 0xb0, 0xae, 0x39, 0xbc, 0xb1,
-	0xcf, 0xae, 0xd0, 0xde, 0xe6, 0x1a, 0x0a, 0x88, 0xb9, 0x5b, 0xf8, 0xa0, 0xf0, 0x1b, 0x09, 0x26,
-	0x62, 0xaf, 0xe0, 0xc5, 0x74, 0x41, 0x29, 0x54, 0x6a, 0x66, 0x6f, 0x5b, 0x0a, 0x4d, 0x44, 0x4b,
-	0x3d, 0x5f, 0x4a, 0xcd, 0xa5, 0xd0, 0x4d, 0xc8, 0xf1, 0x72, 0x21, 0xde, 0xa7, 0xd8, 0x72, 0x79,
-	0x8d, 0xa3, 0x97, 0x77, 0x5f, 0x5e, 0x3b, 0xac, 0x16, 0x5f, 0x48, 0xe7, 0xf3, 0x86, 0x2c, 0x15,
-	0x66, 0xc8, 0x99, 0xf2, 0xd4, 0x93, 0xe2, 0x8d, 0xeb, 0x1f, 0x95, 0xfc, 0x50, 0xf0, 0xd3, 0xc5,
-	0x2b, 0x8b, 0x6f, 0x3e, 0xbf, 0xf4, 0xe9, 0xe2, 0x95, 0xf2, 0xf3, 0x39, 0x25, 0xcb, 0x30, 0x56,
-	0x02, 0x88, 0xc2, 0x7f, 0x4b, 0x20, 0x77, 0xd8, 0xba, 0x8b, 0x9e, 0xc3, 0x80, 0x17, 0x8d, 0xfa,
-	0x57, 0xfa, 0xb5, 0x8e, 0x12, 0x68, 0x61, 0x2d, 0x89, 0xbf, 0xdf, 0xa6, 0xb6, 0xe2, 0xaf, 0x39,
-	0xa9, 0x43, 0x26, 0x0a, 0xd3, 0x26, 0x96, 0x39, 0xae, 0xb3, 0xd0, 0x61, 0x7b, 0xd1, 0xce, 0xc2,
-	0xa7, 0x30, 0xb3, 0x64, 0x5b, 0x7b, 0x98, 0xd0, 0x18, 0xb1, 0x6f, 0x3a, 0xcb, 0x90, 0xf6, 0xb6,
-	0xc4, 0x22, 0x70, 0x4f, 0x8e, 0x17, 0x0f, 0xab, 0xdd, 0xbd, 0x4c, 0xca, 0xe3, 0x5c, 0x33, 0x98,
-	0x3f, 0xe1, 0xc1, 0x36, 0xbf, 0x1f, 0x14, 0xfe, 0x7c, 0x79, 0x15, 0x20, 0xcc, 0x9d, 0xd0, 0x30,
-	0x0c, 0x6d, 0xbc, 0xfb, 0xfe, 0x8a, 0xa2, 0xde, 0xbf, 0x7b, 0xeb, 0xee, 0xbb, 0xef, 0xdf, 0xcd,
-	0xf7, 0x84, 0x43, 0xd5, 0xca, 0xe6, 0xe6, 0x8a, 0xf2, 0x61, 0x5e, 0x42, 0x08, 0xb2, 0xde, 0xd0,
-	0xca, 0x07, 0x9b, 0x2b, 0xca, 0xdd, 0xca, 0xed, 0x7c, 0xa2, 0x7a, 0xe7, 0x5f, 0xfe, 0x63, 0xba,
-	0xe7, 0xf3, 0x6f, 0xa6, 0xa5, 0xbf, 0xfd, 0x66, 0x5a, 0xfa, 0xe3, 0x37, 0xd3, 0x3d, 0xff, 0xf5,
-	0xcd, 0xb4, 0xf4, 0x8b, 0x3f, 0x4c, 0xf7, 0xfc, 0xee, 0x0f, 0xd3, 0xd2, 0xc3, 0x85, 0x13, 0xdc,
-	0x41, 0xd4, 0x72, 0xb6, 0xb6, 0xfa, 0xb9, 0x61, 0x5c, 0xfd, 0x9f, 0x00, 0x00, 0x00, 0xff, 0xff,
-	0x41, 0xf2, 0x14, 0xd2, 0x31, 0x3d, 0x00, 0x00,
-}
-
-func (x PowerState) String() string {
-	s, ok := PowerState_name[int32(x)]
-	if ok {
-		return s
-	}
-	return strconv.Itoa(int(x))
-}
-func (this *Session) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*Session)
-	if !ok {
-		that2, ok := that.(Session)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.DevAddr.Equal(that1.DevAddr) {
-		return false
-	}
-	if !this.SessionKeys.Equal(&that1.SessionKeys) {
-		return false
-	}
-	if this.LastFCntUp != that1.LastFCntUp {
-		return false
-	}
-	if this.LastNFCntDown != that1.LastNFCntDown {
-		return false
-	}
-	if this.LastAFCntDown != that1.LastAFCntDown {
-		return false
-	}
-	if this.LastConfFCntDown != that1.LastConfFCntDown {
-		return false
-	}
-	if !this.StartedAt.Equal(that1.StartedAt) {
-		return false
-	}
-	if len(this.QueuedApplicationDownlinks) != len(that1.QueuedApplicationDownlinks) {
-		return false
-	}
-	for i := range this.QueuedApplicationDownlinks {
-		if !this.QueuedApplicationDownlinks[i].Equal(that1.QueuedApplicationDownlinks[i]) {
-			return false
-		}
-	}
-	return true
-}
-func (this *BoolValue) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*BoolValue)
-	if !ok {
-		that2, ok := that.(BoolValue)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.Value != that1.Value {
-		return false
-	}
-	return true
-}
-func (this *MACParameters) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*MACParameters)
-	if !ok {
-		that2, ok := that.(MACParameters)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.MaxEirp != that1.MaxEirp {
-		return false
-	}
-	if this.AdrDataRateIndex != that1.AdrDataRateIndex {
-		return false
-	}
-	if this.AdrTxPowerIndex != that1.AdrTxPowerIndex {
-		return false
-	}
-	if this.AdrNbTrans != that1.AdrNbTrans {
-		return false
-	}
-	if this.AdrAckLimit != that1.AdrAckLimit {
-		return false
-	}
-	if this.AdrAckDelay != that1.AdrAckDelay {
-		return false
-	}
-	if this.Rx1Delay != that1.Rx1Delay {
-		return false
-	}
-	if this.Rx1DataRateOffset != that1.Rx1DataRateOffset {
-		return false
-	}
-	if this.Rx2DataRateIndex != that1.Rx2DataRateIndex {
-		return false
-	}
-	if this.Rx2Frequency != that1.Rx2Frequency {
-		return false
-	}
-	if this.MaxDutyCycle != that1.MaxDutyCycle {
-		return false
-	}
-	if this.RejoinTimePeriodicity != that1.RejoinTimePeriodicity {
-		return false
-	}
-	if this.RejoinCountPeriodicity != that1.RejoinCountPeriodicity {
-		return false
-	}
-	if this.PingSlotFrequency != that1.PingSlotFrequency {
-		return false
-	}
-	if this.PingSlotDataRateIndex != that1.PingSlotDataRateIndex {
-		return false
-	}
-	if this.BeaconFrequency != that1.BeaconFrequency {
-		return false
-	}
-	if len(this.Channels) != len(that1.Channels) {
-		return false
-	}
-	for i := range this.Channels {
-		if !this.Channels[i].Equal(that1.Channels[i]) {
-			return false
-		}
-	}
-	if !this.UplinkDwellTime.Equal(that1.UplinkDwellTime) {
-		return false
-	}
-	if !this.DownlinkDwellTime.Equal(that1.DownlinkDwellTime) {
-		return false
-	}
-	if !this.AdrAckLimitExponent.Equal(that1.AdrAckLimitExponent) {
-		return false
-	}
-	if !this.AdrAckDelayExponent.Equal(that1.AdrAckDelayExponent) {
-		return false
-	}
-	if !this.PingSlotDataRateIndexValue.Equal(that1.PingSlotDataRateIndexValue) {
-		return false
-	}
-	return true
-}
-func (this *MACParameters_Channel) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*MACParameters_Channel)
-	if !ok {
-		that2, ok := that.(MACParameters_Channel)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.UplinkFrequency != that1.UplinkFrequency {
-		return false
-	}
-	if this.DownlinkFrequency != that1.DownlinkFrequency {
-		return false
-	}
-	if this.MinDataRateIndex != that1.MinDataRateIndex {
-		return false
-	}
-	if this.MaxDataRateIndex != that1.MaxDataRateIndex {
-		return false
-	}
-	if this.EnableUplink != that1.EnableUplink {
-		return false
-	}
-	return true
-}
-func (this *EndDeviceVersion) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*EndDeviceVersion)
-	if !ok {
-		that2, ok := that.(EndDeviceVersion)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.EndDeviceVersionIdentifiers.Equal(&that1.EndDeviceVersionIdentifiers) {
-		return false
-	}
-	if this.LorawanVersion != that1.LorawanVersion {
-		return false
-	}
-	if this.LorawanPhyVersion != that1.LorawanPhyVersion {
-		return false
-	}
-	if this.FrequencyPlanId != that1.FrequencyPlanId {
-		return false
-	}
-	if len(this.Photos) != len(that1.Photos) {
-		return false
-	}
-	for i := range this.Photos {
-		if this.Photos[i] != that1.Photos[i] {
-			return false
-		}
-	}
-	if this.SupportsClassB != that1.SupportsClassB {
-		return false
-	}
-	if this.SupportsClassC != that1.SupportsClassC {
-		return false
-	}
-	if !this.DefaultMacSettings.Equal(that1.DefaultMacSettings) {
-		return false
-	}
-	if this.MinFrequency != that1.MinFrequency {
-		return false
-	}
-	if this.MaxFrequency != that1.MaxFrequency {
-		return false
-	}
-	if this.SupportsJoin != that1.SupportsJoin {
-		return false
-	}
-	if this.ResetsJoinNonces != that1.ResetsJoinNonces {
-		return false
-	}
-	if !this.DefaultFormatters.Equal(&that1.DefaultFormatters) {
-		return false
-	}
-	return true
-}
-func (this *MACSettings) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*MACSettings)
-	if !ok {
-		that2, ok := that.(MACSettings)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.ClassBTimeout != nil && that1.ClassBTimeout != nil {
-		if *this.ClassBTimeout != *that1.ClassBTimeout {
-			return false
-		}
-	} else if this.ClassBTimeout != nil {
-		return false
-	} else if that1.ClassBTimeout != nil {
-		return false
-	}
-	if !this.PingSlotPeriodicity.Equal(that1.PingSlotPeriodicity) {
-		return false
-	}
-	if !this.PingSlotDataRateIndex.Equal(that1.PingSlotDataRateIndex) {
-		return false
-	}
-	if !this.PingSlotFrequency.Equal(that1.PingSlotFrequency) {
-		return false
-	}
-	if !this.BeaconFrequency.Equal(that1.BeaconFrequency) {
-		return false
-	}
-	if this.ClassCTimeout != nil && that1.ClassCTimeout != nil {
-		if *this.ClassCTimeout != *that1.ClassCTimeout {
-			return false
-		}
-	} else if this.ClassCTimeout != nil {
-		return false
-	} else if that1.ClassCTimeout != nil {
-		return false
-	}
-	if !this.Rx1Delay.Equal(that1.Rx1Delay) {
-		return false
-	}
-	if !this.Rx1DataRateOffset.Equal(that1.Rx1DataRateOffset) {
-		return false
-	}
-	if !this.Rx2DataRateIndex.Equal(that1.Rx2DataRateIndex) {
-		return false
-	}
-	if !this.Rx2Frequency.Equal(that1.Rx2Frequency) {
-		return false
-	}
-	if len(this.FactoryPresetFrequencies) != len(that1.FactoryPresetFrequencies) {
-		return false
-	}
-	for i := range this.FactoryPresetFrequencies {
-		if this.FactoryPresetFrequencies[i] != that1.FactoryPresetFrequencies[i] {
-			return false
-		}
-	}
-	if !this.MaxDutyCycle.Equal(that1.MaxDutyCycle) {
-		return false
-	}
-	if !this.Supports_32BitFCnt.Equal(that1.Supports_32BitFCnt) {
-		return false
-	}
-	if !this.UseAdr.Equal(that1.UseAdr) {
-		return false
-	}
-	if !this.AdrMargin.Equal(that1.AdrMargin) {
-		return false
-	}
-	if !this.ResetsFCnt.Equal(that1.ResetsFCnt) {
-		return false
-	}
-	if this.StatusTimePeriodicity != nil && that1.StatusTimePeriodicity != nil {
-		if *this.StatusTimePeriodicity != *that1.StatusTimePeriodicity {
-			return false
-		}
-	} else if this.StatusTimePeriodicity != nil {
-		return false
-	} else if that1.StatusTimePeriodicity != nil {
-		return false
-	}
-	if !this.StatusCountPeriodicity.Equal(that1.StatusCountPeriodicity) {
-		return false
-	}
-	if !this.DesiredRx1Delay.Equal(that1.DesiredRx1Delay) {
-		return false
-	}
-	if !this.DesiredRx1DataRateOffset.Equal(that1.DesiredRx1DataRateOffset) {
-		return false
-	}
-	if !this.DesiredRx2DataRateIndex.Equal(that1.DesiredRx2DataRateIndex) {
-		return false
-	}
-	if !this.DesiredRx2Frequency.Equal(that1.DesiredRx2Frequency) {
-		return false
-	}
-	if !this.DesiredMaxDutyCycle.Equal(that1.DesiredMaxDutyCycle) {
-		return false
-	}
-	if !this.DesiredAdrAckLimitExponent.Equal(that1.DesiredAdrAckLimitExponent) {
-		return false
-	}
-	if !this.DesiredAdrAckDelayExponent.Equal(that1.DesiredAdrAckDelayExponent) {
-		return false
-	}
-	if !this.DesiredPingSlotDataRateIndex.Equal(that1.DesiredPingSlotDataRateIndex) {
-		return false
-	}
-	if !this.DesiredPingSlotFrequency.Equal(that1.DesiredPingSlotFrequency) {
-		return false
-	}
-	if !this.DesiredBeaconFrequency.Equal(that1.DesiredBeaconFrequency) {
-		return false
-	}
-	if !this.DesiredMaxEirp.Equal(that1.DesiredMaxEirp) {
-		return false
-	}
-	return true
-}
-func (this *MACState) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*MACState)
-	if !ok {
-		that2, ok := that.(MACState)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.CurrentParameters.Equal(&that1.CurrentParameters) {
-		return false
-	}
-	if !this.DesiredParameters.Equal(&that1.DesiredParameters) {
-		return false
-	}
-	if this.DeviceClass != that1.DeviceClass {
-		return false
-	}
-	if this.LorawanVersion != that1.LorawanVersion {
-		return false
-	}
-	if that1.LastConfirmedDownlinkAt == nil {
-		if this.LastConfirmedDownlinkAt != nil {
-			return false
-		}
-	} else if !this.LastConfirmedDownlinkAt.Equal(*that1.LastConfirmedDownlinkAt) {
-		return false
-	}
-	if this.LastDevStatusFCntUp != that1.LastDevStatusFCntUp {
-		return false
-	}
-	if !this.PingSlotPeriodicity.Equal(that1.PingSlotPeriodicity) {
-		return false
-	}
-	if !this.PendingApplicationDownlink.Equal(that1.PendingApplicationDownlink) {
-		return false
-	}
-	if len(this.QueuedResponses) != len(that1.QueuedResponses) {
-		return false
-	}
-	for i := range this.QueuedResponses {
-		if !this.QueuedResponses[i].Equal(that1.QueuedResponses[i]) {
-			return false
-		}
-	}
-	if len(this.PendingRequests) != len(that1.PendingRequests) {
-		return false
-	}
-	for i := range this.PendingRequests {
-		if !this.PendingRequests[i].Equal(that1.PendingRequests[i]) {
-			return false
-		}
-	}
-	if !this.QueuedJoinAccept.Equal(that1.QueuedJoinAccept) {
-		return false
-	}
-	if !this.PendingJoinRequest.Equal(that1.PendingJoinRequest) {
-		return false
-	}
-	if this.RxWindowsAvailable != that1.RxWindowsAvailable {
-		return false
-	}
-	if len(this.RecentUplinks) != len(that1.RecentUplinks) {
-		return false
-	}
-	for i := range this.RecentUplinks {
-		if !this.RecentUplinks[i].Equal(that1.RecentUplinks[i]) {
-			return false
-		}
-	}
-	if len(this.RecentDownlinks) != len(that1.RecentDownlinks) {
-		return false
-	}
-	for i := range this.RecentDownlinks {
-		if !this.RecentDownlinks[i].Equal(that1.RecentDownlinks[i]) {
-			return false
-		}
-	}
-	if that1.LastNetworkInitiatedDownlinkAt == nil {
-		if this.LastNetworkInitiatedDownlinkAt != nil {
-			return false
-		}
-	} else if !this.LastNetworkInitiatedDownlinkAt.Equal(*that1.LastNetworkInitiatedDownlinkAt) {
-		return false
-	}
-	if len(this.RejectedAdrDataRateIndexes) != len(that1.RejectedAdrDataRateIndexes) {
-		return false
-	}
-	for i := range this.RejectedAdrDataRateIndexes {
-		if this.RejectedAdrDataRateIndexes[i] != that1.RejectedAdrDataRateIndexes[i] {
-			return false
-		}
-	}
-	if len(this.RejectedAdrTxPowerIndexes) != len(that1.RejectedAdrTxPowerIndexes) {
-		return false
-	}
-	for i := range this.RejectedAdrTxPowerIndexes {
-		if this.RejectedAdrTxPowerIndexes[i] != that1.RejectedAdrTxPowerIndexes[i] {
-			return false
-		}
-	}
-	if len(this.RejectedFrequencies) != len(that1.RejectedFrequencies) {
-		return false
-	}
-	for i := range this.RejectedFrequencies {
-		if this.RejectedFrequencies[i] != that1.RejectedFrequencies[i] {
-			return false
-		}
-	}
-	if that1.LastDownlinkAt == nil {
-		if this.LastDownlinkAt != nil {
-			return false
-		}
-	} else if !this.LastDownlinkAt.Equal(*that1.LastDownlinkAt) {
-		return false
-	}
-	if len(this.RejectedDataRateRanges) != len(that1.RejectedDataRateRanges) {
-		return false
-	}
-	for i := range this.RejectedDataRateRanges {
-		if !this.RejectedDataRateRanges[i].Equal(that1.RejectedDataRateRanges[i]) {
-			return false
-		}
-	}
-	if this.LastAdrChangeFCntUp != that1.LastAdrChangeFCntUp {
-		return false
-	}
-	return true
-}
-func (this *MACState_JoinRequest) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*MACState_JoinRequest)
-	if !ok {
-		that2, ok := that.(MACState_JoinRequest)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.DownlinkSettings.Equal(&that1.DownlinkSettings) {
-		return false
-	}
-	if this.RxDelay != that1.RxDelay {
-		return false
-	}
-	if !this.CfList.Equal(that1.CfList) {
-		return false
-	}
-	return true
-}
-func (this *MACState_JoinAccept) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*MACState_JoinAccept)
-	if !ok {
-		that2, ok := that.(MACState_JoinAccept)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !bytes.Equal(this.Payload, that1.Payload) {
-		return false
-	}
-	if !this.Request.Equal(&that1.Request) {
-		return false
-	}
-	if !this.Keys.Equal(&that1.Keys) {
-		return false
-	}
-	if len(this.CorrelationIds) != len(that1.CorrelationIds) {
-		return false
-	}
-	for i := range this.CorrelationIds {
-		if this.CorrelationIds[i] != that1.CorrelationIds[i] {
-			return false
-		}
-	}
-	if !this.DevAddr.Equal(that1.DevAddr) {
-		return false
-	}
-	if !this.NetId.Equal(that1.NetId) {
-		return false
-	}
-	return true
-}
-func (this *MACState_DataRateRange) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*MACState_DataRateRange)
-	if !ok {
-		that2, ok := that.(MACState_DataRateRange)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.MinDataRateIndex != that1.MinDataRateIndex {
-		return false
-	}
-	if this.MaxDataRateIndex != that1.MaxDataRateIndex {
-		return false
-	}
-	return true
-}
-func (this *MACState_DataRateRanges) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*MACState_DataRateRanges)
-	if !ok {
-		that2, ok := that.(MACState_DataRateRanges)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if len(this.Ranges) != len(that1.Ranges) {
-		return false
-	}
-	for i := range this.Ranges {
-		if !this.Ranges[i].Equal(that1.Ranges[i]) {
-			return false
-		}
-	}
-	return true
-}
-func (this *EndDeviceAuthenticationCode) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*EndDeviceAuthenticationCode)
-	if !ok {
-		that2, ok := that.(EndDeviceAuthenticationCode)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.Value != that1.Value {
-		return false
-	}
-	if that1.ValidFrom == nil {
-		if this.ValidFrom != nil {
-			return false
-		}
-	} else if !this.ValidFrom.Equal(*that1.ValidFrom) {
-		return false
-	}
-	if that1.ValidTo == nil {
-		if this.ValidTo != nil {
-			return false
-		}
-	} else if !this.ValidTo.Equal(*that1.ValidTo) {
-		return false
-	}
-	return true
-}
-func (this *EndDevice) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*EndDevice)
-	if !ok {
-		that2, ok := that.(EndDevice)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.EndDeviceIdentifiers.Equal(&that1.EndDeviceIdentifiers) {
-		return false
-	}
-	if !this.CreatedAt.Equal(that1.CreatedAt) {
-		return false
-	}
-	if !this.UpdatedAt.Equal(that1.UpdatedAt) {
-		return false
-	}
-	if this.Name != that1.Name {
-		return false
-	}
-	if this.Description != that1.Description {
-		return false
-	}
-	if len(this.Attributes) != len(that1.Attributes) {
-		return false
-	}
-	for i := range this.Attributes {
-		if this.Attributes[i] != that1.Attributes[i] {
-			return false
-		}
-	}
-	if !this.VersionIds.Equal(that1.VersionIds) {
-		return false
-	}
-	if this.ServiceProfileId != that1.ServiceProfileId {
-		return false
-	}
-	if this.NetworkServerAddress != that1.NetworkServerAddress {
-		return false
-	}
-	if this.NetworkServerKekLabel != that1.NetworkServerKekLabel {
-		return false
-	}
-	if this.ApplicationServerAddress != that1.ApplicationServerAddress {
-		return false
-	}
-	if this.ApplicationServerKekLabel != that1.ApplicationServerKekLabel {
-		return false
-	}
-	if this.ApplicationServerId != that1.ApplicationServerId {
-		return false
-	}
-	if this.JoinServerAddress != that1.JoinServerAddress {
-		return false
-	}
-	if len(this.Locations) != len(that1.Locations) {
-		return false
-	}
-	for i := range this.Locations {
-		if !this.Locations[i].Equal(that1.Locations[i]) {
-			return false
-		}
-	}
-	if !this.Picture.Equal(that1.Picture) {
-		return false
-	}
-	if this.SupportsClassB != that1.SupportsClassB {
-		return false
-	}
-	if this.SupportsClassC != that1.SupportsClassC {
-		return false
-	}
-	if this.LorawanVersion != that1.LorawanVersion {
-		return false
-	}
-	if this.LorawanPhyVersion != that1.LorawanPhyVersion {
-		return false
-	}
-	if this.FrequencyPlanId != that1.FrequencyPlanId {
-		return false
-	}
-	if this.MinFrequency != that1.MinFrequency {
-		return false
-	}
-	if this.MaxFrequency != that1.MaxFrequency {
-		return false
-	}
-	if this.SupportsJoin != that1.SupportsJoin {
-		return false
-	}
-	if this.ResetsJoinNonces != that1.ResetsJoinNonces {
-		return false
-	}
-	if !this.RootKeys.Equal(that1.RootKeys) {
-		return false
-	}
-	if that1.NetId == nil {
-		if this.NetId != nil {
-			return false
-		}
-	} else if !this.NetId.Equal(*that1.NetId) {
-		return false
-	}
-	if !this.MacSettings.Equal(that1.MacSettings) {
-		return false
-	}
-	if !this.MacState.Equal(that1.MacState) {
-		return false
-	}
-	if !this.PendingMacState.Equal(that1.PendingMacState) {
-		return false
-	}
-	if !this.Session.Equal(that1.Session) {
-		return false
-	}
-	if !this.PendingSession.Equal(that1.PendingSession) {
-		return false
-	}
-	if this.LastDevNonce != that1.LastDevNonce {
-		return false
-	}
-	if len(this.UsedDevNonces) != len(that1.UsedDevNonces) {
-		return false
-	}
-	for i := range this.UsedDevNonces {
-		if this.UsedDevNonces[i] != that1.UsedDevNonces[i] {
-			return false
-		}
-	}
-	if this.LastJoinNonce != that1.LastJoinNonce {
-		return false
-	}
-	if this.LastRjCount_0 != that1.LastRjCount_0 {
-		return false
-	}
-	if this.LastRjCount_1 != that1.LastRjCount_1 {
-		return false
-	}
-	if that1.LastDevStatusReceivedAt == nil {
-		if this.LastDevStatusReceivedAt != nil {
-			return false
-		}
-	} else if !this.LastDevStatusReceivedAt.Equal(*that1.LastDevStatusReceivedAt) {
-		return false
-	}
-	if this.PowerState != that1.PowerState {
-		return false
-	}
-	if !this.BatteryPercentage.Equal(that1.BatteryPercentage) {
-		return false
-	}
-	if this.DownlinkMargin != that1.DownlinkMargin {
-		return false
-	}
-	if len(this.QueuedApplicationDownlinks) != len(that1.QueuedApplicationDownlinks) {
-		return false
-	}
-	for i := range this.QueuedApplicationDownlinks {
-		if !this.QueuedApplicationDownlinks[i].Equal(that1.QueuedApplicationDownlinks[i]) {
-			return false
-		}
-	}
-	if !this.Formatters.Equal(that1.Formatters) {
-		return false
-	}
-	if this.ProvisionerId != that1.ProvisionerId {
-		return false
-	}
-	if !this.ProvisioningData.Equal(that1.ProvisioningData) {
-		return false
-	}
-	if this.Multicast != that1.Multicast {
-		return false
-	}
-	if !this.ClaimAuthenticationCode.Equal(that1.ClaimAuthenticationCode) {
-		return false
-	}
-	if this.SkipPayloadCrypto != that1.SkipPayloadCrypto {
-		return false
-	}
-	if !this.SkipPayloadCryptoOverride.Equal(that1.SkipPayloadCryptoOverride) {
-		return false
-	}
-	if that1.ActivatedAt == nil {
-		if this.ActivatedAt != nil {
-			return false
-		}
-	} else if !this.ActivatedAt.Equal(*that1.ActivatedAt) {
-		return false
-	}
-	return true
-}
-func (this *EndDevices) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*EndDevices)
-	if !ok {
-		that2, ok := that.(EndDevices)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if len(this.EndDevices) != len(that1.EndDevices) {
-		return false
-	}
-	for i := range this.EndDevices {
-		if !this.EndDevices[i].Equal(that1.EndDevices[i]) {
-			return false
-		}
-	}
-	return true
-}
-func (this *DevAddrPrefix) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*DevAddrPrefix)
-	if !ok {
-		that2, ok := that.(DevAddrPrefix)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if that1.DevAddr == nil {
-		if this.DevAddr != nil {
-			return false
-		}
-	} else if !this.DevAddr.Equal(*that1.DevAddr) {
-		return false
-	}
-	if this.Length != that1.Length {
-		return false
-	}
-	return true
-}
-func (this *CreateEndDeviceRequest) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*CreateEndDeviceRequest)
-	if !ok {
-		that2, ok := that.(CreateEndDeviceRequest)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.EndDevice.Equal(&that1.EndDevice) {
-		return false
-	}
-	return true
-}
-func (this *UpdateEndDeviceRequest) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*UpdateEndDeviceRequest)
-	if !ok {
-		that2, ok := that.(UpdateEndDeviceRequest)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.EndDevice.Equal(&that1.EndDevice) {
-		return false
-	}
-	if !this.FieldMask.Equal(that1.FieldMask) {
-		return false
-	}
-	return true
-}
-func (this *GetEndDeviceRequest) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*GetEndDeviceRequest)
-	if !ok {
-		that2, ok := that.(GetEndDeviceRequest)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.EndDeviceIdentifiers.Equal(&that1.EndDeviceIdentifiers) {
-		return false
-	}
-	if !this.FieldMask.Equal(that1.FieldMask) {
-		return false
-	}
-	return true
-}
-func (this *GetEndDeviceIdentifiersForEUIsRequest) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*GetEndDeviceIdentifiersForEUIsRequest)
-	if !ok {
-		that2, ok := that.(GetEndDeviceIdentifiersForEUIsRequest)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.JoinEui.Equal(that1.JoinEui) {
-		return false
-	}
-	if !this.DevEui.Equal(that1.DevEui) {
-		return false
-	}
-	return true
-}
-func (this *ListEndDevicesRequest) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ListEndDevicesRequest)
-	if !ok {
-		that2, ok := that.(ListEndDevicesRequest)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.ApplicationIdentifiers.Equal(&that1.ApplicationIdentifiers) {
-		return false
-	}
-	if !this.FieldMask.Equal(that1.FieldMask) {
-		return false
-	}
-	if this.Order != that1.Order {
-		return false
-	}
-	if this.Limit != that1.Limit {
-		return false
-	}
-	if this.Page != that1.Page {
-		return false
-	}
-	return true
-}
-func (this *SetEndDeviceRequest) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*SetEndDeviceRequest)
-	if !ok {
-		that2, ok := that.(SetEndDeviceRequest)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.EndDevice.Equal(&that1.EndDevice) {
-		return false
-	}
-	if !this.FieldMask.Equal(that1.FieldMask) {
-		return false
-	}
-	return true
-}
-func (this *ResetAndGetEndDeviceRequest) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ResetAndGetEndDeviceRequest)
-	if !ok {
-		that2, ok := that.(ResetAndGetEndDeviceRequest)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.EndDeviceIdentifiers.Equal(&that1.EndDeviceIdentifiers) {
-		return false
-	}
-	if !this.FieldMask.Equal(that1.FieldMask) {
-		return false
-	}
-	return true
-}
-func (this *EndDeviceTemplate) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*EndDeviceTemplate)
-	if !ok {
-		that2, ok := that.(EndDeviceTemplate)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.EndDevice.Equal(&that1.EndDevice) {
-		return false
-	}
-	if !this.FieldMask.Equal(that1.FieldMask) {
-		return false
-	}
-	if this.MappingKey != that1.MappingKey {
-		return false
-	}
-	return true
-}
-func (this *EndDeviceTemplateFormat) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*EndDeviceTemplateFormat)
-	if !ok {
-		that2, ok := that.(EndDeviceTemplateFormat)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.Name != that1.Name {
-		return false
-	}
-	if this.Description != that1.Description {
-		return false
-	}
-	if len(this.FileExtensions) != len(that1.FileExtensions) {
-		return false
-	}
-	for i := range this.FileExtensions {
-		if this.FileExtensions[i] != that1.FileExtensions[i] {
-			return false
-		}
-	}
-	return true
-}
-func (this *EndDeviceTemplateFormats) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*EndDeviceTemplateFormats)
-	if !ok {
-		that2, ok := that.(EndDeviceTemplateFormats)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if len(this.Formats) != len(that1.Formats) {
-		return false
-	}
-	for i := range this.Formats {
-		if !this.Formats[i].Equal(that1.Formats[i]) {
-			return false
-		}
-	}
-	return true
-}
-func (this *ConvertEndDeviceTemplateRequest) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ConvertEndDeviceTemplateRequest)
-	if !ok {
-		that2, ok := that.(ConvertEndDeviceTemplateRequest)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.FormatId != that1.FormatId {
-		return false
-	}
-	if !bytes.Equal(this.Data, that1.Data) {
-		return false
-	}
-	return true
-}
-func NewPopulatedSession(r randyEndDevice, easy bool) *Session {
-	this := &Session{}
-	v1 := go_thethings_network_lorawan_stack_v3_pkg_types.NewPopulatedDevAddr(r)
-	this.DevAddr = *v1
-	v2 := NewPopulatedSessionKeys(r, easy)
-	this.SessionKeys = *v2
-	this.LastFCntUp = uint32(r.Uint32())
-	this.LastNFCntDown = uint32(r.Uint32())
-	this.LastAFCntDown = uint32(r.Uint32())
-	this.LastConfFCntDown = uint32(r.Uint32())
-	v3 := github_com_gogo_protobuf_types.NewPopulatedStdTime(r, easy)
-	this.StartedAt = *v3
-	if r.Intn(5) != 0 {
-		v4 := r.Intn(5)
-		this.QueuedApplicationDownlinks = make([]*ApplicationDownlink, v4)
-		for i := 0; i < v4; i++ {
-			this.QueuedApplicationDownlinks[i] = NewPopulatedApplicationDownlink(r, easy)
-		}
-	}
-	if !easy && r.Intn(10) != 0 {
-	}
-	return this
-}
-
-func NewPopulatedMACState_JoinRequest(r randyEndDevice, easy bool) *MACState_JoinRequest {
-	this := &MACState_JoinRequest{}
-	v5 := NewPopulatedDLSettings(r, easy)
-	this.DownlinkSettings = *v5
-	this.RxDelay = RxDelay([]int32{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15}[r.Intn(16)])
-	if r.Intn(5) != 0 {
-		this.CfList = NewPopulatedCFList(r, easy)
-	}
-	if !easy && r.Intn(10) != 0 {
-	}
-	return this
-}
-
-func NewPopulatedDevAddrPrefix(r randyEndDevice, easy bool) *DevAddrPrefix {
-	this := &DevAddrPrefix{}
-	this.DevAddr = go_thethings_network_lorawan_stack_v3_pkg_types.NewPopulatedDevAddr(r)
-	this.Length = uint32(r.Uint32())
-	if !easy && r.Intn(10) != 0 {
-	}
-	return this
-}
-
-type randyEndDevice interface {
-	Float32() float32
-	Float64() float64
-	Int63() int64
-	Int31() int32
-	Uint32() uint32
-	Intn(n int) int
-}
-
-func randUTF8RuneEndDevice(r randyEndDevice) rune {
-	ru := r.Intn(62)
-	if ru < 10 {
-		return rune(ru + 48)
-	} else if ru < 36 {
-		return rune(ru + 55)
-	}
-	return rune(ru + 61)
-}
-func randStringEndDevice(r randyEndDevice) string {
-	v6 := r.Intn(100)
-	tmps := make([]rune, v6)
-	for i := 0; i < v6; i++ {
-		tmps[i] = randUTF8RuneEndDevice(r)
-	}
-	return string(tmps)
-}
-func randUnrecognizedEndDevice(r randyEndDevice, maxFieldNumber int) (dAtA []byte) {
-	l := r.Intn(5)
-	for i := 0; i < l; i++ {
-		wire := r.Intn(4)
-		if wire == 3 {
-			wire = 5
-		}
-		fieldNumber := maxFieldNumber + r.Intn(100)
-		dAtA = randFieldEndDevice(dAtA, r, fieldNumber, wire)
-	}
-	return dAtA
-}
-func randFieldEndDevice(dAtA []byte, r randyEndDevice, fieldNumber int, wire int) []byte {
-	key := uint32(fieldNumber)<<3 | uint32(wire)
-	switch wire {
-	case 0:
-		dAtA = encodeVarintPopulateEndDevice(dAtA, uint64(key))
-		v7 := r.Int63()
-		if r.Intn(2) == 0 {
-			v7 *= -1
-		}
-		dAtA = encodeVarintPopulateEndDevice(dAtA, uint64(v7))
-	case 1:
-		dAtA = encodeVarintPopulateEndDevice(dAtA, uint64(key))
-		dAtA = append(dAtA, byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)))
-	case 2:
-		dAtA = encodeVarintPopulateEndDevice(dAtA, uint64(key))
-		ll := r.Intn(100)
-		dAtA = encodeVarintPopulateEndDevice(dAtA, uint64(ll))
-		for j := 0; j < ll; j++ {
-			dAtA = append(dAtA, byte(r.Intn(256)))
-		}
-	default:
-		dAtA = encodeVarintPopulateEndDevice(dAtA, uint64(key))
-		dAtA = append(dAtA, byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)))
-	}
-	return dAtA
-}
-func encodeVarintPopulateEndDevice(dAtA []byte, v uint64) []byte {
-	for v >= 1<<7 {
-		dAtA = append(dAtA, uint8(uint64(v)&0x7f|0x80))
-		v >>= 7
-	}
-	dAtA = append(dAtA, uint8(v))
-	return dAtA
-}
-func (this *Session) String() string {
-	if this == nil {
-		return "nil"
-	}
-	repeatedStringForQueuedApplicationDownlinks := "[]*ApplicationDownlink{"
-	for _, f := range this.QueuedApplicationDownlinks {
-		repeatedStringForQueuedApplicationDownlinks += strings.Replace(fmt.Sprintf("%v", f), "ApplicationDownlink", "ApplicationDownlink", 1) + ","
-	}
-	repeatedStringForQueuedApplicationDownlinks += "}"
-	s := strings.Join([]string{`&Session{`,
-		`DevAddr:` + fmt.Sprintf("%v", this.DevAddr) + `,`,
-		`SessionKeys:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.SessionKeys), "SessionKeys", "SessionKeys", 1), `&`, ``, 1) + `,`,
-		`LastFCntUp:` + fmt.Sprintf("%v", this.LastFCntUp) + `,`,
-		`LastNFCntDown:` + fmt.Sprintf("%v", this.LastNFCntDown) + `,`,
-		`LastAFCntDown:` + fmt.Sprintf("%v", this.LastAFCntDown) + `,`,
-		`LastConfFCntDown:` + fmt.Sprintf("%v", this.LastConfFCntDown) + `,`,
-		`StartedAt:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.StartedAt), "Timestamp", "types.Timestamp", 1), `&`, ``, 1) + `,`,
-		`QueuedApplicationDownlinks:` + repeatedStringForQueuedApplicationDownlinks + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *BoolValue) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&BoolValue{`,
-		`Value:` + fmt.Sprintf("%v", this.Value) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *MACParameters) String() string {
-	if this == nil {
-		return "nil"
-	}
-	repeatedStringForChannels := "[]*MACParameters_Channel{"
-	for _, f := range this.Channels {
-		repeatedStringForChannels += strings.Replace(fmt.Sprintf("%v", f), "MACParameters_Channel", "MACParameters_Channel", 1) + ","
-	}
-	repeatedStringForChannels += "}"
-	s := strings.Join([]string{`&MACParameters{`,
-		`MaxEirp:` + fmt.Sprintf("%v", this.MaxEirp) + `,`,
-		`AdrDataRateIndex:` + fmt.Sprintf("%v", this.AdrDataRateIndex) + `,`,
-		`AdrTxPowerIndex:` + fmt.Sprintf("%v", this.AdrTxPowerIndex) + `,`,
-		`AdrNbTrans:` + fmt.Sprintf("%v", this.AdrNbTrans) + `,`,
-		`AdrAckLimit:` + fmt.Sprintf("%v", this.AdrAckLimit) + `,`,
-		`AdrAckDelay:` + fmt.Sprintf("%v", this.AdrAckDelay) + `,`,
-		`Rx1Delay:` + fmt.Sprintf("%v", this.Rx1Delay) + `,`,
-		`Rx1DataRateOffset:` + fmt.Sprintf("%v", this.Rx1DataRateOffset) + `,`,
-		`Rx2DataRateIndex:` + fmt.Sprintf("%v", this.Rx2DataRateIndex) + `,`,
-		`Rx2Frequency:` + fmt.Sprintf("%v", this.Rx2Frequency) + `,`,
-		`MaxDutyCycle:` + fmt.Sprintf("%v", this.MaxDutyCycle) + `,`,
-		`RejoinTimePeriodicity:` + fmt.Sprintf("%v", this.RejoinTimePeriodicity) + `,`,
-		`RejoinCountPeriodicity:` + fmt.Sprintf("%v", this.RejoinCountPeriodicity) + `,`,
-		`PingSlotFrequency:` + fmt.Sprintf("%v", this.PingSlotFrequency) + `,`,
-		`PingSlotDataRateIndex:` + fmt.Sprintf("%v", this.PingSlotDataRateIndex) + `,`,
-		`BeaconFrequency:` + fmt.Sprintf("%v", this.BeaconFrequency) + `,`,
-		`Channels:` + repeatedStringForChannels + `,`,
-		`UplinkDwellTime:` + strings.Replace(this.UplinkDwellTime.String(), "BoolValue", "BoolValue", 1) + `,`,
-		`DownlinkDwellTime:` + strings.Replace(this.DownlinkDwellTime.String(), "BoolValue", "BoolValue", 1) + `,`,
-		`AdrAckLimitExponent:` + strings.Replace(fmt.Sprintf("%v", this.AdrAckLimitExponent), "ADRAckLimitExponentValue", "ADRAckLimitExponentValue", 1) + `,`,
-		`AdrAckDelayExponent:` + strings.Replace(fmt.Sprintf("%v", this.AdrAckDelayExponent), "ADRAckDelayExponentValue", "ADRAckDelayExponentValue", 1) + `,`,
-		`PingSlotDataRateIndexValue:` + strings.Replace(fmt.Sprintf("%v", this.PingSlotDataRateIndexValue), "DataRateIndexValue", "DataRateIndexValue", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *MACParameters_Channel) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&MACParameters_Channel{`,
-		`UplinkFrequency:` + fmt.Sprintf("%v", this.UplinkFrequency) + `,`,
-		`DownlinkFrequency:` + fmt.Sprintf("%v", this.DownlinkFrequency) + `,`,
-		`MinDataRateIndex:` + fmt.Sprintf("%v", this.MinDataRateIndex) + `,`,
-		`MaxDataRateIndex:` + fmt.Sprintf("%v", this.MaxDataRateIndex) + `,`,
-		`EnableUplink:` + fmt.Sprintf("%v", this.EnableUplink) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *EndDeviceVersion) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&EndDeviceVersion{`,
-		`EndDeviceVersionIdentifiers:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.EndDeviceVersionIdentifiers), "EndDeviceVersionIdentifiers", "EndDeviceVersionIdentifiers", 1), `&`, ``, 1) + `,`,
-		`LorawanVersion:` + fmt.Sprintf("%v", this.LorawanVersion) + `,`,
-		`LorawanPhyVersion:` + fmt.Sprintf("%v", this.LorawanPhyVersion) + `,`,
-		`FrequencyPlanId:` + fmt.Sprintf("%v", this.FrequencyPlanId) + `,`,
-		`Photos:` + fmt.Sprintf("%v", this.Photos) + `,`,
-		`SupportsClassB:` + fmt.Sprintf("%v", this.SupportsClassB) + `,`,
-		`SupportsClassC:` + fmt.Sprintf("%v", this.SupportsClassC) + `,`,
-		`DefaultMacSettings:` + strings.Replace(this.DefaultMacSettings.String(), "MACSettings", "MACSettings", 1) + `,`,
-		`MinFrequency:` + fmt.Sprintf("%v", this.MinFrequency) + `,`,
-		`MaxFrequency:` + fmt.Sprintf("%v", this.MaxFrequency) + `,`,
-		`SupportsJoin:` + fmt.Sprintf("%v", this.SupportsJoin) + `,`,
-		`ResetsJoinNonces:` + fmt.Sprintf("%v", this.ResetsJoinNonces) + `,`,
-		`DefaultFormatters:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.DefaultFormatters), "MessagePayloadFormatters", "MessagePayloadFormatters", 1), `&`, ``, 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *MACSettings) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&MACSettings{`,
-		`ClassBTimeout:` + strings.Replace(fmt.Sprintf("%v", this.ClassBTimeout), "Duration", "types.Duration", 1) + `,`,
-		`PingSlotPeriodicity:` + strings.Replace(fmt.Sprintf("%v", this.PingSlotPeriodicity), "PingSlotPeriodValue", "PingSlotPeriodValue", 1) + `,`,
-		`PingSlotDataRateIndex:` + strings.Replace(fmt.Sprintf("%v", this.PingSlotDataRateIndex), "DataRateIndexValue", "DataRateIndexValue", 1) + `,`,
-		`PingSlotFrequency:` + strings.Replace(fmt.Sprintf("%v", this.PingSlotFrequency), "FrequencyValue", "FrequencyValue", 1) + `,`,
-		`BeaconFrequency:` + strings.Replace(fmt.Sprintf("%v", this.BeaconFrequency), "FrequencyValue", "FrequencyValue", 1) + `,`,
-		`ClassCTimeout:` + strings.Replace(fmt.Sprintf("%v", this.ClassCTimeout), "Duration", "types.Duration", 1) + `,`,
-		`Rx1Delay:` + strings.Replace(fmt.Sprintf("%v", this.Rx1Delay), "RxDelayValue", "RxDelayValue", 1) + `,`,
-		`Rx1DataRateOffset:` + strings.Replace(fmt.Sprintf("%v", this.Rx1DataRateOffset), "DataRateOffsetValue", "DataRateOffsetValue", 1) + `,`,
-		`Rx2DataRateIndex:` + strings.Replace(fmt.Sprintf("%v", this.Rx2DataRateIndex), "DataRateIndexValue", "DataRateIndexValue", 1) + `,`,
-		`Rx2Frequency:` + strings.Replace(fmt.Sprintf("%v", this.Rx2Frequency), "FrequencyValue", "FrequencyValue", 1) + `,`,
-		`FactoryPresetFrequencies:` + fmt.Sprintf("%v", this.FactoryPresetFrequencies) + `,`,
-		`MaxDutyCycle:` + strings.Replace(fmt.Sprintf("%v", this.MaxDutyCycle), "AggregatedDutyCycleValue", "AggregatedDutyCycleValue", 1) + `,`,
-		`Supports_32BitFCnt:` + strings.Replace(this.Supports_32BitFCnt.String(), "BoolValue", "BoolValue", 1) + `,`,
-		`UseAdr:` + strings.Replace(this.UseAdr.String(), "BoolValue", "BoolValue", 1) + `,`,
-		`AdrMargin:` + strings.Replace(fmt.Sprintf("%v", this.AdrMargin), "FloatValue", "types.FloatValue", 1) + `,`,
-		`ResetsFCnt:` + strings.Replace(this.ResetsFCnt.String(), "BoolValue", "BoolValue", 1) + `,`,
-		`StatusTimePeriodicity:` + strings.Replace(fmt.Sprintf("%v", this.StatusTimePeriodicity), "Duration", "types.Duration", 1) + `,`,
-		`StatusCountPeriodicity:` + strings.Replace(fmt.Sprintf("%v", this.StatusCountPeriodicity), "UInt32Value", "types.UInt32Value", 1) + `,`,
-		`DesiredRx1Delay:` + strings.Replace(fmt.Sprintf("%v", this.DesiredRx1Delay), "RxDelayValue", "RxDelayValue", 1) + `,`,
-		`DesiredRx1DataRateOffset:` + strings.Replace(fmt.Sprintf("%v", this.DesiredRx1DataRateOffset), "DataRateOffsetValue", "DataRateOffsetValue", 1) + `,`,
-		`DesiredRx2DataRateIndex:` + strings.Replace(fmt.Sprintf("%v", this.DesiredRx2DataRateIndex), "DataRateIndexValue", "DataRateIndexValue", 1) + `,`,
-		`DesiredRx2Frequency:` + strings.Replace(fmt.Sprintf("%v", this.DesiredRx2Frequency), "FrequencyValue", "FrequencyValue", 1) + `,`,
-		`DesiredMaxDutyCycle:` + strings.Replace(fmt.Sprintf("%v", this.DesiredMaxDutyCycle), "AggregatedDutyCycleValue", "AggregatedDutyCycleValue", 1) + `,`,
-		`DesiredAdrAckLimitExponent:` + strings.Replace(fmt.Sprintf("%v", this.DesiredAdrAckLimitExponent), "ADRAckLimitExponentValue", "ADRAckLimitExponentValue", 1) + `,`,
-		`DesiredAdrAckDelayExponent:` + strings.Replace(fmt.Sprintf("%v", this.DesiredAdrAckDelayExponent), "ADRAckDelayExponentValue", "ADRAckDelayExponentValue", 1) + `,`,
-		`DesiredPingSlotDataRateIndex:` + strings.Replace(fmt.Sprintf("%v", this.DesiredPingSlotDataRateIndex), "DataRateIndexValue", "DataRateIndexValue", 1) + `,`,
-		`DesiredPingSlotFrequency:` + strings.Replace(fmt.Sprintf("%v", this.DesiredPingSlotFrequency), "FrequencyValue", "FrequencyValue", 1) + `,`,
-		`DesiredBeaconFrequency:` + strings.Replace(fmt.Sprintf("%v", this.DesiredBeaconFrequency), "FrequencyValue", "FrequencyValue", 1) + `,`,
-		`DesiredMaxEirp:` + strings.Replace(fmt.Sprintf("%v", this.DesiredMaxEirp), "DeviceEIRPValue", "DeviceEIRPValue", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *MACState) String() string {
-	if this == nil {
-		return "nil"
-	}
-	repeatedStringForQueuedResponses := "[]*MACCommand{"
-	for _, f := range this.QueuedResponses {
-		repeatedStringForQueuedResponses += strings.Replace(fmt.Sprintf("%v", f), "MACCommand", "MACCommand", 1) + ","
-	}
-	repeatedStringForQueuedResponses += "}"
-	repeatedStringForPendingRequests := "[]*MACCommand{"
-	for _, f := range this.PendingRequests {
-		repeatedStringForPendingRequests += strings.Replace(fmt.Sprintf("%v", f), "MACCommand", "MACCommand", 1) + ","
-	}
-	repeatedStringForPendingRequests += "}"
-	repeatedStringForRecentUplinks := "[]*UplinkMessage{"
-	for _, f := range this.RecentUplinks {
-		repeatedStringForRecentUplinks += strings.Replace(fmt.Sprintf("%v", f), "UplinkMessage", "UplinkMessage", 1) + ","
-	}
-	repeatedStringForRecentUplinks += "}"
-	repeatedStringForRecentDownlinks := "[]*DownlinkMessage{"
-	for _, f := range this.RecentDownlinks {
-		repeatedStringForRecentDownlinks += strings.Replace(fmt.Sprintf("%v", f), "DownlinkMessage", "DownlinkMessage", 1) + ","
-	}
-	repeatedStringForRecentDownlinks += "}"
-	keysForRejectedDataRateRanges := make([]uint64, 0, len(this.RejectedDataRateRanges))
-	for k := range this.RejectedDataRateRanges {
-		keysForRejectedDataRateRanges = append(keysForRejectedDataRateRanges, k)
-	}
-	github_com_gogo_protobuf_sortkeys.Uint64s(keysForRejectedDataRateRanges)
-	mapStringForRejectedDataRateRanges := "map[uint64]*MACState_DataRateRanges{"
-	for _, k := range keysForRejectedDataRateRanges {
-		mapStringForRejectedDataRateRanges += fmt.Sprintf("%v: %v,", k, this.RejectedDataRateRanges[k])
-	}
-	mapStringForRejectedDataRateRanges += "}"
-	s := strings.Join([]string{`&MACState{`,
-		`CurrentParameters:` + strings.Replace(strings.Replace(this.CurrentParameters.String(), "MACParameters", "MACParameters", 1), `&`, ``, 1) + `,`,
-		`DesiredParameters:` + strings.Replace(strings.Replace(this.DesiredParameters.String(), "MACParameters", "MACParameters", 1), `&`, ``, 1) + `,`,
-		`DeviceClass:` + fmt.Sprintf("%v", this.DeviceClass) + `,`,
-		`LorawanVersion:` + fmt.Sprintf("%v", this.LorawanVersion) + `,`,
-		`LastConfirmedDownlinkAt:` + strings.Replace(fmt.Sprintf("%v", this.LastConfirmedDownlinkAt), "Timestamp", "types.Timestamp", 1) + `,`,
-		`LastDevStatusFCntUp:` + fmt.Sprintf("%v", this.LastDevStatusFCntUp) + `,`,
-		`PingSlotPeriodicity:` + strings.Replace(fmt.Sprintf("%v", this.PingSlotPeriodicity), "PingSlotPeriodValue", "PingSlotPeriodValue", 1) + `,`,
-		`PendingApplicationDownlink:` + strings.Replace(fmt.Sprintf("%v", this.PendingApplicationDownlink), "ApplicationDownlink", "ApplicationDownlink", 1) + `,`,
-		`QueuedResponses:` + repeatedStringForQueuedResponses + `,`,
-		`PendingRequests:` + repeatedStringForPendingRequests + `,`,
-		`QueuedJoinAccept:` + strings.Replace(fmt.Sprintf("%v", this.QueuedJoinAccept), "MACState_JoinAccept", "MACState_JoinAccept", 1) + `,`,
-		`PendingJoinRequest:` + strings.Replace(fmt.Sprintf("%v", this.PendingJoinRequest), "MACState_JoinRequest", "MACState_JoinRequest", 1) + `,`,
-		`RxWindowsAvailable:` + fmt.Sprintf("%v", this.RxWindowsAvailable) + `,`,
-		`RecentUplinks:` + repeatedStringForRecentUplinks + `,`,
-		`RecentDownlinks:` + repeatedStringForRecentDownlinks + `,`,
-		`LastNetworkInitiatedDownlinkAt:` + strings.Replace(fmt.Sprintf("%v", this.LastNetworkInitiatedDownlinkAt), "Timestamp", "types.Timestamp", 1) + `,`,
-		`RejectedAdrDataRateIndexes:` + fmt.Sprintf("%v", this.RejectedAdrDataRateIndexes) + `,`,
-		`RejectedAdrTxPowerIndexes:` + fmt.Sprintf("%v", this.RejectedAdrTxPowerIndexes) + `,`,
-		`RejectedFrequencies:` + fmt.Sprintf("%v", this.RejectedFrequencies) + `,`,
-		`LastDownlinkAt:` + strings.Replace(fmt.Sprintf("%v", this.LastDownlinkAt), "Timestamp", "types.Timestamp", 1) + `,`,
-		`RejectedDataRateRanges:` + mapStringForRejectedDataRateRanges + `,`,
-		`LastAdrChangeFCntUp:` + fmt.Sprintf("%v", this.LastAdrChangeFCntUp) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *MACState_JoinRequest) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&MACState_JoinRequest{`,
-		`DownlinkSettings:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.DownlinkSettings), "DLSettings", "DLSettings", 1), `&`, ``, 1) + `,`,
-		`RxDelay:` + fmt.Sprintf("%v", this.RxDelay) + `,`,
-		`CfList:` + strings.Replace(fmt.Sprintf("%v", this.CfList), "CFList", "CFList", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *MACState_JoinAccept) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&MACState_JoinAccept{`,
-		`Payload:` + fmt.Sprintf("%v", this.Payload) + `,`,
-		`Request:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.Request), "MACState_JoinRequest", "MACState_JoinRequest", 1), `&`, ``, 1) + `,`,
-		`Keys:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.Keys), "SessionKeys", "SessionKeys", 1), `&`, ``, 1) + `,`,
-		`CorrelationIds:` + fmt.Sprintf("%v", this.CorrelationIds) + `,`,
-		`DevAddr:` + fmt.Sprintf("%v", this.DevAddr) + `,`,
-		`NetId:` + fmt.Sprintf("%v", this.NetId) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *MACState_DataRateRange) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&MACState_DataRateRange{`,
-		`MinDataRateIndex:` + fmt.Sprintf("%v", this.MinDataRateIndex) + `,`,
-		`MaxDataRateIndex:` + fmt.Sprintf("%v", this.MaxDataRateIndex) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *MACState_DataRateRanges) String() string {
-	if this == nil {
-		return "nil"
-	}
-	repeatedStringForRanges := "[]*MACState_DataRateRange{"
-	for _, f := range this.Ranges {
-		repeatedStringForRanges += strings.Replace(fmt.Sprintf("%v", f), "MACState_DataRateRange", "MACState_DataRateRange", 1) + ","
-	}
-	repeatedStringForRanges += "}"
-	s := strings.Join([]string{`&MACState_DataRateRanges{`,
-		`Ranges:` + repeatedStringForRanges + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *EndDeviceAuthenticationCode) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&EndDeviceAuthenticationCode{`,
-		`Value:` + fmt.Sprintf("%v", this.Value) + `,`,
-		`ValidFrom:` + strings.Replace(fmt.Sprintf("%v", this.ValidFrom), "Timestamp", "types.Timestamp", 1) + `,`,
-		`ValidTo:` + strings.Replace(fmt.Sprintf("%v", this.ValidTo), "Timestamp", "types.Timestamp", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *EndDevice) String() string {
-	if this == nil {
-		return "nil"
-	}
-	repeatedStringForQueuedApplicationDownlinks := "[]*ApplicationDownlink{"
-	for _, f := range this.QueuedApplicationDownlinks {
-		repeatedStringForQueuedApplicationDownlinks += strings.Replace(fmt.Sprintf("%v", f), "ApplicationDownlink", "ApplicationDownlink", 1) + ","
-	}
-	repeatedStringForQueuedApplicationDownlinks += "}"
-	keysForAttributes := make([]string, 0, len(this.Attributes))
-	for k := range this.Attributes {
-		keysForAttributes = append(keysForAttributes, k)
-	}
-	github_com_gogo_protobuf_sortkeys.Strings(keysForAttributes)
-	mapStringForAttributes := "map[string]string{"
-	for _, k := range keysForAttributes {
-		mapStringForAttributes += fmt.Sprintf("%v: %v,", k, this.Attributes[k])
-	}
-	mapStringForAttributes += "}"
-	keysForLocations := make([]string, 0, len(this.Locations))
-	for k := range this.Locations {
-		keysForLocations = append(keysForLocations, k)
-	}
-	github_com_gogo_protobuf_sortkeys.Strings(keysForLocations)
-	mapStringForLocations := "map[string]*Location{"
-	for _, k := range keysForLocations {
-		mapStringForLocations += fmt.Sprintf("%v: %v,", k, this.Locations[k])
-	}
-	mapStringForLocations += "}"
-	s := strings.Join([]string{`&EndDevice{`,
-		`EndDeviceIdentifiers:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.EndDeviceIdentifiers), "EndDeviceIdentifiers", "EndDeviceIdentifiers", 1), `&`, ``, 1) + `,`,
-		`CreatedAt:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.CreatedAt), "Timestamp", "types.Timestamp", 1), `&`, ``, 1) + `,`,
-		`UpdatedAt:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.UpdatedAt), "Timestamp", "types.Timestamp", 1), `&`, ``, 1) + `,`,
-		`Name:` + fmt.Sprintf("%v", this.Name) + `,`,
-		`Description:` + fmt.Sprintf("%v", this.Description) + `,`,
-		`Attributes:` + mapStringForAttributes + `,`,
-		`VersionIds:` + strings.Replace(fmt.Sprintf("%v", this.VersionIds), "EndDeviceVersionIdentifiers", "EndDeviceVersionIdentifiers", 1) + `,`,
-		`ServiceProfileId:` + fmt.Sprintf("%v", this.ServiceProfileId) + `,`,
-		`NetworkServerAddress:` + fmt.Sprintf("%v", this.NetworkServerAddress) + `,`,
-		`NetworkServerKekLabel:` + fmt.Sprintf("%v", this.NetworkServerKekLabel) + `,`,
-		`ApplicationServerAddress:` + fmt.Sprintf("%v", this.ApplicationServerAddress) + `,`,
-		`ApplicationServerKekLabel:` + fmt.Sprintf("%v", this.ApplicationServerKekLabel) + `,`,
-		`ApplicationServerId:` + fmt.Sprintf("%v", this.ApplicationServerId) + `,`,
-		`JoinServerAddress:` + fmt.Sprintf("%v", this.JoinServerAddress) + `,`,
-		`Locations:` + mapStringForLocations + `,`,
-		`Picture:` + strings.Replace(fmt.Sprintf("%v", this.Picture), "Picture", "Picture", 1) + `,`,
-		`SupportsClassB:` + fmt.Sprintf("%v", this.SupportsClassB) + `,`,
-		`SupportsClassC:` + fmt.Sprintf("%v", this.SupportsClassC) + `,`,
-		`LorawanVersion:` + fmt.Sprintf("%v", this.LorawanVersion) + `,`,
-		`LorawanPhyVersion:` + fmt.Sprintf("%v", this.LorawanPhyVersion) + `,`,
-		`FrequencyPlanId:` + fmt.Sprintf("%v", this.FrequencyPlanId) + `,`,
-		`MinFrequency:` + fmt.Sprintf("%v", this.MinFrequency) + `,`,
-		`MaxFrequency:` + fmt.Sprintf("%v", this.MaxFrequency) + `,`,
-		`SupportsJoin:` + fmt.Sprintf("%v", this.SupportsJoin) + `,`,
-		`ResetsJoinNonces:` + fmt.Sprintf("%v", this.ResetsJoinNonces) + `,`,
-		`RootKeys:` + strings.Replace(fmt.Sprintf("%v", this.RootKeys), "RootKeys", "RootKeys", 1) + `,`,
-		`NetId:` + fmt.Sprintf("%v", this.NetId) + `,`,
-		`MacSettings:` + strings.Replace(this.MacSettings.String(), "MACSettings", "MACSettings", 1) + `,`,
-		`MacState:` + strings.Replace(this.MacState.String(), "MACState", "MACState", 1) + `,`,
-		`PendingMacState:` + strings.Replace(this.PendingMacState.String(), "MACState", "MACState", 1) + `,`,
-		`Session:` + strings.Replace(this.Session.String(), "Session", "Session", 1) + `,`,
-		`PendingSession:` + strings.Replace(this.PendingSession.String(), "Session", "Session", 1) + `,`,
-		`LastDevNonce:` + fmt.Sprintf("%v", this.LastDevNonce) + `,`,
-		`UsedDevNonces:` + fmt.Sprintf("%v", this.UsedDevNonces) + `,`,
-		`LastJoinNonce:` + fmt.Sprintf("%v", this.LastJoinNonce) + `,`,
-		`LastRjCount_0:` + fmt.Sprintf("%v", this.LastRjCount_0) + `,`,
-		`LastRjCount_1:` + fmt.Sprintf("%v", this.LastRjCount_1) + `,`,
-		`LastDevStatusReceivedAt:` + strings.Replace(fmt.Sprintf("%v", this.LastDevStatusReceivedAt), "Timestamp", "types.Timestamp", 1) + `,`,
-		`PowerState:` + fmt.Sprintf("%v", this.PowerState) + `,`,
-		`BatteryPercentage:` + strings.Replace(fmt.Sprintf("%v", this.BatteryPercentage), "FloatValue", "types.FloatValue", 1) + `,`,
-		`DownlinkMargin:` + fmt.Sprintf("%v", this.DownlinkMargin) + `,`,
-		`QueuedApplicationDownlinks:` + repeatedStringForQueuedApplicationDownlinks + `,`,
-		`Formatters:` + strings.Replace(fmt.Sprintf("%v", this.Formatters), "MessagePayloadFormatters", "MessagePayloadFormatters", 1) + `,`,
-		`ProvisionerId:` + fmt.Sprintf("%v", this.ProvisionerId) + `,`,
-		`ProvisioningData:` + strings.Replace(fmt.Sprintf("%v", this.ProvisioningData), "Struct", "types.Struct", 1) + `,`,
-		`Multicast:` + fmt.Sprintf("%v", this.Multicast) + `,`,
-		`ClaimAuthenticationCode:` + strings.Replace(this.ClaimAuthenticationCode.String(), "EndDeviceAuthenticationCode", "EndDeviceAuthenticationCode", 1) + `,`,
-		`SkipPayloadCrypto:` + fmt.Sprintf("%v", this.SkipPayloadCrypto) + `,`,
-		`SkipPayloadCryptoOverride:` + strings.Replace(fmt.Sprintf("%v", this.SkipPayloadCryptoOverride), "BoolValue", "types.BoolValue", 1) + `,`,
-		`ActivatedAt:` + strings.Replace(fmt.Sprintf("%v", this.ActivatedAt), "Timestamp", "types.Timestamp", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *EndDevices) String() string {
-	if this == nil {
-		return "nil"
-	}
-	repeatedStringForEndDevices := "[]*EndDevice{"
-	for _, f := range this.EndDevices {
-		repeatedStringForEndDevices += strings.Replace(f.String(), "EndDevice", "EndDevice", 1) + ","
-	}
-	repeatedStringForEndDevices += "}"
-	s := strings.Join([]string{`&EndDevices{`,
-		`EndDevices:` + repeatedStringForEndDevices + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *DevAddrPrefix) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&DevAddrPrefix{`,
-		`DevAddr:` + fmt.Sprintf("%v", this.DevAddr) + `,`,
-		`Length:` + fmt.Sprintf("%v", this.Length) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *CreateEndDeviceRequest) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&CreateEndDeviceRequest{`,
-		`EndDevice:` + strings.Replace(strings.Replace(this.EndDevice.String(), "EndDevice", "EndDevice", 1), `&`, ``, 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *UpdateEndDeviceRequest) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&UpdateEndDeviceRequest{`,
-		`EndDevice:` + strings.Replace(strings.Replace(this.EndDevice.String(), "EndDevice", "EndDevice", 1), `&`, ``, 1) + `,`,
-		`FieldMask:` + strings.Replace(fmt.Sprintf("%v", this.FieldMask), "FieldMask", "types.FieldMask", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *GetEndDeviceRequest) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&GetEndDeviceRequest{`,
-		`EndDeviceIdentifiers:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.EndDeviceIdentifiers), "EndDeviceIdentifiers", "EndDeviceIdentifiers", 1), `&`, ``, 1) + `,`,
-		`FieldMask:` + strings.Replace(fmt.Sprintf("%v", this.FieldMask), "FieldMask", "types.FieldMask", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *GetEndDeviceIdentifiersForEUIsRequest) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&GetEndDeviceIdentifiersForEUIsRequest{`,
-		`JoinEui:` + fmt.Sprintf("%v", this.JoinEui) + `,`,
-		`DevEui:` + fmt.Sprintf("%v", this.DevEui) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *ListEndDevicesRequest) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&ListEndDevicesRequest{`,
-		`ApplicationIdentifiers:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.ApplicationIdentifiers), "ApplicationIdentifiers", "ApplicationIdentifiers", 1), `&`, ``, 1) + `,`,
-		`FieldMask:` + strings.Replace(fmt.Sprintf("%v", this.FieldMask), "FieldMask", "types.FieldMask", 1) + `,`,
-		`Order:` + fmt.Sprintf("%v", this.Order) + `,`,
-		`Limit:` + fmt.Sprintf("%v", this.Limit) + `,`,
-		`Page:` + fmt.Sprintf("%v", this.Page) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *SetEndDeviceRequest) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&SetEndDeviceRequest{`,
-		`EndDevice:` + strings.Replace(strings.Replace(this.EndDevice.String(), "EndDevice", "EndDevice", 1), `&`, ``, 1) + `,`,
-		`FieldMask:` + strings.Replace(fmt.Sprintf("%v", this.FieldMask), "FieldMask", "types.FieldMask", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *ResetAndGetEndDeviceRequest) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&ResetAndGetEndDeviceRequest{`,
-		`EndDeviceIdentifiers:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.EndDeviceIdentifiers), "EndDeviceIdentifiers", "EndDeviceIdentifiers", 1), `&`, ``, 1) + `,`,
-		`FieldMask:` + strings.Replace(fmt.Sprintf("%v", this.FieldMask), "FieldMask", "types.FieldMask", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *EndDeviceTemplate) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&EndDeviceTemplate{`,
-		`EndDevice:` + strings.Replace(strings.Replace(this.EndDevice.String(), "EndDevice", "EndDevice", 1), `&`, ``, 1) + `,`,
-		`FieldMask:` + strings.Replace(fmt.Sprintf("%v", this.FieldMask), "FieldMask", "types.FieldMask", 1) + `,`,
-		`MappingKey:` + fmt.Sprintf("%v", this.MappingKey) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *EndDeviceTemplateFormat) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&EndDeviceTemplateFormat{`,
-		`Name:` + fmt.Sprintf("%v", this.Name) + `,`,
-		`Description:` + fmt.Sprintf("%v", this.Description) + `,`,
-		`FileExtensions:` + fmt.Sprintf("%v", this.FileExtensions) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *EndDeviceTemplateFormats) String() string {
-	if this == nil {
-		return "nil"
-	}
-	keysForFormats := make([]string, 0, len(this.Formats))
-	for k := range this.Formats {
-		keysForFormats = append(keysForFormats, k)
-	}
-	github_com_gogo_protobuf_sortkeys.Strings(keysForFormats)
-	mapStringForFormats := "map[string]*EndDeviceTemplateFormat{"
-	for _, k := range keysForFormats {
-		mapStringForFormats += fmt.Sprintf("%v: %v,", k, this.Formats[k])
-	}
-	mapStringForFormats += "}"
-	s := strings.Join([]string{`&EndDeviceTemplateFormats{`,
-		`Formats:` + mapStringForFormats + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *ConvertEndDeviceTemplateRequest) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&ConvertEndDeviceTemplateRequest{`,
-		`FormatId:` + fmt.Sprintf("%v", this.FormatId) + `,`,
-		`Data:` + fmt.Sprintf("%v", this.Data) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func valueToStringEndDevice(v interface{}) string {
-	rv := reflect.ValueOf(v)
-	if rv.IsNil() {
-		return "nil"
-	}
-	pv := reflect.Indirect(rv).Interface()
-	return fmt.Sprintf("*%v", pv)
+	// 5997 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x5c, 0x4f, 0x6c, 0x1b, 0xd9,
+	0x79, 0xd7, 0x50, 0x94, 0x48, 0x7e, 0xa4, 0xc8, 0xd1, 0xd3, 0xbf, 0x11, 0xe5, 0x3f, 0x32, 0x57,
+	0xeb, 0xa5, 0x9d, 0x15, 0x25, 0x53, 0xeb, 0x4d, 0xd6, 0x9b, 0xc4, 0x4b, 0x4a, 0x72, 0x2c, 0xd9,
+	0xf2, 0xca, 0x63, 0xd9, 0xde, 0x64, 0xd7, 0x3b, 0x19, 0xcd, 0x3c, 0x51, 0xb3, 0x22, 0x67, 0x98,
+	0x99, 0xa1, 0x4c, 0x65, 0xb3, 0x40, 0x90, 0xb6, 0x28, 0x1a, 0x20, 0x3d, 0x18, 0x45, 0x83, 0xa6,
+	0x97, 0xa0, 0x87, 0xa2, 0x30, 0x8a, 0xa2, 0x87, 0x1e, 0x7a, 0x08, 0xd0, 0x5e, 0x02, 0xa4, 0x08,
+	0xda, 0x26, 0x3d, 0x16, 0x28, 0x50, 0xa0, 0x87, 0x16, 0x01, 0xda, 0xc3, 0xde, 0x2a, 0x14, 0x6d,
+	0xf1, 0xde, 0xbc, 0x37, 0x33, 0x24, 0x87, 0x12, 0x15, 0xef, 0x22, 0x1b, 0x20, 0x97, 0xdd, 0xd1,
+	0x7b, 0xdf, 0xf7, 0x9b, 0x37, 0xef, 0x7d, 0xdf, 0xf7, 0xbe, 0x7f, 0x34, 0x14, 0xea, 0x96, 0xad,
+	0x3e, 0x55, 0xcd, 0x45, 0xc7, 0x55, 0xb5, 0x83, 0x25, 0xb5, 0x69, 0x2c, 0x61, 0x53, 0x57, 0x74,
+	0x7c, 0x68, 0x68, 0xb8, 0xd4, 0xb4, 0x2d, 0xd7, 0x42, 0x59, 0xd7, 0x35, 0x4b, 0x8c, 0xae, 0x74,
+	0xb8, 0x92, 0xaf, 0xd4, 0x0c, 0x77, 0xbf, 0xb5, 0x5b, 0xd2, 0xac, 0xc6, 0x12, 0x36, 0x0f, 0xad,
+	0xa3, 0xa6, 0x6d, 0xb5, 0x8f, 0x96, 0x28, 0xb1, 0xb6, 0x58, 0xc3, 0xe6, 0xe2, 0xa1, 0x5a, 0x37,
+	0x74, 0xd5, 0xc5, 0x4b, 0x3d, 0x0f, 0x1e, 0x64, 0x7e, 0x31, 0x04, 0x51, 0xb3, 0x6a, 0x96, 0xc7,
+	0xbc, 0xdb, 0xda, 0xa3, 0x7f, 0xd1, 0x3f, 0xe8, 0x13, 0x23, 0x5f, 0x0b, 0x91, 0xef, 0xec, 0xe3,
+	0x9d, 0x7d, 0xc3, 0xac, 0x39, 0x1b, 0xa6, 0xde, 0x72, 0x5c, 0xdb, 0xc0, 0x4e, 0xf8, 0xd5, 0x35,
+	0x6b, 0x71, 0xaf, 0xae, 0xd6, 0x9c, 0x25, 0xd5, 0x34, 0x2d, 0x57, 0x75, 0x0d, 0xcb, 0x74, 0x18,
+	0xca, 0xea, 0x99, 0x50, 0x3e, 0x70, 0x2c, 0x33, 0x02, 0xe4, 0x42, 0xcd, 0xb2, 0x6a, 0x75, 0x1c,
+	0x2c, 0x58, 0x6f, 0xd9, 0x94, 0x80, 0xcd, 0xcf, 0x77, 0xcf, 0xef, 0x19, 0xb8, 0xae, 0x2b, 0x0d,
+	0xd5, 0x39, 0x60, 0x14, 0xe7, 0xba, 0x29, 0x1c, 0xd7, 0x6e, 0x69, 0x2e, 0x9b, 0xbd, 0xd8, 0x3d,
+	0xeb, 0x1a, 0x0d, 0xec, 0xb8, 0x6a, 0xa3, 0xd9, 0x6f, 0x01, 0x4f, 0x6d, 0xb5, 0xd9, 0xc4, 0x36,
+	0x5f, 0xe0, 0xf9, 0xa8, 0x13, 0x6d, 0x35, 0xf8, 0xf4, 0x4b, 0xbd, 0xd3, 0x86, 0x8e, 0x4d, 0xd7,
+	0xd8, 0x33, 0x02, 0x8c, 0x73, 0xbd, 0x44, 0x07, 0xf8, 0x88, 0xcf, 0x5e, 0xec, 0x9d, 0xe5, 0xd2,
+	0xc1, 0xf6, 0xa0, 0x97, 0xa0, 0x81, 0x1d, 0x47, 0xad, 0x61, 0xe7, 0x24, 0x0a, 0x57, 0xd5, 0x55,
+	0x57, 0xed, 0xff, 0x92, 0xa6, 0xa1, 0xb9, 0x2d, 0x9b, 0x8b, 0x50, 0x29, 0x74, 0x5c, 0x56, 0x13,
+	0x9b, 0x6a, 0xd3, 0x38, 0x2c, 0x2f, 0x59, 0x4d, 0x7a, 0x58, 0xbd, 0x07, 0x57, 0xf8, 0xde, 0x28,
+	0x24, 0x1e, 0x60, 0xc7, 0x31, 0x2c, 0x13, 0xfd, 0x67, 0x0c, 0x92, 0x3a, 0x3e, 0x54, 0x54, 0x5d,
+	0xb7, 0xa5, 0xd8, 0xbc, 0x50, 0xcc, 0x54, 0x7f, 0x1e, 0x7b, 0x56, 0x99, 0xdd, 0x84, 0x42, 0xf9,
+	0xf5, 0xe5, 0xe5, 0x4a, 0x75, 0x75, 0xad, 0xf0, 0x83, 0x98, 0x90, 0xf8, 0x93, 0xd8, 0x28, 0x91,
+	0x0d, 0xb3, 0x76, 0x5c, 0x1d, 0xfd, 0x66, 0x7c, 0x3f, 0xde, 0x14, 0x7e, 0xf1, 0x7c, 0xf6, 0x3b,
+	0x02, 0xdc, 0xac, 0x59, 0x25, 0x77, 0x1f, 0xbb, 0x54, 0x82, 0x4a, 0x26, 0x76, 0x9f, 0x5a, 0xf6,
+	0xc1, 0x52, 0xe7, 0x8a, 0x0f, 0x57, 0x96, 0x9a, 0x07, 0xb5, 0x25, 0xf7, 0xa8, 0x89, 0x9d, 0xd2,
+	0x96, 0x6a, 0x3b, 0xfb, 0x6a, 0xfd, 0xf6, 0xfa, 0x3b, 0xd5, 0x23, 0x17, 0x3b, 0xe8, 0xcc, 0x00,
+	0x0f, 0xcd, 0x86, 0x07, 0xf1, 0x1a, 0x05, 0xf8, 0xf8, 0xf9, 0xec, 0x0f, 0x85, 0xfc, 0xbd, 0xc1,
+	0x50, 0xb4, 0x86, 0xbe, 0xe4, 0xba, 0xe6, 0x62, 0xfd, 0xe9, 0xa2, 0x56, 0x37, 0x96, 0xb4, 0x96,
+	0xe3, 0x5a, 0x0d, 0xaa, 0x24, 0xa5, 0x7b, 0xf8, 0xa9, 0x07, 0x78, 0xab, 0xae, 0xd6, 0x0a, 0x2f,
+	0x8e, 0xf7, 0x15, 0xec, 0xae, 0xb7, 0x55, 0xcd, 0xa5, 0x98, 0x72, 0x42, 0xc7, 0x87, 0x15, 0x5d,
+	0xb7, 0xd1, 0x1b, 0x10, 0x27, 0xf2, 0x23, 0x0d, 0xcf, 0x0b, 0xc5, 0x74, 0x79, 0xae, 0xd4, 0x69,
+	0x50, 0x4a, 0xec, 0x58, 0xee, 0xe0, 0x23, 0xa7, 0x9a, 0x3c, 0xae, 0x8e, 0x7c, 0x57, 0x88, 0x89,
+	0x82, 0x4c, 0x59, 0xd0, 0x25, 0x18, 0xab, 0xab, 0x8e, 0xab, 0xec, 0x29, 0x9a, 0xe9, 0x2a, 0xad,
+	0xa6, 0x14, 0x9f, 0x17, 0x8a, 0x63, 0x32, 0x90, 0xc1, 0x5b, 0xab, 0xa6, 0xfb, 0xb0, 0x89, 0x8a,
+	0x30, 0x4e, 0x49, 0x4c, 0x46, 0xa4, 0x5b, 0x4f, 0x4d, 0x69, 0x84, 0x92, 0x51, 0xde, 0x7b, 0x84,
+	0x6e, 0xcd, 0x7a, 0x6a, 0xfa, 0x94, 0x6a, 0x98, 0x72, 0x34, 0xa0, 0xac, 0xf8, 0x94, 0x25, 0x98,
+	0xa4, 0x94, 0x9a, 0x65, 0xee, 0x85, 0x89, 0x13, 0x94, 0x58, 0x24, 0x73, 0xab, 0x96, 0xb9, 0xe7,
+	0xd3, 0xbf, 0x01, 0xe0, 0xb8, 0xaa, 0xed, 0x62, 0x5d, 0x51, 0x5d, 0x29, 0x49, 0xbf, 0x33, 0x5f,
+	0xf2, 0x54, 0xb5, 0xc4, 0x55, 0xb5, 0xb4, 0xc3, 0x75, 0x59, 0x4e, 0x31, 0xea, 0x8a, 0x8b, 0x30,
+	0x9c, 0xfb, 0x46, 0x0b, 0xb7, 0x08, 0x67, 0xb3, 0x59, 0x37, 0x34, 0x2a, 0xb5, 0xf4, 0x6d, 0x75,
+	0xc3, 0x3c, 0x70, 0xa4, 0xd4, 0xfc, 0x70, 0x31, 0x5d, 0x7e, 0xa9, 0x7b, 0xd3, 0x2a, 0x01, 0xf1,
+	0x1a, 0xa3, 0x95, 0xf3, 0x1e, 0x50, 0xc4, 0x94, 0x73, 0x23, 0xf9, 0xf1, 0xf3, 0xd9, 0x78, 0x52,
+	0x10, 0x85, 0x4d, 0xf2, 0xdf, 0x58, 0x61, 0x05, 0x52, 0x55, 0xcb, 0xaa, 0x3f, 0x52, 0xeb, 0x2d,
+	0x8c, 0x26, 0x61, 0xe4, 0x90, 0x3c, 0x48, 0xc2, 0xbc, 0x50, 0x4c, 0xca, 0xde, 0x1f, 0x37, 0xc4,
+	0x5f, 0x3c, 0x9f, 0x8d, 0x49, 0xc2, 0xc7, 0xcf, 0x67, 0x47, 0x09, 0xa3, 0x24, 0x14, 0x7e, 0x9c,
+	0x83, 0xb1, 0xad, 0xca, 0xea, 0xb6, 0x6a, 0xab, 0x0d, 0xec, 0x62, 0xdb, 0x41, 0xb3, 0x90, 0x6c,
+	0xa8, 0x6d, 0x05, 0x1b, 0x76, 0x93, 0x32, 0xc7, 0xe4, 0x44, 0x43, 0x6d, 0xaf, 0x1b, 0x76, 0x13,
+	0x3d, 0x82, 0x09, 0x55, 0xb7, 0x15, 0xa2, 0xd4, 0x8a, 0xad, 0xba, 0x58, 0x31, 0x4c, 0x1d, 0xb7,
+	0xe9, 0x01, 0x66, 0xcb, 0xe7, 0xbb, 0xbf, 0x67, 0x4d, 0x75, 0x55, 0x59, 0x75, 0xf1, 0x06, 0x21,
+	0xa2, 0x62, 0xf0, 0x1d, 0x2a, 0x06, 0xa2, 0xaa, 0xdb, 0x1d, 0x73, 0xe8, 0x35, 0x40, 0x04, 0xd7,
+	0x6d, 0x2b, 0x4d, 0xeb, 0x29, 0xb6, 0x19, 0x2c, 0x3d, 0xf0, 0x6a, 0xe2, 0xb8, 0x1a, 0xbf, 0x1a,
+	0x93, 0x72, 0x72, 0x4e, 0xd5, 0xed, 0x9d, 0xf6, 0x36, 0x21, 0xf0, 0xb8, 0xae, 0x40, 0x86, 0x70,
+	0x99, 0xbb, 0x8a, 0x6b, 0xab, 0xa6, 0xe3, 0x1d, 0x7b, 0x40, 0x0f, 0xaa, 0x6e, 0xdf, 0xdb, 0xdd,
+	0x21, 0x53, 0xe8, 0x32, 0x8c, 0x11, 0x52, 0x55, 0x3b, 0x50, 0xea, 0x46, 0xc3, 0x70, 0xbd, 0x53,
+	0xaf, 0xc6, 0x24, 0x41, 0x4e, 0xab, 0xba, 0x5d, 0xd1, 0x0e, 0xee, 0x92, 0xe1, 0x30, 0x9d, 0x8e,
+	0xeb, 0xea, 0x11, 0x3d, 0xf7, 0x0e, 0xba, 0x35, 0x32, 0x8c, 0xbe, 0x0c, 0x29, 0xbb, 0x7d, 0x8d,
+	0xd1, 0xa4, 0xe8, 0xe7, 0xcf, 0x74, 0x7f, 0xbe, 0xdc, 0xa6, 0xb4, 0xa1, 0x0f, 0x4f, 0xda, 0xed,
+	0x6b, 0x1e, 0xff, 0x57, 0x61, 0x92, 0xf2, 0xfb, 0x1b, 0x69, 0xed, 0xed, 0x39, 0xd8, 0x95, 0x80,
+	0x42, 0x5d, 0xe8, 0xb7, 0x93, 0x6f, 0x53, 0xaa, 0x10, 0xe2, 0x38, 0x41, 0xec, 0x98, 0x24, 0x67,
+	0x64, 0xb7, 0xcb, 0x3d, 0x67, 0x94, 0x3e, 0xe3, 0x19, 0xd9, 0xed, 0x72, 0xe7, 0x19, 0x95, 0x60,
+	0x8c, 0xe0, 0xee, 0xd9, 0xf8, 0x1b, 0x2d, 0x6c, 0x6a, 0x47, 0x52, 0x66, 0x5e, 0x28, 0xc6, 0xab,
+	0xa9, 0xe3, 0xea, 0x68, 0x39, 0x5e, 0xfc, 0xe1, 0xf7, 0x46, 0xe5, 0x8c, 0xdd, 0x2e, 0xdf, 0xe2,
+	0xd3, 0xe8, 0x01, 0x64, 0x89, 0x18, 0xe9, 0x2d, 0xf7, 0x48, 0xd1, 0x8e, 0xb4, 0x3a, 0x96, 0xc6,
+	0xe8, 0x12, 0x7a, 0xc5, 0xbe, 0x56, 0xb3, 0x71, 0x4d, 0x75, 0xb1, 0xbe, 0xd6, 0x72, 0x8f, 0x56,
+	0x09, 0x69, 0x68, 0x21, 0x99, 0x86, 0xda, 0xf6, 0xc7, 0x91, 0x0e, 0x33, 0x36, 0xfe, 0xc0, 0x32,
+	0x4c, 0x85, 0x5c, 0xa2, 0x4a, 0x13, 0xdb, 0x86, 0xa5, 0x1b, 0x9a, 0xe1, 0x1e, 0x49, 0x59, 0x8a,
+	0x5e, 0xe8, 0x39, 0x05, 0x4a, 0x4e, 0xd4, 0x74, 0xbd, 0xdd, 0xb4, 0x4c, 0x6c, 0x86, 0xb7, 0x6f,
+	0xca, 0xf6, 0x67, 0xb7, 0x03, 0x28, 0x54, 0x03, 0x89, 0xbd, 0x45, 0xb3, 0x5a, 0xa6, 0xdb, 0xf1,
+	0x9a, 0x5c, 0xf4, 0x47, 0x78, 0xaf, 0x59, 0x25, 0xe4, 0x11, 0xef, 0x99, 0xb6, 0x83, 0xe9, 0xf0,
+	0x8b, 0xde, 0x84, 0x89, 0xa6, 0x61, 0xd6, 0x14, 0xa7, 0x6e, 0xb9, 0xa1, 0x9d, 0x15, 0xe9, 0xce,
+	0xa6, 0x8f, 0xab, 0xc9, 0xf2, 0xa8, 0x34, 0x44, 0xf7, 0x76, 0x9c, 0xd0, 0x3d, 0xa8, 0x5b, 0x6e,
+	0xb0, 0xc1, 0xef, 0xc2, 0x6c, 0xc0, 0xdc, 0x7d, 0xdc, 0xe3, 0x83, 0x1c, 0x37, 0x11, 0xeb, 0x29,
+	0x0e, 0xdc, 0x79, 0xda, 0xaf, 0x83, 0xb8, 0x8b, 0x55, 0xcd, 0x32, 0x43, 0xcb, 0x42, 0xbd, 0xcb,
+	0xca, 0x79, 0x44, 0xc1, 0xa2, 0xee, 0x40, 0x52, 0xdb, 0x57, 0x4d, 0x13, 0xd7, 0x1d, 0x69, 0x82,
+	0x9a, 0xb9, 0x97, 0xbb, 0xd7, 0xd0, 0x61, 0x6d, 0x4a, 0xab, 0x1e, 0x35, 0xdd, 0xac, 0x67, 0x42,
+	0x2c, 0x29, 0xc8, 0x3e, 0x00, 0x5a, 0x87, 0xf1, 0x56, 0x93, 0xd8, 0x3a, 0x45, 0x7f, 0x8a, 0xeb,
+	0x75, 0x7a, 0xe6, 0xd2, 0x24, 0xb5, 0xc4, 0xb3, 0xdd, 0xa8, 0xbe, 0xe5, 0x93, 0x73, 0x1e, 0xcf,
+	0x1a, 0x61, 0x21, 0x27, 0x8b, 0x36, 0x60, 0x82, 0xdb, 0xde, 0x30, 0xd0, 0xd4, 0x69, 0x40, 0xe3,
+	0x9c, 0x2b, 0x80, 0x7a, 0x02, 0xd3, 0x1d, 0x76, 0x44, 0xc1, 0xec, 0xb0, 0xa5, 0x69, 0x8a, 0x56,
+	0xec, 0x11, 0xee, 0x35, 0x99, 0x1b, 0x17, 0x2e, 0x17, 0x1e, 0xf8, 0x44, 0xc8, 0xec, 0xf0, 0x99,
+	0x30, 0x3c, 0x35, 0x2d, 0x01, 0xfc, 0xcc, 0x49, 0xf0, 0xd4, 0xa6, 0x44, 0xc2, 0x77, 0xcc, 0xa0,
+	0x1a, 0x5c, 0xec, 0x2b, 0x31, 0x8a, 0x77, 0x5b, 0x48, 0xf4, 0x3d, 0x85, 0x13, 0xe5, 0xc6, 0x7b,
+	0x43, 0x3e, 0x52, 0x70, 0xe8, 0x5c, 0xfe, 0x9f, 0x63, 0x90, 0x60, 0x07, 0x4b, 0x24, 0x89, 0x1d,
+	0x62, 0x20, 0x49, 0x42, 0x84, 0x24, 0x79, 0x44, 0x81, 0x24, 0x7d, 0x01, 0x90, 0x7f, 0x6a, 0x01,
+	0x67, 0xac, 0xdb, 0xe8, 0xf8, 0x87, 0x14, 0x70, 0x3e, 0x82, 0x89, 0x86, 0x61, 0xf6, 0xa8, 0xc4,
+	0xf0, 0x19, 0x2d, 0x60, 0xc3, 0x30, 0x3b, 0x75, 0x82, 0xe0, 0x12, 0x8b, 0xf6, 0x82, 0xb7, 0x1f,
+	0x31, 0x68, 0x1d, 0xb8, 0x2f, 0xc1, 0x18, 0x36, 0xd5, 0xdd, 0x3a, 0x56, 0xbc, 0x3d, 0xa0, 0x17,
+	0x5f, 0x52, 0xce, 0x78, 0x83, 0x0f, 0xe9, 0x58, 0x70, 0xd9, 0x77, 0x5c, 0xfb, 0x31, 0x71, 0x78,
+	0x33, 0x9e, 0x1c, 0x16, 0xe3, 0x85, 0xe3, 0x11, 0x10, 0xd7, 0x4d, 0x7d, 0x8d, 0x86, 0x79, 0x8f,
+	0xb0, 0x4d, 0xbd, 0xe2, 0xaf, 0xc0, 0xb0, 0xa1, 0x3b, 0x74, 0xbb, 0xd3, 0xe5, 0xcf, 0x75, 0xaf,
+	0xb0, 0x9b, 0x7c, 0x23, 0x88, 0x1a, 0x42, 0x4e, 0x1b, 0x41, 0x40, 0x5b, 0x90, 0x63, 0x8c, 0xca,
+	0xa1, 0x47, 0x4c, 0x4f, 0x22, 0x5b, 0xce, 0x47, 0x68, 0x37, 0x83, 0x0b, 0x7d, 0x73, 0x96, 0x11,
+	0xf0, 0x75, 0xed, 0xc0, 0x04, 0x87, 0x6b, 0xee, 0x1f, 0xf9, 0x90, 0xc3, 0xd1, 0x90, 0xdb, 0xb7,
+	0xbf, 0xda, 0x0b, 0x39, 0xce, 0x08, 0xb6, 0xf7, 0x8f, 0x38, 0xea, 0x0a, 0x8c, 0xfb, 0x82, 0xa2,
+	0x34, 0xeb, 0xaa, 0xa9, 0x18, 0x3a, 0x3d, 0x9d, 0x14, 0x75, 0x0a, 0xec, 0x98, 0xf4, 0x96, 0x9c,
+	0xf3, 0x29, 0xb6, 0xeb, 0xaa, 0xb9, 0xa1, 0xa3, 0x79, 0x18, 0x6d, 0xee, 0x5b, 0xae, 0xe5, 0x48,
+	0x23, 0xf3, 0xc3, 0xc5, 0x14, 0xb7, 0x43, 0x22, 0xc8, 0x6c, 0x1c, 0x15, 0x41, 0x74, 0x5a, 0xcd,
+	0xa6, 0x65, 0xbb, 0x8e, 0xa2, 0xd5, 0x55, 0xc7, 0x51, 0x76, 0xa9, 0xab, 0x91, 0x94, 0xb3, 0x7c,
+	0x7c, 0x95, 0x0c, 0x57, 0x23, 0x28, 0x35, 0xea, 0x68, 0x74, 0x53, 0xae, 0xa2, 0x2d, 0x98, 0xd4,
+	0xf1, 0x9e, 0xda, 0xaa, 0xbb, 0x4a, 0x43, 0xd5, 0x14, 0x07, 0xbb, 0x2e, 0xf1, 0xd0, 0x99, 0x9b,
+	0x39, 0x17, 0xb1, 0xa9, 0x0f, 0x18, 0x89, 0x8c, 0x18, 0xe3, 0x96, 0xaa, 0xf1, 0x31, 0x22, 0x41,
+	0x44, 0xe2, 0x03, 0x35, 0x21, 0x2e, 0x49, 0x5c, 0xce, 0x34, 0x8c, 0x90, 0x69, 0x26, 0x44, 0x6a,
+	0x3b, 0x44, 0x04, 0x8c, 0x48, 0x6d, 0x77, 0x10, 0xf9, 0x9f, 0x40, 0xae, 0x2c, 0xea, 0x37, 0x24,
+	0xe5, 0x0c, 0x1f, 0xdc, 0xb4, 0x0c, 0x13, 0xbd, 0x0a, 0xc8, 0xc6, 0x0e, 0x66, 0x24, 0x8a, 0x69,
+	0x99, 0x1a, 0x76, 0xa8, 0x3f, 0x90, 0x94, 0x45, 0x6f, 0x86, 0xd0, 0xdd, 0xa3, 0xe3, 0x48, 0x05,
+	0xbe, 0x64, 0x65, 0xcf, 0xb2, 0x1b, 0xaa, 0x4b, 0xec, 0x3e, 0x75, 0x06, 0x22, 0x0c, 0xda, 0x96,
+	0x17, 0x55, 0x6e, 0xab, 0x47, 0x75, 0x4b, 0xd5, 0x6f, 0xf9, 0xf4, 0x21, 0x81, 0x1c, 0x67, 0x68,
+	0xc1, 0x64, 0xe1, 0x7f, 0x12, 0x90, 0xae, 0xac, 0xc9, 0xfe, 0x7e, 0xbc, 0x05, 0xa3, 0x0e, 0x89,
+	0x15, 0x35, 0x26, 0xfa, 0x97, 0x23, 0xec, 0x26, 0x27, 0x2e, 0x3d, 0xa0, 0x94, 0x5b, 0x96, 0x8e,
+	0x6f, 0x0f, 0xc9, 0x8c, 0x0f, 0xad, 0x42, 0x42, 0x3f, 0x32, 0xd5, 0x86, 0xa1, 0x51, 0x41, 0x4f,
+	0x97, 0x5f, 0x39, 0x09, 0x62, 0xcd, 0x23, 0x65, 0x18, 0x9c, 0x13, 0xdd, 0x82, 0xa4, 0x6e, 0x38,
+	0x44, 0x89, 0x75, 0x16, 0x28, 0x15, 0x4f, 0x44, 0x61, 0xb4, 0x0c, 0xc6, 0xe7, 0xcd, 0xff, 0x48,
+	0x00, 0x08, 0x56, 0x89, 0xde, 0x86, 0x5c, 0xb7, 0x0d, 0x12, 0xce, 0x66, 0x83, 0xc6, 0xf4, 0x0e,
+	0x03, 0xb4, 0x08, 0xd9, 0x2e, 0xd7, 0x3b, 0xd6, 0xe9, 0x4a, 0x67, 0xdc, 0xb0, 0xdf, 0xbd, 0x00,
+	0x49, 0xdf, 0xe7, 0x1e, 0xa6, 0x84, 0xc4, 0x1e, 0x5f, 0x8d, 0x4b, 0xb9, 0xa2, 0x20, 0x27, 0x4c,
+	0xcf, 0xe5, 0x0e, 0xcc, 0x54, 0xfe, 0x2f, 0xe3, 0x90, 0x0e, 0xed, 0x10, 0x5a, 0x81, 0xd1, 0x86,
+	0x6a, 0xd7, 0x0c, 0x93, 0x9d, 0xce, 0x5c, 0x4f, 0x54, 0x75, 0xab, 0x6e, 0xa9, 0xec, 0x22, 0x63,
+	0xa4, 0xe8, 0x7e, 0xb4, 0x51, 0x8f, 0x0d, 0x7c, 0x5f, 0xf5, 0xda, 0xf3, 0xfb, 0xd1, 0xf6, 0x7c,
+	0xf8, 0x0c, 0x90, 0xdd, 0xa6, 0x5c, 0x06, 0x44, 0x56, 0xd9, 0xb5, 0x9b, 0x71, 0x8a, 0x78, 0xae,
+	0xe7, 0x33, 0x1f, 0x6e, 0x98, 0xee, 0x4a, 0x99, 0x62, 0x85, 0xc2, 0x9c, 0x86, 0x61, 0x76, 0x84,
+	0x39, 0x04, 0x53, 0x6d, 0x47, 0x05, 0x47, 0x67, 0xc0, 0x54, 0xdb, 0x1d, 0x98, 0x1b, 0x40, 0x6c,
+	0x43, 0x67, 0xe8, 0x74, 0x1a, 0x1a, 0x3b, 0xe4, 0xe1, 0xa2, 0x20, 0x43, 0xc3, 0x30, 0x79, 0x68,
+	0x45, 0xa0, 0xd4, 0x76, 0x00, 0x95, 0x38, 0x2b, 0x94, 0xda, 0xbe, 0xd7, 0x23, 0x32, 0x12, 0x64,
+	0xc2, 0xda, 0x10, 0xba, 0xfd, 0x80, 0xc7, 0xae, 0xf3, 0x42, 0x75, 0x14, 0xe2, 0x0d, 0x4b, 0xc7,
+	0x85, 0x7f, 0x9a, 0x82, 0x74, 0xc8, 0x44, 0xa2, 0x0a, 0xe4, 0x98, 0xa1, 0xa6, 0x9e, 0x9e, 0xd5,
+	0x72, 0x99, 0xa4, 0xcd, 0xf6, 0xac, 0x6a, 0x8d, 0xe5, 0xfa, 0xe4, 0x31, 0xca, 0x51, 0xdd, 0xf1,
+	0xe8, 0xd1, 0x63, 0x98, 0x0a, 0x5c, 0xa5, 0xb0, 0xff, 0xef, 0x09, 0x5c, 0x8f, 0xff, 0xbf, 0xcd,
+	0x9c, 0x21, 0xcf, 0xbb, 0x67, 0x3e, 0x58, 0xb3, 0x63, 0xd0, 0x73, 0xf9, 0xdf, 0x3b, 0xc9, 0x6b,
+	0x1f, 0x5c, 0xf4, 0xfa, 0xb8, 0xed, 0xf7, 0xa2, 0x03, 0x0a, 0x4f, 0x00, 0x7b, 0xc2, 0x4a, 0xdf,
+	0xec, 0x33, 0x7f, 0xb7, 0x37, 0xc6, 0xd8, 0x88, 0x08, 0x03, 0x66, 0x07, 0x02, 0xeb, 0x89, 0x0c,
+	0xfc, 0x43, 0xd1, 0xfc, 0x43, 0x19, 0x19, 0xec, 0x50, 0x56, 0xf9, 0xa1, 0xbc, 0x11, 0x8e, 0xba,
+	0xb9, 0xc8, 0x46, 0x47, 0xdd, 0xde, 0x22, 0x82, 0x80, 0x7b, 0xa7, 0x4f, 0xc0, 0x9d, 0x88, 0x3e,
+	0xce, 0xce, 0x98, 0x9a, 0x6d, 0x4f, 0x6f, 0xac, 0x7d, 0x3f, 0x3a, 0xd6, 0x4e, 0x0e, 0x6e, 0x41,
+	0x7a, 0xc2, 0xec, 0xd5, 0xee, 0x30, 0x3b, 0x35, 0xd0, 0x76, 0x77, 0xc6, 0xde, 0xb7, 0x20, 0xbf,
+	0xa7, 0x6a, 0xae, 0x65, 0x1f, 0x29, 0x4d, 0x7a, 0x1f, 0xfb, 0x78, 0x06, 0x76, 0x24, 0x98, 0x1f,
+	0x2e, 0xc6, 0x7d, 0x47, 0xe7, 0xeb, 0xb2, 0xc4, 0x68, 0xb7, 0x29, 0xe9, 0xad, 0x80, 0x12, 0xdd,
+	0xeb, 0x89, 0xe1, 0xd3, 0x7d, 0xae, 0xb1, 0xde, 0x18, 0x9e, 0xad, 0xab, 0x23, 0x7c, 0xbf, 0x03,
+	0x53, 0xbe, 0x77, 0xb1, 0x52, 0x56, 0x76, 0x0d, 0x96, 0x05, 0xa4, 0xbe, 0xc3, 0xc9, 0xb1, 0x18,
+	0xe7, 0x5b, 0x29, 0x57, 0x0d, 0x9a, 0x26, 0x44, 0xaf, 0x43, 0xa2, 0xe5, 0x60, 0x45, 0xd5, 0x6d,
+	0xe6, 0x4c, 0xf4, 0x67, 0xa7, 0x91, 0xee, 0x68, 0xcb, 0xc1, 0x15, 0xdd, 0x46, 0x5f, 0x06, 0x20,
+	0x41, 0x16, 0xbb, 0x82, 0xb2, 0xa7, 0x5e, 0x41, 0x94, 0x39, 0xa5, 0xea, 0xf6, 0x96, 0x77, 0x13,
+	0xbd, 0x09, 0x19, 0xe6, 0xfd, 0x78, 0x6b, 0xcf, 0x9d, 0xb6, 0x76, 0xf0, 0xc8, 0xe9, 0xa2, 0xef,
+	0xc3, 0x0c, 0xf1, 0x30, 0x5a, 0x4e, 0x6f, 0x02, 0x43, 0x3c, 0x4d, 0x1b, 0xa6, 0x3c, 0xce, 0xee,
+	0x6c, 0xc5, 0x23, 0x90, 0x18, 0x64, 0x6f, 0xb6, 0x62, 0xfc, 0x74, 0x63, 0x2c, 0x4f, 0x7b, 0xdc,
+	0x3d, 0xc9, 0x89, 0xdb, 0x30, 0xae, 0x63, 0xc7, 0xb0, 0xb1, 0xae, 0x04, 0x5a, 0x87, 0x06, 0xd0,
+	0xba, 0x1c, 0x63, 0x93, 0xb9, 0xf2, 0x69, 0x70, 0xae, 0x03, 0xa9, 0x5b, 0x09, 0x27, 0x06, 0x57,
+	0x42, 0x29, 0x84, 0xdd, 0xa9, 0x8b, 0x5f, 0x87, 0xb9, 0xe0, 0x25, 0xbd, 0x3a, 0x39, 0x39, 0xb0,
+	0x4e, 0xce, 0xf8, 0xaf, 0x28, 0x77, 0x5f, 0xee, 0x53, 0xe1, 0x37, 0x04, 0x2a, 0x3a, 0x35, 0x90,
+	0x8a, 0x4e, 0x04, 0xb8, 0x81, 0xa6, 0x3e, 0x81, 0x69, 0x8e, 0xd9, 0xa5, 0x69, 0xd3, 0x67, 0xd4,
+	0x34, 0x0e, 0xbf, 0x15, 0x56, 0xb8, 0x3a, 0x5c, 0xe0, 0xf0, 0x7d, 0xf2, 0x16, 0x33, 0x67, 0xcc,
+	0x5b, 0xe4, 0x19, 0x5e, 0x25, 0x22, 0x7d, 0x11, 0xf1, 0xb6, 0xae, 0x34, 0x86, 0x74, 0xc6, 0x34,
+	0x46, 0xe7, 0xdb, 0x3a, 0xb3, 0x19, 0x07, 0x70, 0x89, 0xbf, 0xad, 0xff, 0x8d, 0x3a, 0x37, 0xf0,
+	0xb1, 0x73, 0x11, 0xdd, 0x8e, 0xbc, 0x58, 0x9f, 0x04, 0xd2, 0x15, 0x75, 0xc1, 0x9e, 0x1b, 0x48,
+	0x02, 0xa4, 0xae, 0x57, 0x04, 0x62, 0xf0, 0x0e, 0xf0, 0x39, 0xa5, 0xe7, 0xbe, 0x3d, 0x3f, 0x10,
+	0x36, 0x17, 0xa3, 0x6a, 0xd7, 0xb5, 0xbb, 0x01, 0x62, 0x58, 0xc0, 0x68, 0x56, 0xff, 0x02, 0x45,
+	0xbc, 0xd8, 0xb3, 0x29, 0x34, 0x19, 0xb0, 0xbe, 0x21, 0x6f, 0x7b, 0x90, 0xd9, 0x40, 0xa2, 0x68,
+	0xf6, 0xff, 0x31, 0xcc, 0x71, 0xb7, 0x4a, 0xf3, 0xab, 0x19, 0x8a, 0x61, 0xba, 0xd8, 0x3e, 0x54,
+	0xeb, 0xd2, 0xc5, 0xd3, 0xec, 0xd7, 0x8c, 0xe7, 0x62, 0xad, 0xf2, 0x0a, 0xc6, 0x06, 0xe3, 0x8c,
+	0xce, 0xf3, 0xcd, 0x7f, 0x52, 0x79, 0xbe, 0x4b, 0xbf, 0x44, 0x9e, 0x6f, 0x11, 0x86, 0xc9, 0xbd,
+	0x52, 0x88, 0x0e, 0xc7, 0x43, 0x41, 0x9b, 0x4c, 0xe8, 0xd0, 0x6d, 0x40, 0x8e, 0xb6, 0x8f, 0xf5,
+	0x56, 0x1d, 0x87, 0xca, 0x3c, 0x2f, 0x9d, 0x7e, 0xa9, 0x31, 0xa6, 0x88, 0x9a, 0x4e, 0xe1, 0x0f,
+	0x8b, 0x90, 0x24, 0x4e, 0xad, 0xab, 0xba, 0x18, 0x3d, 0x02, 0xa4, 0xb5, 0x6c, 0x1b, 0x13, 0xf3,
+	0xee, 0xe7, 0x4e, 0x99, 0x53, 0x7b, 0xfe, 0xc4, 0x04, 0x6b, 0x38, 0x70, 0x66, 0x10, 0xa1, 0x5a,
+	0xcf, 0x23, 0x12, 0x9b, 0x33, 0xb1, 0x0e, 0x70, 0x63, 0x67, 0xc4, 0xe5, 0x62, 0x1d, 0xe0, 0x56,
+	0x21, 0xe3, 0x35, 0x1c, 0x78, 0x79, 0x10, 0x96, 0xd9, 0x99, 0xea, 0x46, 0xf4, 0xf2, 0x26, 0x41,
+	0x5c, 0x9a, 0xf6, 0x98, 0xe8, 0x70, 0x54, 0xce, 0x29, 0xfe, 0x02, 0x39, 0xa7, 0xc7, 0x90, 0xf7,
+	0xeb, 0x7f, 0x86, 0xdd, 0xc0, 0x7a, 0x20, 0xc2, 0x2a, 0x77, 0x45, 0x4f, 0xaa, 0xef, 0xcd, 0xf0,
+	0x0a, 0x21, 0x65, 0xe6, 0x27, 0x56, 0x71, 0xd1, 0x75, 0x90, 0x28, 0xb0, 0x8e, 0x0f, 0x15, 0x76,
+	0x11, 0xfb, 0xa5, 0x4d, 0xaf, 0x12, 0x39, 0x41, 0xe6, 0xd7, 0xf0, 0xe1, 0x03, 0x3a, 0xcb, 0x6a,
+	0x9c, 0x7d, 0x23, 0x8c, 0xc4, 0x0b, 0x46, 0x18, 0x18, 0xce, 0x35, 0xb1, 0xa9, 0x13, 0xec, 0xa8,
+	0xf2, 0x23, 0xf3, 0x4e, 0x07, 0xab, 0x3e, 0x32, 0xa0, 0x88, 0x39, 0xb4, 0x0e, 0x22, 0x2b, 0x72,
+	0xda, 0xd8, 0x69, 0x5a, 0xa6, 0x83, 0x79, 0x61, 0x33, 0xea, 0x7c, 0x56, 0xad, 0x46, 0x43, 0x35,
+	0x75, 0x39, 0xe7, 0xf1, 0xc8, 0x9c, 0x85, 0xc0, 0xf0, 0xd5, 0x52, 0x9b, 0xe5, 0xb8, 0x9e, 0x83,
+	0x7a, 0x0a, 0x0c, 0xe3, 0x91, 0x19, 0x0b, 0xba, 0x0f, 0x88, 0xad, 0x86, 0xa6, 0xa4, 0x54, 0x4d,
+	0xc3, 0x4d, 0x97, 0x79, 0xab, 0x2f, 0x45, 0xa5, 0xd3, 0x88, 0x5a, 0x95, 0x36, 0x2d, 0xc3, 0xac,
+	0x50, 0x52, 0x99, 0x7d, 0x4c, 0x30, 0x82, 0x1e, 0xc1, 0x24, 0x5f, 0x19, 0xc5, 0x64, 0xcb, 0x63,
+	0xbe, 0xea, 0xc2, 0x89, 0xa0, 0x6c, 0x5d, 0x32, 0x62, 0x08, 0xa1, 0x31, 0xb4, 0x4c, 0x42, 0x11,
+	0xe5, 0xa9, 0x61, 0xea, 0xd6, 0x53, 0x47, 0x51, 0x0f, 0x55, 0xa3, 0x4e, 0x02, 0x5d, 0xea, 0xc4,
+	0x26, 0x65, 0x64, 0xb7, 0x1f, 0x7b, 0x53, 0x15, 0x3e, 0x83, 0xb6, 0x20, 0x6b, 0x63, 0x0d, 0x53,
+	0x91, 0xf2, 0x4c, 0x4b, 0x96, 0xee, 0xd0, 0xe5, 0xbe, 0x6b, 0xf0, 0x92, 0xc6, 0x2c, 0x99, 0x26,
+	0x8f, 0x79, 0xdc, 0xde, 0xa0, 0x83, 0x1e, 0x80, 0xc8, 0xe0, 0x02, 0x5b, 0x95, 0xa3, 0x80, 0xc5,
+	0xbe, 0x80, 0xfc, 0xd8, 0x39, 0x64, 0xce, 0x43, 0xf0, 0x0d, 0x17, 0xda, 0x83, 0x82, 0x57, 0xb2,
+	0xf7, 0x7a, 0x0c, 0x14, 0xc3, 0x34, 0x5c, 0x83, 0xb8, 0x29, 0x1d, 0x6a, 0x26, 0x9e, 0xaa, 0x66,
+	0x17, 0x68, 0x7d, 0xdf, 0x03, 0xd9, 0xe0, 0x18, 0x21, 0x6d, 0xb3, 0xe1, 0x82, 0x8d, 0x3f, 0xc0,
+	0x9a, 0xcb, 0x9c, 0x8c, 0xae, 0x0b, 0x1f, 0x3b, 0xd2, 0xf8, 0xfc, 0xf0, 0xe9, 0xb9, 0xb0, 0xdc,
+	0x71, 0x35, 0xf3, 0x4c, 0x48, 0x89, 0xb9, 0x02, 0x33, 0x17, 0x79, 0x8e, 0x5a, 0xe9, 0x2a, 0x4e,
+	0x63, 0x07, 0x6d, 0xc3, 0xf9, 0x8e, 0x77, 0x76, 0xa6, 0x62, 0xb0, 0x23, 0xa1, 0xf9, 0xe1, 0xe2,
+	0x58, 0x35, 0x7b, 0x5c, 0x4d, 0x3f, 0x13, 0x92, 0x62, 0xae, 0xe0, 0x65, 0x5d, 0x66, 0x43, 0x90,
+	0xe1, 0xec, 0x0b, 0x76, 0x50, 0x05, 0x26, 0x7d, 0xc4, 0x70, 0x68, 0x36, 0x41, 0x43, 0x33, 0x06,
+	0x54, 0xe0, 0x35, 0x8e, 0x09, 0x4e, 0x1b, 0x8e, 0xcd, 0xd6, 0x40, 0xf4, 0xcc, 0x4e, 0x68, 0x7b,
+	0x27, 0x4f, 0xdd, 0xde, 0x2c, 0x35, 0x45, 0xc1, 0x76, 0x5a, 0xe0, 0xaf, 0x32, 0xb4, 0x95, 0xb6,
+	0x6a, 0xd6, 0xb0, 0x23, 0x4d, 0x51, 0xa1, 0x78, 0xad, 0xaf, 0x50, 0xc8, 0x8c, 0x93, 0xef, 0x97,
+	0x4c, 0xd9, 0xd6, 0x4d, 0xd7, 0x3e, 0xa2, 0x25, 0xcf, 0x88, 0x49, 0xdf, 0x5a, 0x92, 0x7d, 0xd4,
+	0xf6, 0xc9, 0x58, 0x60, 0x2d, 0xa7, 0x03, 0x6b, 0x59, 0xd1, 0xed, 0x55, 0x3a, 0xcb, 0xac, 0xa5,
+	0x41, 0x8e, 0x9d, 0xca, 0x6c, 0x43, 0xd5, 0x14, 0xcd, 0x33, 0x03, 0x4a, 0xa8, 0xcf, 0x49, 0x9a,
+	0xa1, 0xc7, 0xbe, 0xd0, 0xdf, 0x68, 0x04, 0xe5, 0x0d, 0x79, 0xce, 0xc3, 0xda, 0x52, 0xb5, 0x9e,
+	0x39, 0x27, 0xff, 0x5b, 0x31, 0x48, 0x87, 0xf5, 0xf5, 0x3e, 0xf8, 0x0e, 0x42, 0x90, 0xa8, 0x1f,
+	0x65, 0x3b, 0xdd, 0x2d, 0x64, 0x77, 0xb9, 0x63, 0x10, 0xba, 0x1f, 0x45, 0xce, 0xee, 0x27, 0xa8,
+	0xbe, 0x08, 0x49, 0xbb, 0xcd, 0x22, 0xaa, 0xc4, 0xa0, 0xdd, 0x03, 0x09, 0xdb, 0x1b, 0x42, 0x4b,
+	0x90, 0xd0, 0xf6, 0x94, 0xba, 0xe1, 0xf0, 0xb6, 0x94, 0xe9, 0x9e, 0x7b, 0xf5, 0xd6, 0x5d, 0xc3,
+	0x71, 0xe5, 0x51, 0x6d, 0x8f, 0xfc, 0xbf, 0xbb, 0x51, 0x24, 0x5c, 0x37, 0xda, 0x8c, 0x27, 0xe3,
+	0xe2, 0xc8, 0x66, 0x3c, 0x39, 0x22, 0x8e, 0x6e, 0xc6, 0x93, 0x29, 0x11, 0x36, 0xe3, 0x49, 0x10,
+	0xd3, 0xf9, 0x9f, 0x27, 0x00, 0x42, 0xc6, 0xf0, 0x25, 0x48, 0x34, 0xbd, 0x9c, 0x3c, 0xf5, 0x3a,
+	0x32, 0x34, 0x85, 0xf7, 0xcd, 0xb8, 0x38, 0x2e, 0x5d, 0x92, 0xf9, 0x0c, 0xba, 0x0d, 0x09, 0x6e,
+	0x24, 0x63, 0x83, 0x1b, 0xc9, 0xd0, 0x4e, 0x71, 0xf6, 0x17, 0x69, 0x2f, 0xba, 0x0e, 0x39, 0xcd,
+	0xb2, 0x6d, 0x5c, 0xf7, 0xae, 0x3d, 0x43, 0x77, 0xa4, 0x38, 0xad, 0xec, 0x64, 0x8e, 0xab, 0xa9,
+	0x67, 0xc2, 0x68, 0x21, 0x6e, 0xc7, 0x24, 0x5d, 0xce, 0x86, 0x88, 0x36, 0x74, 0xa7, 0xb3, 0x81,
+	0x6c, 0xe4, 0x37, 0x0d, 0x64, 0x9f, 0x76, 0x03, 0xd9, 0xbf, 0xc7, 0x60, 0xd4, 0xc4, 0xae, 0x62,
+	0xe8, 0x54, 0x97, 0x32, 0xd5, 0x7f, 0x8c, 0x3d, 0xab, 0xcc, 0x6c, 0x26, 0x0b, 0xcb, 0xcb, 0xcb,
+	0xcb, 0xd7, 0x56, 0xa2, 0xf6, 0x7a, 0xf8, 0x33, 0xb0, 0xd7, 0x2b, 0x9f, 0xf4, 0x5e, 0xaf, 0x7c,
+	0x7a, 0x7b, 0x3d, 0x62, 0x62, 0x77, 0x43, 0x0f, 0x65, 0xd5, 0xff, 0x3b, 0x01, 0x63, 0x1d, 0x9e,
+	0x01, 0x7a, 0x33, 0x50, 0x6b, 0x4f, 0x63, 0x67, 0xfa, 0x14, 0xe4, 0xc2, 0x4a, 0xca, 0xd5, 0xfd,
+	0x31, 0x24, 0x7d, 0x7b, 0xe8, 0x65, 0x98, 0xaf, 0x0d, 0xe6, 0x90, 0x94, 0x76, 0xda, 0x11, 0x66,
+	0xd2, 0x07, 0x43, 0x32, 0xa4, 0xed, 0xb6, 0xc2, 0xdb, 0x47, 0x69, 0x61, 0x76, 0x70, 0x6c, 0xb9,
+	0xbd, 0xc5, 0x18, 0x65, 0xb0, 0xfd, 0x67, 0xf4, 0x26, 0xa4, 0x89, 0xd1, 0x37, 0x0e, 0xbd, 0x7e,
+	0xbe, 0xd1, 0x53, 0x6f, 0x4a, 0xe0, 0xe4, 0xd4, 0xc5, 0xef, 0xb1, 0x29, 0x89, 0x01, 0x6c, 0xca,
+	0x0d, 0x98, 0xe4, 0x51, 0x90, 0xd7, 0x0c, 0xc1, 0x92, 0x12, 0x29, 0x5a, 0x34, 0x23, 0x5f, 0x7e,
+	0x75, 0x58, 0xfa, 0x3f, 0x41, 0x46, 0x2c, 0xec, 0xf1, 0x88, 0xa8, 0x8f, 0x90, 0x7f, 0x00, 0x10,
+	0xec, 0x12, 0xba, 0x09, 0x29, 0xff, 0x76, 0x66, 0x61, 0x9f, 0xd4, 0xcf, 0xc1, 0x09, 0x6f, 0x29,
+	0xaf, 0xf3, 0x51, 0x93, 0x0f, 0xf9, 0x7f, 0x1d, 0x06, 0x08, 0xf6, 0x07, 0x6d, 0x41, 0xba, 0xa6,
+	0xba, 0xf8, 0xa9, 0x7a, 0xa4, 0x04, 0x6d, 0x02, 0x3d, 0xb9, 0x92, 0xaf, 0x78, 0x24, 0xd1, 0xdd,
+	0x01, 0x50, 0xe3, 0xb3, 0x0e, 0xba, 0x04, 0x19, 0xfe, 0x9d, 0xb6, 0xe3, 0x18, 0xf4, 0x33, 0x63,
+	0x72, 0x9a, 0x8d, 0xc9, 0x8e, 0x63, 0x20, 0x11, 0x86, 0x1d, 0xd3, 0xa6, 0x7e, 0x79, 0x4c, 0x26,
+	0x8f, 0xe8, 0x03, 0x90, 0xfc, 0xdb, 0xb5, 0xa9, 0xba, 0xfb, 0x24, 0x3e, 0x73, 0x5c, 0x5b, 0x35,
+	0x4c, 0x97, 0xb5, 0x74, 0xf5, 0x78, 0xb9, 0xdc, 0x7d, 0xd9, 0x56, 0xdd, 0xfd, 0x55, 0x9f, 0x3a,
+	0xdc, 0x6e, 0xa5, 0x47, 0x52, 0x90, 0x05, 0xb2, 0x3c, 0x83, 0x6b, 0x1d, 0x60, 0x93, 0x66, 0x6e,
+	0x33, 0x72, 0xda, 0x1b, 0xdb, 0x21, 0x43, 0xe8, 0x00, 0xc6, 0x9a, 0xaa, 0x76, 0x80, 0x5d, 0x65,
+	0xd7, 0xb6, 0x0e, 0xb0, 0xcd, 0x12, 0x9e, 0xb7, 0xce, 0x2c, 0x7c, 0xa5, 0x6d, 0x0a, 0x53, 0xa5,
+	0x28, 0xbe, 0x44, 0x66, 0x9a, 0xa1, 0xd1, 0xfc, 0x39, 0x98, 0x8c, 0xa2, 0xa2, 0xb7, 0x74, 0x9a,
+	0x1e, 0x59, 0xca, 0xbb, 0x8d, 0x37, 0xe3, 0xc9, 0x8c, 0x38, 0xb6, 0x19, 0x4f, 0x8e, 0x89, 0xd9,
+	0xcd, 0x78, 0x52, 0x14, 0xc7, 0x37, 0xe3, 0xc9, 0x71, 0x11, 0x6d, 0xc6, 0x93, 0x13, 0xe2, 0xe4,
+	0x66, 0x3c, 0x39, 0x29, 0x4e, 0x6d, 0xc6, 0x93, 0x9a, 0xa8, 0xfb, 0x37, 0xbc, 0x77, 0xb7, 0x27,
+	0x39, 0x42, 0xfe, 0xfb, 0x71, 0xc8, 0x75, 0x39, 0xf1, 0x68, 0xb3, 0x5b, 0xfb, 0x97, 0x07, 0xf5,
+	0xff, 0xb9, 0x59, 0x08, 0x8c, 0x41, 0x84, 0x8a, 0x8c, 0x9e, 0xae, 0x22, 0xf9, 0xff, 0x8a, 0x41,
+	0x82, 0x2f, 0x67, 0x07, 0x46, 0x1a, 0xca, 0xbe, 0x6e, 0x33, 0x41, 0xbc, 0x7e, 0xd6, 0xc5, 0x94,
+	0xb6, 0x6e, 0xaf, 0xc9, 0x61, 0x7f, 0xa0, 0x71, 0x5b, 0xb7, 0xd1, 0x7b, 0x90, 0x26, 0x2e, 0x23,
+	0xff, 0x50, 0xcf, 0xa3, 0x78, 0xf3, 0xec, 0xd8, 0x95, 0x55, 0xd6, 0x94, 0x20, 0x43, 0x43, 0xd5,
+	0xd8, 0x73, 0x7e, 0x0d, 0xe2, 0xe4, 0xad, 0xe8, 0x75, 0x18, 0x6d, 0x28, 0xe4, 0xae, 0x60, 0xa5,
+	0xf8, 0x9e, 0x54, 0xc7, 0xd6, 0xce, 0x51, 0x33, 0xdc, 0xd7, 0x38, 0xd2, 0x20, 0x03, 0x9e, 0x2b,
+	0x96, 0x7f, 0x02, 0x10, 0xe0, 0xa3, 0x8b, 0x30, 0xba, 0xa7, 0x34, 0x2d, 0xdb, 0x65, 0x65, 0xf8,
+	0xc0, 0x50, 0x8c, 0xec, 0x6d, 0x5b, 0xb6, 0x8b, 0xce, 0x01, 0xec, 0xb5, 0xea, 0x75, 0x56, 0x7f,
+	0xf0, 0xfa, 0xa2, 0x93, 0x64, 0x84, 0x38, 0xcb, 0x5d, 0x12, 0xe0, 0x79, 0x77, 0x9e, 0xbf, 0x17,
+	0x17, 0x93, 0xa1, 0x59, 0xe2, 0xef, 0x25, 0xc4, 0x64, 0xfe, 0xef, 0x04, 0x18, 0xeb, 0x70, 0xd2,
+	0xfb, 0x35, 0x50, 0x09, 0x9f, 0x52, 0x03, 0x55, 0xec, 0x05, 0x1b, 0xa8, 0x42, 0x37, 0x9c, 0x0e,
+	0xd9, 0xae, 0x78, 0xe3, 0x36, 0x8c, 0xb2, 0x68, 0x46, 0x38, 0x25, 0x66, 0xee, 0x60, 0x0c, 0xf5,
+	0x23, 0x32, 0xfe, 0xd0, 0x5b, 0x6c, 0x98, 0x3b, 0x21, 0xf4, 0x21, 0x46, 0xee, 0x00, 0xb3, 0x26,
+	0x37, 0x99, 0x3c, 0xa2, 0x2f, 0xf1, 0x66, 0xec, 0x3e, 0xbd, 0x24, 0xd1, 0x6b, 0x70, 0x78, 0xd7,
+	0x76, 0xec, 0x0b, 0xa1, 0xae, 0xaf, 0xc2, 0x4f, 0x05, 0x98, 0xf3, 0x5b, 0xb7, 0x2a, 0x2d, 0x77,
+	0x9f, 0xd8, 0x65, 0x2f, 0x39, 0xb3, 0x6a, 0xe9, 0x18, 0x2d, 0x87, 0x3b, 0xbf, 0x53, 0xd5, 0xfc,
+	0x71, 0x75, 0xc6, 0x9e, 0x2a, 0x4f, 0xbc, 0xff, 0xae, 0xba, 0xf8, 0xcd, 0xca, 0xe2, 0xd7, 0x96,
+	0x17, 0xdf, 0x78, 0xf2, 0xe1, 0xb5, 0x57, 0x57, 0xca, 0x1f, 0x2d, 0x30, 0x7c, 0xf4, 0x06, 0x00,
+	0xfd, 0x35, 0x8f, 0xb2, 0x67, 0x5b, 0x0d, 0xb6, 0xc6, 0x13, 0x5b, 0xdd, 0x29, 0xf5, 0x2d, 0xdb,
+	0x6a, 0xa0, 0xeb, 0x90, 0xf4, 0x58, 0x5d, 0x8b, 0xa9, 0xd6, 0x49, 0x8c, 0x09, 0x4a, 0xbb, 0x63,
+	0x85, 0xbe, 0xe6, 0x8f, 0xe7, 0x21, 0xe5, 0x7f, 0x0d, 0xba, 0x1d, 0x6e, 0x58, 0x5b, 0xe8, 0xdb,
+	0xb0, 0x16, 0xbe, 0x8b, 0x44, 0xae, 0xef, 0x14, 0x72, 0xa8, 0xc8, 0x3a, 0xd6, 0x56, 0x01, 0x34,
+	0x1b, 0xab, 0xac, 0x7d, 0xff, 0xd4, 0x6f, 0xaa, 0x7a, 0x2b, 0x1a, 0x12, 0x87, 0xe4, 0x14, 0xe3,
+	0xab, 0xb8, 0x04, 0xa4, 0xd5, 0xd4, 0x39, 0xc8, 0xf0, 0x59, 0x40, 0x18, 0x5f, 0xc5, 0x45, 0x73,
+	0x10, 0x37, 0xd5, 0x06, 0xee, 0xec, 0x44, 0x2b, 0xcb, 0x74, 0x10, 0x5d, 0x85, 0xb4, 0x8e, 0x1d,
+	0xcd, 0x36, 0xe8, 0xaf, 0x5c, 0xa8, 0x2e, 0x7b, 0x3d, 0x68, 0xf6, 0xb0, 0xf4, 0xb3, 0x9c, 0x1c,
+	0x9e, 0x44, 0xdf, 0x16, 0x00, 0x54, 0xd7, 0xb5, 0x8d, 0xdd, 0x96, 0x8b, 0x3d, 0xf3, 0x9a, 0x2e,
+	0x5f, 0xe9, 0xbb, 0x49, 0xa5, 0x8a, 0x4f, 0x4b, 0xe5, 0xb2, 0x7a, 0xfd, 0xb8, 0x5a, 0xfe, 0x81,
+	0xb0, 0x24, 0x42, 0x61, 0xc1, 0x2e, 0x48, 0x0b, 0xe5, 0x0b, 0x54, 0x24, 0x88, 0x3c, 0x14, 0x6f,
+	0xde, 0x78, 0x77, 0xf1, 0xc9, 0x4d, 0xfe, 0xe7, 0x95, 0x0f, 0xcb, 0xaf, 0x7e, 0xb4, 0x70, 0x95,
+	0xac, 0xe1, 0x27, 0x82, 0x1c, 0x7a, 0x27, 0xba, 0x0b, 0x69, 0x96, 0x8b, 0x65, 0x4e, 0xd0, 0x59,
+	0x1b, 0x0b, 0x65, 0x38, 0xe4, 0x63, 0x24, 0x54, 0x43, 0x0e, 0xb6, 0xa9, 0x83, 0xd4, 0xb4, 0xad,
+	0x3d, 0xa3, 0x8e, 0x49, 0x38, 0x90, 0xec, 0xec, 0xd8, 0x13, 0x19, 0xc9, 0xb6, 0x47, 0xb1, 0xa1,
+	0xa3, 0x1f, 0x0b, 0x30, 0xcd, 0xd3, 0x4c, 0x64, 0x12, 0xdb, 0x34, 0x6a, 0xc3, 0x8e, 0x43, 0x5d,
+	0x8e, 0x54, 0xf5, 0xf7, 0x85, 0xe3, 0xea, 0x77, 0x05, 0xfb, 0x77, 0x85, 0xf2, 0x6f, 0x0b, 0xef,
+	0x17, 0x6f, 0xde, 0x20, 0x9f, 0x17, 0x08, 0xff, 0xb7, 0x42, 0xcf, 0xc1, 0xe3, 0x7b, 0x8b, 0x4f,
+	0xae, 0x86, 0x26, 0xae, 0xbc, 0x57, 0xba, 0x72, 0x95, 0xf0, 0x55, 0x16, 0xbf, 0xc6, 0x76, 0xe5,
+	0x5b, 0xa1, 0xe7, 0xe0, 0x91, 0xf2, 0x05, 0x13, 0x57, 0x8a, 0x37, 0x6f, 0xdc, 0x78, 0x97, 0xe9,
+	0xd8, 0xf5, 0x8f, 0xae, 0xdc, 0x5c, 0xf8, 0xd6, 0xfb, 0x0b, 0xf2, 0x24, 0x5b, 0xee, 0x03, 0xba,
+	0xda, 0x8a, 0xb7, 0x58, 0x54, 0x01, 0xa9, 0xeb, 0x33, 0x0e, 0xf0, 0x81, 0x52, 0x57, 0x77, 0x71,
+	0x5d, 0x5a, 0x0a, 0x0b, 0xc2, 0xb7, 0x45, 0x79, 0xaa, 0x03, 0xe1, 0x0e, 0x3e, 0xb8, 0x4b, 0xc8,
+	0xd0, 0xdf, 0x0b, 0x90, 0x0f, 0x27, 0x79, 0xbb, 0xb6, 0x03, 0x3e, 0x9b, 0xdb, 0x21, 0x85, 0x96,
+	0xdc, 0xb9, 0x25, 0x1b, 0x70, 0x2e, 0xe2, 0x73, 0x82, 0x6d, 0x59, 0xee, 0xda, 0x96, 0xd9, 0x1e,
+	0x24, 0x7f, 0x6b, 0xde, 0x84, 0xa9, 0x08, 0x28, 0x43, 0x97, 0xae, 0x85, 0xe5, 0x4b, 0x97, 0x27,
+	0x7a, 0x20, 0x36, 0x74, 0xf4, 0x37, 0x02, 0x4c, 0xd0, 0xa4, 0x6f, 0xd7, 0x86, 0xa6, 0x3f, 0x9b,
+	0x1b, 0x3a, 0x4e, 0xd6, 0xda, 0xb9, 0x93, 0x2e, 0xa4, 0xea, 0x96, 0xf7, 0x55, 0x8e, 0x94, 0x89,
+	0xce, 0xee, 0x06, 0xa6, 0xe2, 0x2e, 0x27, 0xf5, 0x2c, 0xc5, 0xab, 0xc7, 0xd5, 0x2b, 0x3f, 0x10,
+	0x2e, 0x0f, 0x66, 0x27, 0xe4, 0xe0, 0x45, 0xe8, 0x1a, 0x24, 0xd8, 0x6f, 0xfa, 0xa4, 0x72, 0x74,
+	0x3c, 0xb9, 0xed, 0x4d, 0xcb, 0x9c, 0x2e, 0xb2, 0xbd, 0x76, 0x6c, 0xe0, 0xf6, 0xda, 0x6c, 0x9f,
+	0xf6, 0xda, 0x9e, 0xd2, 0x51, 0xee, 0x93, 0x6f, 0x57, 0x16, 0x3f, 0x85, 0x76, 0xe5, 0xf1, 0x53,
+	0xda, 0x95, 0x7b, 0x3a, 0x7d, 0xd1, 0x20, 0x9d, 0xbe, 0x13, 0x83, 0x74, 0xfa, 0x4e, 0x0e, 0xdc,
+	0xe9, 0x3b, 0xd5, 0xa7, 0xd3, 0xf7, 0x3a, 0xa4, 0x6c, 0xcb, 0x72, 0x15, 0x9a, 0xba, 0x9b, 0x8e,
+	0x8e, 0x52, 0x65, 0xcb, 0x72, 0xef, 0xe0, 0x23, 0x47, 0x4e, 0xda, 0xec, 0x29, 0x9c, 0x0a, 0x9a,
+	0xf9, 0x4d, 0x2a, 0xe8, 0x53, 0x4c, 0x05, 0xa1, 0x2f, 0x43, 0xa6, 0xa3, 0xdd, 0x5c, 0x3a, 0xbd,
+	0xdd, 0x9c, 0x04, 0x4f, 0x7e, 0x1a, 0xe2, 0x3a, 0xa4, 0x28, 0x3f, 0xf1, 0x55, 0x59, 0x1f, 0xa0,
+	0xd4, 0xcf, 0x97, 0x95, 0x93, 0x84, 0x93, 0x56, 0xaf, 0xd7, 0x60, 0x9c, 0x57, 0xd2, 0x02, 0xf6,
+	0x57, 0x4f, 0x61, 0xe7, 0x25, 0xbe, 0x2d, 0x8e, 0x72, 0x0d, 0x12, 0x8e, 0x97, 0xf7, 0x95, 0xf2,
+	0xd1, 0xb6, 0x85, 0xa5, 0x85, 0x65, 0x4e, 0x87, 0xde, 0x02, 0x8e, 0xa2, 0x70, 0xd6, 0xb9, 0x93,
+	0x59, 0xb3, 0x8c, 0x9e, 0xff, 0xae, 0x78, 0x01, 0xb2, 0x7e, 0x71, 0x97, 0x4a, 0x3f, 0x6d, 0xf5,
+	0x18, 0x93, 0x33, 0xac, 0xa4, 0x4b, 0x25, 0x1f, 0x5d, 0x86, 0x5c, 0xcb, 0xc1, 0x7a, 0x40, 0xe5,
+	0x48, 0xe7, 0xe7, 0x87, 0x8b, 0x63, 0xf2, 0x18, 0x19, 0xe6, 0x64, 0x0e, 0xa1, 0xa3, 0x68, 0x81,
+	0x32, 0xd1, 0x5e, 0x0c, 0xf6, 0x5b, 0x55, 0x5f, 0x93, 0xd0, 0xcb, 0x8c, 0xce, 0xfe, 0x80, 0xf5,
+	0x74, 0x2d, 0xd3, 0xee, 0x0a, 0xf6, 0x5a, 0xf9, 0x03, 0xda, 0xab, 0xb5, 0xdc, 0x4b, 0x76, 0x8d,
+	0x76, 0x4d, 0x74, 0x92, 0x5d, 0x43, 0xef, 0xc0, 0x5c, 0x77, 0x81, 0x3a, 0x9c, 0x0a, 0xbb, 0x34,
+	0x58, 0xe9, 0xdb, 0xaf, 0x5f, 0xcb, 0x41, 0x5e, 0xec, 0x0e, 0xa4, 0xbd, 0x42, 0x98, 0x77, 0xa4,
+	0x85, 0x3e, 0x06, 0x91, 0x90, 0xd0, 0x33, 0xac, 0x66, 0xb9, 0x41, 0xfc, 0xf8, 0xf9, 0x6c, 0x4c,
+	0x1c, 0x92, 0xa1, 0xe9, 0xcf, 0xa1, 0x77, 0x01, 0xed, 0xd2, 0x7e, 0xfe, 0x23, 0xa5, 0x89, 0x6d,
+	0x0d, 0x9b, 0xae, 0x5a, 0xc3, 0xac, 0x89, 0xe2, 0xc4, 0xfe, 0xbc, 0xdc, 0x71, 0x35, 0x03, 0x70,
+	0x7e, 0x68, 0xe8, 0xdb, 0x37, 0x17, 0x87, 0x86, 0x86, 0x86, 0xe4, 0x71, 0x86, 0xb3, 0xed, 0xc3,
+	0xa0, 0x57, 0x20, 0xe7, 0xa7, 0x99, 0x58, 0xe7, 0xdf, 0xc2, 0xbc, 0x50, 0x1c, 0x91, 0xb3, 0x7c,
+	0x98, 0x75, 0xf7, 0x9d, 0xf6, 0xdb, 0xdd, 0xe2, 0x27, 0xf2, 0xdb, 0x5d, 0x74, 0x1b, 0x20, 0xf4,
+	0x63, 0x88, 0x2b, 0x67, 0xfb, 0x31, 0x84, 0x1c, 0xe2, 0x45, 0xf7, 0x21, 0xdb, 0xb4, 0xad, 0x43,
+	0x83, 0x88, 0xab, 0xe7, 0xe0, 0x5c, 0xa5, 0x77, 0xc8, 0xd5, 0xe3, 0xea, 0x2b, 0xf6, 0xcb, 0xd2,
+	0x42, 0xf9, 0xd2, 0xc9, 0xd7, 0x37, 0xf1, 0x1f, 0xc6, 0x42, 0x08, 0x1b, 0x3a, 0xd5, 0x57, 0x3e,
+	0x40, 0x74, 0x87, 0x66, 0x61, 0x3f, 0xc7, 0x14, 0xa7, 0xfb, 0x20, 0x1e, 0xd0, 0x7f, 0xeb, 0x40,
+	0x16, 0xc3, 0x1c, 0x24, 0x8c, 0x45, 0xe7, 0x20, 0xd5, 0x68, 0xd5, 0x49, 0x68, 0xea, 0xb8, 0xd2,
+	0x22, 0xbd, 0x32, 0x82, 0x01, 0x54, 0x83, 0x59, 0xad, 0xae, 0x1a, 0x0d, 0x45, 0xed, 0x88, 0x60,
+	0x15, 0xcd, 0xd2, 0xb1, 0x54, 0x3a, 0x25, 0xae, 0xe8, 0x8d, 0x7a, 0x69, 0x73, 0x91, 0xd1, 0x88,
+	0x08, 0x87, 0x4b, 0x30, 0xe1, 0x1c, 0x18, 0x4d, 0x9e, 0x00, 0x52, 0x34, 0xfb, 0xa8, 0xe9, 0x5a,
+	0xd2, 0x0a, 0x5d, 0xd0, 0x38, 0x99, 0x62, 0xfb, 0xbb, 0x4a, 0x27, 0xd0, 0xbb, 0x70, 0x2e, 0x82,
+	0x5e, 0xb1, 0x0e, 0xb1, 0x6d, 0x1b, 0x3a, 0x96, 0x5e, 0xeb, 0xa3, 0x2e, 0x41, 0x5b, 0xcf, 0x6c,
+	0x0f, 0xe8, 0xdb, 0x8c, 0x19, 0x7d, 0x09, 0x32, 0xaa, 0xe6, 0x1a, 0x87, 0x3c, 0xa4, 0xbc, 0x7e,
+	0xaa, 0xee, 0xa5, 0x7d, 0xfa, 0x8a, 0x8b, 0xbe, 0x08, 0x54, 0xb3, 0x15, 0x07, 0x63, 0x93, 0xb0,
+	0xbf, 0x7e, 0x7a, 0x16, 0x9b, 0xd0, 0x3f, 0xc0, 0xd8, 0xac, 0xb8, 0xf9, 0x2f, 0x41, 0xae, 0x2b,
+	0x24, 0x0c, 0xa7, 0x2a, 0x52, 0x5e, 0xaa, 0x62, 0x32, 0x9c, 0xaa, 0x48, 0x85, 0x32, 0x10, 0xf9,
+	0x47, 0x90, 0xed, 0x74, 0x13, 0x23, 0xb8, 0x4b, 0x9d, 0x89, 0x8e, 0x1e, 0xeb, 0xce, 0x01, 0x22,
+	0x33, 0x1b, 0x9b, 0xf1, 0xe4, 0xcb, 0xe2, 0xe5, 0xcd, 0x78, 0xf2, 0xb2, 0xf8, 0xca, 0x66, 0x3c,
+	0xf9, 0x8a, 0x58, 0x2c, 0xdc, 0x06, 0xf0, 0x0f, 0xdd, 0x41, 0x37, 0x20, 0x1d, 0xfc, 0x53, 0x26,
+	0x3c, 0xa1, 0x33, 0xdb, 0x57, 0x4a, 0x64, 0xc0, 0x3e, 0x6f, 0xe1, 0x63, 0x01, 0xc6, 0xd6, 0xbc,
+	0xda, 0xd3, 0xb6, 0x8d, 0xf7, 0x8c, 0x36, 0xfa, 0x89, 0x10, 0xaa, 0xf8, 0x79, 0x45, 0xcd, 0x3f,
+	0x17, 0x7e, 0x9d, 0x2a, 0x7e, 0x41, 0x31, 0x6d, 0x1a, 0x46, 0xeb, 0xd8, 0xac, 0xb9, 0xfb, 0x5e,
+	0xc6, 0x50, 0x66, 0x7f, 0x15, 0xde, 0x83, 0xe9, 0x55, 0x9a, 0xcc, 0x08, 0xf6, 0x84, 0x15, 0x58,
+	0xab, 0x00, 0xc1, 0x56, 0xfa, 0xbf, 0x8e, 0xe8, 0xb7, 0x93, 0xa1, 0xa4, 0x6a, 0xca, 0xdf, 0xd3,
+	0xc2, 0xf7, 0x05, 0x98, 0x7e, 0x48, 0xd3, 0x1c, 0x9f, 0x06, 0x3c, 0x7a, 0x03, 0x20, 0xf8, 0x97,
+	0x56, 0xfa, 0x66, 0x70, 0x6e, 0x11, 0x92, 0x2d, 0xd5, 0x39, 0x90, 0x53, 0x7b, 0xfc, 0xb1, 0xf0,
+	0x67, 0x31, 0x78, 0xa9, 0xaa, 0xba, 0xda, 0x7e, 0xd7, 0xf2, 0xee, 0x32, 0x65, 0xe0, 0xcb, 0xc4,
+	0x90, 0xf0, 0xf2, 0x34, 0x5c, 0x98, 0xee, 0xf4, 0x34, 0xeb, 0x9d, 0x8e, 0x52, 0xea, 0x99, 0xf0,
+	0xe8, 0x65, 0x8e, 0x9d, 0xff, 0x23, 0x01, 0x66, 0xfa, 0x10, 0xa1, 0xb7, 0xce, 0x9e, 0xf1, 0xea,
+	0xfa, 0x6d, 0x66, 0xb7, 0x51, 0x88, 0x9d, 0xc5, 0x28, 0x14, 0xfe, 0x54, 0x80, 0x09, 0xe2, 0x2b,
+	0x76, 0x9f, 0xe0, 0x0e, 0x64, 0x83, 0x13, 0x54, 0x7e, 0xf9, 0x25, 0x66, 0x70, 0x30, 0xef, 0xbc,
+	0xc8, 0x99, 0xfe, 0x74, 0x18, 0x5e, 0x0e, 0x2f, 0x34, 0xf4, 0xba, 0x5b, 0x96, 0xbd, 0xfe, 0x70,
+	0xc3, 0xe1, 0x4b, 0xff, 0x99, 0x00, 0x49, 0xea, 0x61, 0xe1, 0x96, 0xc1, 0x14, 0xfb, 0xaf, 0x84,
+	0x67, 0x95, 0x4b, 0x9b, 0xa8, 0xf0, 0xf9, 0xe5, 0xea, 0xca, 0xda, 0xf5, 0xcf, 0xaf, 0xaf, 0x2d,
+	0xf7, 0x57, 0xf0, 0xe4, 0x67, 0x40, 0xc1, 0xbf, 0xc0, 0x14, 0x9c, 0x7c, 0xc6, 0x7a, 0xcb, 0x40,
+	0xff, 0x20, 0x00, 0x51, 0x76, 0xfa, 0x45, 0xb1, 0x5f, 0xe7, 0x2f, 0x1a, 0xd5, 0xf1, 0xe1, 0x7a,
+	0xcb, 0x28, 0x1c, 0xc7, 0x60, 0xea, 0xae, 0xe1, 0x04, 0xc7, 0xe9, 0x9f, 0xde, 0xdb, 0x90, 0x0b,
+	0x7b, 0x5e, 0x81, 0xe4, 0x5d, 0x3e, 0xc1, 0xe7, 0x0a, 0x67, 0x18, 0xb3, 0x6a, 0x78, 0xfc, 0x45,
+	0x64, 0x0e, 0xfd, 0x50, 0x80, 0x11, 0xcb, 0xd6, 0xb1, 0x4d, 0x73, 0xbf, 0xa9, 0xea, 0xef, 0x09,
+	0xc7, 0xd5, 0xdf, 0x11, 0xec, 0xef, 0x08, 0xf2, 0x90, 0x9c, 0xf2, 0x55, 0x43, 0x86, 0xc5, 0xe0,
+	0xd9, 0x97, 0x3c, 0x39, 0xb5, 0xe8, 0x3f, 0xf2, 0xb3, 0x93, 0x93, 0x8b, 0xfc, 0x89, 0xa6, 0x7f,
+	0xe5, 0x91, 0x45, 0xfa, 0xbf, 0x70, 0x9a, 0x57, 0xce, 0x2c, 0x86, 0xff, 0x0a, 0x65, 0xb1, 0xe5,
+	0xf4, 0x62, 0xe8, 0x0f, 0x6f, 0x61, 0xe8, 0x02, 0x8c, 0x78, 0xff, 0xa2, 0x49, 0x3c, 0x5c, 0x2b,
+	0xfa, 0x8f, 0x84, 0xec, 0x0d, 0x23, 0x04, 0xf1, 0x26, 0xf1, 0xa3, 0xbd, 0x2a, 0x11, 0x7d, 0x2e,
+	0xfc, 0x81, 0x00, 0x13, 0x0f, 0x22, 0x74, 0xfe, 0x57, 0x6c, 0xb5, 0xff, 0x42, 0x80, 0x39, 0x19,
+	0x3b, 0xd8, 0xad, 0x98, 0xfa, 0xaf, 0x85, 0x49, 0xfa, 0x91, 0x00, 0xe3, 0xfe, 0xbb, 0x76, 0x70,
+	0xa3, 0x59, 0x27, 0x16, 0xfd, 0x57, 0xbb, 0x8b, 0xa8, 0x08, 0xe9, 0x86, 0xda, 0xa4, 0xad, 0xc5,
+	0xc4, 0x39, 0x1b, 0xee, 0xcc, 0x76, 0x02, 0x9b, 0xbb, 0x83, 0x8f, 0x0a, 0x7f, 0x1d, 0xbe, 0x96,
+	0xf8, 0xf2, 0xbd, 0x28, 0xc3, 0x2f, 0x5a, 0x08, 0x9d, 0xec, 0x91, 0x45, 0x8b, 0x58, 0x38, 0x29,
+	0xfb, 0x13, 0xa1, 0xb3, 0x68, 0xb1, 0x03, 0x39, 0x9a, 0xd8, 0xc7, 0x6d, 0x17, 0x9b, 0x0e, 0xcd,
+	0x46, 0x0e, 0xd3, 0xba, 0xf0, 0xe7, 0x8e, 0xab, 0xc5, 0x67, 0xc2, 0xcb, 0xa2, 0x2e, 0x09, 0x85,
+	0x8b, 0xf6, 0xf9, 0xf2, 0xdc, 0xfb, 0xc5, 0x9b, 0x37, 0xde, 0x2b, 0xf1, 0xe0, 0xe4, 0xc3, 0x6b,
+	0xaf, 0x5e, 0x7b, 0xfd, 0xa3, 0x2b, 0x1f, 0x5e, 0x7b, 0xb5, 0xfc, 0xd1, 0x82, 0x9c, 0x25, 0x18,
+	0xeb, 0x3e, 0x44, 0xe1, 0x7f, 0x05, 0x90, 0xfa, 0x2c, 0xdd, 0x41, 0x1f, 0x41, 0xc2, 0x8b, 0x8f,
+	0xf8, 0xad, 0x7e, 0xbd, 0xef, 0xee, 0x77, 0xb1, 0x96, 0xd8, 0xff, 0x7f, 0x99, 0x2c, 0x28, 0x7f,
+	0x67, 0x5e, 0x83, 0x4c, 0x18, 0x26, 0xc2, 0x4b, 0x3e, 0xad, 0x1c, 0xd8, 0x67, 0x79, 0x21, 0xa7,
+	0xb9, 0xf0, 0x2f, 0x02, 0x5c, 0x5c, 0xb5, 0xcc, 0x43, 0x6c, 0xbb, 0x3d, 0xd4, 0x5c, 0x5f, 0xd6,
+	0x20, 0xe5, 0xad, 0x89, 0x04, 0x85, 0xde, 0x41, 0xbe, 0x72, 0x5c, 0x1d, 0xec, 0x6b, 0x92, 0x1e,
+	0xe7, 0x86, 0x4e, 0x0c, 0x08, 0x8d, 0xff, 0xe8, 0xb5, 0x23, 0xd3, 0x67, 0xf4, 0x75, 0x98, 0x0e,
+	0x69, 0x62, 0xb8, 0x22, 0x34, 0x7c, 0xf6, 0x8a, 0xd0, 0x04, 0xee, 0x99, 0x74, 0xae, 0x3e, 0x04,
+	0x08, 0xd2, 0x06, 0x68, 0x1c, 0xc6, 0xb6, 0xdf, 0x7e, 0xbc, 0x2e, 0x2b, 0x0f, 0xef, 0xdd, 0xb9,
+	0xf7, 0xf6, 0xe3, 0x7b, 0xe2, 0x50, 0x30, 0x54, 0xad, 0xec, 0xec, 0xac, 0xcb, 0x5f, 0x15, 0x05,
+	0x84, 0x20, 0xeb, 0x0d, 0xad, 0xbf, 0xb3, 0xb3, 0x2e, 0xdf, 0xab, 0xdc, 0x15, 0x63, 0xf9, 0xb1,
+	0x5f, 0x3c, 0x9f, 0x4d, 0x49, 0xc2, 0xd5, 0x11, 0x3a, 0x53, 0xbd, 0xfe, 0xb7, 0xff, 0x76, 0x41,
+	0xf8, 0xda, 0xd2, 0x19, 0x6e, 0x31, 0xd7, 0x6c, 0xee, 0xee, 0x8e, 0x52, 0x95, 0x5b, 0xf9, 0xff,
+	0x00, 0x00, 0x00, 0xff, 0xff, 0x42, 0xf7, 0x79, 0xf9, 0x5c, 0x51, 0x00, 0x00,
 }

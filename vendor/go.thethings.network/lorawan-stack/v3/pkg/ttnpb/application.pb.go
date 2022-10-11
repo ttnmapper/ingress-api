@@ -5,18 +5,15 @@ package ttnpb
 
 import (
 	fmt "fmt"
+	_ "github.com/TheThingsIndustries/protoc-gen-go-flags/annotations"
+	_ "github.com/TheThingsIndustries/protoc-gen-go-json/annotations"
 	_ "github.com/envoyproxy/protoc-gen-validate/validate"
 	_ "github.com/gogo/protobuf/gogoproto"
 	proto "github.com/gogo/protobuf/proto"
-	github_com_gogo_protobuf_sortkeys "github.com/gogo/protobuf/sortkeys"
-	github_com_gogo_protobuf_types "github.com/gogo/protobuf/types"
 	types "github.com/gogo/protobuf/types"
 	golang_proto "github.com/golang/protobuf/proto"
-	go_thethings_network_lorawan_stack_v3_pkg_types "go.thethings.network/lorawan-stack/v3/pkg/types"
+	_ "github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-openapiv2/options"
 	math "math"
-	reflect "reflect"
-	strings "strings"
-	time "time"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -24,7 +21,6 @@ var _ = proto.Marshal
 var _ = golang_proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
-var _ = time.Kitchen
 
 // This is a compile-time assertion to ensure that this generated file
 // is compatible with the proto package it is being compiled against.
@@ -34,23 +30,61 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 // Application is the message that defines an Application in the network.
 type Application struct {
-	ApplicationIdentifiers `protobuf:"bytes,1,opt,name=ids,proto3,embedded=ids" json:"ids"`
-	CreatedAt              time.Time  `protobuf:"bytes,2,opt,name=created_at,json=createdAt,proto3,stdtime" json:"created_at"`
-	UpdatedAt              time.Time  `protobuf:"bytes,3,opt,name=updated_at,json=updatedAt,proto3,stdtime" json:"updated_at"`
-	DeletedAt              *time.Time `protobuf:"bytes,8,opt,name=deleted_at,json=deletedAt,proto3,stdtime" json:"deleted_at,omitempty"`
-	Name                   string     `protobuf:"bytes,4,opt,name=name,proto3" json:"name,omitempty"`
-	Description            string     `protobuf:"bytes,5,opt,name=description,proto3" json:"description,omitempty"`
+	// The identifiers of the application. These are public and can be seen by any authenticated user in the network.
+	Ids *ApplicationIdentifiers `protobuf:"bytes,1,opt,name=ids,proto3" json:"ids,omitempty"`
+	// When the application was created. This information is public and can be seen by any authenticated user in the network.
+	CreatedAt *types.Timestamp `protobuf:"bytes,2,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
+	// When the application was last updated. This information is public and can be seen by any authenticated user in the network.
+	UpdatedAt *types.Timestamp `protobuf:"bytes,3,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
+	// When the application was deleted. This information is public and can be seen by any authenticated user in the network.
+	DeletedAt *types.Timestamp `protobuf:"bytes,8,opt,name=deleted_at,json=deletedAt,proto3" json:"deleted_at,omitempty"`
+	// The name of the application.
+	Name string `protobuf:"bytes,4,opt,name=name,proto3" json:"name,omitempty"`
+	// A description for the application.
+	Description string `protobuf:"bytes,5,opt,name=description,proto3" json:"description,omitempty"`
 	// Key-value attributes for this application. Typically used for organizing applications or for storing integration-specific data.
 	Attributes map[string]string `protobuf:"bytes,6,rep,name=attributes,proto3" json:"attributes,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 	// Contact information for this application. Typically used to indicate who to contact with technical/security questions about the application.
-	ContactInfo          []*ContactInfo `protobuf:"bytes,7,rep,name=contact_info,json=contactInfo,proto3" json:"contact_info,omitempty"`
-	DevEuiCounter        uint32         `protobuf:"varint,9,opt,name=dev_eui_counter,json=devEuiCounter,proto3" json:"dev_eui_counter,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}       `json:"-"`
-	XXX_sizecache        int32          `json:"-"`
+	// This field is deprecated. Use administrative_contact and technical_contact instead.
+	ContactInfo           []*ContactInfo                 `protobuf:"bytes,7,rep,name=contact_info,json=contactInfo,proto3" json:"contact_info,omitempty"` // Deprecated: Do not use.
+	AdministrativeContact *OrganizationOrUserIdentifiers `protobuf:"bytes,10,opt,name=administrative_contact,json=administrativeContact,proto3" json:"administrative_contact,omitempty"`
+	TechnicalContact      *OrganizationOrUserIdentifiers `protobuf:"bytes,11,opt,name=technical_contact,json=technicalContact,proto3" json:"technical_contact,omitempty"`
+	// The address of the Network Server where this application is supposed to be registered.
+	// If set, this fields indicates where end devices for this application should be registered.
+	//
+	// Stored in Entity Registry.
+	// The typical format of the address is "host:port". If the port is omitted,
+	// the normal port inference (with DNS lookup, otherwise defaults) is used.
+	// The connection shall be established with transport layer security (TLS).
+	// Custom certificate authorities may be configured out-of-band.
+	NetworkServerAddress string `protobuf:"bytes,12,opt,name=network_server_address,json=networkServerAddress,proto3" json:"network_server_address,omitempty"`
+	// The address of the Application Server where this application is supposed to be registered.
+	// If set, this fields indicates where end devices for this application should be registered.
+	//
+	// Stored in Entity Registry.
+	// The typical format of the address is "host:port". If the port is omitted,
+	// the normal port inference (with DNS lookup, otherwise defaults) is used.
+	// The connection shall be established with transport layer security (TLS).
+	// Custom certificate authorities may be configured out-of-band.
+	ApplicationServerAddress string `protobuf:"bytes,13,opt,name=application_server_address,json=applicationServerAddress,proto3" json:"application_server_address,omitempty"`
+	// The address of the Join Server where this application is supposed to be registered.
+	// If set, this fields indicates where end devices for this application should be registered.
+	//
+	// Stored in Entity Registry.
+	// The typical format of the address is "host:port". If the port is omitted,
+	// the normal port inference (with DNS lookup, otherwise defaults) is used.
+	// The connection shall be established with transport layer security (TLS).
+	// Custom certificate authorities may be configured out-of-band.
+	JoinServerAddress    string   `protobuf:"bytes,14,opt,name=join_server_address,json=joinServerAddress,proto3" json:"join_server_address,omitempty"`
+	DevEuiCounter        uint32   `protobuf:"varint,9,opt,name=dev_eui_counter,json=devEuiCounter,proto3" json:"dev_eui_counter,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *Application) Reset()      { *m = Application{} }
-func (*Application) ProtoMessage() {}
+func (m *Application) Reset()         { *m = Application{} }
+func (m *Application) String() string { return proto.CompactTextString(m) }
+func (*Application) ProtoMessage()    {}
 func (*Application) Descriptor() ([]byte, []int) {
 	return fileDescriptor_57d90136b1f4f7b1, []int{0}
 }
@@ -72,21 +106,28 @@ func (m *Application) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_Application proto.InternalMessageInfo
 
-func (m *Application) GetCreatedAt() time.Time {
+func (m *Application) GetIds() *ApplicationIdentifiers {
+	if m != nil {
+		return m.Ids
+	}
+	return nil
+}
+
+func (m *Application) GetCreatedAt() *types.Timestamp {
 	if m != nil {
 		return m.CreatedAt
 	}
-	return time.Time{}
+	return nil
 }
 
-func (m *Application) GetUpdatedAt() time.Time {
+func (m *Application) GetUpdatedAt() *types.Timestamp {
 	if m != nil {
 		return m.UpdatedAt
 	}
-	return time.Time{}
+	return nil
 }
 
-func (m *Application) GetDeletedAt() *time.Time {
+func (m *Application) GetDeletedAt() *types.Timestamp {
 	if m != nil {
 		return m.DeletedAt
 	}
@@ -114,11 +155,47 @@ func (m *Application) GetAttributes() map[string]string {
 	return nil
 }
 
+// Deprecated: Do not use.
 func (m *Application) GetContactInfo() []*ContactInfo {
 	if m != nil {
 		return m.ContactInfo
 	}
 	return nil
+}
+
+func (m *Application) GetAdministrativeContact() *OrganizationOrUserIdentifiers {
+	if m != nil {
+		return m.AdministrativeContact
+	}
+	return nil
+}
+
+func (m *Application) GetTechnicalContact() *OrganizationOrUserIdentifiers {
+	if m != nil {
+		return m.TechnicalContact
+	}
+	return nil
+}
+
+func (m *Application) GetNetworkServerAddress() string {
+	if m != nil {
+		return m.NetworkServerAddress
+	}
+	return ""
+}
+
+func (m *Application) GetApplicationServerAddress() string {
+	if m != nil {
+		return m.ApplicationServerAddress
+	}
+	return ""
+}
+
+func (m *Application) GetJoinServerAddress() string {
+	if m != nil {
+		return m.JoinServerAddress
+	}
+	return ""
 }
 
 func (m *Application) GetDevEuiCounter() uint32 {
@@ -131,11 +208,13 @@ func (m *Application) GetDevEuiCounter() uint32 {
 type Applications struct {
 	Applications         []*Application `protobuf:"bytes,1,rep,name=applications,proto3" json:"applications,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}       `json:"-"`
+	XXX_unrecognized     []byte         `json:"-"`
 	XXX_sizecache        int32          `json:"-"`
 }
 
-func (m *Applications) Reset()      { *m = Applications{} }
-func (*Applications) ProtoMessage() {}
+func (m *Applications) Reset()         { *m = Applications{} }
+func (m *Applications) String() string { return proto.CompactTextString(m) }
+func (*Applications) ProtoMessage()    {}
 func (*Applications) Descriptor() ([]byte, []int) {
 	return fileDescriptor_57d90136b1f4f7b1, []int{1}
 }
@@ -165,13 +244,15 @@ func (m *Applications) GetApplications() []*Application {
 }
 
 type IssueDevEUIResponse struct {
-	DevEui               go_thethings_network_lorawan_stack_v3_pkg_types.EUI64 `protobuf:"bytes,1,opt,name=dev_eui,json=devEui,proto3,customtype=go.thethings.network/lorawan-stack/v3/pkg/types.EUI64" json:"dev_eui"`
-	XXX_NoUnkeyedLiteral struct{}                                              `json:"-"`
-	XXX_sizecache        int32                                                 `json:"-"`
+	DevEui               []byte   `protobuf:"bytes,1,opt,name=dev_eui,json=devEui,proto3" json:"dev_eui,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *IssueDevEUIResponse) Reset()      { *m = IssueDevEUIResponse{} }
-func (*IssueDevEUIResponse) ProtoMessage() {}
+func (m *IssueDevEUIResponse) Reset()         { *m = IssueDevEUIResponse{} }
+func (m *IssueDevEUIResponse) String() string { return proto.CompactTextString(m) }
+func (*IssueDevEUIResponse) ProtoMessage()    {}
 func (*IssueDevEUIResponse) Descriptor() ([]byte, []int) {
 	return fileDescriptor_57d90136b1f4f7b1, []int{2}
 }
@@ -193,16 +274,25 @@ func (m *IssueDevEUIResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_IssueDevEUIResponse proto.InternalMessageInfo
 
+func (m *IssueDevEUIResponse) GetDevEui() []byte {
+	if m != nil {
+		return m.DevEui
+	}
+	return nil
+}
+
 type GetApplicationRequest struct {
-	ApplicationIdentifiers `protobuf:"bytes,1,opt,name=application_ids,json=applicationIds,proto3,embedded=application_ids" json:"application_ids"`
+	ApplicationIds *ApplicationIdentifiers `protobuf:"bytes,1,opt,name=application_ids,json=applicationIds,proto3" json:"application_ids,omitempty"`
 	// The names of the application fields that should be returned.
 	FieldMask            *types.FieldMask `protobuf:"bytes,2,opt,name=field_mask,json=fieldMask,proto3" json:"field_mask,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}         `json:"-"`
+	XXX_unrecognized     []byte           `json:"-"`
 	XXX_sizecache        int32            `json:"-"`
 }
 
-func (m *GetApplicationRequest) Reset()      { *m = GetApplicationRequest{} }
-func (*GetApplicationRequest) ProtoMessage() {}
+func (m *GetApplicationRequest) Reset()         { *m = GetApplicationRequest{} }
+func (m *GetApplicationRequest) String() string { return proto.CompactTextString(m) }
+func (*GetApplicationRequest) ProtoMessage()    {}
 func (*GetApplicationRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_57d90136b1f4f7b1, []int{3}
 }
@@ -223,6 +313,13 @@ func (m *GetApplicationRequest) XXX_DiscardUnknown() {
 }
 
 var xxx_messageInfo_GetApplicationRequest proto.InternalMessageInfo
+
+func (m *GetApplicationRequest) GetApplicationIds() *ApplicationIdentifiers {
+	if m != nil {
+		return m.ApplicationIds
+	}
+	return nil
+}
 
 func (m *GetApplicationRequest) GetFieldMask() *types.FieldMask {
 	if m != nil {
@@ -248,11 +345,13 @@ type ListApplicationsRequest struct {
 	// Only return recently deleted applications.
 	Deleted              bool     `protobuf:"varint,6,opt,name=deleted,proto3" json:"deleted,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *ListApplicationsRequest) Reset()      { *m = ListApplicationsRequest{} }
-func (*ListApplicationsRequest) ProtoMessage() {}
+func (m *ListApplicationsRequest) Reset()         { *m = ListApplicationsRequest{} }
+func (m *ListApplicationsRequest) String() string { return proto.CompactTextString(m) }
+func (*ListApplicationsRequest) ProtoMessage()    {}
 func (*ListApplicationsRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_57d90136b1f4f7b1, []int{4}
 }
@@ -317,15 +416,17 @@ func (m *ListApplicationsRequest) GetDeleted() bool {
 }
 
 type CreateApplicationRequest struct {
-	Application `protobuf:"bytes,1,opt,name=application,proto3,embedded=application" json:"application"`
+	Application *Application `protobuf:"bytes,1,opt,name=application,proto3" json:"application,omitempty"`
 	// Collaborator to grant all rights on the newly created application.
-	Collaborator         OrganizationOrUserIdentifiers `protobuf:"bytes,2,opt,name=collaborator,proto3" json:"collaborator"`
-	XXX_NoUnkeyedLiteral struct{}                      `json:"-"`
-	XXX_sizecache        int32                         `json:"-"`
+	Collaborator         *OrganizationOrUserIdentifiers `protobuf:"bytes,2,opt,name=collaborator,proto3" json:"collaborator,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}                       `json:"-"`
+	XXX_unrecognized     []byte                         `json:"-"`
+	XXX_sizecache        int32                          `json:"-"`
 }
 
-func (m *CreateApplicationRequest) Reset()      { *m = CreateApplicationRequest{} }
-func (*CreateApplicationRequest) ProtoMessage() {}
+func (m *CreateApplicationRequest) Reset()         { *m = CreateApplicationRequest{} }
+func (m *CreateApplicationRequest) String() string { return proto.CompactTextString(m) }
+func (*CreateApplicationRequest) ProtoMessage()    {}
 func (*CreateApplicationRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_57d90136b1f4f7b1, []int{5}
 }
@@ -347,23 +448,32 @@ func (m *CreateApplicationRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_CreateApplicationRequest proto.InternalMessageInfo
 
-func (m *CreateApplicationRequest) GetCollaborator() OrganizationOrUserIdentifiers {
+func (m *CreateApplicationRequest) GetApplication() *Application {
+	if m != nil {
+		return m.Application
+	}
+	return nil
+}
+
+func (m *CreateApplicationRequest) GetCollaborator() *OrganizationOrUserIdentifiers {
 	if m != nil {
 		return m.Collaborator
 	}
-	return OrganizationOrUserIdentifiers{}
+	return nil
 }
 
 type UpdateApplicationRequest struct {
-	Application `protobuf:"bytes,1,opt,name=application,proto3,embedded=application" json:"application"`
+	Application *Application `protobuf:"bytes,1,opt,name=application,proto3" json:"application,omitempty"`
 	// The names of the application fields that should be updated.
 	FieldMask            *types.FieldMask `protobuf:"bytes,2,opt,name=field_mask,json=fieldMask,proto3" json:"field_mask,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}         `json:"-"`
+	XXX_unrecognized     []byte           `json:"-"`
 	XXX_sizecache        int32            `json:"-"`
 }
 
-func (m *UpdateApplicationRequest) Reset()      { *m = UpdateApplicationRequest{} }
-func (*UpdateApplicationRequest) ProtoMessage() {}
+func (m *UpdateApplicationRequest) Reset()         { *m = UpdateApplicationRequest{} }
+func (m *UpdateApplicationRequest) String() string { return proto.CompactTextString(m) }
+func (*UpdateApplicationRequest) ProtoMessage()    {}
 func (*UpdateApplicationRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_57d90136b1f4f7b1, []int{6}
 }
@@ -385,6 +495,13 @@ func (m *UpdateApplicationRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_UpdateApplicationRequest proto.InternalMessageInfo
 
+func (m *UpdateApplicationRequest) GetApplication() *Application {
+	if m != nil {
+		return m.Application
+	}
+	return nil
+}
+
 func (m *UpdateApplicationRequest) GetFieldMask() *types.FieldMask {
 	if m != nil {
 		return m.FieldMask
@@ -393,17 +510,22 @@ func (m *UpdateApplicationRequest) GetFieldMask() *types.FieldMask {
 }
 
 type ListApplicationAPIKeysRequest struct {
-	ApplicationIdentifiers `protobuf:"bytes,1,opt,name=application_ids,json=applicationIds,proto3,embedded=application_ids" json:"application_ids"`
+	ApplicationIds *ApplicationIdentifiers `protobuf:"bytes,1,opt,name=application_ids,json=applicationIds,proto3" json:"application_ids,omitempty"`
+	// Order the results by this field path.
+	// Default ordering is by ID. Prepend with a minus (-) to reverse the order.
+	Order string `protobuf:"bytes,4,opt,name=order,proto3" json:"order,omitempty"`
 	// Limit the number of results per page.
 	Limit uint32 `protobuf:"varint,2,opt,name=limit,proto3" json:"limit,omitempty"`
 	// Page number for pagination. 0 is interpreted as 1.
 	Page                 uint32   `protobuf:"varint,3,opt,name=page,proto3" json:"page,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *ListApplicationAPIKeysRequest) Reset()      { *m = ListApplicationAPIKeysRequest{} }
-func (*ListApplicationAPIKeysRequest) ProtoMessage() {}
+func (m *ListApplicationAPIKeysRequest) Reset()         { *m = ListApplicationAPIKeysRequest{} }
+func (m *ListApplicationAPIKeysRequest) String() string { return proto.CompactTextString(m) }
+func (*ListApplicationAPIKeysRequest) ProtoMessage()    {}
 func (*ListApplicationAPIKeysRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_57d90136b1f4f7b1, []int{7}
 }
@@ -425,6 +547,20 @@ func (m *ListApplicationAPIKeysRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_ListApplicationAPIKeysRequest proto.InternalMessageInfo
 
+func (m *ListApplicationAPIKeysRequest) GetApplicationIds() *ApplicationIdentifiers {
+	if m != nil {
+		return m.ApplicationIds
+	}
+	return nil
+}
+
+func (m *ListApplicationAPIKeysRequest) GetOrder() string {
+	if m != nil {
+		return m.Order
+	}
+	return ""
+}
+
 func (m *ListApplicationAPIKeysRequest) GetLimit() uint32 {
 	if m != nil {
 		return m.Limit
@@ -440,15 +576,17 @@ func (m *ListApplicationAPIKeysRequest) GetPage() uint32 {
 }
 
 type GetApplicationAPIKeyRequest struct {
-	ApplicationIdentifiers `protobuf:"bytes,1,opt,name=application_ids,json=applicationIds,proto3,embedded=application_ids" json:"application_ids"`
+	ApplicationIds *ApplicationIdentifiers `protobuf:"bytes,1,opt,name=application_ids,json=applicationIds,proto3" json:"application_ids,omitempty"`
 	// Unique public identifier for the API key.
 	KeyId                string   `protobuf:"bytes,2,opt,name=key_id,json=keyId,proto3" json:"key_id,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *GetApplicationAPIKeyRequest) Reset()      { *m = GetApplicationAPIKeyRequest{} }
-func (*GetApplicationAPIKeyRequest) ProtoMessage() {}
+func (m *GetApplicationAPIKeyRequest) Reset()         { *m = GetApplicationAPIKeyRequest{} }
+func (m *GetApplicationAPIKeyRequest) String() string { return proto.CompactTextString(m) }
+func (*GetApplicationAPIKeyRequest) ProtoMessage()    {}
 func (*GetApplicationAPIKeyRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_57d90136b1f4f7b1, []int{8}
 }
@@ -470,6 +608,13 @@ func (m *GetApplicationAPIKeyRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_GetApplicationAPIKeyRequest proto.InternalMessageInfo
 
+func (m *GetApplicationAPIKeyRequest) GetApplicationIds() *ApplicationIdentifiers {
+	if m != nil {
+		return m.ApplicationIds
+	}
+	return nil
+}
+
 func (m *GetApplicationAPIKeyRequest) GetKeyId() string {
 	if m != nil {
 		return m.KeyId
@@ -478,16 +623,18 @@ func (m *GetApplicationAPIKeyRequest) GetKeyId() string {
 }
 
 type CreateApplicationAPIKeyRequest struct {
-	ApplicationIdentifiers `protobuf:"bytes,1,opt,name=application_ids,json=applicationIds,proto3,embedded=application_ids" json:"application_ids"`
-	Name                   string     `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
-	Rights                 []Right    `protobuf:"varint,3,rep,packed,name=rights,proto3,enum=ttn.lorawan.v3.Right" json:"rights,omitempty"`
-	ExpiresAt              *time.Time `protobuf:"bytes,4,opt,name=expires_at,json=expiresAt,proto3,stdtime" json:"expires_at,omitempty"`
-	XXX_NoUnkeyedLiteral   struct{}   `json:"-"`
-	XXX_sizecache          int32      `json:"-"`
+	ApplicationIds       *ApplicationIdentifiers `protobuf:"bytes,1,opt,name=application_ids,json=applicationIds,proto3" json:"application_ids,omitempty"`
+	Name                 string                  `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	Rights               []Right                 `protobuf:"varint,3,rep,packed,name=rights,proto3,enum=ttn.lorawan.v3.Right" json:"rights,omitempty"`
+	ExpiresAt            *types.Timestamp        `protobuf:"bytes,4,opt,name=expires_at,json=expiresAt,proto3" json:"expires_at,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}                `json:"-"`
+	XXX_unrecognized     []byte                  `json:"-"`
+	XXX_sizecache        int32                   `json:"-"`
 }
 
-func (m *CreateApplicationAPIKeyRequest) Reset()      { *m = CreateApplicationAPIKeyRequest{} }
-func (*CreateApplicationAPIKeyRequest) ProtoMessage() {}
+func (m *CreateApplicationAPIKeyRequest) Reset()         { *m = CreateApplicationAPIKeyRequest{} }
+func (m *CreateApplicationAPIKeyRequest) String() string { return proto.CompactTextString(m) }
+func (*CreateApplicationAPIKeyRequest) ProtoMessage()    {}
 func (*CreateApplicationAPIKeyRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_57d90136b1f4f7b1, []int{9}
 }
@@ -509,6 +656,13 @@ func (m *CreateApplicationAPIKeyRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_CreateApplicationAPIKeyRequest proto.InternalMessageInfo
 
+func (m *CreateApplicationAPIKeyRequest) GetApplicationIds() *ApplicationIdentifiers {
+	if m != nil {
+		return m.ApplicationIds
+	}
+	return nil
+}
+
 func (m *CreateApplicationAPIKeyRequest) GetName() string {
 	if m != nil {
 		return m.Name
@@ -523,7 +677,7 @@ func (m *CreateApplicationAPIKeyRequest) GetRights() []Right {
 	return nil
 }
 
-func (m *CreateApplicationAPIKeyRequest) GetExpiresAt() *time.Time {
+func (m *CreateApplicationAPIKeyRequest) GetExpiresAt() *types.Timestamp {
 	if m != nil {
 		return m.ExpiresAt
 	}
@@ -531,16 +685,18 @@ func (m *CreateApplicationAPIKeyRequest) GetExpiresAt() *time.Time {
 }
 
 type UpdateApplicationAPIKeyRequest struct {
-	ApplicationIdentifiers `protobuf:"bytes,1,opt,name=application_ids,json=applicationIds,proto3,embedded=application_ids" json:"application_ids"`
-	APIKey                 `protobuf:"bytes,2,opt,name=api_key,json=apiKey,proto3,embedded=api_key" json:"api_key"`
+	ApplicationIds *ApplicationIdentifiers `protobuf:"bytes,1,opt,name=application_ids,json=applicationIds,proto3" json:"application_ids,omitempty"`
+	ApiKey         *APIKey                 `protobuf:"bytes,2,opt,name=api_key,json=apiKey,proto3" json:"api_key,omitempty"`
 	// The names of the api key fields that should be updated.
 	FieldMask            *types.FieldMask `protobuf:"bytes,3,opt,name=field_mask,json=fieldMask,proto3" json:"field_mask,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}         `json:"-"`
+	XXX_unrecognized     []byte           `json:"-"`
 	XXX_sizecache        int32            `json:"-"`
 }
 
-func (m *UpdateApplicationAPIKeyRequest) Reset()      { *m = UpdateApplicationAPIKeyRequest{} }
-func (*UpdateApplicationAPIKeyRequest) ProtoMessage() {}
+func (m *UpdateApplicationAPIKeyRequest) Reset()         { *m = UpdateApplicationAPIKeyRequest{} }
+func (m *UpdateApplicationAPIKeyRequest) String() string { return proto.CompactTextString(m) }
+func (*UpdateApplicationAPIKeyRequest) ProtoMessage()    {}
 func (*UpdateApplicationAPIKeyRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_57d90136b1f4f7b1, []int{10}
 }
@@ -562,6 +718,20 @@ func (m *UpdateApplicationAPIKeyRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_UpdateApplicationAPIKeyRequest proto.InternalMessageInfo
 
+func (m *UpdateApplicationAPIKeyRequest) GetApplicationIds() *ApplicationIdentifiers {
+	if m != nil {
+		return m.ApplicationIds
+	}
+	return nil
+}
+
+func (m *UpdateApplicationAPIKeyRequest) GetApiKey() *APIKey {
+	if m != nil {
+		return m.ApiKey
+	}
+	return nil
+}
+
 func (m *UpdateApplicationAPIKeyRequest) GetFieldMask() *types.FieldMask {
 	if m != nil {
 		return m.FieldMask
@@ -570,17 +740,22 @@ func (m *UpdateApplicationAPIKeyRequest) GetFieldMask() *types.FieldMask {
 }
 
 type ListApplicationCollaboratorsRequest struct {
-	ApplicationIdentifiers `protobuf:"bytes,1,opt,name=application_ids,json=applicationIds,proto3,embedded=application_ids" json:"application_ids"`
+	ApplicationIds *ApplicationIdentifiers `protobuf:"bytes,1,opt,name=application_ids,json=applicationIds,proto3" json:"application_ids,omitempty"`
 	// Limit the number of results per page.
 	Limit uint32 `protobuf:"varint,2,opt,name=limit,proto3" json:"limit,omitempty"`
 	// Page number for pagination. 0 is interpreted as 1.
-	Page                 uint32   `protobuf:"varint,3,opt,name=page,proto3" json:"page,omitempty"`
+	Page uint32 `protobuf:"varint,3,opt,name=page,proto3" json:"page,omitempty"`
+	// Order the results by this field path (must be present in the field mask).
+	// Default ordering is by ID. Prepend with a minus (-) to reverse the order.
+	Order                string   `protobuf:"bytes,4,opt,name=order,proto3" json:"order,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *ListApplicationCollaboratorsRequest) Reset()      { *m = ListApplicationCollaboratorsRequest{} }
-func (*ListApplicationCollaboratorsRequest) ProtoMessage() {}
+func (m *ListApplicationCollaboratorsRequest) Reset()         { *m = ListApplicationCollaboratorsRequest{} }
+func (m *ListApplicationCollaboratorsRequest) String() string { return proto.CompactTextString(m) }
+func (*ListApplicationCollaboratorsRequest) ProtoMessage()    {}
 func (*ListApplicationCollaboratorsRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_57d90136b1f4f7b1, []int{11}
 }
@@ -602,6 +777,13 @@ func (m *ListApplicationCollaboratorsRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_ListApplicationCollaboratorsRequest proto.InternalMessageInfo
 
+func (m *ListApplicationCollaboratorsRequest) GetApplicationIds() *ApplicationIdentifiers {
+	if m != nil {
+		return m.ApplicationIds
+	}
+	return nil
+}
+
 func (m *ListApplicationCollaboratorsRequest) GetLimit() uint32 {
 	if m != nil {
 		return m.Limit
@@ -616,15 +798,24 @@ func (m *ListApplicationCollaboratorsRequest) GetPage() uint32 {
 	return 0
 }
 
-type GetApplicationCollaboratorRequest struct {
-	ApplicationIdentifiers        `protobuf:"bytes,1,opt,name=application_ids,json=applicationIds,proto3,embedded=application_ids" json:"application_ids"`
-	OrganizationOrUserIdentifiers `protobuf:"bytes,2,opt,name=collaborator,proto3,embedded=collaborator" json:"collaborator"`
-	XXX_NoUnkeyedLiteral          struct{} `json:"-"`
-	XXX_sizecache                 int32    `json:"-"`
+func (m *ListApplicationCollaboratorsRequest) GetOrder() string {
+	if m != nil {
+		return m.Order
+	}
+	return ""
 }
 
-func (m *GetApplicationCollaboratorRequest) Reset()      { *m = GetApplicationCollaboratorRequest{} }
-func (*GetApplicationCollaboratorRequest) ProtoMessage() {}
+type GetApplicationCollaboratorRequest struct {
+	ApplicationIds       *ApplicationIdentifiers        `protobuf:"bytes,1,opt,name=application_ids,json=applicationIds,proto3" json:"application_ids,omitempty"`
+	Collaborator         *OrganizationOrUserIdentifiers `protobuf:"bytes,2,opt,name=collaborator,proto3" json:"collaborator,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}                       `json:"-"`
+	XXX_unrecognized     []byte                         `json:"-"`
+	XXX_sizecache        int32                          `json:"-"`
+}
+
+func (m *GetApplicationCollaboratorRequest) Reset()         { *m = GetApplicationCollaboratorRequest{} }
+func (m *GetApplicationCollaboratorRequest) String() string { return proto.CompactTextString(m) }
+func (*GetApplicationCollaboratorRequest) ProtoMessage()    {}
 func (*GetApplicationCollaboratorRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_57d90136b1f4f7b1, []int{12}
 }
@@ -646,15 +837,31 @@ func (m *GetApplicationCollaboratorRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_GetApplicationCollaboratorRequest proto.InternalMessageInfo
 
-type SetApplicationCollaboratorRequest struct {
-	ApplicationIdentifiers `protobuf:"bytes,1,opt,name=application_ids,json=applicationIds,proto3,embedded=application_ids" json:"application_ids"`
-	Collaborator           Collaborator `protobuf:"bytes,2,opt,name=collaborator,proto3" json:"collaborator"`
-	XXX_NoUnkeyedLiteral   struct{}     `json:"-"`
-	XXX_sizecache          int32        `json:"-"`
+func (m *GetApplicationCollaboratorRequest) GetApplicationIds() *ApplicationIdentifiers {
+	if m != nil {
+		return m.ApplicationIds
+	}
+	return nil
 }
 
-func (m *SetApplicationCollaboratorRequest) Reset()      { *m = SetApplicationCollaboratorRequest{} }
-func (*SetApplicationCollaboratorRequest) ProtoMessage() {}
+func (m *GetApplicationCollaboratorRequest) GetCollaborator() *OrganizationOrUserIdentifiers {
+	if m != nil {
+		return m.Collaborator
+	}
+	return nil
+}
+
+type SetApplicationCollaboratorRequest struct {
+	ApplicationIds       *ApplicationIdentifiers `protobuf:"bytes,1,opt,name=application_ids,json=applicationIds,proto3" json:"application_ids,omitempty"`
+	Collaborator         *Collaborator           `protobuf:"bytes,2,opt,name=collaborator,proto3" json:"collaborator,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}                `json:"-"`
+	XXX_unrecognized     []byte                  `json:"-"`
+	XXX_sizecache        int32                   `json:"-"`
+}
+
+func (m *SetApplicationCollaboratorRequest) Reset()         { *m = SetApplicationCollaboratorRequest{} }
+func (m *SetApplicationCollaboratorRequest) String() string { return proto.CompactTextString(m) }
+func (*SetApplicationCollaboratorRequest) ProtoMessage()    {}
 func (*SetApplicationCollaboratorRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_57d90136b1f4f7b1, []int{13}
 }
@@ -676,11 +883,18 @@ func (m *SetApplicationCollaboratorRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_SetApplicationCollaboratorRequest proto.InternalMessageInfo
 
-func (m *SetApplicationCollaboratorRequest) GetCollaborator() Collaborator {
+func (m *SetApplicationCollaboratorRequest) GetApplicationIds() *ApplicationIdentifiers {
+	if m != nil {
+		return m.ApplicationIds
+	}
+	return nil
+}
+
+func (m *SetApplicationCollaboratorRequest) GetCollaborator() *Collaborator {
 	if m != nil {
 		return m.Collaborator
 	}
-	return Collaborator{}
+	return nil
 }
 
 func init() {
@@ -724,830 +938,103 @@ func init() {
 }
 
 var fileDescriptor_57d90136b1f4f7b1 = []byte{
-	// 1192 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xcc, 0x56, 0x4d, 0x6c, 0x1b, 0xc5,
-	0x17, 0xcf, 0xac, 0x3f, 0x12, 0x8f, 0xf3, 0xf5, 0xdf, 0x3f, 0x85, 0x55, 0x0a, 0x6b, 0x77, 0x1b,
-	0x55, 0xa6, 0xe0, 0x35, 0x72, 0x28, 0xa2, 0x91, 0xaa, 0xd4, 0x1b, 0x42, 0x31, 0xa1, 0x0d, 0x0c,
-	0x84, 0x03, 0x55, 0xb1, 0xc6, 0xde, 0xf1, 0x66, 0x64, 0x7b, 0x77, 0x99, 0x1d, 0xbb, 0x75, 0x11,
-	0x12, 0xf4, 0xc8, 0xa9, 0xea, 0x05, 0x89, 0x13, 0x27, 0x04, 0xe2, 0x86, 0x04, 0xe2, 0xc0, 0x81,
-	0x63, 0x0f, 0x1c, 0x7a, 0x42, 0x08, 0xa4, 0x20, 0xd2, 0x4b, 0x25, 0x2e, 0x9c, 0x7d, 0x42, 0x3b,
-	0xbb, 0xae, 0xd7, 0x1f, 0xa4, 0x0a, 0xad, 0xac, 0x9e, 0x3c, 0x33, 0xfe, 0xbd, 0xf7, 0x7e, 0xef,
-	0xed, 0xef, 0xbd, 0x19, 0x78, 0xb2, 0xe9, 0x30, 0x7c, 0x15, 0xdb, 0x79, 0x8f, 0xe3, 0x5a, 0xa3,
-	0x80, 0x5d, 0x5a, 0xc0, 0xae, 0xdb, 0xa4, 0x35, 0xcc, 0xa9, 0x63, 0xeb, 0x2e, 0x73, 0xb8, 0x23,
-	0x2f, 0x72, 0x6e, 0xeb, 0x21, 0x50, 0xef, 0xac, 0xad, 0x94, 0x2c, 0xca, 0xf7, 0xda, 0x55, 0xbd,
-	0xe6, 0xb4, 0x0a, 0xc4, 0xee, 0x38, 0x5d, 0x97, 0x39, 0xd7, 0xba, 0x05, 0x01, 0xae, 0xe5, 0x2d,
-	0x62, 0xe7, 0x3b, 0xb8, 0x49, 0x4d, 0xcc, 0x49, 0x61, 0x6c, 0x11, 0xb8, 0x5c, 0xc9, 0x47, 0x5c,
-	0x58, 0x8e, 0xe5, 0x04, 0xc6, 0xd5, 0x76, 0x5d, 0xec, 0xc4, 0x46, 0xac, 0x42, 0x78, 0xd6, 0x72,
-	0x1c, 0xab, 0x49, 0x06, 0xa8, 0x3a, 0x25, 0x4d, 0xb3, 0xd2, 0xc2, 0x5e, 0x23, 0x44, 0x64, 0x46,
-	0x11, 0x9c, 0xb6, 0x88, 0xc7, 0x71, 0xcb, 0x0d, 0x01, 0xab, 0xe3, 0x99, 0xd6, 0x1c, 0x9b, 0xe3,
-	0x1a, 0xaf, 0x50, 0xbb, 0xde, 0x0f, 0x34, 0xa1, 0x1e, 0xd4, 0x24, 0x36, 0xa7, 0x75, 0x4a, 0x98,
-	0x17, 0x82, 0xd4, 0x71, 0x10, 0xa3, 0xd6, 0x1e, 0x0f, 0xff, 0xd7, 0xbe, 0x4e, 0xc0, 0x74, 0x69,
-	0x50, 0x45, 0xf9, 0x75, 0x18, 0xa3, 0xa6, 0xa7, 0x80, 0x2c, 0xc8, 0xa5, 0x8b, 0xa7, 0xf4, 0xe1,
-	0x6a, 0xea, 0x11, 0x64, 0x79, 0x10, 0xca, 0x58, 0xee, 0x19, 0x89, 0x4f, 0x81, 0xb4, 0x0c, 0x6e,
-	0xef, 0x67, 0x66, 0xee, 0xec, 0x67, 0x00, 0xf2, 0x9d, 0xc8, 0x9b, 0x10, 0xd6, 0x18, 0xc1, 0x9c,
-	0x98, 0x15, 0xcc, 0x15, 0x49, 0xb8, 0x5c, 0xd1, 0x83, 0xe4, 0xf5, 0x7e, 0xf2, 0xfa, 0x3b, 0xfd,
-	0xe4, 0x8d, 0x39, 0xdf, 0xfc, 0xe6, 0x1f, 0x19, 0x80, 0x52, 0xa1, 0x5d, 0x89, 0xfb, 0x4e, 0xda,
-	0xae, 0xd9, 0x77, 0x12, 0x3b, 0x8a, 0x93, 0xd0, 0xae, 0xc4, 0xe5, 0x0d, 0x08, 0x4d, 0xd2, 0x24,
-	0xa1, 0x93, 0xb9, 0x07, 0x3a, 0x89, 0x07, 0x0e, 0x42, 0x9b, 0x12, 0x97, 0x8f, 0xc3, 0xb8, 0x8d,
-	0x5b, 0x44, 0x89, 0x67, 0x41, 0x2e, 0x65, 0xcc, 0xf6, 0x8c, 0x38, 0x93, 0x94, 0x22, 0x12, 0x87,
-	0xf2, 0x69, 0x98, 0x36, 0x89, 0x57, 0x63, 0xd4, 0xf5, 0x0b, 0xa3, 0x24, 0x04, 0x66, 0xae, 0x67,
-	0x24, 0x58, 0x4c, 0xb9, 0xb3, 0x84, 0xa2, 0x7f, 0xca, 0x37, 0x00, 0x84, 0x98, 0x73, 0x46, 0xab,
-	0x6d, 0x4e, 0x3c, 0x25, 0x99, 0x8d, 0xe5, 0xd2, 0xc5, 0xe7, 0x0e, 0xa9, 0xb3, 0x5e, 0xba, 0x8f,
-	0xde, 0xb2, 0x39, 0xeb, 0x1a, 0x67, 0x7a, 0x46, 0xf1, 0x73, 0x50, 0x58, 0x86, 0xda, 0x2a, 0xd3,
-	0x94, 0xd5, 0xa2, 0xfa, 0xfe, 0x65, 0x9c, 0xbf, 0xfe, 0x42, 0xfe, 0xec, 0x95, 0xdc, 0xc6, 0xfa,
-	0xe5, 0xfc, 0x95, 0x8d, 0xfe, 0xf6, 0xd9, 0x0f, 0x8b, 0xcf, 0x7f, 0xb4, 0x7a, 0xda, 0x67, 0x71,
-	0x1b, 0xa0, 0x48, 0x54, 0xf9, 0x35, 0x38, 0x1f, 0xd5, 0x93, 0x32, 0x2b, 0x58, 0x1c, 0x1f, 0x65,
-	0xb1, 0x19, 0x60, 0xca, 0x76, 0xdd, 0x11, 0xe9, 0xdc, 0x02, 0xd2, 0x32, 0x44, 0xe9, 0xda, 0xe0,
-	0x58, 0x3e, 0x05, 0x97, 0x4c, 0xd2, 0xa9, 0x90, 0x36, 0xad, 0xd4, 0x9c, 0xb6, 0xcd, 0x09, 0x53,
-	0x52, 0x59, 0x90, 0x5b, 0x40, 0x0b, 0x26, 0xe9, 0x6c, 0xb5, 0xe9, 0x66, 0x70, 0xb8, 0x72, 0x0e,
-	0x2e, 0x8d, 0xe4, 0x21, 0x2f, 0xc3, 0x58, 0x83, 0x74, 0x85, 0xd2, 0x52, 0xc8, 0x5f, 0xca, 0x4f,
-	0xc0, 0x44, 0x07, 0x37, 0xdb, 0x44, 0x48, 0x25, 0x85, 0x82, 0xcd, 0xba, 0xf4, 0x32, 0x58, 0x8f,
-	0xff, 0xf0, 0x45, 0x06, 0x68, 0x3b, 0x70, 0x3e, 0x52, 0x18, 0x4f, 0xde, 0x80, 0xf3, 0x91, 0x01,
-	0xe0, 0x8b, 0x76, 0x62, 0x1a, 0x11, 0x1b, 0x34, 0x64, 0xa0, 0xb5, 0xe0, 0xff, 0xcb, 0x9e, 0xd7,
-	0x26, 0xaf, 0x90, 0xce, 0xd6, 0x6e, 0x19, 0x11, 0xcf, 0x75, 0x6c, 0x8f, 0xc8, 0xef, 0xc2, 0xd9,
-	0x30, 0x29, 0xc1, 0x6e, 0xde, 0x38, 0xe7, 0x6b, 0xea, 0xb7, 0xfd, 0xcc, 0x19, 0xcb, 0xd1, 0xf9,
-	0x1e, 0xe1, 0x7b, 0xd4, 0xb6, 0x3c, 0xdd, 0x26, 0xfc, 0xaa, 0xc3, 0x1a, 0x85, 0xe1, 0x0e, 0xeb,
-	0xac, 0x15, 0xdc, 0x86, 0x55, 0xe0, 0x5d, 0x97, 0x78, 0xfa, 0xd6, 0x6e, 0xf9, 0xa5, 0x17, 0x51,
-	0x32, 0xa8, 0x85, 0xf6, 0x1d, 0x80, 0xc7, 0x2e, 0x10, 0x1e, 0xe5, 0x43, 0x3e, 0x68, 0x13, 0x8f,
-	0xcb, 0x18, 0x2e, 0x45, 0x88, 0x55, 0x1e, 0x45, 0x07, 0x2e, 0xe2, 0x28, 0xd2, 0x93, 0xcf, 0x42,
-	0x38, 0x18, 0x44, 0xff, 0xda, 0x8c, 0xaf, 0xfa, 0x90, 0x8b, 0xd8, 0x6b, 0xa0, 0x54, 0xbd, 0xbf,
-	0xd4, 0x7e, 0x97, 0xe0, 0x53, 0x6f, 0x50, 0x2f, 0x4a, 0xdc, 0xeb, 0x33, 0x7f, 0xcb, 0x97, 0x52,
-	0xb3, 0x89, 0xab, 0x0e, 0xc3, 0xdc, 0x61, 0x21, 0xed, 0xfc, 0x28, 0xed, 0x1d, 0x66, 0x61, 0x9b,
-	0x5e, 0x17, 0xb6, 0x3b, 0x6c, 0xd7, 0x23, 0x2c, 0xc2, 0x1e, 0x0d, 0xb9, 0x78, 0x08, 0xa6, 0xb2,
-	0x09, 0x13, 0x0e, 0x33, 0x09, 0x13, 0x73, 0x22, 0x65, 0x5c, 0xea, 0x19, 0xdb, 0xac, 0x8c, 0x66,
-	0x86, 0x8a, 0x51, 0xa1, 0x26, 0x5a, 0xca, 0x8f, 0x1c, 0x88, 0x46, 0x46, 0x89, 0xbc, 0xf8, 0x89,
-	0x4c, 0x2d, 0x94, 0xce, 0x47, 0x36, 0x81, 0x73, 0x59, 0x85, 0x89, 0x26, 0x6d, 0x51, 0x2e, 0xa6,
-	0xc1, 0x82, 0x68, 0x8d, 0xd3, 0x31, 0xe5, 0xde, 0x2c, 0x0a, 0x8e, 0x65, 0x19, 0xc6, 0x5d, 0x6c,
-	0x11, 0x31, 0x08, 0x16, 0x90, 0x58, 0xcb, 0x8a, 0xaf, 0x29, 0x31, 0x4d, 0x94, 0x64, 0x16, 0xe4,
-	0xe6, 0x50, 0x7f, 0xab, 0xfd, 0x0c, 0xa0, 0xb2, 0x29, 0x62, 0x4c, 0x10, 0xc6, 0x0e, 0x4c, 0x47,
-	0x98, 0x86, 0xd5, 0x3d, 0x4c, 0xe1, 0x13, 0x94, 0x10, 0xf5, 0x20, 0x57, 0x46, 0xbe, 0x97, 0xf4,
-	0x1f, 0xbe, 0x97, 0x31, 0x1f, 0x8d, 0x31, 0xfc, 0xf5, 0xb4, 0x2f, 0x01, 0x54, 0x76, 0xc5, 0xe0,
-	0x9d, 0x46, 0x3a, 0x0f, 0xa1, 0xea, 0xef, 0x01, 0x7c, 0x66, 0x44, 0xd5, 0xa5, 0x37, 0xcb, 0xdb,
-	0xa4, 0xeb, 0x4d, 0xb1, 0x2b, 0xef, 0x4b, 0x49, 0x3a, 0x5c, 0x4a, 0xb1, 0x81, 0x94, 0xb4, 0xcf,
-	0x00, 0x3c, 0x3e, 0x3c, 0x46, 0x02, 0xde, 0x53, 0xa4, 0x7d, 0x0c, 0x26, 0x1b, 0xa4, 0x5b, 0xa1,
-	0x66, 0x7f, 0x54, 0x37, 0x48, 0xb7, 0x6c, 0x6a, 0xdf, 0x48, 0x50, 0x1d, 0x93, 0xf2, 0xd4, 0xc9,
-	0xf5, 0xef, 0x6a, 0x69, 0xd2, 0x5d, 0x7d, 0x1e, 0x26, 0x83, 0xf7, 0x8f, 0x12, 0xcb, 0xc6, 0x72,
-	0x8b, 0xc5, 0x63, 0xa3, 0x61, 0x91, 0xff, 0xaf, 0xf1, 0xbf, 0x9e, 0xb1, 0x78, 0x0b, 0xa4, 0xe7,
-	0x80, 0x02, 0xb4, 0xc4, 0x0d, 0x3f, 0x1c, 0x0a, 0xed, 0xe4, 0x0b, 0x10, 0x92, 0x6b, 0x2e, 0x65,
-	0xc4, 0xf3, 0xdf, 0x12, 0xf1, 0x07, 0xbe, 0x25, 0xfc, 0x66, 0xf9, 0x16, 0x48, 0xe7, 0x41, 0xf0,
-	0xa6, 0x08, 0x6d, 0x4b, 0x5c, 0xfb, 0x44, 0x82, 0xea, 0x58, 0xa7, 0x4c, 0xbd, 0x5a, 0x25, 0x38,
-	0x8b, 0x5d, 0x5a, 0xf1, 0xaf, 0xe2, 0xa0, 0x7d, 0x9e, 0x1c, 0x73, 0x2d, 0x28, 0x4d, 0x70, 0x95,
-	0xc4, 0x2e, 0xdd, 0x26, 0xdd, 0x91, 0x26, 0x8c, 0x1d, 0xa5, 0x09, 0x7f, 0x04, 0xf0, 0xe4, 0x48,
-	0x13, 0x6e, 0x46, 0xa6, 0xc9, 0xe3, 0xde, 0x8a, 0x7f, 0x01, 0x78, 0x62, 0xb8, 0x15, 0xa3, 0xec,
-	0xa7, 0x48, 0xbe, 0xf6, 0x28, 0xc6, 0xfa, 0x78, 0x98, 0xe1, 0xd1, 0xfe, 0x0b, 0x80, 0x27, 0xde,
-	0x7e, 0x1c, 0xb2, 0xbd, 0x34, 0x31, 0xdb, 0xa7, 0xc7, 0xdf, 0xaf, 0x03, 0xcc, 0x61, 0x77, 0x96,
-	0x71, 0xf1, 0xd7, 0x3f, 0xd5, 0x99, 0x8f, 0x0f, 0x54, 0xf0, 0xd5, 0x81, 0x0a, 0xee, 0x1d, 0xa8,
-	0x33, 0x7f, 0x1f, 0xa8, 0xe0, 0xe6, 0x5d, 0x75, 0xe6, 0xa7, 0xbb, 0x2a, 0x78, 0xaf, 0x70, 0x84,
-	0x57, 0x1f, 0xb7, 0xdd, 0x6a, 0x35, 0x29, 0x34, 0xbf, 0xf6, 0x4f, 0x00, 0x00, 0x00, 0xff, 0xff,
-	0x91, 0x49, 0x67, 0x0f, 0xb1, 0x0e, 0x00, 0x00,
-}
-
-func (this *Application) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*Application)
-	if !ok {
-		that2, ok := that.(Application)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.ApplicationIdentifiers.Equal(&that1.ApplicationIdentifiers) {
-		return false
-	}
-	if !this.CreatedAt.Equal(that1.CreatedAt) {
-		return false
-	}
-	if !this.UpdatedAt.Equal(that1.UpdatedAt) {
-		return false
-	}
-	if that1.DeletedAt == nil {
-		if this.DeletedAt != nil {
-			return false
-		}
-	} else if !this.DeletedAt.Equal(*that1.DeletedAt) {
-		return false
-	}
-	if this.Name != that1.Name {
-		return false
-	}
-	if this.Description != that1.Description {
-		return false
-	}
-	if len(this.Attributes) != len(that1.Attributes) {
-		return false
-	}
-	for i := range this.Attributes {
-		if this.Attributes[i] != that1.Attributes[i] {
-			return false
-		}
-	}
-	if len(this.ContactInfo) != len(that1.ContactInfo) {
-		return false
-	}
-	for i := range this.ContactInfo {
-		if !this.ContactInfo[i].Equal(that1.ContactInfo[i]) {
-			return false
-		}
-	}
-	if this.DevEuiCounter != that1.DevEuiCounter {
-		return false
-	}
-	return true
-}
-func (this *Applications) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*Applications)
-	if !ok {
-		that2, ok := that.(Applications)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if len(this.Applications) != len(that1.Applications) {
-		return false
-	}
-	for i := range this.Applications {
-		if !this.Applications[i].Equal(that1.Applications[i]) {
-			return false
-		}
-	}
-	return true
-}
-func (this *IssueDevEUIResponse) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*IssueDevEUIResponse)
-	if !ok {
-		that2, ok := that.(IssueDevEUIResponse)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.DevEui.Equal(that1.DevEui) {
-		return false
-	}
-	return true
-}
-func (this *GetApplicationRequest) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*GetApplicationRequest)
-	if !ok {
-		that2, ok := that.(GetApplicationRequest)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.ApplicationIdentifiers.Equal(&that1.ApplicationIdentifiers) {
-		return false
-	}
-	if !this.FieldMask.Equal(that1.FieldMask) {
-		return false
-	}
-	return true
-}
-func (this *ListApplicationsRequest) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ListApplicationsRequest)
-	if !ok {
-		that2, ok := that.(ListApplicationsRequest)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.Collaborator.Equal(that1.Collaborator) {
-		return false
-	}
-	if !this.FieldMask.Equal(that1.FieldMask) {
-		return false
-	}
-	if this.Order != that1.Order {
-		return false
-	}
-	if this.Limit != that1.Limit {
-		return false
-	}
-	if this.Page != that1.Page {
-		return false
-	}
-	if this.Deleted != that1.Deleted {
-		return false
-	}
-	return true
-}
-func (this *CreateApplicationRequest) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*CreateApplicationRequest)
-	if !ok {
-		that2, ok := that.(CreateApplicationRequest)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.Application.Equal(&that1.Application) {
-		return false
-	}
-	if !this.Collaborator.Equal(&that1.Collaborator) {
-		return false
-	}
-	return true
-}
-func (this *UpdateApplicationRequest) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*UpdateApplicationRequest)
-	if !ok {
-		that2, ok := that.(UpdateApplicationRequest)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.Application.Equal(&that1.Application) {
-		return false
-	}
-	if !this.FieldMask.Equal(that1.FieldMask) {
-		return false
-	}
-	return true
-}
-func (this *ListApplicationAPIKeysRequest) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ListApplicationAPIKeysRequest)
-	if !ok {
-		that2, ok := that.(ListApplicationAPIKeysRequest)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.ApplicationIdentifiers.Equal(&that1.ApplicationIdentifiers) {
-		return false
-	}
-	if this.Limit != that1.Limit {
-		return false
-	}
-	if this.Page != that1.Page {
-		return false
-	}
-	return true
-}
-func (this *GetApplicationAPIKeyRequest) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*GetApplicationAPIKeyRequest)
-	if !ok {
-		that2, ok := that.(GetApplicationAPIKeyRequest)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.ApplicationIdentifiers.Equal(&that1.ApplicationIdentifiers) {
-		return false
-	}
-	if this.KeyId != that1.KeyId {
-		return false
-	}
-	return true
-}
-func (this *CreateApplicationAPIKeyRequest) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*CreateApplicationAPIKeyRequest)
-	if !ok {
-		that2, ok := that.(CreateApplicationAPIKeyRequest)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.ApplicationIdentifiers.Equal(&that1.ApplicationIdentifiers) {
-		return false
-	}
-	if this.Name != that1.Name {
-		return false
-	}
-	if len(this.Rights) != len(that1.Rights) {
-		return false
-	}
-	for i := range this.Rights {
-		if this.Rights[i] != that1.Rights[i] {
-			return false
-		}
-	}
-	if that1.ExpiresAt == nil {
-		if this.ExpiresAt != nil {
-			return false
-		}
-	} else if !this.ExpiresAt.Equal(*that1.ExpiresAt) {
-		return false
-	}
-	return true
-}
-func (this *UpdateApplicationAPIKeyRequest) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*UpdateApplicationAPIKeyRequest)
-	if !ok {
-		that2, ok := that.(UpdateApplicationAPIKeyRequest)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.ApplicationIdentifiers.Equal(&that1.ApplicationIdentifiers) {
-		return false
-	}
-	if !this.APIKey.Equal(&that1.APIKey) {
-		return false
-	}
-	if !this.FieldMask.Equal(that1.FieldMask) {
-		return false
-	}
-	return true
-}
-func (this *ListApplicationCollaboratorsRequest) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ListApplicationCollaboratorsRequest)
-	if !ok {
-		that2, ok := that.(ListApplicationCollaboratorsRequest)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.ApplicationIdentifiers.Equal(&that1.ApplicationIdentifiers) {
-		return false
-	}
-	if this.Limit != that1.Limit {
-		return false
-	}
-	if this.Page != that1.Page {
-		return false
-	}
-	return true
-}
-func (this *GetApplicationCollaboratorRequest) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*GetApplicationCollaboratorRequest)
-	if !ok {
-		that2, ok := that.(GetApplicationCollaboratorRequest)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.ApplicationIdentifiers.Equal(&that1.ApplicationIdentifiers) {
-		return false
-	}
-	if !this.OrganizationOrUserIdentifiers.Equal(&that1.OrganizationOrUserIdentifiers) {
-		return false
-	}
-	return true
-}
-func (this *SetApplicationCollaboratorRequest) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*SetApplicationCollaboratorRequest)
-	if !ok {
-		that2, ok := that.(SetApplicationCollaboratorRequest)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.ApplicationIdentifiers.Equal(&that1.ApplicationIdentifiers) {
-		return false
-	}
-	if !this.Collaborator.Equal(&that1.Collaborator) {
-		return false
-	}
-	return true
-}
-func NewPopulatedApplication(r randyApplication, easy bool) *Application {
-	this := &Application{}
-	v1 := NewPopulatedApplicationIdentifiers(r, easy)
-	this.ApplicationIdentifiers = *v1
-	v2 := github_com_gogo_protobuf_types.NewPopulatedStdTime(r, easy)
-	this.CreatedAt = *v2
-	v3 := github_com_gogo_protobuf_types.NewPopulatedStdTime(r, easy)
-	this.UpdatedAt = *v3
-	if r.Intn(5) != 0 {
-		this.DeletedAt = github_com_gogo_protobuf_types.NewPopulatedStdTime(r, easy)
-	}
-	this.Name = string(randStringApplication(r))
-	this.Description = string(randStringApplication(r))
-	if r.Intn(5) != 0 {
-		v4 := r.Intn(10)
-		this.Attributes = make(map[string]string)
-		for i := 0; i < v4; i++ {
-			this.Attributes[randStringApplication(r)] = randStringApplication(r)
-		}
-	}
-	if r.Intn(5) != 0 {
-		v5 := r.Intn(5)
-		this.ContactInfo = make([]*ContactInfo, v5)
-		for i := 0; i < v5; i++ {
-			this.ContactInfo[i] = NewPopulatedContactInfo(r, easy)
-		}
-	}
-	this.DevEuiCounter = uint32(r.Uint32())
-	if !easy && r.Intn(10) != 0 {
-	}
-	return this
-}
-
-type randyApplication interface {
-	Float32() float32
-	Float64() float64
-	Int63() int64
-	Int31() int32
-	Uint32() uint32
-	Intn(n int) int
-}
-
-func randUTF8RuneApplication(r randyApplication) rune {
-	ru := r.Intn(62)
-	if ru < 10 {
-		return rune(ru + 48)
-	} else if ru < 36 {
-		return rune(ru + 55)
-	}
-	return rune(ru + 61)
-}
-func randStringApplication(r randyApplication) string {
-	v6 := r.Intn(100)
-	tmps := make([]rune, v6)
-	for i := 0; i < v6; i++ {
-		tmps[i] = randUTF8RuneApplication(r)
-	}
-	return string(tmps)
-}
-func randUnrecognizedApplication(r randyApplication, maxFieldNumber int) (dAtA []byte) {
-	l := r.Intn(5)
-	for i := 0; i < l; i++ {
-		wire := r.Intn(4)
-		if wire == 3 {
-			wire = 5
-		}
-		fieldNumber := maxFieldNumber + r.Intn(100)
-		dAtA = randFieldApplication(dAtA, r, fieldNumber, wire)
-	}
-	return dAtA
-}
-func randFieldApplication(dAtA []byte, r randyApplication, fieldNumber int, wire int) []byte {
-	key := uint32(fieldNumber)<<3 | uint32(wire)
-	switch wire {
-	case 0:
-		dAtA = encodeVarintPopulateApplication(dAtA, uint64(key))
-		v7 := r.Int63()
-		if r.Intn(2) == 0 {
-			v7 *= -1
-		}
-		dAtA = encodeVarintPopulateApplication(dAtA, uint64(v7))
-	case 1:
-		dAtA = encodeVarintPopulateApplication(dAtA, uint64(key))
-		dAtA = append(dAtA, byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)))
-	case 2:
-		dAtA = encodeVarintPopulateApplication(dAtA, uint64(key))
-		ll := r.Intn(100)
-		dAtA = encodeVarintPopulateApplication(dAtA, uint64(ll))
-		for j := 0; j < ll; j++ {
-			dAtA = append(dAtA, byte(r.Intn(256)))
-		}
-	default:
-		dAtA = encodeVarintPopulateApplication(dAtA, uint64(key))
-		dAtA = append(dAtA, byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)))
-	}
-	return dAtA
-}
-func encodeVarintPopulateApplication(dAtA []byte, v uint64) []byte {
-	for v >= 1<<7 {
-		dAtA = append(dAtA, uint8(uint64(v)&0x7f|0x80))
-		v >>= 7
-	}
-	dAtA = append(dAtA, uint8(v))
-	return dAtA
-}
-func (this *Application) String() string {
-	if this == nil {
-		return "nil"
-	}
-	repeatedStringForContactInfo := "[]*ContactInfo{"
-	for _, f := range this.ContactInfo {
-		repeatedStringForContactInfo += strings.Replace(fmt.Sprintf("%v", f), "ContactInfo", "ContactInfo", 1) + ","
-	}
-	repeatedStringForContactInfo += "}"
-	keysForAttributes := make([]string, 0, len(this.Attributes))
-	for k := range this.Attributes {
-		keysForAttributes = append(keysForAttributes, k)
-	}
-	github_com_gogo_protobuf_sortkeys.Strings(keysForAttributes)
-	mapStringForAttributes := "map[string]string{"
-	for _, k := range keysForAttributes {
-		mapStringForAttributes += fmt.Sprintf("%v: %v,", k, this.Attributes[k])
-	}
-	mapStringForAttributes += "}"
-	s := strings.Join([]string{`&Application{`,
-		`ApplicationIdentifiers:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.ApplicationIdentifiers), "ApplicationIdentifiers", "ApplicationIdentifiers", 1), `&`, ``, 1) + `,`,
-		`CreatedAt:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.CreatedAt), "Timestamp", "types.Timestamp", 1), `&`, ``, 1) + `,`,
-		`UpdatedAt:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.UpdatedAt), "Timestamp", "types.Timestamp", 1), `&`, ``, 1) + `,`,
-		`DeletedAt:` + strings.Replace(fmt.Sprintf("%v", this.DeletedAt), "Timestamp", "types.Timestamp", 1) + `,`,
-		`Name:` + fmt.Sprintf("%v", this.Name) + `,`,
-		`Description:` + fmt.Sprintf("%v", this.Description) + `,`,
-		`Attributes:` + mapStringForAttributes + `,`,
-		`ContactInfo:` + repeatedStringForContactInfo + `,`,
-		`DevEuiCounter:` + fmt.Sprintf("%v", this.DevEuiCounter) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *Applications) String() string {
-	if this == nil {
-		return "nil"
-	}
-	repeatedStringForApplications := "[]*Application{"
-	for _, f := range this.Applications {
-		repeatedStringForApplications += strings.Replace(f.String(), "Application", "Application", 1) + ","
-	}
-	repeatedStringForApplications += "}"
-	s := strings.Join([]string{`&Applications{`,
-		`Applications:` + repeatedStringForApplications + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *IssueDevEUIResponse) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&IssueDevEUIResponse{`,
-		`DevEui:` + fmt.Sprintf("%v", this.DevEui) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *GetApplicationRequest) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&GetApplicationRequest{`,
-		`ApplicationIdentifiers:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.ApplicationIdentifiers), "ApplicationIdentifiers", "ApplicationIdentifiers", 1), `&`, ``, 1) + `,`,
-		`FieldMask:` + strings.Replace(fmt.Sprintf("%v", this.FieldMask), "FieldMask", "types.FieldMask", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *ListApplicationsRequest) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&ListApplicationsRequest{`,
-		`Collaborator:` + strings.Replace(fmt.Sprintf("%v", this.Collaborator), "OrganizationOrUserIdentifiers", "OrganizationOrUserIdentifiers", 1) + `,`,
-		`FieldMask:` + strings.Replace(fmt.Sprintf("%v", this.FieldMask), "FieldMask", "types.FieldMask", 1) + `,`,
-		`Order:` + fmt.Sprintf("%v", this.Order) + `,`,
-		`Limit:` + fmt.Sprintf("%v", this.Limit) + `,`,
-		`Page:` + fmt.Sprintf("%v", this.Page) + `,`,
-		`Deleted:` + fmt.Sprintf("%v", this.Deleted) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *CreateApplicationRequest) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&CreateApplicationRequest{`,
-		`Application:` + strings.Replace(strings.Replace(this.Application.String(), "Application", "Application", 1), `&`, ``, 1) + `,`,
-		`Collaborator:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.Collaborator), "OrganizationOrUserIdentifiers", "OrganizationOrUserIdentifiers", 1), `&`, ``, 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *UpdateApplicationRequest) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&UpdateApplicationRequest{`,
-		`Application:` + strings.Replace(strings.Replace(this.Application.String(), "Application", "Application", 1), `&`, ``, 1) + `,`,
-		`FieldMask:` + strings.Replace(fmt.Sprintf("%v", this.FieldMask), "FieldMask", "types.FieldMask", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *ListApplicationAPIKeysRequest) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&ListApplicationAPIKeysRequest{`,
-		`ApplicationIdentifiers:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.ApplicationIdentifiers), "ApplicationIdentifiers", "ApplicationIdentifiers", 1), `&`, ``, 1) + `,`,
-		`Limit:` + fmt.Sprintf("%v", this.Limit) + `,`,
-		`Page:` + fmt.Sprintf("%v", this.Page) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *GetApplicationAPIKeyRequest) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&GetApplicationAPIKeyRequest{`,
-		`ApplicationIdentifiers:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.ApplicationIdentifiers), "ApplicationIdentifiers", "ApplicationIdentifiers", 1), `&`, ``, 1) + `,`,
-		`KeyId:` + fmt.Sprintf("%v", this.KeyId) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *CreateApplicationAPIKeyRequest) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&CreateApplicationAPIKeyRequest{`,
-		`ApplicationIdentifiers:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.ApplicationIdentifiers), "ApplicationIdentifiers", "ApplicationIdentifiers", 1), `&`, ``, 1) + `,`,
-		`Name:` + fmt.Sprintf("%v", this.Name) + `,`,
-		`Rights:` + fmt.Sprintf("%v", this.Rights) + `,`,
-		`ExpiresAt:` + strings.Replace(fmt.Sprintf("%v", this.ExpiresAt), "Timestamp", "types.Timestamp", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *UpdateApplicationAPIKeyRequest) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&UpdateApplicationAPIKeyRequest{`,
-		`ApplicationIdentifiers:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.ApplicationIdentifiers), "ApplicationIdentifiers", "ApplicationIdentifiers", 1), `&`, ``, 1) + `,`,
-		`APIKey:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.APIKey), "APIKey", "APIKey", 1), `&`, ``, 1) + `,`,
-		`FieldMask:` + strings.Replace(fmt.Sprintf("%v", this.FieldMask), "FieldMask", "types.FieldMask", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *ListApplicationCollaboratorsRequest) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&ListApplicationCollaboratorsRequest{`,
-		`ApplicationIdentifiers:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.ApplicationIdentifiers), "ApplicationIdentifiers", "ApplicationIdentifiers", 1), `&`, ``, 1) + `,`,
-		`Limit:` + fmt.Sprintf("%v", this.Limit) + `,`,
-		`Page:` + fmt.Sprintf("%v", this.Page) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *GetApplicationCollaboratorRequest) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&GetApplicationCollaboratorRequest{`,
-		`ApplicationIdentifiers:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.ApplicationIdentifiers), "ApplicationIdentifiers", "ApplicationIdentifiers", 1), `&`, ``, 1) + `,`,
-		`OrganizationOrUserIdentifiers:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.OrganizationOrUserIdentifiers), "OrganizationOrUserIdentifiers", "OrganizationOrUserIdentifiers", 1), `&`, ``, 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *SetApplicationCollaboratorRequest) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&SetApplicationCollaboratorRequest{`,
-		`ApplicationIdentifiers:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.ApplicationIdentifiers), "ApplicationIdentifiers", "ApplicationIdentifiers", 1), `&`, ``, 1) + `,`,
-		`Collaborator:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.Collaborator), "Collaborator", "Collaborator", 1), `&`, ``, 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func valueToStringApplication(v interface{}) string {
-	rv := reflect.ValueOf(v)
-	if rv.IsNil() {
-		return "nil"
-	}
-	pv := reflect.Indirect(rv).Interface()
-	return fmt.Sprintf("*%v", pv)
+	// 1564 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xcc, 0x57, 0x5f, 0x6c, 0x13, 0xc9,
+	0x19, 0xcf, 0xac, 0x63, 0xc7, 0x1e, 0xe7, 0x8f, 0x59, 0x08, 0x5d, 0x02, 0x4d, 0x13, 0x13, 0x55,
+	0x4e, 0xca, 0xda, 0xa9, 0xa3, 0x08, 0x88, 0x54, 0x05, 0x6f, 0x92, 0x52, 0x87, 0x52, 0xaa, 0x81,
+	0x48, 0x6d, 0x02, 0x58, 0x13, 0xef, 0xc4, 0x1e, 0x6c, 0xef, 0x6e, 0x67, 0xc7, 0x06, 0x07, 0x78,
+	0x41, 0x95, 0x2a, 0xf1, 0xd0, 0x4a, 0x3c, 0xf2, 0xd0, 0x4a, 0x7d, 0x44, 0xaa, 0x2a, 0x55, 0x7d,
+	0x2f, 0x2f, 0x95, 0x4e, 0x27, 0xdd, 0xe9, 0xde, 0xef, 0xf1, 0xa4, 0xd3, 0xe9, 0xa4, 0x7b, 0x80,
+	0x47, 0x3f, 0x9d, 0x76, 0x76, 0x17, 0x8f, 0xed, 0xc0, 0x11, 0x10, 0x39, 0x9e, 0xfc, 0x8d, 0xe7,
+	0xfb, 0x7e, 0xf3, 0x7d, 0xdf, 0xfc, 0xbe, 0xef, 0x9b, 0x85, 0x67, 0xeb, 0x36, 0xc3, 0x77, 0xb1,
+	0xa5, 0xbb, 0x1c, 0x97, 0x6b, 0x39, 0xec, 0xd0, 0x1c, 0x76, 0x9c, 0x3a, 0x2d, 0x63, 0x4e, 0x6d,
+	0x2b, 0xeb, 0x30, 0x9b, 0xdb, 0xea, 0x38, 0xe7, 0x56, 0x36, 0x50, 0xcc, 0xb6, 0x96, 0xa6, 0x0a,
+	0x15, 0xca, 0xab, 0xcd, 0xdd, 0x6c, 0xd9, 0x6e, 0xe4, 0x88, 0xd5, 0xb2, 0xdb, 0x0e, 0xb3, 0xef,
+	0xb5, 0x73, 0x42, 0xb9, 0xac, 0x57, 0x88, 0xa5, 0xb7, 0x70, 0x9d, 0x9a, 0x98, 0x93, 0xdc, 0x80,
+	0xe0, 0x43, 0x4e, 0xe9, 0x12, 0x44, 0xc5, 0xae, 0xd8, 0xbe, 0xf1, 0x6e, 0x73, 0x4f, 0xac, 0xc4,
+	0x42, 0x48, 0x81, 0xfa, 0x9a, 0xa4, 0x7e, 0xa3, 0x4a, 0x6e, 0x54, 0xa9, 0x55, 0x71, 0x8b, 0x96,
+	0xd9, 0x74, 0x39, 0xa3, 0xc4, 0x95, 0x8f, 0xae, 0xd8, 0xfa, 0x1d, 0xd7, 0xb6, 0x72, 0xd8, 0xb2,
+	0x6c, 0x2e, 0xa2, 0x70, 0x03, 0x90, 0xf5, 0x43, 0x81, 0xec, 0xd5, 0x71, 0xc5, 0x3d, 0x00, 0x65,
+	0xa6, 0x62, 0xdb, 0x95, 0x3a, 0xe9, 0x3a, 0xbc, 0x47, 0x49, 0xdd, 0x2c, 0x35, 0xb0, 0x5b, 0x0b,
+	0x34, 0x7e, 0xd6, 0xaf, 0xc1, 0x69, 0x83, 0xb8, 0x1c, 0x37, 0x9c, 0x40, 0x61, 0x6e, 0x30, 0xe9,
+	0x65, 0xdb, 0xe2, 0xb8, 0xcc, 0x4b, 0xd4, 0xda, 0x0b, 0x63, 0x3e, 0xe0, 0x6a, 0xa8, 0x49, 0x2c,
+	0x4e, 0xf7, 0x28, 0x61, 0xa1, 0x37, 0xd3, 0x83, 0x4a, 0x8c, 0x56, 0xaa, 0x3c, 0xdc, 0xcf, 0x4a,
+	0x41, 0xd9, 0x0e, 0xb1, 0xb0, 0x43, 0x5b, 0xf9, 0x9c, 0xed, 0x88, 0x88, 0x06, 0xa3, 0x4b, 0xbf,
+	0x48, 0xc2, 0x64, 0xa1, 0x4b, 0x00, 0x75, 0x13, 0x46, 0xa8, 0xe9, 0x6a, 0x60, 0x06, 0x64, 0x92,
+	0xf9, 0x9f, 0x67, 0x7b, 0x89, 0x90, 0x95, 0x34, 0x8b, 0x5d, 0xd7, 0x8c, 0x54, 0xc7, 0x88, 0x3e,
+	0x06, 0x4a, 0x0a, 0xbc, 0x7c, 0x76, 0x6a, 0x38, 0x3e, 0x94, 0x01, 0xc8, 0x03, 0x51, 0xd7, 0x20,
+	0x2c, 0x33, 0x82, 0x39, 0x31, 0x4b, 0x98, 0x6b, 0x8a, 0x80, 0x9c, 0xca, 0xfa, 0xc9, 0xca, 0x86,
+	0xc9, 0xca, 0xde, 0x08, 0x93, 0x65, 0xc4, 0x7d, 0xf3, 0xd4, 0x10, 0x4a, 0x04, 0x76, 0x05, 0xee,
+	0x81, 0x34, 0x1d, 0x33, 0x04, 0x89, 0x1c, 0x06, 0x24, 0xb0, 0xf3, 0x41, 0x4c, 0x52, 0x27, 0x01,
+	0x48, 0xfc, 0x2d, 0x41, 0x80, 0x07, 0x12, 0xd8, 0x15, 0xb8, 0x7a, 0x1a, 0x0e, 0x5b, 0xb8, 0x41,
+	0xb4, 0xe1, 0x19, 0x90, 0x49, 0x18, 0x23, 0x1d, 0x63, 0x98, 0x29, 0x5a, 0x1e, 0x89, 0x3f, 0xd5,
+	0x05, 0x98, 0x34, 0x89, 0x5b, 0x66, 0x54, 0x64, 0x5a, 0x8b, 0x0a, 0x9d, 0x78, 0xc7, 0x88, 0xb2,
+	0x88, 0xf6, 0xc5, 0x04, 0x92, 0x37, 0xd5, 0x47, 0x00, 0x42, 0xcc, 0x39, 0xa3, 0xbb, 0x4d, 0x4e,
+	0x5c, 0x2d, 0x36, 0x13, 0xc9, 0x24, 0xf3, 0xbf, 0x78, 0x43, 0xae, 0xb3, 0x85, 0x57, 0xda, 0x1b,
+	0x16, 0x67, 0x6d, 0x63, 0xb9, 0x63, 0xe4, 0x9f, 0x82, 0x5c, 0x0a, 0xa6, 0xe7, 0x58, 0x5a, 0x9b,
+	0xcb, 0x4f, 0xdf, 0xde, 0xc1, 0xfa, 0xfe, 0xa2, 0x7e, 0xf1, 0x56, 0x66, 0x75, 0x65, 0x47, 0xbf,
+	0xb5, 0x1a, 0x2e, 0xe7, 0xef, 0xe7, 0xcf, 0x3d, 0x9c, 0x5b, 0xf0, 0xbc, 0xf8, 0x04, 0x20, 0xe9,
+	0x54, 0x75, 0x13, 0x8e, 0xca, 0x1c, 0xd4, 0x46, 0x84, 0x17, 0xa7, 0xfb, 0xbd, 0x58, 0xf3, 0x75,
+	0x8a, 0xd6, 0x9e, 0x6d, 0xc0, 0x8e, 0x11, 0x7d, 0x02, 0x94, 0x14, 0xd4, 0x00, 0x4a, 0x96, 0xbb,
+	0x1b, 0xaa, 0x09, 0x4f, 0x62, 0xb3, 0x41, 0x2d, 0xea, 0x72, 0x86, 0x39, 0x6d, 0x91, 0x52, 0xb0,
+	0xab, 0x41, 0x91, 0x6a, 0xbd, 0x1f, 0xf5, 0x1a, 0xab, 0x60, 0x8b, 0xee, 0x8b, 0xe0, 0xae, 0xb1,
+	0x2d, 0x97, 0x30, 0x89, 0x4e, 0x68, 0xb2, 0x17, 0x2c, 0x70, 0x41, 0xdd, 0x86, 0xc7, 0x38, 0x29,
+	0x57, 0x2d, 0x5a, 0xc6, 0xf5, 0x57, 0x07, 0x24, 0xdf, 0xe5, 0x80, 0xd4, 0x2b, 0x9c, 0x10, 0xfb,
+	0xff, 0x00, 0x9e, 0xb4, 0x08, 0xbf, 0x6b, 0xb3, 0x5a, 0xc9, 0x25, 0xac, 0x45, 0x58, 0x09, 0x9b,
+	0x26, 0x23, 0xae, 0xab, 0x8d, 0x8a, 0xab, 0xfc, 0x2b, 0xe8, 0x18, 0x8f, 0x01, 0xfb, 0x0b, 0xc8,
+	0xff, 0x19, 0xdc, 0xce, 0xac, 0xae, 0x78, 0x79, 0xc6, 0xfa, 0x7e, 0x41, 0xdf, 0xf6, 0xd2, 0xfc,
+	0x40, 0x92, 0xbb, 0xe2, 0x4d, 0xfd, 0xd6, 0x82, 0xb4, 0x31, 0x7f, 0x33, 0x3b, 0xbf, 0xe0, 0xd9,
+	0x15, 0xf4, 0xed, 0xe0, 0x7a, 0x1e, 0x48, 0x72, 0x57, 0x14, 0x76, 0xdd, 0x8d, 0xf9, 0xcc, 0xea,
+	0xca, 0xca, 0x8e, 0x27, 0xdd, 0xff, 0xe5, 0xb9, 0xe5, 0x87, 0xf3, 0xab, 0x73, 0x0f, 0x6e, 0xcf,
+	0xa1, 0x13, 0x81, 0xbb, 0xd7, 0x85, 0xb7, 0x05, 0xdf, 0x59, 0xf5, 0x33, 0x00, 0xa7, 0xa4, 0x7e,
+	0xde, 0x1f, 0xcb, 0xd8, 0xc7, 0x19, 0x8b, 0x26, 0xb9, 0xdc, 0x1b, 0xcf, 0xff, 0x00, 0x3c, 0x7e,
+	0xc7, 0xa6, 0x03, 0x81, 0x8c, 0x7f, 0x9c, 0x81, 0x1c, 0xf3, 0x7c, 0xed, 0x8d, 0x60, 0x11, 0x4e,
+	0x98, 0xa4, 0x55, 0x22, 0x4d, 0x5a, 0x2a, 0xdb, 0x4d, 0x8b, 0x13, 0xa6, 0x25, 0x66, 0x40, 0x66,
+	0x4c, 0xea, 0x31, 0x63, 0x26, 0x69, 0x6d, 0x34, 0xe9, 0x9a, 0xbf, 0x3d, 0xf5, 0x2b, 0x38, 0xd1,
+	0x57, 0xef, 0x6a, 0x0a, 0x46, 0x6a, 0xa4, 0x2d, 0xba, 0x72, 0x02, 0x79, 0xa2, 0x7a, 0x02, 0x46,
+	0x5b, 0xb8, 0xde, 0x24, 0xa2, 0xad, 0x26, 0x90, 0xbf, 0x58, 0x51, 0x2e, 0x80, 0x95, 0x10, 0x17,
+	0x6c, 0x0e, 0xc7, 0x27, 0x52, 0x29, 0x94, 0x22, 0x96, 0x59, 0x32, 0x49, 0x8b, 0x96, 0x49, 0xa9,
+	0x4e, 0x1b, 0x94, 0xa7, 0xaf, 0xc1, 0x51, 0xa9, 0xb9, 0xb8, 0xea, 0x2a, 0x1c, 0x95, 0x2e, 0xc0,
+	0x6b, 0xfe, 0x07, 0xb6, 0x02, 0xc9, 0x06, 0xf5, 0x18, 0xa4, 0xbf, 0x06, 0xf0, 0x78, 0xd1, 0x75,
+	0x9b, 0x64, 0x9d, 0xb4, 0x36, 0xb6, 0x8a, 0x88, 0xb8, 0x8e, 0x6d, 0xb9, 0x44, 0xfd, 0x1c, 0xc0,
+	0x91, 0x20, 0x78, 0xe1, 0xfb, 0xa8, 0xf1, 0x5f, 0xf0, 0xa4, 0x30, 0xbb, 0xa9, 0xa6, 0xcf, 0x2f,
+	0x1a, 0x4b, 0xeb, 0xcb, 0xe7, 0x37, 0xd6, 0x17, 0x17, 0x17, 0x0b, 0xc6, 0xda, 0x7a, 0xfa, 0xa9,
+	0x02, 0x46, 0xfe, 0xa9, 0xc4, 0xbc, 0xc9, 0x6c, 0x55, 0x3a, 0x46, 0x6c, 0x7f, 0xb8, 0x1a, 0x77,
+	0xc0, 0xb7, 0xcf, 0x4e, 0x3d, 0x02, 0x70, 0xb5, 0x62, 0x67, 0x79, 0x95, 0x70, 0x31, 0xbf, 0xb3,
+	0x01, 0xef, 0x73, 0xbd, 0x83, 0xb0, 0xb5, 0x94, 0x73, 0x6a, 0x95, 0x1c, 0x6f, 0x3b, 0xc4, 0xcd,
+	0x5e, 0xc5, 0xcc, 0xad, 0xe2, 0xfa, 0x6f, 0x36, 0xfe, 0x60, 0xb4, 0xbd, 0x5e, 0x77, 0x68, 0x80,
+	0x2d, 0xab, 0xe1, 0x43, 0x5c, 0x10, 0x00, 0x28, 0xe6, 0xdf, 0x50, 0xfa, 0x5f, 0x00, 0x4e, 0x5e,
+	0x26, 0x5c, 0xce, 0x04, 0xf9, 0x53, 0x93, 0xb8, 0x5c, 0xfd, 0x23, 0x9c, 0x90, 0xeb, 0xee, 0xf0,
+	0x33, 0x34, 0x1e, 0xce, 0x50, 0x34, 0x8e, 0x65, 0x0d, 0x57, 0xbd, 0x08, 0x61, 0xf7, 0xc9, 0xf1,
+	0xda, 0x31, 0xfa, 0x6b, 0x4f, 0xe5, 0x2a, 0x76, 0x6b, 0x28, 0xb1, 0x17, 0x8a, 0xe9, 0xef, 0x14,
+	0xf8, 0x93, 0xdf, 0x52, 0x57, 0x76, 0xd8, 0xed, 0x7a, 0x3c, 0x5a, 0xb6, 0xeb, 0x75, 0xbc, 0x6b,
+	0x33, 0xcc, 0x6d, 0x16, 0xb8, 0x7b, 0xb8, 0x4e, 0x6a, 0xc4, 0x5e, 0x3e, 0x3b, 0xa5, 0x64, 0x00,
+	0xea, 0x81, 0x7a, 0x0f, 0x8f, 0x55, 0x13, 0x46, 0x6d, 0x66, 0x12, 0x26, 0x26, 0x7d, 0xc2, 0xf8,
+	0x5d, 0xc7, 0xb8, 0xc2, 0x8a, 0x68, 0xa8, 0x27, 0x29, 0x25, 0x6a, 0xa2, 0x09, 0xbd, 0xef, 0x0f,
+	0x31, 0x86, 0x51, 0x54, 0x17, 0x3f, 0xd2, 0xbb, 0x03, 0x25, 0x75, 0x69, 0xe1, 0x83, 0xab, 0xd3,
+	0x30, 0x2a, 0x4a, 0x41, 0xcc, 0xf2, 0x31, 0x91, 0xfb, 0x85, 0x88, 0xf6, 0xcd, 0x08, 0xf2, 0xff,
+	0x56, 0x55, 0x38, 0xec, 0xe0, 0x0a, 0x11, 0x63, 0x7c, 0x0c, 0x09, 0x59, 0xd5, 0x3c, 0x2e, 0x8b,
+	0xb7, 0x80, 0x16, 0x9b, 0x01, 0x99, 0x38, 0x0a, 0x97, 0x2b, 0xe1, 0x93, 0x03, 0xa4, 0x9f, 0x03,
+	0xa8, 0xad, 0x89, 0xd3, 0x0e, 0xa0, 0xc8, 0x65, 0x98, 0x94, 0x7c, 0x0e, 0xf2, 0xfd, 0xa6, 0x2a,
+	0x93, 0x38, 0x21, 0x5b, 0xaa, 0x3b, 0x7d, 0x37, 0xa7, 0xbc, 0xcb, 0xcd, 0x75, 0xb1, 0x7b, 0xc0,
+	0xd2, 0x7f, 0x07, 0x50, 0xdb, 0x12, 0x0f, 0xa7, 0x0f, 0x19, 0xc2, 0x7b, 0x70, 0xfa, 0xdf, 0x0a,
+	0xfc, 0x69, 0x1f, 0xa7, 0x0b, 0xbf, 0x2f, 0x5e, 0x21, 0x6d, 0xf7, 0x08, 0x6a, 0xb1, 0x19, 0xd2,
+	0xd3, 0x7f, 0x04, 0x96, 0x3a, 0xc6, 0x4d, 0xb6, 0x8d, 0x86, 0x10, 0xc4, 0x0e, 0x2d, 0xd5, 0x48,
+	0xdb, 0x63, 0x62, 0x52, 0x97, 0x16, 0x6f, 0x47, 0x4b, 0x48, 0xee, 0x39, 0x94, 0x11, 0xd7, 0xdf,
+	0x90, 0x16, 0xfd, 0x7c, 0x55, 0xde, 0xcc, 0xd7, 0x48, 0x97, 0xaf, 0x12, 0x2b, 0xff, 0x06, 0xe0,
+	0xe9, 0xde, 0xae, 0xe5, 0x27, 0xec, 0x08, 0xf2, 0x35, 0x09, 0x63, 0x7e, 0x22, 0xc2, 0x39, 0x55,
+	0x23, 0xed, 0xa2, 0x99, 0xfe, 0x87, 0x02, 0xa7, 0x07, 0xea, 0xe4, 0xc8, 0x9c, 0x0a, 0x1f, 0xf2,
+	0xca, 0x41, 0x0f, 0xf9, 0x4b, 0x30, 0xe6, 0x7f, 0x50, 0x69, 0x91, 0x99, 0x48, 0x66, 0x3c, 0x3f,
+	0xd9, 0x7f, 0x1c, 0xf2, 0x76, 0x8d, 0x63, 0x1d, 0x63, 0xfc, 0x09, 0x48, 0xc6, 0x81, 0x06, 0xd2,
+	0xd1, 0x47, 0xe2, 0x98, 0xc0, 0xce, 0xfb, 0xd8, 0xe8, 0xde, 0xa0, 0x20, 0xca, 0x0f, 0x7c, 0x6c,
+	0x74, 0x8c, 0xe8, 0x7f, 0x80, 0x72, 0x09, 0xa0, 0x44, 0x60, 0x57, 0xe0, 0xe9, 0x17, 0x00, 0x4e,
+	0x0f, 0x94, 0xe1, 0x91, 0x65, 0xe8, 0x22, 0x1c, 0x09, 0x38, 0x1c, 0xd4, 0xe6, 0xc9, 0x01, 0x48,
+	0xe1, 0x8a, 0x04, 0x11, 0xc3, 0x0e, 0xbd, 0x42, 0xda, 0x7d, 0x95, 0x1d, 0x39, 0xd4, 0xb4, 0x02,
+	0xf0, 0x6c, 0x5f, 0x65, 0xaf, 0x49, 0xad, 0xe9, 0x28, 0xea, 0xfb, 0x1d, 0x0a, 0x4d, 0x3d, 0xdf,
+	0xdb, 0x13, 0x66, 0x3b, 0xc6, 0x34, 0x3b, 0x83, 0x86, 0x90, 0x42, 0x4d, 0x14, 0xd1, 0xa9, 0x89,
+	0x46, 0x74, 0x9f, 0x19, 0x21, 0x43, 0x82, 0xaa, 0x4e, 0x7f, 0x09, 0xe0, 0x6c, 0x6f, 0x5d, 0xca,
+	0xe1, 0x1e, 0x41, 0xb4, 0x1f, 0x74, 0x90, 0x7c, 0x0a, 0xe0, 0xec, 0xf5, 0x1f, 0x33, 0xba, 0xcd,
+	0x03, 0xa3, 0x3b, 0x33, 0xf8, 0x85, 0xdb, 0xd5, 0x79, 0x5d, 0x30, 0xc6, 0xf2, 0xf3, 0xaf, 0xa6,
+	0xc1, 0x76, 0xee, 0x10, 0xef, 0x48, 0x6e, 0x39, 0xbb, 0xbb, 0x31, 0x41, 0xf8, 0xa5, 0xef, 0x03,
+	0x00, 0x00, 0xff, 0xff, 0x36, 0xbc, 0xa1, 0x09, 0x76, 0x13, 0x00, 0x00,
 }

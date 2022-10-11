@@ -14,32 +14,32 @@
 
 package ttnpb
 
-import "strconv"
+// All EntityType methods implement the IDStringer interface.
 
-// MarshalText implements encoding.TextMarshaler interface.
-func (v AsConfiguration_PubSub_Providers_Status) MarshalText() ([]byte, error) {
-	return []byte(v.String()), nil
+func (m *GetApplicationLinkRequest) EntityType() string {
+	return m.GetApplicationIds().EntityType()
 }
 
-// UnmarshalText implements encoding.TextUnmarshaler interface.
-func (v *AsConfiguration_PubSub_Providers_Status) UnmarshalText(b []byte) error {
-	s := string(b)
-	if i, ok := AsConfiguration_PubSub_Providers_Status_value[s]; ok {
-		*v = AsConfiguration_PubSub_Providers_Status(i)
-		return nil
-	}
-	return errCouldNotParse("AsConfiguration_PubSub_Providers_Status")(string(b))
+func (m *SetApplicationLinkRequest) EntityType() string {
+	return m.GetApplicationIds().EntityType()
 }
 
-// UnmarshalJSON implements json.Unmarshaler interface.
-func (v *AsConfiguration_PubSub_Providers_Status) UnmarshalJSON(b []byte) error {
-	if len(b) > 2 && b[0] == '"' && b[len(b)-1] == '"' {
-		return v.UnmarshalText(b[1 : len(b)-1])
-	}
-	i, err := strconv.Atoi(string(b))
-	if err != nil {
-		return errCouldNotParse("AsConfiguration_PubSub_Providers_Status")(string(b)).WithCause(err)
-	}
-	*v = AsConfiguration_PubSub_Providers_Status(i)
-	return nil
+// All IDString methods implement the IDStringer interface.
+
+func (m *GetApplicationLinkRequest) IDString() string {
+	return m.GetApplicationIds().IDString()
+}
+
+func (m *SetApplicationLinkRequest) IDString() string {
+	return m.GetApplicationIds().IDString()
+}
+
+// All ExtractRequestFields methods are used by github.com/grpc-ecosystem/go-grpc-middleware/tags.
+
+func (m *GetApplicationLinkRequest) ExtractRequestFields(dst map[string]interface{}) {
+	m.GetApplicationIds().ExtractRequestFields(dst)
+}
+
+func (m *SetApplicationLinkRequest) ExtractRequestFields(dst map[string]interface{}) {
+	m.GetApplicationIds().ExtractRequestFields(dst)
 }

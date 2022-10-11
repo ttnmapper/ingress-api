@@ -263,6 +263,13 @@ func (m *ScheduleDownlinkResponse) ValidateFields(paths ...string) error {
 		switch name {
 		case "delay":
 
+			if m.GetDelay() == nil {
+				return ScheduleDownlinkResponseValidationError{
+					field:  "delay",
+					reason: "value is required",
+				}
+			}
+
 		case "downlink_path":
 
 			if v, ok := interface{}(m.GetDownlinkPath()).(interface{ ValidateFields(...string) error }); ok {
@@ -444,3 +451,222 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = ScheduleDownlinkErrorDetailsValidationError{}
+
+// ValidateFields checks the field values on
+// BatchGetGatewayConnectionStatsRequest with the rules defined in the proto
+// definition for this message. If any rules are violated, an error is returned.
+func (m *BatchGetGatewayConnectionStatsRequest) ValidateFields(paths ...string) error {
+	if m == nil {
+		return nil
+	}
+
+	if len(paths) == 0 {
+		paths = BatchGetGatewayConnectionStatsRequestFieldPathsNested
+	}
+
+	for name, subs := range _processPaths(append(paths[:0:0], paths...)) {
+		_ = subs
+		switch name {
+		case "gateway_ids":
+
+			if l := len(m.GetGatewayIds()); l < 1 || l > 100 {
+				return BatchGetGatewayConnectionStatsRequestValidationError{
+					field:  "gateway_ids",
+					reason: "value must contain between 1 and 100 items, inclusive",
+				}
+			}
+
+			for idx, item := range m.GetGatewayIds() {
+				_, _ = idx, item
+
+				if v, ok := interface{}(item).(interface{ ValidateFields(...string) error }); ok {
+					if err := v.ValidateFields(subs...); err != nil {
+						return BatchGetGatewayConnectionStatsRequestValidationError{
+							field:  fmt.Sprintf("gateway_ids[%v]", idx),
+							reason: "embedded message failed validation",
+							cause:  err,
+						}
+					}
+				}
+
+			}
+
+		case "field_mask":
+
+			if v, ok := interface{}(m.GetFieldMask()).(interface{ ValidateFields(...string) error }); ok {
+				if err := v.ValidateFields(subs...); err != nil {
+					return BatchGetGatewayConnectionStatsRequestValidationError{
+						field:  "field_mask",
+						reason: "embedded message failed validation",
+						cause:  err,
+					}
+				}
+			}
+
+		default:
+			return BatchGetGatewayConnectionStatsRequestValidationError{
+				field:  name,
+				reason: "invalid field path",
+			}
+		}
+	}
+	return nil
+}
+
+// BatchGetGatewayConnectionStatsRequestValidationError is the validation error
+// returned by BatchGetGatewayConnectionStatsRequest.ValidateFields if the
+// designated constraints aren't met.
+type BatchGetGatewayConnectionStatsRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e BatchGetGatewayConnectionStatsRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e BatchGetGatewayConnectionStatsRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e BatchGetGatewayConnectionStatsRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e BatchGetGatewayConnectionStatsRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e BatchGetGatewayConnectionStatsRequestValidationError) ErrorName() string {
+	return "BatchGetGatewayConnectionStatsRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e BatchGetGatewayConnectionStatsRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sBatchGetGatewayConnectionStatsRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = BatchGetGatewayConnectionStatsRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = BatchGetGatewayConnectionStatsRequestValidationError{}
+
+// ValidateFields checks the field values on
+// BatchGetGatewayConnectionStatsResponse with the rules defined in the proto
+// definition for this message. If any rules are violated, an error is returned.
+func (m *BatchGetGatewayConnectionStatsResponse) ValidateFields(paths ...string) error {
+	if m == nil {
+		return nil
+	}
+
+	if len(paths) == 0 {
+		paths = BatchGetGatewayConnectionStatsResponseFieldPathsNested
+	}
+
+	for name, subs := range _processPaths(append(paths[:0:0], paths...)) {
+		_ = subs
+		switch name {
+		case "entries":
+
+			for key, val := range m.GetEntries() {
+				_ = val
+
+				// no validation rules for Entries[key]
+
+				if v, ok := interface{}(val).(interface{ ValidateFields(...string) error }); ok {
+					if err := v.ValidateFields(subs...); err != nil {
+						return BatchGetGatewayConnectionStatsResponseValidationError{
+							field:  fmt.Sprintf("entries[%v]", key),
+							reason: "embedded message failed validation",
+							cause:  err,
+						}
+					}
+				}
+
+			}
+
+		default:
+			return BatchGetGatewayConnectionStatsResponseValidationError{
+				field:  name,
+				reason: "invalid field path",
+			}
+		}
+	}
+	return nil
+}
+
+// BatchGetGatewayConnectionStatsResponseValidationError is the validation
+// error returned by BatchGetGatewayConnectionStatsResponse.ValidateFields if
+// the designated constraints aren't met.
+type BatchGetGatewayConnectionStatsResponseValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e BatchGetGatewayConnectionStatsResponseValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e BatchGetGatewayConnectionStatsResponseValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e BatchGetGatewayConnectionStatsResponseValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e BatchGetGatewayConnectionStatsResponseValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e BatchGetGatewayConnectionStatsResponseValidationError) ErrorName() string {
+	return "BatchGetGatewayConnectionStatsResponseValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e BatchGetGatewayConnectionStatsResponseValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sBatchGetGatewayConnectionStatsResponse.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = BatchGetGatewayConnectionStatsResponseValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = BatchGetGatewayConnectionStatsResponseValidationError{}

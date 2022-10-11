@@ -60,9 +60,31 @@ func (m *SessionKeyRequest) ValidateFields(paths ...string) error {
 			}
 
 		case "dev_eui":
-			// no validation rules for DevEui
+
+			if len(m.GetDevEui()) > 0 {
+
+				if len(m.GetDevEui()) != 8 {
+					return SessionKeyRequestValidationError{
+						field:  "dev_eui",
+						reason: "value length must be 8 bytes",
+					}
+				}
+
+			}
+
 		case "join_eui":
-			// no validation rules for JoinEui
+
+			if len(m.GetJoinEui()) > 0 {
+
+				if len(m.GetJoinEui()) != 8 {
+					return SessionKeyRequestValidationError{
+						field:  "join_eui",
+						reason: "value length must be 8 bytes",
+					}
+				}
+
+			}
+
 		default:
 			return SessionKeyRequestValidationError{
 				field:  name,
@@ -146,7 +168,14 @@ func (m *NwkSKeysResponse) ValidateFields(paths ...string) error {
 		switch name {
 		case "f_nwk_s_int_key":
 
-			if v, ok := interface{}(&m.FNwkSIntKey).(interface{ ValidateFields(...string) error }); ok {
+			if m.GetFNwkSIntKey() == nil {
+				return NwkSKeysResponseValidationError{
+					field:  "f_nwk_s_int_key",
+					reason: "value is required",
+				}
+			}
+
+			if v, ok := interface{}(m.GetFNwkSIntKey()).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return NwkSKeysResponseValidationError{
 						field:  "f_nwk_s_int_key",
@@ -158,7 +187,14 @@ func (m *NwkSKeysResponse) ValidateFields(paths ...string) error {
 
 		case "s_nwk_s_int_key":
 
-			if v, ok := interface{}(&m.SNwkSIntKey).(interface{ ValidateFields(...string) error }); ok {
+			if m.GetSNwkSIntKey() == nil {
+				return NwkSKeysResponseValidationError{
+					field:  "s_nwk_s_int_key",
+					reason: "value is required",
+				}
+			}
+
+			if v, ok := interface{}(m.GetSNwkSIntKey()).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return NwkSKeysResponseValidationError{
 						field:  "s_nwk_s_int_key",
@@ -170,7 +206,14 @@ func (m *NwkSKeysResponse) ValidateFields(paths ...string) error {
 
 		case "nwk_s_enc_key":
 
-			if v, ok := interface{}(&m.NwkSEncKey).(interface{ ValidateFields(...string) error }); ok {
+			if m.GetNwkSEncKey() == nil {
+				return NwkSKeysResponseValidationError{
+					field:  "nwk_s_enc_key",
+					reason: "value is required",
+				}
+			}
+
+			if v, ok := interface{}(m.GetNwkSEncKey()).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return NwkSKeysResponseValidationError{
 						field:  "nwk_s_enc_key",
@@ -261,7 +304,14 @@ func (m *AppSKeyResponse) ValidateFields(paths ...string) error {
 		switch name {
 		case "app_s_key":
 
-			if v, ok := interface{}(&m.AppSKey).(interface{ ValidateFields(...string) error }); ok {
+			if m.GetAppSKey() == nil {
+				return AppSKeyResponseValidationError{
+					field:  "app_s_key",
+					reason: "value is required",
+				}
+			}
+
+			if v, ok := interface{}(m.GetAppSKey()).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return AppSKeyResponseValidationError{
 						field:  "app_s_key",
@@ -352,7 +402,14 @@ func (m *CryptoServicePayloadRequest) ValidateFields(paths ...string) error {
 		switch name {
 		case "ids":
 
-			if v, ok := interface{}(&m.EndDeviceIdentifiers).(interface{ ValidateFields(...string) error }); ok {
+			if m.GetIds() == nil {
+				return CryptoServicePayloadRequestValidationError{
+					field:  "ids",
+					reason: "value is required",
+				}
+			}
+
+			if v, ok := interface{}(m.GetIds()).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return CryptoServicePayloadRequestValidationError{
 						field:  "ids",
@@ -578,7 +635,14 @@ func (m *JoinAcceptMICRequest) ValidateFields(paths ...string) error {
 		switch name {
 		case "payload_request":
 
-			if v, ok := interface{}(&m.CryptoServicePayloadRequest).(interface{ ValidateFields(...string) error }); ok {
+			if m.GetPayloadRequest() == nil {
+				return JoinAcceptMICRequestValidationError{
+					field:  "payload_request",
+					reason: "value is required",
+				}
+			}
+
+			if v, ok := interface{}(m.GetPayloadRequest()).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return JoinAcceptMICRequestValidationError{
 						field:  "payload_request",
@@ -598,7 +662,18 @@ func (m *JoinAcceptMICRequest) ValidateFields(paths ...string) error {
 			}
 
 		case "dev_nonce":
-			// no validation rules for DevNonce
+
+			if len(m.GetDevNonce()) > 0 {
+
+				if len(m.GetDevNonce()) != 2 {
+					return JoinAcceptMICRequestValidationError{
+						field:  "dev_nonce",
+						reason: "value length must be 2 bytes",
+					}
+				}
+
+			}
+
 		default:
 			return JoinAcceptMICRequestValidationError{
 				field:  name,
@@ -682,7 +757,14 @@ func (m *DeriveSessionKeysRequest) ValidateFields(paths ...string) error {
 		switch name {
 		case "ids":
 
-			if v, ok := interface{}(&m.EndDeviceIdentifiers).(interface{ ValidateFields(...string) error }); ok {
+			if m.GetIds() == nil {
+				return DeriveSessionKeysRequestValidationError{
+					field:  "ids",
+					reason: "value is required",
+				}
+			}
+
+			if v, ok := interface{}(m.GetIds()).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return DeriveSessionKeysRequestValidationError{
 						field:  "ids",
@@ -702,11 +784,44 @@ func (m *DeriveSessionKeysRequest) ValidateFields(paths ...string) error {
 			}
 
 		case "join_nonce":
-			// no validation rules for JoinNonce
+
+			if len(m.GetJoinNonce()) > 0 {
+
+				if len(m.GetJoinNonce()) != 3 {
+					return DeriveSessionKeysRequestValidationError{
+						field:  "join_nonce",
+						reason: "value length must be 3 bytes",
+					}
+				}
+
+			}
+
 		case "dev_nonce":
-			// no validation rules for DevNonce
+
+			if len(m.GetDevNonce()) > 0 {
+
+				if len(m.GetDevNonce()) != 2 {
+					return DeriveSessionKeysRequestValidationError{
+						field:  "dev_nonce",
+						reason: "value length must be 2 bytes",
+					}
+				}
+
+			}
+
 		case "net_id":
-			// no validation rules for NetId
+
+			if len(m.GetNetId()) > 0 {
+
+				if len(m.GetNetId()) != 3 {
+					return DeriveSessionKeysRequestValidationError{
+						field:  "net_id",
+						reason: "value length must be 3 bytes",
+					}
+				}
+
+			}
+
 		case "provisioner_id":
 
 			if utf8.RuneCountInString(m.GetProvisionerId()) > 36 {
@@ -821,7 +936,14 @@ func (m *GetRootKeysRequest) ValidateFields(paths ...string) error {
 		switch name {
 		case "ids":
 
-			if v, ok := interface{}(&m.EndDeviceIdentifiers).(interface{ ValidateFields(...string) error }); ok {
+			if m.GetIds() == nil {
+				return GetRootKeysRequestValidationError{
+					field:  "ids",
+					reason: "value is required",
+				}
+			}
+
+			if v, ok := interface{}(m.GetIds()).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return GetRootKeysRequestValidationError{
 						field:  "ids",
@@ -944,7 +1066,14 @@ func (m *ProvisionEndDevicesRequest) ValidateFields(paths ...string) error {
 		switch name {
 		case "application_ids":
 
-			if v, ok := interface{}(&m.ApplicationIdentifiers).(interface{ ValidateFields(...string) error }); ok {
+			if m.GetApplicationIds() == nil {
+				return ProvisionEndDevicesRequestValidationError{
+					field:  "application_ids",
+					reason: "value is required",
+				}
+			}
+
+			if v, ok := interface{}(m.GetApplicationIds()).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return ProvisionEndDevicesRequestValidationError{
 						field:  "application_ids",
@@ -1137,7 +1266,18 @@ func (m *ApplicationActivationSettings) ValidateFields(paths ...string) error {
 			}
 
 		case "home_net_id":
-			// no validation rules for HomeNetId
+
+			if len(m.GetHomeNetId()) > 0 {
+
+				if len(m.GetHomeNetId()) != 3 {
+					return ApplicationActivationSettingsValidationError{
+						field:  "home_net_id",
+						reason: "value length must be 3 bytes",
+					}
+				}
+
+			}
+
 		case "application_server_id":
 
 			if utf8.RuneCountInString(m.GetApplicationServerId()) > 100 {
@@ -1231,7 +1371,14 @@ func (m *GetApplicationActivationSettingsRequest) ValidateFields(paths ...string
 		switch name {
 		case "application_ids":
 
-			if v, ok := interface{}(&m.ApplicationIdentifiers).(interface{ ValidateFields(...string) error }); ok {
+			if m.GetApplicationIds() == nil {
+				return GetApplicationActivationSettingsRequestValidationError{
+					field:  "application_ids",
+					reason: "value is required",
+				}
+			}
+
+			if v, ok := interface{}(m.GetApplicationIds()).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return GetApplicationActivationSettingsRequestValidationError{
 						field:  "application_ids",
@@ -1337,7 +1484,14 @@ func (m *SetApplicationActivationSettingsRequest) ValidateFields(paths ...string
 		switch name {
 		case "application_ids":
 
-			if v, ok := interface{}(&m.ApplicationIdentifiers).(interface{ ValidateFields(...string) error }); ok {
+			if m.GetApplicationIds() == nil {
+				return SetApplicationActivationSettingsRequestValidationError{
+					field:  "application_ids",
+					reason: "value is required",
+				}
+			}
+
+			if v, ok := interface{}(m.GetApplicationIds()).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return SetApplicationActivationSettingsRequestValidationError{
 						field:  "application_ids",
@@ -1349,7 +1503,14 @@ func (m *SetApplicationActivationSettingsRequest) ValidateFields(paths ...string
 
 		case "settings":
 
-			if v, ok := interface{}(&m.ApplicationActivationSettings).(interface{ ValidateFields(...string) error }); ok {
+			if m.GetSettings() == nil {
+				return SetApplicationActivationSettingsRequestValidationError{
+					field:  "settings",
+					reason: "value is required",
+				}
+			}
+
+			if v, ok := interface{}(m.GetSettings()).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return SetApplicationActivationSettingsRequestValidationError{
 						field:  "settings",
@@ -1455,7 +1616,14 @@ func (m *DeleteApplicationActivationSettingsRequest) ValidateFields(paths ...str
 		switch name {
 		case "application_ids":
 
-			if v, ok := interface{}(&m.ApplicationIdentifiers).(interface{ ValidateFields(...string) error }); ok {
+			if m.GetApplicationIds() == nil {
+				return DeleteApplicationActivationSettingsRequestValidationError{
+					field:  "application_ids",
+					reason: "value is required",
+				}
+			}
+
+			if v, ok := interface{}(m.GetApplicationIds()).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return DeleteApplicationActivationSettingsRequestValidationError{
 						field:  "application_ids",
@@ -1548,7 +1716,18 @@ func (m *JoinEUIPrefix) ValidateFields(paths ...string) error {
 		_ = subs
 		switch name {
 		case "join_eui":
-			// no validation rules for JoinEui
+
+			if len(m.GetJoinEui()) > 0 {
+
+				if len(m.GetJoinEui()) != 8 {
+					return JoinEUIPrefixValidationError{
+						field:  "join_eui",
+						reason: "value length must be 8 bytes",
+					}
+				}
+
+			}
+
 		case "length":
 			// no validation rules for Length
 		default:
@@ -1632,7 +1811,7 @@ func (m *JoinEUIPrefixes) ValidateFields(paths ...string) error {
 		switch name {
 		case "prefixes":
 
-			for idx, item := range m.Prefixes {
+			for idx, item := range m.GetPrefixes() {
 				_, _ = idx, item
 
 				if v, ok := interface{}(item).(interface{ ValidateFields(...string) error }); ok {
@@ -1711,6 +1890,101 @@ var _ interface {
 	ErrorName() string
 } = JoinEUIPrefixesValidationError{}
 
+// ValidateFields checks the field values on GetDefaultJoinEUIResponse with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *GetDefaultJoinEUIResponse) ValidateFields(paths ...string) error {
+	if m == nil {
+		return nil
+	}
+
+	if len(paths) == 0 {
+		paths = GetDefaultJoinEUIResponseFieldPathsNested
+	}
+
+	for name, subs := range _processPaths(append(paths[:0:0], paths...)) {
+		_ = subs
+		switch name {
+		case "join_eui":
+
+			if len(m.GetJoinEui()) > 0 {
+
+				if len(m.GetJoinEui()) != 8 {
+					return GetDefaultJoinEUIResponseValidationError{
+						field:  "join_eui",
+						reason: "value length must be 8 bytes",
+					}
+				}
+
+			}
+
+		default:
+			return GetDefaultJoinEUIResponseValidationError{
+				field:  name,
+				reason: "invalid field path",
+			}
+		}
+	}
+	return nil
+}
+
+// GetDefaultJoinEUIResponseValidationError is the validation error returned by
+// GetDefaultJoinEUIResponse.ValidateFields if the designated constraints
+// aren't met.
+type GetDefaultJoinEUIResponseValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e GetDefaultJoinEUIResponseValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e GetDefaultJoinEUIResponseValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e GetDefaultJoinEUIResponseValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e GetDefaultJoinEUIResponseValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e GetDefaultJoinEUIResponseValidationError) ErrorName() string {
+	return "GetDefaultJoinEUIResponseValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e GetDefaultJoinEUIResponseValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sGetDefaultJoinEUIResponse.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = GetDefaultJoinEUIResponseValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = GetDefaultJoinEUIResponseValidationError{}
+
 // ValidateFields checks the field values on
 // ProvisionEndDevicesRequest_IdentifiersList with the rules defined in the
 // proto definition for this message. If any rules are violated, an error is returned.
@@ -1727,10 +2001,21 @@ func (m *ProvisionEndDevicesRequest_IdentifiersList) ValidateFields(paths ...str
 		_ = subs
 		switch name {
 		case "join_eui":
-			// no validation rules for JoinEui
+
+			if len(m.GetJoinEui()) > 0 {
+
+				if len(m.GetJoinEui()) != 8 {
+					return ProvisionEndDevicesRequest_IdentifiersListValidationError{
+						field:  "join_eui",
+						reason: "value length must be 8 bytes",
+					}
+				}
+
+			}
+
 		case "end_device_ids":
 
-			for idx, item := range m.EndDeviceIds {
+			for idx, item := range m.GetEndDeviceIds() {
 				_, _ = idx, item
 
 				if v, ok := interface{}(item).(interface{ ValidateFields(...string) error }); ok {
@@ -1828,9 +2113,31 @@ func (m *ProvisionEndDevicesRequest_IdentifiersRange) ValidateFields(paths ...st
 		_ = subs
 		switch name {
 		case "join_eui":
-			// no validation rules for JoinEui
+
+			if len(m.GetJoinEui()) > 0 {
+
+				if len(m.GetJoinEui()) != 8 {
+					return ProvisionEndDevicesRequest_IdentifiersRangeValidationError{
+						field:  "join_eui",
+						reason: "value length must be 8 bytes",
+					}
+				}
+
+			}
+
 		case "start_dev_eui":
-			// no validation rules for StartDevEui
+
+			if len(m.GetStartDevEui()) > 0 {
+
+				if len(m.GetStartDevEui()) != 8 {
+					return ProvisionEndDevicesRequest_IdentifiersRangeValidationError{
+						field:  "start_dev_eui",
+						reason: "value length must be 8 bytes",
+					}
+				}
+
+			}
+
 		default:
 			return ProvisionEndDevicesRequest_IdentifiersRangeValidationError{
 				field:  name,
@@ -1916,7 +2223,18 @@ func (m *ProvisionEndDevicesRequest_IdentifiersFromData) ValidateFields(paths ..
 		_ = subs
 		switch name {
 		case "join_eui":
-			// no validation rules for JoinEui
+
+			if len(m.GetJoinEui()) > 0 {
+
+				if len(m.GetJoinEui()) != 8 {
+					return ProvisionEndDevicesRequest_IdentifiersFromDataValidationError{
+						field:  "join_eui",
+						reason: "value length must be 8 bytes",
+					}
+				}
+
+			}
+
 		default:
 			return ProvisionEndDevicesRequest_IdentifiersFromDataValidationError{
 				field:  name,

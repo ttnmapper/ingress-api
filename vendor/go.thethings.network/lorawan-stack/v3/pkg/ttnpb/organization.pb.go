@@ -5,17 +5,13 @@ package ttnpb
 
 import (
 	fmt "fmt"
+	_ "github.com/TheThingsIndustries/protoc-gen-go-flags/annotations"
 	_ "github.com/envoyproxy/protoc-gen-validate/validate"
 	_ "github.com/gogo/protobuf/gogoproto"
 	proto "github.com/gogo/protobuf/proto"
-	github_com_gogo_protobuf_sortkeys "github.com/gogo/protobuf/sortkeys"
-	github_com_gogo_protobuf_types "github.com/gogo/protobuf/types"
 	types "github.com/gogo/protobuf/types"
 	golang_proto "github.com/golang/protobuf/proto"
 	math "math"
-	reflect "reflect"
-	strings "strings"
-	time "time"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -23,7 +19,6 @@ var _ = proto.Marshal
 var _ = golang_proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
-var _ = time.Kitchen
 
 // This is a compile-time assertion to ensure that this generated file
 // is compatible with the proto package it is being compiled against.
@@ -32,22 +27,33 @@ var _ = time.Kitchen
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 type Organization struct {
-	OrganizationIdentifiers `protobuf:"bytes,1,opt,name=ids,proto3,embedded=ids" json:"ids"`
-	CreatedAt               time.Time  `protobuf:"bytes,2,opt,name=created_at,json=createdAt,proto3,stdtime" json:"created_at"`
-	UpdatedAt               time.Time  `protobuf:"bytes,3,opt,name=updated_at,json=updatedAt,proto3,stdtime" json:"updated_at"`
-	DeletedAt               *time.Time `protobuf:"bytes,8,opt,name=deleted_at,json=deletedAt,proto3,stdtime" json:"deleted_at,omitempty"`
-	Name                    string     `protobuf:"bytes,4,opt,name=name,proto3" json:"name,omitempty"`
-	Description             string     `protobuf:"bytes,5,opt,name=description,proto3" json:"description,omitempty"`
+	// The identifiers of the organization. These are public and can be seen by any authenticated user in the network.
+	Ids *OrganizationIdentifiers `protobuf:"bytes,1,opt,name=ids,proto3" json:"ids,omitempty"`
+	// When the organization was created. This information is public and can be seen by any authenticated user in the network.
+	CreatedAt *types.Timestamp `protobuf:"bytes,2,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
+	// When the organization was last updated. This information is public and can be seen by any authenticated user in the network.
+	UpdatedAt *types.Timestamp `protobuf:"bytes,3,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
+	// When the organization was deleted. This information is public and can be seen by any authenticated user in the network.
+	DeletedAt *types.Timestamp `protobuf:"bytes,8,opt,name=deleted_at,json=deletedAt,proto3" json:"deleted_at,omitempty"`
+	// The name of the organization. This information is public and can be seen by any authenticated user in the network.
+	Name string `protobuf:"bytes,4,opt,name=name,proto3" json:"name,omitempty"`
+	// A description for the organization.
+	Description string `protobuf:"bytes,5,opt,name=description,proto3" json:"description,omitempty"`
 	// Key-value attributes for this organization. Typically used for organizing organizations or for storing integration-specific data.
 	Attributes map[string]string `protobuf:"bytes,6,rep,name=attributes,proto3" json:"attributes,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 	// Contact information for this organization. Typically used to indicate who to contact with security/billing questions about the organization.
-	ContactInfo          []*ContactInfo `protobuf:"bytes,7,rep,name=contact_info,json=contactInfo,proto3" json:"contact_info,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}       `json:"-"`
-	XXX_sizecache        int32          `json:"-"`
+	// This field is deprecated. Use administrative_contact and technical_contact instead.
+	ContactInfo           []*ContactInfo                 `protobuf:"bytes,7,rep,name=contact_info,json=contactInfo,proto3" json:"contact_info,omitempty"` // Deprecated: Do not use.
+	AdministrativeContact *OrganizationOrUserIdentifiers `protobuf:"bytes,9,opt,name=administrative_contact,json=administrativeContact,proto3" json:"administrative_contact,omitempty"`
+	TechnicalContact      *OrganizationOrUserIdentifiers `protobuf:"bytes,10,opt,name=technical_contact,json=technicalContact,proto3" json:"technical_contact,omitempty"`
+	XXX_NoUnkeyedLiteral  struct{}                       `json:"-"`
+	XXX_unrecognized      []byte                         `json:"-"`
+	XXX_sizecache         int32                          `json:"-"`
 }
 
-func (m *Organization) Reset()      { *m = Organization{} }
-func (*Organization) ProtoMessage() {}
+func (m *Organization) Reset()         { *m = Organization{} }
+func (m *Organization) String() string { return proto.CompactTextString(m) }
+func (*Organization) ProtoMessage()    {}
 func (*Organization) Descriptor() ([]byte, []int) {
 	return fileDescriptor_312da2e2e650bd3b, []int{0}
 }
@@ -69,21 +75,28 @@ func (m *Organization) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_Organization proto.InternalMessageInfo
 
-func (m *Organization) GetCreatedAt() time.Time {
+func (m *Organization) GetIds() *OrganizationIdentifiers {
+	if m != nil {
+		return m.Ids
+	}
+	return nil
+}
+
+func (m *Organization) GetCreatedAt() *types.Timestamp {
 	if m != nil {
 		return m.CreatedAt
 	}
-	return time.Time{}
+	return nil
 }
 
-func (m *Organization) GetUpdatedAt() time.Time {
+func (m *Organization) GetUpdatedAt() *types.Timestamp {
 	if m != nil {
 		return m.UpdatedAt
 	}
-	return time.Time{}
+	return nil
 }
 
-func (m *Organization) GetDeletedAt() *time.Time {
+func (m *Organization) GetDeletedAt() *types.Timestamp {
 	if m != nil {
 		return m.DeletedAt
 	}
@@ -111,6 +124,7 @@ func (m *Organization) GetAttributes() map[string]string {
 	return nil
 }
 
+// Deprecated: Do not use.
 func (m *Organization) GetContactInfo() []*ContactInfo {
 	if m != nil {
 		return m.ContactInfo
@@ -118,14 +132,30 @@ func (m *Organization) GetContactInfo() []*ContactInfo {
 	return nil
 }
 
+func (m *Organization) GetAdministrativeContact() *OrganizationOrUserIdentifiers {
+	if m != nil {
+		return m.AdministrativeContact
+	}
+	return nil
+}
+
+func (m *Organization) GetTechnicalContact() *OrganizationOrUserIdentifiers {
+	if m != nil {
+		return m.TechnicalContact
+	}
+	return nil
+}
+
 type Organizations struct {
 	Organizations        []*Organization `protobuf:"bytes,1,rep,name=organizations,proto3" json:"organizations,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}        `json:"-"`
+	XXX_unrecognized     []byte          `json:"-"`
 	XXX_sizecache        int32           `json:"-"`
 }
 
-func (m *Organizations) Reset()      { *m = Organizations{} }
-func (*Organizations) ProtoMessage() {}
+func (m *Organizations) Reset()         { *m = Organizations{} }
+func (m *Organizations) String() string { return proto.CompactTextString(m) }
+func (*Organizations) ProtoMessage()    {}
 func (*Organizations) Descriptor() ([]byte, []int) {
 	return fileDescriptor_312da2e2e650bd3b, []int{1}
 }
@@ -155,15 +185,17 @@ func (m *Organizations) GetOrganizations() []*Organization {
 }
 
 type GetOrganizationRequest struct {
-	OrganizationIdentifiers `protobuf:"bytes,1,opt,name=organization_ids,json=organizationIds,proto3,embedded=organization_ids" json:"organization_ids"`
+	OrganizationIds *OrganizationIdentifiers `protobuf:"bytes,1,opt,name=organization_ids,json=organizationIds,proto3" json:"organization_ids,omitempty"`
 	// The names of the organization fields that should be returned.
 	FieldMask            *types.FieldMask `protobuf:"bytes,2,opt,name=field_mask,json=fieldMask,proto3" json:"field_mask,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}         `json:"-"`
+	XXX_unrecognized     []byte           `json:"-"`
 	XXX_sizecache        int32            `json:"-"`
 }
 
-func (m *GetOrganizationRequest) Reset()      { *m = GetOrganizationRequest{} }
-func (*GetOrganizationRequest) ProtoMessage() {}
+func (m *GetOrganizationRequest) Reset()         { *m = GetOrganizationRequest{} }
+func (m *GetOrganizationRequest) String() string { return proto.CompactTextString(m) }
+func (*GetOrganizationRequest) ProtoMessage()    {}
 func (*GetOrganizationRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_312da2e2e650bd3b, []int{2}
 }
@@ -184,6 +216,13 @@ func (m *GetOrganizationRequest) XXX_DiscardUnknown() {
 }
 
 var xxx_messageInfo_GetOrganizationRequest proto.InternalMessageInfo
+
+func (m *GetOrganizationRequest) GetOrganizationIds() *OrganizationIdentifiers {
+	if m != nil {
+		return m.OrganizationIds
+	}
+	return nil
+}
 
 func (m *GetOrganizationRequest) GetFieldMask() *types.FieldMask {
 	if m != nil {
@@ -211,11 +250,13 @@ type ListOrganizationsRequest struct {
 	// Only return recently deleted organizations.
 	Deleted              bool     `protobuf:"varint,6,opt,name=deleted,proto3" json:"deleted,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *ListOrganizationsRequest) Reset()      { *m = ListOrganizationsRequest{} }
-func (*ListOrganizationsRequest) ProtoMessage() {}
+func (m *ListOrganizationsRequest) Reset()         { *m = ListOrganizationsRequest{} }
+func (m *ListOrganizationsRequest) String() string { return proto.CompactTextString(m) }
+func (*ListOrganizationsRequest) ProtoMessage()    {}
 func (*ListOrganizationsRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_312da2e2e650bd3b, []int{3}
 }
@@ -280,17 +321,19 @@ func (m *ListOrganizationsRequest) GetDeleted() bool {
 }
 
 type CreateOrganizationRequest struct {
-	Organization `protobuf:"bytes,1,opt,name=organization,proto3,embedded=organization" json:"organization"`
+	Organization *Organization `protobuf:"bytes,1,opt,name=organization,proto3" json:"organization,omitempty"`
 	// Collaborator to grant all rights on the newly created application.
 	// NOTE: It is currently not possible to have organizations collaborating on
 	// other organizations.
-	Collaborator         OrganizationOrUserIdentifiers `protobuf:"bytes,2,opt,name=collaborator,proto3" json:"collaborator"`
-	XXX_NoUnkeyedLiteral struct{}                      `json:"-"`
-	XXX_sizecache        int32                         `json:"-"`
+	Collaborator         *OrganizationOrUserIdentifiers `protobuf:"bytes,2,opt,name=collaborator,proto3" json:"collaborator,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}                       `json:"-"`
+	XXX_unrecognized     []byte                         `json:"-"`
+	XXX_sizecache        int32                          `json:"-"`
 }
 
-func (m *CreateOrganizationRequest) Reset()      { *m = CreateOrganizationRequest{} }
-func (*CreateOrganizationRequest) ProtoMessage() {}
+func (m *CreateOrganizationRequest) Reset()         { *m = CreateOrganizationRequest{} }
+func (m *CreateOrganizationRequest) String() string { return proto.CompactTextString(m) }
+func (*CreateOrganizationRequest) ProtoMessage()    {}
 func (*CreateOrganizationRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_312da2e2e650bd3b, []int{4}
 }
@@ -312,23 +355,32 @@ func (m *CreateOrganizationRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_CreateOrganizationRequest proto.InternalMessageInfo
 
-func (m *CreateOrganizationRequest) GetCollaborator() OrganizationOrUserIdentifiers {
+func (m *CreateOrganizationRequest) GetOrganization() *Organization {
+	if m != nil {
+		return m.Organization
+	}
+	return nil
+}
+
+func (m *CreateOrganizationRequest) GetCollaborator() *OrganizationOrUserIdentifiers {
 	if m != nil {
 		return m.Collaborator
 	}
-	return OrganizationOrUserIdentifiers{}
+	return nil
 }
 
 type UpdateOrganizationRequest struct {
-	Organization `protobuf:"bytes,1,opt,name=organization,proto3,embedded=organization" json:"organization"`
+	Organization *Organization `protobuf:"bytes,1,opt,name=organization,proto3" json:"organization,omitempty"`
 	// The names of the organization fields that should be updated.
 	FieldMask            *types.FieldMask `protobuf:"bytes,2,opt,name=field_mask,json=fieldMask,proto3" json:"field_mask,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}         `json:"-"`
+	XXX_unrecognized     []byte           `json:"-"`
 	XXX_sizecache        int32            `json:"-"`
 }
 
-func (m *UpdateOrganizationRequest) Reset()      { *m = UpdateOrganizationRequest{} }
-func (*UpdateOrganizationRequest) ProtoMessage() {}
+func (m *UpdateOrganizationRequest) Reset()         { *m = UpdateOrganizationRequest{} }
+func (m *UpdateOrganizationRequest) String() string { return proto.CompactTextString(m) }
+func (*UpdateOrganizationRequest) ProtoMessage()    {}
 func (*UpdateOrganizationRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_312da2e2e650bd3b, []int{5}
 }
@@ -350,6 +402,13 @@ func (m *UpdateOrganizationRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_UpdateOrganizationRequest proto.InternalMessageInfo
 
+func (m *UpdateOrganizationRequest) GetOrganization() *Organization {
+	if m != nil {
+		return m.Organization
+	}
+	return nil
+}
+
 func (m *UpdateOrganizationRequest) GetFieldMask() *types.FieldMask {
 	if m != nil {
 		return m.FieldMask
@@ -358,17 +417,22 @@ func (m *UpdateOrganizationRequest) GetFieldMask() *types.FieldMask {
 }
 
 type ListOrganizationAPIKeysRequest struct {
-	OrganizationIdentifiers `protobuf:"bytes,1,opt,name=organization_ids,json=organizationIds,proto3,embedded=organization_ids" json:"organization_ids"`
+	OrganizationIds *OrganizationIdentifiers `protobuf:"bytes,1,opt,name=organization_ids,json=organizationIds,proto3" json:"organization_ids,omitempty"`
+	// Order the results by this field path.
+	// Default ordering is by ID. Prepend with a minus (-) to reverse the order.
+	Order string `protobuf:"bytes,4,opt,name=order,proto3" json:"order,omitempty"`
 	// Limit the number of results per page.
 	Limit uint32 `protobuf:"varint,2,opt,name=limit,proto3" json:"limit,omitempty"`
 	// Page number for pagination. 0 is interpreted as 1.
 	Page                 uint32   `protobuf:"varint,3,opt,name=page,proto3" json:"page,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *ListOrganizationAPIKeysRequest) Reset()      { *m = ListOrganizationAPIKeysRequest{} }
-func (*ListOrganizationAPIKeysRequest) ProtoMessage() {}
+func (m *ListOrganizationAPIKeysRequest) Reset()         { *m = ListOrganizationAPIKeysRequest{} }
+func (m *ListOrganizationAPIKeysRequest) String() string { return proto.CompactTextString(m) }
+func (*ListOrganizationAPIKeysRequest) ProtoMessage()    {}
 func (*ListOrganizationAPIKeysRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_312da2e2e650bd3b, []int{6}
 }
@@ -390,6 +454,20 @@ func (m *ListOrganizationAPIKeysRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_ListOrganizationAPIKeysRequest proto.InternalMessageInfo
 
+func (m *ListOrganizationAPIKeysRequest) GetOrganizationIds() *OrganizationIdentifiers {
+	if m != nil {
+		return m.OrganizationIds
+	}
+	return nil
+}
+
+func (m *ListOrganizationAPIKeysRequest) GetOrder() string {
+	if m != nil {
+		return m.Order
+	}
+	return ""
+}
+
 func (m *ListOrganizationAPIKeysRequest) GetLimit() uint32 {
 	if m != nil {
 		return m.Limit
@@ -405,15 +483,17 @@ func (m *ListOrganizationAPIKeysRequest) GetPage() uint32 {
 }
 
 type GetOrganizationAPIKeyRequest struct {
-	OrganizationIdentifiers `protobuf:"bytes,1,opt,name=organization_ids,json=organizationIds,proto3,embedded=organization_ids" json:"organization_ids"`
+	OrganizationIds *OrganizationIdentifiers `protobuf:"bytes,1,opt,name=organization_ids,json=organizationIds,proto3" json:"organization_ids,omitempty"`
 	// Unique public identifier for the API key.
 	KeyId                string   `protobuf:"bytes,2,opt,name=key_id,json=keyId,proto3" json:"key_id,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *GetOrganizationAPIKeyRequest) Reset()      { *m = GetOrganizationAPIKeyRequest{} }
-func (*GetOrganizationAPIKeyRequest) ProtoMessage() {}
+func (m *GetOrganizationAPIKeyRequest) Reset()         { *m = GetOrganizationAPIKeyRequest{} }
+func (m *GetOrganizationAPIKeyRequest) String() string { return proto.CompactTextString(m) }
+func (*GetOrganizationAPIKeyRequest) ProtoMessage()    {}
 func (*GetOrganizationAPIKeyRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_312da2e2e650bd3b, []int{7}
 }
@@ -435,6 +515,13 @@ func (m *GetOrganizationAPIKeyRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_GetOrganizationAPIKeyRequest proto.InternalMessageInfo
 
+func (m *GetOrganizationAPIKeyRequest) GetOrganizationIds() *OrganizationIdentifiers {
+	if m != nil {
+		return m.OrganizationIds
+	}
+	return nil
+}
+
 func (m *GetOrganizationAPIKeyRequest) GetKeyId() string {
 	if m != nil {
 		return m.KeyId
@@ -443,16 +530,18 @@ func (m *GetOrganizationAPIKeyRequest) GetKeyId() string {
 }
 
 type CreateOrganizationAPIKeyRequest struct {
-	OrganizationIdentifiers `protobuf:"bytes,1,opt,name=organization_ids,json=organizationIds,proto3,embedded=organization_ids" json:"organization_ids"`
-	Name                    string     `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
-	Rights                  []Right    `protobuf:"varint,3,rep,packed,name=rights,proto3,enum=ttn.lorawan.v3.Right" json:"rights,omitempty"`
-	ExpiresAt               *time.Time `protobuf:"bytes,4,opt,name=expires_at,json=expiresAt,proto3,stdtime" json:"expires_at,omitempty"`
-	XXX_NoUnkeyedLiteral    struct{}   `json:"-"`
-	XXX_sizecache           int32      `json:"-"`
+	OrganizationIds      *OrganizationIdentifiers `protobuf:"bytes,1,opt,name=organization_ids,json=organizationIds,proto3" json:"organization_ids,omitempty"`
+	Name                 string                   `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	Rights               []Right                  `protobuf:"varint,3,rep,packed,name=rights,proto3,enum=ttn.lorawan.v3.Right" json:"rights,omitempty"`
+	ExpiresAt            *types.Timestamp         `protobuf:"bytes,4,opt,name=expires_at,json=expiresAt,proto3" json:"expires_at,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}                 `json:"-"`
+	XXX_unrecognized     []byte                   `json:"-"`
+	XXX_sizecache        int32                    `json:"-"`
 }
 
-func (m *CreateOrganizationAPIKeyRequest) Reset()      { *m = CreateOrganizationAPIKeyRequest{} }
-func (*CreateOrganizationAPIKeyRequest) ProtoMessage() {}
+func (m *CreateOrganizationAPIKeyRequest) Reset()         { *m = CreateOrganizationAPIKeyRequest{} }
+func (m *CreateOrganizationAPIKeyRequest) String() string { return proto.CompactTextString(m) }
+func (*CreateOrganizationAPIKeyRequest) ProtoMessage()    {}
 func (*CreateOrganizationAPIKeyRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_312da2e2e650bd3b, []int{8}
 }
@@ -474,6 +563,13 @@ func (m *CreateOrganizationAPIKeyRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_CreateOrganizationAPIKeyRequest proto.InternalMessageInfo
 
+func (m *CreateOrganizationAPIKeyRequest) GetOrganizationIds() *OrganizationIdentifiers {
+	if m != nil {
+		return m.OrganizationIds
+	}
+	return nil
+}
+
 func (m *CreateOrganizationAPIKeyRequest) GetName() string {
 	if m != nil {
 		return m.Name
@@ -488,7 +584,7 @@ func (m *CreateOrganizationAPIKeyRequest) GetRights() []Right {
 	return nil
 }
 
-func (m *CreateOrganizationAPIKeyRequest) GetExpiresAt() *time.Time {
+func (m *CreateOrganizationAPIKeyRequest) GetExpiresAt() *types.Timestamp {
 	if m != nil {
 		return m.ExpiresAt
 	}
@@ -496,16 +592,18 @@ func (m *CreateOrganizationAPIKeyRequest) GetExpiresAt() *time.Time {
 }
 
 type UpdateOrganizationAPIKeyRequest struct {
-	OrganizationIdentifiers `protobuf:"bytes,1,opt,name=organization_ids,json=organizationIds,proto3,embedded=organization_ids" json:"organization_ids"`
-	APIKey                  `protobuf:"bytes,2,opt,name=api_key,json=apiKey,proto3,embedded=api_key" json:"api_key"`
+	OrganizationIds *OrganizationIdentifiers `protobuf:"bytes,1,opt,name=organization_ids,json=organizationIds,proto3" json:"organization_ids,omitempty"`
+	ApiKey          *APIKey                  `protobuf:"bytes,2,opt,name=api_key,json=apiKey,proto3" json:"api_key,omitempty"`
 	// The names of the api key fields that should be updated.
 	FieldMask            *types.FieldMask `protobuf:"bytes,3,opt,name=field_mask,json=fieldMask,proto3" json:"field_mask,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}         `json:"-"`
+	XXX_unrecognized     []byte           `json:"-"`
 	XXX_sizecache        int32            `json:"-"`
 }
 
-func (m *UpdateOrganizationAPIKeyRequest) Reset()      { *m = UpdateOrganizationAPIKeyRequest{} }
-func (*UpdateOrganizationAPIKeyRequest) ProtoMessage() {}
+func (m *UpdateOrganizationAPIKeyRequest) Reset()         { *m = UpdateOrganizationAPIKeyRequest{} }
+func (m *UpdateOrganizationAPIKeyRequest) String() string { return proto.CompactTextString(m) }
+func (*UpdateOrganizationAPIKeyRequest) ProtoMessage()    {}
 func (*UpdateOrganizationAPIKeyRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_312da2e2e650bd3b, []int{9}
 }
@@ -527,6 +625,20 @@ func (m *UpdateOrganizationAPIKeyRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_UpdateOrganizationAPIKeyRequest proto.InternalMessageInfo
 
+func (m *UpdateOrganizationAPIKeyRequest) GetOrganizationIds() *OrganizationIdentifiers {
+	if m != nil {
+		return m.OrganizationIds
+	}
+	return nil
+}
+
+func (m *UpdateOrganizationAPIKeyRequest) GetApiKey() *APIKey {
+	if m != nil {
+		return m.ApiKey
+	}
+	return nil
+}
+
 func (m *UpdateOrganizationAPIKeyRequest) GetFieldMask() *types.FieldMask {
 	if m != nil {
 		return m.FieldMask
@@ -535,17 +647,22 @@ func (m *UpdateOrganizationAPIKeyRequest) GetFieldMask() *types.FieldMask {
 }
 
 type ListOrganizationCollaboratorsRequest struct {
-	OrganizationIdentifiers `protobuf:"bytes,1,opt,name=organization_ids,json=organizationIds,proto3,embedded=organization_ids" json:"organization_ids"`
+	OrganizationIds *OrganizationIdentifiers `protobuf:"bytes,1,opt,name=organization_ids,json=organizationIds,proto3" json:"organization_ids,omitempty"`
 	// Limit the number of results per page.
 	Limit uint32 `protobuf:"varint,2,opt,name=limit,proto3" json:"limit,omitempty"`
 	// Page number for pagination. 0 is interpreted as 1.
-	Page                 uint32   `protobuf:"varint,3,opt,name=page,proto3" json:"page,omitempty"`
+	Page uint32 `protobuf:"varint,3,opt,name=page,proto3" json:"page,omitempty"`
+	// Order the results by this field path (must be present in the field mask).
+	// Default ordering is by ID. Prepend with a minus (-) to reverse the order.
+	Order                string   `protobuf:"bytes,4,opt,name=order,proto3" json:"order,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *ListOrganizationCollaboratorsRequest) Reset()      { *m = ListOrganizationCollaboratorsRequest{} }
-func (*ListOrganizationCollaboratorsRequest) ProtoMessage() {}
+func (m *ListOrganizationCollaboratorsRequest) Reset()         { *m = ListOrganizationCollaboratorsRequest{} }
+func (m *ListOrganizationCollaboratorsRequest) String() string { return proto.CompactTextString(m) }
+func (*ListOrganizationCollaboratorsRequest) ProtoMessage()    {}
 func (*ListOrganizationCollaboratorsRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_312da2e2e650bd3b, []int{10}
 }
@@ -567,6 +684,13 @@ func (m *ListOrganizationCollaboratorsRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_ListOrganizationCollaboratorsRequest proto.InternalMessageInfo
 
+func (m *ListOrganizationCollaboratorsRequest) GetOrganizationIds() *OrganizationIdentifiers {
+	if m != nil {
+		return m.OrganizationIds
+	}
+	return nil
+}
+
 func (m *ListOrganizationCollaboratorsRequest) GetLimit() uint32 {
 	if m != nil {
 		return m.Limit
@@ -581,17 +705,26 @@ func (m *ListOrganizationCollaboratorsRequest) GetPage() uint32 {
 	return 0
 }
 
-type GetOrganizationCollaboratorRequest struct {
-	OrganizationIdentifiers `protobuf:"bytes,1,opt,name=organization_ids,json=organizationIds,proto3,embedded=organization_ids" json:"organization_ids"`
-	// NOTE: It is currently not possible to have organizations collaborating on
-	// other organizations.
-	OrganizationOrUserIdentifiers `protobuf:"bytes,2,opt,name=collaborator,proto3,embedded=collaborator" json:"collaborator"`
-	XXX_NoUnkeyedLiteral          struct{} `json:"-"`
-	XXX_sizecache                 int32    `json:"-"`
+func (m *ListOrganizationCollaboratorsRequest) GetOrder() string {
+	if m != nil {
+		return m.Order
+	}
+	return ""
 }
 
-func (m *GetOrganizationCollaboratorRequest) Reset()      { *m = GetOrganizationCollaboratorRequest{} }
-func (*GetOrganizationCollaboratorRequest) ProtoMessage() {}
+type GetOrganizationCollaboratorRequest struct {
+	OrganizationIds *OrganizationIdentifiers `protobuf:"bytes,1,opt,name=organization_ids,json=organizationIds,proto3" json:"organization_ids,omitempty"`
+	// NOTE: It is currently not possible to have organizations collaborating on
+	// other organizations.
+	Collaborator         *OrganizationOrUserIdentifiers `protobuf:"bytes,2,opt,name=collaborator,proto3" json:"collaborator,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}                       `json:"-"`
+	XXX_unrecognized     []byte                         `json:"-"`
+	XXX_sizecache        int32                          `json:"-"`
+}
+
+func (m *GetOrganizationCollaboratorRequest) Reset()         { *m = GetOrganizationCollaboratorRequest{} }
+func (m *GetOrganizationCollaboratorRequest) String() string { return proto.CompactTextString(m) }
+func (*GetOrganizationCollaboratorRequest) ProtoMessage()    {}
 func (*GetOrganizationCollaboratorRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_312da2e2e650bd3b, []int{11}
 }
@@ -613,15 +746,31 @@ func (m *GetOrganizationCollaboratorRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_GetOrganizationCollaboratorRequest proto.InternalMessageInfo
 
-type SetOrganizationCollaboratorRequest struct {
-	OrganizationIdentifiers `protobuf:"bytes,1,opt,name=organization_ids,json=organizationIds,proto3,embedded=organization_ids" json:"organization_ids"`
-	Collaborator            Collaborator `protobuf:"bytes,2,opt,name=collaborator,proto3" json:"collaborator"`
-	XXX_NoUnkeyedLiteral    struct{}     `json:"-"`
-	XXX_sizecache           int32        `json:"-"`
+func (m *GetOrganizationCollaboratorRequest) GetOrganizationIds() *OrganizationIdentifiers {
+	if m != nil {
+		return m.OrganizationIds
+	}
+	return nil
 }
 
-func (m *SetOrganizationCollaboratorRequest) Reset()      { *m = SetOrganizationCollaboratorRequest{} }
-func (*SetOrganizationCollaboratorRequest) ProtoMessage() {}
+func (m *GetOrganizationCollaboratorRequest) GetCollaborator() *OrganizationOrUserIdentifiers {
+	if m != nil {
+		return m.Collaborator
+	}
+	return nil
+}
+
+type SetOrganizationCollaboratorRequest struct {
+	OrganizationIds      *OrganizationIdentifiers `protobuf:"bytes,1,opt,name=organization_ids,json=organizationIds,proto3" json:"organization_ids,omitempty"`
+	Collaborator         *Collaborator            `protobuf:"bytes,2,opt,name=collaborator,proto3" json:"collaborator,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}                 `json:"-"`
+	XXX_unrecognized     []byte                   `json:"-"`
+	XXX_sizecache        int32                    `json:"-"`
+}
+
+func (m *SetOrganizationCollaboratorRequest) Reset()         { *m = SetOrganizationCollaboratorRequest{} }
+func (m *SetOrganizationCollaboratorRequest) String() string { return proto.CompactTextString(m) }
+func (*SetOrganizationCollaboratorRequest) ProtoMessage()    {}
 func (*SetOrganizationCollaboratorRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_312da2e2e650bd3b, []int{12}
 }
@@ -643,11 +792,18 @@ func (m *SetOrganizationCollaboratorRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_SetOrganizationCollaboratorRequest proto.InternalMessageInfo
 
-func (m *SetOrganizationCollaboratorRequest) GetCollaborator() Collaborator {
+func (m *SetOrganizationCollaboratorRequest) GetOrganizationIds() *OrganizationIdentifiers {
+	if m != nil {
+		return m.OrganizationIds
+	}
+	return nil
+}
+
+func (m *SetOrganizationCollaboratorRequest) GetCollaborator() *Collaborator {
 	if m != nil {
 		return m.Collaborator
 	}
-	return Collaborator{}
+	return nil
 }
 
 func init() {
@@ -689,785 +845,84 @@ func init() {
 }
 
 var fileDescriptor_312da2e2e650bd3b = []byte{
-	// 1098 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xd4, 0x57, 0x4d, 0x6c, 0x1b, 0x45,
-	0x14, 0xce, 0xac, 0x7f, 0x12, 0x3f, 0x27, 0x8d, 0x59, 0xd1, 0x6a, 0x9b, 0x46, 0xb6, 0xb5, 0x44,
-	0xc2, 0x44, 0xdd, 0x35, 0x72, 0x84, 0x44, 0x23, 0xa1, 0xd4, 0x1b, 0x41, 0x89, 0x42, 0x68, 0xd9,
-	0xd2, 0x0b, 0x55, 0xb1, 0xc6, 0xde, 0xf1, 0x66, 0x64, 0x7b, 0x77, 0x99, 0x1d, 0xa7, 0x75, 0x11,
-	0x12, 0xe2, 0xe7, 0xc2, 0xa9, 0xea, 0x11, 0x2e, 0x1c, 0x11, 0x17, 0x24, 0x4e, 0xc0, 0xa9, 0xc7,
-	0x1e, 0x73, 0x44, 0x1c, 0x82, 0x48, 0x2f, 0xbd, 0xc1, 0xd9, 0x27, 0xb4, 0x3f, 0xae, 0x77, 0xd7,
-	0xc6, 0x55, 0x69, 0x95, 0xc2, 0x29, 0x33, 0xbb, 0xdf, 0x7b, 0xf3, 0xbd, 0xb7, 0xdf, 0xf7, 0xc6,
-	0x81, 0xb5, 0xae, 0xcd, 0xf0, 0x4d, 0x6c, 0x29, 0x2e, 0xc7, 0xad, 0x4e, 0x15, 0x3b, 0xb4, 0x6a,
-	0x33, 0x13, 0x5b, 0xf4, 0x36, 0xe6, 0xd4, 0xb6, 0x54, 0x87, 0xd9, 0xdc, 0x16, 0x4f, 0x71, 0x6e,
-	0xa9, 0x21, 0x52, 0x3d, 0xd8, 0x58, 0xa9, 0x9b, 0x94, 0xef, 0xf7, 0x9b, 0x6a, 0xcb, 0xee, 0x55,
-	0x89, 0x75, 0x60, 0x0f, 0x1c, 0x66, 0xdf, 0x1a, 0x54, 0x7d, 0x70, 0x4b, 0x31, 0x89, 0xa5, 0x1c,
-	0xe0, 0x2e, 0x35, 0x30, 0x27, 0xd5, 0x89, 0x45, 0x90, 0x72, 0x45, 0x89, 0xa4, 0x30, 0x6d, 0xd3,
-	0x0e, 0x82, 0x9b, 0xfd, 0xb6, 0xbf, 0xf3, 0x37, 0xfe, 0x2a, 0x84, 0x97, 0x4d, 0xdb, 0x36, 0xbb,
-	0x64, 0x8c, 0x6a, 0x53, 0xd2, 0x35, 0x1a, 0x3d, 0xec, 0x76, 0x42, 0x44, 0x29, 0x89, 0xe0, 0xb4,
-	0x47, 0x5c, 0x8e, 0x7b, 0x4e, 0x08, 0x98, 0x52, 0x6a, 0xcb, 0xb6, 0x38, 0x6e, 0xf1, 0x06, 0xb5,
-	0xda, 0xa3, 0x83, 0x5e, 0x9a, 0x44, 0x51, 0x83, 0x58, 0x9c, 0xb6, 0x29, 0x61, 0x6e, 0x08, 0x2a,
-	0x4e, 0x82, 0x18, 0x35, 0xf7, 0x79, 0xf8, 0x5e, 0xfe, 0x22, 0x03, 0x8b, 0x97, 0x23, 0x6d, 0x14,
-	0x77, 0x21, 0x45, 0x0d, 0x57, 0x42, 0x65, 0x54, 0xc9, 0xd7, 0x5e, 0x56, 0xe3, 0xed, 0x54, 0xa3,
-	0xd0, 0x9d, 0xf1, 0x61, 0x5a, 0x61, 0xa8, 0x65, 0xbe, 0x42, 0x42, 0x01, 0xdd, 0x3f, 0x2a, 0xcd,
-	0x1d, 0x1e, 0x95, 0x90, 0xee, 0x65, 0x11, 0xb7, 0x01, 0x5a, 0x8c, 0x60, 0x4e, 0x8c, 0x06, 0xe6,
-	0x92, 0xe0, 0xe7, 0x5c, 0x51, 0x83, 0xf2, 0xd5, 0x51, 0xf9, 0xea, 0xfb, 0xa3, 0xf2, 0xb5, 0x05,
-	0x2f, 0xfc, 0xce, 0xef, 0x25, 0xa4, 0xe7, 0xc2, 0xb8, 0x3a, 0xf7, 0x92, 0xf4, 0x1d, 0x63, 0x94,
-	0x24, 0xf5, 0x24, 0x49, 0xc2, 0xb8, 0x3a, 0x17, 0xb7, 0x00, 0x0c, 0xd2, 0x25, 0x61, 0x92, 0x85,
-	0xc7, 0x26, 0x49, 0x07, 0x09, 0xc2, 0x98, 0x3a, 0x17, 0xcf, 0x41, 0xda, 0xc2, 0x3d, 0x22, 0xa5,
-	0xcb, 0xa8, 0x92, 0xd3, 0xe6, 0x87, 0x5a, 0x9a, 0x09, 0x52, 0x4d, 0xf7, 0x1f, 0x8a, 0xeb, 0x90,
-	0x37, 0x88, 0xdb, 0x62, 0xd4, 0xf1, 0x1a, 0x23, 0x65, 0x7c, 0xcc, 0xc2, 0x50, 0xcb, 0xb0, 0x94,
-	0x74, 0xb8, 0xac, 0x47, 0x5f, 0x8a, 0x9f, 0x23, 0x00, 0xcc, 0x39, 0xa3, 0xcd, 0x3e, 0x27, 0xae,
-	0x94, 0x2d, 0xa7, 0x2a, 0xf9, 0xda, 0xf9, 0x59, 0x8d, 0x56, 0xeb, 0x8f, 0xe0, 0x6f, 0x5a, 0x9c,
-	0x0d, 0xb4, 0xd7, 0x86, 0x5a, 0xed, 0x6b, 0x54, 0x2d, 0x80, 0xbc, 0xc6, 0x64, 0x69, 0xad, 0x56,
-	0xfc, 0xf0, 0x3a, 0x56, 0x6e, 0xbf, 0xaa, 0x5c, 0xb8, 0x51, 0xd9, 0xda, 0xbc, 0xae, 0xdc, 0xd8,
-	0x1a, 0x6d, 0x5f, 0xf9, 0xb8, 0x76, 0xfe, 0x93, 0xb5, 0x75, 0x8f, 0xc6, 0x7d, 0xa4, 0x47, 0x8e,
-	0x15, 0xdf, 0x86, 0xc5, 0xa8, 0xa4, 0xa4, 0x79, 0x9f, 0xc6, 0xb9, 0x24, 0x8d, 0xed, 0x00, 0xb3,
-	0x63, 0xb5, 0x6d, 0xbf, 0x9e, 0xbb, 0x48, 0x28, 0x80, 0x9e, 0x6f, 0x8d, 0x1f, 0xaf, 0xbc, 0x01,
-	0xcb, 0x09, 0x7e, 0x62, 0x01, 0x52, 0x1d, 0x32, 0xf0, 0x35, 0x94, 0xd3, 0xbd, 0xa5, 0xf8, 0x22,
-	0x64, 0x0e, 0x70, 0xb7, 0x4f, 0x7c, 0x0d, 0xe4, 0xf4, 0x60, 0xb3, 0x29, 0xbc, 0x8e, 0x36, 0xd3,
-	0x3f, 0x7d, 0x5b, 0x42, 0xf2, 0x55, 0x58, 0x8a, 0x56, 0xec, 0x8a, 0x1a, 0x2c, 0x45, 0xdd, 0xed,
-	0x09, 0xd2, 0x23, 0xb8, 0x3a, 0xab, 0x4f, 0x7a, 0x3c, 0x44, 0xfe, 0x19, 0xc1, 0x99, 0x4b, 0x84,
-	0xc7, 0x20, 0xe4, 0xa3, 0x3e, 0x71, 0xb9, 0x68, 0x40, 0x21, 0x8a, 0x6d, 0x3c, 0x13, 0xc9, 0x2f,
-	0xdb, 0x31, 0xa8, 0x2b, 0x5e, 0x00, 0x18, 0x9b, 0xff, 0x1f, 0xe5, 0xff, 0x96, 0x07, 0xd9, 0xc3,
-	0x6e, 0x47, 0xcf, 0xb5, 0x47, 0x4b, 0xf9, 0x48, 0x00, 0xe9, 0x1d, 0xea, 0xc6, 0xc8, 0xbb, 0x23,
-	0xf6, 0xef, 0x79, 0x1f, 0xaf, 0xdb, 0xc5, 0x4d, 0x9b, 0x61, 0x6e, 0xb3, 0x90, 0xb9, 0x32, 0x8b,
-	0xf9, 0x65, 0x76, 0xcd, 0x25, 0x2c, 0xc2, 0x5f, 0x8f, 0xa5, 0x78, 0x0a, 0xaa, 0x62, 0x1b, 0x32,
-	0x36, 0x33, 0x08, 0xf3, 0xad, 0x99, 0xd3, 0xae, 0x0c, 0xb5, 0x3d, 0xb6, 0xab, 0xcf, 0xc5, 0xdb,
-	0xd1, 0xa0, 0x86, 0x5e, 0x50, 0x92, 0x4f, 0x7c, 0xf7, 0xe8, 0x19, 0xc5, 0xff, 0x13, 0x19, 0x15,
-	0x7a, 0x5e, 0x89, 0x6c, 0x82, 0xf4, 0x62, 0x11, 0x32, 0x5d, 0xda, 0xa3, 0xdc, 0xb7, 0xe0, 0x92,
-	0x2f, 0xc7, 0xf5, 0x94, 0xf4, 0x70, 0x5e, 0x0f, 0x1e, 0x8b, 0x22, 0xa4, 0x1d, 0x6c, 0x12, 0xdf,
-	0x7d, 0x4b, 0xba, 0xbf, 0x16, 0x25, 0x98, 0x0f, 0x2d, 0x2c, 0x65, 0xcb, 0xa8, 0xb2, 0xa0, 0x8f,
-	0xb6, 0xf2, 0x21, 0x82, 0xb3, 0xdb, 0xfe, 0x19, 0xd3, 0xf4, 0xa1, 0xc3, 0x62, 0x94, 0x6b, 0xd8,
-	0xe1, 0x99, 0xea, 0x9b, 0x22, 0x88, 0x58, 0x0e, 0xb1, 0x91, 0xf8, 0x6a, 0xc2, 0xbf, 0xf8, 0x6a,
-	0xda, 0x62, 0xf4, 0x90, 0xf8, 0x37, 0x94, 0xbf, 0x47, 0x70, 0xf6, 0x9a, 0x3f, 0xf1, 0x4e, 0xaa,
-	0xa4, 0xa7, 0x10, 0xf8, 0x2f, 0x08, 0x8a, 0x49, 0x81, 0xd7, 0xaf, 0xec, 0xec, 0x92, 0x81, 0x7b,
-	0xb2, 0x26, 0x7d, 0x24, 0x2b, 0x61, 0xb6, 0xac, 0x52, 0x63, 0x59, 0xc9, 0xdf, 0x20, 0x58, 0x4d,
-	0x4c, 0x96, 0x80, 0xfb, 0xc9, 0x52, 0x3f, 0x0d, 0xd9, 0x0e, 0x19, 0x34, 0xa8, 0x31, 0x1a, 0xab,
-	0x1d, 0x32, 0xd8, 0x31, 0xe4, 0x1f, 0x04, 0x28, 0x4d, 0x4a, 0xfb, 0x79, 0x10, 0x1c, 0x5d, 0x9a,
-	0xc2, 0xb4, 0x4b, 0xf3, 0x22, 0x64, 0x83, 0x9f, 0x22, 0x52, 0xaa, 0x9c, 0xaa, 0x9c, 0xaa, 0x9d,
-	0x4e, 0x1e, 0xac, 0x7b, 0x6f, 0xb5, 0x17, 0x86, 0xda, 0xa9, 0xbb, 0x28, 0xbf, 0x80, 0x24, 0x24,
-	0x67, 0x3e, 0xf3, 0xce, 0xd3, 0xc3, 0x38, 0xf1, 0x12, 0x00, 0xb9, 0xe5, 0x50, 0x46, 0x5c, 0xef,
-	0x52, 0x4f, 0x3f, 0xf6, 0x52, 0xf7, 0xcc, 0xf3, 0x23, 0x12, 0x2e, 0xa2, 0xe0, 0x72, 0x0f, 0x63,
-	0xeb, 0x5c, 0xfe, 0x52, 0x80, 0xd2, 0xa4, 0x73, 0x9e, 0x47, 0xc7, 0xea, 0x30, 0x8f, 0x1d, 0xda,
-	0xf0, 0xae, 0xcf, 0xc0, 0x4e, 0x67, 0x92, 0xc9, 0x03, 0x56, 0x53, 0x72, 0x65, 0xb1, 0x43, 0x77,
-	0xc9, 0x20, 0x61, 0xca, 0xd4, 0x93, 0x98, 0xf2, 0x1e, 0x82, 0xb5, 0xa4, 0x29, 0xb7, 0x23, 0x23,
-	0xe6, 0x7f, 0x60, 0xcd, 0x3f, 0x11, 0xc8, 0x09, 0x6b, 0x46, 0x2b, 0x38, 0xd9, 0x02, 0x5a, 0xcf,
-	0x62, 0xe4, 0x4f, 0x19, 0xc2, 0xb1, 0xb1, 0xff, 0x1b, 0x02, 0xf9, 0xea, 0x7f, 0xa5, 0xe2, 0x77,
-	0xa7, 0x56, 0xbc, 0x3a, 0xf9, 0xbb, 0x72, 0x8c, 0x99, 0x75, 0xa7, 0x69, 0x7b, 0xbf, 0xfe, 0x51,
-	0x9c, 0xfb, 0xf4, 0xb8, 0x88, 0xbe, 0x3b, 0x2e, 0xa2, 0x87, 0xc7, 0xc5, 0xb9, 0xbf, 0x8e, 0x8b,
-	0xe8, 0xce, 0x83, 0xe2, 0xdc, 0xbd, 0x07, 0x45, 0xf4, 0x41, 0xd5, 0xb4, 0x55, 0xbe, 0x4f, 0xf8,
-	0x3e, 0xb5, 0x4c, 0x57, 0xb5, 0x08, 0xbf, 0x69, 0xb3, 0x4e, 0x35, 0xfe, 0x2f, 0xcf, 0xc1, 0x46,
-	0xd5, 0xe9, 0x98, 0x55, 0xce, 0x2d, 0xa7, 0xd9, 0xcc, 0xfa, 0xfa, 0xdf, 0xf8, 0x3b, 0x00, 0x00,
-	0xff, 0xff, 0xa7, 0xe3, 0x33, 0x28, 0x4d, 0x0e, 0x00, 0x00,
-}
-
-func (this *Organization) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*Organization)
-	if !ok {
-		that2, ok := that.(Organization)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.OrganizationIdentifiers.Equal(&that1.OrganizationIdentifiers) {
-		return false
-	}
-	if !this.CreatedAt.Equal(that1.CreatedAt) {
-		return false
-	}
-	if !this.UpdatedAt.Equal(that1.UpdatedAt) {
-		return false
-	}
-	if that1.DeletedAt == nil {
-		if this.DeletedAt != nil {
-			return false
-		}
-	} else if !this.DeletedAt.Equal(*that1.DeletedAt) {
-		return false
-	}
-	if this.Name != that1.Name {
-		return false
-	}
-	if this.Description != that1.Description {
-		return false
-	}
-	if len(this.Attributes) != len(that1.Attributes) {
-		return false
-	}
-	for i := range this.Attributes {
-		if this.Attributes[i] != that1.Attributes[i] {
-			return false
-		}
-	}
-	if len(this.ContactInfo) != len(that1.ContactInfo) {
-		return false
-	}
-	for i := range this.ContactInfo {
-		if !this.ContactInfo[i].Equal(that1.ContactInfo[i]) {
-			return false
-		}
-	}
-	return true
-}
-func (this *Organizations) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*Organizations)
-	if !ok {
-		that2, ok := that.(Organizations)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if len(this.Organizations) != len(that1.Organizations) {
-		return false
-	}
-	for i := range this.Organizations {
-		if !this.Organizations[i].Equal(that1.Organizations[i]) {
-			return false
-		}
-	}
-	return true
-}
-func (this *GetOrganizationRequest) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*GetOrganizationRequest)
-	if !ok {
-		that2, ok := that.(GetOrganizationRequest)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.OrganizationIdentifiers.Equal(&that1.OrganizationIdentifiers) {
-		return false
-	}
-	if !this.FieldMask.Equal(that1.FieldMask) {
-		return false
-	}
-	return true
-}
-func (this *ListOrganizationsRequest) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ListOrganizationsRequest)
-	if !ok {
-		that2, ok := that.(ListOrganizationsRequest)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.Collaborator.Equal(that1.Collaborator) {
-		return false
-	}
-	if !this.FieldMask.Equal(that1.FieldMask) {
-		return false
-	}
-	if this.Order != that1.Order {
-		return false
-	}
-	if this.Limit != that1.Limit {
-		return false
-	}
-	if this.Page != that1.Page {
-		return false
-	}
-	if this.Deleted != that1.Deleted {
-		return false
-	}
-	return true
-}
-func (this *CreateOrganizationRequest) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*CreateOrganizationRequest)
-	if !ok {
-		that2, ok := that.(CreateOrganizationRequest)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.Organization.Equal(&that1.Organization) {
-		return false
-	}
-	if !this.Collaborator.Equal(&that1.Collaborator) {
-		return false
-	}
-	return true
-}
-func (this *UpdateOrganizationRequest) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*UpdateOrganizationRequest)
-	if !ok {
-		that2, ok := that.(UpdateOrganizationRequest)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.Organization.Equal(&that1.Organization) {
-		return false
-	}
-	if !this.FieldMask.Equal(that1.FieldMask) {
-		return false
-	}
-	return true
-}
-func (this *ListOrganizationAPIKeysRequest) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ListOrganizationAPIKeysRequest)
-	if !ok {
-		that2, ok := that.(ListOrganizationAPIKeysRequest)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.OrganizationIdentifiers.Equal(&that1.OrganizationIdentifiers) {
-		return false
-	}
-	if this.Limit != that1.Limit {
-		return false
-	}
-	if this.Page != that1.Page {
-		return false
-	}
-	return true
-}
-func (this *GetOrganizationAPIKeyRequest) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*GetOrganizationAPIKeyRequest)
-	if !ok {
-		that2, ok := that.(GetOrganizationAPIKeyRequest)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.OrganizationIdentifiers.Equal(&that1.OrganizationIdentifiers) {
-		return false
-	}
-	if this.KeyId != that1.KeyId {
-		return false
-	}
-	return true
-}
-func (this *CreateOrganizationAPIKeyRequest) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*CreateOrganizationAPIKeyRequest)
-	if !ok {
-		that2, ok := that.(CreateOrganizationAPIKeyRequest)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.OrganizationIdentifiers.Equal(&that1.OrganizationIdentifiers) {
-		return false
-	}
-	if this.Name != that1.Name {
-		return false
-	}
-	if len(this.Rights) != len(that1.Rights) {
-		return false
-	}
-	for i := range this.Rights {
-		if this.Rights[i] != that1.Rights[i] {
-			return false
-		}
-	}
-	if that1.ExpiresAt == nil {
-		if this.ExpiresAt != nil {
-			return false
-		}
-	} else if !this.ExpiresAt.Equal(*that1.ExpiresAt) {
-		return false
-	}
-	return true
-}
-func (this *UpdateOrganizationAPIKeyRequest) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*UpdateOrganizationAPIKeyRequest)
-	if !ok {
-		that2, ok := that.(UpdateOrganizationAPIKeyRequest)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.OrganizationIdentifiers.Equal(&that1.OrganizationIdentifiers) {
-		return false
-	}
-	if !this.APIKey.Equal(&that1.APIKey) {
-		return false
-	}
-	if !this.FieldMask.Equal(that1.FieldMask) {
-		return false
-	}
-	return true
-}
-func (this *ListOrganizationCollaboratorsRequest) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ListOrganizationCollaboratorsRequest)
-	if !ok {
-		that2, ok := that.(ListOrganizationCollaboratorsRequest)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.OrganizationIdentifiers.Equal(&that1.OrganizationIdentifiers) {
-		return false
-	}
-	if this.Limit != that1.Limit {
-		return false
-	}
-	if this.Page != that1.Page {
-		return false
-	}
-	return true
-}
-func (this *GetOrganizationCollaboratorRequest) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*GetOrganizationCollaboratorRequest)
-	if !ok {
-		that2, ok := that.(GetOrganizationCollaboratorRequest)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.OrganizationIdentifiers.Equal(&that1.OrganizationIdentifiers) {
-		return false
-	}
-	if !this.OrganizationOrUserIdentifiers.Equal(&that1.OrganizationOrUserIdentifiers) {
-		return false
-	}
-	return true
-}
-func (this *SetOrganizationCollaboratorRequest) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*SetOrganizationCollaboratorRequest)
-	if !ok {
-		that2, ok := that.(SetOrganizationCollaboratorRequest)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.OrganizationIdentifiers.Equal(&that1.OrganizationIdentifiers) {
-		return false
-	}
-	if !this.Collaborator.Equal(&that1.Collaborator) {
-		return false
-	}
-	return true
-}
-func NewPopulatedOrganization(r randyOrganization, easy bool) *Organization {
-	this := &Organization{}
-	v1 := NewPopulatedOrganizationIdentifiers(r, easy)
-	this.OrganizationIdentifiers = *v1
-	v2 := github_com_gogo_protobuf_types.NewPopulatedStdTime(r, easy)
-	this.CreatedAt = *v2
-	v3 := github_com_gogo_protobuf_types.NewPopulatedStdTime(r, easy)
-	this.UpdatedAt = *v3
-	if r.Intn(5) != 0 {
-		this.DeletedAt = github_com_gogo_protobuf_types.NewPopulatedStdTime(r, easy)
-	}
-	this.Name = string(randStringOrganization(r))
-	this.Description = string(randStringOrganization(r))
-	if r.Intn(5) != 0 {
-		v4 := r.Intn(10)
-		this.Attributes = make(map[string]string)
-		for i := 0; i < v4; i++ {
-			this.Attributes[randStringOrganization(r)] = randStringOrganization(r)
-		}
-	}
-	if r.Intn(5) != 0 {
-		v5 := r.Intn(5)
-		this.ContactInfo = make([]*ContactInfo, v5)
-		for i := 0; i < v5; i++ {
-			this.ContactInfo[i] = NewPopulatedContactInfo(r, easy)
-		}
-	}
-	if !easy && r.Intn(10) != 0 {
-	}
-	return this
-}
-
-type randyOrganization interface {
-	Float32() float32
-	Float64() float64
-	Int63() int64
-	Int31() int32
-	Uint32() uint32
-	Intn(n int) int
-}
-
-func randUTF8RuneOrganization(r randyOrganization) rune {
-	ru := r.Intn(62)
-	if ru < 10 {
-		return rune(ru + 48)
-	} else if ru < 36 {
-		return rune(ru + 55)
-	}
-	return rune(ru + 61)
-}
-func randStringOrganization(r randyOrganization) string {
-	v6 := r.Intn(100)
-	tmps := make([]rune, v6)
-	for i := 0; i < v6; i++ {
-		tmps[i] = randUTF8RuneOrganization(r)
-	}
-	return string(tmps)
-}
-func randUnrecognizedOrganization(r randyOrganization, maxFieldNumber int) (dAtA []byte) {
-	l := r.Intn(5)
-	for i := 0; i < l; i++ {
-		wire := r.Intn(4)
-		if wire == 3 {
-			wire = 5
-		}
-		fieldNumber := maxFieldNumber + r.Intn(100)
-		dAtA = randFieldOrganization(dAtA, r, fieldNumber, wire)
-	}
-	return dAtA
-}
-func randFieldOrganization(dAtA []byte, r randyOrganization, fieldNumber int, wire int) []byte {
-	key := uint32(fieldNumber)<<3 | uint32(wire)
-	switch wire {
-	case 0:
-		dAtA = encodeVarintPopulateOrganization(dAtA, uint64(key))
-		v7 := r.Int63()
-		if r.Intn(2) == 0 {
-			v7 *= -1
-		}
-		dAtA = encodeVarintPopulateOrganization(dAtA, uint64(v7))
-	case 1:
-		dAtA = encodeVarintPopulateOrganization(dAtA, uint64(key))
-		dAtA = append(dAtA, byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)))
-	case 2:
-		dAtA = encodeVarintPopulateOrganization(dAtA, uint64(key))
-		ll := r.Intn(100)
-		dAtA = encodeVarintPopulateOrganization(dAtA, uint64(ll))
-		for j := 0; j < ll; j++ {
-			dAtA = append(dAtA, byte(r.Intn(256)))
-		}
-	default:
-		dAtA = encodeVarintPopulateOrganization(dAtA, uint64(key))
-		dAtA = append(dAtA, byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)))
-	}
-	return dAtA
-}
-func encodeVarintPopulateOrganization(dAtA []byte, v uint64) []byte {
-	for v >= 1<<7 {
-		dAtA = append(dAtA, uint8(uint64(v)&0x7f|0x80))
-		v >>= 7
-	}
-	dAtA = append(dAtA, uint8(v))
-	return dAtA
-}
-func (this *Organization) String() string {
-	if this == nil {
-		return "nil"
-	}
-	repeatedStringForContactInfo := "[]*ContactInfo{"
-	for _, f := range this.ContactInfo {
-		repeatedStringForContactInfo += strings.Replace(fmt.Sprintf("%v", f), "ContactInfo", "ContactInfo", 1) + ","
-	}
-	repeatedStringForContactInfo += "}"
-	keysForAttributes := make([]string, 0, len(this.Attributes))
-	for k := range this.Attributes {
-		keysForAttributes = append(keysForAttributes, k)
-	}
-	github_com_gogo_protobuf_sortkeys.Strings(keysForAttributes)
-	mapStringForAttributes := "map[string]string{"
-	for _, k := range keysForAttributes {
-		mapStringForAttributes += fmt.Sprintf("%v: %v,", k, this.Attributes[k])
-	}
-	mapStringForAttributes += "}"
-	s := strings.Join([]string{`&Organization{`,
-		`OrganizationIdentifiers:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.OrganizationIdentifiers), "OrganizationIdentifiers", "OrganizationIdentifiers", 1), `&`, ``, 1) + `,`,
-		`CreatedAt:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.CreatedAt), "Timestamp", "types.Timestamp", 1), `&`, ``, 1) + `,`,
-		`UpdatedAt:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.UpdatedAt), "Timestamp", "types.Timestamp", 1), `&`, ``, 1) + `,`,
-		`DeletedAt:` + strings.Replace(fmt.Sprintf("%v", this.DeletedAt), "Timestamp", "types.Timestamp", 1) + `,`,
-		`Name:` + fmt.Sprintf("%v", this.Name) + `,`,
-		`Description:` + fmt.Sprintf("%v", this.Description) + `,`,
-		`Attributes:` + mapStringForAttributes + `,`,
-		`ContactInfo:` + repeatedStringForContactInfo + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *Organizations) String() string {
-	if this == nil {
-		return "nil"
-	}
-	repeatedStringForOrganizations := "[]*Organization{"
-	for _, f := range this.Organizations {
-		repeatedStringForOrganizations += strings.Replace(f.String(), "Organization", "Organization", 1) + ","
-	}
-	repeatedStringForOrganizations += "}"
-	s := strings.Join([]string{`&Organizations{`,
-		`Organizations:` + repeatedStringForOrganizations + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *GetOrganizationRequest) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&GetOrganizationRequest{`,
-		`OrganizationIdentifiers:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.OrganizationIdentifiers), "OrganizationIdentifiers", "OrganizationIdentifiers", 1), `&`, ``, 1) + `,`,
-		`FieldMask:` + strings.Replace(fmt.Sprintf("%v", this.FieldMask), "FieldMask", "types.FieldMask", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *ListOrganizationsRequest) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&ListOrganizationsRequest{`,
-		`Collaborator:` + strings.Replace(fmt.Sprintf("%v", this.Collaborator), "OrganizationOrUserIdentifiers", "OrganizationOrUserIdentifiers", 1) + `,`,
-		`FieldMask:` + strings.Replace(fmt.Sprintf("%v", this.FieldMask), "FieldMask", "types.FieldMask", 1) + `,`,
-		`Order:` + fmt.Sprintf("%v", this.Order) + `,`,
-		`Limit:` + fmt.Sprintf("%v", this.Limit) + `,`,
-		`Page:` + fmt.Sprintf("%v", this.Page) + `,`,
-		`Deleted:` + fmt.Sprintf("%v", this.Deleted) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *CreateOrganizationRequest) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&CreateOrganizationRequest{`,
-		`Organization:` + strings.Replace(strings.Replace(this.Organization.String(), "Organization", "Organization", 1), `&`, ``, 1) + `,`,
-		`Collaborator:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.Collaborator), "OrganizationOrUserIdentifiers", "OrganizationOrUserIdentifiers", 1), `&`, ``, 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *UpdateOrganizationRequest) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&UpdateOrganizationRequest{`,
-		`Organization:` + strings.Replace(strings.Replace(this.Organization.String(), "Organization", "Organization", 1), `&`, ``, 1) + `,`,
-		`FieldMask:` + strings.Replace(fmt.Sprintf("%v", this.FieldMask), "FieldMask", "types.FieldMask", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *ListOrganizationAPIKeysRequest) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&ListOrganizationAPIKeysRequest{`,
-		`OrganizationIdentifiers:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.OrganizationIdentifiers), "OrganizationIdentifiers", "OrganizationIdentifiers", 1), `&`, ``, 1) + `,`,
-		`Limit:` + fmt.Sprintf("%v", this.Limit) + `,`,
-		`Page:` + fmt.Sprintf("%v", this.Page) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *GetOrganizationAPIKeyRequest) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&GetOrganizationAPIKeyRequest{`,
-		`OrganizationIdentifiers:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.OrganizationIdentifiers), "OrganizationIdentifiers", "OrganizationIdentifiers", 1), `&`, ``, 1) + `,`,
-		`KeyId:` + fmt.Sprintf("%v", this.KeyId) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *CreateOrganizationAPIKeyRequest) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&CreateOrganizationAPIKeyRequest{`,
-		`OrganizationIdentifiers:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.OrganizationIdentifiers), "OrganizationIdentifiers", "OrganizationIdentifiers", 1), `&`, ``, 1) + `,`,
-		`Name:` + fmt.Sprintf("%v", this.Name) + `,`,
-		`Rights:` + fmt.Sprintf("%v", this.Rights) + `,`,
-		`ExpiresAt:` + strings.Replace(fmt.Sprintf("%v", this.ExpiresAt), "Timestamp", "types.Timestamp", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *UpdateOrganizationAPIKeyRequest) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&UpdateOrganizationAPIKeyRequest{`,
-		`OrganizationIdentifiers:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.OrganizationIdentifiers), "OrganizationIdentifiers", "OrganizationIdentifiers", 1), `&`, ``, 1) + `,`,
-		`APIKey:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.APIKey), "APIKey", "APIKey", 1), `&`, ``, 1) + `,`,
-		`FieldMask:` + strings.Replace(fmt.Sprintf("%v", this.FieldMask), "FieldMask", "types.FieldMask", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *ListOrganizationCollaboratorsRequest) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&ListOrganizationCollaboratorsRequest{`,
-		`OrganizationIdentifiers:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.OrganizationIdentifiers), "OrganizationIdentifiers", "OrganizationIdentifiers", 1), `&`, ``, 1) + `,`,
-		`Limit:` + fmt.Sprintf("%v", this.Limit) + `,`,
-		`Page:` + fmt.Sprintf("%v", this.Page) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *GetOrganizationCollaboratorRequest) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&GetOrganizationCollaboratorRequest{`,
-		`OrganizationIdentifiers:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.OrganizationIdentifiers), "OrganizationIdentifiers", "OrganizationIdentifiers", 1), `&`, ``, 1) + `,`,
-		`OrganizationOrUserIdentifiers:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.OrganizationOrUserIdentifiers), "OrganizationOrUserIdentifiers", "OrganizationOrUserIdentifiers", 1), `&`, ``, 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *SetOrganizationCollaboratorRequest) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&SetOrganizationCollaboratorRequest{`,
-		`OrganizationIdentifiers:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.OrganizationIdentifiers), "OrganizationIdentifiers", "OrganizationIdentifiers", 1), `&`, ``, 1) + `,`,
-		`Collaborator:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.Collaborator), "Collaborator", "Collaborator", 1), `&`, ``, 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func valueToStringOrganization(v interface{}) string {
-	rv := reflect.ValueOf(v)
-	if rv.IsNil() {
-		return "nil"
-	}
-	pv := reflect.Indirect(rv).Interface()
-	return fmt.Sprintf("*%v", pv)
+	// 1259 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xc4, 0x57, 0xcf, 0x6f, 0xdc, 0xc4,
+	0x17, 0xcf, 0x78, 0x7f, 0xcf, 0x66, 0xd3, 0xad, 0xf5, 0x6d, 0xe5, 0xa4, 0x51, 0x9a, 0xaf, 0x89,
+	0xc4, 0x52, 0xd5, 0x5e, 0xb4, 0x55, 0x05, 0x8d, 0x84, 0xda, 0x38, 0xfc, 0x50, 0x12, 0xaa, 0x56,
+	0xd3, 0xf6, 0x40, 0x7f, 0xb0, 0x9a, 0xd8, 0xb3, 0xce, 0x68, 0xbd, 0xb6, 0x19, 0xcf, 0xa6, 0xdd,
+	0x22, 0x2e, 0x70, 0xe3, 0x58, 0x6e, 0x1c, 0xe1, 0xd6, 0x1b, 0xf0, 0x0f, 0x70, 0xe0, 0xc0, 0x09,
+	0xf1, 0x1f, 0x70, 0xe0, 0xc2, 0x11, 0x2a, 0x71, 0xd9, 0x13, 0xf2, 0xd8, 0xee, 0xce, 0x3a, 0x69,
+	0x68, 0x53, 0x75, 0x39, 0xad, 0x9f, 0xe7, 0xf3, 0x3e, 0xf3, 0xde, 0x9b, 0xcf, 0x7b, 0x9e, 0x85,
+	0x6b, 0x5e, 0xc0, 0xf0, 0x7d, 0xec, 0x1b, 0x11, 0xc7, 0x76, 0xbf, 0x8d, 0x43, 0xda, 0x0e, 0x98,
+	0x8b, 0x7d, 0xfa, 0x10, 0x73, 0x1a, 0xf8, 0x66, 0xc8, 0x02, 0x1e, 0xa8, 0x0b, 0x9c, 0xfb, 0x66,
+	0x8a, 0x34, 0xf7, 0x2f, 0x2c, 0xbd, 0xeb, 0x52, 0xbe, 0x37, 0xdc, 0x35, 0xed, 0x60, 0xd0, 0xbe,
+	0xb9, 0x47, 0x6e, 0xee, 0x51, 0xdf, 0x8d, 0xb6, 0x7c, 0x67, 0x18, 0x71, 0x46, 0x49, 0xd4, 0x16,
+	0x5e, 0xb6, 0xe1, 0x12, 0xdf, 0x70, 0x03, 0xa3, 0xe7, 0x61, 0x37, 0x6a, 0x63, 0xdf, 0x0f, 0xb8,
+	0x20, 0x8d, 0x12, 0xd6, 0xa5, 0x0d, 0x89, 0x85, 0xf8, 0xfb, 0xc1, 0x28, 0x64, 0xc1, 0x83, 0x91,
+	0xec, 0xbc, 0x8f, 0x3d, 0xea, 0x60, 0x4e, 0xda, 0x07, 0x1e, 0x52, 0x0a, 0x43, 0xa2, 0x70, 0x03,
+	0x37, 0x48, 0x9c, 0x77, 0x87, 0x3d, 0x61, 0x09, 0x43, 0x3c, 0xa5, 0xf0, 0x55, 0x37, 0x08, 0x5c,
+	0x8f, 0x4c, 0x50, 0x3d, 0x4a, 0x3c, 0xa7, 0x3b, 0xc0, 0x51, 0x3f, 0x45, 0x9c, 0xcd, 0x23, 0x38,
+	0x1d, 0x90, 0x88, 0xe3, 0x41, 0x98, 0x02, 0x0e, 0x29, 0x98, 0x1d, 0xf8, 0x1c, 0xdb, 0xbc, 0x4b,
+	0xfd, 0x5e, 0xb6, 0xd1, 0x6b, 0x07, 0x51, 0xd4, 0x21, 0x3e, 0xa7, 0x3d, 0x4a, 0x58, 0x96, 0xff,
+	0xca, 0x41, 0x10, 0xa3, 0xee, 0x1e, 0x4f, 0xd7, 0xf5, 0x47, 0x15, 0x38, 0x7f, 0x4d, 0x3a, 0x0c,
+	0x75, 0x07, 0x16, 0xa8, 0x13, 0x69, 0x60, 0x15, 0xb4, 0xea, 0x9d, 0xd7, 0xcd, 0xe9, 0x43, 0x31,
+	0x65, 0xe8, 0xd6, 0x64, 0x33, 0xab, 0x39, 0xb6, 0x4a, 0x5f, 0x02, 0xa5, 0x09, 0x9e, 0x3c, 0x5e,
+	0x2c, 0x56, 0xe7, 0x5a, 0x00, 0xc5, 0x2c, 0xea, 0x26, 0x84, 0x36, 0x23, 0x98, 0x13, 0xa7, 0x8b,
+	0xb9, 0xa6, 0x08, 0xce, 0x25, 0x33, 0x49, 0xdf, 0xcc, 0xd2, 0x37, 0x6f, 0x66, 0xe9, 0x5b, 0xd5,
+	0xc4, 0xbd, 0x39, 0x87, 0x6a, 0xa9, 0xdf, 0x06, 0x8f, 0x49, 0x86, 0xa1, 0x93, 0x91, 0x14, 0x5e,
+	0x84, 0x24, 0xf5, 0x4b, 0x48, 0x1c, 0xe2, 0x91, 0x94, 0xa4, 0xfa, 0x9c, 0x24, 0x20, 0x26, 0x49,
+	0xfd, 0x36, 0xb8, 0x7a, 0x06, 0x16, 0x7d, 0x3c, 0x20, 0x5a, 0x71, 0x15, 0xb4, 0x6a, 0x56, 0x65,
+	0x6c, 0x15, 0x99, 0xa2, 0x75, 0x90, 0x78, 0xa9, 0x9e, 0x83, 0x75, 0x87, 0x44, 0x36, 0xa3, 0x61,
+	0x5c, 0x1c, 0xad, 0x24, 0x30, 0xd5, 0xb1, 0x55, 0x62, 0x05, 0xed, 0xd7, 0x13, 0x48, 0x5e, 0x54,
+	0xbf, 0x00, 0x10, 0x62, 0xce, 0x19, 0xdd, 0x1d, 0x72, 0x12, 0x69, 0xe5, 0xd5, 0x42, 0xab, 0xde,
+	0x39, 0x7f, 0x54, 0xb1, 0xcd, 0x8d, 0xa7, 0xf0, 0xf7, 0x7c, 0xce, 0x46, 0xd6, 0xc5, 0xb1, 0xd5,
+	0xf9, 0x1a, 0xb4, 0x9b, 0x50, 0x5f, 0x63, 0xba, 0xb6, 0xd6, 0x59, 0xf9, 0xf8, 0x0e, 0x36, 0x1e,
+	0xbe, 0x69, 0x5c, 0xba, 0xd7, 0xba, 0xbc, 0x7e, 0xc7, 0xb8, 0x77, 0x39, 0x33, 0xdf, 0xf8, 0xb4,
+	0x73, 0xfe, 0xb3, 0xb5, 0x73, 0x71, 0x18, 0x3f, 0x03, 0x24, 0x6d, 0xab, 0x6e, 0xc3, 0x79, 0x59,
+	0x56, 0x5a, 0x45, 0x84, 0x71, 0x26, 0x1f, 0xc6, 0x66, 0x82, 0xd9, 0xf2, 0x7b, 0x81, 0x05, 0xc7,
+	0x56, 0xe9, 0x11, 0x50, 0x9a, 0x50, 0x03, 0xa8, 0x6e, 0x4f, 0x16, 0x54, 0x07, 0x9e, 0xc6, 0xce,
+	0x80, 0xfa, 0x34, 0xe2, 0x0c, 0x73, 0xba, 0x4f, 0xba, 0xe9, 0xaa, 0x56, 0x13, 0xb5, 0x36, 0x8e,
+	0x4a, 0xee, 0x1a, 0xbb, 0x15, 0x11, 0x26, 0xe9, 0x09, 0x9d, 0x9a, 0x26, 0x4b, 0x43, 0x50, 0x6f,
+	0xc3, 0x93, 0x9c, 0xd8, 0x7b, 0x3e, 0xb5, 0xb1, 0xf7, 0x74, 0x03, 0x78, 0x9c, 0x0d, 0x9a, 0x4f,
+	0x79, 0x52, 0xee, 0xa5, 0x77, 0xe0, 0x89, 0x5c, 0x8d, 0xd5, 0x26, 0x2c, 0xf4, 0xc9, 0x48, 0xf4,
+	0x42, 0x0d, 0xc5, 0x8f, 0xea, 0xff, 0x60, 0x69, 0x1f, 0x7b, 0x43, 0x22, 0xb4, 0x5c, 0x43, 0x89,
+	0xb1, 0xae, 0xbc, 0x0d, 0xd6, 0x33, 0xc1, 0x80, 0xed, 0x62, 0xb5, 0xde, 0x9c, 0xdf, 0x2e, 0x56,
+	0xe7, 0x9b, 0x8d, 0xed, 0x62, 0xb5, 0xd1, 0x5c, 0x40, 0x27, 0x71, 0x18, 0x7a, 0xd4, 0x16, 0xa1,
+	0x74, 0x3d, 0x3a, 0xa0, 0x1c, 0xcd, 0xdb, 0x1e, 0x25, 0x3e, 0x4f, 0xad, 0x86, 0x8b, 0x39, 0xb9,
+	0x8f, 0x47, 0x89, 0xa9, 0xdf, 0x80, 0x0d, 0x39, 0xfa, 0x48, 0xb5, 0x60, 0x43, 0x9e, 0x98, 0x71,
+	0x7b, 0xc6, 0x47, 0xb5, 0x7c, 0x54, 0xce, 0x68, 0xda, 0x45, 0xff, 0x0e, 0xc0, 0xd3, 0x1f, 0x10,
+	0x3e, 0x05, 0x21, 0x9f, 0x0c, 0x49, 0xc4, 0xd5, 0xbb, 0xb0, 0x29, 0x63, 0xbb, 0xc7, 0x18, 0x00,
+	0xd5, 0x6c, 0x00, 0xa0, 0x13, 0xc1, 0x14, 0x24, 0x52, 0x2f, 0x41, 0x38, 0x19, 0x81, 0xcf, 0x1c,
+	0x02, 0xef, 0xc7, 0x90, 0xab, 0x38, 0xea, 0xa3, 0x5a, 0x2f, 0x7b, 0xd4, 0xff, 0x54, 0xa0, 0xf6,
+	0x21, 0x8d, 0xa6, 0x82, 0x8e, 0xb2, 0xa8, 0x3f, 0x8a, 0xe5, 0xeb, 0x79, 0x78, 0x37, 0x60, 0x98,
+	0x07, 0x2c, 0x8d, 0xf8, 0xc5, 0x74, 0x60, 0x95, 0x9f, 0x3c, 0x5e, 0x54, 0x5a, 0x00, 0x4d, 0x51,
+	0xbd, 0x44, 0xc8, 0x6a, 0x0f, 0x96, 0x02, 0xe6, 0x10, 0x26, 0x06, 0x55, 0xcd, 0xba, 0x3e, 0xb6,
+	0xae, 0xb2, 0x1d, 0x34, 0x37, 0x5d, 0x96, 0x2e, 0x75, 0x50, 0xd3, 0xc8, 0xbf, 0x11, 0x73, 0x04,
+	0x95, 0x0c, 0xf1, 0x23, 0x0d, 0x4e, 0x54, 0x37, 0x24, 0x23, 0xa1, 0x57, 0x57, 0x60, 0x49, 0x88,
+	0x45, 0x0c, 0xa3, 0x86, 0xa8, 0xff, 0xb9, 0x82, 0xf6, 0x47, 0x05, 0x25, 0xaf, 0x55, 0x15, 0x16,
+	0x43, 0xec, 0x12, 0x31, 0x87, 0x1a, 0x48, 0x3c, 0xab, 0x1a, 0xac, 0xa4, 0xc3, 0x4c, 0x2b, 0xaf,
+	0x82, 0x56, 0x15, 0x65, 0xe6, 0x7a, 0x36, 0x33, 0x81, 0xfe, 0x13, 0x80, 0x8b, 0x9b, 0x62, 0xb7,
+	0xc3, 0x94, 0xb2, 0x0d, 0xe7, 0xe5, 0xa8, 0xd3, 0x9a, 0x1f, 0xa9, 0x43, 0x49, 0x1a, 0x53, 0xbe,
+	0xea, 0x9d, 0xdc, 0xf9, 0x29, 0xc7, 0x39, 0x3f, 0x89, 0x5c, 0x26, 0xd3, 0xbf, 0x01, 0x70, 0xf1,
+	0x96, 0x98, 0xfe, 0xaf, 0x3a, 0x8d, 0x97, 0x90, 0xf7, 0x0f, 0x0a, 0x5c, 0xc9, 0xcb, 0x7b, 0xe3,
+	0xfa, 0xd6, 0x0e, 0x19, 0x45, 0xb3, 0x69, 0xcd, 0x61, 0x26, 0xd6, 0xe4, 0x8b, 0xd6, 0x1d, 0x5b,
+	0x77, 0xd9, 0x6d, 0x34, 0x87, 0x20, 0x0e, 0x69, 0xb7, 0x4f, 0x46, 0xb1, 0x2a, 0xeb, 0x86, 0x64,
+	0x3c, 0x9f, 0x44, 0x21, 0x79, 0x10, 0x52, 0x46, 0xa2, 0x64, 0x41, 0x32, 0xf2, 0xda, 0x55, 0x8e,
+	0xd6, 0x6e, 0x61, 0xa2, 0x5d, 0x49, 0xa1, 0x5f, 0x01, 0xb8, 0x9c, 0x1b, 0x64, 0x49, 0xd1, 0x66,
+	0x53, 0xb3, 0x53, 0xb0, 0x9c, 0x14, 0x23, 0xfb, 0x06, 0xf4, 0xc9, 0x68, 0xcb, 0xd1, 0xbf, 0x55,
+	0xe0, 0xd9, 0x83, 0x7d, 0x33, 0xcb, 0xc0, 0xb2, 0xdb, 0x89, 0x72, 0xd8, 0xed, 0xe4, 0x0a, 0x2c,
+	0x27, 0xf7, 0x3e, 0xad, 0xb0, 0x5a, 0x68, 0x2d, 0x74, 0x4e, 0xe5, 0x37, 0x44, 0xf1, 0xaa, 0x75,
+	0x72, 0x6c, 0x2d, 0x3c, 0x02, 0xf5, 0x2a, 0xd0, 0x80, 0x5e, 0xfa, 0x5c, 0xec, 0x93, 0xfa, 0xc5,
+	0x37, 0xa8, 0xc9, 0x49, 0x0a, 0xc1, 0xfc, 0xcb, 0x0d, 0x6a, 0x6c, 0x95, 0xbe, 0x07, 0xca, 0x15,
+	0x80, 0x6a, 0xa9, 0xdf, 0x06, 0xd7, 0xff, 0x06, 0xf0, 0xec, 0xc1, 0xb6, 0x9c, 0x65, 0x95, 0x2e,
+	0xc1, 0x4a, 0xaa, 0xe7, 0xb4, 0x57, 0x4f, 0xe7, 0x49, 0x93, 0x68, 0x24, 0x8e, 0x32, 0x0e, 0xe9,
+	0x0e, 0x19, 0xe5, 0x3a, 0xbd, 0xf0, 0x22, 0x9d, 0xfe, 0x17, 0x80, 0x6b, 0xf9, 0x4e, 0xdf, 0x94,
+	0xe6, 0xd5, 0x8c, 0xfa, 0xfd, 0x18, 0x8d, 0xa7, 0xbe, 0x35, 0x3d, 0x23, 0xfe, 0x3f, 0xb6, 0x56,
+	0xd8, 0x32, 0x9a, 0x43, 0x0a, 0x75, 0x50, 0xc1, 0xa0, 0x0e, 0xaa, 0x18, 0x89, 0x42, 0x32, 0xa5,
+	0xa4, 0x5d, 0xae, 0xff, 0x06, 0xa0, 0x9e, 0xeb, 0x53, 0x39, 0xe5, 0xd9, 0x64, 0xfc, 0x4a, 0x3f,
+	0x32, 0xbf, 0x00, 0xa8, 0xdf, 0xf8, 0xaf, 0x33, 0xdc, 0x3e, 0x34, 0xc3, 0xe5, 0x83, 0xb7, 0xf8,
+	0x09, 0xe6, 0x59, 0x09, 0x59, 0x17, 0x7f, 0xfc, 0x7d, 0x05, 0xdc, 0x6e, 0xbb, 0x81, 0xc9, 0xf7,
+	0x08, 0x17, 0xff, 0xb8, 0x4d, 0x9f, 0xf0, 0xfb, 0x01, 0xeb, 0xb7, 0xa7, 0xff, 0x48, 0xee, 0x5f,
+	0x68, 0x87, 0x7d, 0xb7, 0xcd, 0xb9, 0x1f, 0xee, 0xee, 0x96, 0x85, 0xf8, 0x2f, 0xfc, 0x13, 0x00,
+	0x00, 0xff, 0xff, 0x0c, 0xe7, 0xcc, 0x55, 0xe9, 0x0f, 0x00, 0x00,
 }

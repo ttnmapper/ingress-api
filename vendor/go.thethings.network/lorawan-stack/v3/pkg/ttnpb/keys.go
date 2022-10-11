@@ -19,18 +19,11 @@ import (
 	"fmt"
 
 	"github.com/vmihailenco/msgpack/v5"
-	"go.thethings.network/lorawan-stack/v3/pkg/types"
+	types "go.thethings.network/lorawan-stack/v3/pkg/types"
 )
 
-func (m *KeyEnvelope) GetKey() *types.AES128Key {
-	if m != nil {
-		return m.Key
-	}
-	return nil
-}
-
 func (m *KeyEnvelope) IsZero() bool {
-	return m == nil || m.Key.IsZero() && m.KekLabel == "" && len(m.EncryptedKey) == 0
+	return m == nil || types.MustAES128Key(m.Key).OrZero().IsZero() && m.KekLabel == "" && len(m.EncryptedKey) == 0
 }
 
 // FieldIsZero returns whether path p is zero.
@@ -50,42 +43,45 @@ func (v *KeyEnvelope) FieldIsZero(p string) bool {
 }
 
 // EncodeMsgpack implements msgpack.CustomEncoder interface.
-func (v KeyEnvelope) EncodeMsgpack(enc *msgpack.Encoder) error {
+func (m *KeyEnvelope) EncodeMsgpack(enc *msgpack.Encoder) error {
+	if m == nil {
+		return enc.EncodeMapLen(0)
+	}
 	var n uint8
-	if v.Key != nil {
+	if m.Key != nil {
 		n++
 	}
-	if v.KekLabel != "" {
+	if m.KekLabel != "" {
 		n++
 	}
-	if len(v.EncryptedKey) > 0 {
+	if len(m.EncryptedKey) > 0 {
 		n++
 	}
 	if err := enc.EncodeMapLen(int(n)); err != nil {
 		return err
 	}
 
-	if v.Key != nil {
+	if m.Key != nil {
 		if err := enc.EncodeString("key"); err != nil {
 			return err
 		}
-		if err := v.Key.EncodeMsgpack(enc); err != nil {
+		if err := enc.EncodeString(hex.EncodeToString(m.Key)); err != nil {
 			return err
 		}
 	}
-	if v.KekLabel != "" {
+	if m.KekLabel != "" {
 		if err := enc.EncodeString("kek_label"); err != nil {
 			return err
 		}
-		if err := enc.EncodeString(v.KekLabel); err != nil {
+		if err := enc.EncodeString(m.KekLabel); err != nil {
 			return err
 		}
 	}
-	if len(v.EncryptedKey) > 0 {
+	if len(m.EncryptedKey) > 0 {
 		if err := enc.EncodeString("encrypted_key"); err != nil {
 			return err
 		}
-		if err := enc.EncodeString(hex.EncodeToString(v.EncryptedKey)); err != nil {
+		if err := enc.EncodeString(hex.EncodeToString(m.EncryptedKey)); err != nil {
 			return err
 		}
 	}
@@ -98,7 +94,7 @@ func (v *KeyEnvelope) DecodeMsgpack(dec *msgpack.Decoder) error {
 	if err != nil {
 		return err
 	}
-	*v = KeyEnvelope{}
+	v.Reset()
 	for i := 0; i < n; i++ {
 		s, err := dec.DecodeString()
 		if err != nil {
@@ -106,8 +102,12 @@ func (v *KeyEnvelope) DecodeMsgpack(dec *msgpack.Decoder) error {
 		}
 		switch s {
 		case "key":
-			fv := &types.AES128Key{}
-			if err := fv.DecodeMsgpack(dec); err != nil {
+			s, err := dec.DecodeString()
+			if err != nil {
+				return err
+			}
+			fv, err := hex.DecodeString(s)
+			if err != nil {
 				return err
 			}
 			v.Key = fv

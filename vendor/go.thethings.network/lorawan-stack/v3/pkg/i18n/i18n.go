@@ -19,13 +19,15 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"os"
 	"path/filepath"
 	"runtime"
 	"sort"
 	"strings"
+	"sync"
 
 	"github.com/gotnospirit/messageformat"
+	"golang.org/x/exp/maps"
 )
 
 const defaultLanguage = "en" // The language of the messages written in Go files.
@@ -84,7 +86,7 @@ func (m *MessageDescriptor) Format(language string, data map[string]interface{})
 
 // Format a message from the global registry in the given language.
 func Format(id, language string, data map[string]interface{}) (msg string) {
-	return Global[id].Format(language, data)
+	return Get(id).Format(language, data)
 }
 
 // Touched returns whether the descriptor was touched (i.e. it is still used).
@@ -125,12 +127,14 @@ func (m *MessageDescriptor) SetSource(skip uint) {
 // MessageDescriptorMap is a map of message descriptors.
 type MessageDescriptorMap map[string]*MessageDescriptor
 
-// Global registry.
-var Global = make(MessageDescriptorMap)
+var (
+	global   = make(MessageDescriptorMap)
+	globalMu = sync.RWMutex{}
+)
 
 // ReadFile reads the descriptors from a file.
 func ReadFile(filename string) (MessageDescriptorMap, error) {
-	bytes, err := ioutil.ReadFile(filename)
+	bytes, err := os.ReadFile(filename)
 	if err != nil {
 		return nil, err
 	}
@@ -192,7 +196,7 @@ func (m MessageDescriptorMap) WriteFile(filename string) error {
 	if err != nil {
 		return err
 	}
-	return ioutil.WriteFile(filename, append(bytes, '\n'), 0644)
+	return os.WriteFile(filename, append(bytes, '\n'), 0o644) //nolint:gas
 }
 
 // Define a message.
@@ -217,7 +221,9 @@ func (m MessageDescriptorMap) Define(id, message string) *MessageDescriptor {
 
 // Define a message in the global registry.
 func Define(id, message string) *MessageDescriptor {
-	d := Global.Define(id, message)
+	globalMu.Lock()
+	defer globalMu.Unlock()
+	d := global.Define(id, message)
 	d.SetSource(1)
 	return d
 }
@@ -232,7 +238,9 @@ func (m MessageDescriptorMap) Get(id string) *MessageDescriptor {
 
 // Get returns the MessageDescriptor of a specific message from the global registry.
 func Get(id string) *MessageDescriptor {
-	return Global.Get(id)
+	globalMu.RLock()
+	defer globalMu.RUnlock()
+	return global.Get(id)
 }
 
 // Merge messages from the given descriptor map into the current registry.
@@ -273,4 +281,11 @@ func (m MessageDescriptorMap) Cleanup() (deleted []string) {
 		}
 	}
 	return
+}
+
+// CloneGlobal returns a shallow clone of the global message descriptor registry.
+func CloneGlobal() MessageDescriptorMap {
+	globalMu.RLock()
+	defer globalMu.RUnlock()
+	return maps.Clone(global)
 }

@@ -4,22 +4,21 @@
 package ttnpb
 
 import (
-	bytes "bytes"
 	context "context"
 	fmt "fmt"
+	_ "github.com/TheThingsIndustries/protoc-gen-go-flags/annotations"
+	_ "github.com/TheThingsIndustries/protoc-gen-go-json/annotations"
 	_ "github.com/envoyproxy/protoc-gen-validate/validate"
 	_ "github.com/gogo/protobuf/gogoproto"
 	proto "github.com/gogo/protobuf/proto"
 	types "github.com/gogo/protobuf/types"
 	golang_proto "github.com/golang/protobuf/proto"
-	go_thethings_network_lorawan_stack_v3_pkg_types "go.thethings.network/lorawan-stack/v3/pkg/types"
+	_ "github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-openapiv2/options"
 	_ "google.golang.org/genproto/googleapis/api/annotations"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
 	math "math"
-	reflect "reflect"
-	strings "strings"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -38,15 +37,17 @@ type SessionKeyRequest struct {
 	// Join Server issued identifier for the session keys.
 	SessionKeyId []byte `protobuf:"bytes,1,opt,name=session_key_id,json=sessionKeyId,proto3" json:"session_key_id,omitempty"`
 	// LoRaWAN DevEUI.
-	DevEui go_thethings_network_lorawan_stack_v3_pkg_types.EUI64 `protobuf:"bytes,2,opt,name=dev_eui,json=devEui,proto3,customtype=go.thethings.network/lorawan-stack/v3/pkg/types.EUI64" json:"dev_eui"`
+	DevEui []byte `protobuf:"bytes,2,opt,name=dev_eui,json=devEui,proto3" json:"dev_eui,omitempty"`
 	// The LoRaWAN JoinEUI (AppEUI until LoRaWAN 1.0.3 end devices).
-	JoinEui              go_thethings_network_lorawan_stack_v3_pkg_types.EUI64 `protobuf:"bytes,3,opt,name=join_eui,json=joinEui,proto3,customtype=go.thethings.network/lorawan-stack/v3/pkg/types.EUI64" json:"join_eui"`
-	XXX_NoUnkeyedLiteral struct{}                                              `json:"-"`
-	XXX_sizecache        int32                                                 `json:"-"`
+	JoinEui              []byte   `protobuf:"bytes,3,opt,name=join_eui,json=joinEui,proto3" json:"join_eui,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *SessionKeyRequest) Reset()      { *m = SessionKeyRequest{} }
-func (*SessionKeyRequest) ProtoMessage() {}
+func (m *SessionKeyRequest) Reset()         { *m = SessionKeyRequest{} }
+func (m *SessionKeyRequest) String() string { return proto.CompactTextString(m) }
+func (*SessionKeyRequest) ProtoMessage()    {}
 func (*SessionKeyRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_1b695d5f526759a7, []int{0}
 }
@@ -75,19 +76,35 @@ func (m *SessionKeyRequest) GetSessionKeyId() []byte {
 	return nil
 }
 
-type NwkSKeysResponse struct {
-	// The (encrypted) Forwarding Network Session Integrity Key (or Network Session Key in 1.0 compatibility mode).
-	FNwkSIntKey KeyEnvelope `protobuf:"bytes,1,opt,name=f_nwk_s_int_key,json=fNwkSIntKey,proto3" json:"f_nwk_s_int_key"`
-	// The (encrypted) Serving Network Session Integrity Key.
-	SNwkSIntKey KeyEnvelope `protobuf:"bytes,2,opt,name=s_nwk_s_int_key,json=sNwkSIntKey,proto3" json:"s_nwk_s_int_key"`
-	// The (encrypted) Network Session Encryption Key.
-	NwkSEncKey           KeyEnvelope `protobuf:"bytes,3,opt,name=nwk_s_enc_key,json=nwkSEncKey,proto3" json:"nwk_s_enc_key"`
-	XXX_NoUnkeyedLiteral struct{}    `json:"-"`
-	XXX_sizecache        int32       `json:"-"`
+func (m *SessionKeyRequest) GetDevEui() []byte {
+	if m != nil {
+		return m.DevEui
+	}
+	return nil
 }
 
-func (m *NwkSKeysResponse) Reset()      { *m = NwkSKeysResponse{} }
-func (*NwkSKeysResponse) ProtoMessage() {}
+func (m *SessionKeyRequest) GetJoinEui() []byte {
+	if m != nil {
+		return m.JoinEui
+	}
+	return nil
+}
+
+type NwkSKeysResponse struct {
+	// The (encrypted) Forwarding Network Session Integrity Key (or Network Session Key in 1.0 compatibility mode).
+	FNwkSIntKey *KeyEnvelope `protobuf:"bytes,1,opt,name=f_nwk_s_int_key,json=fNwkSIntKey,proto3" json:"f_nwk_s_int_key,omitempty"`
+	// The (encrypted) Serving Network Session Integrity Key.
+	SNwkSIntKey *KeyEnvelope `protobuf:"bytes,2,opt,name=s_nwk_s_int_key,json=sNwkSIntKey,proto3" json:"s_nwk_s_int_key,omitempty"`
+	// The (encrypted) Network Session Encryption Key.
+	NwkSEncKey           *KeyEnvelope `protobuf:"bytes,3,opt,name=nwk_s_enc_key,json=nwkSEncKey,proto3" json:"nwk_s_enc_key,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}     `json:"-"`
+	XXX_unrecognized     []byte       `json:"-"`
+	XXX_sizecache        int32        `json:"-"`
+}
+
+func (m *NwkSKeysResponse) Reset()         { *m = NwkSKeysResponse{} }
+func (m *NwkSKeysResponse) String() string { return proto.CompactTextString(m) }
+func (*NwkSKeysResponse) ProtoMessage()    {}
 func (*NwkSKeysResponse) Descriptor() ([]byte, []int) {
 	return fileDescriptor_1b695d5f526759a7, []int{1}
 }
@@ -109,36 +126,38 @@ func (m *NwkSKeysResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_NwkSKeysResponse proto.InternalMessageInfo
 
-func (m *NwkSKeysResponse) GetFNwkSIntKey() KeyEnvelope {
+func (m *NwkSKeysResponse) GetFNwkSIntKey() *KeyEnvelope {
 	if m != nil {
 		return m.FNwkSIntKey
 	}
-	return KeyEnvelope{}
+	return nil
 }
 
-func (m *NwkSKeysResponse) GetSNwkSIntKey() KeyEnvelope {
+func (m *NwkSKeysResponse) GetSNwkSIntKey() *KeyEnvelope {
 	if m != nil {
 		return m.SNwkSIntKey
 	}
-	return KeyEnvelope{}
+	return nil
 }
 
-func (m *NwkSKeysResponse) GetNwkSEncKey() KeyEnvelope {
+func (m *NwkSKeysResponse) GetNwkSEncKey() *KeyEnvelope {
 	if m != nil {
 		return m.NwkSEncKey
 	}
-	return KeyEnvelope{}
+	return nil
 }
 
 type AppSKeyResponse struct {
 	// The (encrypted) Application Session Key.
-	AppSKey              KeyEnvelope `protobuf:"bytes,1,opt,name=app_s_key,json=appSKey,proto3" json:"app_s_key"`
-	XXX_NoUnkeyedLiteral struct{}    `json:"-"`
-	XXX_sizecache        int32       `json:"-"`
+	AppSKey              *KeyEnvelope `protobuf:"bytes,1,opt,name=app_s_key,json=appSKey,proto3" json:"app_s_key,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}     `json:"-"`
+	XXX_unrecognized     []byte       `json:"-"`
+	XXX_sizecache        int32        `json:"-"`
 }
 
-func (m *AppSKeyResponse) Reset()      { *m = AppSKeyResponse{} }
-func (*AppSKeyResponse) ProtoMessage() {}
+func (m *AppSKeyResponse) Reset()         { *m = AppSKeyResponse{} }
+func (m *AppSKeyResponse) String() string { return proto.CompactTextString(m) }
+func (*AppSKeyResponse) ProtoMessage()    {}
 func (*AppSKeyResponse) Descriptor() ([]byte, []int) {
 	return fileDescriptor_1b695d5f526759a7, []int{2}
 }
@@ -160,16 +179,16 @@ func (m *AppSKeyResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_AppSKeyResponse proto.InternalMessageInfo
 
-func (m *AppSKeyResponse) GetAppSKey() KeyEnvelope {
+func (m *AppSKeyResponse) GetAppSKey() *KeyEnvelope {
 	if m != nil {
 		return m.AppSKey
 	}
-	return KeyEnvelope{}
+	return nil
 }
 
 type CryptoServicePayloadRequest struct {
 	// End device identifiers for the cryptographic operation.
-	EndDeviceIdentifiers `protobuf:"bytes,1,opt,name=ids,proto3,embedded=ids" json:"ids"`
+	Ids *EndDeviceIdentifiers `protobuf:"bytes,1,opt,name=ids,proto3" json:"ids,omitempty"`
 	// LoRaWAN version to use for the cryptographic operation.
 	LorawanVersion MACVersion `protobuf:"varint,2,opt,name=lorawan_version,json=lorawanVersion,proto3,enum=ttn.lorawan.v3.MACVersion" json:"lorawan_version,omitempty"`
 	// Raw input payload.
@@ -179,11 +198,13 @@ type CryptoServicePayloadRequest struct {
 	// Provisioning data for the provisioner.
 	ProvisioningData     *types.Struct `protobuf:"bytes,5,opt,name=provisioning_data,json=provisioningData,proto3" json:"provisioning_data,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}      `json:"-"`
+	XXX_unrecognized     []byte        `json:"-"`
 	XXX_sizecache        int32         `json:"-"`
 }
 
-func (m *CryptoServicePayloadRequest) Reset()      { *m = CryptoServicePayloadRequest{} }
-func (*CryptoServicePayloadRequest) ProtoMessage() {}
+func (m *CryptoServicePayloadRequest) Reset()         { *m = CryptoServicePayloadRequest{} }
+func (m *CryptoServicePayloadRequest) String() string { return proto.CompactTextString(m) }
+func (*CryptoServicePayloadRequest) ProtoMessage()    {}
 func (*CryptoServicePayloadRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_1b695d5f526759a7, []int{3}
 }
@@ -205,11 +226,18 @@ func (m *CryptoServicePayloadRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_CryptoServicePayloadRequest proto.InternalMessageInfo
 
+func (m *CryptoServicePayloadRequest) GetIds() *EndDeviceIdentifiers {
+	if m != nil {
+		return m.Ids
+	}
+	return nil
+}
+
 func (m *CryptoServicePayloadRequest) GetLorawanVersion() MACVersion {
 	if m != nil {
 		return m.LorawanVersion
 	}
-	return MAC_UNKNOWN
+	return MACVersion_MAC_UNKNOWN
 }
 
 func (m *CryptoServicePayloadRequest) GetPayload() []byte {
@@ -237,11 +265,13 @@ type CryptoServicePayloadResponse struct {
 	// Raw output payload.
 	Payload              []byte   `protobuf:"bytes,1,opt,name=payload,proto3" json:"payload,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *CryptoServicePayloadResponse) Reset()      { *m = CryptoServicePayloadResponse{} }
-func (*CryptoServicePayloadResponse) ProtoMessage() {}
+func (m *CryptoServicePayloadResponse) Reset()         { *m = CryptoServicePayloadResponse{} }
+func (m *CryptoServicePayloadResponse) String() string { return proto.CompactTextString(m) }
+func (*CryptoServicePayloadResponse) ProtoMessage()    {}
 func (*CryptoServicePayloadResponse) Descriptor() ([]byte, []int) {
 	return fileDescriptor_1b695d5f526759a7, []int{4}
 }
@@ -272,17 +302,19 @@ func (m *CryptoServicePayloadResponse) GetPayload() []byte {
 
 type JoinAcceptMICRequest struct {
 	// Request data for the cryptographic operation.
-	CryptoServicePayloadRequest `protobuf:"bytes,1,opt,name=payload_request,json=payloadRequest,proto3,embedded=payload_request" json:"payload_request"`
+	PayloadRequest *CryptoServicePayloadRequest `protobuf:"bytes,1,opt,name=payload_request,json=payloadRequest,proto3" json:"payload_request,omitempty"`
 	// LoRaWAN join-request type.
 	JoinRequestType JoinRequestType `protobuf:"varint,2,opt,name=join_request_type,json=joinRequestType,proto3,enum=ttn.lorawan.v3.JoinRequestType" json:"join_request_type,omitempty"`
 	// LoRaWAN DevNonce.
-	DevNonce             go_thethings_network_lorawan_stack_v3_pkg_types.DevNonce `protobuf:"bytes,3,opt,name=dev_nonce,json=devNonce,proto3,customtype=go.thethings.network/lorawan-stack/v3/pkg/types.DevNonce" json:"dev_nonce"`
-	XXX_NoUnkeyedLiteral struct{}                                                 `json:"-"`
-	XXX_sizecache        int32                                                    `json:"-"`
+	DevNonce             []byte   `protobuf:"bytes,3,opt,name=dev_nonce,json=devNonce,proto3" json:"dev_nonce,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *JoinAcceptMICRequest) Reset()      { *m = JoinAcceptMICRequest{} }
-func (*JoinAcceptMICRequest) ProtoMessage() {}
+func (m *JoinAcceptMICRequest) Reset()         { *m = JoinAcceptMICRequest{} }
+func (m *JoinAcceptMICRequest) String() string { return proto.CompactTextString(m) }
+func (*JoinAcceptMICRequest) ProtoMessage()    {}
 func (*JoinAcceptMICRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_1b695d5f526759a7, []int{5}
 }
@@ -304,6 +336,13 @@ func (m *JoinAcceptMICRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_JoinAcceptMICRequest proto.InternalMessageInfo
 
+func (m *JoinAcceptMICRequest) GetPayloadRequest() *CryptoServicePayloadRequest {
+	if m != nil {
+		return m.PayloadRequest
+	}
+	return nil
+}
+
 func (m *JoinAcceptMICRequest) GetJoinRequestType() JoinRequestType {
 	if m != nil {
 		return m.JoinRequestType
@@ -311,28 +350,37 @@ func (m *JoinAcceptMICRequest) GetJoinRequestType() JoinRequestType {
 	return JoinRequestType_REJOIN_CONTEXT
 }
 
+func (m *JoinAcceptMICRequest) GetDevNonce() []byte {
+	if m != nil {
+		return m.DevNonce
+	}
+	return nil
+}
+
 type DeriveSessionKeysRequest struct {
 	// End device identifiers to use for key derivation.
 	// The DevAddr must be set in this request. The DevEUI may need to be set, depending on the provisioner.
-	EndDeviceIdentifiers `protobuf:"bytes,1,opt,name=ids,proto3,embedded=ids" json:"ids"`
+	Ids *EndDeviceIdentifiers `protobuf:"bytes,1,opt,name=ids,proto3" json:"ids,omitempty"`
 	// LoRaWAN key derivation scheme.
 	LorawanVersion MACVersion `protobuf:"varint,2,opt,name=lorawan_version,json=lorawanVersion,proto3,enum=ttn.lorawan.v3.MACVersion" json:"lorawan_version,omitempty"`
 	// LoRaWAN JoinNonce (or AppNonce).
-	JoinNonce go_thethings_network_lorawan_stack_v3_pkg_types.JoinNonce `protobuf:"bytes,3,opt,name=join_nonce,json=joinNonce,proto3,customtype=go.thethings.network/lorawan-stack/v3/pkg/types.JoinNonce" json:"join_nonce"`
+	JoinNonce []byte `protobuf:"bytes,3,opt,name=join_nonce,json=joinNonce,proto3" json:"join_nonce,omitempty"`
 	// LoRaWAN DevNonce.
-	DevNonce go_thethings_network_lorawan_stack_v3_pkg_types.DevNonce `protobuf:"bytes,4,opt,name=dev_nonce,json=devNonce,proto3,customtype=go.thethings.network/lorawan-stack/v3/pkg/types.DevNonce" json:"dev_nonce"`
+	DevNonce []byte `protobuf:"bytes,4,opt,name=dev_nonce,json=devNonce,proto3" json:"dev_nonce,omitempty"`
 	// LoRaWAN NetID.
-	NetId go_thethings_network_lorawan_stack_v3_pkg_types.NetID `protobuf:"bytes,5,opt,name=net_id,json=netId,proto3,customtype=go.thethings.network/lorawan-stack/v3/pkg/types.NetID" json:"net_id"`
+	NetId []byte `protobuf:"bytes,5,opt,name=net_id,json=netId,proto3" json:"net_id,omitempty"`
 	// Provisioner that provisioned the end device.
 	ProvisionerId string `protobuf:"bytes,6,opt,name=provisioner_id,json=provisionerId,proto3" json:"provisioner_id,omitempty"`
 	// Provisioning data for the provisioner.
 	ProvisioningData     *types.Struct `protobuf:"bytes,7,opt,name=provisioning_data,json=provisioningData,proto3" json:"provisioning_data,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}      `json:"-"`
+	XXX_unrecognized     []byte        `json:"-"`
 	XXX_sizecache        int32         `json:"-"`
 }
 
-func (m *DeriveSessionKeysRequest) Reset()      { *m = DeriveSessionKeysRequest{} }
-func (*DeriveSessionKeysRequest) ProtoMessage() {}
+func (m *DeriveSessionKeysRequest) Reset()         { *m = DeriveSessionKeysRequest{} }
+func (m *DeriveSessionKeysRequest) String() string { return proto.CompactTextString(m) }
+func (*DeriveSessionKeysRequest) ProtoMessage()    {}
 func (*DeriveSessionKeysRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_1b695d5f526759a7, []int{6}
 }
@@ -354,11 +402,39 @@ func (m *DeriveSessionKeysRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_DeriveSessionKeysRequest proto.InternalMessageInfo
 
+func (m *DeriveSessionKeysRequest) GetIds() *EndDeviceIdentifiers {
+	if m != nil {
+		return m.Ids
+	}
+	return nil
+}
+
 func (m *DeriveSessionKeysRequest) GetLorawanVersion() MACVersion {
 	if m != nil {
 		return m.LorawanVersion
 	}
-	return MAC_UNKNOWN
+	return MACVersion_MAC_UNKNOWN
+}
+
+func (m *DeriveSessionKeysRequest) GetJoinNonce() []byte {
+	if m != nil {
+		return m.JoinNonce
+	}
+	return nil
+}
+
+func (m *DeriveSessionKeysRequest) GetDevNonce() []byte {
+	if m != nil {
+		return m.DevNonce
+	}
+	return nil
+}
+
+func (m *DeriveSessionKeysRequest) GetNetId() []byte {
+	if m != nil {
+		return m.NetId
+	}
+	return nil
 }
 
 func (m *DeriveSessionKeysRequest) GetProvisionerId() string {
@@ -377,17 +453,19 @@ func (m *DeriveSessionKeysRequest) GetProvisioningData() *types.Struct {
 
 type GetRootKeysRequest struct {
 	// End device identifiers to request the root keys for.
-	EndDeviceIdentifiers `protobuf:"bytes,1,opt,name=ids,proto3,embedded=ids" json:"ids"`
+	Ids *EndDeviceIdentifiers `protobuf:"bytes,1,opt,name=ids,proto3" json:"ids,omitempty"`
 	// Provisioner that provisioned the end device.
 	ProvisionerId string `protobuf:"bytes,2,opt,name=provisioner_id,json=provisionerId,proto3" json:"provisioner_id,omitempty"`
 	// Provisioning data for the provisioner.
 	ProvisioningData     *types.Struct `protobuf:"bytes,3,opt,name=provisioning_data,json=provisioningData,proto3" json:"provisioning_data,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}      `json:"-"`
+	XXX_unrecognized     []byte        `json:"-"`
 	XXX_sizecache        int32         `json:"-"`
 }
 
-func (m *GetRootKeysRequest) Reset()      { *m = GetRootKeysRequest{} }
-func (*GetRootKeysRequest) ProtoMessage() {}
+func (m *GetRootKeysRequest) Reset()         { *m = GetRootKeysRequest{} }
+func (m *GetRootKeysRequest) String() string { return proto.CompactTextString(m) }
+func (*GetRootKeysRequest) ProtoMessage()    {}
 func (*GetRootKeysRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_1b695d5f526759a7, []int{7}
 }
@@ -409,6 +487,13 @@ func (m *GetRootKeysRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_GetRootKeysRequest proto.InternalMessageInfo
 
+func (m *GetRootKeysRequest) GetIds() *EndDeviceIdentifiers {
+	if m != nil {
+		return m.Ids
+	}
+	return nil
+}
+
 func (m *GetRootKeysRequest) GetProvisionerId() string {
 	if m != nil {
 		return m.ProvisionerId
@@ -425,7 +510,7 @@ func (m *GetRootKeysRequest) GetProvisioningData() *types.Struct {
 
 // Deprecated: Do not use.
 type ProvisionEndDevicesRequest struct {
-	ApplicationIdentifiers `protobuf:"bytes,1,opt,name=application_ids,json=applicationIds,proto3,embedded=application_ids" json:"application_ids"`
+	ApplicationIds *ApplicationIdentifiers `protobuf:"bytes,1,opt,name=application_ids,json=applicationIds,proto3" json:"application_ids,omitempty"`
 	// ID of the provisioner service as configured in the Join Server.
 	ProvisionerId string `protobuf:"bytes,2,opt,name=provisioner_id,json=provisionerId,proto3" json:"provisioner_id,omitempty"`
 	// Vendor-specific provisioning data.
@@ -436,11 +521,13 @@ type ProvisionEndDevicesRequest struct {
 	//	*ProvisionEndDevicesRequest_FromData
 	EndDevices           isProvisionEndDevicesRequest_EndDevices `protobuf_oneof:"end_devices"`
 	XXX_NoUnkeyedLiteral struct{}                                `json:"-"`
+	XXX_unrecognized     []byte                                  `json:"-"`
 	XXX_sizecache        int32                                   `json:"-"`
 }
 
-func (m *ProvisionEndDevicesRequest) Reset()      { *m = ProvisionEndDevicesRequest{} }
-func (*ProvisionEndDevicesRequest) ProtoMessage() {}
+func (m *ProvisionEndDevicesRequest) Reset()         { *m = ProvisionEndDevicesRequest{} }
+func (m *ProvisionEndDevicesRequest) String() string { return proto.CompactTextString(m) }
+func (*ProvisionEndDevicesRequest) ProtoMessage()    {}
 func (*ProvisionEndDevicesRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_1b695d5f526759a7, []int{8}
 }
@@ -464,7 +551,6 @@ var xxx_messageInfo_ProvisionEndDevicesRequest proto.InternalMessageInfo
 
 type isProvisionEndDevicesRequest_EndDevices interface {
 	isProvisionEndDevicesRequest_EndDevices()
-	Equal(interface{}) bool
 }
 
 type ProvisionEndDevicesRequest_List struct {
@@ -484,6 +570,13 @@ func (*ProvisionEndDevicesRequest_FromData) isProvisionEndDevicesRequest_EndDevi
 func (m *ProvisionEndDevicesRequest) GetEndDevices() isProvisionEndDevicesRequest_EndDevices {
 	if m != nil {
 		return m.EndDevices
+	}
+	return nil
+}
+
+func (m *ProvisionEndDevicesRequest) GetApplicationIds() *ApplicationIdentifiers {
+	if m != nil {
+		return m.ApplicationIds
 	}
 	return nil
 }
@@ -533,14 +626,18 @@ func (*ProvisionEndDevicesRequest) XXX_OneofWrappers() []interface{} {
 }
 
 type ProvisionEndDevicesRequest_IdentifiersList struct {
-	JoinEui              *go_thethings_network_lorawan_stack_v3_pkg_types.EUI64 `protobuf:"bytes,1,opt,name=join_eui,json=joinEui,proto3,customtype=go.thethings.network/lorawan-stack/v3/pkg/types.EUI64" json:"join_eui,omitempty"`
-	EndDeviceIds         []EndDeviceIdentifiers                                 `protobuf:"bytes,2,rep,name=end_device_ids,json=endDeviceIds,proto3" json:"end_device_ids"`
-	XXX_NoUnkeyedLiteral struct{}                                               `json:"-"`
-	XXX_sizecache        int32                                                  `json:"-"`
+	JoinEui              []byte                  `protobuf:"bytes,1,opt,name=join_eui,json=joinEui,proto3" json:"join_eui,omitempty"`
+	EndDeviceIds         []*EndDeviceIdentifiers `protobuf:"bytes,2,rep,name=end_device_ids,json=endDeviceIds,proto3" json:"end_device_ids,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}                `json:"-"`
+	XXX_unrecognized     []byte                  `json:"-"`
+	XXX_sizecache        int32                   `json:"-"`
 }
 
 func (m *ProvisionEndDevicesRequest_IdentifiersList) Reset() {
 	*m = ProvisionEndDevicesRequest_IdentifiersList{}
+}
+func (m *ProvisionEndDevicesRequest_IdentifiersList) String() string {
+	return proto.CompactTextString(m)
 }
 func (*ProvisionEndDevicesRequest_IdentifiersList) ProtoMessage() {}
 func (*ProvisionEndDevicesRequest_IdentifiersList) Descriptor() ([]byte, []int) {
@@ -564,7 +661,14 @@ func (m *ProvisionEndDevicesRequest_IdentifiersList) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_ProvisionEndDevicesRequest_IdentifiersList proto.InternalMessageInfo
 
-func (m *ProvisionEndDevicesRequest_IdentifiersList) GetEndDeviceIds() []EndDeviceIdentifiers {
+func (m *ProvisionEndDevicesRequest_IdentifiersList) GetJoinEui() []byte {
+	if m != nil {
+		return m.JoinEui
+	}
+	return nil
+}
+
+func (m *ProvisionEndDevicesRequest_IdentifiersList) GetEndDeviceIds() []*EndDeviceIdentifiers {
 	if m != nil {
 		return m.EndDeviceIds
 	}
@@ -572,15 +676,19 @@ func (m *ProvisionEndDevicesRequest_IdentifiersList) GetEndDeviceIds() []EndDevi
 }
 
 type ProvisionEndDevicesRequest_IdentifiersRange struct {
-	JoinEui *go_thethings_network_lorawan_stack_v3_pkg_types.EUI64 `protobuf:"bytes,1,opt,name=join_eui,json=joinEui,proto3,customtype=go.thethings.network/lorawan-stack/v3/pkg/types.EUI64" json:"join_eui,omitempty"`
+	JoinEui []byte `protobuf:"bytes,1,opt,name=join_eui,json=joinEui,proto3" json:"join_eui,omitempty"`
 	// DevEUI to start issuing from.
-	StartDevEui          go_thethings_network_lorawan_stack_v3_pkg_types.EUI64 `protobuf:"bytes,2,opt,name=start_dev_eui,json=startDevEui,proto3,customtype=go.thethings.network/lorawan-stack/v3/pkg/types.EUI64" json:"start_dev_eui"`
-	XXX_NoUnkeyedLiteral struct{}                                              `json:"-"`
-	XXX_sizecache        int32                                                 `json:"-"`
+	StartDevEui          []byte   `protobuf:"bytes,2,opt,name=start_dev_eui,json=startDevEui,proto3" json:"start_dev_eui,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
 }
 
 func (m *ProvisionEndDevicesRequest_IdentifiersRange) Reset() {
 	*m = ProvisionEndDevicesRequest_IdentifiersRange{}
+}
+func (m *ProvisionEndDevicesRequest_IdentifiersRange) String() string {
+	return proto.CompactTextString(m)
 }
 func (*ProvisionEndDevicesRequest_IdentifiersRange) ProtoMessage() {}
 func (*ProvisionEndDevicesRequest_IdentifiersRange) Descriptor() ([]byte, []int) {
@@ -604,14 +712,32 @@ func (m *ProvisionEndDevicesRequest_IdentifiersRange) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_ProvisionEndDevicesRequest_IdentifiersRange proto.InternalMessageInfo
 
+func (m *ProvisionEndDevicesRequest_IdentifiersRange) GetJoinEui() []byte {
+	if m != nil {
+		return m.JoinEui
+	}
+	return nil
+}
+
+func (m *ProvisionEndDevicesRequest_IdentifiersRange) GetStartDevEui() []byte {
+	if m != nil {
+		return m.StartDevEui
+	}
+	return nil
+}
+
 type ProvisionEndDevicesRequest_IdentifiersFromData struct {
-	JoinEui              *go_thethings_network_lorawan_stack_v3_pkg_types.EUI64 `protobuf:"bytes,1,opt,name=join_eui,json=joinEui,proto3,customtype=go.thethings.network/lorawan-stack/v3/pkg/types.EUI64" json:"join_eui,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}                                               `json:"-"`
-	XXX_sizecache        int32                                                  `json:"-"`
+	JoinEui              []byte   `protobuf:"bytes,1,opt,name=join_eui,json=joinEui,proto3" json:"join_eui,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
 }
 
 func (m *ProvisionEndDevicesRequest_IdentifiersFromData) Reset() {
 	*m = ProvisionEndDevicesRequest_IdentifiersFromData{}
+}
+func (m *ProvisionEndDevicesRequest_IdentifiersFromData) String() string {
+	return proto.CompactTextString(m)
 }
 func (*ProvisionEndDevicesRequest_IdentifiersFromData) ProtoMessage() {}
 func (*ProvisionEndDevicesRequest_IdentifiersFromData) Descriptor() ([]byte, []int) {
@@ -635,21 +761,30 @@ func (m *ProvisionEndDevicesRequest_IdentifiersFromData) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_ProvisionEndDevicesRequest_IdentifiersFromData proto.InternalMessageInfo
 
+func (m *ProvisionEndDevicesRequest_IdentifiersFromData) GetJoinEui() []byte {
+	if m != nil {
+		return m.JoinEui
+	}
+	return nil
+}
+
 type ApplicationActivationSettings struct {
 	// The KEK label to use for wrapping application keys.
 	KekLabel string `protobuf:"bytes,1,opt,name=kek_label,json=kekLabel,proto3" json:"kek_label,omitempty"`
 	// The (encrypted) Key Encryption Key.
 	Kek *KeyEnvelope `protobuf:"bytes,2,opt,name=kek,proto3" json:"kek,omitempty"`
 	// Home NetID.
-	HomeNetId *go_thethings_network_lorawan_stack_v3_pkg_types.NetID `protobuf:"bytes,3,opt,name=home_net_id,json=homeNetId,proto3,customtype=go.thethings.network/lorawan-stack/v3/pkg/types.NetID" json:"home_net_id,omitempty"`
+	HomeNetId []byte `protobuf:"bytes,3,opt,name=home_net_id,json=homeNetId,proto3" json:"home_net_id,omitempty"`
 	// The AS-ID of the Application Server to use.
 	ApplicationServerId  string   `protobuf:"bytes,4,opt,name=application_server_id,json=applicationServerId,proto3" json:"application_server_id,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *ApplicationActivationSettings) Reset()      { *m = ApplicationActivationSettings{} }
-func (*ApplicationActivationSettings) ProtoMessage() {}
+func (m *ApplicationActivationSettings) Reset()         { *m = ApplicationActivationSettings{} }
+func (m *ApplicationActivationSettings) String() string { return proto.CompactTextString(m) }
+func (*ApplicationActivationSettings) ProtoMessage()    {}
 func (*ApplicationActivationSettings) Descriptor() ([]byte, []int) {
 	return fileDescriptor_1b695d5f526759a7, []int{9}
 }
@@ -685,6 +820,13 @@ func (m *ApplicationActivationSettings) GetKek() *KeyEnvelope {
 	return nil
 }
 
+func (m *ApplicationActivationSettings) GetHomeNetId() []byte {
+	if m != nil {
+		return m.HomeNetId
+	}
+	return nil
+}
+
 func (m *ApplicationActivationSettings) GetApplicationServerId() string {
 	if m != nil {
 		return m.ApplicationServerId
@@ -693,16 +835,18 @@ func (m *ApplicationActivationSettings) GetApplicationServerId() string {
 }
 
 type GetApplicationActivationSettingsRequest struct {
-	ApplicationIdentifiers `protobuf:"bytes,1,opt,name=application_ids,json=applicationIds,proto3,embedded=application_ids" json:"application_ids"`
-	FieldMask              *types.FieldMask `protobuf:"bytes,2,opt,name=field_mask,json=fieldMask,proto3" json:"field_mask,omitempty"`
-	XXX_NoUnkeyedLiteral   struct{}         `json:"-"`
-	XXX_sizecache          int32            `json:"-"`
+	ApplicationIds       *ApplicationIdentifiers `protobuf:"bytes,1,opt,name=application_ids,json=applicationIds,proto3" json:"application_ids,omitempty"`
+	FieldMask            *types.FieldMask        `protobuf:"bytes,2,opt,name=field_mask,json=fieldMask,proto3" json:"field_mask,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}                `json:"-"`
+	XXX_unrecognized     []byte                  `json:"-"`
+	XXX_sizecache        int32                   `json:"-"`
 }
 
 func (m *GetApplicationActivationSettingsRequest) Reset() {
 	*m = GetApplicationActivationSettingsRequest{}
 }
-func (*GetApplicationActivationSettingsRequest) ProtoMessage() {}
+func (m *GetApplicationActivationSettingsRequest) String() string { return proto.CompactTextString(m) }
+func (*GetApplicationActivationSettingsRequest) ProtoMessage()    {}
 func (*GetApplicationActivationSettingsRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_1b695d5f526759a7, []int{10}
 }
@@ -724,6 +868,13 @@ func (m *GetApplicationActivationSettingsRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_GetApplicationActivationSettingsRequest proto.InternalMessageInfo
 
+func (m *GetApplicationActivationSettingsRequest) GetApplicationIds() *ApplicationIdentifiers {
+	if m != nil {
+		return m.ApplicationIds
+	}
+	return nil
+}
+
 func (m *GetApplicationActivationSettingsRequest) GetFieldMask() *types.FieldMask {
 	if m != nil {
 		return m.FieldMask
@@ -732,17 +883,19 @@ func (m *GetApplicationActivationSettingsRequest) GetFieldMask() *types.FieldMas
 }
 
 type SetApplicationActivationSettingsRequest struct {
-	ApplicationIdentifiers        `protobuf:"bytes,1,opt,name=application_ids,json=applicationIds,proto3,embedded=application_ids" json:"application_ids"`
-	ApplicationActivationSettings `protobuf:"bytes,2,opt,name=settings,proto3,embedded=settings" json:"settings"`
-	FieldMask                     *types.FieldMask `protobuf:"bytes,3,opt,name=field_mask,json=fieldMask,proto3" json:"field_mask,omitempty"`
-	XXX_NoUnkeyedLiteral          struct{}         `json:"-"`
-	XXX_sizecache                 int32            `json:"-"`
+	ApplicationIds       *ApplicationIdentifiers        `protobuf:"bytes,1,opt,name=application_ids,json=applicationIds,proto3" json:"application_ids,omitempty"`
+	Settings             *ApplicationActivationSettings `protobuf:"bytes,2,opt,name=settings,proto3" json:"settings,omitempty"`
+	FieldMask            *types.FieldMask               `protobuf:"bytes,3,opt,name=field_mask,json=fieldMask,proto3" json:"field_mask,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}                       `json:"-"`
+	XXX_unrecognized     []byte                         `json:"-"`
+	XXX_sizecache        int32                          `json:"-"`
 }
 
 func (m *SetApplicationActivationSettingsRequest) Reset() {
 	*m = SetApplicationActivationSettingsRequest{}
 }
-func (*SetApplicationActivationSettingsRequest) ProtoMessage() {}
+func (m *SetApplicationActivationSettingsRequest) String() string { return proto.CompactTextString(m) }
+func (*SetApplicationActivationSettingsRequest) ProtoMessage()    {}
 func (*SetApplicationActivationSettingsRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_1b695d5f526759a7, []int{11}
 }
@@ -764,6 +917,20 @@ func (m *SetApplicationActivationSettingsRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_SetApplicationActivationSettingsRequest proto.InternalMessageInfo
 
+func (m *SetApplicationActivationSettingsRequest) GetApplicationIds() *ApplicationIdentifiers {
+	if m != nil {
+		return m.ApplicationIds
+	}
+	return nil
+}
+
+func (m *SetApplicationActivationSettingsRequest) GetSettings() *ApplicationActivationSettings {
+	if m != nil {
+		return m.Settings
+	}
+	return nil
+}
+
 func (m *SetApplicationActivationSettingsRequest) GetFieldMask() *types.FieldMask {
 	if m != nil {
 		return m.FieldMask
@@ -772,13 +939,17 @@ func (m *SetApplicationActivationSettingsRequest) GetFieldMask() *types.FieldMas
 }
 
 type DeleteApplicationActivationSettingsRequest struct {
-	ApplicationIdentifiers `protobuf:"bytes,1,opt,name=application_ids,json=applicationIds,proto3,embedded=application_ids" json:"application_ids"`
-	XXX_NoUnkeyedLiteral   struct{} `json:"-"`
-	XXX_sizecache          int32    `json:"-"`
+	ApplicationIds       *ApplicationIdentifiers `protobuf:"bytes,1,opt,name=application_ids,json=applicationIds,proto3" json:"application_ids,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}                `json:"-"`
+	XXX_unrecognized     []byte                  `json:"-"`
+	XXX_sizecache        int32                   `json:"-"`
 }
 
 func (m *DeleteApplicationActivationSettingsRequest) Reset() {
 	*m = DeleteApplicationActivationSettingsRequest{}
+}
+func (m *DeleteApplicationActivationSettingsRequest) String() string {
+	return proto.CompactTextString(m)
 }
 func (*DeleteApplicationActivationSettingsRequest) ProtoMessage() {}
 func (*DeleteApplicationActivationSettingsRequest) Descriptor() ([]byte, []int) {
@@ -802,15 +973,24 @@ func (m *DeleteApplicationActivationSettingsRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_DeleteApplicationActivationSettingsRequest proto.InternalMessageInfo
 
-type JoinEUIPrefix struct {
-	JoinEui              go_thethings_network_lorawan_stack_v3_pkg_types.EUI64 `protobuf:"bytes,1,opt,name=join_eui,json=joinEui,proto3,customtype=go.thethings.network/lorawan-stack/v3/pkg/types.EUI64" json:"join_eui"`
-	Length               uint32                                                `protobuf:"varint,2,opt,name=length,proto3" json:"length,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}                                              `json:"-"`
-	XXX_sizecache        int32                                                 `json:"-"`
+func (m *DeleteApplicationActivationSettingsRequest) GetApplicationIds() *ApplicationIdentifiers {
+	if m != nil {
+		return m.ApplicationIds
+	}
+	return nil
 }
 
-func (m *JoinEUIPrefix) Reset()      { *m = JoinEUIPrefix{} }
-func (*JoinEUIPrefix) ProtoMessage() {}
+type JoinEUIPrefix struct {
+	JoinEui              []byte   `protobuf:"bytes,1,opt,name=join_eui,json=joinEui,proto3" json:"join_eui,omitempty"`
+	Length               uint32   `protobuf:"varint,2,opt,name=length,proto3" json:"length,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *JoinEUIPrefix) Reset()         { *m = JoinEUIPrefix{} }
+func (m *JoinEUIPrefix) String() string { return proto.CompactTextString(m) }
+func (*JoinEUIPrefix) ProtoMessage()    {}
 func (*JoinEUIPrefix) Descriptor() ([]byte, []int) {
 	return fileDescriptor_1b695d5f526759a7, []int{13}
 }
@@ -832,6 +1012,13 @@ func (m *JoinEUIPrefix) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_JoinEUIPrefix proto.InternalMessageInfo
 
+func (m *JoinEUIPrefix) GetJoinEui() []byte {
+	if m != nil {
+		return m.JoinEui
+	}
+	return nil
+}
+
 func (m *JoinEUIPrefix) GetLength() uint32 {
 	if m != nil {
 		return m.Length
@@ -840,13 +1027,15 @@ func (m *JoinEUIPrefix) GetLength() uint32 {
 }
 
 type JoinEUIPrefixes struct {
-	Prefixes             []JoinEUIPrefix `protobuf:"bytes,1,rep,name=prefixes,proto3" json:"prefixes"`
-	XXX_NoUnkeyedLiteral struct{}        `json:"-"`
-	XXX_sizecache        int32           `json:"-"`
+	Prefixes             []*JoinEUIPrefix `protobuf:"bytes,1,rep,name=prefixes,proto3" json:"prefixes,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}         `json:"-"`
+	XXX_unrecognized     []byte           `json:"-"`
+	XXX_sizecache        int32            `json:"-"`
 }
 
-func (m *JoinEUIPrefixes) Reset()      { *m = JoinEUIPrefixes{} }
-func (*JoinEUIPrefixes) ProtoMessage() {}
+func (m *JoinEUIPrefixes) Reset()         { *m = JoinEUIPrefixes{} }
+func (m *JoinEUIPrefixes) String() string { return proto.CompactTextString(m) }
+func (*JoinEUIPrefixes) ProtoMessage()    {}
 func (*JoinEUIPrefixes) Descriptor() ([]byte, []int) {
 	return fileDescriptor_1b695d5f526759a7, []int{14}
 }
@@ -868,9 +1057,47 @@ func (m *JoinEUIPrefixes) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_JoinEUIPrefixes proto.InternalMessageInfo
 
-func (m *JoinEUIPrefixes) GetPrefixes() []JoinEUIPrefix {
+func (m *JoinEUIPrefixes) GetPrefixes() []*JoinEUIPrefix {
 	if m != nil {
 		return m.Prefixes
+	}
+	return nil
+}
+
+type GetDefaultJoinEUIResponse struct {
+	JoinEui              []byte   `protobuf:"bytes,1,opt,name=join_eui,json=joinEui,proto3" json:"join_eui,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *GetDefaultJoinEUIResponse) Reset()         { *m = GetDefaultJoinEUIResponse{} }
+func (m *GetDefaultJoinEUIResponse) String() string { return proto.CompactTextString(m) }
+func (*GetDefaultJoinEUIResponse) ProtoMessage()    {}
+func (*GetDefaultJoinEUIResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_1b695d5f526759a7, []int{15}
+}
+func (m *GetDefaultJoinEUIResponse) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_GetDefaultJoinEUIResponse.Unmarshal(m, b)
+}
+func (m *GetDefaultJoinEUIResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_GetDefaultJoinEUIResponse.Marshal(b, m, deterministic)
+}
+func (m *GetDefaultJoinEUIResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetDefaultJoinEUIResponse.Merge(m, src)
+}
+func (m *GetDefaultJoinEUIResponse) XXX_Size() int {
+	return xxx_messageInfo_GetDefaultJoinEUIResponse.Size(m)
+}
+func (m *GetDefaultJoinEUIResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetDefaultJoinEUIResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GetDefaultJoinEUIResponse proto.InternalMessageInfo
+
+func (m *GetDefaultJoinEUIResponse) GetJoinEui() []byte {
+	if m != nil {
+		return m.JoinEui
 	}
 	return nil
 }
@@ -912,6 +1139,8 @@ func init() {
 	golang_proto.RegisterType((*JoinEUIPrefix)(nil), "ttn.lorawan.v3.JoinEUIPrefix")
 	proto.RegisterType((*JoinEUIPrefixes)(nil), "ttn.lorawan.v3.JoinEUIPrefixes")
 	golang_proto.RegisterType((*JoinEUIPrefixes)(nil), "ttn.lorawan.v3.JoinEUIPrefixes")
+	proto.RegisterType((*GetDefaultJoinEUIResponse)(nil), "ttn.lorawan.v3.GetDefaultJoinEUIResponse")
+	golang_proto.RegisterType((*GetDefaultJoinEUIResponse)(nil), "ttn.lorawan.v3.GetDefaultJoinEUIResponse")
 }
 
 func init() {
@@ -922,756 +1151,143 @@ func init() {
 }
 
 var fileDescriptor_1b695d5f526759a7 = []byte{
-	// 1951 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xcc, 0x58, 0x4f, 0x6c, 0x1b, 0x59,
-	0x19, 0xcf, 0xd8, 0x4e, 0x62, 0x7f, 0x49, 0x9c, 0xf4, 0x75, 0xff, 0x18, 0xb7, 0x4d, 0xb2, 0xb3,
-	0x59, 0x5a, 0xb2, 0x6b, 0x7b, 0xe5, 0x02, 0xbb, 0xcd, 0x02, 0xc5, 0x4e, 0xbc, 0x89, 0x9b, 0x26,
-	0x64, 0xc7, 0xed, 0xaa, 0xed, 0xd2, 0x1d, 0x26, 0x9e, 0x67, 0x67, 0x32, 0xce, 0xcc, 0x30, 0xef,
-	0xc5, 0x59, 0xef, 0x52, 0x69, 0xa9, 0x10, 0x20, 0x24, 0x24, 0x24, 0xd8, 0x3b, 0x12, 0x07, 0xb8,
-	0x82, 0x2a, 0x21, 0x2e, 0xc0, 0x81, 0x03, 0x12, 0x17, 0x24, 0x2e, 0x88, 0x43, 0x25, 0x5a, 0x0e,
-	0x1c, 0x91, 0x10, 0x20, 0xe5, 0x84, 0xe6, 0xcd, 0x9b, 0xf1, 0x78, 0xec, 0xb8, 0x76, 0x9a, 0xec,
-	0xee, 0xed, 0x8d, 0xdf, 0xf7, 0x7e, 0xef, 0xfb, 0x7e, 0xdf, 0x9f, 0xf7, 0x7d, 0x06, 0xb1, 0x61,
-	0xda, 0xca, 0x81, 0x62, 0x64, 0x08, 0x55, 0xaa, 0x7a, 0x4e, 0xb1, 0xb4, 0xdc, 0xae, 0xa9, 0x19,
-	0x04, 0xdb, 0x4d, 0x6c, 0x67, 0x2d, 0xdb, 0xa4, 0x26, 0x4a, 0x52, 0x6a, 0x64, 0xb9, 0x5c, 0xb6,
-	0x79, 0x39, 0x5d, 0xa8, 0x6b, 0x74, 0x67, 0x7f, 0x3b, 0x5b, 0x35, 0xf7, 0x72, 0xd8, 0x68, 0x9a,
-	0x2d, 0xcb, 0x36, 0xdf, 0x6b, 0xe5, 0x98, 0x70, 0x35, 0x53, 0xc7, 0x46, 0xa6, 0xa9, 0x34, 0x34,
-	0x55, 0xa1, 0x38, 0xd7, 0xb5, 0x70, 0x21, 0xd3, 0x99, 0x00, 0x44, 0xdd, 0xac, 0x9b, 0xee, 0xe1,
-	0xed, 0xfd, 0x1a, 0xfb, 0x62, 0x1f, 0x6c, 0xc5, 0xc5, 0xcf, 0xd7, 0x4d, 0xb3, 0xde, 0xc0, 0x4c,
-	0x3d, 0xc5, 0x30, 0x4c, 0xaa, 0x50, 0xcd, 0x34, 0x08, 0xdf, 0x3d, 0xc7, 0x77, 0x7d, 0x0c, 0xbc,
-	0x67, 0xd1, 0x16, 0xdf, 0x9c, 0x0f, 0x6f, 0xd6, 0x34, 0xdc, 0x50, 0xe5, 0x3d, 0x85, 0xe8, 0x21,
-	0x70, 0x5f, 0x82, 0x50, 0x7b, 0xbf, 0x4a, 0xf9, 0x6e, 0x0f, 0x82, 0xb0, 0xa1, 0xca, 0x2a, 0x6e,
-	0x6a, 0x55, 0xcf, 0x9a, 0x17, 0xbb, 0x65, 0x34, 0x15, 0x1b, 0x54, 0xab, 0x69, 0xd8, 0xf6, 0xb4,
-	0x3c, 0xdf, 0x9b, 0xe9, 0xa3, 0x77, 0x75, 0xdc, 0xf2, 0xce, 0xce, 0x75, 0xef, 0x7a, 0xfe, 0x60,
-	0x02, 0xe2, 0x7f, 0x04, 0x38, 0x53, 0xc1, 0x84, 0x68, 0xa6, 0xb1, 0x8e, 0x5b, 0x12, 0xfe, 0xe6,
-	0x3e, 0x26, 0x14, 0x65, 0x21, 0x49, 0xdc, 0x1f, 0x65, 0x1d, 0xb7, 0x64, 0x4d, 0x4d, 0x09, 0xf3,
-	0xc2, 0xa5, 0xc9, 0x62, 0xfc, 0xb0, 0x38, 0xfa, 0x7e, 0x34, 0xf5, 0xe1, 0x8c, 0x34, 0x49, 0xfc,
-	0x43, 0x65, 0x15, 0xbd, 0x0d, 0xe3, 0x2a, 0x6e, 0xca, 0x78, 0x5f, 0x4b, 0x45, 0x98, 0xe0, 0x97,
-	0xff, 0xf8, 0x70, 0x6e, 0xe4, 0x6f, 0x0f, 0xe7, 0xbe, 0x50, 0x37, 0xb3, 0x74, 0x07, 0xd3, 0x1d,
-	0xcd, 0xa8, 0x93, 0xac, 0x81, 0xe9, 0x81, 0x69, 0xeb, 0xb9, 0x4e, 0xa5, 0x9a, 0x97, 0x73, 0x96,
-	0x5e, 0xcf, 0xd1, 0x96, 0x85, 0x49, 0xb6, 0x74, 0xb3, 0xfc, 0xc5, 0xcf, 0x4b, 0x63, 0x2a, 0x6e,
-	0x96, 0xf6, 0x35, 0x74, 0x0b, 0xe2, 0x8e, 0xa9, 0x0c, 0x38, 0x7a, 0x12, 0xc0, 0xe3, 0x0e, 0x5c,
-	0x69, 0x5f, 0x13, 0xef, 0x47, 0x60, 0x66, 0xf3, 0x40, 0xaf, 0xac, 0xe3, 0x16, 0x91, 0x30, 0xb1,
-	0x4c, 0x83, 0x60, 0xf4, 0x35, 0x98, 0xae, 0xc9, 0xc6, 0x81, 0x2e, 0x13, 0x59, 0x33, 0xa8, 0x63,
-	0x3a, 0xb3, 0x7b, 0x22, 0x7f, 0x2e, 0xdb, 0x19, 0xc9, 0xd9, 0x75, 0xdc, 0x2a, 0x19, 0x4d, 0xdc,
-	0x30, 0x2d, 0x5c, 0x9c, 0x3c, 0x2c, 0x8e, 0xfe, 0x40, 0x88, 0xcc, 0x08, 0x8e, 0x6a, 0xd2, 0x44,
-	0xcd, 0x81, 0x2d, 0x1b, 0x74, 0x1d, 0xb7, 0x1c, 0x40, 0x12, 0x02, 0x8c, 0x0c, 0x0d, 0x48, 0x02,
-	0x80, 0xd7, 0x61, 0xca, 0x85, 0xc3, 0x46, 0x95, 0xc1, 0x45, 0x87, 0x85, 0x03, 0xe3, 0x40, 0xaf,
-	0x94, 0x8c, 0xea, 0x3a, 0x6e, 0x89, 0xb7, 0x60, 0xba, 0x60, 0x59, 0x15, 0xe6, 0x78, 0x4e, 0x41,
-	0x09, 0x12, 0x8a, 0x65, 0xc9, 0xe4, 0x78, 0xc6, 0x8f, 0x2b, 0x2e, 0x9c, 0xf8, 0xef, 0x08, 0x9c,
-	0x5b, 0xb6, 0x5b, 0x16, 0x35, 0x2b, 0xd8, 0x76, 0x02, 0x7e, 0x4b, 0x69, 0x35, 0x4c, 0x45, 0xf5,
-	0x02, 0x6c, 0x0d, 0xa2, 0x9a, 0x4a, 0xf8, 0x05, 0x0b, 0xe1, 0x0b, 0x4a, 0x86, 0xba, 0xc2, 0xd2,
-	0xa4, 0xdc, 0x4e, 0x86, 0xe2, 0x4c, 0xf0, 0xa6, 0x3f, 0x3f, 0x9c, 0x13, 0x24, 0x07, 0x02, 0x6d,
-	0xc0, 0x34, 0x3f, 0x29, 0x37, 0xb1, 0xed, 0x84, 0x24, 0xa3, 0x38, 0x99, 0x4f, 0x87, 0x51, 0x37,
-	0x0a, 0xcb, 0x6f, 0xbb, 0x12, 0x2c, 0x8e, 0xef, 0x3b, 0x58, 0x52, 0x92, 0x0b, 0xf0, 0x1d, 0x24,
-	0xc2, 0xb8, 0xe5, 0xaa, 0xca, 0x03, 0xce, 0x0b, 0xf9, 0x88, 0xe4, 0x6d, 0xa0, 0xb7, 0x20, 0x69,
-	0xd9, 0x66, 0x53, 0x73, 0x0e, 0x60, 0xdb, 0xc9, 0x8e, 0xd8, 0xbc, 0x70, 0x29, 0x51, 0x5c, 0x3c,
-	0x2c, 0x5e, 0xb4, 0x5f, 0x4a, 0x2d, 0xe4, 0x5f, 0x78, 0xf7, 0x1d, 0x25, 0xf3, 0xfe, 0xab, 0x99,
-	0x2b, 0x77, 0x2f, 0x5d, 0x5d, 0x7a, 0x27, 0x73, 0xf7, 0xaa, 0xf7, 0xf9, 0xb9, 0x0f, 0xf2, 0xaf,
-	0xdc, 0x5b, 0xf8, 0xd6, 0xbb, 0x0b, 0xd2, 0x54, 0x00, 0xa1, 0xac, 0xa2, 0x15, 0x38, 0xe3, 0xff,
-	0xa0, 0x19, 0x75, 0x59, 0x55, 0xa8, 0x92, 0x1a, 0x65, 0xec, 0x3c, 0x9f, 0x75, 0xcb, 0x4c, 0xd6,
-	0x2b, 0x33, 0xd9, 0x0a, 0x2b, 0x33, 0xd2, 0x4c, 0xf0, 0xc4, 0x8a, 0x42, 0x15, 0xf1, 0x75, 0x38,
-	0xdf, 0x9b, 0x74, 0xee, 0xdc, 0x54, 0xdb, 0x38, 0x96, 0xcf, 0xbe, 0x49, 0xe2, 0x83, 0x08, 0x3c,
-	0x73, 0xcd, 0xd4, 0x8c, 0x42, 0xb5, 0x8a, 0x2d, 0xba, 0x51, 0x5e, 0xf6, 0x1c, 0x55, 0x83, 0x69,
-	0x2e, 0x23, 0xdb, 0xee, 0x4f, 0xdc, 0x69, 0x2f, 0x87, 0xe9, 0xed, 0xe3, 0xee, 0x1e, 0xbe, 0x4b,
-	0x5a, 0x9d, 0x01, 0x71, 0x13, 0xce, 0xb0, 0x4c, 0xe7, 0x97, 0xc8, 0x4e, 0xd2, 0x72, 0x47, 0xce,
-	0x85, 0x6f, 0x72, 0x14, 0xe5, 0xe7, 0x6e, 0xb4, 0x2c, 0x1c, 0xf0, 0xe6, 0xf4, 0x6e, 0xe7, 0x16,
-	0xba, 0x0b, 0x09, 0xa7, 0x30, 0x19, 0xa6, 0x51, 0xc5, 0xdc, 0xa1, 0x5f, 0xe5, 0x15, 0xe4, 0xf5,
-	0x61, 0x2b, 0xc8, 0x0a, 0x6e, 0x6e, 0x3a, 0x38, 0x52, 0x5c, 0xe5, 0x2b, 0xf1, 0x71, 0x0c, 0x52,
-	0x2b, 0xd8, 0xd6, 0x9a, 0xb8, 0x5d, 0x43, 0xc9, 0xa7, 0x3e, 0xc6, 0xbf, 0x01, 0xc0, 0xb8, 0x0e,
-	0xb2, 0x52, 0xe0, 0xac, 0x5c, 0x19, 0x96, 0x15, 0xc7, 0x19, 0x2e, 0x2d, 0x89, 0x5d, 0x6f, 0xd9,
-	0x49, 0x7b, 0xec, 0xa4, 0x69, 0x47, 0x37, 0x60, 0xcc, 0xc0, 0xd4, 0x49, 0xbc, 0xd1, 0xa7, 0x7b,
-	0x14, 0x36, 0x31, 0x2d, 0xaf, 0x48, 0xa3, 0x06, 0xa6, 0xe5, 0x5e, 0x69, 0x3d, 0x76, 0x2a, 0x69,
-	0x3d, 0x3e, 0x6c, 0x5a, 0xff, 0x4f, 0x00, 0xb4, 0x8a, 0xa9, 0x64, 0x9a, 0xf4, 0x74, 0xe2, 0xab,
-	0xdb, 0xf2, 0xc8, 0xa9, 0x58, 0x1e, 0x1d, 0xd6, 0xf2, 0xef, 0xc4, 0x21, 0xbd, 0xe5, 0xfd, 0xe8,
-	0x5b, 0xe4, 0x33, 0x70, 0x1b, 0xa6, 0x15, 0xcb, 0x6a, 0x68, 0x55, 0xd6, 0xd5, 0xc9, 0x6d, 0x36,
-	0x3e, 0x1b, 0x66, 0xa3, 0xd0, 0x16, 0x0b, 0xf2, 0x11, 0x6f, 0xd7, 0x23, 0x25, 0x28, 0x41, 0xd0,
-	0xe6, 0x11, 0x94, 0x5c, 0x3c, 0x2c, 0x2e, 0xd8, 0x62, 0x6a, 0x21, 0x3f, 0xdb, 0x9f, 0x92, 0x30,
-	0x1f, 0x2f, 0x1f, 0xc5, 0xc7, 0x64, 0xb7, 0xd9, 0x68, 0x0b, 0x62, 0x0d, 0x8d, 0x50, 0x96, 0x39,
-	0x13, 0xf9, 0xa5, 0xb0, 0x31, 0x47, 0x33, 0x92, 0x0d, 0x18, 0x77, 0x5d, 0x23, 0x74, 0x6d, 0x44,
-	0x62, 0x48, 0xa8, 0x02, 0xa3, 0xb6, 0x62, 0xd4, 0x31, 0x7f, 0x53, 0xde, 0x38, 0x1e, 0xa4, 0xe4,
-	0x40, 0xac, 0x8d, 0x48, 0x2e, 0x96, 0x93, 0xe5, 0x35, 0xdb, 0xdc, 0x73, 0x6d, 0x19, 0x63, 0xc0,
-	0x5f, 0x39, 0x1e, 0xf0, 0x9b, 0xb6, 0xb9, 0xe7, 0x58, 0xbe, 0x36, 0x22, 0xc5, 0x6b, 0x7c, 0x9d,
-	0xfe, 0x8d, 0x00, 0xd3, 0x21, 0x7b, 0xd0, 0x8d, 0x40, 0x43, 0xe8, 0xb6, 0xa4, 0x57, 0x9e, 0xbe,
-	0x19, 0x44, 0x5b, 0x90, 0x6c, 0xb7, 0xe6, 0x2c, 0x8c, 0x22, 0xf3, 0xd1, 0x81, 0x93, 0x2a, 0xc6,
-	0x5a, 0x9f, 0x49, 0xdc, 0xde, 0x23, 0xe9, 0x3f, 0x09, 0x30, 0x13, 0x26, 0xee, 0x94, 0x94, 0x57,
-	0x60, 0x8a, 0x50, 0xc5, 0xa6, 0xf2, 0x89, 0x76, 0xe0, 0x13, 0x0c, 0x73, 0x85, 0xb5, 0xe1, 0x69,
-	0x1d, 0xce, 0xf6, 0x70, 0xd6, 0xe9, 0xd8, 0xb3, 0x14, 0x49, 0x09, 0xc5, 0x29, 0x98, 0x68, 0x3b,
-	0x84, 0x88, 0x3f, 0x8c, 0xc0, 0x85, 0x40, 0x06, 0x17, 0xaa, 0x54, 0x6b, 0xb2, 0x55, 0x05, 0x53,
-	0xea, 0x5c, 0x83, 0x5e, 0x82, 0x84, 0x8e, 0x75, 0xb9, 0xa1, 0x6c, 0xe3, 0x06, 0xd3, 0x25, 0xc1,
-	0xde, 0x3f, 0x9b, 0xcd, 0x2a, 0x71, 0x1d, 0xeb, 0xd7, 0x9d, 0x1d, 0x94, 0x81, 0xa8, 0x8e, 0xf5,
-	0x01, 0x7a, 0x70, 0xc9, 0x91, 0x43, 0xb7, 0x61, 0x62, 0xc7, 0xdc, 0xc3, 0x32, 0x7f, 0x6c, 0xa2,
-	0xc7, 0xb7, 0xd1, 0x7d, 0x68, 0x12, 0x0e, 0xda, 0x26, 0x7b, 0x6c, 0xde, 0x80, 0x67, 0x83, 0xa5,
-	0xcb, 0x1d, 0x9b, 0xdb, 0xad, 0xe4, 0xf8, 0x61, 0x31, 0x66, 0x47, 0x52, 0xaa, 0x74, 0x36, 0x20,
-	0x55, 0x61, 0x42, 0x65, 0x55, 0xfc, 0x9d, 0x00, 0x17, 0x57, 0x31, 0xed, 0x4b, 0xc9, 0xc7, 0x50,
-	0x23, 0xaf, 0x00, 0xb4, 0x67, 0x62, 0x4e, 0x6a, 0xba, 0xab, 0xb8, 0xbf, 0xe9, 0x88, 0x6c, 0x28,
-	0x44, 0x97, 0x12, 0x35, 0x6f, 0x29, 0xfe, 0x24, 0x02, 0x17, 0x2b, 0x9f, 0xbc, 0x05, 0x15, 0x88,
-	0x13, 0x7e, 0x1b, 0xd7, 0x3f, 0xd3, 0x07, 0xb3, 0x5b, 0xc5, 0x00, 0xb4, 0x0f, 0x14, 0xa2, 0x25,
-	0x3a, 0x0c, 0x2d, 0xdf, 0x13, 0x60, 0x71, 0x05, 0x37, 0x30, 0xc5, 0x9f, 0x30, 0x33, 0xe2, 0xb7,
-	0x05, 0x98, 0x72, 0x5a, 0xbb, 0xd2, 0xcd, 0xf2, 0x96, 0x8d, 0x6b, 0xda, 0x7b, 0x1d, 0xb3, 0xb8,
-	0x70, 0x92, 0xb3, 0x38, 0x7a, 0x0e, 0xc6, 0x1a, 0xd8, 0xa8, 0xd3, 0x1d, 0xe6, 0x83, 0x29, 0x89,
-	0x7f, 0x89, 0x12, 0x4c, 0x77, 0xa8, 0x80, 0x09, 0xba, 0x0a, 0x71, 0x8b, 0xaf, 0x53, 0x02, 0xab,
-	0xd1, 0x17, 0x7a, 0x4d, 0x07, 0xfe, 0x11, 0x5e, 0x9c, 0xfd, 0x43, 0xf9, 0x9f, 0x09, 0x10, 0xdb,
-	0x24, 0xd7, 0x08, 0x5a, 0x05, 0x58, 0x53, 0x0c, 0xb5, 0x81, 0x1d, 0x79, 0x74, 0xae, 0xcf, 0x8c,
-	0x91, 0x3e, 0xdf, 0x7b, 0x93, 0x0f, 0x55, 0x12, 0x4c, 0xac, 0x62, 0xea, 0xfd, 0x97, 0x80, 0x5e,
-	0x08, 0x0b, 0x77, 0xfd, 0xbb, 0x92, 0x9e, 0x0f, 0x8b, 0x84, 0xff, 0x88, 0xc8, 0xdf, 0x82, 0x58,
-	0xc1, 0x51, 0x72, 0x0b, 0xc0, 0xcd, 0x73, 0x67, 0x7b, 0x10, 0xe8, 0xb9, 0x1e, 0x8e, 0x0f, 0xce,
-	0xf7, 0xf9, 0xdb, 0x30, 0x5a, 0xb0, 0xac, 0x53, 0x81, 0xfe, 0x6f, 0x0c, 0x9e, 0xd9, 0x74, 0x9d,
-	0xdf, 0x31, 0x0b, 0x22, 0x1d, 0x92, 0x01, 0x3a, 0x37, 0xca, 0xcb, 0x68, 0x98, 0xe1, 0x31, 0xfd,
-	0xca, 0x60, 0xc2, 0xdc, 0x1d, 0x55, 0x37, 0x6e, 0xfd, 0x41, 0x16, 0x2d, 0xf4, 0xf2, 0x5e, 0x78,
-	0xce, 0x1d, 0xf2, 0x12, 0x03, 0xce, 0x94, 0x8c, 0xaa, 0x23, 0xd1, 0x06, 0x3b, 0x4d, 0xa3, 0x2c,
-	0x38, 0xcb, 0xef, 0x93, 0xf0, 0xee, 0xc7, 0x72, 0xe3, 0xd7, 0x21, 0xe9, 0x0e, 0xb6, 0x7e, 0x60,
-	0x5f, 0x0a, 0x9f, 0x3f, 0x6a, 0xf0, 0x7d, 0x72, 0x7c, 0xa3, 0xeb, 0x90, 0x70, 0x73, 0xc6, 0x89,
-	0x3d, 0x31, 0x2c, 0xde, 0x3d, 0xeb, 0xa4, 0xfb, 0xbd, 0xd5, 0xf9, 0x3f, 0x08, 0x90, 0x0a, 0x14,
-	0xb8, 0xce, 0xe0, 0xbb, 0x03, 0x53, 0xae, 0xa2, 0x5e, 0xa8, 0x0f, 0x6e, 0xc7, 0x93, 0x22, 0x9e,
-	0x9b, 0x51, 0xb0, 0xac, 0x13, 0x31, 0xe3, 0xa3, 0x31, 0x38, 0x7b, 0x8d, 0xf8, 0x2d, 0xa6, 0x84,
-	0xeb, 0x1a, 0xa1, 0x76, 0x0b, 0xfd, 0x4a, 0x80, 0xe8, 0x2a, 0xa6, 0xe8, 0xc5, 0x1e, 0x17, 0x04,
-	0xa4, 0xdd, 0x1b, 0x3e, 0x73, 0x64, 0xcb, 0x2a, 0xea, 0xf7, 0xff, 0xf2, 0x8f, 0x1f, 0x47, 0x30,
-	0xaa, 0xe6, 0x76, 0x49, 0x2e, 0x50, 0xee, 0x49, 0xee, 0x83, 0xce, 0xee, 0x37, 0x1b, 0x7a, 0x54,
-	0x42, 0xdf, 0xf7, 0x72, 0xbc, 0x2f, 0xeb, 0x3a, 0xe7, 0x2f, 0xef, 0xa1, 0xef, 0x46, 0x20, 0x5a,
-	0xe9, 0xa5, 0x74, 0x65, 0x38, 0xa5, 0x7f, 0x2b, 0x30, 0xad, 0x7f, 0x2d, 0xa4, 0xfb, 0xaa, 0x9d,
-	0x3d, 0xa6, 0xda, 0xd9, 0x4e, 0xb5, 0x97, 0x84, 0xc5, 0x3b, 0x1b, 0xe2, 0xda, 0x49, 0xdd, 0xb4,
-	0x24, 0x2c, 0xa2, 0x9f, 0x0b, 0x90, 0xf0, 0x87, 0x20, 0xb4, 0x38, 0xf8, 0x7c, 0xd4, 0x8f, 0x95,
-	0xb7, 0x18, 0x29, 0x6b, 0xe9, 0xe5, 0x6e, 0x4d, 0x9f, 0xa4, 0x9a, 0x3f, 0x6c, 0x66, 0xda, 0x4a,
-	0x7e, 0x3f, 0x22, 0xbc, 0x2a, 0xa0, 0x8f, 0x04, 0x18, 0x73, 0x9b, 0x0f, 0x34, 0xd0, 0xe0, 0x93,
-	0x7e, 0xae, 0xab, 0xa9, 0x29, 0xed, 0x59, 0xb4, 0x25, 0x6e, 0x30, 0xed, 0x56, 0x17, 0x4b, 0xc3,
-	0x6b, 0xe7, 0xbb, 0xa8, 0xed, 0x93, 0xfc, 0x83, 0x18, 0x2c, 0xf4, 0x6b, 0x87, 0xfc, 0x44, 0xf9,
-	0x25, 0x4f, 0x94, 0xd7, 0x7a, 0x24, 0xca, 0x20, 0xfd, 0x54, 0x7a, 0xb8, 0xe6, 0x4f, 0x2c, 0x32,
-	0x3b, 0xbf, 0x84, 0x96, 0x86, 0xb7, 0xd3, 0x6f, 0x16, 0x1f, 0x08, 0x6e, 0x9e, 0xbc, 0xd6, 0x23,
-	0x4f, 0x4e, 0x43, 0xe7, 0x12, 0xd3, 0xf9, 0xaa, 0xf8, 0x14, 0x3a, 0x3b, 0x51, 0xfd, 0xd3, 0x76,
-	0xac, 0x2c, 0x75, 0xd7, 0xd3, 0x41, 0x1b, 0xd8, 0x23, 0x23, 0x88, 0x33, 0xbb, 0xf8, 0x14, 0x5a,
-	0xe6, 0x6d, 0x88, 0x5c, 0x23, 0xa8, 0xc1, 0xfe, 0x3a, 0x0b, 0xb7, 0x91, 0x47, 0xdc, 0x9b, 0x9e,
-	0xeb, 0xdb, 0x4c, 0x62, 0x22, 0x5e, 0x60, 0x8a, 0x3d, 0x8f, 0x9e, 0x75, 0x14, 0xf3, 0xda, 0x61,
-	0xd9, 0xeb, 0x2e, 0x8b, 0x1b, 0x7f, 0xfd, 0xfb, 0xec, 0xc8, 0x87, 0x8f, 0x66, 0x85, 0x5f, 0x3c,
-	0x9a, 0x15, 0xfe, 0xf9, 0x68, 0x76, 0xe4, 0x5f, 0x8f, 0x66, 0x85, 0x1f, 0x3d, 0x9e, 0x1d, 0xf9,
-	0xfd, 0xe3, 0x59, 0xe1, 0x4e, 0x6e, 0x88, 0x3e, 0x99, 0x1a, 0xd6, 0xf6, 0xf6, 0x18, 0x53, 0xef,
-	0xf2, 0xff, 0x03, 0x00, 0x00, 0xff, 0xff, 0x11, 0xbd, 0x63, 0x8a, 0x6c, 0x1d, 0x00, 0x00,
-}
-
-func (this *SessionKeyRequest) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*SessionKeyRequest)
-	if !ok {
-		that2, ok := that.(SessionKeyRequest)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !bytes.Equal(this.SessionKeyId, that1.SessionKeyId) {
-		return false
-	}
-	if !this.DevEui.Equal(that1.DevEui) {
-		return false
-	}
-	if !this.JoinEui.Equal(that1.JoinEui) {
-		return false
-	}
-	return true
-}
-func (this *NwkSKeysResponse) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*NwkSKeysResponse)
-	if !ok {
-		that2, ok := that.(NwkSKeysResponse)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.FNwkSIntKey.Equal(&that1.FNwkSIntKey) {
-		return false
-	}
-	if !this.SNwkSIntKey.Equal(&that1.SNwkSIntKey) {
-		return false
-	}
-	if !this.NwkSEncKey.Equal(&that1.NwkSEncKey) {
-		return false
-	}
-	return true
-}
-func (this *AppSKeyResponse) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*AppSKeyResponse)
-	if !ok {
-		that2, ok := that.(AppSKeyResponse)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.AppSKey.Equal(&that1.AppSKey) {
-		return false
-	}
-	return true
-}
-func (this *CryptoServicePayloadRequest) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*CryptoServicePayloadRequest)
-	if !ok {
-		that2, ok := that.(CryptoServicePayloadRequest)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.EndDeviceIdentifiers.Equal(&that1.EndDeviceIdentifiers) {
-		return false
-	}
-	if this.LorawanVersion != that1.LorawanVersion {
-		return false
-	}
-	if !bytes.Equal(this.Payload, that1.Payload) {
-		return false
-	}
-	if this.ProvisionerId != that1.ProvisionerId {
-		return false
-	}
-	if !this.ProvisioningData.Equal(that1.ProvisioningData) {
-		return false
-	}
-	return true
-}
-func (this *CryptoServicePayloadResponse) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*CryptoServicePayloadResponse)
-	if !ok {
-		that2, ok := that.(CryptoServicePayloadResponse)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !bytes.Equal(this.Payload, that1.Payload) {
-		return false
-	}
-	return true
-}
-func (this *JoinAcceptMICRequest) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*JoinAcceptMICRequest)
-	if !ok {
-		that2, ok := that.(JoinAcceptMICRequest)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.CryptoServicePayloadRequest.Equal(&that1.CryptoServicePayloadRequest) {
-		return false
-	}
-	if this.JoinRequestType != that1.JoinRequestType {
-		return false
-	}
-	if !this.DevNonce.Equal(that1.DevNonce) {
-		return false
-	}
-	return true
-}
-func (this *DeriveSessionKeysRequest) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*DeriveSessionKeysRequest)
-	if !ok {
-		that2, ok := that.(DeriveSessionKeysRequest)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.EndDeviceIdentifiers.Equal(&that1.EndDeviceIdentifiers) {
-		return false
-	}
-	if this.LorawanVersion != that1.LorawanVersion {
-		return false
-	}
-	if !this.JoinNonce.Equal(that1.JoinNonce) {
-		return false
-	}
-	if !this.DevNonce.Equal(that1.DevNonce) {
-		return false
-	}
-	if !this.NetId.Equal(that1.NetId) {
-		return false
-	}
-	if this.ProvisionerId != that1.ProvisionerId {
-		return false
-	}
-	if !this.ProvisioningData.Equal(that1.ProvisioningData) {
-		return false
-	}
-	return true
-}
-func (this *GetRootKeysRequest) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*GetRootKeysRequest)
-	if !ok {
-		that2, ok := that.(GetRootKeysRequest)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.EndDeviceIdentifiers.Equal(&that1.EndDeviceIdentifiers) {
-		return false
-	}
-	if this.ProvisionerId != that1.ProvisionerId {
-		return false
-	}
-	if !this.ProvisioningData.Equal(that1.ProvisioningData) {
-		return false
-	}
-	return true
-}
-func (this *ProvisionEndDevicesRequest) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ProvisionEndDevicesRequest)
-	if !ok {
-		that2, ok := that.(ProvisionEndDevicesRequest)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.ApplicationIdentifiers.Equal(&that1.ApplicationIdentifiers) {
-		return false
-	}
-	if this.ProvisionerId != that1.ProvisionerId {
-		return false
-	}
-	if !bytes.Equal(this.ProvisioningData, that1.ProvisioningData) {
-		return false
-	}
-	if that1.EndDevices == nil {
-		if this.EndDevices != nil {
-			return false
-		}
-	} else if this.EndDevices == nil {
-		return false
-	} else if !this.EndDevices.Equal(that1.EndDevices) {
-		return false
-	}
-	return true
-}
-func (this *ProvisionEndDevicesRequest_List) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ProvisionEndDevicesRequest_List)
-	if !ok {
-		that2, ok := that.(ProvisionEndDevicesRequest_List)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.List.Equal(that1.List) {
-		return false
-	}
-	return true
-}
-func (this *ProvisionEndDevicesRequest_Range) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ProvisionEndDevicesRequest_Range)
-	if !ok {
-		that2, ok := that.(ProvisionEndDevicesRequest_Range)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.Range.Equal(that1.Range) {
-		return false
-	}
-	return true
-}
-func (this *ProvisionEndDevicesRequest_FromData) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ProvisionEndDevicesRequest_FromData)
-	if !ok {
-		that2, ok := that.(ProvisionEndDevicesRequest_FromData)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.FromData.Equal(that1.FromData) {
-		return false
-	}
-	return true
-}
-func (this *ProvisionEndDevicesRequest_IdentifiersList) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ProvisionEndDevicesRequest_IdentifiersList)
-	if !ok {
-		that2, ok := that.(ProvisionEndDevicesRequest_IdentifiersList)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if that1.JoinEui == nil {
-		if this.JoinEui != nil {
-			return false
-		}
-	} else if !this.JoinEui.Equal(*that1.JoinEui) {
-		return false
-	}
-	if len(this.EndDeviceIds) != len(that1.EndDeviceIds) {
-		return false
-	}
-	for i := range this.EndDeviceIds {
-		if !this.EndDeviceIds[i].Equal(&that1.EndDeviceIds[i]) {
-			return false
-		}
-	}
-	return true
-}
-func (this *ProvisionEndDevicesRequest_IdentifiersRange) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ProvisionEndDevicesRequest_IdentifiersRange)
-	if !ok {
-		that2, ok := that.(ProvisionEndDevicesRequest_IdentifiersRange)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if that1.JoinEui == nil {
-		if this.JoinEui != nil {
-			return false
-		}
-	} else if !this.JoinEui.Equal(*that1.JoinEui) {
-		return false
-	}
-	if !this.StartDevEui.Equal(that1.StartDevEui) {
-		return false
-	}
-	return true
-}
-func (this *ProvisionEndDevicesRequest_IdentifiersFromData) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ProvisionEndDevicesRequest_IdentifiersFromData)
-	if !ok {
-		that2, ok := that.(ProvisionEndDevicesRequest_IdentifiersFromData)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if that1.JoinEui == nil {
-		if this.JoinEui != nil {
-			return false
-		}
-	} else if !this.JoinEui.Equal(*that1.JoinEui) {
-		return false
-	}
-	return true
-}
-func (this *ApplicationActivationSettings) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ApplicationActivationSettings)
-	if !ok {
-		that2, ok := that.(ApplicationActivationSettings)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.KekLabel != that1.KekLabel {
-		return false
-	}
-	if !this.Kek.Equal(that1.Kek) {
-		return false
-	}
-	if that1.HomeNetId == nil {
-		if this.HomeNetId != nil {
-			return false
-		}
-	} else if !this.HomeNetId.Equal(*that1.HomeNetId) {
-		return false
-	}
-	if this.ApplicationServerId != that1.ApplicationServerId {
-		return false
-	}
-	return true
-}
-func (this *GetApplicationActivationSettingsRequest) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*GetApplicationActivationSettingsRequest)
-	if !ok {
-		that2, ok := that.(GetApplicationActivationSettingsRequest)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.ApplicationIdentifiers.Equal(&that1.ApplicationIdentifiers) {
-		return false
-	}
-	if !this.FieldMask.Equal(that1.FieldMask) {
-		return false
-	}
-	return true
-}
-func (this *SetApplicationActivationSettingsRequest) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*SetApplicationActivationSettingsRequest)
-	if !ok {
-		that2, ok := that.(SetApplicationActivationSettingsRequest)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.ApplicationIdentifiers.Equal(&that1.ApplicationIdentifiers) {
-		return false
-	}
-	if !this.ApplicationActivationSettings.Equal(&that1.ApplicationActivationSettings) {
-		return false
-	}
-	if !this.FieldMask.Equal(that1.FieldMask) {
-		return false
-	}
-	return true
-}
-func (this *DeleteApplicationActivationSettingsRequest) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*DeleteApplicationActivationSettingsRequest)
-	if !ok {
-		that2, ok := that.(DeleteApplicationActivationSettingsRequest)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.ApplicationIdentifiers.Equal(&that1.ApplicationIdentifiers) {
-		return false
-	}
-	return true
-}
-func (this *JoinEUIPrefix) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*JoinEUIPrefix)
-	if !ok {
-		that2, ok := that.(JoinEUIPrefix)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.JoinEui.Equal(that1.JoinEui) {
-		return false
-	}
-	if this.Length != that1.Length {
-		return false
-	}
-	return true
-}
-func (this *JoinEUIPrefixes) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*JoinEUIPrefixes)
-	if !ok {
-		that2, ok := that.(JoinEUIPrefixes)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if len(this.Prefixes) != len(that1.Prefixes) {
-		return false
-	}
-	for i := range this.Prefixes {
-		if !this.Prefixes[i].Equal(&that1.Prefixes[i]) {
-			return false
-		}
-	}
-	return true
+	// 2162 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xdc, 0x59, 0x4b, 0x6c, 0x1b, 0xc7,
+	0x19, 0xce, 0x2c, 0x29, 0x8a, 0x1c, 0x59, 0x94, 0x3c, 0x7e, 0xd1, 0xb4, 0x1d, 0xdb, 0x1b, 0xa5,
+	0x76, 0x94, 0xf0, 0x51, 0x0a, 0x81, 0x13, 0xa5, 0xa8, 0x4b, 0x8a, 0xb4, 0x44, 0xc9, 0x12, 0x9c,
+	0xa5, 0x5d, 0x24, 0x4e, 0x6d, 0x62, 0xcd, 0x1d, 0x52, 0x6b, 0x2e, 0x67, 0xb7, 0x3b, 0x43, 0xca,
+	0x74, 0x6a, 0xa0, 0xf0, 0xa1, 0x2d, 0x7a, 0x74, 0x91, 0x1e, 0x7a, 0x68, 0x83, 0xf6, 0xd0, 0xc2,
+	0x97, 0x3e, 0x60, 0xa0, 0xb7, 0xbe, 0x50, 0xf4, 0xd0, 0x43, 0x5b, 0xa0, 0xa7, 0x9e, 0x5b, 0xa0,
+	0x41, 0x0b, 0xb4, 0x45, 0x0e, 0x39, 0xe8, 0x54, 0xec, 0xec, 0x72, 0xb9, 0x5c, 0x3e, 0x4c, 0xfa,
+	0x91, 0xd8, 0xba, 0x2d, 0x77, 0xfe, 0xf9, 0xe6, 0xff, 0xbf, 0xff, 0xb1, 0xff, 0xfc, 0x84, 0xa2,
+	0xa6, 0x9b, 0xf2, 0x8e, 0x4c, 0x12, 0x94, 0xc9, 0x95, 0x7a, 0x4a, 0x36, 0xd4, 0xd4, 0x4d, 0x5d,
+	0x25, 0x14, 0x9b, 0x2d, 0x6c, 0x26, 0x0d, 0x53, 0x67, 0x3a, 0x8a, 0x32, 0x46, 0x92, 0x8e, 0x5c,
+	0xb2, 0xb5, 0x14, 0xcf, 0xd6, 0x54, 0xb6, 0xdd, 0xbc, 0x91, 0xac, 0xe8, 0x8d, 0x14, 0x26, 0x2d,
+	0xbd, 0x6d, 0x98, 0xfa, 0xad, 0x76, 0x8a, 0x0b, 0x57, 0x12, 0x35, 0x4c, 0x12, 0x2d, 0x59, 0x53,
+	0x15, 0x99, 0xe1, 0x54, 0xdf, 0x83, 0x0d, 0x19, 0x4f, 0x78, 0x20, 0x6a, 0x7a, 0x4d, 0xb7, 0x37,
+	0xdf, 0x68, 0x56, 0xf9, 0x2f, 0xfe, 0x83, 0x3f, 0x39, 0xe2, 0x79, 0x8f, 0xf8, 0xe5, 0x6d, 0x7c,
+	0x79, 0x5b, 0x25, 0x35, 0x5a, 0x24, 0x4a, 0x93, 0x32, 0x53, 0xc5, 0xd4, 0x7b, 0x74, 0x4d, 0x4f,
+	0x54, 0x35, 0xb9, 0x46, 0x53, 0x32, 0x21, 0x3a, 0x93, 0x99, 0xaa, 0x13, 0xea, 0xa0, 0xac, 0x4c,
+	0x84, 0x72, 0x93, 0xea, 0x64, 0x00, 0xc8, 0xf1, 0x9a, 0xae, 0xd7, 0x34, 0xcc, 0x99, 0xea, 0x5f,
+	0x3d, 0xe6, 0xac, 0xba, 0xe6, 0xe0, 0x86, 0xc1, 0xda, 0xce, 0xe2, 0x29, 0xff, 0x62, 0x55, 0xc5,
+	0x9a, 0x52, 0x6e, 0xc8, 0xb4, 0xee, 0x03, 0x77, 0x25, 0x28, 0x33, 0x9b, 0x15, 0xe6, 0xac, 0x0e,
+	0xf0, 0x15, 0x26, 0x4a, 0x59, 0xc1, 0x2d, 0xb5, 0xd2, 0x21, 0xf6, 0xa5, 0x7e, 0x19, 0x55, 0xc1,
+	0x84, 0xa9, 0x55, 0x15, 0x9b, 0xae, 0x0d, 0x83, 0x9d, 0x3e, 0x7c, 0xb5, 0x8e, 0xdb, 0x9d, 0xbd,
+	0x27, 0xfb, 0x57, 0x3b, 0xa1, 0x61, 0x0b, 0x24, 0x3d, 0x34, 0xea, 0x06, 0x26, 0xb2, 0xa1, 0xb6,
+	0x32, 0x29, 0xdd, 0xe0, 0x34, 0xf5, 0x53, 0x26, 0xfe, 0x33, 0x00, 0xf7, 0x97, 0x30, 0xa5, 0xaa,
+	0x4e, 0x36, 0x70, 0x5b, 0xc2, 0x5f, 0x6d, 0x62, 0xca, 0x50, 0x12, 0x46, 0xa9, 0xfd, 0xb2, 0x5c,
+	0xc7, 0xed, 0xb2, 0xaa, 0xc4, 0xc0, 0x29, 0x70, 0x76, 0x5f, 0x2e, 0xbc, 0x9b, 0x9b, 0xba, 0x1d,
+	0x88, 0x7d, 0x7d, 0x5e, 0xda, 0x47, 0xdd, 0x4d, 0x45, 0x05, 0xfd, 0x09, 0xc0, 0x69, 0x05, 0xb7,
+	0xca, 0xb8, 0xa9, 0xc6, 0x04, 0x2e, 0xf9, 0x00, 0xdc, 0xcb, 0x9e, 0x5e, 0x47, 0xe2, 0xb9, 0x74,
+	0x6e, 0x29, 0xff, 0xfa, 0xb9, 0x42, 0x3e, 0x9d, 0x4e, 0x67, 0x73, 0x2b, 0x79, 0xf1, 0x7b, 0x02,
+	0x98, 0xfe, 0xa1, 0x10, 0xb2, 0x9c, 0x4e, 0x6a, 0xbb, 0xb9, 0xd0, 0xed, 0xe0, 0x76, 0xd8, 0x00,
+	0xff, 0xba, 0x7f, 0xf4, 0x2e, 0x80, 0xe7, 0x6b, 0x7a, 0x92, 0x6d, 0x63, 0xc6, 0x43, 0x23, 0x49,
+	0x30, 0xdb, 0xd1, 0xcd, 0x7a, 0xaa, 0xd7, 0xe4, 0xd6, 0x52, 0xca, 0xa8, 0xd7, 0x52, 0xac, 0x6d,
+	0x60, 0x9a, 0xdc, 0x94, 0x4d, 0xba, 0x2d, 0x6b, 0x6b, 0x85, 0x77, 0x72, 0x6d, 0x86, 0x29, 0x9a,
+	0x18, 0xe0, 0x0a, 0x69, 0xd8, 0x10, 0x6f, 0x70, 0x00, 0x29, 0xa4, 0xe0, 0x56, 0xa1, 0xa9, 0xa2,
+	0xbf, 0x00, 0x18, 0xb6, 0x9c, 0xc2, 0x2d, 0x0a, 0x3c, 0xcf, 0x16, 0x4d, 0x5b, 0x66, 0x14, 0x9a,
+	0xaa, 0xf8, 0x09, 0x80, 0xf3, 0x5b, 0x3b, 0xf5, 0xd2, 0x06, 0x6e, 0x53, 0x09, 0x53, 0x43, 0x27,
+	0x14, 0xa3, 0x0d, 0x38, 0x57, 0x2d, 0x93, 0x9d, 0x7a, 0x99, 0x96, 0x55, 0xc2, 0x2c, 0x67, 0x73,
+	0x4f, 0xcf, 0x64, 0x8e, 0x25, 0x7b, 0xcb, 0x4e, 0x72, 0x03, 0xb7, 0x0b, 0xa4, 0x85, 0x35, 0xdd,
+	0xc0, 0x3c, 0x0c, 0xbe, 0x0d, 0x84, 0x79, 0x20, 0xcd, 0x54, 0x2d, 0xc8, 0x22, 0x61, 0x1b, 0xb8,
+	0x6d, 0x81, 0x51, 0x1f, 0x98, 0x30, 0x11, 0x18, 0xf5, 0x80, 0xad, 0xc1, 0x59, 0x1b, 0x0a, 0x93,
+	0x0a, 0x87, 0x0a, 0x4c, 0x02, 0x05, 0xc9, 0x4e, 0xbd, 0x54, 0x20, 0x95, 0x0d, 0xdc, 0x16, 0x2f,
+	0xc3, 0xb9, 0xac, 0x61, 0x94, 0x78, 0x78, 0x3b, 0x66, 0x67, 0x61, 0x44, 0x36, 0x8c, 0x32, 0x9d,
+	0xdc, 0xe0, 0x69, 0xd9, 0x86, 0x12, 0xff, 0x2d, 0xc0, 0x63, 0x2b, 0x66, 0xdb, 0x60, 0x7a, 0x09,
+	0x9b, 0x56, 0x09, 0xb8, 0x24, 0xb7, 0x35, 0x5d, 0x56, 0x3a, 0x29, 0xf4, 0x25, 0x18, 0x50, 0x15,
+	0xea, 0x80, 0x2f, 0xf8, 0xc1, 0x0b, 0x44, 0xc9, 0xf3, 0xc2, 0x51, 0xec, 0x96, 0x07, 0xcf, 0x29,
+	0xd6, 0x56, 0xb4, 0x09, 0xe7, 0x9c, 0x1d, 0xe5, 0x16, 0x36, 0xad, 0x64, 0xe3, 0x74, 0x46, 0x33,
+	0x71, 0x3f, 0xda, 0x66, 0x76, 0xe5, 0xcb, 0xb6, 0x04, 0xc7, 0xb8, 0xcb, 0x31, 0xa2, 0x8e, 0x80,
+	0xb3, 0x82, 0x44, 0x38, 0x6d, 0xd8, 0x2a, 0x3a, 0x01, 0xdd, 0x49, 0x66, 0x41, 0xea, 0x2c, 0xa0,
+	0xb7, 0x61, 0xd4, 0x30, 0xf5, 0x96, 0x6a, 0x6d, 0xc0, 0xa6, 0x95, 0xf7, 0xc1, 0x53, 0xe0, 0x6c,
+	0x24, 0xb7, 0xb8, 0x9b, 0x3b, 0x63, 0xbe, 0x1c, 0x5b, 0xc8, 0x9c, 0xbe, 0xfe, 0x9e, 0x9c, 0xb8,
+	0x9d, 0x4e, 0xbc, 0x79, 0xed, 0xec, 0xf9, 0xe5, 0xf7, 0x12, 0xd7, 0xce, 0x77, 0x7e, 0xbe, 0xf2,
+	0x7e, 0xe6, 0xb5, 0x3b, 0x0b, 0x5f, 0xbb, 0xbe, 0x20, 0xcd, 0x7a, 0x10, 0x8a, 0x0a, 0xca, 0xc3,
+	0xfd, 0xee, 0x0b, 0x95, 0xd4, 0xca, 0x8a, 0xcc, 0xe4, 0xd8, 0x14, 0x67, 0xe5, 0x48, 0xd2, 0x2e,
+	0xb8, 0xc9, 0x4e, 0xc1, 0x4d, 0x96, 0x78, 0xc1, 0x95, 0xe6, 0xbd, 0x3b, 0xf2, 0x32, 0x93, 0xc5,
+	0x37, 0xe0, 0xf1, 0xc1, 0x64, 0x3b, 0x0e, 0x8d, 0x75, 0x8d, 0xe3, 0x95, 0xca, 0x35, 0x49, 0xfc,
+	0x6e, 0x00, 0x1e, 0x5c, 0xd7, 0x55, 0x92, 0xad, 0x54, 0xb0, 0xc1, 0x36, 0x8b, 0x2b, 0x1d, 0x07,
+	0x5d, 0x87, 0x73, 0x8e, 0x4c, 0xd9, 0xb4, 0x5f, 0x39, 0xce, 0x7a, 0xd5, 0x4f, 0xef, 0x08, 0x37,
+	0x7b, 0x7c, 0x16, 0x35, 0x7a, 0x03, 0xe0, 0x0a, 0xdc, 0xcf, 0x2b, 0x88, 0x03, 0x5e, 0xb6, 0xd2,
+	0xd3, 0x71, 0xe0, 0x49, 0xff, 0x09, 0x96, 0x82, 0xce, 0xbe, 0xcb, 0x6d, 0x27, 0xde, 0x6c, 0x2f,
+	0xce, 0xdd, 0xec, 0x5d, 0x42, 0x7f, 0x00, 0x30, 0x62, 0x95, 0x5a, 0xa2, 0x93, 0x0a, 0x76, 0x3c,
+	0xf9, 0x13, 0x70, 0x2f, 0x7b, 0x68, 0x3d, 0x24, 0x0e, 0x2b, 0x47, 0xc2, 0x33, 0x50, 0x8e, 0x32,
+	0x76, 0x39, 0x0a, 0x2b, 0xb8, 0xb5, 0x65, 0xa9, 0x2e, 0xfe, 0x60, 0x1a, 0xc6, 0xf2, 0xd8, 0x54,
+	0x5b, 0xb8, 0xfb, 0xfd, 0xa1, 0xcf, 0x6c, 0xf6, 0xfc, 0x11, 0x40, 0xc8, 0xdd, 0xe9, 0xe5, 0xfd,
+	0x3e, 0xb8, 0x97, 0x3d, 0xb2, 0x1e, 0xe6, 0xbc, 0x17, 0x2e, 0x0c, 0x62, 0x3e, 0xf0, 0x0c, 0x30,
+	0xbf, 0x64, 0x33, 0x1f, 0xb1, 0xd4, 0xe7, 0xd4, 0xfb, 0x62, 0x28, 0xf8, 0xdc, 0xc6, 0x10, 0xfa,
+	0x1d, 0x80, 0x21, 0x82, 0x99, 0x55, 0xa8, 0xa6, 0x7a, 0x3c, 0x92, 0x4e, 0xa7, 0xd3, 0x9f, 0x5f,
+	0x7a, 0xc6, 0x3d, 0x32, 0x45, 0x30, 0x2b, 0x0e, 0x2a, 0xba, 0xa1, 0xa7, 0x52, 0x74, 0xa7, 0x27,
+	0x2d, 0xba, 0xff, 0x05, 0x10, 0xad, 0x62, 0x26, 0xe9, 0x3a, 0x7b, 0xb2, 0xb9, 0xd9, 0x6f, 0xb1,
+	0xf0, 0x54, 0x2c, 0x0e, 0x4c, 0x6c, 0xf1, 0x0c, 0x8c, 0x5f, 0xea, 0xbc, 0x74, 0x2d, 0x71, 0x2d,
+	0x7f, 0x17, 0xce, 0xc9, 0x86, 0xa1, 0xa9, 0x15, 0xde, 0x42, 0x97, 0xbb, 0x2c, 0x7c, 0xce, 0xcf,
+	0x42, 0xb6, 0x2b, 0x36, 0x98, 0x87, 0xa8, 0xec, 0x95, 0xa0, 0x68, 0x6b, 0x08, 0x25, 0x67, 0x76,
+	0x73, 0x0b, 0xa6, 0x18, 0x5b, 0xc8, 0xbc, 0x38, 0x9a, 0x12, 0x3f, 0x1f, 0xaf, 0x0e, 0xe3, 0x63,
+	0x5f, 0xbf, 0xd9, 0xe8, 0x12, 0x0c, 0x6a, 0x2a, 0x65, 0xbc, 0x12, 0xcc, 0x64, 0x96, 0xfd, 0xc6,
+	0x0c, 0x67, 0x24, 0xe9, 0x31, 0xee, 0xa2, 0x4a, 0xd9, 0xda, 0x0b, 0x12, 0x47, 0x42, 0x25, 0x38,
+	0x65, 0xca, 0xa4, 0x86, 0x9d, 0x2f, 0xfd, 0x5b, 0x8f, 0x06, 0x29, 0x59, 0x10, 0x6b, 0x2f, 0x48,
+	0x36, 0x16, 0xba, 0x06, 0x23, 0x55, 0x53, 0x6f, 0xd8, 0xb6, 0x84, 0x38, 0xf0, 0x17, 0x1f, 0x0d,
+	0xf8, 0x82, 0xa9, 0x37, 0x2c, 0xcb, 0xd7, 0x5e, 0x90, 0xc2, 0x55, 0xe7, 0x39, 0xfe, 0x33, 0x01,
+	0xce, 0xf9, 0xec, 0xe9, 0xbd, 0x07, 0x80, 0xbd, 0x70, 0x0f, 0x40, 0xeb, 0x30, 0xda, 0xbd, 0xb7,
+	0xf2, 0x18, 0x16, 0x4e, 0x05, 0xc6, 0xcd, 0x64, 0x69, 0x1f, 0xee, 0xbe, 0xa5, 0xf1, 0xdf, 0x06,
+	0xe0, 0xbc, 0xdf, 0x5f, 0x7b, 0x91, 0xb3, 0xbf, 0x01, 0x38, 0x4b, 0x99, 0x6c, 0xb2, 0xf2, 0x9e,
+	0xb8, 0xe5, 0xce, 0x70, 0x5b, 0xf2, 0xfc, 0xaa, 0x1b, 0xff, 0x08, 0xc0, 0x03, 0x03, 0x52, 0x63,
+	0x0f, 0xba, 0x71, 0x59, 0x88, 0x81, 0xdc, 0x2c, 0x9c, 0xe9, 0x86, 0x3f, 0x15, 0x7f, 0x1a, 0x84,
+	0x27, 0x3c, 0xc5, 0x3a, 0x5b, 0x61, 0x6a, 0x8b, 0x3f, 0x95, 0x30, 0x63, 0xd6, 0x81, 0xe8, 0x65,
+	0x18, 0xa9, 0xe3, 0x7a, 0x59, 0x93, 0x6f, 0x60, 0x8d, 0xf3, 0x10, 0xe1, 0x65, 0xdc, 0xe4, 0x63,
+	0x90, 0x70, 0x1d, 0xd7, 0x2f, 0x5a, 0x2b, 0x28, 0x01, 0x03, 0x75, 0x5c, 0x1f, 0xe3, 0xc2, 0x2b,
+	0x59, 0x72, 0xe8, 0x7f, 0x02, 0x9c, 0xd9, 0xd6, 0x1b, 0xb8, 0xec, 0xb4, 0x2f, 0x76, 0x43, 0xf9,
+	0x67, 0xe1, 0xf9, 0x69, 0x5f, 0x3e, 0xbe, 0x7f, 0xf4, 0x43, 0x10, 0xdf, 0x1a, 0x0f, 0xa5, 0xd2,
+	0x50, 0x52, 0x8c, 0x91, 0x84, 0xb6, 0x93, 0xa8, 0x68, 0x6a, 0xaa, 0xd2, 0xa4, 0x4c, 0x6f, 0xf0,
+	0x49, 0x61, 0x72, 0x0b, 0xef, 0xd8, 0x80, 0x17, 0x34, 0xb9, 0x26, 0x3e, 0x3e, 0xde, 0x2a, 0x66,
+	0x85, 0x5b, 0x72, 0x85, 0x39, 0x5d, 0xaf, 0x45, 0xf2, 0x16, 0xef, 0xb3, 0xde, 0x82, 0x87, 0xbc,
+	0x5f, 0x6f, 0x7b, 0xc8, 0xda, 0xbd, 0xe3, 0x4e, 0xef, 0xe6, 0x82, 0xa6, 0x10, 0x53, 0xa4, 0x03,
+	0x1e, 0xa9, 0x12, 0x17, 0x2a, 0x2a, 0xcb, 0xe1, 0x8f, 0xef, 0x1f, 0x0d, 0x86, 0xc1, 0x3c, 0x10,
+	0x7f, 0x0d, 0xe0, 0x99, 0x55, 0xcc, 0x46, 0x06, 0xcd, 0xa7, 0xd0, 0x30, 0xbc, 0x09, 0x61, 0x77,
+	0x80, 0xe9, 0x84, 0x5d, 0xbc, 0xaf, 0xd3, 0xb9, 0x60, 0x89, 0x6c, 0xca, 0xb4, 0x2e, 0x45, 0xaa,
+	0x9d, 0x47, 0xf1, 0xfb, 0x02, 0x3c, 0x53, 0xfa, 0xec, 0x2d, 0x28, 0xc1, 0x30, 0x75, 0x4e, 0x73,
+	0xf4, 0x4f, 0x8c, 0xc0, 0xec, 0x57, 0xd1, 0x03, 0xed, 0x02, 0xf9, 0x68, 0x09, 0x4c, 0x40, 0x8b,
+	0xc7, 0xc5, 0xdf, 0x04, 0x70, 0x31, 0x8f, 0x35, 0xcc, 0xf0, 0x67, 0xcc, 0x91, 0xb8, 0x0b, 0xe0,
+	0xec, 0xba, 0x55, 0xbd, 0xae, 0x14, 0x2f, 0x99, 0xb8, 0xaa, 0xde, 0xda, 0x8b, 0x5f, 0xd7, 0xc3,
+	0x30, 0xa4, 0x61, 0x52, 0x63, 0xdb, 0x3c, 0x0c, 0x66, 0x25, 0xe7, 0x97, 0x78, 0x11, 0xce, 0xf5,
+	0xd8, 0x8e, 0x2d, 0xf7, 0x86, 0x0d, 0xe7, 0x39, 0x06, 0x78, 0xdb, 0x72, 0x62, 0xd0, 0x2c, 0xc5,
+	0xdd, 0x22, 0xb9, 0xe2, 0xe2, 0x7f, 0x00, 0x3c, 0xba, 0x8a, 0x59, 0x1e, 0x57, 0xe5, 0xa6, 0xc6,
+	0x1c, 0x29, 0x77, 0x80, 0xb4, 0xf7, 0x68, 0xcd, 0xfc, 0x08, 0xc0, 0xe0, 0x16, 0x5d, 0xa7, 0x68,
+	0x15, 0xc2, 0x35, 0x99, 0x28, 0x1a, 0xb6, 0x8c, 0x46, 0xc7, 0x46, 0x0c, 0x9f, 0xe2, 0xc7, 0x07,
+	0x2f, 0x3a, 0x24, 0x49, 0x70, 0x66, 0x15, 0xb3, 0xce, 0x10, 0x19, 0x9d, 0xf6, 0x0b, 0xf7, 0xfd,
+	0x91, 0x10, 0x3f, 0xe5, 0x17, 0xf1, 0x4f, 0xa0, 0x33, 0xef, 0xc0, 0x60, 0xd6, 0x52, 0xf2, 0x12,
+	0x84, 0x76, 0x55, 0xb5, 0x96, 0xc7, 0x81, 0x3e, 0x39, 0x20, 0xb9, 0xbc, 0x43, 0xde, 0xcc, 0xbb,
+	0x70, 0x2a, 0x6b, 0x18, 0x4f, 0x05, 0xfa, 0x93, 0x20, 0x3c, 0xb8, 0x65, 0xbb, 0xa6, 0x67, 0x38,
+	0x88, 0xea, 0x30, 0xea, 0xa1, 0x73, 0xb3, 0xb8, 0x82, 0x26, 0x99, 0x26, 0xc6, 0x5f, 0x1b, 0x4f,
+	0xd8, 0x71, 0x47, 0xc5, 0xae, 0x0d, 0xee, 0x64, 0x13, 0x2d, 0x0c, 0xf2, 0x9e, 0x7f, 0xf0, 0x39,
+	0xe1, 0x21, 0x04, 0xee, 0x2f, 0x90, 0x8a, 0x25, 0xd1, 0x05, 0x7b, 0x9a, 0x46, 0x19, 0xf0, 0x80,
+	0x73, 0x9e, 0x84, 0x6f, 0x7e, 0x2a, 0x27, 0x7e, 0x05, 0x46, 0xed, 0x39, 0xa4, 0x1b, 0xd8, 0x67,
+	0xfd, 0xfb, 0x87, 0xcd, 0x29, 0x1f, 0x1e, 0xdf, 0xe8, 0x22, 0x8c, 0xd8, 0x39, 0x63, 0xc5, 0x9e,
+	0xe8, 0x17, 0xef, 0x1f, 0xaf, 0xc4, 0x47, 0xf5, 0x8e, 0x99, 0xdf, 0x03, 0x18, 0xf3, 0x7c, 0x44,
+	0x7a, 0x83, 0xef, 0x2a, 0x9c, 0xb5, 0x15, 0xed, 0x84, 0xfa, 0xf8, 0x76, 0x3c, 0x2c, 0xe2, 0x1d,
+	0x33, 0xb2, 0x86, 0xf1, 0x44, 0xcc, 0xf8, 0x20, 0x04, 0x0f, 0xac, 0x53, 0xf7, 0x82, 0x29, 0xe1,
+	0x9a, 0x4a, 0x99, 0xd9, 0x46, 0xbf, 0x00, 0x30, 0xb0, 0x8a, 0x19, 0x7a, 0x69, 0xc0, 0x01, 0x1e,
+	0x69, 0xfb, 0x84, 0xa3, 0x43, 0x2f, 0xac, 0x62, 0xfd, 0xee, 0x5f, 0xff, 0xf1, 0x1d, 0x01, 0xa3,
+	0x4a, 0xea, 0x26, 0x4d, 0x79, 0x3e, 0xa9, 0x34, 0xf5, 0x7e, 0xef, 0xdd, 0x37, 0xe9, 0xfb, 0x70,
+	0xfb, 0x7e, 0xdf, 0x49, 0x39, 0xf7, 0x84, 0xbe, 0x7d, 0xee, 0xe3, 0x1d, 0xf4, 0x0d, 0x01, 0x06,
+	0x4a, 0x83, 0x94, 0x2e, 0x4d, 0xa6, 0xf4, 0xaf, 0x00, 0xd7, 0xfa, 0x97, 0x20, 0x3e, 0x52, 0xed,
+	0xe4, 0x23, 0xaa, 0x9d, 0xec, 0x55, 0x7b, 0x19, 0x2c, 0x5e, 0xdd, 0x14, 0xd7, 0x9e, 0xd4, 0x49,
+	0xcb, 0x60, 0x11, 0xfd, 0x18, 0xc0, 0x88, 0x3b, 0x7f, 0x41, 0x8b, 0xe3, 0x8f, 0x66, 0x46, 0xb1,
+	0xf2, 0x36, 0x27, 0x65, 0x2d, 0xbe, 0xd2, 0xaf, 0xe9, 0xc3, 0x54, 0x73, 0xe7, 0x5c, 0x89, 0xae,
+	0x92, 0xdf, 0x12, 0x40, 0x1a, 0xa0, 0x0f, 0x00, 0x0c, 0xd9, 0x0d, 0x1e, 0x1a, 0x6b, 0xec, 0x11,
+	0x3f, 0xdc, 0xd7, 0x42, 0x16, 0x1a, 0x06, 0x6b, 0x8b, 0x9b, 0x5c, 0xbb, 0xd5, 0xc5, 0xc2, 0xe4,
+	0xda, 0xb9, 0x2e, 0xea, 0xfa, 0x24, 0xf3, 0x20, 0x08, 0x17, 0x46, 0xb5, 0x9c, 0x6e, 0xa2, 0xfc,
+	0xdc, 0x49, 0x94, 0x73, 0x03, 0x12, 0x65, 0x9c, 0x9e, 0x35, 0x3e, 0x59, 0xab, 0x2d, 0xe6, 0xb8,
+	0x9d, 0x5f, 0x40, 0xcb, 0x93, 0xdb, 0xe9, 0xb6, 0xe6, 0x0f, 0x80, 0x9d, 0x27, 0xe7, 0x06, 0xe4,
+	0xc9, 0xd3, 0xd0, 0xb9, 0xc0, 0x75, 0x3e, 0x2f, 0x3e, 0x86, 0xce, 0x56, 0x54, 0x7f, 0xd8, 0x8d,
+	0x95, 0xe5, 0xfe, 0x7a, 0x3a, 0xee, 0x25, 0x61, 0x68, 0x04, 0x39, 0xcc, 0x2e, 0x3e, 0x86, 0x96,
+	0x99, 0x8f, 0x00, 0x14, 0xd6, 0x29, 0xd2, 0xf8, 0xb8, 0xde, 0xdf, 0x32, 0x0f, 0x39, 0x38, 0x7e,
+	0x72, 0x64, 0xe3, 0x8c, 0xa9, 0x78, 0x82, 0x6b, 0x76, 0x04, 0x1d, 0xb2, 0x34, 0xeb, 0xf4, 0xc6,
+	0xe5, 0x4e, 0x3f, 0x8d, 0x18, 0xdc, 0xdf, 0xd7, 0x4e, 0x0f, 0x3d, 0xec, 0x95, 0x01, 0x71, 0x3a,
+	0xb8, 0x13, 0x17, 0x8f, 0xf3, 0x63, 0x0f, 0xa3, 0x83, 0xd6, 0xb1, 0x8a, 0x2d, 0x53, 0xee, 0x1c,
+	0x9f, 0x7b, 0xfd, 0x37, 0x7f, 0x7f, 0x11, 0x5c, 0x4d, 0x4d, 0xd0, 0x24, 0x33, 0x62, 0xdc, 0xb8,
+	0x11, 0xe2, 0xfa, 0x2c, 0xfd, 0x3f, 0x00, 0x00, 0xff, 0xff, 0xf4, 0x72, 0xe1, 0x95, 0x71, 0x25,
+	0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -2697,6 +2313,8 @@ var _ApplicationActivationSettingRegistry_serviceDesc = grpc.ServiceDesc{
 type JsClient interface {
 	// Request the JoinEUI prefixes that are configured for this Join Server.
 	GetJoinEUIPrefixes(ctx context.Context, in *types.Empty, opts ...grpc.CallOption) (*JoinEUIPrefixes, error)
+	// Request the default JoinEUI that is configured for this Join Server.
+	GetDefaultJoinEUI(ctx context.Context, in *types.Empty, opts ...grpc.CallOption) (*GetDefaultJoinEUIResponse, error)
 }
 
 type jsClient struct {
@@ -2716,10 +2334,21 @@ func (c *jsClient) GetJoinEUIPrefixes(ctx context.Context, in *types.Empty, opts
 	return out, nil
 }
 
+func (c *jsClient) GetDefaultJoinEUI(ctx context.Context, in *types.Empty, opts ...grpc.CallOption) (*GetDefaultJoinEUIResponse, error) {
+	out := new(GetDefaultJoinEUIResponse)
+	err := c.cc.Invoke(ctx, "/ttn.lorawan.v3.Js/GetDefaultJoinEUI", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // JsServer is the server API for Js service.
 type JsServer interface {
 	// Request the JoinEUI prefixes that are configured for this Join Server.
 	GetJoinEUIPrefixes(context.Context, *types.Empty) (*JoinEUIPrefixes, error)
+	// Request the default JoinEUI that is configured for this Join Server.
+	GetDefaultJoinEUI(context.Context, *types.Empty) (*GetDefaultJoinEUIResponse, error)
 }
 
 // UnimplementedJsServer can be embedded to have forward compatible implementations.
@@ -2728,6 +2357,9 @@ type UnimplementedJsServer struct {
 
 func (*UnimplementedJsServer) GetJoinEUIPrefixes(ctx context.Context, req *types.Empty) (*JoinEUIPrefixes, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetJoinEUIPrefixes not implemented")
+}
+func (*UnimplementedJsServer) GetDefaultJoinEUI(ctx context.Context, req *types.Empty) (*GetDefaultJoinEUIResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetDefaultJoinEUI not implemented")
 }
 
 func RegisterJsServer(s *grpc.Server, srv JsServer) {
@@ -2752,6 +2384,24 @@ func _Js_GetJoinEUIPrefixes_Handler(srv interface{}, ctx context.Context, dec fu
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Js_GetDefaultJoinEUI_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(types.Empty)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(JsServer).GetDefaultJoinEUI(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/ttn.lorawan.v3.Js/GetDefaultJoinEUI",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(JsServer).GetDefaultJoinEUI(ctx, req.(*types.Empty))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var _Js_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "ttn.lorawan.v3.Js",
 	HandlerType: (*JsServer)(nil),
@@ -2760,266 +2410,11 @@ var _Js_serviceDesc = grpc.ServiceDesc{
 			MethodName: "GetJoinEUIPrefixes",
 			Handler:    _Js_GetJoinEUIPrefixes_Handler,
 		},
+		{
+			MethodName: "GetDefaultJoinEUI",
+			Handler:    _Js_GetDefaultJoinEUI_Handler,
+		},
 	},
 	Streams:  []grpc.StreamDesc{},
 	Metadata: "lorawan-stack/api/joinserver.proto",
-}
-
-func (this *SessionKeyRequest) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&SessionKeyRequest{`,
-		`SessionKeyId:` + fmt.Sprintf("%v", this.SessionKeyId) + `,`,
-		`DevEui:` + fmt.Sprintf("%v", this.DevEui) + `,`,
-		`JoinEui:` + fmt.Sprintf("%v", this.JoinEui) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *NwkSKeysResponse) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&NwkSKeysResponse{`,
-		`FNwkSIntKey:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.FNwkSIntKey), "KeyEnvelope", "KeyEnvelope", 1), `&`, ``, 1) + `,`,
-		`SNwkSIntKey:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.SNwkSIntKey), "KeyEnvelope", "KeyEnvelope", 1), `&`, ``, 1) + `,`,
-		`NwkSEncKey:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.NwkSEncKey), "KeyEnvelope", "KeyEnvelope", 1), `&`, ``, 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *AppSKeyResponse) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&AppSKeyResponse{`,
-		`AppSKey:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.AppSKey), "KeyEnvelope", "KeyEnvelope", 1), `&`, ``, 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *CryptoServicePayloadRequest) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&CryptoServicePayloadRequest{`,
-		`EndDeviceIdentifiers:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.EndDeviceIdentifiers), "EndDeviceIdentifiers", "EndDeviceIdentifiers", 1), `&`, ``, 1) + `,`,
-		`LorawanVersion:` + fmt.Sprintf("%v", this.LorawanVersion) + `,`,
-		`Payload:` + fmt.Sprintf("%v", this.Payload) + `,`,
-		`ProvisionerId:` + fmt.Sprintf("%v", this.ProvisionerId) + `,`,
-		`ProvisioningData:` + strings.Replace(fmt.Sprintf("%v", this.ProvisioningData), "Struct", "types.Struct", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *CryptoServicePayloadResponse) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&CryptoServicePayloadResponse{`,
-		`Payload:` + fmt.Sprintf("%v", this.Payload) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *JoinAcceptMICRequest) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&JoinAcceptMICRequest{`,
-		`CryptoServicePayloadRequest:` + strings.Replace(strings.Replace(this.CryptoServicePayloadRequest.String(), "CryptoServicePayloadRequest", "CryptoServicePayloadRequest", 1), `&`, ``, 1) + `,`,
-		`JoinRequestType:` + fmt.Sprintf("%v", this.JoinRequestType) + `,`,
-		`DevNonce:` + fmt.Sprintf("%v", this.DevNonce) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *DeriveSessionKeysRequest) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&DeriveSessionKeysRequest{`,
-		`EndDeviceIdentifiers:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.EndDeviceIdentifiers), "EndDeviceIdentifiers", "EndDeviceIdentifiers", 1), `&`, ``, 1) + `,`,
-		`LorawanVersion:` + fmt.Sprintf("%v", this.LorawanVersion) + `,`,
-		`JoinNonce:` + fmt.Sprintf("%v", this.JoinNonce) + `,`,
-		`DevNonce:` + fmt.Sprintf("%v", this.DevNonce) + `,`,
-		`NetId:` + fmt.Sprintf("%v", this.NetId) + `,`,
-		`ProvisionerId:` + fmt.Sprintf("%v", this.ProvisionerId) + `,`,
-		`ProvisioningData:` + strings.Replace(fmt.Sprintf("%v", this.ProvisioningData), "Struct", "types.Struct", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *GetRootKeysRequest) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&GetRootKeysRequest{`,
-		`EndDeviceIdentifiers:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.EndDeviceIdentifiers), "EndDeviceIdentifiers", "EndDeviceIdentifiers", 1), `&`, ``, 1) + `,`,
-		`ProvisionerId:` + fmt.Sprintf("%v", this.ProvisionerId) + `,`,
-		`ProvisioningData:` + strings.Replace(fmt.Sprintf("%v", this.ProvisioningData), "Struct", "types.Struct", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *ProvisionEndDevicesRequest) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&ProvisionEndDevicesRequest{`,
-		`ApplicationIdentifiers:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.ApplicationIdentifiers), "ApplicationIdentifiers", "ApplicationIdentifiers", 1), `&`, ``, 1) + `,`,
-		`ProvisionerId:` + fmt.Sprintf("%v", this.ProvisionerId) + `,`,
-		`ProvisioningData:` + fmt.Sprintf("%v", this.ProvisioningData) + `,`,
-		`EndDevices:` + fmt.Sprintf("%v", this.EndDevices) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *ProvisionEndDevicesRequest_List) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&ProvisionEndDevicesRequest_List{`,
-		`List:` + strings.Replace(fmt.Sprintf("%v", this.List), "ProvisionEndDevicesRequest_IdentifiersList", "ProvisionEndDevicesRequest_IdentifiersList", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *ProvisionEndDevicesRequest_Range) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&ProvisionEndDevicesRequest_Range{`,
-		`Range:` + strings.Replace(fmt.Sprintf("%v", this.Range), "ProvisionEndDevicesRequest_IdentifiersRange", "ProvisionEndDevicesRequest_IdentifiersRange", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *ProvisionEndDevicesRequest_FromData) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&ProvisionEndDevicesRequest_FromData{`,
-		`FromData:` + strings.Replace(fmt.Sprintf("%v", this.FromData), "ProvisionEndDevicesRequest_IdentifiersFromData", "ProvisionEndDevicesRequest_IdentifiersFromData", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *ProvisionEndDevicesRequest_IdentifiersList) String() string {
-	if this == nil {
-		return "nil"
-	}
-	repeatedStringForEndDeviceIds := "[]EndDeviceIdentifiers{"
-	for _, f := range this.EndDeviceIds {
-		repeatedStringForEndDeviceIds += fmt.Sprintf("%v", f) + ","
-	}
-	repeatedStringForEndDeviceIds += "}"
-	s := strings.Join([]string{`&ProvisionEndDevicesRequest_IdentifiersList{`,
-		`JoinEui:` + fmt.Sprintf("%v", this.JoinEui) + `,`,
-		`EndDeviceIds:` + repeatedStringForEndDeviceIds + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *ProvisionEndDevicesRequest_IdentifiersRange) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&ProvisionEndDevicesRequest_IdentifiersRange{`,
-		`JoinEui:` + fmt.Sprintf("%v", this.JoinEui) + `,`,
-		`StartDevEui:` + fmt.Sprintf("%v", this.StartDevEui) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *ProvisionEndDevicesRequest_IdentifiersFromData) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&ProvisionEndDevicesRequest_IdentifiersFromData{`,
-		`JoinEui:` + fmt.Sprintf("%v", this.JoinEui) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *ApplicationActivationSettings) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&ApplicationActivationSettings{`,
-		`KekLabel:` + fmt.Sprintf("%v", this.KekLabel) + `,`,
-		`Kek:` + strings.Replace(fmt.Sprintf("%v", this.Kek), "KeyEnvelope", "KeyEnvelope", 1) + `,`,
-		`HomeNetId:` + fmt.Sprintf("%v", this.HomeNetId) + `,`,
-		`ApplicationServerId:` + fmt.Sprintf("%v", this.ApplicationServerId) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *GetApplicationActivationSettingsRequest) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&GetApplicationActivationSettingsRequest{`,
-		`ApplicationIdentifiers:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.ApplicationIdentifiers), "ApplicationIdentifiers", "ApplicationIdentifiers", 1), `&`, ``, 1) + `,`,
-		`FieldMask:` + strings.Replace(fmt.Sprintf("%v", this.FieldMask), "FieldMask", "types.FieldMask", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *SetApplicationActivationSettingsRequest) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&SetApplicationActivationSettingsRequest{`,
-		`ApplicationIdentifiers:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.ApplicationIdentifiers), "ApplicationIdentifiers", "ApplicationIdentifiers", 1), `&`, ``, 1) + `,`,
-		`ApplicationActivationSettings:` + strings.Replace(strings.Replace(this.ApplicationActivationSettings.String(), "ApplicationActivationSettings", "ApplicationActivationSettings", 1), `&`, ``, 1) + `,`,
-		`FieldMask:` + strings.Replace(fmt.Sprintf("%v", this.FieldMask), "FieldMask", "types.FieldMask", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *DeleteApplicationActivationSettingsRequest) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&DeleteApplicationActivationSettingsRequest{`,
-		`ApplicationIdentifiers:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.ApplicationIdentifiers), "ApplicationIdentifiers", "ApplicationIdentifiers", 1), `&`, ``, 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *JoinEUIPrefix) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&JoinEUIPrefix{`,
-		`JoinEui:` + fmt.Sprintf("%v", this.JoinEui) + `,`,
-		`Length:` + fmt.Sprintf("%v", this.Length) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *JoinEUIPrefixes) String() string {
-	if this == nil {
-		return "nil"
-	}
-	repeatedStringForPrefixes := "[]JoinEUIPrefix{"
-	for _, f := range this.Prefixes {
-		repeatedStringForPrefixes += strings.Replace(strings.Replace(f.String(), "JoinEUIPrefix", "JoinEUIPrefix", 1), `&`, ``, 1) + ","
-	}
-	repeatedStringForPrefixes += "}"
-	s := strings.Join([]string{`&JoinEUIPrefixes{`,
-		`Prefixes:` + repeatedStringForPrefixes + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func valueToStringJoinserver(v interface{}) string {
-	rv := reflect.ValueOf(v)
-	if rv.IsNil() {
-		return "nil"
-	}
-	pv := reflect.Indirect(rv).Interface()
-	return fmt.Sprintf("*%v", pv)
 }

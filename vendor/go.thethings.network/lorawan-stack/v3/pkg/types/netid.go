@@ -1,4 +1,4 @@
-// Copyright © 2019 The Things Network Foundation, The Things Industries B.V.
+// Copyright © 2022 The Things Network Foundation, The Things Industries B.V.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -16,12 +16,17 @@ package types
 
 import (
 	"encoding/hex"
+	"fmt"
 	"strings"
 
+	"github.com/TheThingsIndustries/protoc-gen-go-flags/flagsplugin"
+	"github.com/TheThingsIndustries/protoc-gen-go-json/jsonplugin"
+	"github.com/spf13/pflag"
+	"go.thethings.network/lorawan-stack/v3/cmd/ttn-lw-cli/customflags"
 	"go.thethings.network/lorawan-stack/v3/pkg/errors"
 )
 
-const unmatchedNetID = "unmatched NetID type"
+var errInvalidNetID = errors.DefineInvalidArgument("invalid_net_id", "invalid NetID")
 
 // NetID is issued by the LoRa Alliance.
 type NetID [3]byte
@@ -29,17 +34,54 @@ type NetID [3]byte
 // IsZero returns true iff the type is zero.
 func (id NetID) IsZero() bool { return id == [3]byte{} }
 
-// String implements the Stringer interface.
 func (id NetID) String() string { return strings.ToUpper(hex.EncodeToString(id[:])) }
 
-// GoString implements the GoStringer interface.
 func (id NetID) GoString() string { return id.String() }
 
-// Size implements the Sizer interface.
-func (id NetID) Size() int { return 3 }
+func (id NetID) Bytes() []byte {
+	b := make([]byte, 3)
+	copy(b, id[:])
+	return b
+}
+
+// GetNetID gets a typed NetID from the bytes.
+// It returns nil, nil if b is nil.
+// It returns an error if unmarshaling fails.
+func GetNetID(b []byte) (*NetID, error) {
+	if b == nil {
+		return nil, nil
+	}
+	var t NetID
+	if err := t.UnmarshalBinary(b); err != nil {
+		return nil, err
+	}
+	return &t, nil
+}
+
+// MustNetID returns a typed NetID from the bytes.
+// It returns nil if the bytes are empty.
+// It panics if unmarshaling results in an error.
+func MustNetID(b []byte) *NetID {
+	t, err := GetNetID(b)
+	if err != nil {
+		panic(err)
+	}
+	return t
+}
+
+// OrZero returns the NetID value, or a zero value if the NetID was nil.
+func (id *NetID) OrZero() NetID {
+	if id != nil {
+		return *id
+	}
+	return NetID{}
+}
 
 // Equal returns true iff IDs are equal.
 func (id NetID) Equal(other NetID) bool { return id == other }
+
+// Size implements the Sizer interface.
+func (id NetID) Size() int { return 3 }
 
 // Marshal implements the proto.Marshaler interface.
 func (id NetID) Marshal() ([]byte, error) { return id.MarshalBinary() }
@@ -56,7 +98,34 @@ func (id NetID) MarshalJSON() ([]byte, error) { return marshalJSONHexBytes(id[:]
 // UnmarshalJSON implements the json.Unmarshaler interface.
 func (id *NetID) UnmarshalJSON(data []byte) error {
 	*id = [3]byte{}
-	return unmarshalJSONHexBytes(id[:], data)
+	if err := unmarshalJSONHexBytes(id[:], data); err != nil {
+		return errInvalidNetID.WithCause(err)
+	}
+	return nil
+}
+
+// MarshalProtoJSON implements the jsonplugin.Marshaler interface.
+func (id *NetID) MarshalProtoJSON(s *jsonplugin.MarshalState) {
+	if id == nil {
+		s.WriteNil()
+		return
+	}
+	s.WriteString(fmt.Sprintf("%X", id[:]))
+}
+
+// UnmarshalProtoJSON implements the jsonplugin.Unmarshaler interface.
+func (id *NetID) UnmarshalProtoJSON(s *jsonplugin.UnmarshalState) {
+	*id = [3]byte{}
+	b, err := hex.DecodeString(s.ReadString())
+	if err != nil {
+		s.SetError(err)
+		return
+	}
+	if len(b) != 3 {
+		s.SetError(errInvalidNetID.WithCause(errInvalidLength.WithAttributes("want", 3, "got", len(b))))
+		return
+	}
+	copy(id[:], b)
 }
 
 // MarshalBinary implements the encoding.BinaryMarshaler interface.
@@ -65,7 +134,10 @@ func (id NetID) MarshalBinary() ([]byte, error) { return marshalBinaryBytes(id[:
 // UnmarshalBinary implements the encoding.BinaryUnmarshaler interface.
 func (id *NetID) UnmarshalBinary(data []byte) error {
 	*id = [3]byte{}
-	return unmarshalBinaryBytes(id[:], data)
+	if err := unmarshalBinaryBytes(id[:], data); err != nil {
+		return errInvalidNetID.WithCause(err)
+	}
+	return nil
 }
 
 // MarshalText implements the encoding.TextMarshaler interface.
@@ -74,7 +146,10 @@ func (id NetID) MarshalText() ([]byte, error) { return marshalTextBytes(id[:]) }
 // UnmarshalText implements the encoding.TextUnmarshaler interface.
 func (id *NetID) UnmarshalText(data []byte) error {
 	*id = [3]byte{}
-	return unmarshalTextBytes(id[:], data)
+	if err := unmarshalTextBytes(id[:], data); err != nil {
+		return errInvalidNetID.WithCause(err)
+	}
+	return nil
 }
 
 // MarshalNumber returns the numeric value.
@@ -114,7 +189,7 @@ func (id NetID) ID() []byte {
 		// 21 LSB
 		return []byte{id[0] & 0x1f, id[1], id[2]}
 	default:
-		panic(unmatchedNetID)
+		panic("unreachable")
 	}
 }
 
@@ -128,7 +203,7 @@ func (id NetID) IDBits() uint {
 	case 3, 4, 5, 6, 7:
 		return 21
 	}
-	panic(unmatchedNetID)
+	panic("unreachable")
 }
 
 // Copy stores a copy of id in x and returns it.
@@ -157,4 +232,20 @@ func NewNetID(typ byte, id []byte) (netID NetID, err error) {
 	copy(netID[:], id)
 	netID[0] = netID[0]&0x1f | typ<<5
 	return netID, nil
+}
+
+// GetNetIDFromFlag gets a NetID from a named flag in the flag set.
+func GetNetIDFromFlag(fs *pflag.FlagSet, name string) (value NetID, set bool, err error) {
+	flag := fs.Lookup(name)
+	if flag == nil {
+		return NetID{}, false, &flagsplugin.ErrFlagNotFound{FlagName: name}
+	}
+	var netID NetID
+	if !flag.Changed {
+		return netID, flag.Changed, nil
+	}
+	if err := netID.Unmarshal(flag.Value.(*customflags.ExactBytesValue).Value); err != nil {
+		return netID, false, err
+	}
+	return netID, flag.Changed, nil
 }

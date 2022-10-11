@@ -19,12 +19,12 @@ import (
 	"fmt"
 
 	"go.thethings.network/lorawan-stack/v3/pkg/errors"
-	"go.thethings.network/lorawan-stack/v3/pkg/types"
+	types "go.thethings.network/lorawan-stack/v3/pkg/types"
 )
 
 // IsZero returns true if all identifiers have zero-values.
-func (ids ApplicationIdentifiers) IsZero() bool {
-	return ids.ApplicationId == ""
+func (ids *ApplicationIdentifiers) IsZero() bool {
+	return ids == nil || ids.ApplicationId == ""
 }
 
 // FieldIsZero returns whether path p is zero.
@@ -40,16 +40,19 @@ func (v *ApplicationIdentifiers) FieldIsZero(p string) bool {
 }
 
 // IsZero returns true if all identifiers have zero-values.
-func (ids ClientIdentifiers) IsZero() bool {
-	return ids.ClientId == ""
+func (ids *ClientIdentifiers) IsZero() bool {
+	return ids == nil || ids.ClientId == ""
 }
 
 // IsZero reports whether ids represent zero identifiers.
-func (ids EndDeviceIdentifiers) IsZero() bool {
-	return ids.GetDeviceId() == "" &&
-		ids.GetApplicationId() == "" &&
-		(ids.DevAddr == nil || ids.DevAddr.IsZero()) &&
-		(ids.DevEui == nil || ids.DevEui.IsZero()) &&
+func (ids *EndDeviceIdentifiers) IsZero() bool {
+	if ids == nil {
+		return true
+	}
+	return ids.DeviceId == "" &&
+		ids.ApplicationIds == nil &&
+		types.MustDevAddr(ids.DevAddr).OrZero().IsZero() &&
+		types.MustEUI64(ids.DevEui).OrZero().IsZero() &&
 		ids.JoinEui == nil
 }
 
@@ -60,9 +63,9 @@ func (v *EndDeviceIdentifiers) FieldIsZero(p string) bool {
 	}
 	switch p {
 	case "application_ids":
-		return v.ApplicationIdentifiers == ApplicationIdentifiers{}
+		return v.ApplicationIds == nil
 	case "application_ids.application_id":
-		return v.ApplicationIdentifiers.FieldIsZero("application_id")
+		return v.ApplicationIds.FieldIsZero("application_id")
 	case "dev_addr":
 		return v.DevAddr == nil
 	case "dev_eui":
@@ -76,18 +79,24 @@ func (v *EndDeviceIdentifiers) FieldIsZero(p string) bool {
 }
 
 // IsZero returns true if all identifiers have zero-values.
-func (ids GatewayIdentifiers) IsZero() bool {
+func (ids *GatewayIdentifiers) IsZero() bool {
+	if ids == nil {
+		return true
+	}
 	return ids.GatewayId == "" && ids.Eui == nil
 }
 
 // IsZero returns true if all identifiers have zero-values.
-func (ids OrganizationIdentifiers) IsZero() bool {
-	return ids.OrganizationId == ""
+func (ids *OrganizationIdentifiers) IsZero() bool {
+	return ids == nil || ids.OrganizationId == ""
 }
 
 // IsZero returns true if all identifiers have zero-values.
-func (ids UserIdentifiers) IsZero() bool {
-	return ids.UserId == "" && ids.Email == ""
+func (ids *UserIdentifiers) IsZero() bool {
+	if ids == nil {
+		return true
+	}
+	return ids.GetUserId() == "" && ids.GetEmail() == ""
 }
 
 // GetOrganizationOrUserIdentifiers returns the OrganizationIdentifiers as *OrganizationOrUserIdentifiers.
@@ -95,13 +104,8 @@ func (ids *OrganizationIdentifiers) GetOrganizationOrUserIdentifiers() *Organiza
 	if ids == nil {
 		return nil
 	}
-	return ids.OrganizationOrUserIdentifiers()
-}
-
-// OrganizationOrUserIdentifiers returns the OrganizationIdentifiers as *OrganizationOrUserIdentifiers.
-func (ids OrganizationIdentifiers) OrganizationOrUserIdentifiers() *OrganizationOrUserIdentifiers {
 	return &OrganizationOrUserIdentifiers{Ids: &OrganizationOrUserIdentifiers_OrganizationIds{
-		OrganizationIds: &ids,
+		OrganizationIds: ids,
 	}}
 }
 
@@ -110,35 +114,9 @@ func (ids *UserIdentifiers) GetOrganizationOrUserIdentifiers() *OrganizationOrUs
 	if ids == nil {
 		return nil
 	}
-	return ids.OrganizationOrUserIdentifiers()
-}
-
-// OrganizationOrUserIdentifiers returns the UserIdentifiers as *OrganizationOrUserIdentifiers.
-func (ids UserIdentifiers) OrganizationOrUserIdentifiers() *OrganizationOrUserIdentifiers {
 	return &OrganizationOrUserIdentifiers{Ids: &OrganizationOrUserIdentifiers_UserIds{
-		UserIds: &ids,
+		UserIds: ids,
 	}}
-}
-
-// Copy stores a copy of ids in x and returns it.
-func (ids EndDeviceIdentifiers) Copy(x *EndDeviceIdentifiers) *EndDeviceIdentifiers {
-	*x = EndDeviceIdentifiers{
-		DeviceId: ids.DeviceId,
-		ApplicationIdentifiers: ApplicationIdentifiers{
-			ApplicationId: ids.ApplicationId,
-		},
-		XXX_sizecache: ids.XXX_sizecache,
-	}
-	if ids.DevEui != nil {
-		x.DevEui = ids.DevEui.Copy(&types.EUI64{})
-	}
-	if ids.JoinEui != nil {
-		x.JoinEui = ids.JoinEui.Copy(&types.EUI64{})
-	}
-	if ids.DevAddr != nil {
-		x.DevAddr = ids.DevAddr.Copy(&types.DevAddr{})
-	}
-	return x
 }
 
 var errIdentifiers = errors.DefineInvalidArgument("identifiers", "invalid identifiers")
@@ -165,13 +143,6 @@ func (ids *GatewayIdentifiers) ValidateContext(context.Context) error {
 		return errIdentifiers.WithCause(err)
 	}
 	return nil
-}
-
-func (ids *GatewayIdentifiers) GetEui() *types.EUI64 {
-	if ids == nil {
-		return nil
-	}
-	return ids.Eui
 }
 
 // ValidateContext wraps the generated validator with (optionally context-based) custom checks.

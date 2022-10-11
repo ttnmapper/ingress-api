@@ -52,7 +52,14 @@ func (m *ApplicationPubSubIdentifiers) ValidateFields(paths ...string) error {
 		switch name {
 		case "application_ids":
 
-			if v, ok := interface{}(&m.ApplicationIdentifiers).(interface{ ValidateFields(...string) error }); ok {
+			if m.GetApplicationIds() == nil {
+				return ApplicationPubSubIdentifiersValidationError{
+					field:  "application_ids",
+					reason: "value is required",
+				}
+			}
+
+			if v, ok := interface{}(m.GetApplicationIds()).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return ApplicationPubSubIdentifiersValidationError{
 						field:  "application_ids",
@@ -164,7 +171,14 @@ func (m *ApplicationPubSub) ValidateFields(paths ...string) error {
 		switch name {
 		case "ids":
 
-			if v, ok := interface{}(&m.ApplicationPubSubIdentifiers).(interface{ ValidateFields(...string) error }); ok {
+			if m.GetIds() == nil {
+				return ApplicationPubSubValidationError{
+					field:  "ids",
+					reason: "value is required",
+				}
+			}
+
+			if v, ok := interface{}(m.GetIds()).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return ApplicationPubSubValidationError{
 						field:  "ids",
@@ -176,7 +190,7 @@ func (m *ApplicationPubSub) ValidateFields(paths ...string) error {
 
 		case "created_at":
 
-			if v, ok := interface{}(&m.CreatedAt).(interface{ ValidateFields(...string) error }); ok {
+			if v, ok := interface{}(m.GetCreatedAt()).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return ApplicationPubSubValidationError{
 						field:  "created_at",
@@ -188,7 +202,7 @@ func (m *ApplicationPubSub) ValidateFields(paths ...string) error {
 
 		case "updated_at":
 
-			if v, ok := interface{}(&m.UpdatedAt).(interface{ ValidateFields(...string) error }); ok {
+			if v, ok := interface{}(m.GetUpdatedAt()).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return ApplicationPubSubValidationError{
 						field:  "updated_at",
@@ -253,6 +267,18 @@ func (m *ApplicationPubSub) ValidateFields(paths ...string) error {
 				if err := v.ValidateFields(subs...); err != nil {
 					return ApplicationPubSubValidationError{
 						field:  "uplink_message",
+						reason: "embedded message failed validation",
+						cause:  err,
+					}
+				}
+			}
+
+		case "uplink_normalized":
+
+			if v, ok := interface{}(m.GetUplinkNormalized()).(interface{ ValidateFields(...string) error }); ok {
+				if err := v.ValidateFields(subs...); err != nil {
+					return ApplicationPubSubValidationError{
+						field:  "uplink_normalized",
 						reason: "embedded message failed validation",
 						cause:  err,
 					}
@@ -699,7 +725,14 @@ func (m *GetApplicationPubSubRequest) ValidateFields(paths ...string) error {
 		switch name {
 		case "ids":
 
-			if v, ok := interface{}(&m.ApplicationPubSubIdentifiers).(interface{ ValidateFields(...string) error }); ok {
+			if m.GetIds() == nil {
+				return GetApplicationPubSubRequestValidationError{
+					field:  "ids",
+					reason: "value is required",
+				}
+			}
+
+			if v, ok := interface{}(m.GetIds()).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return GetApplicationPubSubRequestValidationError{
 						field:  "ids",
@@ -805,7 +838,14 @@ func (m *ListApplicationPubSubsRequest) ValidateFields(paths ...string) error {
 		switch name {
 		case "application_ids":
 
-			if v, ok := interface{}(&m.ApplicationIdentifiers).(interface{ ValidateFields(...string) error }); ok {
+			if m.GetApplicationIds() == nil {
+				return ListApplicationPubSubsRequestValidationError{
+					field:  "application_ids",
+					reason: "value is required",
+				}
+			}
+
+			if v, ok := interface{}(m.GetApplicationIds()).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return ListApplicationPubSubsRequestValidationError{
 						field:  "application_ids",
@@ -911,7 +951,14 @@ func (m *SetApplicationPubSubRequest) ValidateFields(paths ...string) error {
 		switch name {
 		case "pubsub":
 
-			if v, ok := interface{}(&m.ApplicationPubSub).(interface{ ValidateFields(...string) error }); ok {
+			if m.GetPubsub() == nil {
+				return SetApplicationPubSubRequestValidationError{
+					field:  "pubsub",
+					reason: "value is required",
+				}
+			}
+
+			if v, ok := interface{}(m.GetPubsub()).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return SetApplicationPubSubRequestValidationError{
 						field:  "pubsub",

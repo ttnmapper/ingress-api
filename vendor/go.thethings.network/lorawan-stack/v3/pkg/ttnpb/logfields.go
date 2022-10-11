@@ -32,7 +32,7 @@ func (ids *EndDeviceIdentifiers) ExtractRequestFields(m map[string]interface{}) 
 	if ids == nil {
 		return
 	}
-	m["application_id"] = ids.ApplicationId
+	m["application_id"] = ids.GetApplicationIds().GetApplicationId()
 	m["device_id"] = ids.DeviceId
 }
 
@@ -77,7 +77,7 @@ func (req *CreateApplicationRequest) ExtractRequestFields(m map[string]interface
 		return
 	}
 	req.Application.ExtractRequestFields(m)
-	extractCollaboratorFields(m, &req.Collaborator)
+	extractCollaboratorFields(m, req.GetCollaborator())
 }
 
 func (req *CreateClientRequest) ExtractRequestFields(m map[string]interface{}) {
@@ -85,7 +85,7 @@ func (req *CreateClientRequest) ExtractRequestFields(m map[string]interface{}) {
 		return
 	}
 	req.Client.ExtractRequestFields(m)
-	extractCollaboratorFields(m, &req.Collaborator)
+	extractCollaboratorFields(m, req.GetCollaborator())
 }
 
 func (req *CreateGatewayRequest) ExtractRequestFields(m map[string]interface{}) {
@@ -93,7 +93,7 @@ func (req *CreateGatewayRequest) ExtractRequestFields(m map[string]interface{}) 
 		return
 	}
 	req.Gateway.ExtractRequestFields(m)
-	extractCollaboratorFields(m, &req.Collaborator)
+	extractCollaboratorFields(m, req.GetCollaborator())
 }
 
 func (req *CreateOrganizationRequest) ExtractRequestFields(m map[string]interface{}) {
@@ -101,37 +101,37 @@ func (req *CreateOrganizationRequest) ExtractRequestFields(m map[string]interfac
 		return
 	}
 	req.Organization.ExtractRequestFields(m)
-	extractCollaboratorFields(m, &req.Collaborator)
+	extractCollaboratorFields(m, req.GetCollaborator())
 }
 
 func (req *SetApplicationCollaboratorRequest) ExtractRequestFields(m map[string]interface{}) {
 	if req == nil {
 		return
 	}
-	req.ApplicationIdentifiers.ExtractRequestFields(m)
-	extractCollaboratorFields(m, &req.Collaborator.OrganizationOrUserIdentifiers)
+	req.ApplicationIds.ExtractRequestFields(m)
+	extractCollaboratorFields(m, req.GetCollaborator().GetIds())
 }
 
 func (req *SetClientCollaboratorRequest) ExtractRequestFields(m map[string]interface{}) {
 	if req == nil {
 		return
 	}
-	req.ClientIdentifiers.ExtractRequestFields(m)
-	extractCollaboratorFields(m, &req.Collaborator.OrganizationOrUserIdentifiers)
+	req.GetClientIds().ExtractRequestFields(m)
+	extractCollaboratorFields(m, req.GetCollaborator().GetIds())
 }
 
 func (req *SetGatewayCollaboratorRequest) ExtractRequestFields(m map[string]interface{}) {
 	if req == nil {
 		return
 	}
-	req.GatewayIdentifiers.ExtractRequestFields(m)
-	extractCollaboratorFields(m, &req.Collaborator.OrganizationOrUserIdentifiers)
+	req.GetGatewayIds().ExtractRequestFields(m)
+	extractCollaboratorFields(m, req.GetCollaborator().GetIds())
 }
 
 func (req *SetOrganizationCollaboratorRequest) ExtractRequestFields(m map[string]interface{}) {
 	if req == nil {
 		return
 	}
-	req.OrganizationIdentifiers.ExtractRequestFields(m)
-	extractCollaboratorFields(m, &req.Collaborator.OrganizationOrUserIdentifiers)
+	req.GetOrganizationIds().ExtractRequestFields(m)
+	extractCollaboratorFields(m, req.GetCollaborator().GetIds())
 }

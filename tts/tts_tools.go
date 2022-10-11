@@ -2,9 +2,11 @@ package tts
 
 import (
 	"encoding/json"
+	"fmt"
 	"go.thethings.network/lorawan-stack/v3/pkg/jsonpb"
 	"go.thethings.network/lorawan-stack/v3/pkg/ttnpb"
 	"strings"
+	"time"
 	"ttnmapper-ingress-api/types"
 	"ttnmapper-ingress-api/utils"
 )
@@ -55,14 +57,14 @@ func CopyV3Fields(packetIn ttnpb.ApplicationUp, packetOut *types.TtnMapperUplink
 		TODO: Follow what happens on https://github.com/TheThingsNetwork/lorawan-stack/issues/4076
 	*/
 	packetOut.NetworkId = types.NS_TTS_V3 + "://" +
-		packetIn.GetUplinkMessage().NetworkIds.TenantId + "@" +
-		packetIn.GetUplinkMessage().NetworkIds.NetId.String()
+		packetIn.GetUplinkMessage().GetNetworkIds().TenantId + "@" +
+		utils.NetIdToString(packetIn.GetUplinkMessage().GetNetworkIds().NetId)
 
-	packetOut.AppID = packetIn.EndDeviceIdentifiers.ApplicationId
-	packetOut.DevID = packetIn.EndDeviceIdentifiers.DeviceId
+	packetOut.AppID = packetIn.GetEndDeviceIds().ApplicationIds.ApplicationId
+	packetOut.DevID = packetIn.GetEndDeviceIds().DeviceId
 
-	if packetIn.EndDeviceIdentifiers.DevEui != nil {
-		packetOut.DevEui = packetIn.EndDeviceIdentifiers.DevEui.String()
+	if packetIn.GetEndDeviceIds().DevEui != nil {
+		packetOut.DevEui = fmt.Sprintf("%016X", packetIn.GetEndDeviceIds().DevEui)
 	}
 
 	/*
@@ -77,7 +79,7 @@ func CopyV3Fields(packetIn ttnpb.ApplicationUp, packetOut *types.TtnMapperUplink
 		    },
 		    "received_at": "2020-02-12T15:15..."     // ISO 8601 UTC timestamp at which the uplink has been received by the Network Server
 	*/
-	packetOut.Time = packetIn.ReceivedAt.UnixNano()
+	packetOut.Time = time.Unix(packetIn.ReceivedAt.Seconds, int64(packetIn.ReceivedAt.Nanos)).UnixNano()
 
 	/*
 	   V3
@@ -110,6 +112,7 @@ func CopyV3Fields(packetIn ttnpb.ApplicationUp, packetOut *types.TtnMapperUplink
 		packetOut.Modulation = "LORA"
 		packetOut.SpreadingFactor = uint8(packetIn.GetUplinkMessage().Settings.DataRate.GetLora().SpreadingFactor)
 		packetOut.Bandwidth = uint64(packetIn.GetUplinkMessage().Settings.DataRate.GetLora().Bandwidth)
+		packetOut.CodingRate = packetIn.GetUplinkMessage().Settings.DataRate.GetLora().CodingRate
 	}
 	if packetIn.GetUplinkMessage().Settings.DataRate.GetFsk() != nil {
 		//log.Println("Is FSK")
@@ -119,10 +122,9 @@ func CopyV3Fields(packetIn ttnpb.ApplicationUp, packetOut *types.TtnMapperUplink
 	if packetIn.GetUplinkMessage().Settings.DataRate.GetLrfhss() != nil {
 		packetOut.Modulation = "LR_FHSS"
 		packetOut.Bandwidth = uint64(packetIn.GetUplinkMessage().Settings.DataRate.GetLrfhss().GetOperatingChannelWidth())
+		packetOut.CodingRate = packetIn.GetUplinkMessage().Settings.DataRate.GetLrfhss().CodingRate
 		// TODO: grid steps, code rate
 	}
-
-	packetOut.CodingRate = packetIn.GetUplinkMessage().Settings.CodingRate
 
 	/*
 		V3
@@ -172,9 +174,9 @@ func CopyV3Fields(packetIn ttnpb.ApplicationUp, packetOut *types.TtnMapperUplink
 		gatewayOut.Attributes = make(map[string]interface{}, 0)
 
 		// The gateway's ID - unique per network
-		gatewayOut.GatewayId = gatewayIn.GatewayIdentifiers.GetGatewayId()
-		if gatewayIn.GatewayIdentifiers.Eui != nil {
-			gatewayOut.GatewayEui = gatewayIn.GatewayIdentifiers.Eui.String()
+		gatewayOut.GatewayId = gatewayIn.GatewayIds.GatewayId
+		if gatewayIn.GatewayIds.Eui != nil {
+			gatewayOut.GatewayEui = fmt.Sprintf("%016X", gatewayIn.GatewayIds.Eui)
 		}
 
 		/*
@@ -206,7 +208,7 @@ func CopyV3Fields(packetIn ttnpb.ApplicationUp, packetOut *types.TtnMapperUplink
 			if forwarderTenantId == "ttnv2" {
 				gatewayOut.NetworkId = "thethingsnetwork.org"
 			} else {
-				gatewayOut.NetworkId = types.NS_TTS_V3 + "://" + forwarderTenantId + "@" + forwarderNetId.String()
+				gatewayOut.NetworkId = types.NS_TTS_V3 + "://" + forwarderTenantId + "@" + utils.NetIdToString(forwarderNetId)
 				gatewayOut.Attributes["cluster_id"] = gatewayIn.PacketBroker.ForwarderClusterId
 			}
 
@@ -214,7 +216,7 @@ func CopyV3Fields(packetIn ttnpb.ApplicationUp, packetOut *types.TtnMapperUplink
 				Use GatewayId and EUI if reported by PacketBroker
 			*/
 			if gatewayIn.PacketBroker.ForwarderGatewayEui != nil {
-				gatewayOut.GatewayEui = gatewayIn.PacketBroker.ForwarderGatewayEui.String()
+				gatewayOut.GatewayEui = fmt.Sprintf("%016X", gatewayIn.PacketBroker.ForwarderGatewayEui)
 			}
 			if gatewayIn.PacketBroker.ForwarderGatewayId != nil {
 				gatewayOut.GatewayId = gatewayIn.PacketBroker.ForwarderGatewayId.Value
@@ -223,7 +225,7 @@ func CopyV3Fields(packetIn ttnpb.ApplicationUp, packetOut *types.TtnMapperUplink
 		} else {
 			gatewayOut.NetworkId = types.NS_TTS_V3 + "://" +
 				packetIn.GetUplinkMessage().NetworkIds.TenantId + "@" +
-				packetIn.GetUplinkMessage().NetworkIds.NetId.String()
+				utils.NetIdToString(packetIn.GetUplinkMessage().NetworkIds.NetId)
 			gatewayOut.Attributes["cluster_id"] = packetIn.GetUplinkMessage().NetworkIds.ClusterId
 		}
 
@@ -242,7 +244,7 @@ func CopyV3Fields(packetIn ttnpb.ApplicationUp, packetOut *types.TtnMapperUplink
 		gatewayOut.Timestamp = gatewayIn.Timestamp
 
 		if gatewayIn.Time != nil {
-			gatewayOut.Time = gatewayIn.Time.UnixNano()
+			gatewayOut.Time = time.Unix(gatewayIn.Time.Seconds, int64(gatewayIn.Time.Nanos)).UnixNano()
 		}
 
 		gatewayOut.FineTimestamp = gatewayIn.FineTimestamp

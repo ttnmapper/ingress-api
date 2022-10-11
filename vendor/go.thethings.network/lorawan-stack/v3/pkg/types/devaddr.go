@@ -1,4 +1,4 @@
-// Copyright © 2019 The Things Network Foundation, The Things Industries B.V.
+// Copyright © 2022 The Things Network Foundation, The Things Industries B.V.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -21,8 +21,14 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/TheThingsIndustries/protoc-gen-go-flags/flagsplugin"
+	"github.com/TheThingsIndustries/protoc-gen-go-json/jsonplugin"
+	"github.com/spf13/pflag"
+	"go.thethings.network/lorawan-stack/v3/cmd/ttn-lw-cli/customflags"
 	"go.thethings.network/lorawan-stack/v3/pkg/errors"
 )
+
+var errInvalidDevAddr = errors.DefineInvalidArgument("invalid_dev_addr", "invalid DevAddr")
 
 // DevAddr is a 32-bit LoRaWAN device address.
 type DevAddr [4]byte
@@ -36,17 +42,52 @@ var MaxDevAddr = DevAddr{0xFF, 0xFF, 0xFF, 0xFF}
 // IsZero returns true iff the type is zero.
 func (addr DevAddr) IsZero() bool { return addr == [4]byte{} }
 
-// String implements the Stringer interface.
-func (addr DevAddr) String() string { return strings.ToUpper(hex.EncodeToString(addr[:])) }
-
-// GoString implements the GoStringer interface.
+func (addr DevAddr) String() string   { return strings.ToUpper(hex.EncodeToString(addr[:])) }
 func (addr DevAddr) GoString() string { return addr.String() }
+func (addr DevAddr) Bytes() []byte {
+	b := make([]byte, 4)
+	copy(b, addr[:])
+	return b
+}
 
-// Size implements the Sizer interface.
-func (addr DevAddr) Size() int { return 4 }
+// GetDevAddr gets a typed DevAddr from the bytes.
+// It returns nil, nil if b is nil.
+// It returns an error if unmarshaling fails.
+func GetDevAddr(b []byte) (*DevAddr, error) {
+	if b == nil {
+		return nil, nil
+	}
+	var t DevAddr
+	if err := t.UnmarshalBinary(b); err != nil {
+		return nil, err
+	}
+	return &t, nil
+}
+
+// MustDevAddr returns a typed DevAddr from the bytes.
+// It returns nil if the bytes are empty.
+// It panics if unmarshaling results in an error.
+func MustDevAddr(b []byte) *DevAddr {
+	t, err := GetDevAddr(b)
+	if err != nil {
+		panic(err)
+	}
+	return t
+}
+
+// OrZero returns the DevAddr value, or a zero value if the DevAddr was nil.
+func (addr *DevAddr) OrZero() DevAddr {
+	if addr != nil {
+		return *addr
+	}
+	return DevAddr{}
+}
 
 // Equal returns true iff addresses are equal.
 func (addr DevAddr) Equal(other DevAddr) bool { return addr == other }
+
+// Size implements the Sizer interface.
+func (addr DevAddr) Size() int { return 4 }
 
 // Marshal implements the proto.Marshaler interface.
 func (addr DevAddr) Marshal() ([]byte, error) { return addr.MarshalBinary() }
@@ -63,7 +104,34 @@ func (addr DevAddr) MarshalJSON() ([]byte, error) { return marshalJSONHexBytes(a
 // UnmarshalJSON implements the json.Unmarshaler interface.
 func (addr *DevAddr) UnmarshalJSON(data []byte) error {
 	*addr = [4]byte{}
-	return unmarshalJSONHexBytes(addr[:], data)
+	if err := unmarshalJSONHexBytes(addr[:], data); err != nil {
+		return errInvalidDevAddr.WithCause(err)
+	}
+	return nil
+}
+
+// MarshalProtoJSON implements the jsonplugin.Marshaler interface.
+func (addr *DevAddr) MarshalProtoJSON(s *jsonplugin.MarshalState) {
+	if addr == nil {
+		s.WriteNil()
+		return
+	}
+	s.WriteString(fmt.Sprintf("%X", addr[:]))
+}
+
+// UnmarshalProtoJSON implements the jsonplugin.Unmarshaler interface.
+func (addr *DevAddr) UnmarshalProtoJSON(s *jsonplugin.UnmarshalState) {
+	*addr = [4]byte{}
+	b, err := hex.DecodeString(s.ReadString())
+	if err != nil {
+		s.SetError(err)
+		return
+	}
+	if len(b) != 4 {
+		s.SetError(errInvalidDevAddr.WithCause(errInvalidLength.WithAttributes("want", 4, "got", len(b))))
+		return
+	}
+	copy(addr[:], b)
 }
 
 // MarshalBinary implements the encoding.BinaryMarshaler interface.
@@ -72,7 +140,10 @@ func (addr DevAddr) MarshalBinary() ([]byte, error) { return marshalBinaryBytes(
 // UnmarshalBinary implements the encoding.BinaryUnmarshaler interface.
 func (addr *DevAddr) UnmarshalBinary(data []byte) error {
 	*addr = [4]byte{}
-	return unmarshalBinaryBytes(addr[:], data)
+	if err := unmarshalBinaryBytes(addr[:], data); err != nil {
+		return errInvalidDevAddr.WithCause(err)
+	}
+	return nil
 }
 
 // MarshalText implements the encoding.TextMarshaler interface.
@@ -81,7 +152,10 @@ func (addr DevAddr) MarshalText() ([]byte, error) { return marshalTextBytes(addr
 // UnmarshalText implements the encoding.TextUnmarshaler interface.
 func (addr *DevAddr) UnmarshalText(data []byte) error {
 	*addr = [4]byte{}
-	return unmarshalTextBytes(addr[:], data)
+	if err := unmarshalTextBytes(addr[:], data); err != nil {
+		return errInvalidDevAddr.WithCause(err)
+	}
+	return nil
 }
 
 // MarshalNumber returns the DevAddr in a decimal form.
@@ -95,65 +169,71 @@ func (addr *DevAddr) UnmarshalNumber(n uint32) {
 	binary.BigEndian.PutUint32(addr[:], n)
 }
 
-// HasValidNetIDType returns true if the DevAddr has NetID type, which is valid and compliant with LoRaWAN specification.
-func (addr DevAddr) HasValidNetIDType() bool {
-	return addr[0] != 0xff
-}
-
 // NetIDType returns the NetID type of the DevAddr.
-func (addr DevAddr) NetIDType() byte {
-	for i := uint(7); i >= 0; i-- {
-		if addr[0]&(1<<i) == 0 {
-			return byte(7 - i)
+func (addr DevAddr) NetIDType() (byte, bool) {
+	const prefix = 0b11111110
+	for i := byte(0); i <= 7; i++ {
+		prefixLength := i + 1
+		typePrefix := byte(prefix << (7 - i))
+		if addr[0]>>(8-prefixLength) == typePrefix>>(8-prefixLength) {
+			return i, true
 		}
 	}
-	panic(unmatchedNetID)
+	return 0, false
 }
 
 // NwkAddr returns NwkAddr of the DevAddr.
-func (addr DevAddr) NwkAddr() []byte {
-	switch addr.NetIDType() {
-	case 0:
-		return []byte{addr[0] & 0x01, addr[1], addr[2], addr[3]}
-	case 1:
-		return []byte{addr[1], addr[2], addr[3]}
-	case 2:
-		return []byte{addr[1] & 0x0f, addr[2], addr[3]}
-	case 3:
-		return []byte{addr[1] & 0x01, addr[2], addr[3]}
-	case 4:
-		return []byte{addr[2] & 0x7f, addr[3]}
-	case 5:
-		return []byte{addr[2] & 0x1f, addr[3]}
-	case 6:
-		return []byte{addr[2] & 0x03, addr[3]}
-	case 7:
-		return []byte{addr[3] & 0x7f}
+func (addr DevAddr) NwkAddr() ([]byte, bool) {
+	netIDType, ok := addr.NetIDType()
+	if !ok {
+		return nil, false
 	}
-	panic(unmatchedNetID)
+	switch netIDType {
+	case 0:
+		return []byte{addr[0] & 0x01, addr[1], addr[2], addr[3]}, true
+	case 1:
+		return []byte{addr[1], addr[2], addr[3]}, true
+	case 2:
+		return []byte{addr[1] & 0x0f, addr[2], addr[3]}, true
+	case 3:
+		return []byte{addr[1] & 0x01, addr[2], addr[3]}, true
+	case 4:
+		return []byte{addr[2] & 0x7f, addr[3]}, true
+	case 5:
+		return []byte{addr[2] & 0x1f, addr[3]}, true
+	case 6:
+		return []byte{addr[2] & 0x03, addr[3]}, true
+	case 7:
+		return []byte{addr[3] & 0x7f}, true
+	}
+	panic("unreachable")
 }
 
-// NwkID returns NwkID of the DevAddr.
-func (addr DevAddr) NwkID() []byte {
-	switch addr.NetIDType() {
-	case 0:
-		return []byte{(addr[0] & 0x7f) >> 1}
-	case 1:
-		return []byte{addr[0] & 0x3f}
-	case 2:
-		return []byte{(addr[0] & 0x1f) >> 4, (addr[0] << 4) | (addr[1] >> 4)}
-	case 3:
-		return []byte{(addr[0] >> 1) & 0x07, (addr[0] << 7) | (addr[1] >> 1)}
-	case 4:
-		return []byte{((addr[0] & 0x07) << 1) | (addr[1] >> 7), (addr[1] << 1) | (addr[2] >> 7)}
-	case 5:
-		return []byte{((addr[0] & 0x03) << 3) | (addr[1] >> 5), (addr[1] << 3) | (addr[2] >> 5)}
-	case 6:
-		return []byte{((addr[0] & 0x01) << 6) | (addr[1] >> 2), (addr[1] << 6) | (addr[2] >> 2)}
-	case 7:
-		return []byte{addr[1] >> 7, (addr[1] << 1) | (addr[2] >> 7), (addr[2] << 1) | (addr[3] >> 7)}
+// NetID returns NetID of the DevAddr.
+func (addr DevAddr) NetID() (NetID, bool) {
+	netIDType, ok := addr.NetIDType()
+	if !ok {
+		return NetID{}, false
 	}
-	panic(unmatchedNetID)
+	switch netIDType {
+	case 0:
+		return NetID{0b000_00000, 0x0, (addr[0] & 0x7f) >> 1}, true
+	case 1:
+		return NetID{0b001_00000, 0x0, addr[0] & 0x3f}, true
+	case 2:
+		return NetID{0b010_00000, (addr[0] & 0x1f) >> 4, (addr[0] << 4) | (addr[1] >> 4)}, true
+	case 3:
+		return NetID{0b011_00000, (addr[0] >> 1) & 0x07, (addr[0] << 7) | (addr[1] >> 1)}, true
+	case 4:
+		return NetID{0b100_00000, ((addr[0] & 0x07) << 1) | (addr[1] >> 7), (addr[1] << 1) | (addr[2] >> 7)}, true
+	case 5:
+		return NetID{0b101_00000, ((addr[0] & 0x03) << 3) | (addr[1] >> 5), (addr[1] << 3) | (addr[2] >> 5)}, true
+	case 6:
+		return NetID{0b110_00000, ((addr[0] & 0x01) << 6) | (addr[1] >> 2), (addr[1] << 6) | (addr[2] >> 2)}, true
+	case 7:
+		return NetID{0b111_00000 | addr[1]>>7, (addr[1] << 1) | (addr[2] >> 7), (addr[2] << 1) | (addr[3] >> 7)}, true
+	}
+	panic("unreachable")
 }
 
 // NwkAddrBits returns the length of NwkAddr field of netID in bits.
@@ -176,7 +256,7 @@ func NwkAddrBits(netID NetID) uint {
 	case 7:
 		return 7
 	}
-	panic(unmatchedNetID)
+	panic("unreachable")
 }
 
 // NwkAddrLength returns the length of NwkAddr field of netID in bytes.
@@ -246,21 +326,56 @@ type DevAddrPrefix struct {
 // IsZero returns true iff the type is zero.
 func (prefix DevAddrPrefix) IsZero() bool { return prefix.Length == 0 }
 
-// String implements the Stringer interface.
 func (prefix DevAddrPrefix) String() string {
 	return fmt.Sprintf("%s/%d", prefix.DevAddr, prefix.Length)
 }
 
-// GoString implements the GoStringer interface.
 func (prefix DevAddrPrefix) GoString() string { return prefix.String() }
 
-// Size implements the Sizer interface.
-func (prefix DevAddrPrefix) Size() int { return 5 }
+func (prefix DevAddrPrefix) Bytes() []byte {
+	return append(prefix.DevAddr.Bytes(), prefix.Length)
+}
+
+// GetDevAddrPrefix gets a typed DevAddrPrefix from the bytes.
+// It returns nil, nil if b is nil.
+// It returns an error if unmarshaling fails.
+func GetDevAddrPrefix(b []byte) (*DevAddrPrefix, error) {
+	if b == nil {
+		return nil, nil
+	}
+	var t DevAddrPrefix
+	if err := t.UnmarshalBinary(b); err != nil {
+		return nil, err
+	}
+	return &t, nil
+}
+
+// MustDevAddrPrefix returns a typed DevAddrPrefix from the bytes.
+// It returns nil if the bytes are empty.
+// It panics if unmarshaling results in an error.
+func MustDevAddrPrefix(b []byte) *DevAddrPrefix {
+	t, err := GetDevAddrPrefix(b)
+	if err != nil {
+		panic(err)
+	}
+	return t
+}
+
+// OrZero returns the DevAddr prefix value, or a zero value if the DevAddr prefix was nil.
+func (prefix *DevAddrPrefix) OrZero() DevAddrPrefix {
+	if prefix != nil {
+		return *prefix
+	}
+	return DevAddrPrefix{}
+}
 
 // Equal returns true iff prefixes are equal.
 func (prefix DevAddrPrefix) Equal(other DevAddrPrefix) bool {
 	return prefix.Length == other.Length && prefix.DevAddr.Equal(other.DevAddr)
 }
+
+// Size implements the Sizer interface.
+func (prefix DevAddrPrefix) Size() int { return 5 }
 
 // MarshalTo implements the MarshalerTo function required by generated protobuf.
 func (prefix DevAddrPrefix) MarshalTo(data []byte) (int, error) {
@@ -327,7 +442,7 @@ func (prefix *DevAddrPrefix) UnmarshalBinary(data []byte) error {
 	if len(data) != 5 {
 		return errInvalidDevAddrPrefix.New()
 	}
-	if err := prefix.DevAddr.Unmarshal(data[:4]); err != nil {
+	if err := prefix.DevAddr.UnmarshalBinary(data[:4]); err != nil {
 		return err
 	}
 	prefix.Length = data[4]
@@ -377,6 +492,34 @@ func (prefix DevAddrPrefix) ConfigString() string {
 	return prefix.String()
 }
 
+// MarshalDevAddrPrefixSlice marshals a slice of DevAddrPrefixes to JSON.
+func MarshalDevAddrPrefixSlice(s *jsonplugin.MarshalState, bs [][]byte) {
+	vs := make([]string, len(bs))
+	for i, b := range bs {
+		prefix := MustDevAddrPrefix(b)
+		vs[i] = prefix.String()
+	}
+	s.WriteStringArray(vs)
+}
+
+// UnmarshalDevAddrPrefixSlice unmarshals a slice of DevAddrPrefixes from JSON.
+func UnmarshalDevAddrPrefixSlice(s *jsonplugin.UnmarshalState) [][]byte {
+	vs := s.ReadStringArray()
+	if s.Err() != nil {
+		return nil
+	}
+	bs := make([][]byte, len(vs))
+	for i, v := range vs {
+		var prefix DevAddrPrefix
+		if err := prefix.UnmarshalText([]byte(v)); err != nil {
+			s.SetError(err)
+			return nil
+		}
+		bs[i] = prefix.Bytes()
+	}
+	return bs
+}
+
 // WithPrefix returns the DevAddr, but with the first length bits replaced by the Prefix.
 func (addr DevAddr) WithPrefix(prefix DevAddrPrefix) (prefixed DevAddr) {
 	k := uint(prefix.Length)
@@ -409,4 +552,37 @@ func (prefix DevAddrPrefix) Matches(addr DevAddr) bool {
 func (addr DevAddr) Copy(x *DevAddr) *DevAddr {
 	copy(x[:], addr[:])
 	return x
+}
+
+// GetDevAddrFromFlag gets a DevAddr from a named flag in the flag set.
+func GetDevAddrFromFlag(fs *pflag.FlagSet, name string) (value DevAddr, set bool, err error) {
+	flag := fs.Lookup(name)
+	var devAddr DevAddr
+	if flag == nil {
+		return devAddr, false, &flagsplugin.ErrFlagNotFound{FlagName: name}
+	}
+	if !flag.Changed {
+		return devAddr, flag.Changed, nil
+	}
+	if err := devAddr.Unmarshal(flag.Value.(*customflags.ExactBytesValue).Value); err != nil {
+		return devAddr, false, err
+	}
+	return devAddr, flag.Changed, nil
+}
+
+// GetDevAddrPrefixSliceFromFlag gets a DevAddrPrefix slice from a named flag in the flag set.
+func GetDevAddrPrefixSliceFromFlag(fs *pflag.FlagSet, name string) (value [][]byte, set bool, err error) {
+	flag := fs.Lookup(name)
+	if flag == nil {
+		return nil, false, &flagsplugin.ErrFlagNotFound{FlagName: name}
+	}
+	value = make([][]byte, len(flag.Value.(*flagsplugin.StringSliceValue).Values))
+	for i, v := range flag.Value.(*flagsplugin.StringSliceValue).Values {
+		var prefix DevAddrPrefix
+		if err := prefix.UnmarshalText([]byte(v.Value)); err != nil {
+			return nil, false, err
+		}
+		value[i] = prefix.Bytes()
+	}
+	return value, flag.Changed, nil
 }

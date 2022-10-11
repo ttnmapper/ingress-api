@@ -2,11 +2,7 @@
 
 package ttnpb
 
-import (
-	fmt "fmt"
-	go_thethings_network_lorawan_stack_v3_pkg_types "go.thethings.network/lorawan-stack/v3/pkg/types"
-	time "time"
-)
+import fmt "fmt"
 
 func (dst *Message) SetFields(src *Message, paths ...string) error {
 	for name, subs := range _processPaths(paths) {
@@ -14,19 +10,26 @@ func (dst *Message) SetFields(src *Message, paths ...string) error {
 		case "m_hdr":
 			if len(subs) > 0 {
 				var newDst, newSrc *MHDR
-				if src != nil {
-					newSrc = &src.MHDR
+				if (src == nil || src.MHdr == nil) && dst.MHdr == nil {
+					continue
 				}
-				newDst = &dst.MHDR
+				if src != nil {
+					newSrc = src.MHdr
+				}
+				if dst.MHdr != nil {
+					newDst = dst.MHdr
+				} else {
+					newDst = &MHDR{}
+					dst.MHdr = newDst
+				}
 				if err := newDst.SetFields(newSrc, subs...); err != nil {
 					return err
 				}
 			} else {
 				if src != nil {
-					dst.MHDR = src.MHDR
+					dst.MHdr = src.MHdr
 				} else {
-					var zero MHDR
-					dst.MHDR = zero
+					dst.MHdr = nil
 				}
 			}
 		case "mic":
@@ -55,132 +58,144 @@ func (dst *Message) SetFields(src *Message, paths ...string) error {
 			for oneofName, oneofSubs := range subPathMap {
 				switch oneofName {
 				case "mac_payload":
-					_, srcOk := src.Payload.(*Message_MacPayload)
-					if !srcOk && src.Payload != nil {
+					var srcTypeOk bool
+					if src != nil {
+						_, srcTypeOk = src.Payload.(*Message_MacPayload)
+					}
+					if srcValid := srcTypeOk || src == nil || src.Payload == nil || len(oneofSubs) == 0; !srcValid {
 						return fmt.Errorf("attempt to set oneof 'mac_payload', while different oneof is set in source")
 					}
-					_, dstOk := dst.Payload.(*Message_MacPayload)
-					if !dstOk && dst.Payload != nil {
+					_, dstTypeOk := dst.Payload.(*Message_MacPayload)
+					if dstValid := dstTypeOk || dst.Payload == nil || len(oneofSubs) == 0; !dstValid {
 						return fmt.Errorf("attempt to set oneof 'mac_payload', while different oneof is set in destination")
 					}
 					if len(oneofSubs) > 0 {
 						var newDst, newSrc *MACPayload
-						if !srcOk && !dstOk {
-							continue
-						}
-						if srcOk {
+						if srcTypeOk {
 							newSrc = src.Payload.(*Message_MacPayload).MacPayload
 						}
-						if dstOk {
+						if dstTypeOk {
 							newDst = dst.Payload.(*Message_MacPayload).MacPayload
-						} else {
+						} else if srcTypeOk {
 							newDst = &MACPayload{}
 							dst.Payload = &Message_MacPayload{MacPayload: newDst}
+						} else {
+							dst.Payload = nil
+							continue
 						}
 						if err := newDst.SetFields(newSrc, oneofSubs...); err != nil {
 							return err
 						}
 					} else {
-						if src != nil {
+						if srcTypeOk {
 							dst.Payload = src.Payload
 						} else {
 							dst.Payload = nil
 						}
 					}
 				case "join_request_payload":
-					_, srcOk := src.Payload.(*Message_JoinRequestPayload)
-					if !srcOk && src.Payload != nil {
+					var srcTypeOk bool
+					if src != nil {
+						_, srcTypeOk = src.Payload.(*Message_JoinRequestPayload)
+					}
+					if srcValid := srcTypeOk || src == nil || src.Payload == nil || len(oneofSubs) == 0; !srcValid {
 						return fmt.Errorf("attempt to set oneof 'join_request_payload', while different oneof is set in source")
 					}
-					_, dstOk := dst.Payload.(*Message_JoinRequestPayload)
-					if !dstOk && dst.Payload != nil {
+					_, dstTypeOk := dst.Payload.(*Message_JoinRequestPayload)
+					if dstValid := dstTypeOk || dst.Payload == nil || len(oneofSubs) == 0; !dstValid {
 						return fmt.Errorf("attempt to set oneof 'join_request_payload', while different oneof is set in destination")
 					}
 					if len(oneofSubs) > 0 {
 						var newDst, newSrc *JoinRequestPayload
-						if !srcOk && !dstOk {
-							continue
-						}
-						if srcOk {
+						if srcTypeOk {
 							newSrc = src.Payload.(*Message_JoinRequestPayload).JoinRequestPayload
 						}
-						if dstOk {
+						if dstTypeOk {
 							newDst = dst.Payload.(*Message_JoinRequestPayload).JoinRequestPayload
-						} else {
+						} else if srcTypeOk {
 							newDst = &JoinRequestPayload{}
 							dst.Payload = &Message_JoinRequestPayload{JoinRequestPayload: newDst}
+						} else {
+							dst.Payload = nil
+							continue
 						}
 						if err := newDst.SetFields(newSrc, oneofSubs...); err != nil {
 							return err
 						}
 					} else {
-						if src != nil {
+						if srcTypeOk {
 							dst.Payload = src.Payload
 						} else {
 							dst.Payload = nil
 						}
 					}
 				case "join_accept_payload":
-					_, srcOk := src.Payload.(*Message_JoinAcceptPayload)
-					if !srcOk && src.Payload != nil {
+					var srcTypeOk bool
+					if src != nil {
+						_, srcTypeOk = src.Payload.(*Message_JoinAcceptPayload)
+					}
+					if srcValid := srcTypeOk || src == nil || src.Payload == nil || len(oneofSubs) == 0; !srcValid {
 						return fmt.Errorf("attempt to set oneof 'join_accept_payload', while different oneof is set in source")
 					}
-					_, dstOk := dst.Payload.(*Message_JoinAcceptPayload)
-					if !dstOk && dst.Payload != nil {
+					_, dstTypeOk := dst.Payload.(*Message_JoinAcceptPayload)
+					if dstValid := dstTypeOk || dst.Payload == nil || len(oneofSubs) == 0; !dstValid {
 						return fmt.Errorf("attempt to set oneof 'join_accept_payload', while different oneof is set in destination")
 					}
 					if len(oneofSubs) > 0 {
 						var newDst, newSrc *JoinAcceptPayload
-						if !srcOk && !dstOk {
-							continue
-						}
-						if srcOk {
+						if srcTypeOk {
 							newSrc = src.Payload.(*Message_JoinAcceptPayload).JoinAcceptPayload
 						}
-						if dstOk {
+						if dstTypeOk {
 							newDst = dst.Payload.(*Message_JoinAcceptPayload).JoinAcceptPayload
-						} else {
+						} else if srcTypeOk {
 							newDst = &JoinAcceptPayload{}
 							dst.Payload = &Message_JoinAcceptPayload{JoinAcceptPayload: newDst}
+						} else {
+							dst.Payload = nil
+							continue
 						}
 						if err := newDst.SetFields(newSrc, oneofSubs...); err != nil {
 							return err
 						}
 					} else {
-						if src != nil {
+						if srcTypeOk {
 							dst.Payload = src.Payload
 						} else {
 							dst.Payload = nil
 						}
 					}
 				case "rejoin_request_payload":
-					_, srcOk := src.Payload.(*Message_RejoinRequestPayload)
-					if !srcOk && src.Payload != nil {
+					var srcTypeOk bool
+					if src != nil {
+						_, srcTypeOk = src.Payload.(*Message_RejoinRequestPayload)
+					}
+					if srcValid := srcTypeOk || src == nil || src.Payload == nil || len(oneofSubs) == 0; !srcValid {
 						return fmt.Errorf("attempt to set oneof 'rejoin_request_payload', while different oneof is set in source")
 					}
-					_, dstOk := dst.Payload.(*Message_RejoinRequestPayload)
-					if !dstOk && dst.Payload != nil {
+					_, dstTypeOk := dst.Payload.(*Message_RejoinRequestPayload)
+					if dstValid := dstTypeOk || dst.Payload == nil || len(oneofSubs) == 0; !dstValid {
 						return fmt.Errorf("attempt to set oneof 'rejoin_request_payload', while different oneof is set in destination")
 					}
 					if len(oneofSubs) > 0 {
 						var newDst, newSrc *RejoinRequestPayload
-						if !srcOk && !dstOk {
-							continue
-						}
-						if srcOk {
+						if srcTypeOk {
 							newSrc = src.Payload.(*Message_RejoinRequestPayload).RejoinRequestPayload
 						}
-						if dstOk {
+						if dstTypeOk {
 							newDst = dst.Payload.(*Message_RejoinRequestPayload).RejoinRequestPayload
-						} else {
+						} else if srcTypeOk {
 							newDst = &RejoinRequestPayload{}
 							dst.Payload = &Message_RejoinRequestPayload{RejoinRequestPayload: newDst}
+						} else {
+							dst.Payload = nil
+							continue
 						}
 						if err := newDst.SetFields(newSrc, oneofSubs...); err != nil {
 							return err
 						}
 					} else {
-						if src != nil {
+						if srcTypeOk {
 							dst.Payload = src.Payload
 						} else {
 							dst.Payload = nil
@@ -236,19 +251,26 @@ func (dst *MACPayload) SetFields(src *MACPayload, paths ...string) error {
 		case "f_hdr":
 			if len(subs) > 0 {
 				var newDst, newSrc *FHDR
-				if src != nil {
-					newSrc = &src.FHDR
+				if (src == nil || src.FHdr == nil) && dst.FHdr == nil {
+					continue
 				}
-				newDst = &dst.FHDR
+				if src != nil {
+					newSrc = src.FHdr
+				}
+				if dst.FHdr != nil {
+					newDst = dst.FHdr
+				} else {
+					newDst = &FHDR{}
+					dst.FHdr = newDst
+				}
 				if err := newDst.SetFields(newSrc, subs...); err != nil {
 					return err
 				}
 			} else {
 				if src != nil {
-					dst.FHDR = src.FHDR
+					dst.FHdr = src.FHdr
 				} else {
-					var zero FHDR
-					dst.FHDR = zero
+					dst.FHdr = nil
 				}
 			}
 		case "f_port":
@@ -307,16 +329,23 @@ func (dst *FHDR) SetFields(src *FHDR, paths ...string) error {
 			if src != nil {
 				dst.DevAddr = src.DevAddr
 			} else {
-				var zero go_thethings_network_lorawan_stack_v3_pkg_types.DevAddr
-				dst.DevAddr = zero
+				dst.DevAddr = nil
 			}
 		case "f_ctrl":
 			if len(subs) > 0 {
 				var newDst, newSrc *FCtrl
-				if src != nil {
-					newSrc = &src.FCtrl
+				if (src == nil || src.FCtrl == nil) && dst.FCtrl == nil {
+					continue
 				}
-				newDst = &dst.FCtrl
+				if src != nil {
+					newSrc = src.FCtrl
+				}
+				if dst.FCtrl != nil {
+					newDst = dst.FCtrl
+				} else {
+					newDst = &FCtrl{}
+					dst.FCtrl = newDst
+				}
 				if err := newDst.SetFields(newSrc, subs...); err != nil {
 					return err
 				}
@@ -324,8 +353,7 @@ func (dst *FHDR) SetFields(src *FHDR, paths ...string) error {
 				if src != nil {
 					dst.FCtrl = src.FCtrl
 				} else {
-					var zero FCtrl
-					dst.FCtrl = zero
+					dst.FCtrl = nil
 				}
 			}
 		case "f_cnt":
@@ -426,8 +454,7 @@ func (dst *JoinRequestPayload) SetFields(src *JoinRequestPayload, paths ...strin
 			if src != nil {
 				dst.JoinEui = src.JoinEui
 			} else {
-				var zero go_thethings_network_lorawan_stack_v3_pkg_types.EUI64
-				dst.JoinEui = zero
+				dst.JoinEui = nil
 			}
 		case "dev_eui":
 			if len(subs) > 0 {
@@ -436,8 +463,7 @@ func (dst *JoinRequestPayload) SetFields(src *JoinRequestPayload, paths ...strin
 			if src != nil {
 				dst.DevEui = src.DevEui
 			} else {
-				var zero go_thethings_network_lorawan_stack_v3_pkg_types.EUI64
-				dst.DevEui = zero
+				dst.DevEui = nil
 			}
 		case "dev_nonce":
 			if len(subs) > 0 {
@@ -446,8 +472,7 @@ func (dst *JoinRequestPayload) SetFields(src *JoinRequestPayload, paths ...strin
 			if src != nil {
 				dst.DevNonce = src.DevNonce
 			} else {
-				var zero go_thethings_network_lorawan_stack_v3_pkg_types.DevNonce
-				dst.DevNonce = zero
+				dst.DevNonce = nil
 			}
 
 		default:
@@ -477,8 +502,7 @@ func (dst *RejoinRequestPayload) SetFields(src *RejoinRequestPayload, paths ...s
 			if src != nil {
 				dst.NetId = src.NetId
 			} else {
-				var zero go_thethings_network_lorawan_stack_v3_pkg_types.NetID
-				dst.NetId = zero
+				dst.NetId = nil
 			}
 		case "join_eui":
 			if len(subs) > 0 {
@@ -487,8 +511,7 @@ func (dst *RejoinRequestPayload) SetFields(src *RejoinRequestPayload, paths ...s
 			if src != nil {
 				dst.JoinEui = src.JoinEui
 			} else {
-				var zero go_thethings_network_lorawan_stack_v3_pkg_types.EUI64
-				dst.JoinEui = zero
+				dst.JoinEui = nil
 			}
 		case "dev_eui":
 			if len(subs) > 0 {
@@ -497,8 +520,7 @@ func (dst *RejoinRequestPayload) SetFields(src *RejoinRequestPayload, paths ...s
 			if src != nil {
 				dst.DevEui = src.DevEui
 			} else {
-				var zero go_thethings_network_lorawan_stack_v3_pkg_types.EUI64
-				dst.DevEui = zero
+				dst.DevEui = nil
 			}
 		case "rejoin_cnt":
 			if len(subs) > 0 {
@@ -537,8 +559,7 @@ func (dst *JoinAcceptPayload) SetFields(src *JoinAcceptPayload, paths ...string)
 			if src != nil {
 				dst.JoinNonce = src.JoinNonce
 			} else {
-				var zero go_thethings_network_lorawan_stack_v3_pkg_types.JoinNonce
-				dst.JoinNonce = zero
+				dst.JoinNonce = nil
 			}
 		case "net_id":
 			if len(subs) > 0 {
@@ -547,8 +568,7 @@ func (dst *JoinAcceptPayload) SetFields(src *JoinAcceptPayload, paths ...string)
 			if src != nil {
 				dst.NetId = src.NetId
 			} else {
-				var zero go_thethings_network_lorawan_stack_v3_pkg_types.NetID
-				dst.NetId = zero
+				dst.NetId = nil
 			}
 		case "dev_addr":
 			if len(subs) > 0 {
@@ -557,25 +577,31 @@ func (dst *JoinAcceptPayload) SetFields(src *JoinAcceptPayload, paths ...string)
 			if src != nil {
 				dst.DevAddr = src.DevAddr
 			} else {
-				var zero go_thethings_network_lorawan_stack_v3_pkg_types.DevAddr
-				dst.DevAddr = zero
+				dst.DevAddr = nil
 			}
 		case "dl_settings":
 			if len(subs) > 0 {
 				var newDst, newSrc *DLSettings
-				if src != nil {
-					newSrc = &src.DLSettings
+				if (src == nil || src.DlSettings == nil) && dst.DlSettings == nil {
+					continue
 				}
-				newDst = &dst.DLSettings
+				if src != nil {
+					newSrc = src.DlSettings
+				}
+				if dst.DlSettings != nil {
+					newDst = dst.DlSettings
+				} else {
+					newDst = &DLSettings{}
+					dst.DlSettings = newDst
+				}
 				if err := newDst.SetFields(newSrc, subs...); err != nil {
 					return err
 				}
 			} else {
 				if src != nil {
-					dst.DLSettings = src.DLSettings
+					dst.DlSettings = src.DlSettings
 				} else {
-					var zero DLSettings
-					dst.DLSettings = zero
+					dst.DlSettings = nil
 				}
 			}
 		case "rx_delay":
@@ -724,6 +750,16 @@ func (dst *LoRaDataRate) SetFields(src *LoRaDataRate, paths ...string) error {
 				var zero uint32
 				dst.SpreadingFactor = zero
 			}
+		case "coding_rate":
+			if len(subs) > 0 {
+				return fmt.Errorf("'coding_rate' has no subfields, but %s were specified", subs)
+			}
+			if src != nil {
+				dst.CodingRate = src.CodingRate
+			} else {
+				var zero string
+				dst.CodingRate = zero
+			}
 
 		default:
 			return fmt.Errorf("invalid field: '%s'", name)
@@ -776,6 +812,16 @@ func (dst *LRFHSSDataRate) SetFields(src *LRFHSSDataRate, paths ...string) error
 				var zero uint32
 				dst.OperatingChannelWidth = zero
 			}
+		case "coding_rate":
+			if len(subs) > 0 {
+				return fmt.Errorf("'coding_rate' has no subfields, but %s were specified", subs)
+			}
+			if src != nil {
+				dst.CodingRate = src.CodingRate
+			} else {
+				var zero string
+				dst.CodingRate = zero
+			}
 
 		default:
 			return fmt.Errorf("invalid field: '%s'", name)
@@ -804,99 +850,108 @@ func (dst *DataRate) SetFields(src *DataRate, paths ...string) error {
 			for oneofName, oneofSubs := range subPathMap {
 				switch oneofName {
 				case "lora":
-					_, srcOk := src.Modulation.(*DataRate_Lora)
-					if !srcOk && src.Modulation != nil {
+					var srcTypeOk bool
+					if src != nil {
+						_, srcTypeOk = src.Modulation.(*DataRate_Lora)
+					}
+					if srcValid := srcTypeOk || src == nil || src.Modulation == nil || len(oneofSubs) == 0; !srcValid {
 						return fmt.Errorf("attempt to set oneof 'lora', while different oneof is set in source")
 					}
-					_, dstOk := dst.Modulation.(*DataRate_Lora)
-					if !dstOk && dst.Modulation != nil {
+					_, dstTypeOk := dst.Modulation.(*DataRate_Lora)
+					if dstValid := dstTypeOk || dst.Modulation == nil || len(oneofSubs) == 0; !dstValid {
 						return fmt.Errorf("attempt to set oneof 'lora', while different oneof is set in destination")
 					}
 					if len(oneofSubs) > 0 {
 						var newDst, newSrc *LoRaDataRate
-						if !srcOk && !dstOk {
-							continue
-						}
-						if srcOk {
+						if srcTypeOk {
 							newSrc = src.Modulation.(*DataRate_Lora).Lora
 						}
-						if dstOk {
+						if dstTypeOk {
 							newDst = dst.Modulation.(*DataRate_Lora).Lora
-						} else {
+						} else if srcTypeOk {
 							newDst = &LoRaDataRate{}
 							dst.Modulation = &DataRate_Lora{Lora: newDst}
+						} else {
+							dst.Modulation = nil
+							continue
 						}
 						if err := newDst.SetFields(newSrc, oneofSubs...); err != nil {
 							return err
 						}
 					} else {
-						if src != nil {
+						if srcTypeOk {
 							dst.Modulation = src.Modulation
 						} else {
 							dst.Modulation = nil
 						}
 					}
 				case "fsk":
-					_, srcOk := src.Modulation.(*DataRate_Fsk)
-					if !srcOk && src.Modulation != nil {
+					var srcTypeOk bool
+					if src != nil {
+						_, srcTypeOk = src.Modulation.(*DataRate_Fsk)
+					}
+					if srcValid := srcTypeOk || src == nil || src.Modulation == nil || len(oneofSubs) == 0; !srcValid {
 						return fmt.Errorf("attempt to set oneof 'fsk', while different oneof is set in source")
 					}
-					_, dstOk := dst.Modulation.(*DataRate_Fsk)
-					if !dstOk && dst.Modulation != nil {
+					_, dstTypeOk := dst.Modulation.(*DataRate_Fsk)
+					if dstValid := dstTypeOk || dst.Modulation == nil || len(oneofSubs) == 0; !dstValid {
 						return fmt.Errorf("attempt to set oneof 'fsk', while different oneof is set in destination")
 					}
 					if len(oneofSubs) > 0 {
 						var newDst, newSrc *FSKDataRate
-						if !srcOk && !dstOk {
-							continue
-						}
-						if srcOk {
+						if srcTypeOk {
 							newSrc = src.Modulation.(*DataRate_Fsk).Fsk
 						}
-						if dstOk {
+						if dstTypeOk {
 							newDst = dst.Modulation.(*DataRate_Fsk).Fsk
-						} else {
+						} else if srcTypeOk {
 							newDst = &FSKDataRate{}
 							dst.Modulation = &DataRate_Fsk{Fsk: newDst}
+						} else {
+							dst.Modulation = nil
+							continue
 						}
 						if err := newDst.SetFields(newSrc, oneofSubs...); err != nil {
 							return err
 						}
 					} else {
-						if src != nil {
+						if srcTypeOk {
 							dst.Modulation = src.Modulation
 						} else {
 							dst.Modulation = nil
 						}
 					}
 				case "lrfhss":
-					_, srcOk := src.Modulation.(*DataRate_Lrfhss)
-					if !srcOk && src.Modulation != nil {
+					var srcTypeOk bool
+					if src != nil {
+						_, srcTypeOk = src.Modulation.(*DataRate_Lrfhss)
+					}
+					if srcValid := srcTypeOk || src == nil || src.Modulation == nil || len(oneofSubs) == 0; !srcValid {
 						return fmt.Errorf("attempt to set oneof 'lrfhss', while different oneof is set in source")
 					}
-					_, dstOk := dst.Modulation.(*DataRate_Lrfhss)
-					if !dstOk && dst.Modulation != nil {
+					_, dstTypeOk := dst.Modulation.(*DataRate_Lrfhss)
+					if dstValid := dstTypeOk || dst.Modulation == nil || len(oneofSubs) == 0; !dstValid {
 						return fmt.Errorf("attempt to set oneof 'lrfhss', while different oneof is set in destination")
 					}
 					if len(oneofSubs) > 0 {
 						var newDst, newSrc *LRFHSSDataRate
-						if !srcOk && !dstOk {
-							continue
-						}
-						if srcOk {
+						if srcTypeOk {
 							newSrc = src.Modulation.(*DataRate_Lrfhss).Lrfhss
 						}
-						if dstOk {
+						if dstTypeOk {
 							newDst = dst.Modulation.(*DataRate_Lrfhss).Lrfhss
-						} else {
+						} else if srcTypeOk {
 							newDst = &LRFHSSDataRate{}
 							dst.Modulation = &DataRate_Lrfhss{Lrfhss: newDst}
+						} else {
+							dst.Modulation = nil
+							continue
 						}
 						if err := newDst.SetFields(newSrc, oneofSubs...); err != nil {
 							return err
 						}
 					} else {
-						if src != nil {
+						if srcTypeOk {
 							dst.Modulation = src.Modulation
 						} else {
 							dst.Modulation = nil
@@ -921,10 +976,18 @@ func (dst *TxSettings) SetFields(src *TxSettings, paths ...string) error {
 		case "data_rate":
 			if len(subs) > 0 {
 				var newDst, newSrc *DataRate
-				if src != nil {
-					newSrc = &src.DataRate
+				if (src == nil || src.DataRate == nil) && dst.DataRate == nil {
+					continue
 				}
-				newDst = &dst.DataRate
+				if src != nil {
+					newSrc = src.DataRate
+				}
+				if dst.DataRate != nil {
+					newDst = dst.DataRate
+				} else {
+					newDst = &DataRate{}
+					dst.DataRate = newDst
+				}
 				if err := newDst.SetFields(newSrc, subs...); err != nil {
 					return err
 				}
@@ -932,29 +995,8 @@ func (dst *TxSettings) SetFields(src *TxSettings, paths ...string) error {
 				if src != nil {
 					dst.DataRate = src.DataRate
 				} else {
-					var zero DataRate
-					dst.DataRate = zero
+					dst.DataRate = nil
 				}
-			}
-		case "data_rate_index":
-			if len(subs) > 0 {
-				return fmt.Errorf("'data_rate_index' has no subfields, but %s were specified", subs)
-			}
-			if src != nil {
-				dst.DataRateIndex = src.DataRateIndex
-			} else {
-				var zero DataRateIndex
-				dst.DataRateIndex = zero
-			}
-		case "coding_rate":
-			if len(subs) > 0 {
-				return fmt.Errorf("'coding_rate' has no subfields, but %s were specified", subs)
-			}
-			if src != nil {
-				dst.CodingRate = src.CodingRate
-			} else {
-				var zero string
-				dst.CodingRate = zero
 			}
 		case "frequency":
 			if len(subs) > 0 {
@@ -1020,6 +1062,16 @@ func (dst *TxSettings) SetFields(src *TxSettings, paths ...string) error {
 					dst.Downlink = nil
 				}
 			}
+		case "concentrator_timestamp":
+			if len(subs) > 0 {
+				return fmt.Errorf("'concentrator_timestamp' has no subfields, but %s were specified", subs)
+			}
+			if src != nil {
+				dst.ConcentratorTimestamp = src.ConcentratorTimestamp
+			} else {
+				var zero int64
+				dst.ConcentratorTimestamp = zero
+			}
 
 		default:
 			return fmt.Errorf("invalid field: '%s'", name)
@@ -1034,19 +1086,26 @@ func (dst *GatewayAntennaIdentifiers) SetFields(src *GatewayAntennaIdentifiers, 
 		case "gateway_ids":
 			if len(subs) > 0 {
 				var newDst, newSrc *GatewayIdentifiers
-				if src != nil {
-					newSrc = &src.GatewayIdentifiers
+				if (src == nil || src.GatewayIds == nil) && dst.GatewayIds == nil {
+					continue
 				}
-				newDst = &dst.GatewayIdentifiers
+				if src != nil {
+					newSrc = src.GatewayIds
+				}
+				if dst.GatewayIds != nil {
+					newDst = dst.GatewayIds
+				} else {
+					newDst = &GatewayIdentifiers{}
+					dst.GatewayIds = newDst
+				}
 				if err := newDst.SetFields(newSrc, subs...); err != nil {
 					return err
 				}
 			} else {
 				if src != nil {
-					dst.GatewayIdentifiers = src.GatewayIdentifiers
+					dst.GatewayIds = src.GatewayIds
 				} else {
-					var zero GatewayIdentifiers
-					dst.GatewayIdentifiers = zero
+					dst.GatewayIds = nil
 				}
 			}
 		case "antenna_index":
@@ -1067,25 +1126,88 @@ func (dst *GatewayAntennaIdentifiers) SetFields(src *GatewayAntennaIdentifiers, 
 	return nil
 }
 
+func (dst *ClassBCGatewayIdentifiers) SetFields(src *ClassBCGatewayIdentifiers, paths ...string) error {
+	for name, subs := range _processPaths(paths) {
+		switch name {
+		case "gateway_ids":
+			if len(subs) > 0 {
+				var newDst, newSrc *GatewayIdentifiers
+				if (src == nil || src.GatewayIds == nil) && dst.GatewayIds == nil {
+					continue
+				}
+				if src != nil {
+					newSrc = src.GatewayIds
+				}
+				if dst.GatewayIds != nil {
+					newDst = dst.GatewayIds
+				} else {
+					newDst = &GatewayIdentifiers{}
+					dst.GatewayIds = newDst
+				}
+				if err := newDst.SetFields(newSrc, subs...); err != nil {
+					return err
+				}
+			} else {
+				if src != nil {
+					dst.GatewayIds = src.GatewayIds
+				} else {
+					dst.GatewayIds = nil
+				}
+			}
+		case "antenna_index":
+			if len(subs) > 0 {
+				return fmt.Errorf("'antenna_index' has no subfields, but %s were specified", subs)
+			}
+			if src != nil {
+				dst.AntennaIndex = src.AntennaIndex
+			} else {
+				var zero uint32
+				dst.AntennaIndex = zero
+			}
+		case "group_index":
+			if len(subs) > 0 {
+				return fmt.Errorf("'group_index' has no subfields, but %s were specified", subs)
+			}
+			if src != nil {
+				dst.GroupIndex = src.GroupIndex
+			} else {
+				var zero uint32
+				dst.GroupIndex = zero
+			}
+
+		default:
+			return fmt.Errorf("invalid field: '%s'", name)
+		}
+	}
+	return nil
+}
+
 func (dst *UplinkToken) SetFields(src *UplinkToken, paths ...string) error {
 	for name, subs := range _processPaths(paths) {
 		switch name {
 		case "ids":
 			if len(subs) > 0 {
 				var newDst, newSrc *GatewayAntennaIdentifiers
-				if src != nil {
-					newSrc = &src.GatewayAntennaIdentifiers
+				if (src == nil || src.Ids == nil) && dst.Ids == nil {
+					continue
 				}
-				newDst = &dst.GatewayAntennaIdentifiers
+				if src != nil {
+					newSrc = src.Ids
+				}
+				if dst.Ids != nil {
+					newDst = dst.Ids
+				} else {
+					newDst = &GatewayAntennaIdentifiers{}
+					dst.Ids = newDst
+				}
 				if err := newDst.SetFields(newSrc, subs...); err != nil {
 					return err
 				}
 			} else {
 				if src != nil {
-					dst.GatewayAntennaIdentifiers = src.GatewayAntennaIdentifiers
+					dst.Ids = src.Ids
 				} else {
-					var zero GatewayAntennaIdentifiers
-					dst.GatewayAntennaIdentifiers = zero
+					dst.Ids = nil
 				}
 			}
 		case "timestamp":
@@ -1105,8 +1227,7 @@ func (dst *UplinkToken) SetFields(src *UplinkToken, paths ...string) error {
 			if src != nil {
 				dst.ServerTime = src.ServerTime
 			} else {
-				var zero time.Time
-				dst.ServerTime = zero
+				dst.ServerTime = nil
 			}
 		case "concentrator_time":
 			if len(subs) > 0 {
@@ -1117,6 +1238,15 @@ func (dst *UplinkToken) SetFields(src *UplinkToken, paths ...string) error {
 			} else {
 				var zero int64
 				dst.ConcentratorTime = zero
+			}
+		case "gateway_time":
+			if len(subs) > 0 {
+				return fmt.Errorf("'gateway_time' has no subfields, but %s were specified", subs)
+			}
+			if src != nil {
+				dst.GatewayTime = src.GatewayTime
+			} else {
+				dst.GatewayTime = nil
 			}
 
 		default:
@@ -1146,50 +1276,56 @@ func (dst *DownlinkPath) SetFields(src *DownlinkPath, paths ...string) error {
 			for oneofName, oneofSubs := range subPathMap {
 				switch oneofName {
 				case "uplink_token":
-					_, srcOk := src.Path.(*DownlinkPath_UplinkToken)
-					if !srcOk && src.Path != nil {
+					var srcTypeOk bool
+					if src != nil {
+						_, srcTypeOk = src.Path.(*DownlinkPath_UplinkToken)
+					}
+					if srcValid := srcTypeOk || src == nil || src.Path == nil || len(oneofSubs) == 0; !srcValid {
 						return fmt.Errorf("attempt to set oneof 'uplink_token', while different oneof is set in source")
 					}
-					_, dstOk := dst.Path.(*DownlinkPath_UplinkToken)
-					if !dstOk && dst.Path != nil {
+					_, dstTypeOk := dst.Path.(*DownlinkPath_UplinkToken)
+					if dstValid := dstTypeOk || dst.Path == nil || len(oneofSubs) == 0; !dstValid {
 						return fmt.Errorf("attempt to set oneof 'uplink_token', while different oneof is set in destination")
 					}
 					if len(oneofSubs) > 0 {
 						return fmt.Errorf("'uplink_token' has no subfields, but %s were specified", oneofSubs)
 					}
-					if src != nil {
+					if srcTypeOk {
 						dst.Path = src.Path
 					} else {
 						dst.Path = nil
 					}
 				case "fixed":
-					_, srcOk := src.Path.(*DownlinkPath_Fixed)
-					if !srcOk && src.Path != nil {
+					var srcTypeOk bool
+					if src != nil {
+						_, srcTypeOk = src.Path.(*DownlinkPath_Fixed)
+					}
+					if srcValid := srcTypeOk || src == nil || src.Path == nil || len(oneofSubs) == 0; !srcValid {
 						return fmt.Errorf("attempt to set oneof 'fixed', while different oneof is set in source")
 					}
-					_, dstOk := dst.Path.(*DownlinkPath_Fixed)
-					if !dstOk && dst.Path != nil {
+					_, dstTypeOk := dst.Path.(*DownlinkPath_Fixed)
+					if dstValid := dstTypeOk || dst.Path == nil || len(oneofSubs) == 0; !dstValid {
 						return fmt.Errorf("attempt to set oneof 'fixed', while different oneof is set in destination")
 					}
 					if len(oneofSubs) > 0 {
 						var newDst, newSrc *GatewayAntennaIdentifiers
-						if !srcOk && !dstOk {
-							continue
-						}
-						if srcOk {
+						if srcTypeOk {
 							newSrc = src.Path.(*DownlinkPath_Fixed).Fixed
 						}
-						if dstOk {
+						if dstTypeOk {
 							newDst = dst.Path.(*DownlinkPath_Fixed).Fixed
-						} else {
+						} else if srcTypeOk {
 							newDst = &GatewayAntennaIdentifiers{}
 							dst.Path = &DownlinkPath_Fixed{Fixed: newDst}
+						} else {
+							dst.Path = nil
+							continue
 						}
 						if err := newDst.SetFields(newSrc, oneofSubs...); err != nil {
 							return err
 						}
 					} else {
-						if src != nil {
+						if srcTypeOk {
 							dst.Path = src.Path
 						} else {
 							dst.Path = nil
@@ -1240,15 +1376,30 @@ func (dst *TxRequest) SetFields(src *TxRequest, paths ...string) error {
 				var zero RxDelay
 				dst.Rx1Delay = zero
 			}
-		case "rx1_data_rate_index":
+		case "rx1_data_rate":
 			if len(subs) > 0 {
-				return fmt.Errorf("'rx1_data_rate_index' has no subfields, but %s were specified", subs)
-			}
-			if src != nil {
-				dst.Rx1DataRateIndex = src.Rx1DataRateIndex
+				var newDst, newSrc *DataRate
+				if (src == nil || src.Rx1DataRate == nil) && dst.Rx1DataRate == nil {
+					continue
+				}
+				if src != nil {
+					newSrc = src.Rx1DataRate
+				}
+				if dst.Rx1DataRate != nil {
+					newDst = dst.Rx1DataRate
+				} else {
+					newDst = &DataRate{}
+					dst.Rx1DataRate = newDst
+				}
+				if err := newDst.SetFields(newSrc, subs...); err != nil {
+					return err
+				}
 			} else {
-				var zero DataRateIndex
-				dst.Rx1DataRateIndex = zero
+				if src != nil {
+					dst.Rx1DataRate = src.Rx1DataRate
+				} else {
+					dst.Rx1DataRate = nil
+				}
 			}
 		case "rx1_frequency":
 			if len(subs) > 0 {
@@ -1260,15 +1411,30 @@ func (dst *TxRequest) SetFields(src *TxRequest, paths ...string) error {
 				var zero uint64
 				dst.Rx1Frequency = zero
 			}
-		case "rx2_data_rate_index":
+		case "rx2_data_rate":
 			if len(subs) > 0 {
-				return fmt.Errorf("'rx2_data_rate_index' has no subfields, but %s were specified", subs)
-			}
-			if src != nil {
-				dst.Rx2DataRateIndex = src.Rx2DataRateIndex
+				var newDst, newSrc *DataRate
+				if (src == nil || src.Rx2DataRate == nil) && dst.Rx2DataRate == nil {
+					continue
+				}
+				if src != nil {
+					newSrc = src.Rx2DataRate
+				}
+				if dst.Rx2DataRate != nil {
+					newDst = dst.Rx2DataRate
+				} else {
+					newDst = &DataRate{}
+					dst.Rx2DataRate = newDst
+				}
+				if err := newDst.SetFields(newSrc, subs...); err != nil {
+					return err
+				}
 			} else {
-				var zero DataRateIndex
-				dst.Rx2DataRateIndex = zero
+				if src != nil {
+					dst.Rx2DataRate = src.Rx2DataRate
+				} else {
+					dst.Rx2DataRate = nil
+				}
 			}
 		case "rx2_frequency":
 			if len(subs) > 0 {
@@ -1308,16 +1474,6 @@ func (dst *TxRequest) SetFields(src *TxRequest, paths ...string) error {
 			} else {
 				var zero string
 				dst.FrequencyPlanId = zero
-			}
-		case "lorawan_phy_version":
-			if len(subs) > 0 {
-				return fmt.Errorf("'lorawan_phy_version' has no subfields, but %s were specified", subs)
-			}
-			if src != nil {
-				dst.LorawanPhyVersion = src.LorawanPhyVersion
-			} else {
-				var zero PHYVersion
-				dst.LorawanPhyVersion = zero
 			}
 		case "advanced":
 			if len(subs) > 0 {
@@ -1366,1007 +1522,1100 @@ func (dst *MACCommand) SetFields(src *MACCommand, paths ...string) error {
 			for oneofName, oneofSubs := range subPathMap {
 				switch oneofName {
 				case "raw_payload":
-					_, srcOk := src.Payload.(*MACCommand_RawPayload)
-					if !srcOk && src.Payload != nil {
+					var srcTypeOk bool
+					if src != nil {
+						_, srcTypeOk = src.Payload.(*MACCommand_RawPayload)
+					}
+					if srcValid := srcTypeOk || src == nil || src.Payload == nil || len(oneofSubs) == 0; !srcValid {
 						return fmt.Errorf("attempt to set oneof 'raw_payload', while different oneof is set in source")
 					}
-					_, dstOk := dst.Payload.(*MACCommand_RawPayload)
-					if !dstOk && dst.Payload != nil {
+					_, dstTypeOk := dst.Payload.(*MACCommand_RawPayload)
+					if dstValid := dstTypeOk || dst.Payload == nil || len(oneofSubs) == 0; !dstValid {
 						return fmt.Errorf("attempt to set oneof 'raw_payload', while different oneof is set in destination")
 					}
 					if len(oneofSubs) > 0 {
 						return fmt.Errorf("'raw_payload' has no subfields, but %s were specified", oneofSubs)
 					}
-					if src != nil {
+					if srcTypeOk {
 						dst.Payload = src.Payload
 					} else {
 						dst.Payload = nil
 					}
 				case "reset_ind":
-					_, srcOk := src.Payload.(*MACCommand_ResetInd_)
-					if !srcOk && src.Payload != nil {
+					var srcTypeOk bool
+					if src != nil {
+						_, srcTypeOk = src.Payload.(*MACCommand_ResetInd_)
+					}
+					if srcValid := srcTypeOk || src == nil || src.Payload == nil || len(oneofSubs) == 0; !srcValid {
 						return fmt.Errorf("attempt to set oneof 'reset_ind', while different oneof is set in source")
 					}
-					_, dstOk := dst.Payload.(*MACCommand_ResetInd_)
-					if !dstOk && dst.Payload != nil {
+					_, dstTypeOk := dst.Payload.(*MACCommand_ResetInd_)
+					if dstValid := dstTypeOk || dst.Payload == nil || len(oneofSubs) == 0; !dstValid {
 						return fmt.Errorf("attempt to set oneof 'reset_ind', while different oneof is set in destination")
 					}
 					if len(oneofSubs) > 0 {
 						var newDst, newSrc *MACCommand_ResetInd
-						if !srcOk && !dstOk {
-							continue
-						}
-						if srcOk {
+						if srcTypeOk {
 							newSrc = src.Payload.(*MACCommand_ResetInd_).ResetInd
 						}
-						if dstOk {
+						if dstTypeOk {
 							newDst = dst.Payload.(*MACCommand_ResetInd_).ResetInd
-						} else {
+						} else if srcTypeOk {
 							newDst = &MACCommand_ResetInd{}
 							dst.Payload = &MACCommand_ResetInd_{ResetInd: newDst}
+						} else {
+							dst.Payload = nil
+							continue
 						}
 						if err := newDst.SetFields(newSrc, oneofSubs...); err != nil {
 							return err
 						}
 					} else {
-						if src != nil {
+						if srcTypeOk {
 							dst.Payload = src.Payload
 						} else {
 							dst.Payload = nil
 						}
 					}
 				case "reset_conf":
-					_, srcOk := src.Payload.(*MACCommand_ResetConf_)
-					if !srcOk && src.Payload != nil {
+					var srcTypeOk bool
+					if src != nil {
+						_, srcTypeOk = src.Payload.(*MACCommand_ResetConf_)
+					}
+					if srcValid := srcTypeOk || src == nil || src.Payload == nil || len(oneofSubs) == 0; !srcValid {
 						return fmt.Errorf("attempt to set oneof 'reset_conf', while different oneof is set in source")
 					}
-					_, dstOk := dst.Payload.(*MACCommand_ResetConf_)
-					if !dstOk && dst.Payload != nil {
+					_, dstTypeOk := dst.Payload.(*MACCommand_ResetConf_)
+					if dstValid := dstTypeOk || dst.Payload == nil || len(oneofSubs) == 0; !dstValid {
 						return fmt.Errorf("attempt to set oneof 'reset_conf', while different oneof is set in destination")
 					}
 					if len(oneofSubs) > 0 {
 						var newDst, newSrc *MACCommand_ResetConf
-						if !srcOk && !dstOk {
-							continue
-						}
-						if srcOk {
+						if srcTypeOk {
 							newSrc = src.Payload.(*MACCommand_ResetConf_).ResetConf
 						}
-						if dstOk {
+						if dstTypeOk {
 							newDst = dst.Payload.(*MACCommand_ResetConf_).ResetConf
-						} else {
+						} else if srcTypeOk {
 							newDst = &MACCommand_ResetConf{}
 							dst.Payload = &MACCommand_ResetConf_{ResetConf: newDst}
+						} else {
+							dst.Payload = nil
+							continue
 						}
 						if err := newDst.SetFields(newSrc, oneofSubs...); err != nil {
 							return err
 						}
 					} else {
-						if src != nil {
+						if srcTypeOk {
 							dst.Payload = src.Payload
 						} else {
 							dst.Payload = nil
 						}
 					}
 				case "link_check_ans":
-					_, srcOk := src.Payload.(*MACCommand_LinkCheckAns_)
-					if !srcOk && src.Payload != nil {
+					var srcTypeOk bool
+					if src != nil {
+						_, srcTypeOk = src.Payload.(*MACCommand_LinkCheckAns_)
+					}
+					if srcValid := srcTypeOk || src == nil || src.Payload == nil || len(oneofSubs) == 0; !srcValid {
 						return fmt.Errorf("attempt to set oneof 'link_check_ans', while different oneof is set in source")
 					}
-					_, dstOk := dst.Payload.(*MACCommand_LinkCheckAns_)
-					if !dstOk && dst.Payload != nil {
+					_, dstTypeOk := dst.Payload.(*MACCommand_LinkCheckAns_)
+					if dstValid := dstTypeOk || dst.Payload == nil || len(oneofSubs) == 0; !dstValid {
 						return fmt.Errorf("attempt to set oneof 'link_check_ans', while different oneof is set in destination")
 					}
 					if len(oneofSubs) > 0 {
 						var newDst, newSrc *MACCommand_LinkCheckAns
-						if !srcOk && !dstOk {
-							continue
-						}
-						if srcOk {
+						if srcTypeOk {
 							newSrc = src.Payload.(*MACCommand_LinkCheckAns_).LinkCheckAns
 						}
-						if dstOk {
+						if dstTypeOk {
 							newDst = dst.Payload.(*MACCommand_LinkCheckAns_).LinkCheckAns
-						} else {
+						} else if srcTypeOk {
 							newDst = &MACCommand_LinkCheckAns{}
 							dst.Payload = &MACCommand_LinkCheckAns_{LinkCheckAns: newDst}
+						} else {
+							dst.Payload = nil
+							continue
 						}
 						if err := newDst.SetFields(newSrc, oneofSubs...); err != nil {
 							return err
 						}
 					} else {
-						if src != nil {
+						if srcTypeOk {
 							dst.Payload = src.Payload
 						} else {
 							dst.Payload = nil
 						}
 					}
 				case "link_adr_req":
-					_, srcOk := src.Payload.(*MACCommand_LinkAdrReq)
-					if !srcOk && src.Payload != nil {
+					var srcTypeOk bool
+					if src != nil {
+						_, srcTypeOk = src.Payload.(*MACCommand_LinkAdrReq)
+					}
+					if srcValid := srcTypeOk || src == nil || src.Payload == nil || len(oneofSubs) == 0; !srcValid {
 						return fmt.Errorf("attempt to set oneof 'link_adr_req', while different oneof is set in source")
 					}
-					_, dstOk := dst.Payload.(*MACCommand_LinkAdrReq)
-					if !dstOk && dst.Payload != nil {
+					_, dstTypeOk := dst.Payload.(*MACCommand_LinkAdrReq)
+					if dstValid := dstTypeOk || dst.Payload == nil || len(oneofSubs) == 0; !dstValid {
 						return fmt.Errorf("attempt to set oneof 'link_adr_req', while different oneof is set in destination")
 					}
 					if len(oneofSubs) > 0 {
 						var newDst, newSrc *MACCommand_LinkADRReq
-						if !srcOk && !dstOk {
-							continue
-						}
-						if srcOk {
+						if srcTypeOk {
 							newSrc = src.Payload.(*MACCommand_LinkAdrReq).LinkAdrReq
 						}
-						if dstOk {
+						if dstTypeOk {
 							newDst = dst.Payload.(*MACCommand_LinkAdrReq).LinkAdrReq
-						} else {
+						} else if srcTypeOk {
 							newDst = &MACCommand_LinkADRReq{}
 							dst.Payload = &MACCommand_LinkAdrReq{LinkAdrReq: newDst}
+						} else {
+							dst.Payload = nil
+							continue
 						}
 						if err := newDst.SetFields(newSrc, oneofSubs...); err != nil {
 							return err
 						}
 					} else {
-						if src != nil {
+						if srcTypeOk {
 							dst.Payload = src.Payload
 						} else {
 							dst.Payload = nil
 						}
 					}
 				case "link_adr_ans":
-					_, srcOk := src.Payload.(*MACCommand_LinkAdrAns)
-					if !srcOk && src.Payload != nil {
+					var srcTypeOk bool
+					if src != nil {
+						_, srcTypeOk = src.Payload.(*MACCommand_LinkAdrAns)
+					}
+					if srcValid := srcTypeOk || src == nil || src.Payload == nil || len(oneofSubs) == 0; !srcValid {
 						return fmt.Errorf("attempt to set oneof 'link_adr_ans', while different oneof is set in source")
 					}
-					_, dstOk := dst.Payload.(*MACCommand_LinkAdrAns)
-					if !dstOk && dst.Payload != nil {
+					_, dstTypeOk := dst.Payload.(*MACCommand_LinkAdrAns)
+					if dstValid := dstTypeOk || dst.Payload == nil || len(oneofSubs) == 0; !dstValid {
 						return fmt.Errorf("attempt to set oneof 'link_adr_ans', while different oneof is set in destination")
 					}
 					if len(oneofSubs) > 0 {
 						var newDst, newSrc *MACCommand_LinkADRAns
-						if !srcOk && !dstOk {
-							continue
-						}
-						if srcOk {
+						if srcTypeOk {
 							newSrc = src.Payload.(*MACCommand_LinkAdrAns).LinkAdrAns
 						}
-						if dstOk {
+						if dstTypeOk {
 							newDst = dst.Payload.(*MACCommand_LinkAdrAns).LinkAdrAns
-						} else {
+						} else if srcTypeOk {
 							newDst = &MACCommand_LinkADRAns{}
 							dst.Payload = &MACCommand_LinkAdrAns{LinkAdrAns: newDst}
+						} else {
+							dst.Payload = nil
+							continue
 						}
 						if err := newDst.SetFields(newSrc, oneofSubs...); err != nil {
 							return err
 						}
 					} else {
-						if src != nil {
+						if srcTypeOk {
 							dst.Payload = src.Payload
 						} else {
 							dst.Payload = nil
 						}
 					}
 				case "duty_cycle_req":
-					_, srcOk := src.Payload.(*MACCommand_DutyCycleReq_)
-					if !srcOk && src.Payload != nil {
+					var srcTypeOk bool
+					if src != nil {
+						_, srcTypeOk = src.Payload.(*MACCommand_DutyCycleReq_)
+					}
+					if srcValid := srcTypeOk || src == nil || src.Payload == nil || len(oneofSubs) == 0; !srcValid {
 						return fmt.Errorf("attempt to set oneof 'duty_cycle_req', while different oneof is set in source")
 					}
-					_, dstOk := dst.Payload.(*MACCommand_DutyCycleReq_)
-					if !dstOk && dst.Payload != nil {
+					_, dstTypeOk := dst.Payload.(*MACCommand_DutyCycleReq_)
+					if dstValid := dstTypeOk || dst.Payload == nil || len(oneofSubs) == 0; !dstValid {
 						return fmt.Errorf("attempt to set oneof 'duty_cycle_req', while different oneof is set in destination")
 					}
 					if len(oneofSubs) > 0 {
 						var newDst, newSrc *MACCommand_DutyCycleReq
-						if !srcOk && !dstOk {
-							continue
-						}
-						if srcOk {
+						if srcTypeOk {
 							newSrc = src.Payload.(*MACCommand_DutyCycleReq_).DutyCycleReq
 						}
-						if dstOk {
+						if dstTypeOk {
 							newDst = dst.Payload.(*MACCommand_DutyCycleReq_).DutyCycleReq
-						} else {
+						} else if srcTypeOk {
 							newDst = &MACCommand_DutyCycleReq{}
 							dst.Payload = &MACCommand_DutyCycleReq_{DutyCycleReq: newDst}
+						} else {
+							dst.Payload = nil
+							continue
 						}
 						if err := newDst.SetFields(newSrc, oneofSubs...); err != nil {
 							return err
 						}
 					} else {
-						if src != nil {
+						if srcTypeOk {
 							dst.Payload = src.Payload
 						} else {
 							dst.Payload = nil
 						}
 					}
 				case "rx_param_setup_req":
-					_, srcOk := src.Payload.(*MACCommand_RxParamSetupReq_)
-					if !srcOk && src.Payload != nil {
+					var srcTypeOk bool
+					if src != nil {
+						_, srcTypeOk = src.Payload.(*MACCommand_RxParamSetupReq_)
+					}
+					if srcValid := srcTypeOk || src == nil || src.Payload == nil || len(oneofSubs) == 0; !srcValid {
 						return fmt.Errorf("attempt to set oneof 'rx_param_setup_req', while different oneof is set in source")
 					}
-					_, dstOk := dst.Payload.(*MACCommand_RxParamSetupReq_)
-					if !dstOk && dst.Payload != nil {
+					_, dstTypeOk := dst.Payload.(*MACCommand_RxParamSetupReq_)
+					if dstValid := dstTypeOk || dst.Payload == nil || len(oneofSubs) == 0; !dstValid {
 						return fmt.Errorf("attempt to set oneof 'rx_param_setup_req', while different oneof is set in destination")
 					}
 					if len(oneofSubs) > 0 {
 						var newDst, newSrc *MACCommand_RxParamSetupReq
-						if !srcOk && !dstOk {
-							continue
-						}
-						if srcOk {
+						if srcTypeOk {
 							newSrc = src.Payload.(*MACCommand_RxParamSetupReq_).RxParamSetupReq
 						}
-						if dstOk {
+						if dstTypeOk {
 							newDst = dst.Payload.(*MACCommand_RxParamSetupReq_).RxParamSetupReq
-						} else {
+						} else if srcTypeOk {
 							newDst = &MACCommand_RxParamSetupReq{}
 							dst.Payload = &MACCommand_RxParamSetupReq_{RxParamSetupReq: newDst}
+						} else {
+							dst.Payload = nil
+							continue
 						}
 						if err := newDst.SetFields(newSrc, oneofSubs...); err != nil {
 							return err
 						}
 					} else {
-						if src != nil {
+						if srcTypeOk {
 							dst.Payload = src.Payload
 						} else {
 							dst.Payload = nil
 						}
 					}
 				case "rx_param_setup_ans":
-					_, srcOk := src.Payload.(*MACCommand_RxParamSetupAns_)
-					if !srcOk && src.Payload != nil {
+					var srcTypeOk bool
+					if src != nil {
+						_, srcTypeOk = src.Payload.(*MACCommand_RxParamSetupAns_)
+					}
+					if srcValid := srcTypeOk || src == nil || src.Payload == nil || len(oneofSubs) == 0; !srcValid {
 						return fmt.Errorf("attempt to set oneof 'rx_param_setup_ans', while different oneof is set in source")
 					}
-					_, dstOk := dst.Payload.(*MACCommand_RxParamSetupAns_)
-					if !dstOk && dst.Payload != nil {
+					_, dstTypeOk := dst.Payload.(*MACCommand_RxParamSetupAns_)
+					if dstValid := dstTypeOk || dst.Payload == nil || len(oneofSubs) == 0; !dstValid {
 						return fmt.Errorf("attempt to set oneof 'rx_param_setup_ans', while different oneof is set in destination")
 					}
 					if len(oneofSubs) > 0 {
 						var newDst, newSrc *MACCommand_RxParamSetupAns
-						if !srcOk && !dstOk {
-							continue
-						}
-						if srcOk {
+						if srcTypeOk {
 							newSrc = src.Payload.(*MACCommand_RxParamSetupAns_).RxParamSetupAns
 						}
-						if dstOk {
+						if dstTypeOk {
 							newDst = dst.Payload.(*MACCommand_RxParamSetupAns_).RxParamSetupAns
-						} else {
+						} else if srcTypeOk {
 							newDst = &MACCommand_RxParamSetupAns{}
 							dst.Payload = &MACCommand_RxParamSetupAns_{RxParamSetupAns: newDst}
+						} else {
+							dst.Payload = nil
+							continue
 						}
 						if err := newDst.SetFields(newSrc, oneofSubs...); err != nil {
 							return err
 						}
 					} else {
-						if src != nil {
+						if srcTypeOk {
 							dst.Payload = src.Payload
 						} else {
 							dst.Payload = nil
 						}
 					}
 				case "dev_status_ans":
-					_, srcOk := src.Payload.(*MACCommand_DevStatusAns_)
-					if !srcOk && src.Payload != nil {
+					var srcTypeOk bool
+					if src != nil {
+						_, srcTypeOk = src.Payload.(*MACCommand_DevStatusAns_)
+					}
+					if srcValid := srcTypeOk || src == nil || src.Payload == nil || len(oneofSubs) == 0; !srcValid {
 						return fmt.Errorf("attempt to set oneof 'dev_status_ans', while different oneof is set in source")
 					}
-					_, dstOk := dst.Payload.(*MACCommand_DevStatusAns_)
-					if !dstOk && dst.Payload != nil {
+					_, dstTypeOk := dst.Payload.(*MACCommand_DevStatusAns_)
+					if dstValid := dstTypeOk || dst.Payload == nil || len(oneofSubs) == 0; !dstValid {
 						return fmt.Errorf("attempt to set oneof 'dev_status_ans', while different oneof is set in destination")
 					}
 					if len(oneofSubs) > 0 {
 						var newDst, newSrc *MACCommand_DevStatusAns
-						if !srcOk && !dstOk {
-							continue
-						}
-						if srcOk {
+						if srcTypeOk {
 							newSrc = src.Payload.(*MACCommand_DevStatusAns_).DevStatusAns
 						}
-						if dstOk {
+						if dstTypeOk {
 							newDst = dst.Payload.(*MACCommand_DevStatusAns_).DevStatusAns
-						} else {
+						} else if srcTypeOk {
 							newDst = &MACCommand_DevStatusAns{}
 							dst.Payload = &MACCommand_DevStatusAns_{DevStatusAns: newDst}
+						} else {
+							dst.Payload = nil
+							continue
 						}
 						if err := newDst.SetFields(newSrc, oneofSubs...); err != nil {
 							return err
 						}
 					} else {
-						if src != nil {
+						if srcTypeOk {
 							dst.Payload = src.Payload
 						} else {
 							dst.Payload = nil
 						}
 					}
 				case "new_channel_req":
-					_, srcOk := src.Payload.(*MACCommand_NewChannelReq_)
-					if !srcOk && src.Payload != nil {
+					var srcTypeOk bool
+					if src != nil {
+						_, srcTypeOk = src.Payload.(*MACCommand_NewChannelReq_)
+					}
+					if srcValid := srcTypeOk || src == nil || src.Payload == nil || len(oneofSubs) == 0; !srcValid {
 						return fmt.Errorf("attempt to set oneof 'new_channel_req', while different oneof is set in source")
 					}
-					_, dstOk := dst.Payload.(*MACCommand_NewChannelReq_)
-					if !dstOk && dst.Payload != nil {
+					_, dstTypeOk := dst.Payload.(*MACCommand_NewChannelReq_)
+					if dstValid := dstTypeOk || dst.Payload == nil || len(oneofSubs) == 0; !dstValid {
 						return fmt.Errorf("attempt to set oneof 'new_channel_req', while different oneof is set in destination")
 					}
 					if len(oneofSubs) > 0 {
 						var newDst, newSrc *MACCommand_NewChannelReq
-						if !srcOk && !dstOk {
-							continue
-						}
-						if srcOk {
+						if srcTypeOk {
 							newSrc = src.Payload.(*MACCommand_NewChannelReq_).NewChannelReq
 						}
-						if dstOk {
+						if dstTypeOk {
 							newDst = dst.Payload.(*MACCommand_NewChannelReq_).NewChannelReq
-						} else {
+						} else if srcTypeOk {
 							newDst = &MACCommand_NewChannelReq{}
 							dst.Payload = &MACCommand_NewChannelReq_{NewChannelReq: newDst}
+						} else {
+							dst.Payload = nil
+							continue
 						}
 						if err := newDst.SetFields(newSrc, oneofSubs...); err != nil {
 							return err
 						}
 					} else {
-						if src != nil {
+						if srcTypeOk {
 							dst.Payload = src.Payload
 						} else {
 							dst.Payload = nil
 						}
 					}
 				case "new_channel_ans":
-					_, srcOk := src.Payload.(*MACCommand_NewChannelAns_)
-					if !srcOk && src.Payload != nil {
+					var srcTypeOk bool
+					if src != nil {
+						_, srcTypeOk = src.Payload.(*MACCommand_NewChannelAns_)
+					}
+					if srcValid := srcTypeOk || src == nil || src.Payload == nil || len(oneofSubs) == 0; !srcValid {
 						return fmt.Errorf("attempt to set oneof 'new_channel_ans', while different oneof is set in source")
 					}
-					_, dstOk := dst.Payload.(*MACCommand_NewChannelAns_)
-					if !dstOk && dst.Payload != nil {
+					_, dstTypeOk := dst.Payload.(*MACCommand_NewChannelAns_)
+					if dstValid := dstTypeOk || dst.Payload == nil || len(oneofSubs) == 0; !dstValid {
 						return fmt.Errorf("attempt to set oneof 'new_channel_ans', while different oneof is set in destination")
 					}
 					if len(oneofSubs) > 0 {
 						var newDst, newSrc *MACCommand_NewChannelAns
-						if !srcOk && !dstOk {
-							continue
-						}
-						if srcOk {
+						if srcTypeOk {
 							newSrc = src.Payload.(*MACCommand_NewChannelAns_).NewChannelAns
 						}
-						if dstOk {
+						if dstTypeOk {
 							newDst = dst.Payload.(*MACCommand_NewChannelAns_).NewChannelAns
-						} else {
+						} else if srcTypeOk {
 							newDst = &MACCommand_NewChannelAns{}
 							dst.Payload = &MACCommand_NewChannelAns_{NewChannelAns: newDst}
+						} else {
+							dst.Payload = nil
+							continue
 						}
 						if err := newDst.SetFields(newSrc, oneofSubs...); err != nil {
 							return err
 						}
 					} else {
-						if src != nil {
+						if srcTypeOk {
 							dst.Payload = src.Payload
 						} else {
 							dst.Payload = nil
 						}
 					}
 				case "dl_channel_req":
-					_, srcOk := src.Payload.(*MACCommand_DlChannelReq)
-					if !srcOk && src.Payload != nil {
+					var srcTypeOk bool
+					if src != nil {
+						_, srcTypeOk = src.Payload.(*MACCommand_DlChannelReq)
+					}
+					if srcValid := srcTypeOk || src == nil || src.Payload == nil || len(oneofSubs) == 0; !srcValid {
 						return fmt.Errorf("attempt to set oneof 'dl_channel_req', while different oneof is set in source")
 					}
-					_, dstOk := dst.Payload.(*MACCommand_DlChannelReq)
-					if !dstOk && dst.Payload != nil {
+					_, dstTypeOk := dst.Payload.(*MACCommand_DlChannelReq)
+					if dstValid := dstTypeOk || dst.Payload == nil || len(oneofSubs) == 0; !dstValid {
 						return fmt.Errorf("attempt to set oneof 'dl_channel_req', while different oneof is set in destination")
 					}
 					if len(oneofSubs) > 0 {
 						var newDst, newSrc *MACCommand_DLChannelReq
-						if !srcOk && !dstOk {
-							continue
-						}
-						if srcOk {
+						if srcTypeOk {
 							newSrc = src.Payload.(*MACCommand_DlChannelReq).DlChannelReq
 						}
-						if dstOk {
+						if dstTypeOk {
 							newDst = dst.Payload.(*MACCommand_DlChannelReq).DlChannelReq
-						} else {
+						} else if srcTypeOk {
 							newDst = &MACCommand_DLChannelReq{}
 							dst.Payload = &MACCommand_DlChannelReq{DlChannelReq: newDst}
+						} else {
+							dst.Payload = nil
+							continue
 						}
 						if err := newDst.SetFields(newSrc, oneofSubs...); err != nil {
 							return err
 						}
 					} else {
-						if src != nil {
+						if srcTypeOk {
 							dst.Payload = src.Payload
 						} else {
 							dst.Payload = nil
 						}
 					}
 				case "dl_channel_ans":
-					_, srcOk := src.Payload.(*MACCommand_DlChannelAns)
-					if !srcOk && src.Payload != nil {
+					var srcTypeOk bool
+					if src != nil {
+						_, srcTypeOk = src.Payload.(*MACCommand_DlChannelAns)
+					}
+					if srcValid := srcTypeOk || src == nil || src.Payload == nil || len(oneofSubs) == 0; !srcValid {
 						return fmt.Errorf("attempt to set oneof 'dl_channel_ans', while different oneof is set in source")
 					}
-					_, dstOk := dst.Payload.(*MACCommand_DlChannelAns)
-					if !dstOk && dst.Payload != nil {
+					_, dstTypeOk := dst.Payload.(*MACCommand_DlChannelAns)
+					if dstValid := dstTypeOk || dst.Payload == nil || len(oneofSubs) == 0; !dstValid {
 						return fmt.Errorf("attempt to set oneof 'dl_channel_ans', while different oneof is set in destination")
 					}
 					if len(oneofSubs) > 0 {
 						var newDst, newSrc *MACCommand_DLChannelAns
-						if !srcOk && !dstOk {
-							continue
-						}
-						if srcOk {
+						if srcTypeOk {
 							newSrc = src.Payload.(*MACCommand_DlChannelAns).DlChannelAns
 						}
-						if dstOk {
+						if dstTypeOk {
 							newDst = dst.Payload.(*MACCommand_DlChannelAns).DlChannelAns
-						} else {
+						} else if srcTypeOk {
 							newDst = &MACCommand_DLChannelAns{}
 							dst.Payload = &MACCommand_DlChannelAns{DlChannelAns: newDst}
+						} else {
+							dst.Payload = nil
+							continue
 						}
 						if err := newDst.SetFields(newSrc, oneofSubs...); err != nil {
 							return err
 						}
 					} else {
-						if src != nil {
+						if srcTypeOk {
 							dst.Payload = src.Payload
 						} else {
 							dst.Payload = nil
 						}
 					}
 				case "rx_timing_setup_req":
-					_, srcOk := src.Payload.(*MACCommand_RxTimingSetupReq_)
-					if !srcOk && src.Payload != nil {
+					var srcTypeOk bool
+					if src != nil {
+						_, srcTypeOk = src.Payload.(*MACCommand_RxTimingSetupReq_)
+					}
+					if srcValid := srcTypeOk || src == nil || src.Payload == nil || len(oneofSubs) == 0; !srcValid {
 						return fmt.Errorf("attempt to set oneof 'rx_timing_setup_req', while different oneof is set in source")
 					}
-					_, dstOk := dst.Payload.(*MACCommand_RxTimingSetupReq_)
-					if !dstOk && dst.Payload != nil {
+					_, dstTypeOk := dst.Payload.(*MACCommand_RxTimingSetupReq_)
+					if dstValid := dstTypeOk || dst.Payload == nil || len(oneofSubs) == 0; !dstValid {
 						return fmt.Errorf("attempt to set oneof 'rx_timing_setup_req', while different oneof is set in destination")
 					}
 					if len(oneofSubs) > 0 {
 						var newDst, newSrc *MACCommand_RxTimingSetupReq
-						if !srcOk && !dstOk {
-							continue
-						}
-						if srcOk {
+						if srcTypeOk {
 							newSrc = src.Payload.(*MACCommand_RxTimingSetupReq_).RxTimingSetupReq
 						}
-						if dstOk {
+						if dstTypeOk {
 							newDst = dst.Payload.(*MACCommand_RxTimingSetupReq_).RxTimingSetupReq
-						} else {
+						} else if srcTypeOk {
 							newDst = &MACCommand_RxTimingSetupReq{}
 							dst.Payload = &MACCommand_RxTimingSetupReq_{RxTimingSetupReq: newDst}
+						} else {
+							dst.Payload = nil
+							continue
 						}
 						if err := newDst.SetFields(newSrc, oneofSubs...); err != nil {
 							return err
 						}
 					} else {
-						if src != nil {
+						if srcTypeOk {
 							dst.Payload = src.Payload
 						} else {
 							dst.Payload = nil
 						}
 					}
 				case "tx_param_setup_req":
-					_, srcOk := src.Payload.(*MACCommand_TxParamSetupReq_)
-					if !srcOk && src.Payload != nil {
+					var srcTypeOk bool
+					if src != nil {
+						_, srcTypeOk = src.Payload.(*MACCommand_TxParamSetupReq_)
+					}
+					if srcValid := srcTypeOk || src == nil || src.Payload == nil || len(oneofSubs) == 0; !srcValid {
 						return fmt.Errorf("attempt to set oneof 'tx_param_setup_req', while different oneof is set in source")
 					}
-					_, dstOk := dst.Payload.(*MACCommand_TxParamSetupReq_)
-					if !dstOk && dst.Payload != nil {
+					_, dstTypeOk := dst.Payload.(*MACCommand_TxParamSetupReq_)
+					if dstValid := dstTypeOk || dst.Payload == nil || len(oneofSubs) == 0; !dstValid {
 						return fmt.Errorf("attempt to set oneof 'tx_param_setup_req', while different oneof is set in destination")
 					}
 					if len(oneofSubs) > 0 {
 						var newDst, newSrc *MACCommand_TxParamSetupReq
-						if !srcOk && !dstOk {
-							continue
-						}
-						if srcOk {
+						if srcTypeOk {
 							newSrc = src.Payload.(*MACCommand_TxParamSetupReq_).TxParamSetupReq
 						}
-						if dstOk {
+						if dstTypeOk {
 							newDst = dst.Payload.(*MACCommand_TxParamSetupReq_).TxParamSetupReq
-						} else {
+						} else if srcTypeOk {
 							newDst = &MACCommand_TxParamSetupReq{}
 							dst.Payload = &MACCommand_TxParamSetupReq_{TxParamSetupReq: newDst}
+						} else {
+							dst.Payload = nil
+							continue
 						}
 						if err := newDst.SetFields(newSrc, oneofSubs...); err != nil {
 							return err
 						}
 					} else {
-						if src != nil {
+						if srcTypeOk {
 							dst.Payload = src.Payload
 						} else {
 							dst.Payload = nil
 						}
 					}
 				case "rekey_ind":
-					_, srcOk := src.Payload.(*MACCommand_RekeyInd_)
-					if !srcOk && src.Payload != nil {
+					var srcTypeOk bool
+					if src != nil {
+						_, srcTypeOk = src.Payload.(*MACCommand_RekeyInd_)
+					}
+					if srcValid := srcTypeOk || src == nil || src.Payload == nil || len(oneofSubs) == 0; !srcValid {
 						return fmt.Errorf("attempt to set oneof 'rekey_ind', while different oneof is set in source")
 					}
-					_, dstOk := dst.Payload.(*MACCommand_RekeyInd_)
-					if !dstOk && dst.Payload != nil {
+					_, dstTypeOk := dst.Payload.(*MACCommand_RekeyInd_)
+					if dstValid := dstTypeOk || dst.Payload == nil || len(oneofSubs) == 0; !dstValid {
 						return fmt.Errorf("attempt to set oneof 'rekey_ind', while different oneof is set in destination")
 					}
 					if len(oneofSubs) > 0 {
 						var newDst, newSrc *MACCommand_RekeyInd
-						if !srcOk && !dstOk {
-							continue
-						}
-						if srcOk {
+						if srcTypeOk {
 							newSrc = src.Payload.(*MACCommand_RekeyInd_).RekeyInd
 						}
-						if dstOk {
+						if dstTypeOk {
 							newDst = dst.Payload.(*MACCommand_RekeyInd_).RekeyInd
-						} else {
+						} else if srcTypeOk {
 							newDst = &MACCommand_RekeyInd{}
 							dst.Payload = &MACCommand_RekeyInd_{RekeyInd: newDst}
+						} else {
+							dst.Payload = nil
+							continue
 						}
 						if err := newDst.SetFields(newSrc, oneofSubs...); err != nil {
 							return err
 						}
 					} else {
-						if src != nil {
+						if srcTypeOk {
 							dst.Payload = src.Payload
 						} else {
 							dst.Payload = nil
 						}
 					}
 				case "rekey_conf":
-					_, srcOk := src.Payload.(*MACCommand_RekeyConf_)
-					if !srcOk && src.Payload != nil {
+					var srcTypeOk bool
+					if src != nil {
+						_, srcTypeOk = src.Payload.(*MACCommand_RekeyConf_)
+					}
+					if srcValid := srcTypeOk || src == nil || src.Payload == nil || len(oneofSubs) == 0; !srcValid {
 						return fmt.Errorf("attempt to set oneof 'rekey_conf', while different oneof is set in source")
 					}
-					_, dstOk := dst.Payload.(*MACCommand_RekeyConf_)
-					if !dstOk && dst.Payload != nil {
+					_, dstTypeOk := dst.Payload.(*MACCommand_RekeyConf_)
+					if dstValid := dstTypeOk || dst.Payload == nil || len(oneofSubs) == 0; !dstValid {
 						return fmt.Errorf("attempt to set oneof 'rekey_conf', while different oneof is set in destination")
 					}
 					if len(oneofSubs) > 0 {
 						var newDst, newSrc *MACCommand_RekeyConf
-						if !srcOk && !dstOk {
-							continue
-						}
-						if srcOk {
+						if srcTypeOk {
 							newSrc = src.Payload.(*MACCommand_RekeyConf_).RekeyConf
 						}
-						if dstOk {
+						if dstTypeOk {
 							newDst = dst.Payload.(*MACCommand_RekeyConf_).RekeyConf
-						} else {
+						} else if srcTypeOk {
 							newDst = &MACCommand_RekeyConf{}
 							dst.Payload = &MACCommand_RekeyConf_{RekeyConf: newDst}
+						} else {
+							dst.Payload = nil
+							continue
 						}
 						if err := newDst.SetFields(newSrc, oneofSubs...); err != nil {
 							return err
 						}
 					} else {
-						if src != nil {
+						if srcTypeOk {
 							dst.Payload = src.Payload
 						} else {
 							dst.Payload = nil
 						}
 					}
 				case "adr_param_setup_req":
-					_, srcOk := src.Payload.(*MACCommand_AdrParamSetupReq)
-					if !srcOk && src.Payload != nil {
+					var srcTypeOk bool
+					if src != nil {
+						_, srcTypeOk = src.Payload.(*MACCommand_AdrParamSetupReq)
+					}
+					if srcValid := srcTypeOk || src == nil || src.Payload == nil || len(oneofSubs) == 0; !srcValid {
 						return fmt.Errorf("attempt to set oneof 'adr_param_setup_req', while different oneof is set in source")
 					}
-					_, dstOk := dst.Payload.(*MACCommand_AdrParamSetupReq)
-					if !dstOk && dst.Payload != nil {
+					_, dstTypeOk := dst.Payload.(*MACCommand_AdrParamSetupReq)
+					if dstValid := dstTypeOk || dst.Payload == nil || len(oneofSubs) == 0; !dstValid {
 						return fmt.Errorf("attempt to set oneof 'adr_param_setup_req', while different oneof is set in destination")
 					}
 					if len(oneofSubs) > 0 {
 						var newDst, newSrc *MACCommand_ADRParamSetupReq
-						if !srcOk && !dstOk {
-							continue
-						}
-						if srcOk {
+						if srcTypeOk {
 							newSrc = src.Payload.(*MACCommand_AdrParamSetupReq).AdrParamSetupReq
 						}
-						if dstOk {
+						if dstTypeOk {
 							newDst = dst.Payload.(*MACCommand_AdrParamSetupReq).AdrParamSetupReq
-						} else {
+						} else if srcTypeOk {
 							newDst = &MACCommand_ADRParamSetupReq{}
 							dst.Payload = &MACCommand_AdrParamSetupReq{AdrParamSetupReq: newDst}
+						} else {
+							dst.Payload = nil
+							continue
 						}
 						if err := newDst.SetFields(newSrc, oneofSubs...); err != nil {
 							return err
 						}
 					} else {
-						if src != nil {
+						if srcTypeOk {
 							dst.Payload = src.Payload
 						} else {
 							dst.Payload = nil
 						}
 					}
 				case "device_time_ans":
-					_, srcOk := src.Payload.(*MACCommand_DeviceTimeAns_)
-					if !srcOk && src.Payload != nil {
+					var srcTypeOk bool
+					if src != nil {
+						_, srcTypeOk = src.Payload.(*MACCommand_DeviceTimeAns_)
+					}
+					if srcValid := srcTypeOk || src == nil || src.Payload == nil || len(oneofSubs) == 0; !srcValid {
 						return fmt.Errorf("attempt to set oneof 'device_time_ans', while different oneof is set in source")
 					}
-					_, dstOk := dst.Payload.(*MACCommand_DeviceTimeAns_)
-					if !dstOk && dst.Payload != nil {
+					_, dstTypeOk := dst.Payload.(*MACCommand_DeviceTimeAns_)
+					if dstValid := dstTypeOk || dst.Payload == nil || len(oneofSubs) == 0; !dstValid {
 						return fmt.Errorf("attempt to set oneof 'device_time_ans', while different oneof is set in destination")
 					}
 					if len(oneofSubs) > 0 {
 						var newDst, newSrc *MACCommand_DeviceTimeAns
-						if !srcOk && !dstOk {
-							continue
-						}
-						if srcOk {
+						if srcTypeOk {
 							newSrc = src.Payload.(*MACCommand_DeviceTimeAns_).DeviceTimeAns
 						}
-						if dstOk {
+						if dstTypeOk {
 							newDst = dst.Payload.(*MACCommand_DeviceTimeAns_).DeviceTimeAns
-						} else {
+						} else if srcTypeOk {
 							newDst = &MACCommand_DeviceTimeAns{}
 							dst.Payload = &MACCommand_DeviceTimeAns_{DeviceTimeAns: newDst}
+						} else {
+							dst.Payload = nil
+							continue
 						}
 						if err := newDst.SetFields(newSrc, oneofSubs...); err != nil {
 							return err
 						}
 					} else {
-						if src != nil {
+						if srcTypeOk {
 							dst.Payload = src.Payload
 						} else {
 							dst.Payload = nil
 						}
 					}
 				case "force_rejoin_req":
-					_, srcOk := src.Payload.(*MACCommand_ForceRejoinReq_)
-					if !srcOk && src.Payload != nil {
+					var srcTypeOk bool
+					if src != nil {
+						_, srcTypeOk = src.Payload.(*MACCommand_ForceRejoinReq_)
+					}
+					if srcValid := srcTypeOk || src == nil || src.Payload == nil || len(oneofSubs) == 0; !srcValid {
 						return fmt.Errorf("attempt to set oneof 'force_rejoin_req', while different oneof is set in source")
 					}
-					_, dstOk := dst.Payload.(*MACCommand_ForceRejoinReq_)
-					if !dstOk && dst.Payload != nil {
+					_, dstTypeOk := dst.Payload.(*MACCommand_ForceRejoinReq_)
+					if dstValid := dstTypeOk || dst.Payload == nil || len(oneofSubs) == 0; !dstValid {
 						return fmt.Errorf("attempt to set oneof 'force_rejoin_req', while different oneof is set in destination")
 					}
 					if len(oneofSubs) > 0 {
 						var newDst, newSrc *MACCommand_ForceRejoinReq
-						if !srcOk && !dstOk {
-							continue
-						}
-						if srcOk {
+						if srcTypeOk {
 							newSrc = src.Payload.(*MACCommand_ForceRejoinReq_).ForceRejoinReq
 						}
-						if dstOk {
+						if dstTypeOk {
 							newDst = dst.Payload.(*MACCommand_ForceRejoinReq_).ForceRejoinReq
-						} else {
+						} else if srcTypeOk {
 							newDst = &MACCommand_ForceRejoinReq{}
 							dst.Payload = &MACCommand_ForceRejoinReq_{ForceRejoinReq: newDst}
+						} else {
+							dst.Payload = nil
+							continue
 						}
 						if err := newDst.SetFields(newSrc, oneofSubs...); err != nil {
 							return err
 						}
 					} else {
-						if src != nil {
+						if srcTypeOk {
 							dst.Payload = src.Payload
 						} else {
 							dst.Payload = nil
 						}
 					}
 				case "rejoin_param_setup_req":
-					_, srcOk := src.Payload.(*MACCommand_RejoinParamSetupReq_)
-					if !srcOk && src.Payload != nil {
+					var srcTypeOk bool
+					if src != nil {
+						_, srcTypeOk = src.Payload.(*MACCommand_RejoinParamSetupReq_)
+					}
+					if srcValid := srcTypeOk || src == nil || src.Payload == nil || len(oneofSubs) == 0; !srcValid {
 						return fmt.Errorf("attempt to set oneof 'rejoin_param_setup_req', while different oneof is set in source")
 					}
-					_, dstOk := dst.Payload.(*MACCommand_RejoinParamSetupReq_)
-					if !dstOk && dst.Payload != nil {
+					_, dstTypeOk := dst.Payload.(*MACCommand_RejoinParamSetupReq_)
+					if dstValid := dstTypeOk || dst.Payload == nil || len(oneofSubs) == 0; !dstValid {
 						return fmt.Errorf("attempt to set oneof 'rejoin_param_setup_req', while different oneof is set in destination")
 					}
 					if len(oneofSubs) > 0 {
 						var newDst, newSrc *MACCommand_RejoinParamSetupReq
-						if !srcOk && !dstOk {
-							continue
-						}
-						if srcOk {
+						if srcTypeOk {
 							newSrc = src.Payload.(*MACCommand_RejoinParamSetupReq_).RejoinParamSetupReq
 						}
-						if dstOk {
+						if dstTypeOk {
 							newDst = dst.Payload.(*MACCommand_RejoinParamSetupReq_).RejoinParamSetupReq
-						} else {
+						} else if srcTypeOk {
 							newDst = &MACCommand_RejoinParamSetupReq{}
 							dst.Payload = &MACCommand_RejoinParamSetupReq_{RejoinParamSetupReq: newDst}
+						} else {
+							dst.Payload = nil
+							continue
 						}
 						if err := newDst.SetFields(newSrc, oneofSubs...); err != nil {
 							return err
 						}
 					} else {
-						if src != nil {
+						if srcTypeOk {
 							dst.Payload = src.Payload
 						} else {
 							dst.Payload = nil
 						}
 					}
 				case "rejoin_param_setup_ans":
-					_, srcOk := src.Payload.(*MACCommand_RejoinParamSetupAns_)
-					if !srcOk && src.Payload != nil {
+					var srcTypeOk bool
+					if src != nil {
+						_, srcTypeOk = src.Payload.(*MACCommand_RejoinParamSetupAns_)
+					}
+					if srcValid := srcTypeOk || src == nil || src.Payload == nil || len(oneofSubs) == 0; !srcValid {
 						return fmt.Errorf("attempt to set oneof 'rejoin_param_setup_ans', while different oneof is set in source")
 					}
-					_, dstOk := dst.Payload.(*MACCommand_RejoinParamSetupAns_)
-					if !dstOk && dst.Payload != nil {
+					_, dstTypeOk := dst.Payload.(*MACCommand_RejoinParamSetupAns_)
+					if dstValid := dstTypeOk || dst.Payload == nil || len(oneofSubs) == 0; !dstValid {
 						return fmt.Errorf("attempt to set oneof 'rejoin_param_setup_ans', while different oneof is set in destination")
 					}
 					if len(oneofSubs) > 0 {
 						var newDst, newSrc *MACCommand_RejoinParamSetupAns
-						if !srcOk && !dstOk {
-							continue
-						}
-						if srcOk {
+						if srcTypeOk {
 							newSrc = src.Payload.(*MACCommand_RejoinParamSetupAns_).RejoinParamSetupAns
 						}
-						if dstOk {
+						if dstTypeOk {
 							newDst = dst.Payload.(*MACCommand_RejoinParamSetupAns_).RejoinParamSetupAns
-						} else {
+						} else if srcTypeOk {
 							newDst = &MACCommand_RejoinParamSetupAns{}
 							dst.Payload = &MACCommand_RejoinParamSetupAns_{RejoinParamSetupAns: newDst}
+						} else {
+							dst.Payload = nil
+							continue
 						}
 						if err := newDst.SetFields(newSrc, oneofSubs...); err != nil {
 							return err
 						}
 					} else {
-						if src != nil {
+						if srcTypeOk {
 							dst.Payload = src.Payload
 						} else {
 							dst.Payload = nil
 						}
 					}
 				case "ping_slot_info_req":
-					_, srcOk := src.Payload.(*MACCommand_PingSlotInfoReq_)
-					if !srcOk && src.Payload != nil {
+					var srcTypeOk bool
+					if src != nil {
+						_, srcTypeOk = src.Payload.(*MACCommand_PingSlotInfoReq_)
+					}
+					if srcValid := srcTypeOk || src == nil || src.Payload == nil || len(oneofSubs) == 0; !srcValid {
 						return fmt.Errorf("attempt to set oneof 'ping_slot_info_req', while different oneof is set in source")
 					}
-					_, dstOk := dst.Payload.(*MACCommand_PingSlotInfoReq_)
-					if !dstOk && dst.Payload != nil {
+					_, dstTypeOk := dst.Payload.(*MACCommand_PingSlotInfoReq_)
+					if dstValid := dstTypeOk || dst.Payload == nil || len(oneofSubs) == 0; !dstValid {
 						return fmt.Errorf("attempt to set oneof 'ping_slot_info_req', while different oneof is set in destination")
 					}
 					if len(oneofSubs) > 0 {
 						var newDst, newSrc *MACCommand_PingSlotInfoReq
-						if !srcOk && !dstOk {
-							continue
-						}
-						if srcOk {
+						if srcTypeOk {
 							newSrc = src.Payload.(*MACCommand_PingSlotInfoReq_).PingSlotInfoReq
 						}
-						if dstOk {
+						if dstTypeOk {
 							newDst = dst.Payload.(*MACCommand_PingSlotInfoReq_).PingSlotInfoReq
-						} else {
+						} else if srcTypeOk {
 							newDst = &MACCommand_PingSlotInfoReq{}
 							dst.Payload = &MACCommand_PingSlotInfoReq_{PingSlotInfoReq: newDst}
+						} else {
+							dst.Payload = nil
+							continue
 						}
 						if err := newDst.SetFields(newSrc, oneofSubs...); err != nil {
 							return err
 						}
 					} else {
-						if src != nil {
+						if srcTypeOk {
 							dst.Payload = src.Payload
 						} else {
 							dst.Payload = nil
 						}
 					}
 				case "ping_slot_channel_req":
-					_, srcOk := src.Payload.(*MACCommand_PingSlotChannelReq_)
-					if !srcOk && src.Payload != nil {
+					var srcTypeOk bool
+					if src != nil {
+						_, srcTypeOk = src.Payload.(*MACCommand_PingSlotChannelReq_)
+					}
+					if srcValid := srcTypeOk || src == nil || src.Payload == nil || len(oneofSubs) == 0; !srcValid {
 						return fmt.Errorf("attempt to set oneof 'ping_slot_channel_req', while different oneof is set in source")
 					}
-					_, dstOk := dst.Payload.(*MACCommand_PingSlotChannelReq_)
-					if !dstOk && dst.Payload != nil {
+					_, dstTypeOk := dst.Payload.(*MACCommand_PingSlotChannelReq_)
+					if dstValid := dstTypeOk || dst.Payload == nil || len(oneofSubs) == 0; !dstValid {
 						return fmt.Errorf("attempt to set oneof 'ping_slot_channel_req', while different oneof is set in destination")
 					}
 					if len(oneofSubs) > 0 {
 						var newDst, newSrc *MACCommand_PingSlotChannelReq
-						if !srcOk && !dstOk {
-							continue
-						}
-						if srcOk {
+						if srcTypeOk {
 							newSrc = src.Payload.(*MACCommand_PingSlotChannelReq_).PingSlotChannelReq
 						}
-						if dstOk {
+						if dstTypeOk {
 							newDst = dst.Payload.(*MACCommand_PingSlotChannelReq_).PingSlotChannelReq
-						} else {
+						} else if srcTypeOk {
 							newDst = &MACCommand_PingSlotChannelReq{}
 							dst.Payload = &MACCommand_PingSlotChannelReq_{PingSlotChannelReq: newDst}
+						} else {
+							dst.Payload = nil
+							continue
 						}
 						if err := newDst.SetFields(newSrc, oneofSubs...); err != nil {
 							return err
 						}
 					} else {
-						if src != nil {
+						if srcTypeOk {
 							dst.Payload = src.Payload
 						} else {
 							dst.Payload = nil
 						}
 					}
 				case "ping_slot_channel_ans":
-					_, srcOk := src.Payload.(*MACCommand_PingSlotChannelAns_)
-					if !srcOk && src.Payload != nil {
+					var srcTypeOk bool
+					if src != nil {
+						_, srcTypeOk = src.Payload.(*MACCommand_PingSlotChannelAns_)
+					}
+					if srcValid := srcTypeOk || src == nil || src.Payload == nil || len(oneofSubs) == 0; !srcValid {
 						return fmt.Errorf("attempt to set oneof 'ping_slot_channel_ans', while different oneof is set in source")
 					}
-					_, dstOk := dst.Payload.(*MACCommand_PingSlotChannelAns_)
-					if !dstOk && dst.Payload != nil {
+					_, dstTypeOk := dst.Payload.(*MACCommand_PingSlotChannelAns_)
+					if dstValid := dstTypeOk || dst.Payload == nil || len(oneofSubs) == 0; !dstValid {
 						return fmt.Errorf("attempt to set oneof 'ping_slot_channel_ans', while different oneof is set in destination")
 					}
 					if len(oneofSubs) > 0 {
 						var newDst, newSrc *MACCommand_PingSlotChannelAns
-						if !srcOk && !dstOk {
-							continue
-						}
-						if srcOk {
+						if srcTypeOk {
 							newSrc = src.Payload.(*MACCommand_PingSlotChannelAns_).PingSlotChannelAns
 						}
-						if dstOk {
+						if dstTypeOk {
 							newDst = dst.Payload.(*MACCommand_PingSlotChannelAns_).PingSlotChannelAns
-						} else {
+						} else if srcTypeOk {
 							newDst = &MACCommand_PingSlotChannelAns{}
 							dst.Payload = &MACCommand_PingSlotChannelAns_{PingSlotChannelAns: newDst}
+						} else {
+							dst.Payload = nil
+							continue
 						}
 						if err := newDst.SetFields(newSrc, oneofSubs...); err != nil {
 							return err
 						}
 					} else {
-						if src != nil {
+						if srcTypeOk {
 							dst.Payload = src.Payload
 						} else {
 							dst.Payload = nil
 						}
 					}
 				case "beacon_timing_ans":
-					_, srcOk := src.Payload.(*MACCommand_BeaconTimingAns_)
-					if !srcOk && src.Payload != nil {
+					var srcTypeOk bool
+					if src != nil {
+						_, srcTypeOk = src.Payload.(*MACCommand_BeaconTimingAns_)
+					}
+					if srcValid := srcTypeOk || src == nil || src.Payload == nil || len(oneofSubs) == 0; !srcValid {
 						return fmt.Errorf("attempt to set oneof 'beacon_timing_ans', while different oneof is set in source")
 					}
-					_, dstOk := dst.Payload.(*MACCommand_BeaconTimingAns_)
-					if !dstOk && dst.Payload != nil {
+					_, dstTypeOk := dst.Payload.(*MACCommand_BeaconTimingAns_)
+					if dstValid := dstTypeOk || dst.Payload == nil || len(oneofSubs) == 0; !dstValid {
 						return fmt.Errorf("attempt to set oneof 'beacon_timing_ans', while different oneof is set in destination")
 					}
 					if len(oneofSubs) > 0 {
 						var newDst, newSrc *MACCommand_BeaconTimingAns
-						if !srcOk && !dstOk {
-							continue
-						}
-						if srcOk {
+						if srcTypeOk {
 							newSrc = src.Payload.(*MACCommand_BeaconTimingAns_).BeaconTimingAns
 						}
-						if dstOk {
+						if dstTypeOk {
 							newDst = dst.Payload.(*MACCommand_BeaconTimingAns_).BeaconTimingAns
-						} else {
+						} else if srcTypeOk {
 							newDst = &MACCommand_BeaconTimingAns{}
 							dst.Payload = &MACCommand_BeaconTimingAns_{BeaconTimingAns: newDst}
+						} else {
+							dst.Payload = nil
+							continue
 						}
 						if err := newDst.SetFields(newSrc, oneofSubs...); err != nil {
 							return err
 						}
 					} else {
-						if src != nil {
+						if srcTypeOk {
 							dst.Payload = src.Payload
 						} else {
 							dst.Payload = nil
 						}
 					}
 				case "beacon_freq_req":
-					_, srcOk := src.Payload.(*MACCommand_BeaconFreqReq_)
-					if !srcOk && src.Payload != nil {
+					var srcTypeOk bool
+					if src != nil {
+						_, srcTypeOk = src.Payload.(*MACCommand_BeaconFreqReq_)
+					}
+					if srcValid := srcTypeOk || src == nil || src.Payload == nil || len(oneofSubs) == 0; !srcValid {
 						return fmt.Errorf("attempt to set oneof 'beacon_freq_req', while different oneof is set in source")
 					}
-					_, dstOk := dst.Payload.(*MACCommand_BeaconFreqReq_)
-					if !dstOk && dst.Payload != nil {
+					_, dstTypeOk := dst.Payload.(*MACCommand_BeaconFreqReq_)
+					if dstValid := dstTypeOk || dst.Payload == nil || len(oneofSubs) == 0; !dstValid {
 						return fmt.Errorf("attempt to set oneof 'beacon_freq_req', while different oneof is set in destination")
 					}
 					if len(oneofSubs) > 0 {
 						var newDst, newSrc *MACCommand_BeaconFreqReq
-						if !srcOk && !dstOk {
-							continue
-						}
-						if srcOk {
+						if srcTypeOk {
 							newSrc = src.Payload.(*MACCommand_BeaconFreqReq_).BeaconFreqReq
 						}
-						if dstOk {
+						if dstTypeOk {
 							newDst = dst.Payload.(*MACCommand_BeaconFreqReq_).BeaconFreqReq
-						} else {
+						} else if srcTypeOk {
 							newDst = &MACCommand_BeaconFreqReq{}
 							dst.Payload = &MACCommand_BeaconFreqReq_{BeaconFreqReq: newDst}
+						} else {
+							dst.Payload = nil
+							continue
 						}
 						if err := newDst.SetFields(newSrc, oneofSubs...); err != nil {
 							return err
 						}
 					} else {
-						if src != nil {
+						if srcTypeOk {
 							dst.Payload = src.Payload
 						} else {
 							dst.Payload = nil
 						}
 					}
 				case "beacon_freq_ans":
-					_, srcOk := src.Payload.(*MACCommand_BeaconFreqAns_)
-					if !srcOk && src.Payload != nil {
+					var srcTypeOk bool
+					if src != nil {
+						_, srcTypeOk = src.Payload.(*MACCommand_BeaconFreqAns_)
+					}
+					if srcValid := srcTypeOk || src == nil || src.Payload == nil || len(oneofSubs) == 0; !srcValid {
 						return fmt.Errorf("attempt to set oneof 'beacon_freq_ans', while different oneof is set in source")
 					}
-					_, dstOk := dst.Payload.(*MACCommand_BeaconFreqAns_)
-					if !dstOk && dst.Payload != nil {
+					_, dstTypeOk := dst.Payload.(*MACCommand_BeaconFreqAns_)
+					if dstValid := dstTypeOk || dst.Payload == nil || len(oneofSubs) == 0; !dstValid {
 						return fmt.Errorf("attempt to set oneof 'beacon_freq_ans', while different oneof is set in destination")
 					}
 					if len(oneofSubs) > 0 {
 						var newDst, newSrc *MACCommand_BeaconFreqAns
-						if !srcOk && !dstOk {
-							continue
-						}
-						if srcOk {
+						if srcTypeOk {
 							newSrc = src.Payload.(*MACCommand_BeaconFreqAns_).BeaconFreqAns
 						}
-						if dstOk {
+						if dstTypeOk {
 							newDst = dst.Payload.(*MACCommand_BeaconFreqAns_).BeaconFreqAns
-						} else {
+						} else if srcTypeOk {
 							newDst = &MACCommand_BeaconFreqAns{}
 							dst.Payload = &MACCommand_BeaconFreqAns_{BeaconFreqAns: newDst}
+						} else {
+							dst.Payload = nil
+							continue
 						}
 						if err := newDst.SetFields(newSrc, oneofSubs...); err != nil {
 							return err
 						}
 					} else {
-						if src != nil {
+						if srcTypeOk {
 							dst.Payload = src.Payload
 						} else {
 							dst.Payload = nil
 						}
 					}
 				case "device_mode_ind":
-					_, srcOk := src.Payload.(*MACCommand_DeviceModeInd_)
-					if !srcOk && src.Payload != nil {
+					var srcTypeOk bool
+					if src != nil {
+						_, srcTypeOk = src.Payload.(*MACCommand_DeviceModeInd_)
+					}
+					if srcValid := srcTypeOk || src == nil || src.Payload == nil || len(oneofSubs) == 0; !srcValid {
 						return fmt.Errorf("attempt to set oneof 'device_mode_ind', while different oneof is set in source")
 					}
-					_, dstOk := dst.Payload.(*MACCommand_DeviceModeInd_)
-					if !dstOk && dst.Payload != nil {
+					_, dstTypeOk := dst.Payload.(*MACCommand_DeviceModeInd_)
+					if dstValid := dstTypeOk || dst.Payload == nil || len(oneofSubs) == 0; !dstValid {
 						return fmt.Errorf("attempt to set oneof 'device_mode_ind', while different oneof is set in destination")
 					}
 					if len(oneofSubs) > 0 {
 						var newDst, newSrc *MACCommand_DeviceModeInd
-						if !srcOk && !dstOk {
-							continue
-						}
-						if srcOk {
+						if srcTypeOk {
 							newSrc = src.Payload.(*MACCommand_DeviceModeInd_).DeviceModeInd
 						}
-						if dstOk {
+						if dstTypeOk {
 							newDst = dst.Payload.(*MACCommand_DeviceModeInd_).DeviceModeInd
-						} else {
+						} else if srcTypeOk {
 							newDst = &MACCommand_DeviceModeInd{}
 							dst.Payload = &MACCommand_DeviceModeInd_{DeviceModeInd: newDst}
+						} else {
+							dst.Payload = nil
+							continue
 						}
 						if err := newDst.SetFields(newSrc, oneofSubs...); err != nil {
 							return err
 						}
 					} else {
-						if src != nil {
+						if srcTypeOk {
 							dst.Payload = src.Payload
 						} else {
 							dst.Payload = nil
 						}
 					}
 				case "device_mode_conf":
-					_, srcOk := src.Payload.(*MACCommand_DeviceModeConf_)
-					if !srcOk && src.Payload != nil {
+					var srcTypeOk bool
+					if src != nil {
+						_, srcTypeOk = src.Payload.(*MACCommand_DeviceModeConf_)
+					}
+					if srcValid := srcTypeOk || src == nil || src.Payload == nil || len(oneofSubs) == 0; !srcValid {
 						return fmt.Errorf("attempt to set oneof 'device_mode_conf', while different oneof is set in source")
 					}
-					_, dstOk := dst.Payload.(*MACCommand_DeviceModeConf_)
-					if !dstOk && dst.Payload != nil {
+					_, dstTypeOk := dst.Payload.(*MACCommand_DeviceModeConf_)
+					if dstValid := dstTypeOk || dst.Payload == nil || len(oneofSubs) == 0; !dstValid {
 						return fmt.Errorf("attempt to set oneof 'device_mode_conf', while different oneof is set in destination")
 					}
 					if len(oneofSubs) > 0 {
 						var newDst, newSrc *MACCommand_DeviceModeConf
-						if !srcOk && !dstOk {
-							continue
-						}
-						if srcOk {
+						if srcTypeOk {
 							newSrc = src.Payload.(*MACCommand_DeviceModeConf_).DeviceModeConf
 						}
-						if dstOk {
+						if dstTypeOk {
 							newDst = dst.Payload.(*MACCommand_DeviceModeConf_).DeviceModeConf
-						} else {
+						} else if srcTypeOk {
 							newDst = &MACCommand_DeviceModeConf{}
 							dst.Payload = &MACCommand_DeviceModeConf_{DeviceModeConf: newDst}
+						} else {
+							dst.Payload = nil
+							continue
 						}
 						if err := newDst.SetFields(newSrc, oneofSubs...); err != nil {
 							return err
 						}
 					} else {
-						if src != nil {
+						if srcTypeOk {
 							dst.Payload = src.Payload
 						} else {
 							dst.Payload = nil
@@ -2376,6 +2625,26 @@ func (dst *MACCommand) SetFields(src *MACCommand, paths ...string) error {
 				default:
 					return fmt.Errorf("invalid oneof field: '%s.%s'", name, oneofName)
 				}
+			}
+
+		default:
+			return fmt.Errorf("invalid field: '%s'", name)
+		}
+	}
+	return nil
+}
+
+func (dst *MACCommands) SetFields(src *MACCommands, paths ...string) error {
+	for name, subs := range _processPaths(paths) {
+		switch name {
+		case "commands":
+			if len(subs) > 0 {
+				return fmt.Errorf("'commands' has no subfields, but %s were specified", subs)
+			}
+			if src != nil {
+				dst.Commands = src.Commands
+			} else {
+				dst.Commands = nil
 			}
 
 		default:
@@ -3212,8 +3481,7 @@ func (dst *MACCommand_DeviceTimeAns) SetFields(src *MACCommand_DeviceTimeAns, pa
 			if src != nil {
 				dst.Time = src.Time
 			} else {
-				var zero time.Time
-				dst.Time = zero
+				dst.Time = nil
 			}
 
 		default:

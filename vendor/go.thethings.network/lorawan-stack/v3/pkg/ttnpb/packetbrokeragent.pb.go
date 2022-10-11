@@ -6,19 +6,19 @@ package ttnpb
 import (
 	context "context"
 	fmt "fmt"
+	_ "github.com/TheThingsIndustries/protoc-gen-go-flags/annotations"
+	_ "github.com/TheThingsIndustries/protoc-gen-go-json/annotations"
 	_ "github.com/envoyproxy/protoc-gen-validate/validate"
 	_ "github.com/gogo/protobuf/gogoproto"
 	proto "github.com/gogo/protobuf/proto"
 	types "github.com/gogo/protobuf/types"
 	golang_proto "github.com/golang/protobuf/proto"
-	go_thethings_network_lorawan_stack_v3_pkg_types "go.thethings.network/lorawan-stack/v3/pkg/types"
+	_ "github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-openapiv2/options"
 	_ "google.golang.org/genproto/googleapis/api/annotations"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
 	math "math"
-	reflect "reflect"
-	strings "strings"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -37,14 +37,17 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 // This is a subset and superset of the Gateway message using the same data types and field tags to achieve initial wire compatibility.
 // There is no (longer) wire compatibility needed; new fields may use any tag.
 type PacketBrokerGateway struct {
-	Ids                      *PacketBrokerGateway_GatewayIdentifiers `protobuf:"bytes,1,opt,name=ids,proto3" json:"ids,omitempty"`
-	ContactInfo              []*ContactInfo                          `protobuf:"bytes,7,rep,name=contact_info,json=contactInfo,proto3" json:"contact_info,omitempty"`
-	Antennas                 []*GatewayAntenna                       `protobuf:"bytes,13,rep,name=antennas,proto3" json:"antennas,omitempty"`
-	StatusPublic             bool                                    `protobuf:"varint,14,opt,name=status_public,json=statusPublic,proto3" json:"status_public,omitempty"`
-	LocationPublic           bool                                    `protobuf:"varint,15,opt,name=location_public,json=locationPublic,proto3" json:"location_public,omitempty"`
-	FrequencyPlanIds         []string                                `protobuf:"bytes,20,rep,name=frequency_plan_ids,json=frequencyPlanIds,proto3" json:"frequency_plan_ids,omitempty"`
-	UpdateLocationFromStatus bool                                    `protobuf:"varint,21,opt,name=update_location_from_status,json=updateLocationFromStatus,proto3" json:"update_location_from_status,omitempty"`
-	Online                   bool                                    `protobuf:"varint,28,opt,name=online,proto3" json:"online,omitempty"`
+	Ids *PacketBrokerGateway_GatewayIdentifiers `protobuf:"bytes,1,opt,name=ids,proto3" json:"ids,omitempty"`
+	// This field is deprecated. Use administrative_contact and technical_contact instead.
+	ContactInfo              []*ContactInfo                 `protobuf:"bytes,7,rep,name=contact_info,json=contactInfo,proto3" json:"contact_info,omitempty"` // Deprecated: Do not use.
+	AdministrativeContact    *OrganizationOrUserIdentifiers `protobuf:"bytes,10,opt,name=administrative_contact,json=administrativeContact,proto3" json:"administrative_contact,omitempty"`
+	TechnicalContact         *OrganizationOrUserIdentifiers `protobuf:"bytes,11,opt,name=technical_contact,json=technicalContact,proto3" json:"technical_contact,omitempty"`
+	Antennas                 []*GatewayAntenna              `protobuf:"bytes,13,rep,name=antennas,proto3" json:"antennas,omitempty"`
+	StatusPublic             bool                           `protobuf:"varint,14,opt,name=status_public,json=statusPublic,proto3" json:"status_public,omitempty"`
+	LocationPublic           bool                           `protobuf:"varint,15,opt,name=location_public,json=locationPublic,proto3" json:"location_public,omitempty"`
+	FrequencyPlanIds         []string                       `protobuf:"bytes,20,rep,name=frequency_plan_ids,json=frequencyPlanIds,proto3" json:"frequency_plan_ids,omitempty"`
+	UpdateLocationFromStatus bool                           `protobuf:"varint,21,opt,name=update_location_from_status,json=updateLocationFromStatus,proto3" json:"update_location_from_status,omitempty"`
+	Online                   bool                           `protobuf:"varint,28,opt,name=online,proto3" json:"online,omitempty"`
 	// Received packets rate (number of packets per hour).
 	// This field gets updated when a value is set.
 	RxRate *types.FloatValue `protobuf:"bytes,29,opt,name=rx_rate,json=rxRate,proto3" json:"rx_rate,omitempty"`
@@ -52,11 +55,13 @@ type PacketBrokerGateway struct {
 	// This field gets updated when a value is set.
 	TxRate               *types.FloatValue `protobuf:"bytes,30,opt,name=tx_rate,json=txRate,proto3" json:"tx_rate,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}          `json:"-"`
+	XXX_unrecognized     []byte            `json:"-"`
 	XXX_sizecache        int32             `json:"-"`
 }
 
-func (m *PacketBrokerGateway) Reset()      { *m = PacketBrokerGateway{} }
-func (*PacketBrokerGateway) ProtoMessage() {}
+func (m *PacketBrokerGateway) Reset()         { *m = PacketBrokerGateway{} }
+func (m *PacketBrokerGateway) String() string { return proto.CompactTextString(m) }
+func (*PacketBrokerGateway) ProtoMessage()    {}
 func (*PacketBrokerGateway) Descriptor() ([]byte, []int) {
 	return fileDescriptor_1a44242dc5cd678e, []int{0}
 }
@@ -85,9 +90,24 @@ func (m *PacketBrokerGateway) GetIds() *PacketBrokerGateway_GatewayIdentifiers {
 	return nil
 }
 
+// Deprecated: Do not use.
 func (m *PacketBrokerGateway) GetContactInfo() []*ContactInfo {
 	if m != nil {
 		return m.ContactInfo
+	}
+	return nil
+}
+
+func (m *PacketBrokerGateway) GetAdministrativeContact() *OrganizationOrUserIdentifiers {
+	if m != nil {
+		return m.AdministrativeContact
+	}
+	return nil
+}
+
+func (m *PacketBrokerGateway) GetTechnicalContact() *OrganizationOrUserIdentifiers {
+	if m != nil {
+		return m.TechnicalContact
 	}
 	return nil
 }
@@ -149,16 +169,18 @@ func (m *PacketBrokerGateway) GetTxRate() *types.FloatValue {
 }
 
 type PacketBrokerGateway_GatewayIdentifiers struct {
-	GatewayId            string                                                 `protobuf:"bytes,1,opt,name=gateway_id,json=gatewayId,proto3" json:"gateway_id,omitempty"`
-	Eui                  *go_thethings_network_lorawan_stack_v3_pkg_types.EUI64 `protobuf:"bytes,2,opt,name=eui,proto3,customtype=go.thethings.network/lorawan-stack/v3/pkg/types.EUI64" json:"eui,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}                                               `json:"-"`
-	XXX_sizecache        int32                                                  `json:"-"`
+	GatewayId            string   `protobuf:"bytes,1,opt,name=gateway_id,json=gatewayId,proto3" json:"gateway_id,omitempty"`
+	Eui                  []byte   `protobuf:"bytes,2,opt,name=eui,proto3" json:"eui,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
 }
 
 func (m *PacketBrokerGateway_GatewayIdentifiers) Reset() {
 	*m = PacketBrokerGateway_GatewayIdentifiers{}
 }
-func (*PacketBrokerGateway_GatewayIdentifiers) ProtoMessage() {}
+func (m *PacketBrokerGateway_GatewayIdentifiers) String() string { return proto.CompactTextString(m) }
+func (*PacketBrokerGateway_GatewayIdentifiers) ProtoMessage()    {}
 func (*PacketBrokerGateway_GatewayIdentifiers) Descriptor() ([]byte, []int) {
 	return fileDescriptor_1a44242dc5cd678e, []int{0, 0}
 }
@@ -187,6 +209,13 @@ func (m *PacketBrokerGateway_GatewayIdentifiers) GetGatewayId() string {
 	return ""
 }
 
+func (m *PacketBrokerGateway_GatewayIdentifiers) GetEui() []byte {
+	if m != nil {
+		return m.Eui
+	}
+	return nil
+}
+
 type UpdatePacketBrokerGatewayRequest struct {
 	Gateway *PacketBrokerGateway `protobuf:"bytes,1,opt,name=gateway,proto3" json:"gateway,omitempty"`
 	// The names of the gateway fields that are considered for update.
@@ -199,11 +228,13 @@ type UpdatePacketBrokerGatewayRequest struct {
 	// If location_public is set and true, the first antenna location will be used as gateway location.
 	FieldMask            *types.FieldMask `protobuf:"bytes,5,opt,name=field_mask,json=fieldMask,proto3" json:"field_mask,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}         `json:"-"`
+	XXX_unrecognized     []byte           `json:"-"`
 	XXX_sizecache        int32            `json:"-"`
 }
 
-func (m *UpdatePacketBrokerGatewayRequest) Reset()      { *m = UpdatePacketBrokerGatewayRequest{} }
-func (*UpdatePacketBrokerGatewayRequest) ProtoMessage() {}
+func (m *UpdatePacketBrokerGatewayRequest) Reset()         { *m = UpdatePacketBrokerGatewayRequest{} }
+func (m *UpdatePacketBrokerGatewayRequest) String() string { return proto.CompactTextString(m) }
+func (*UpdatePacketBrokerGatewayRequest) ProtoMessage()    {}
 func (*UpdatePacketBrokerGatewayRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_1a44242dc5cd678e, []int{1}
 }
@@ -243,11 +274,13 @@ type UpdatePacketBrokerGatewayResponse struct {
 	// Time to live of the online status.
 	OnlineTtl            *types.Duration `protobuf:"bytes,1,opt,name=online_ttl,json=onlineTtl,proto3" json:"online_ttl,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}        `json:"-"`
+	XXX_unrecognized     []byte          `json:"-"`
 	XXX_sizecache        int32           `json:"-"`
 }
 
-func (m *UpdatePacketBrokerGatewayResponse) Reset()      { *m = UpdatePacketBrokerGatewayResponse{} }
-func (*UpdatePacketBrokerGatewayResponse) ProtoMessage() {}
+func (m *UpdatePacketBrokerGatewayResponse) Reset()         { *m = UpdatePacketBrokerGatewayResponse{} }
+func (m *UpdatePacketBrokerGatewayResponse) String() string { return proto.CompactTextString(m) }
+func (*UpdatePacketBrokerGatewayResponse) ProtoMessage()    {}
 func (*UpdatePacketBrokerGatewayResponse) Descriptor() ([]byte, []int) {
 	return fileDescriptor_1a44242dc5cd678e, []int{2}
 }
@@ -282,11 +315,13 @@ type PacketBrokerNetworkIdentifier struct {
 	// Tenant identifier if the registration leases DevAddr blocks from a NetID.
 	TenantId             string   `protobuf:"bytes,2,opt,name=tenant_id,json=tenantId,proto3" json:"tenant_id,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *PacketBrokerNetworkIdentifier) Reset()      { *m = PacketBrokerNetworkIdentifier{} }
-func (*PacketBrokerNetworkIdentifier) ProtoMessage() {}
+func (m *PacketBrokerNetworkIdentifier) Reset()         { *m = PacketBrokerNetworkIdentifier{} }
+func (m *PacketBrokerNetworkIdentifier) String() string { return proto.CompactTextString(m) }
+func (*PacketBrokerNetworkIdentifier) ProtoMessage()    {}
 func (*PacketBrokerNetworkIdentifier) Descriptor() ([]byte, []int) {
 	return fileDescriptor_1a44242dc5cd678e, []int{3}
 }
@@ -326,11 +361,13 @@ type PacketBrokerDevAddrBlock struct {
 	DevAddrPrefix        *DevAddrPrefix `protobuf:"bytes,1,opt,name=dev_addr_prefix,json=devAddrPrefix,proto3" json:"dev_addr_prefix,omitempty"`
 	HomeNetworkClusterId string         `protobuf:"bytes,2,opt,name=home_network_cluster_id,json=homeNetworkClusterId,proto3" json:"home_network_cluster_id,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}       `json:"-"`
+	XXX_unrecognized     []byte         `json:"-"`
 	XXX_sizecache        int32          `json:"-"`
 }
 
-func (m *PacketBrokerDevAddrBlock) Reset()      { *m = PacketBrokerDevAddrBlock{} }
-func (*PacketBrokerDevAddrBlock) ProtoMessage() {}
+func (m *PacketBrokerDevAddrBlock) Reset()         { *m = PacketBrokerDevAddrBlock{} }
+func (m *PacketBrokerDevAddrBlock) String() string { return proto.CompactTextString(m) }
+func (*PacketBrokerDevAddrBlock) ProtoMessage()    {}
 func (*PacketBrokerDevAddrBlock) Descriptor() ([]byte, []int) {
 	return fileDescriptor_1a44242dc5cd678e, []int{4}
 }
@@ -374,15 +411,20 @@ type PacketBrokerNetwork struct {
 	// DevAddr blocks that are assigned to this registration.
 	DevAddrBlocks []*PacketBrokerDevAddrBlock `protobuf:"bytes,3,rep,name=dev_addr_blocks,json=devAddrBlocks,proto3" json:"dev_addr_blocks,omitempty"`
 	// Contact information.
-	ContactInfo []*ContactInfo `protobuf:"bytes,4,rep,name=contact_info,json=contactInfo,proto3" json:"contact_info,omitempty"`
+	// This field is deprecated. Use administrative_contact and technical_contact instead.
+	ContactInfo           []*ContactInfo `protobuf:"bytes,4,rep,name=contact_info,json=contactInfo,proto3" json:"contact_info,omitempty"` // Deprecated: Do not use.
+	AdministrativeContact *ContactInfo   `protobuf:"bytes,6,opt,name=administrative_contact,json=administrativeContact,proto3" json:"administrative_contact,omitempty"`
+	TechnicalContact      *ContactInfo   `protobuf:"bytes,7,opt,name=technical_contact,json=technicalContact,proto3" json:"technical_contact,omitempty"`
 	// Whether the network is listed so it can be viewed by other networks.
 	Listed               bool     `protobuf:"varint,5,opt,name=listed,proto3" json:"listed,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *PacketBrokerNetwork) Reset()      { *m = PacketBrokerNetwork{} }
-func (*PacketBrokerNetwork) ProtoMessage() {}
+func (m *PacketBrokerNetwork) Reset()         { *m = PacketBrokerNetwork{} }
+func (m *PacketBrokerNetwork) String() string { return proto.CompactTextString(m) }
+func (*PacketBrokerNetwork) ProtoMessage()    {}
 func (*PacketBrokerNetwork) Descriptor() ([]byte, []int) {
 	return fileDescriptor_1a44242dc5cd678e, []int{5}
 }
@@ -425,9 +467,24 @@ func (m *PacketBrokerNetwork) GetDevAddrBlocks() []*PacketBrokerDevAddrBlock {
 	return nil
 }
 
+// Deprecated: Do not use.
 func (m *PacketBrokerNetwork) GetContactInfo() []*ContactInfo {
 	if m != nil {
 		return m.ContactInfo
+	}
+	return nil
+}
+
+func (m *PacketBrokerNetwork) GetAdministrativeContact() *ContactInfo {
+	if m != nil {
+		return m.AdministrativeContact
+	}
+	return nil
+}
+
+func (m *PacketBrokerNetwork) GetTechnicalContact() *ContactInfo {
+	if m != nil {
+		return m.TechnicalContact
 	}
 	return nil
 }
@@ -442,11 +499,13 @@ func (m *PacketBrokerNetwork) GetListed() bool {
 type PacketBrokerNetworks struct {
 	Networks             []*PacketBrokerNetwork `protobuf:"bytes,1,rep,name=networks,proto3" json:"networks,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}               `json:"-"`
+	XXX_unrecognized     []byte                 `json:"-"`
 	XXX_sizecache        int32                  `json:"-"`
 }
 
-func (m *PacketBrokerNetworks) Reset()      { *m = PacketBrokerNetworks{} }
-func (*PacketBrokerNetworks) ProtoMessage() {}
+func (m *PacketBrokerNetworks) Reset()         { *m = PacketBrokerNetworks{} }
+func (m *PacketBrokerNetworks) String() string { return proto.CompactTextString(m) }
+func (*PacketBrokerNetworks) ProtoMessage()    {}
 func (*PacketBrokerNetworks) Descriptor() ([]byte, []int) {
 	return fileDescriptor_1a44242dc5cd678e, []int{6}
 }
@@ -481,13 +540,17 @@ type PacketBrokerInfo struct {
 	// Whether the server is configured as Forwarder (with gateways).
 	ForwarderEnabled bool `protobuf:"varint,2,opt,name=forwarder_enabled,json=forwarderEnabled,proto3" json:"forwarder_enabled,omitempty"`
 	// Whether the server is configured as Home Network (with end devices).
-	HomeNetworkEnabled   bool     `protobuf:"varint,3,opt,name=home_network_enabled,json=homeNetworkEnabled,proto3" json:"home_network_enabled,omitempty"`
+	HomeNetworkEnabled bool `protobuf:"varint,3,opt,name=home_network_enabled,json=homeNetworkEnabled,proto3" json:"home_network_enabled,omitempty"`
+	// Whether the registration can be changed.
+	RegisterEnabled      bool     `protobuf:"varint,4,opt,name=register_enabled,json=registerEnabled,proto3" json:"register_enabled,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *PacketBrokerInfo) Reset()      { *m = PacketBrokerInfo{} }
-func (*PacketBrokerInfo) ProtoMessage() {}
+func (m *PacketBrokerInfo) Reset()         { *m = PacketBrokerInfo{} }
+func (m *PacketBrokerInfo) String() string { return proto.CompactTextString(m) }
+func (*PacketBrokerInfo) ProtoMessage()    {}
 func (*PacketBrokerInfo) Descriptor() ([]byte, []int) {
 	return fileDescriptor_1a44242dc5cd678e, []int{7}
 }
@@ -530,6 +593,53 @@ func (m *PacketBrokerInfo) GetHomeNetworkEnabled() bool {
 	return false
 }
 
+func (m *PacketBrokerInfo) GetRegisterEnabled() bool {
+	if m != nil {
+		return m.RegisterEnabled
+	}
+	return false
+}
+
+type PacketBrokerRegisterRequest struct {
+	// Whether the network should be listed in Packet Broker.
+	// If unset, the value is taken from the registration settings.
+	Listed               *types.BoolValue `protobuf:"bytes,1,opt,name=listed,proto3" json:"listed,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}         `json:"-"`
+	XXX_unrecognized     []byte           `json:"-"`
+	XXX_sizecache        int32            `json:"-"`
+}
+
+func (m *PacketBrokerRegisterRequest) Reset()         { *m = PacketBrokerRegisterRequest{} }
+func (m *PacketBrokerRegisterRequest) String() string { return proto.CompactTextString(m) }
+func (*PacketBrokerRegisterRequest) ProtoMessage()    {}
+func (*PacketBrokerRegisterRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_1a44242dc5cd678e, []int{8}
+}
+func (m *PacketBrokerRegisterRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_PacketBrokerRegisterRequest.Unmarshal(m, b)
+}
+func (m *PacketBrokerRegisterRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_PacketBrokerRegisterRequest.Marshal(b, m, deterministic)
+}
+func (m *PacketBrokerRegisterRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_PacketBrokerRegisterRequest.Merge(m, src)
+}
+func (m *PacketBrokerRegisterRequest) XXX_Size() int {
+	return xxx_messageInfo_PacketBrokerRegisterRequest.Size(m)
+}
+func (m *PacketBrokerRegisterRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_PacketBrokerRegisterRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_PacketBrokerRegisterRequest proto.InternalMessageInfo
+
+func (m *PacketBrokerRegisterRequest) GetListed() *types.BoolValue {
+	if m != nil {
+		return m.Listed
+	}
+	return nil
+}
+
 type PacketBrokerRoutingPolicyUplink struct {
 	// Forward join-request messages.
 	JoinRequest bool `protobuf:"varint,1,opt,name=join_request,json=joinRequest,proto3" json:"join_request,omitempty"`
@@ -542,13 +652,15 @@ type PacketBrokerRoutingPolicyUplink struct {
 	// Forward gateway location, RSSI, SNR and fine timestamp.
 	Localization         bool     `protobuf:"varint,5,opt,name=localization,proto3" json:"localization,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *PacketBrokerRoutingPolicyUplink) Reset()      { *m = PacketBrokerRoutingPolicyUplink{} }
-func (*PacketBrokerRoutingPolicyUplink) ProtoMessage() {}
+func (m *PacketBrokerRoutingPolicyUplink) Reset()         { *m = PacketBrokerRoutingPolicyUplink{} }
+func (m *PacketBrokerRoutingPolicyUplink) String() string { return proto.CompactTextString(m) }
+func (*PacketBrokerRoutingPolicyUplink) ProtoMessage()    {}
 func (*PacketBrokerRoutingPolicyUplink) Descriptor() ([]byte, []int) {
-	return fileDescriptor_1a44242dc5cd678e, []int{8}
+	return fileDescriptor_1a44242dc5cd678e, []int{9}
 }
 func (m *PacketBrokerRoutingPolicyUplink) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_PacketBrokerRoutingPolicyUplink.Unmarshal(m, b)
@@ -611,13 +723,15 @@ type PacketBrokerRoutingPolicyDownlink struct {
 	// Allow downlink messages with FPort between 1 and 255.
 	ApplicationData      bool     `protobuf:"varint,3,opt,name=application_data,json=applicationData,proto3" json:"application_data,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *PacketBrokerRoutingPolicyDownlink) Reset()      { *m = PacketBrokerRoutingPolicyDownlink{} }
-func (*PacketBrokerRoutingPolicyDownlink) ProtoMessage() {}
+func (m *PacketBrokerRoutingPolicyDownlink) Reset()         { *m = PacketBrokerRoutingPolicyDownlink{} }
+func (m *PacketBrokerRoutingPolicyDownlink) String() string { return proto.CompactTextString(m) }
+func (*PacketBrokerRoutingPolicyDownlink) ProtoMessage()    {}
 func (*PacketBrokerRoutingPolicyDownlink) Descriptor() ([]byte, []int) {
-	return fileDescriptor_1a44242dc5cd678e, []int{9}
+	return fileDescriptor_1a44242dc5cd678e, []int{10}
 }
 func (m *PacketBrokerRoutingPolicyDownlink) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_PacketBrokerRoutingPolicyDownlink.Unmarshal(m, b)
@@ -666,13 +780,15 @@ type PacketBrokerDefaultRoutingPolicy struct {
 	// Downlink policy.
 	Downlink             *PacketBrokerRoutingPolicyDownlink `protobuf:"bytes,3,opt,name=downlink,proto3" json:"downlink,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}                           `json:"-"`
+	XXX_unrecognized     []byte                             `json:"-"`
 	XXX_sizecache        int32                              `json:"-"`
 }
 
-func (m *PacketBrokerDefaultRoutingPolicy) Reset()      { *m = PacketBrokerDefaultRoutingPolicy{} }
-func (*PacketBrokerDefaultRoutingPolicy) ProtoMessage() {}
+func (m *PacketBrokerDefaultRoutingPolicy) Reset()         { *m = PacketBrokerDefaultRoutingPolicy{} }
+func (m *PacketBrokerDefaultRoutingPolicy) String() string { return proto.CompactTextString(m) }
+func (*PacketBrokerDefaultRoutingPolicy) ProtoMessage()    {}
 func (*PacketBrokerDefaultRoutingPolicy) Descriptor() ([]byte, []int) {
-	return fileDescriptor_1a44242dc5cd678e, []int{10}
+	return fileDescriptor_1a44242dc5cd678e, []int{11}
 }
 func (m *PacketBrokerDefaultRoutingPolicy) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_PacketBrokerDefaultRoutingPolicy.Unmarshal(m, b)
@@ -725,13 +841,15 @@ type PacketBrokerRoutingPolicy struct {
 	// Downlink policy.
 	Downlink             *PacketBrokerRoutingPolicyDownlink `protobuf:"bytes,5,opt,name=downlink,proto3" json:"downlink,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}                           `json:"-"`
+	XXX_unrecognized     []byte                             `json:"-"`
 	XXX_sizecache        int32                              `json:"-"`
 }
 
-func (m *PacketBrokerRoutingPolicy) Reset()      { *m = PacketBrokerRoutingPolicy{} }
-func (*PacketBrokerRoutingPolicy) ProtoMessage() {}
+func (m *PacketBrokerRoutingPolicy) Reset()         { *m = PacketBrokerRoutingPolicy{} }
+func (m *PacketBrokerRoutingPolicy) String() string { return proto.CompactTextString(m) }
+func (*PacketBrokerRoutingPolicy) ProtoMessage()    {}
 func (*PacketBrokerRoutingPolicy) Descriptor() ([]byte, []int) {
-	return fileDescriptor_1a44242dc5cd678e, []int{11}
+	return fileDescriptor_1a44242dc5cd678e, []int{12}
 }
 func (m *PacketBrokerRoutingPolicy) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_PacketBrokerRoutingPolicy.Unmarshal(m, b)
@@ -792,15 +910,19 @@ type SetPacketBrokerDefaultRoutingPolicyRequest struct {
 	// Downlink policy.
 	Downlink             *PacketBrokerRoutingPolicyDownlink `protobuf:"bytes,2,opt,name=downlink,proto3" json:"downlink,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}                           `json:"-"`
+	XXX_unrecognized     []byte                             `json:"-"`
 	XXX_sizecache        int32                              `json:"-"`
 }
 
 func (m *SetPacketBrokerDefaultRoutingPolicyRequest) Reset() {
 	*m = SetPacketBrokerDefaultRoutingPolicyRequest{}
 }
+func (m *SetPacketBrokerDefaultRoutingPolicyRequest) String() string {
+	return proto.CompactTextString(m)
+}
 func (*SetPacketBrokerDefaultRoutingPolicyRequest) ProtoMessage() {}
 func (*SetPacketBrokerDefaultRoutingPolicyRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_1a44242dc5cd678e, []int{12}
+	return fileDescriptor_1a44242dc5cd678e, []int{13}
 }
 func (m *SetPacketBrokerDefaultRoutingPolicyRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_SetPacketBrokerDefaultRoutingPolicyRequest.Unmarshal(m, b)
@@ -840,13 +962,15 @@ type ListHomeNetworkRoutingPoliciesRequest struct {
 	// Page number for pagination. 0 is interpreted as 1.
 	Page                 uint32   `protobuf:"varint,2,opt,name=page,proto3" json:"page,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *ListHomeNetworkRoutingPoliciesRequest) Reset()      { *m = ListHomeNetworkRoutingPoliciesRequest{} }
-func (*ListHomeNetworkRoutingPoliciesRequest) ProtoMessage() {}
+func (m *ListHomeNetworkRoutingPoliciesRequest) Reset()         { *m = ListHomeNetworkRoutingPoliciesRequest{} }
+func (m *ListHomeNetworkRoutingPoliciesRequest) String() string { return proto.CompactTextString(m) }
+func (*ListHomeNetworkRoutingPoliciesRequest) ProtoMessage()    {}
 func (*ListHomeNetworkRoutingPoliciesRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_1a44242dc5cd678e, []int{13}
+	return fileDescriptor_1a44242dc5cd678e, []int{14}
 }
 func (m *ListHomeNetworkRoutingPoliciesRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListHomeNetworkRoutingPoliciesRequest.Unmarshal(m, b)
@@ -883,13 +1007,15 @@ func (m *ListHomeNetworkRoutingPoliciesRequest) GetPage() uint32 {
 type PacketBrokerRoutingPolicies struct {
 	Policies             []*PacketBrokerRoutingPolicy `protobuf:"bytes,1,rep,name=policies,proto3" json:"policies,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}                     `json:"-"`
+	XXX_unrecognized     []byte                       `json:"-"`
 	XXX_sizecache        int32                        `json:"-"`
 }
 
-func (m *PacketBrokerRoutingPolicies) Reset()      { *m = PacketBrokerRoutingPolicies{} }
-func (*PacketBrokerRoutingPolicies) ProtoMessage() {}
+func (m *PacketBrokerRoutingPolicies) Reset()         { *m = PacketBrokerRoutingPolicies{} }
+func (m *PacketBrokerRoutingPolicies) String() string { return proto.CompactTextString(m) }
+func (*PacketBrokerRoutingPolicies) ProtoMessage()    {}
 func (*PacketBrokerRoutingPolicies) Descriptor() ([]byte, []int) {
-	return fileDescriptor_1a44242dc5cd678e, []int{14}
+	return fileDescriptor_1a44242dc5cd678e, []int{15}
 }
 func (m *PacketBrokerRoutingPolicies) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_PacketBrokerRoutingPolicies.Unmarshal(m, b)
@@ -924,13 +1050,15 @@ type SetPacketBrokerRoutingPolicyRequest struct {
 	// Downlink policy.
 	Downlink             *PacketBrokerRoutingPolicyDownlink `protobuf:"bytes,3,opt,name=downlink,proto3" json:"downlink,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}                           `json:"-"`
+	XXX_unrecognized     []byte                             `json:"-"`
 	XXX_sizecache        int32                              `json:"-"`
 }
 
-func (m *SetPacketBrokerRoutingPolicyRequest) Reset()      { *m = SetPacketBrokerRoutingPolicyRequest{} }
-func (*SetPacketBrokerRoutingPolicyRequest) ProtoMessage() {}
+func (m *SetPacketBrokerRoutingPolicyRequest) Reset()         { *m = SetPacketBrokerRoutingPolicyRequest{} }
+func (m *SetPacketBrokerRoutingPolicyRequest) String() string { return proto.CompactTextString(m) }
+func (*SetPacketBrokerRoutingPolicyRequest) ProtoMessage()    {}
 func (*SetPacketBrokerRoutingPolicyRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_1a44242dc5cd678e, []int{15}
+	return fileDescriptor_1a44242dc5cd678e, []int{16}
 }
 func (m *SetPacketBrokerRoutingPolicyRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_SetPacketBrokerRoutingPolicyRequest.Unmarshal(m, b)
@@ -971,6 +1099,197 @@ func (m *SetPacketBrokerRoutingPolicyRequest) GetDownlink() *PacketBrokerRouting
 	return nil
 }
 
+type PacketBrokerGatewayVisibility struct {
+	// Show location.
+	Location bool `protobuf:"varint,1,opt,name=location,proto3" json:"location,omitempty"`
+	// Show antenna placement (indoor/outdoor).
+	AntennaPlacement bool `protobuf:"varint,2,opt,name=antenna_placement,json=antennaPlacement,proto3" json:"antenna_placement,omitempty"`
+	// Show antenna count.
+	AntennaCount bool `protobuf:"varint,3,opt,name=antenna_count,json=antennaCount,proto3" json:"antenna_count,omitempty"`
+	// Show whether the gateway produces fine timestamps.
+	FineTimestamps bool `protobuf:"varint,4,opt,name=fine_timestamps,json=fineTimestamps,proto3" json:"fine_timestamps,omitempty"`
+	// Show contact information.
+	ContactInfo bool `protobuf:"varint,5,opt,name=contact_info,json=contactInfo,proto3" json:"contact_info,omitempty"`
+	// Show status (online/offline).
+	Status bool `protobuf:"varint,6,opt,name=status,proto3" json:"status,omitempty"`
+	// Show frequency plan.
+	FrequencyPlan bool `protobuf:"varint,8,opt,name=frequency_plan,json=frequencyPlan,proto3" json:"frequency_plan,omitempty"`
+	// Show receive and transmission packet rates.
+	PacketRates          bool     `protobuf:"varint,9,opt,name=packet_rates,json=packetRates,proto3" json:"packet_rates,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *PacketBrokerGatewayVisibility) Reset()         { *m = PacketBrokerGatewayVisibility{} }
+func (m *PacketBrokerGatewayVisibility) String() string { return proto.CompactTextString(m) }
+func (*PacketBrokerGatewayVisibility) ProtoMessage()    {}
+func (*PacketBrokerGatewayVisibility) Descriptor() ([]byte, []int) {
+	return fileDescriptor_1a44242dc5cd678e, []int{17}
+}
+func (m *PacketBrokerGatewayVisibility) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_PacketBrokerGatewayVisibility.Unmarshal(m, b)
+}
+func (m *PacketBrokerGatewayVisibility) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_PacketBrokerGatewayVisibility.Marshal(b, m, deterministic)
+}
+func (m *PacketBrokerGatewayVisibility) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_PacketBrokerGatewayVisibility.Merge(m, src)
+}
+func (m *PacketBrokerGatewayVisibility) XXX_Size() int {
+	return xxx_messageInfo_PacketBrokerGatewayVisibility.Size(m)
+}
+func (m *PacketBrokerGatewayVisibility) XXX_DiscardUnknown() {
+	xxx_messageInfo_PacketBrokerGatewayVisibility.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_PacketBrokerGatewayVisibility proto.InternalMessageInfo
+
+func (m *PacketBrokerGatewayVisibility) GetLocation() bool {
+	if m != nil {
+		return m.Location
+	}
+	return false
+}
+
+func (m *PacketBrokerGatewayVisibility) GetAntennaPlacement() bool {
+	if m != nil {
+		return m.AntennaPlacement
+	}
+	return false
+}
+
+func (m *PacketBrokerGatewayVisibility) GetAntennaCount() bool {
+	if m != nil {
+		return m.AntennaCount
+	}
+	return false
+}
+
+func (m *PacketBrokerGatewayVisibility) GetFineTimestamps() bool {
+	if m != nil {
+		return m.FineTimestamps
+	}
+	return false
+}
+
+func (m *PacketBrokerGatewayVisibility) GetContactInfo() bool {
+	if m != nil {
+		return m.ContactInfo
+	}
+	return false
+}
+
+func (m *PacketBrokerGatewayVisibility) GetStatus() bool {
+	if m != nil {
+		return m.Status
+	}
+	return false
+}
+
+func (m *PacketBrokerGatewayVisibility) GetFrequencyPlan() bool {
+	if m != nil {
+		return m.FrequencyPlan
+	}
+	return false
+}
+
+func (m *PacketBrokerGatewayVisibility) GetPacketRates() bool {
+	if m != nil {
+		return m.PacketRates
+	}
+	return false
+}
+
+type PacketBrokerDefaultGatewayVisibility struct {
+	// Timestamp when the policy got last updated.
+	UpdatedAt            *types.Timestamp               `protobuf:"bytes,1,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
+	Visibility           *PacketBrokerGatewayVisibility `protobuf:"bytes,2,opt,name=visibility,proto3" json:"visibility,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}                       `json:"-"`
+	XXX_unrecognized     []byte                         `json:"-"`
+	XXX_sizecache        int32                          `json:"-"`
+}
+
+func (m *PacketBrokerDefaultGatewayVisibility) Reset()         { *m = PacketBrokerDefaultGatewayVisibility{} }
+func (m *PacketBrokerDefaultGatewayVisibility) String() string { return proto.CompactTextString(m) }
+func (*PacketBrokerDefaultGatewayVisibility) ProtoMessage()    {}
+func (*PacketBrokerDefaultGatewayVisibility) Descriptor() ([]byte, []int) {
+	return fileDescriptor_1a44242dc5cd678e, []int{18}
+}
+func (m *PacketBrokerDefaultGatewayVisibility) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_PacketBrokerDefaultGatewayVisibility.Unmarshal(m, b)
+}
+func (m *PacketBrokerDefaultGatewayVisibility) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_PacketBrokerDefaultGatewayVisibility.Marshal(b, m, deterministic)
+}
+func (m *PacketBrokerDefaultGatewayVisibility) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_PacketBrokerDefaultGatewayVisibility.Merge(m, src)
+}
+func (m *PacketBrokerDefaultGatewayVisibility) XXX_Size() int {
+	return xxx_messageInfo_PacketBrokerDefaultGatewayVisibility.Size(m)
+}
+func (m *PacketBrokerDefaultGatewayVisibility) XXX_DiscardUnknown() {
+	xxx_messageInfo_PacketBrokerDefaultGatewayVisibility.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_PacketBrokerDefaultGatewayVisibility proto.InternalMessageInfo
+
+func (m *PacketBrokerDefaultGatewayVisibility) GetUpdatedAt() *types.Timestamp {
+	if m != nil {
+		return m.UpdatedAt
+	}
+	return nil
+}
+
+func (m *PacketBrokerDefaultGatewayVisibility) GetVisibility() *PacketBrokerGatewayVisibility {
+	if m != nil {
+		return m.Visibility
+	}
+	return nil
+}
+
+type SetPacketBrokerDefaultGatewayVisibilityRequest struct {
+	Visibility           *PacketBrokerGatewayVisibility `protobuf:"bytes,1,opt,name=visibility,proto3" json:"visibility,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}                       `json:"-"`
+	XXX_unrecognized     []byte                         `json:"-"`
+	XXX_sizecache        int32                          `json:"-"`
+}
+
+func (m *SetPacketBrokerDefaultGatewayVisibilityRequest) Reset() {
+	*m = SetPacketBrokerDefaultGatewayVisibilityRequest{}
+}
+func (m *SetPacketBrokerDefaultGatewayVisibilityRequest) String() string {
+	return proto.CompactTextString(m)
+}
+func (*SetPacketBrokerDefaultGatewayVisibilityRequest) ProtoMessage() {}
+func (*SetPacketBrokerDefaultGatewayVisibilityRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_1a44242dc5cd678e, []int{19}
+}
+func (m *SetPacketBrokerDefaultGatewayVisibilityRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_SetPacketBrokerDefaultGatewayVisibilityRequest.Unmarshal(m, b)
+}
+func (m *SetPacketBrokerDefaultGatewayVisibilityRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_SetPacketBrokerDefaultGatewayVisibilityRequest.Marshal(b, m, deterministic)
+}
+func (m *SetPacketBrokerDefaultGatewayVisibilityRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SetPacketBrokerDefaultGatewayVisibilityRequest.Merge(m, src)
+}
+func (m *SetPacketBrokerDefaultGatewayVisibilityRequest) XXX_Size() int {
+	return xxx_messageInfo_SetPacketBrokerDefaultGatewayVisibilityRequest.Size(m)
+}
+func (m *SetPacketBrokerDefaultGatewayVisibilityRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_SetPacketBrokerDefaultGatewayVisibilityRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_SetPacketBrokerDefaultGatewayVisibilityRequest proto.InternalMessageInfo
+
+func (m *SetPacketBrokerDefaultGatewayVisibilityRequest) GetVisibility() *PacketBrokerGatewayVisibility {
+	if m != nil {
+		return m.Visibility
+	}
+	return nil
+}
+
 type ListPacketBrokerNetworksRequest struct {
 	// Limit the number of results per page.
 	Limit uint32 `protobuf:"varint,1,opt,name=limit,proto3" json:"limit,omitempty"`
@@ -983,13 +1302,15 @@ type ListPacketBrokerNetworksRequest struct {
 	// Filter by name.
 	NameContains         string   `protobuf:"bytes,5,opt,name=name_contains,json=nameContains,proto3" json:"name_contains,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *ListPacketBrokerNetworksRequest) Reset()      { *m = ListPacketBrokerNetworksRequest{} }
-func (*ListPacketBrokerNetworksRequest) ProtoMessage() {}
+func (m *ListPacketBrokerNetworksRequest) Reset()         { *m = ListPacketBrokerNetworksRequest{} }
+func (m *ListPacketBrokerNetworksRequest) String() string { return proto.CompactTextString(m) }
+func (*ListPacketBrokerNetworksRequest) ProtoMessage()    {}
 func (*ListPacketBrokerNetworksRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_1a44242dc5cd678e, []int{16}
+	return fileDescriptor_1a44242dc5cd678e, []int{20}
 }
 func (m *ListPacketBrokerNetworksRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListPacketBrokerNetworksRequest.Unmarshal(m, b)
@@ -1054,13 +1375,15 @@ type ListPacketBrokerHomeNetworksRequest struct {
 	// Filter by name.
 	NameContains         string   `protobuf:"bytes,4,opt,name=name_contains,json=nameContains,proto3" json:"name_contains,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *ListPacketBrokerHomeNetworksRequest) Reset()      { *m = ListPacketBrokerHomeNetworksRequest{} }
-func (*ListPacketBrokerHomeNetworksRequest) ProtoMessage() {}
+func (m *ListPacketBrokerHomeNetworksRequest) Reset()         { *m = ListPacketBrokerHomeNetworksRequest{} }
+func (m *ListPacketBrokerHomeNetworksRequest) String() string { return proto.CompactTextString(m) }
+func (*ListPacketBrokerHomeNetworksRequest) ProtoMessage()    {}
 func (*ListPacketBrokerHomeNetworksRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_1a44242dc5cd678e, []int{17}
+	return fileDescriptor_1a44242dc5cd678e, []int{21}
 }
 func (m *ListPacketBrokerHomeNetworksRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListPacketBrokerHomeNetworksRequest.Unmarshal(m, b)
@@ -1116,13 +1439,15 @@ type ListForwarderRoutingPoliciesRequest struct {
 	// Page number for pagination. 0 is interpreted as 1.
 	Page                 uint32   `protobuf:"varint,3,opt,name=page,proto3" json:"page,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *ListForwarderRoutingPoliciesRequest) Reset()      { *m = ListForwarderRoutingPoliciesRequest{} }
-func (*ListForwarderRoutingPoliciesRequest) ProtoMessage() {}
+func (m *ListForwarderRoutingPoliciesRequest) Reset()         { *m = ListForwarderRoutingPoliciesRequest{} }
+func (m *ListForwarderRoutingPoliciesRequest) String() string { return proto.CompactTextString(m) }
+func (*ListForwarderRoutingPoliciesRequest) ProtoMessage()    {}
 func (*ListForwarderRoutingPoliciesRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_1a44242dc5cd678e, []int{18}
+	return fileDescriptor_1a44242dc5cd678e, []int{22}
 }
 func (m *ListForwarderRoutingPoliciesRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListForwarderRoutingPoliciesRequest.Unmarshal(m, b)
@@ -1182,6 +1507,8 @@ func init() {
 	golang_proto.RegisterType((*PacketBrokerNetworks)(nil), "ttn.lorawan.v3.PacketBrokerNetworks")
 	proto.RegisterType((*PacketBrokerInfo)(nil), "ttn.lorawan.v3.PacketBrokerInfo")
 	golang_proto.RegisterType((*PacketBrokerInfo)(nil), "ttn.lorawan.v3.PacketBrokerInfo")
+	proto.RegisterType((*PacketBrokerRegisterRequest)(nil), "ttn.lorawan.v3.PacketBrokerRegisterRequest")
+	golang_proto.RegisterType((*PacketBrokerRegisterRequest)(nil), "ttn.lorawan.v3.PacketBrokerRegisterRequest")
 	proto.RegisterType((*PacketBrokerRoutingPolicyUplink)(nil), "ttn.lorawan.v3.PacketBrokerRoutingPolicyUplink")
 	golang_proto.RegisterType((*PacketBrokerRoutingPolicyUplink)(nil), "ttn.lorawan.v3.PacketBrokerRoutingPolicyUplink")
 	proto.RegisterType((*PacketBrokerRoutingPolicyDownlink)(nil), "ttn.lorawan.v3.PacketBrokerRoutingPolicyDownlink")
@@ -1198,6 +1525,12 @@ func init() {
 	golang_proto.RegisterType((*PacketBrokerRoutingPolicies)(nil), "ttn.lorawan.v3.PacketBrokerRoutingPolicies")
 	proto.RegisterType((*SetPacketBrokerRoutingPolicyRequest)(nil), "ttn.lorawan.v3.SetPacketBrokerRoutingPolicyRequest")
 	golang_proto.RegisterType((*SetPacketBrokerRoutingPolicyRequest)(nil), "ttn.lorawan.v3.SetPacketBrokerRoutingPolicyRequest")
+	proto.RegisterType((*PacketBrokerGatewayVisibility)(nil), "ttn.lorawan.v3.PacketBrokerGatewayVisibility")
+	golang_proto.RegisterType((*PacketBrokerGatewayVisibility)(nil), "ttn.lorawan.v3.PacketBrokerGatewayVisibility")
+	proto.RegisterType((*PacketBrokerDefaultGatewayVisibility)(nil), "ttn.lorawan.v3.PacketBrokerDefaultGatewayVisibility")
+	golang_proto.RegisterType((*PacketBrokerDefaultGatewayVisibility)(nil), "ttn.lorawan.v3.PacketBrokerDefaultGatewayVisibility")
+	proto.RegisterType((*SetPacketBrokerDefaultGatewayVisibilityRequest)(nil), "ttn.lorawan.v3.SetPacketBrokerDefaultGatewayVisibilityRequest")
+	golang_proto.RegisterType((*SetPacketBrokerDefaultGatewayVisibilityRequest)(nil), "ttn.lorawan.v3.SetPacketBrokerDefaultGatewayVisibilityRequest")
 	proto.RegisterType((*ListPacketBrokerNetworksRequest)(nil), "ttn.lorawan.v3.ListPacketBrokerNetworksRequest")
 	golang_proto.RegisterType((*ListPacketBrokerNetworksRequest)(nil), "ttn.lorawan.v3.ListPacketBrokerNetworksRequest")
 	proto.RegisterType((*ListPacketBrokerHomeNetworksRequest)(nil), "ttn.lorawan.v3.ListPacketBrokerHomeNetworksRequest")
@@ -1214,793 +1547,172 @@ func init() {
 }
 
 var fileDescriptor_1a44242dc5cd678e = []byte{
-	// 2137 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xb4, 0x58, 0xcd, 0x6f, 0x1b, 0xc7,
-	0x15, 0xf7, 0x92, 0xfa, 0xa0, 0x1e, 0x45, 0x4b, 0x1e, 0xcb, 0x2e, 0x4d, 0xd9, 0x14, 0xbd, 0x92,
-	0x10, 0x5a, 0x8e, 0x48, 0x85, 0xb6, 0x83, 0xda, 0x68, 0xea, 0x8a, 0x96, 0xac, 0xa8, 0x8d, 0x02,
-	0x79, 0x15, 0xc5, 0x85, 0x0c, 0x67, 0x3b, 0xe4, 0x0e, 0xa9, 0xad, 0x96, 0xb3, 0x9b, 0xdd, 0xa1,
-	0x64, 0xc5, 0x31, 0x5a, 0x14, 0xbd, 0x34, 0xa7, 0xc2, 0x05, 0xda, 0x02, 0xbd, 0xe5, 0x10, 0x24,
-	0xfd, 0x13, 0x7a, 0x28, 0x7a, 0xe9, 0xa1, 0x40, 0x4f, 0x2d, 0x0a, 0xa4, 0x3d, 0x14, 0xa8, 0xd3,
-	0x43, 0xd0, 0x53, 0x2f, 0xb9, 0xe8, 0x14, 0xec, 0xec, 0x2c, 0xb9, 0xe4, 0xf2, 0x4b, 0x92, 0x73,
-	0x22, 0x77, 0xde, 0xc7, 0xfe, 0x7e, 0xef, 0xbd, 0x79, 0xf3, 0x66, 0xe1, 0x9a, 0x61, 0xda, 0xf8,
-	0x00, 0xd3, 0x45, 0x87, 0xe1, 0xf2, 0x5e, 0x1e, 0x5b, 0x7a, 0xde, 0xc2, 0xe5, 0x3d, 0xc2, 0x4a,
-	0xb6, 0xb9, 0x47, 0x6c, 0x5c, 0x25, 0x94, 0xe5, 0x2c, 0xdb, 0x64, 0x26, 0x3a, 0xcb, 0x18, 0xcd,
-	0x09, 0xf5, 0xdc, 0xfe, 0x8d, 0xd4, 0x72, 0x55, 0x67, 0xbb, 0xf5, 0x52, 0xae, 0x6c, 0xd6, 0xf2,
-	0x84, 0xee, 0x9b, 0x87, 0x96, 0x6d, 0x3e, 0x39, 0xcc, 0x73, 0xe5, 0xf2, 0x62, 0x95, 0xd0, 0xc5,
-	0x7d, 0x6c, 0xe8, 0x1a, 0x66, 0x24, 0x1f, 0xfa, 0xe3, 0xb9, 0x4c, 0x2d, 0x06, 0x5c, 0x54, 0xcd,
-	0xaa, 0xe9, 0x19, 0x97, 0xea, 0x15, 0xfe, 0xc4, 0x1f, 0xf8, 0x3f, 0xa1, 0x7e, 0xb9, 0x6a, 0x9a,
-	0x55, 0x83, 0x70, 0x94, 0x98, 0x52, 0x93, 0x61, 0xa6, 0x9b, 0xd4, 0x11, 0xd2, 0xb4, 0x90, 0x36,
-	0x7c, 0x68, 0x75, 0x9b, 0x2b, 0x08, 0xf9, 0x74, 0xbb, 0x9c, 0xd4, 0x2c, 0x76, 0x28, 0x84, 0x99,
-	0x76, 0x61, 0x45, 0x27, 0x86, 0xa6, 0xd6, 0xb0, 0xb3, 0x27, 0x34, 0x66, 0xda, 0x35, 0x98, 0x5e,
-	0x23, 0x0e, 0xc3, 0x35, 0xab, 0xdb, 0xfb, 0x0f, 0x6c, 0x6c, 0x59, 0xc4, 0xf6, 0xf1, 0xcd, 0x85,
-	0x43, 0x5d, 0x36, 0x29, 0xc3, 0x65, 0xa6, 0xea, 0xb4, 0xe2, 0x73, 0x9c, 0x09, 0x6b, 0x55, 0x31,
-	0x23, 0x07, 0xd8, 0x47, 0x2a, 0x87, 0x15, 0x08, 0xd5, 0x54, 0x8d, 0xec, 0xeb, 0x65, 0x3f, 0xae,
-	0x99, 0xb0, 0x4e, 0x8d, 0x38, 0x0e, 0xae, 0x12, 0x01, 0x46, 0xfe, 0x6a, 0x18, 0xce, 0x6f, 0xf2,
-	0x44, 0x17, 0x79, 0xa2, 0xd7, 0xbc, 0x77, 0x20, 0x05, 0xa2, 0xba, 0xe6, 0x24, 0xa5, 0x8c, 0x94,
-	0x8d, 0x17, 0x5e, 0xcf, 0xb5, 0xa6, 0x3c, 0xd7, 0xc1, 0x22, 0x27, 0x7e, 0xd7, 0x35, 0x42, 0x99,
-	0x5e, 0xd1, 0x89, 0xed, 0x14, 0x63, 0x47, 0xc5, 0xe1, 0x8f, 0xa4, 0xc8, 0xa4, 0xa4, 0xb8, 0xce,
-	0xd0, 0x9b, 0x30, 0x1e, 0x24, 0x9a, 0x1c, 0xcd, 0x44, 0xb3, 0xf1, 0xc2, 0x74, 0xbb, 0xf3, 0x7b,
-	0x9e, 0xce, 0x3a, 0xad, 0x98, 0xdc, 0xc3, 0x73, 0x29, 0x32, 0x09, 0x4a, 0xbc, 0xdc, 0x5c, 0x46,
-	0x2b, 0x10, 0xc3, 0x94, 0x11, 0x4a, 0xb1, 0x93, 0x4c, 0x70, 0x2f, 0xe9, 0x76, 0x2f, 0x02, 0xce,
-	0xb2, 0xa7, 0xd6, 0x70, 0x14, 0x53, 0x1a, 0x96, 0x68, 0x16, 0x12, 0x0e, 0xc3, 0xac, 0xee, 0xa8,
-	0x56, 0xbd, 0x64, 0xe8, 0xe5, 0xe4, 0xd9, 0x8c, 0x94, 0x8d, 0x29, 0xe3, 0xde, 0xe2, 0x26, 0x5f,
-	0x43, 0xaf, 0xc0, 0x84, 0x61, 0x96, 0x79, 0xfd, 0xf8, 0x6a, 0x13, 0x5c, 0xed, 0xac, 0xbf, 0x2c,
-	0x14, 0xbf, 0x03, 0xa8, 0x62, 0x93, 0xf7, 0xeb, 0x84, 0x96, 0x0f, 0x55, 0xcb, 0xc0, 0x54, 0x75,
-	0x03, 0x38, 0x95, 0x89, 0x66, 0xc7, 0x8a, 0x67, 0x8f, 0x8a, 0xf1, 0xe7, 0x52, 0x6c, 0x32, 0x26,
-	0x0f, 0xd9, 0x91, 0xe4, 0xf7, 0x94, 0xc9, 0x86, 0xe6, 0xa6, 0x81, 0xe9, 0xba, 0xe6, 0xa0, 0x37,
-	0x60, 0xba, 0x6e, 0xb9, 0x3b, 0x42, 0x6d, 0xbc, 0xad, 0x62, 0x9b, 0x35, 0xd5, 0xc3, 0x92, 0xbc,
-	0xc0, 0x5f, 0x99, 0xf4, 0x54, 0xde, 0x12, 0x1a, 0xf7, 0x6d, 0xb3, 0xb6, 0xc5, 0xe5, 0xe8, 0x22,
-	0x8c, 0x98, 0xd4, 0xd0, 0x29, 0x49, 0x5e, 0xe6, 0x9a, 0xe2, 0x09, 0xdd, 0x84, 0x51, 0xfb, 0x89,
-	0x6a, 0x63, 0x46, 0x92, 0x57, 0x78, 0x2a, 0xa7, 0x73, 0x5e, 0x75, 0xe6, 0xfc, 0xea, 0xcc, 0xdd,
-	0x37, 0x4c, 0xcc, 0xde, 0xc5, 0x46, 0x9d, 0x28, 0x23, 0xf6, 0x13, 0x05, 0x33, 0x6e, 0xc5, 0x84,
-	0x55, 0x7a, 0x00, 0x2b, 0xc6, 0xad, 0x52, 0xbf, 0x97, 0x00, 0x85, 0x8b, 0x00, 0xad, 0x01, 0x88,
-	0xc2, 0x55, 0x75, 0x8d, 0x17, 0xd4, 0x58, 0x31, 0x7b, 0x54, 0x9c, 0xb7, 0x67, 0x93, 0x73, 0x85,
-	0x99, 0xf7, 0x1e, 0xe1, 0xc5, 0x0f, 0x96, 0x16, 0x6f, 0x3f, 0xce, 0xde, 0xbd, 0xf3, 0x48, 0x5d,
-	0x7c, 0x7c, 0xd7, 0x7f, 0xbe, 0xf6, 0xb4, 0xf0, 0xea, 0xb3, 0x39, 0x65, 0xac, 0xea, 0x7b, 0x44,
-	0x3f, 0x80, 0x28, 0xa9, 0xeb, 0xc9, 0x48, 0x46, 0xca, 0x8e, 0x17, 0x6f, 0xff, 0xeb, 0xdf, 0x33,
-	0xb7, 0xaa, 0x66, 0x8e, 0xed, 0x12, 0xb6, 0xab, 0xd3, 0xaa, 0x93, 0xa3, 0x84, 0x1d, 0x98, 0xf6,
-	0x5e, 0xbe, 0xb5, 0xe4, 0xf7, 0x6f, 0xe4, 0xad, 0xbd, 0x6a, 0x9e, 0x1d, 0x5a, 0xc4, 0xc9, 0xad,
-	0x6e, 0xaf, 0xbf, 0x7e, 0x53, 0x71, 0xbd, 0xc8, 0x9f, 0x48, 0x90, 0xd9, 0xe6, 0xd1, 0xec, 0x50,
-	0xcb, 0x8a, 0x9b, 0x1c, 0x87, 0xa1, 0x35, 0x18, 0x15, 0xaf, 0x17, 0x1b, 0x61, 0x76, 0x80, 0x8d,
-	0x10, 0xa8, 0x7a, 0xdf, 0x1a, 0xdd, 0x06, 0x68, 0xf6, 0x91, 0xe4, 0x30, 0xf7, 0x95, 0x0a, 0xc7,
-	0xd4, 0x55, 0xd9, 0xc0, 0xce, 0x9e, 0x32, 0x56, 0xf1, 0xff, 0xca, 0x8f, 0xe1, 0x6a, 0x0f, 0x9c,
-	0x8e, 0x65, 0x52, 0x87, 0xa0, 0x6f, 0x03, 0x78, 0x09, 0x57, 0x19, 0x33, 0x04, 0xd6, 0x4b, 0x21,
-	0xff, 0x2b, 0xa2, 0x0f, 0x2a, 0x63, 0x9e, 0xf2, 0x3b, 0xcc, 0x90, 0x7f, 0x02, 0x57, 0x82, 0x8e,
-	0xdf, 0xf6, 0x82, 0xd8, 0xcc, 0x1f, 0xba, 0x00, 0x23, 0x94, 0x30, 0x3f, 0x75, 0x09, 0x65, 0x98,
-	0x12, 0xb6, 0xae, 0xa1, 0x35, 0x18, 0x63, 0x84, 0x62, 0xca, 0x25, 0x11, 0x9e, 0xd4, 0x85, 0xa3,
-	0xe2, 0x2b, 0xf6, 0x7c, 0x72, 0xae, 0x70, 0xb5, 0x25, 0xa9, 0xa1, 0x9c, 0x7e, 0xf8, 0xde, 0x9c,
-	0x12, 0xf3, 0x8c, 0xd7, 0x35, 0xf9, 0xb7, 0x12, 0x24, 0x83, 0x08, 0x56, 0xc8, 0xfe, 0xb2, 0xa6,
-	0xd9, 0x45, 0xc3, 0x2c, 0xef, 0xa1, 0x55, 0x98, 0xd0, 0xc8, 0xbe, 0x8a, 0x35, 0xcd, 0x56, 0x2d,
-	0x9b, 0x54, 0xf4, 0x27, 0x82, 0xdc, 0x95, 0xf6, 0x44, 0x08, 0xb3, 0x4d, 0xae, 0xa4, 0x24, 0xb4,
-	0xe0, 0x23, 0xba, 0x05, 0xdf, 0xda, 0x35, 0x6b, 0x44, 0x15, 0x25, 0xa2, 0x96, 0x8d, 0xba, 0xc3,
-	0x88, 0xdd, 0x80, 0xae, 0x4c, 0xb9, 0x62, 0xc1, 0xfd, 0x9e, 0x27, 0x5c, 0xd7, 0xe4, 0xe7, 0x91,
-	0xd6, 0xde, 0x28, 0x14, 0xd0, 0x1b, 0x10, 0x11, 0xe1, 0x88, 0x17, 0x16, 0x7b, 0x55, 0x44, 0x28,
-	0x9a, 0x4a, 0x44, 0xd7, 0x10, 0x82, 0x21, 0x8a, 0x6b, 0x44, 0xbc, 0x9a, 0xff, 0x47, 0x9b, 0x01,
-	0xa2, 0x25, 0x97, 0xba, 0x93, 0x8c, 0xf2, 0xbe, 0x96, 0xed, 0xe5, 0x3f, 0x18, 0xab, 0x06, 0x67,
-	0xfe, 0xe4, 0xa0, 0xef, 0xb6, 0x35, 0xdb, 0xa1, 0xbe, 0xcd, 0xb6, 0xb5, 0xc5, 0x5e, 0x84, 0x11,
-	0x43, 0x77, 0x18, 0xd1, 0x78, 0xb9, 0xc6, 0x14, 0xf1, 0x24, 0x3f, 0x84, 0xa9, 0x0e, 0x14, 0x1d,
-	0x74, 0x17, 0x62, 0x22, 0xbc, 0xee, 0xa9, 0x11, 0xed, 0xb7, 0x59, 0x84, 0x9d, 0xd2, 0x30, 0x92,
-	0xff, 0x20, 0xc1, 0x64, 0x50, 0x83, 0xa3, 0x58, 0x83, 0x71, 0x9b, 0x54, 0x75, 0x87, 0x79, 0x95,
-	0x3b, 0xc8, 0x36, 0xf4, 0x3d, 0xb7, 0x18, 0xa2, 0xeb, 0x70, 0xae, 0x62, 0xda, 0x07, 0xd8, 0xd6,
-	0x88, 0xad, 0x12, 0x8a, 0x4b, 0x06, 0xf1, 0x92, 0x1f, 0x53, 0x26, 0x1b, 0x82, 0x55, 0x6f, 0x1d,
-	0x2d, 0xc1, 0x54, 0x4b, 0xbd, 0xf8, 0xfa, 0x51, 0xae, 0x8f, 0x02, 0xc5, 0x22, 0x2c, 0xe4, 0x7f,
-	0x48, 0x30, 0x13, 0x04, 0xa1, 0x98, 0x75, 0xa6, 0xd3, 0xea, 0xa6, 0x69, 0xe8, 0xe5, 0xc3, 0x6d,
-	0xcb, 0xd0, 0xe9, 0x1e, 0xba, 0x0a, 0xe3, 0x3f, 0x36, 0x75, 0xaa, 0xda, 0x5e, 0x77, 0xe1, 0x5c,
-	0x62, 0x4a, 0xdc, 0x5d, 0xf3, 0x1b, 0xce, 0x25, 0x88, 0xd5, 0x70, 0x59, 0xd5, 0x30, 0xc3, 0x02,
-	0xdc, 0x68, 0x0d, 0x97, 0x57, 0x30, 0xc3, 0xe8, 0x1a, 0x4c, 0x62, 0xcb, 0x32, 0x74, 0x71, 0x38,
-	0x70, 0x15, 0x0f, 0xcf, 0x44, 0x60, 0x9d, 0xab, 0xce, 0xc3, 0x59, 0x47, 0xaf, 0x52, 0x6c, 0xa8,
-	0xef, 0xd7, 0xb1, 0xa1, 0xb3, 0xc3, 0xe4, 0x10, 0x57, 0x4c, 0x78, 0xab, 0x0f, 0xbc, 0x45, 0x24,
-	0xc3, 0xb8, 0x7b, 0xd6, 0x18, 0xfa, 0x07, 0x5e, 0x6c, 0xbd, 0x3c, 0xb7, 0xac, 0xc9, 0x1f, 0x49,
-	0x70, 0xb5, 0x2b, 0xaf, 0x15, 0xf3, 0x80, 0x72, 0x66, 0x33, 0xc0, 0x59, 0xa8, 0xb8, 0x5c, 0x26,
-	0x96, 0x4f, 0x0c, 0xdc, 0xa5, 0x65, 0xbe, 0xf2, 0x72, 0x78, 0xc9, 0x5f, 0x49, 0x90, 0x69, 0x2d,
-	0xff, 0x0a, 0xae, 0x1b, 0xac, 0x05, 0x93, 0xdb, 0x6a, 0xbd, 0x53, 0x52, 0x53, 0x31, 0x13, 0xf5,
-	0x12, 0x6e, 0xb5, 0xef, 0xf8, 0x33, 0x9b, 0x32, 0x26, 0xb4, 0x97, 0xdd, 0x76, 0x3f, 0x52, 0xe7,
-	0xa9, 0xe2, 0x18, 0xe3, 0x85, 0x7c, 0xaf, 0x32, 0xeb, 0x90, 0x61, 0x45, 0x98, 0xa3, 0x0d, 0x88,
-	0x69, 0x22, 0x36, 0x9c, 0x4b, 0xbc, 0xf0, 0xda, 0xc0, 0xae, 0xfc, 0xa0, 0x2a, 0x0d, 0x17, 0xf2,
-	0x6f, 0xa2, 0x70, 0xa9, 0xab, 0x3e, 0xda, 0x84, 0xf1, 0x66, 0x65, 0x9f, 0xb4, 0x2f, 0xc5, 0x1b,
-	0x2e, 0xd6, 0x35, 0xb4, 0x0d, 0x13, 0x2d, 0xe5, 0x2f, 0xda, 0xe4, 0xb1, 0x9d, 0x26, 0x02, 0x1b,
-	0x65, 0x5d, 0x6b, 0xcb, 0x4c, 0xf4, 0x64, 0x99, 0x19, 0x7a, 0x79, 0x99, 0x19, 0x3e, 0x7d, 0x66,
-	0x3e, 0x97, 0x60, 0x61, 0x8b, 0xb0, 0x7e, 0x45, 0xe9, 0x6f, 0xef, 0x07, 0x0d, 0x1a, 0xd2, 0x89,
-	0x68, 0x04, 0x46, 0x0b, 0x9f, 0xd0, 0xc3, 0x00, 0xa1, 0xc8, 0x09, 0x09, 0x05, 0xdc, 0x36, 0xa9,
-	0x3d, 0x82, 0xf9, 0xb7, 0x74, 0x87, 0xbd, 0xd9, 0x4c, 0x61, 0xd0, 0x56, 0x27, 0x8e, 0x4f, 0x2a,
-	0x0d, 0xc3, 0x86, 0x5e, 0xd3, 0xbd, 0xbd, 0x96, 0xe0, 0xbe, 0x16, 0xa2, 0xc9, 0x2f, 0x47, 0x15,
-	0x6f, 0xd9, 0x3d, 0xee, 0x2c, 0x5c, 0xf5, 0x8e, 0xbb, 0x84, 0xc2, 0xff, 0xcb, 0x1a, 0x4c, 0x77,
-	0x43, 0xa5, 0x13, 0x07, 0xad, 0x42, 0xcc, 0x12, 0xff, 0xc5, 0x59, 0x72, 0x6d, 0x60, 0x52, 0x4a,
-	0xc3, 0x54, 0xfe, 0x34, 0x02, 0xb3, 0x6d, 0xd9, 0xe9, 0x98, 0x96, 0x0e, 0xf5, 0x2e, 0xbd, 0x84,
-	0x7a, 0x7f, 0x70, 0xca, 0x76, 0xd2, 0x27, 0xdb, 0xd1, 0x97, 0x99, 0xed, 0xff, 0x49, 0x30, 0xe3,
-	0xa6, 0xbb, 0xd3, 0xd1, 0x7e, 0x8a, 0x44, 0xa3, 0x1c, 0x9c, 0x3f, 0xd0, 0xd9, 0xae, 0x6a, 0x7b,
-	0x48, 0x54, 0x9e, 0x9b, 0x43, 0xd1, 0xe0, 0xcf, 0xb9, 0xa2, 0xd6, 0x66, 0x76, 0x0b, 0x50, 0x63,
-	0xac, 0x54, 0xf9, 0x38, 0xa2, 0x53, 0x87, 0x6f, 0xfa, 0xb1, 0xe2, 0xe8, 0x51, 0xd1, 0xbd, 0x3d,
-	0x69, 0xca, 0xa4, 0x3f, 0x3c, 0xde, 0x13, 0x0a, 0xe8, 0x55, 0x48, 0xb8, 0x63, 0x54, 0xd3, 0x62,
-	0xb8, 0xd5, 0x62, 0xdc, 0x95, 0xfa, 0xda, 0xf2, 0x1f, 0x25, 0x98, 0x6d, 0x27, 0x1b, 0xa8, 0xf3,
-	0x53, 0x11, 0xee, 0x4c, 0x20, 0x7a, 0x6c, 0x02, 0x43, 0xbd, 0x08, 0x7c, 0x22, 0x08, 0xdc, 0xf7,
-	0x9b, 0x76, 0x97, 0xad, 0xf9, 0x0d, 0x15, 0xf6, 0x94, 0x1f, 0x17, 0x8f, 0x78, 0x5b, 0x34, 0xa2,
-	0xcd, 0x68, 0x14, 0xfe, 0x2a, 0xc1, 0xf0, 0x9a, 0xb3, 0x59, 0xc2, 0x68, 0x03, 0x12, 0xfc, 0x9e,
-	0xec, 0xec, 0x8a, 0x69, 0x68, 0xae, 0xcb, 0x85, 0xdd, 0x13, 0x6f, 0x78, 0x5f, 0x29, 0x52, 0x17,
-	0x43, 0xe7, 0xc3, 0x6a, 0xcd, 0x62, 0x87, 0x88, 0x41, 0xc2, 0xbb, 0x15, 0xf9, 0xdf, 0x2b, 0x96,
-	0xda, 0xdd, 0xf5, 0xbb, 0xdc, 0xa5, 0x5e, 0x3b, 0x86, 0x85, 0x77, 0xcd, 0x2a, 0x6c, 0xc1, 0xf0,
-	0xdb, 0x9c, 0xcd, 0xf7, 0x61, 0x42, 0xb0, 0x69, 0xce, 0x40, 0xa1, 0x1b, 0x89, 0x90, 0xf4, 0xa1,
-	0x52, 0xf8, 0xf3, 0x39, 0x88, 0xba, 0x3e, 0xdf, 0x85, 0xd1, 0x35, 0x22, 0x66, 0xef, 0xce, 0xaa,
-	0xa9, 0x4c, 0xaf, 0xb4, 0xb9, 0x96, 0xf2, 0xb9, 0x9f, 0xfd, 0xfd, 0xbf, 0xbf, 0x8a, 0xc4, 0xd1,
-	0x58, 0xde, 0x2a, 0xe1, 0xbc, 0x3b, 0xf8, 0xa3, 0x03, 0x88, 0x29, 0x7c, 0x12, 0x26, 0x76, 0x57,
-	0xc7, 0x83, 0x0c, 0xd4, 0x72, 0x8e, 0xfb, 0xce, 0xa6, 0xce, 0x71, 0xdf, 0xc1, 0xe9, 0x7a, 0xe7,
-	0xbc, 0x1c, 0x5e, 0x44, 0x0f, 0x01, 0x56, 0x88, 0xdd, 0xef, 0xd5, 0x5d, 0xd6, 0xe5, 0x4b, 0xfc,
-	0x6d, 0xe7, 0x17, 0x3a, 0x38, 0xfe, 0x9d, 0x04, 0xf2, 0x1a, 0x09, 0x1e, 0x4d, 0x1d, 0x27, 0xc1,
-	0x6e, 0x6f, 0x5c, 0xea, 0x7d, 0xa5, 0x0a, 0x7b, 0x92, 0xaf, 0x73, 0x2c, 0xf3, 0x68, 0x96, 0x63,
-	0x71, 0x37, 0xc3, 0xa2, 0x7f, 0x6d, 0xc9, 0xfb, 0xa7, 0x4d, 0x5e, 0xf3, 0x2c, 0xd1, 0xdf, 0x24,
-	0x90, 0xb7, 0xfa, 0xa3, 0xbb, 0xd3, 0x8e, 0x62, 0xf0, 0x39, 0xa2, 0x6b, 0xcc, 0x7e, 0xc8, 0x71,
-	0x2a, 0xa9, 0x41, 0x70, 0xde, 0x91, 0x16, 0x76, 0xb2, 0xf2, 0x80, 0x9a, 0xe8, 0xe7, 0x12, 0xcc,
-	0xaf, 0x10, 0x83, 0x30, 0x72, 0xd2, 0xa8, 0x77, 0xc3, 0x2c, 0x62, 0xbb, 0x30, 0x50, 0x6c, 0x3f,
-	0x93, 0x20, 0xdd, 0x7b, 0x2a, 0x41, 0xb7, 0xda, 0xe3, 0x3a, 0xd0, 0x14, 0x93, 0xba, 0x3e, 0xe8,
-	0x39, 0xea, 0x0e, 0x16, 0xb3, 0x1c, 0xf3, 0x15, 0x34, 0xdd, 0x03, 0x33, 0xfa, 0xa7, 0x04, 0xd3,
-	0xad, 0x55, 0xda, 0x1a, 0xa8, 0xe3, 0xf5, 0xe0, 0xd4, 0xe0, 0x13, 0x90, 0xfc, 0x23, 0x0e, 0x6f,
-	0x07, 0xcd, 0xf5, 0x0a, 0xe9, 0x53, 0xef, 0xab, 0xce, 0xb3, 0x9d, 0x02, 0x5a, 0x1a, 0x44, 0x2f,
-	0xff, 0xb4, 0x71, 0xae, 0x3d, 0x43, 0xbf, 0x8e, 0xc2, 0xf4, 0x56, 0x0f, 0x6e, 0x37, 0xfa, 0x14,
-	0xf7, 0xb1, 0xaa, 0xfa, 0xb3, 0x08, 0xe7, 0xf3, 0x71, 0x24, 0x75, 0xb3, 0x27, 0xd0, 0xb6, 0xa3,
-	0x2e, 0x27, 0x80, 0xbb, 0x85, 0x7e, 0x5b, 0x3e, 0xb1, 0xe9, 0x76, 0x6a, 0xf3, 0x24, 0xa6, 0x61,
-	0x41, 0x33, 0x7c, 0xdc, 0xad, 0xfc, 0x4d, 0xb8, 0x45, 0x7f, 0x91, 0x20, 0x1d, 0xda, 0xa7, 0xa7,
-	0xaa, 0xbb, 0x6e, 0x59, 0x11, 0x45, 0xb6, 0x30, 0x60, 0x91, 0x2d, 0x1c, 0xbf, 0xc8, 0x3e, 0x84,
-	0x71, 0x77, 0xef, 0x36, 0xbe, 0x30, 0xe5, 0x3b, 0xed, 0xec, 0x1e, 0x03, 0x6b, 0x6a, 0x6e, 0x00,
-	0xa6, 0x8e, 0x7c, 0x81, 0x13, 0x99, 0x40, 0x09, 0x0e, 0xd0, 0xc7, 0x86, 0x7e, 0x21, 0xc1, 0x64,
-	0x5b, 0xeb, 0x70, 0xc2, 0x75, 0x3d, 0xc0, 0x18, 0x39, 0x20, 0x8c, 0x14, 0x87, 0x31, 0x85, 0x50,
-	0x38, 0x4e, 0xe8, 0x63, 0x09, 0x2e, 0xf7, 0x9a, 0xf7, 0x3a, 0xe3, 0xea, 0x33, 0x1d, 0x1e, 0xaf,
-	0xe5, 0x65, 0x38, 0xbc, 0x14, 0x4a, 0x72, 0x78, 0x8d, 0xaf, 0x05, 0xcd, 0x1c, 0x16, 0x37, 0x3e,
-	0xff, 0x4f, 0xfa, 0xcc, 0x4f, 0x5f, 0xa4, 0xa5, 0x4f, 0x5f, 0xa4, 0xa5, 0x2f, 0x5f, 0xa4, 0xcf,
-	0xfc, 0xff, 0x45, 0x5a, 0xfa, 0xe5, 0x17, 0xe9, 0x33, 0x7f, 0xfa, 0x22, 0x2d, 0xed, 0xe4, 0x8f,
-	0xf1, 0xad, 0x9e, 0x51, 0xab, 0x54, 0x1a, 0xe1, 0xf5, 0x76, 0xe3, 0xeb, 0x00, 0x00, 0x00, 0xff,
-	0xff, 0xb1, 0x65, 0x75, 0x98, 0x99, 0x1c, 0x00, 0x00,
-}
-
-func (this *PacketBrokerGateway) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*PacketBrokerGateway)
-	if !ok {
-		that2, ok := that.(PacketBrokerGateway)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.Ids.Equal(that1.Ids) {
-		return false
-	}
-	if len(this.ContactInfo) != len(that1.ContactInfo) {
-		return false
-	}
-	for i := range this.ContactInfo {
-		if !this.ContactInfo[i].Equal(that1.ContactInfo[i]) {
-			return false
-		}
-	}
-	if len(this.Antennas) != len(that1.Antennas) {
-		return false
-	}
-	for i := range this.Antennas {
-		if !this.Antennas[i].Equal(that1.Antennas[i]) {
-			return false
-		}
-	}
-	if this.StatusPublic != that1.StatusPublic {
-		return false
-	}
-	if this.LocationPublic != that1.LocationPublic {
-		return false
-	}
-	if len(this.FrequencyPlanIds) != len(that1.FrequencyPlanIds) {
-		return false
-	}
-	for i := range this.FrequencyPlanIds {
-		if this.FrequencyPlanIds[i] != that1.FrequencyPlanIds[i] {
-			return false
-		}
-	}
-	if this.UpdateLocationFromStatus != that1.UpdateLocationFromStatus {
-		return false
-	}
-	if this.Online != that1.Online {
-		return false
-	}
-	if !this.RxRate.Equal(that1.RxRate) {
-		return false
-	}
-	if !this.TxRate.Equal(that1.TxRate) {
-		return false
-	}
-	return true
-}
-func (this *PacketBrokerGateway_GatewayIdentifiers) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*PacketBrokerGateway_GatewayIdentifiers)
-	if !ok {
-		that2, ok := that.(PacketBrokerGateway_GatewayIdentifiers)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.GatewayId != that1.GatewayId {
-		return false
-	}
-	if that1.Eui == nil {
-		if this.Eui != nil {
-			return false
-		}
-	} else if !this.Eui.Equal(*that1.Eui) {
-		return false
-	}
-	return true
-}
-func (this *UpdatePacketBrokerGatewayRequest) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*UpdatePacketBrokerGatewayRequest)
-	if !ok {
-		that2, ok := that.(UpdatePacketBrokerGatewayRequest)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.Gateway.Equal(that1.Gateway) {
-		return false
-	}
-	if !this.FieldMask.Equal(that1.FieldMask) {
-		return false
-	}
-	return true
-}
-func (this *UpdatePacketBrokerGatewayResponse) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*UpdatePacketBrokerGatewayResponse)
-	if !ok {
-		that2, ok := that.(UpdatePacketBrokerGatewayResponse)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.OnlineTtl.Equal(that1.OnlineTtl) {
-		return false
-	}
-	return true
-}
-func (this *PacketBrokerNetworkIdentifier) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*PacketBrokerNetworkIdentifier)
-	if !ok {
-		that2, ok := that.(PacketBrokerNetworkIdentifier)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.NetId != that1.NetId {
-		return false
-	}
-	if this.TenantId != that1.TenantId {
-		return false
-	}
-	return true
-}
-func (this *PacketBrokerDevAddrBlock) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*PacketBrokerDevAddrBlock)
-	if !ok {
-		that2, ok := that.(PacketBrokerDevAddrBlock)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.DevAddrPrefix.Equal(that1.DevAddrPrefix) {
-		return false
-	}
-	if this.HomeNetworkClusterId != that1.HomeNetworkClusterId {
-		return false
-	}
-	return true
-}
-func (this *PacketBrokerNetwork) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*PacketBrokerNetwork)
-	if !ok {
-		that2, ok := that.(PacketBrokerNetwork)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.Id.Equal(that1.Id) {
-		return false
-	}
-	if this.Name != that1.Name {
-		return false
-	}
-	if len(this.DevAddrBlocks) != len(that1.DevAddrBlocks) {
-		return false
-	}
-	for i := range this.DevAddrBlocks {
-		if !this.DevAddrBlocks[i].Equal(that1.DevAddrBlocks[i]) {
-			return false
-		}
-	}
-	if len(this.ContactInfo) != len(that1.ContactInfo) {
-		return false
-	}
-	for i := range this.ContactInfo {
-		if !this.ContactInfo[i].Equal(that1.ContactInfo[i]) {
-			return false
-		}
-	}
-	if this.Listed != that1.Listed {
-		return false
-	}
-	return true
-}
-func (this *PacketBrokerNetworks) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*PacketBrokerNetworks)
-	if !ok {
-		that2, ok := that.(PacketBrokerNetworks)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if len(this.Networks) != len(that1.Networks) {
-		return false
-	}
-	for i := range this.Networks {
-		if !this.Networks[i].Equal(that1.Networks[i]) {
-			return false
-		}
-	}
-	return true
-}
-func (this *PacketBrokerInfo) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*PacketBrokerInfo)
-	if !ok {
-		that2, ok := that.(PacketBrokerInfo)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.Registration.Equal(that1.Registration) {
-		return false
-	}
-	if this.ForwarderEnabled != that1.ForwarderEnabled {
-		return false
-	}
-	if this.HomeNetworkEnabled != that1.HomeNetworkEnabled {
-		return false
-	}
-	return true
-}
-func (this *PacketBrokerRoutingPolicyUplink) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*PacketBrokerRoutingPolicyUplink)
-	if !ok {
-		that2, ok := that.(PacketBrokerRoutingPolicyUplink)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.JoinRequest != that1.JoinRequest {
-		return false
-	}
-	if this.MacData != that1.MacData {
-		return false
-	}
-	if this.ApplicationData != that1.ApplicationData {
-		return false
-	}
-	if this.SignalQuality != that1.SignalQuality {
-		return false
-	}
-	if this.Localization != that1.Localization {
-		return false
-	}
-	return true
-}
-func (this *PacketBrokerRoutingPolicyDownlink) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*PacketBrokerRoutingPolicyDownlink)
-	if !ok {
-		that2, ok := that.(PacketBrokerRoutingPolicyDownlink)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.JoinAccept != that1.JoinAccept {
-		return false
-	}
-	if this.MacData != that1.MacData {
-		return false
-	}
-	if this.ApplicationData != that1.ApplicationData {
-		return false
-	}
-	return true
-}
-func (this *PacketBrokerDefaultRoutingPolicy) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*PacketBrokerDefaultRoutingPolicy)
-	if !ok {
-		that2, ok := that.(PacketBrokerDefaultRoutingPolicy)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.UpdatedAt.Equal(that1.UpdatedAt) {
-		return false
-	}
-	if !this.Uplink.Equal(that1.Uplink) {
-		return false
-	}
-	if !this.Downlink.Equal(that1.Downlink) {
-		return false
-	}
-	return true
-}
-func (this *PacketBrokerRoutingPolicy) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*PacketBrokerRoutingPolicy)
-	if !ok {
-		that2, ok := that.(PacketBrokerRoutingPolicy)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.ForwarderId.Equal(that1.ForwarderId) {
-		return false
-	}
-	if !this.HomeNetworkId.Equal(that1.HomeNetworkId) {
-		return false
-	}
-	if !this.UpdatedAt.Equal(that1.UpdatedAt) {
-		return false
-	}
-	if !this.Uplink.Equal(that1.Uplink) {
-		return false
-	}
-	if !this.Downlink.Equal(that1.Downlink) {
-		return false
-	}
-	return true
-}
-func (this *SetPacketBrokerDefaultRoutingPolicyRequest) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*SetPacketBrokerDefaultRoutingPolicyRequest)
-	if !ok {
-		that2, ok := that.(SetPacketBrokerDefaultRoutingPolicyRequest)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.Uplink.Equal(that1.Uplink) {
-		return false
-	}
-	if !this.Downlink.Equal(that1.Downlink) {
-		return false
-	}
-	return true
-}
-func (this *ListHomeNetworkRoutingPoliciesRequest) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ListHomeNetworkRoutingPoliciesRequest)
-	if !ok {
-		that2, ok := that.(ListHomeNetworkRoutingPoliciesRequest)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.Limit != that1.Limit {
-		return false
-	}
-	if this.Page != that1.Page {
-		return false
-	}
-	return true
-}
-func (this *PacketBrokerRoutingPolicies) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*PacketBrokerRoutingPolicies)
-	if !ok {
-		that2, ok := that.(PacketBrokerRoutingPolicies)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if len(this.Policies) != len(that1.Policies) {
-		return false
-	}
-	for i := range this.Policies {
-		if !this.Policies[i].Equal(that1.Policies[i]) {
-			return false
-		}
-	}
-	return true
-}
-func (this *SetPacketBrokerRoutingPolicyRequest) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*SetPacketBrokerRoutingPolicyRequest)
-	if !ok {
-		that2, ok := that.(SetPacketBrokerRoutingPolicyRequest)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.HomeNetworkId.Equal(that1.HomeNetworkId) {
-		return false
-	}
-	if !this.Uplink.Equal(that1.Uplink) {
-		return false
-	}
-	if !this.Downlink.Equal(that1.Downlink) {
-		return false
-	}
-	return true
-}
-func (this *ListPacketBrokerNetworksRequest) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ListPacketBrokerNetworksRequest)
-	if !ok {
-		that2, ok := that.(ListPacketBrokerNetworksRequest)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.Limit != that1.Limit {
-		return false
-	}
-	if this.Page != that1.Page {
-		return false
-	}
-	if this.WithRoutingPolicy != that1.WithRoutingPolicy {
-		return false
-	}
-	if this.TenantIdContains != that1.TenantIdContains {
-		return false
-	}
-	if this.NameContains != that1.NameContains {
-		return false
-	}
-	return true
-}
-func (this *ListPacketBrokerHomeNetworksRequest) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ListPacketBrokerHomeNetworksRequest)
-	if !ok {
-		that2, ok := that.(ListPacketBrokerHomeNetworksRequest)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.Limit != that1.Limit {
-		return false
-	}
-	if this.Page != that1.Page {
-		return false
-	}
-	if this.TenantIdContains != that1.TenantIdContains {
-		return false
-	}
-	if this.NameContains != that1.NameContains {
-		return false
-	}
-	return true
-}
-func (this *ListForwarderRoutingPoliciesRequest) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ListForwarderRoutingPoliciesRequest)
-	if !ok {
-		that2, ok := that.(ListForwarderRoutingPoliciesRequest)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.HomeNetworkId.Equal(that1.HomeNetworkId) {
-		return false
-	}
-	if this.Limit != that1.Limit {
-		return false
-	}
-	if this.Page != that1.Page {
-		return false
-	}
-	return true
+	// 2634 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xb4, 0x59, 0x4d, 0x6c, 0x1b, 0xc7,
+	0xf5, 0xff, 0x2f, 0xa9, 0x0f, 0xea, 0x49, 0x94, 0xe4, 0x89, 0xac, 0x3f, 0x45, 0xc5, 0x92, 0xbc,
+	0x92, 0x12, 0x59, 0x8e, 0x48, 0x85, 0xb6, 0x9b, 0xc4, 0x68, 0xea, 0x8a, 0x92, 0x2c, 0xcb, 0x88,
+	0x12, 0x79, 0x65, 0xd9, 0x81, 0x0d, 0x67, 0x3b, 0xe2, 0x0e, 0xa9, 0xb5, 0x96, 0xb3, 0x9b, 0xdd,
+	0xa1, 0x64, 0xd9, 0x31, 0x0a, 0x04, 0xbd, 0x24, 0x47, 0xb7, 0x68, 0x8b, 0xf6, 0x50, 0xc0, 0x87,
+	0xb4, 0xc9, 0xa5, 0x3d, 0x14, 0x3d, 0x15, 0x45, 0x2f, 0x45, 0x51, 0xa0, 0xa7, 0x16, 0x05, 0xda,
+	0x73, 0x5b, 0xa0, 0xc8, 0x31, 0x40, 0x2f, 0x3a, 0x15, 0x3b, 0x3b, 0x4b, 0xee, 0x72, 0x49, 0x8a,
+	0x94, 0x9c, 0x93, 0xb8, 0x33, 0xef, 0xbd, 0xf9, 0xbd, 0x8f, 0x79, 0x1f, 0x23, 0xb8, 0x60, 0x98,
+	0x36, 0x3e, 0xc0, 0x74, 0xc1, 0x61, 0xb8, 0xb0, 0x97, 0xc5, 0x96, 0x9e, 0xb5, 0x70, 0x61, 0x8f,
+	0xb0, 0x1d, 0xdb, 0xdc, 0x23, 0x36, 0x2e, 0x11, 0xca, 0x32, 0x96, 0x6d, 0x32, 0x13, 0x0d, 0x32,
+	0x46, 0x33, 0x82, 0x3c, 0xb3, 0x7f, 0x29, 0xbd, 0x52, 0xd2, 0xd9, 0x6e, 0x65, 0x27, 0x53, 0x30,
+	0xcb, 0xd9, 0xdb, 0xbb, 0xe4, 0xf6, 0xae, 0x4e, 0x4b, 0xce, 0x3a, 0xd5, 0x2a, 0x0e, 0xb3, 0x75,
+	0xe2, 0x64, 0x39, 0x57, 0x61, 0xa1, 0x44, 0xe8, 0x42, 0xc9, 0x5c, 0x28, 0x1a, 0xb8, 0xe4, 0x64,
+	0x31, 0xa5, 0x26, 0xc3, 0x4c, 0x37, 0xa9, 0xe3, 0x49, 0x4d, 0x2f, 0x05, 0xa4, 0x10, 0xba, 0x6f,
+	0x1e, 0x5a, 0xb6, 0xf9, 0xe8, 0x30, 0xc8, 0xbc, 0x8f, 0x0d, 0x5d, 0xc3, 0x8c, 0x64, 0x23, 0x3f,
+	0x84, 0x88, 0xe5, 0x8e, 0x80, 0x3c, 0x74, 0x4c, 0xda, 0x00, 0xc7, 0x42, 0x40, 0x48, 0xc9, 0x2c,
+	0x99, 0x1e, 0xd7, 0x4e, 0xa5, 0xc8, 0xbf, 0xf8, 0x07, 0xff, 0x25, 0xc8, 0x5f, 0x2e, 0x99, 0x66,
+	0xc9, 0x20, 0xdc, 0x60, 0x51, 0x61, 0x13, 0x62, 0xb7, 0x2a, 0x43, 0xab, 0xd8, 0x9c, 0x40, 0xec,
+	0x8f, 0xd7, 0xef, 0x93, 0xb2, 0xc5, 0x0e, 0xc5, 0xe6, 0x54, 0xfd, 0x66, 0x51, 0x27, 0x86, 0xa6,
+	0x96, 0xb1, 0xb3, 0x27, 0x28, 0x26, 0xeb, 0x29, 0x98, 0x5e, 0x26, 0x0e, 0xc3, 0x65, 0xab, 0xd9,
+	0xf9, 0x07, 0x36, 0xb6, 0x2c, 0x62, 0xfb, 0xf8, 0x66, 0xa2, 0x5e, 0x2f, 0x98, 0x94, 0xe1, 0x02,
+	0x53, 0x75, 0x5a, 0xf4, 0x75, 0x9c, 0x8c, 0x52, 0x95, 0x30, 0x23, 0x07, 0xd8, 0x47, 0x2a, 0x47,
+	0x09, 0x08, 0xd5, 0x54, 0x8d, 0xec, 0xeb, 0x05, 0xdf, 0x39, 0xd3, 0x51, 0x1a, 0x5d, 0x23, 0x94,
+	0xe9, 0x45, 0xbd, 0x86, 0x67, 0x2a, 0x4a, 0x54, 0x26, 0x8e, 0x83, 0x4b, 0xc4, 0xa7, 0xc8, 0x04,
+	0x9c, 0x68, 0x5a, 0x84, 0x62, 0x4b, 0xdf, 0xcf, 0x65, 0x4d, 0x8b, 0x5b, 0x3d, 0xea, 0x01, 0xf9,
+	0x37, 0x09, 0x78, 0x69, 0x93, 0x07, 0x72, 0x9e, 0x07, 0xf2, 0x9a, 0x07, 0x1c, 0x29, 0x10, 0xd7,
+	0x35, 0x27, 0x25, 0x4d, 0x49, 0x73, 0xfd, 0xb9, 0x6f, 0x64, 0xc2, 0x21, 0x9d, 0x69, 0xc0, 0x91,
+	0x11, 0x7f, 0xd7, 0x6b, 0xa0, 0xf3, 0x89, 0xa3, 0x7c, 0xf7, 0xa7, 0x52, 0x6c, 0x58, 0x52, 0x5c,
+	0x61, 0xe8, 0x26, 0x0c, 0x04, 0xad, 0x97, 0xea, 0x9d, 0x8a, 0xcf, 0xf5, 0xe7, 0xc6, 0xeb, 0x85,
+	0x2f, 0x7b, 0x34, 0xeb, 0xb4, 0x68, 0xe6, 0xe1, 0x28, 0xdf, 0xfd, 0x4c, 0x8a, 0x0d, 0x43, 0x4a,
+	0x52, 0xfa, 0x0b, 0xb5, 0x0d, 0xa4, 0xc1, 0x28, 0xd6, 0xca, 0x3a, 0xd5, 0x1d, 0xe6, 0x46, 0xcc,
+	0x3e, 0x51, 0xc5, 0x6e, 0x0a, 0x38, 0xe4, 0x85, 0x7a, 0xa9, 0xef, 0xd9, 0x25, 0x4c, 0xf5, 0xc7,
+	0x5c, 0xf9, 0xf7, 0xec, 0x6d, 0x87, 0xd8, 0x01, 0xa4, 0xca, 0xd9, 0xb0, 0x30, 0x01, 0x01, 0xdd,
+	0x83, 0x33, 0x8c, 0x14, 0x76, 0xa9, 0x5e, 0xc0, 0x46, 0xf5, 0x80, 0xfe, 0x93, 0x1c, 0x30, 0x5c,
+	0x95, 0xe3, 0xcb, 0x5e, 0x81, 0x04, 0xa6, 0x8c, 0x50, 0x8a, 0x9d, 0x54, 0x92, 0x5b, 0x62, 0xa2,
+	0x5e, 0xa4, 0x30, 0xe9, 0x92, 0x47, 0xc6, 0xcd, 0xe9, 0x1a, 0x23, 0xa1, 0x54, 0x39, 0xd1, 0x34,
+	0x24, 0x1d, 0x86, 0x59, 0xc5, 0x51, 0xad, 0xca, 0x8e, 0xa1, 0x17, 0x52, 0x83, 0x53, 0xd2, 0x5c,
+	0x42, 0x19, 0xf0, 0x16, 0x37, 0xf9, 0x1a, 0x7a, 0x15, 0x86, 0x0c, 0xb3, 0xc0, 0x91, 0xf9, 0x64,
+	0x43, 0x9c, 0x6c, 0xd0, 0x5f, 0x16, 0x84, 0xdf, 0x04, 0x54, 0xb4, 0xc9, 0x87, 0x15, 0x42, 0x0b,
+	0x87, 0xaa, 0x65, 0x60, 0xaa, 0xba, 0x41, 0x30, 0x32, 0x15, 0x9f, 0xeb, 0xcb, 0x0f, 0x1e, 0xe5,
+	0xfb, 0x9f, 0x49, 0x89, 0xe1, 0x84, 0xdc, 0x65, 0xc7, 0x52, 0xdf, 0x56, 0x86, 0xab, 0x94, 0x9b,
+	0x06, 0xa6, 0xeb, 0x9a, 0x83, 0xde, 0x86, 0xf1, 0x8a, 0xe5, 0xe6, 0x1b, 0xb5, 0x7a, 0x5a, 0xd1,
+	0x36, 0xcb, 0xaa, 0x87, 0x25, 0x75, 0x96, 0x1f, 0x99, 0xf2, 0x48, 0xde, 0x11, 0x14, 0xd7, 0x6d,
+	0xb3, 0xbc, 0xc5, 0xf7, 0xd1, 0x28, 0xf4, 0x98, 0xd4, 0xd0, 0x29, 0x49, 0xbd, 0xcc, 0x29, 0xc5,
+	0x17, 0xba, 0x0c, 0xbd, 0xf6, 0x23, 0xd5, 0xc6, 0x8c, 0xa4, 0xce, 0x71, 0xd3, 0x8f, 0x67, 0xbc,
+	0x6b, 0x9b, 0xf1, 0xaf, 0x6d, 0xe6, 0xba, 0x61, 0x62, 0x76, 0x07, 0x1b, 0x15, 0xa2, 0xf4, 0xd8,
+	0x8f, 0x14, 0xcc, 0x38, 0x17, 0x13, 0x5c, 0x13, 0x6d, 0x70, 0x31, 0xce, 0x95, 0xfe, 0x79, 0x0c,
+	0x50, 0x34, 0x90, 0xd1, 0x1a, 0x80, 0xb8, 0xd1, 0xaa, 0xae, 0xf1, 0x4b, 0xd1, 0x97, 0x9f, 0x3b,
+	0xca, 0xcf, 0xda, 0xd3, 0xa9, 0x99, 0xdc, 0xe4, 0x07, 0xf7, 0xf1, 0xc2, 0xe3, 0xc5, 0x85, 0xb7,
+	0x1e, 0xcc, 0x5d, 0xbb, 0x7a, 0x5f, 0x5d, 0x78, 0x70, 0xcd, 0xff, 0xbe, 0xf0, 0x24, 0xf7, 0xda,
+	0xd3, 0x19, 0xa5, 0xaf, 0xe4, 0x4b, 0x44, 0x7f, 0x94, 0x20, 0x4e, 0x2a, 0x7a, 0x2a, 0x36, 0x25,
+	0xcd, 0x0d, 0xe4, 0x7f, 0x2d, 0x3d, 0x5b, 0x3a, 0x7f, 0x13, 0xc9, 0x6f, 0x2c, 0xe6, 0x2f, 0xad,
+	0x5c, 0x79, 0x63, 0x75, 0x65, 0x71, 0x71, 0x71, 0x29, 0xbf, 0xbc, 0x22, 0xff, 0x24, 0x26, 0xf5,
+	0x3e, 0x8f, 0xf5, 0xb8, 0x79, 0x99, 0x96, 0x8e, 0xf2, 0x3d, 0x8f, 0xbb, 0x76, 0x13, 0x96, 0xf4,
+	0xe5, 0x17, 0x63, 0x1f, 0x4b, 0x70, 0xad, 0x64, 0x66, 0xd8, 0x2e, 0x61, 0x3c, 0x7b, 0x67, 0x28,
+	0x61, 0x07, 0xa6, 0xbd, 0x97, 0x0d, 0x27, 0x86, 0xfd, 0x4b, 0x59, 0x6b, 0xaf, 0x94, 0x65, 0x87,
+	0x16, 0x71, 0x32, 0x1b, 0xd8, 0x76, 0x76, 0xb1, 0x71, 0x63, 0xf5, 0xfd, 0xfc, 0x21, 0x23, 0x0e,
+	0xea, 0x58, 0xc0, 0x36, 0x2d, 0x7b, 0x22, 0xde, 0xe4, 0x02, 0x14, 0x57, 0x03, 0xf9, 0x33, 0x09,
+	0xa6, 0xb6, 0xb9, 0x2b, 0x1b, 0x24, 0x03, 0xc5, 0x8d, 0x0c, 0x87, 0xa1, 0x35, 0xe8, 0x15, 0xba,
+	0x8b, 0x4c, 0x32, 0xdd, 0x46, 0x26, 0x09, 0xa4, 0x0d, 0x9f, 0x1b, 0xbd, 0x05, 0x50, 0xcb, 0xee,
+	0xa9, 0x6e, 0x2e, 0x2b, 0x1d, 0x75, 0xa8, 0x4b, 0xb2, 0x81, 0x9d, 0x3d, 0xa5, 0xaf, 0xe8, 0xff,
+	0x94, 0x1f, 0xc0, 0xf9, 0x16, 0x38, 0x1d, 0xcb, 0xa4, 0x0e, 0x41, 0x6f, 0x02, 0x78, 0xd1, 0xa6,
+	0x32, 0x66, 0x08, 0xac, 0x63, 0x11, 0xf9, 0x2b, 0xa2, 0x3a, 0x29, 0x7d, 0x1e, 0xf1, 0x6d, 0x66,
+	0xc8, 0xdf, 0x85, 0x73, 0x41, 0xc1, 0xef, 0x7a, 0xe6, 0xac, 0x05, 0x0f, 0x3a, 0x0b, 0x3d, 0x94,
+	0x30, 0x3f, 0x6e, 0x92, 0x4a, 0x37, 0x25, 0x6c, 0x5d, 0x43, 0x6b, 0xd0, 0xc7, 0x08, 0xc5, 0x94,
+	0xef, 0xc4, 0x78, 0x44, 0xcd, 0x1f, 0xe5, 0x5f, 0xb5, 0x67, 0x53, 0x33, 0xb9, 0xf3, 0xa1, 0x88,
+	0x8a, 0x04, 0xd4, 0x47, 0x1f, 0xcc, 0x28, 0x09, 0x8f, 0x79, 0x5d, 0x93, 0x7f, 0x2c, 0x41, 0x2a,
+	0x88, 0x60, 0x85, 0xec, 0x2f, 0x69, 0x9a, 0x9d, 0x37, 0xcc, 0xc2, 0x1e, 0x5a, 0x85, 0x21, 0x8d,
+	0xec, 0xab, 0x58, 0xd3, 0x6c, 0xd5, 0xb2, 0x49, 0x51, 0x7f, 0x24, 0x94, 0x3b, 0x57, 0xef, 0x08,
+	0xc1, 0xb6, 0xc9, 0x89, 0x94, 0xa4, 0x16, 0xfc, 0x44, 0x57, 0xe0, 0xff, 0x77, 0xcd, 0x32, 0x51,
+	0x45, 0xb0, 0xa8, 0x05, 0xa3, 0xe2, 0x30, 0x62, 0x57, 0xa1, 0x2b, 0x23, 0xee, 0xb6, 0xd0, 0x7d,
+	0xd9, 0xdb, 0x5c, 0xd7, 0xe4, 0xdf, 0xc6, 0xc3, 0xc5, 0x45, 0x10, 0xa0, 0xb7, 0x21, 0x26, 0xcc,
+	0xd1, 0x20, 0x8f, 0xb6, 0xb4, 0xa6, 0x12, 0xd3, 0x35, 0x84, 0xa0, 0x8b, 0xe2, 0x32, 0x11, 0x47,
+	0xf3, 0xdf, 0x68, 0x33, 0xa0, 0xe8, 0x8e, 0xab, 0xba, 0x93, 0x8a, 0xf3, 0xa4, 0x3a, 0xd7, 0x4a,
+	0x7e, 0xd0, 0x56, 0x55, 0x9d, 0xf9, 0x57, 0xb4, 0x5a, 0x75, 0x9d, 0xa2, 0x5a, 0x29, 0x4d, 0xab,
+	0x55, 0x8f, 0xc8, 0x4d, 0xcd, 0xa5, 0x36, 0xab, 0x4d, 0x37, 0x1a, 0xd5, 0xa6, 0xde, 0xe3, 0xc5,
+	0x45, 0x2b, 0xd1, 0x28, 0xf4, 0x18, 0xba, 0xc3, 0x88, 0xc6, 0x2f, 0x56, 0x42, 0x11, 0x5f, 0xf2,
+	0x5d, 0x18, 0x69, 0xe0, 0x0c, 0x07, 0x5d, 0x83, 0x84, 0x08, 0x04, 0xb7, 0x41, 0x88, 0x1f, 0x77,
+	0xad, 0x05, 0x9f, 0x52, 0x65, 0x92, 0xff, 0x2d, 0xc1, 0x70, 0x90, 0x82, 0xdb, 0x68, 0x0d, 0x06,
+	0x6c, 0x52, 0x12, 0x6a, 0x9a, 0xb4, 0x9d, 0x84, 0xe1, 0x4b, 0x0e, 0x31, 0xa2, 0x8b, 0x70, 0xa6,
+	0x68, 0xda, 0x07, 0xd8, 0xd6, 0x88, 0xad, 0x12, 0x8a, 0x77, 0x0c, 0xe2, 0x85, 0x69, 0x42, 0x19,
+	0xae, 0x6e, 0xac, 0x7a, 0xeb, 0x68, 0x11, 0x46, 0x42, 0x91, 0xed, 0xd3, 0xc7, 0x39, 0x3d, 0x0a,
+	0x84, 0xb5, 0xcf, 0x71, 0x01, 0x86, 0xbd, 0xe3, 0x02, 0xd2, 0xbb, 0x38, 0xf5, 0x90, 0xbf, 0x2e,
+	0x48, 0xe5, 0xfb, 0x30, 0x1e, 0x84, 0xab, 0x88, 0x6d, 0x3f, 0x3b, 0xe6, 0xaa, 0x76, 0x97, 0x9a,
+	0x24, 0xb4, 0xbc, 0x69, 0x1a, 0xa2, 0x40, 0x79, 0x94, 0x57, 0x13, 0x5f, 0x7d, 0x31, 0xd6, 0x95,
+	0xf8, 0xbf, 0x61, 0x49, 0xfe, 0x9b, 0x04, 0x93, 0x21, 0xe9, 0x66, 0x85, 0xe9, 0xb4, 0xb4, 0x69,
+	0x1a, 0x7a, 0xe1, 0x70, 0xdb, 0x32, 0x74, 0xba, 0x87, 0xce, 0xc3, 0xc0, 0x43, 0x53, 0xa7, 0xaa,
+	0xed, 0x9d, 0xc8, 0xcf, 0x49, 0x28, 0xfd, 0xee, 0x9a, 0x0f, 0x62, 0x0c, 0x12, 0x65, 0x5c, 0x50,
+	0x35, 0xcc, 0xb0, 0x30, 0x52, 0x6f, 0x19, 0x17, 0x56, 0x30, 0xc3, 0xae, 0xa6, 0xd8, 0xb2, 0x0c,
+	0x5d, 0xd4, 0x72, 0x4e, 0xe2, 0xd9, 0x65, 0x28, 0xb0, 0xce, 0x49, 0x67, 0x61, 0xd0, 0xd1, 0x4b,
+	0x14, 0x1b, 0xea, 0x87, 0x15, 0x6c, 0xe8, 0xec, 0x50, 0x98, 0x24, 0xe9, 0xad, 0xde, 0xf2, 0x16,
+	0x91, 0x0c, 0x03, 0x6e, 0x6b, 0x60, 0x88, 0x36, 0x49, 0xc4, 0x5b, 0x68, 0x4d, 0xfe, 0x54, 0x82,
+	0xf3, 0x4d, 0xf5, 0x5a, 0x31, 0x0f, 0x28, 0xd7, 0x6c, 0x12, 0xb8, 0x16, 0x2a, 0x2e, 0x14, 0x88,
+	0xe5, 0x2b, 0x06, 0xee, 0xd2, 0x12, 0x5f, 0x79, 0x31, 0x7a, 0xc9, 0xff, 0x95, 0x60, 0x2a, 0x9c,
+	0x30, 0x8a, 0xb8, 0x62, 0xb0, 0x10, 0x26, 0xb7, 0x38, 0x79, 0x4d, 0x8d, 0xa6, 0x62, 0xd6, 0xd4,
+	0x97, 0xb7, 0xfd, 0xd9, 0x43, 0xe9, 0x13, 0xd4, 0x4b, 0x6e, 0x81, 0xec, 0xa9, 0x70, 0x57, 0x71,
+	0x8c, 0xfd, 0xb9, 0x6c, 0xab, 0x70, 0x6f, 0xe0, 0x61, 0x45, 0xb0, 0xa3, 0x0d, 0x48, 0x68, 0xc2,
+	0x36, 0x5c, 0x97, 0xfe, 0xdc, 0xeb, 0x6d, 0x8b, 0xf2, 0x8d, 0xaa, 0x54, 0x45, 0xc8, 0x3f, 0x8a,
+	0xc3, 0x58, 0x53, 0x7a, 0xb4, 0x09, 0x03, 0xb5, 0x1b, 0x76, 0xd2, 0x4c, 0xde, 0x5f, 0x15, 0xb1,
+	0xae, 0xa1, 0x6d, 0x18, 0x0a, 0x5d, 0x43, 0x51, 0x58, 0x3a, 0x16, 0x9a, 0x0c, 0x5c, 0xd8, 0x75,
+	0xad, 0xce, 0x33, 0xf1, 0x93, 0x79, 0xa6, 0xeb, 0xc5, 0x79, 0xa6, 0xfb, 0xf4, 0x9e, 0xf9, 0xbb,
+	0x04, 0xf3, 0x5b, 0x84, 0x1d, 0x17, 0x94, 0xfe, 0xf5, 0xbe, 0x55, 0x55, 0x43, 0x3a, 0x91, 0x1a,
+	0x81, 0x66, 0xcc, 0x57, 0xe8, 0x6e, 0x40, 0xa1, 0xd8, 0x09, 0x15, 0x0a, 0x88, 0xad, 0xa9, 0x76,
+	0x1f, 0x66, 0xdf, 0xd1, 0x1d, 0x76, 0xa3, 0xe6, 0xc2, 0x20, 0xaf, 0x4e, 0x1c, 0x5f, 0xa9, 0x09,
+	0xe8, 0x36, 0xf4, 0xb2, 0xee, 0xdd, 0xb5, 0x24, 0x97, 0x35, 0x1f, 0x4f, 0xfd, 0xa7, 0x57, 0xf1,
+	0x96, 0xdd, 0x06, 0xc1, 0xc2, 0x25, 0xaf, 0x41, 0x48, 0x2a, 0xfc, 0xb7, 0xac, 0xd5, 0xe5, 0xe2,
+	0xb0, 0x64, 0xb4, 0x0a, 0x09, 0x4b, 0xfc, 0x16, 0x35, 0xed, 0x42, 0xdb, 0x4a, 0x29, 0x55, 0x56,
+	0xf9, 0x17, 0x31, 0x98, 0xae, 0xf3, 0x4e, 0x43, 0xb7, 0x34, 0x88, 0x77, 0xe9, 0x05, 0xc4, 0xfb,
+	0xad, 0x53, 0xa6, 0x93, 0x63, 0xbc, 0x1d, 0x7f, 0x91, 0xde, 0xfe, 0x43, 0x2c, 0xdc, 0x39, 0x8b,
+	0x96, 0xfc, 0x8e, 0xee, 0xe8, 0x3b, 0x3a, 0xaf, 0x16, 0x69, 0x48, 0xf8, 0x83, 0xa4, 0x48, 0xf0,
+	0xd5, 0x6f, 0xb7, 0xc8, 0x8b, 0x19, 0xd8, 0x9d, 0x53, 0x0b, 0xa4, 0x4c, 0x28, 0xf3, 0x8b, 0xbc,
+	0xd8, 0xd8, 0xf4, 0xd7, 0xdd, 0x21, 0xd9, 0x27, 0x2e, 0x98, 0x15, 0xca, 0x44, 0xb6, 0x1f, 0x10,
+	0x8b, 0xcb, 0xee, 0x9a, 0x3b, 0x24, 0x17, 0xf9, 0x00, 0xe0, 0x67, 0x03, 0x47, 0xd4, 0xb0, 0x41,
+	0x77, 0xb9, 0x9a, 0x23, 0x1c, 0xb7, 0xa8, 0x86, 0x1a, 0x43, 0xaf, 0x88, 0x85, 0xfa, 0xbd, 0x51,
+	0xe8, 0x11, 0x43, 0x6f, 0x8f, 0xd7, 0x51, 0x79, 0x5f, 0x6e, 0x99, 0x0c, 0xcf, 0xd7, 0xa9, 0x84,
+	0x57, 0x26, 0x43, 0xb3, 0xb4, 0x7b, 0x82, 0xf7, 0xb8, 0xc8, 0xe7, 0x57, 0x27, 0xd5, 0xe7, 0x9d,
+	0xe0, 0xad, 0xb9, 0x73, 0xaa, 0x13, 0xe8, 0x03, 0x7e, 0x25, 0xc1, 0x4c, 0x83, 0x6c, 0x10, 0x35,
+	0xe7, 0x29, 0xca, 0xd4, 0x06, 0xc0, 0x7e, 0x55, 0x50, 0x3b, 0x99, 0x39, 0x72, 0xba, 0x12, 0x10,
+	0x20, 0x7f, 0x22, 0x41, 0xa6, 0x71, 0x0e, 0x8b, 0xf2, 0x89, 0x0b, 0x73, 0x37, 0x84, 0x40, 0x3a,
+	0x01, 0x82, 0x40, 0x10, 0x06, 0xb1, 0x7c, 0x29, 0xc1, 0xa4, 0x9b, 0x75, 0x1a, 0x75, 0xba, 0xa7,
+	0xc8, 0x37, 0x28, 0x03, 0x2f, 0x1d, 0xe8, 0x6c, 0x57, 0xb5, 0xbd, 0x0b, 0xa1, 0xf2, 0x14, 0x71,
+	0x28, 0x22, 0xef, 0x8c, 0xbb, 0x15, 0xae, 0xa9, 0x57, 0x00, 0x55, 0xe7, 0x41, 0xaf, 0x9d, 0xd7,
+	0xa9, 0x17, 0x81, 0x7d, 0xf9, 0xde, 0xa3, 0x7c, 0x97, 0x1d, 0x4b, 0x69, 0x6e, 0xef, 0xee, 0x4d,
+	0x7d, 0xcb, 0x82, 0x00, 0xbd, 0x06, 0x49, 0x77, 0xfe, 0xa9, 0x71, 0x74, 0x87, 0x39, 0x06, 0xdc,
+	0x5d, 0x9f, 0x5a, 0xfe, 0x9d, 0x04, 0xd3, 0xf5, 0xca, 0x06, 0xd2, 0xed, 0xa9, 0x14, 0x6e, 0xac,
+	0x40, 0xbc, 0x63, 0x05, 0xba, 0x5a, 0x29, 0xf0, 0x99, 0x50, 0xe0, 0xba, 0xdf, 0x3b, 0x34, 0xa9,
+	0x10, 0x5f, 0x53, 0x7e, 0x1d, 0xf1, 0xed, 0xe2, 0x29, 0x5e, 0x67, 0x8d, 0x78, 0xcd, 0x1a, 0xb9,
+	0x3f, 0x4b, 0xd0, 0xbd, 0xe6, 0x6c, 0xee, 0x60, 0xb4, 0x01, 0x49, 0xfe, 0xba, 0xe6, 0xec, 0x8a,
+	0xa6, 0x7c, 0xa6, 0xc9, 0x33, 0x9f, 0xb7, 0xbd, 0xe1, 0xbd, 0xe7, 0xa6, 0x47, 0x23, 0x37, 0x73,
+	0xb5, 0x6c, 0xb1, 0x43, 0xc4, 0x20, 0xe9, 0x3d, 0x67, 0xf8, 0x2f, 0xb5, 0x8b, 0xf5, 0xe2, 0x8e,
+	0x7b, 0x95, 0x49, 0xbf, 0xde, 0x01, 0x87, 0xf7, 0x3e, 0x92, 0xdb, 0x82, 0xee, 0x77, 0xb9, 0x36,
+	0x37, 0x61, 0x48, 0x68, 0x53, 0x6b, 0xc5, 0x23, 0x4f, 0x09, 0x62, 0xe7, 0x18, 0x55, 0x72, 0x3f,
+	0x1b, 0x85, 0xb8, 0x2b, 0xf3, 0x0e, 0xf4, 0xae, 0x11, 0x91, 0x38, 0x1b, 0x93, 0xa6, 0xa7, 0x5a,
+	0xb9, 0xcd, 0xe5, 0x94, 0xcf, 0x7c, 0xfc, 0xd7, 0x7f, 0x7d, 0x3f, 0xd6, 0x8f, 0xfa, 0xb2, 0xd6,
+	0x0e, 0xce, 0xba, 0x89, 0x19, 0x3d, 0x93, 0x20, 0xe1, 0xcf, 0x5c, 0xe8, 0x62, 0xcb, 0xaa, 0x15,
+	0x9e, 0xcc, 0xd2, 0xed, 0x4c, 0x9d, 0xf2, 0x65, 0x7e, 0x62, 0x26, 0x7d, 0x86, 0x9f, 0x18, 0x1c,
+	0x41, 0xaf, 0x4a, 0xf3, 0xf7, 0x46, 0xe5, 0x86, 0xeb, 0x6e, 0x22, 0x5b, 0x21, 0xfe, 0xa0, 0xd8,
+	0x54, 0xdf, 0x26, 0xeb, 0xf2, 0x18, 0x3f, 0xf3, 0xa5, 0xf9, 0xa8, 0x6c, 0xf4, 0x53, 0x09, 0xe4,
+	0x35, 0x12, 0xec, 0x9e, 0x1a, 0x0e, 0x2b, 0xcd, 0x4e, 0x5c, 0x6c, 0xfd, 0x4e, 0x12, 0x95, 0x24,
+	0x5f, 0xe4, 0x58, 0x66, 0xd1, 0x34, 0xc7, 0xe2, 0x5e, 0x94, 0x05, 0x7f, 0xc2, 0xcf, 0xfa, 0x0d,
+	0x51, 0x56, 0xf3, 0x38, 0xd1, 0x5f, 0x24, 0x90, 0xb7, 0x8e, 0x47, 0x77, 0xb5, 0x1e, 0x45, 0xfb,
+	0xad, 0x6e, 0x53, 0x9b, 0xbd, 0xcf, 0x71, 0x2a, 0xe9, 0x76, 0x70, 0xba, 0x9e, 0x9b, 0x93, 0xdb,
+	0xa4, 0x44, 0xdf, 0x93, 0x60, 0x76, 0x85, 0x18, 0x84, 0x91, 0x93, 0x5a, 0xbd, 0x19, 0x66, 0x61,
+	0xdb, 0xf9, 0xb6, 0x6c, 0xfb, 0xb9, 0x04, 0x13, 0xad, 0x1b, 0x67, 0x74, 0xa5, 0xde, 0xae, 0x6d,
+	0x35, 0xda, 0xe9, 0x8b, 0xed, 0xb6, 0x7a, 0x6e, 0xef, 0x3b, 0xcd, 0x31, 0x9f, 0x43, 0xe3, 0x2d,
+	0x30, 0xa3, 0x7f, 0x48, 0x30, 0x1e, 0x8e, 0xd2, 0xb0, 0xa1, 0x3a, 0xcb, 0xcf, 0xe9, 0xf6, 0x9b,
+	0x74, 0xf9, 0x3b, 0x1c, 0xde, 0x3d, 0x34, 0xd3, 0xca, 0xa4, 0x4f, 0xbc, 0xa7, 0xda, 0xa7, 0xf7,
+	0x72, 0x68, 0xb1, 0x1d, 0xba, 0xec, 0x93, 0x6a, 0xcd, 0x7b, 0x8a, 0x7e, 0x18, 0x87, 0xf1, 0xad,
+	0x16, 0xba, 0x5d, 0x3a, 0x26, 0xb8, 0x3b, 0x8a, 0xea, 0xcf, 0x63, 0x5c, 0x9f, 0xe7, 0xb1, 0xf4,
+	0xe5, 0x96, 0x40, 0xeb, 0xca, 0x60, 0x46, 0x00, 0x77, 0x03, 0xfd, 0x2d, 0xf9, 0xc4, 0xac, 0xdb,
+	0xe9, 0xcd, 0x93, 0xb0, 0x46, 0x37, 0x6a, 0xe6, 0xe3, 0x62, 0xe5, 0xaf, 0x43, 0x2c, 0xfa, 0x93,
+	0x04, 0x13, 0x91, 0x7b, 0x7a, 0xaa, 0xb8, 0x6b, 0xe6, 0x15, 0x11, 0x64, 0xf3, 0x6d, 0x06, 0xd9,
+	0x7c, 0xe7, 0x41, 0xf6, 0x4b, 0x09, 0x5e, 0x69, 0x98, 0xe6, 0xa3, 0x0d, 0x7f, 0xb3, 0xa4, 0x73,
+	0xb9, 0x8d, 0x54, 0x1f, 0x91, 0x26, 0xbf, 0xc1, 0x55, 0x7b, 0x1d, 0x65, 0x1b, 0x40, 0x16, 0xff,
+	0xa6, 0x59, 0xa8, 0xf6, 0xd5, 0xc1, 0xf4, 0xf4, 0x95, 0x04, 0xaf, 0x6c, 0xb5, 0x87, 0xf8, 0x5b,
+	0xed, 0xa5, 0xff, 0x66, 0x53, 0x42, 0x53, 0xb7, 0x58, 0x1c, 0xfb, 0xc3, 0x74, 0xa7, 0xd8, 0xdd,
+	0x98, 0xbc, 0x2c, 0x9f, 0x80, 0x0b, 0xfd, 0x40, 0x82, 0x0b, 0xcd, 0x4a, 0x43, 0xfb, 0x9e, 0x6a,
+	0xa6, 0x8f, 0xf0, 0xc5, 0x7c, 0xc7, 0xbe, 0xf8, 0x08, 0x06, 0xdc, 0xcc, 0x5f, 0x7d, 0xca, 0xcf,
+	0x36, 0xaa, 0x0b, 0x2d, 0x46, 0xa1, 0xf4, 0x4c, 0x1b, 0xf7, 0xc4, 0x91, 0xcf, 0x72, 0x7c, 0x43,
+	0x28, 0xc9, 0xf1, 0xf9, 0xd0, 0xd0, 0x27, 0x12, 0x0c, 0xd7, 0x15, 0x1e, 0x27, 0x9a, 0x15, 0xdb,
+	0x18, 0x50, 0xda, 0x84, 0x91, 0xe6, 0x30, 0x46, 0x10, 0x8a, 0x9a, 0x09, 0x3d, 0x97, 0xe0, 0xe5,
+	0x56, 0x93, 0x44, 0x63, 0x5c, 0xc7, 0xcc, 0x1d, 0x9d, 0x15, 0xcc, 0x29, 0x0e, 0x2f, 0x8d, 0x52,
+	0x1c, 0x5e, 0xf5, 0x39, 0xb4, 0x96, 0x01, 0xf2, 0x57, 0x7e, 0xff, 0xcf, 0x09, 0xe9, 0x5e, 0xb6,
+	0x83, 0x7f, 0xd8, 0x32, 0x6a, 0xed, 0xec, 0xf4, 0xf0, 0x70, 0xb9, 0xf4, 0xbf, 0x00, 0x00, 0x00,
+	0xff, 0xff, 0x6a, 0x8f, 0x85, 0xf0, 0xb5, 0x24, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -2209,11 +1921,15 @@ type PbaClient interface {
 	// Viewing Packet Packet information requires administrative access.
 	GetInfo(ctx context.Context, in *types.Empty, opts ...grpc.CallOption) (*PacketBrokerInfo, error)
 	// Register with Packet Broker. If no registration exists, it will be created. Any existing registration will be updated.
-	// All registration settings are taken from Packet Broker Agent configuration and caller context.
+	// Registration settings not in the request message are taken from Packet Broker Agent configuration and caller context.
 	// Packet Broker registration requires administrative access.
-	Register(ctx context.Context, in *types.Empty, opts ...grpc.CallOption) (*PacketBrokerNetwork, error)
+	// Packet Broker registration is only supported for tenants and requires Packet Broker Agent to be configured with
+	// NetID level authentication. Use rpc GetInfo and check register_enabled to check whether this rpc is enabled.
+	Register(ctx context.Context, in *PacketBrokerRegisterRequest, opts ...grpc.CallOption) (*PacketBrokerNetwork, error)
 	// Deregister from Packet Broker.
 	// Packet Broker deregistration requires administrative access.
+	// Packet Broker deregistration is only supported for tenants and requires Packet Broker Agent to be configured with
+	// NetID level authentication. Use rpc GetInfo and check register_enabled to check whether this rpc is enabled.
 	Deregister(ctx context.Context, in *types.Empty, opts ...grpc.CallOption) (*types.Empty, error)
 	// Get the default routing policy.
 	// Getting routing policies requires administrative access.
@@ -2236,6 +1952,15 @@ type PbaClient interface {
 	// Delete the routing policy for the given Home Network.
 	// Deleting routing policies requires administrative access.
 	DeleteHomeNetworkRoutingPolicy(ctx context.Context, in *PacketBrokerNetworkIdentifier, opts ...grpc.CallOption) (*types.Empty, error)
+	// Get the default gateway visibility.
+	// Getting gateway visibilities requires administrative access.
+	GetHomeNetworkDefaultGatewayVisibility(ctx context.Context, in *types.Empty, opts ...grpc.CallOption) (*PacketBrokerDefaultGatewayVisibility, error)
+	// Set the default gateway visibility.
+	// Setting gateway visibilities requires administrative access.
+	SetHomeNetworkDefaultGatewayVisibility(ctx context.Context, in *SetPacketBrokerDefaultGatewayVisibilityRequest, opts ...grpc.CallOption) (*types.Empty, error)
+	// Deletes the default gateway visibility.
+	// Deleting gateway visibilities requires administrative access.
+	DeleteHomeNetworkDefaultGatewayVisibility(ctx context.Context, in *types.Empty, opts ...grpc.CallOption) (*types.Empty, error)
 	// List all listed networks.
 	// Listing networks requires administrative access.
 	ListNetworks(ctx context.Context, in *ListPacketBrokerNetworksRequest, opts ...grpc.CallOption) (*PacketBrokerNetworks, error)
@@ -2264,7 +1989,7 @@ func (c *pbaClient) GetInfo(ctx context.Context, in *types.Empty, opts ...grpc.C
 	return out, nil
 }
 
-func (c *pbaClient) Register(ctx context.Context, in *types.Empty, opts ...grpc.CallOption) (*PacketBrokerNetwork, error) {
+func (c *pbaClient) Register(ctx context.Context, in *PacketBrokerRegisterRequest, opts ...grpc.CallOption) (*PacketBrokerNetwork, error) {
 	out := new(PacketBrokerNetwork)
 	err := c.cc.Invoke(ctx, "/ttn.lorawan.v3.Pba/Register", in, out, opts...)
 	if err != nil {
@@ -2345,6 +2070,33 @@ func (c *pbaClient) DeleteHomeNetworkRoutingPolicy(ctx context.Context, in *Pack
 	return out, nil
 }
 
+func (c *pbaClient) GetHomeNetworkDefaultGatewayVisibility(ctx context.Context, in *types.Empty, opts ...grpc.CallOption) (*PacketBrokerDefaultGatewayVisibility, error) {
+	out := new(PacketBrokerDefaultGatewayVisibility)
+	err := c.cc.Invoke(ctx, "/ttn.lorawan.v3.Pba/GetHomeNetworkDefaultGatewayVisibility", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *pbaClient) SetHomeNetworkDefaultGatewayVisibility(ctx context.Context, in *SetPacketBrokerDefaultGatewayVisibilityRequest, opts ...grpc.CallOption) (*types.Empty, error) {
+	out := new(types.Empty)
+	err := c.cc.Invoke(ctx, "/ttn.lorawan.v3.Pba/SetHomeNetworkDefaultGatewayVisibility", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *pbaClient) DeleteHomeNetworkDefaultGatewayVisibility(ctx context.Context, in *types.Empty, opts ...grpc.CallOption) (*types.Empty, error) {
+	out := new(types.Empty)
+	err := c.cc.Invoke(ctx, "/ttn.lorawan.v3.Pba/DeleteHomeNetworkDefaultGatewayVisibility", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *pbaClient) ListNetworks(ctx context.Context, in *ListPacketBrokerNetworksRequest, opts ...grpc.CallOption) (*PacketBrokerNetworks, error) {
 	out := new(PacketBrokerNetworks)
 	err := c.cc.Invoke(ctx, "/ttn.lorawan.v3.Pba/ListNetworks", in, out, opts...)
@@ -2378,11 +2130,15 @@ type PbaServer interface {
 	// Viewing Packet Packet information requires administrative access.
 	GetInfo(context.Context, *types.Empty) (*PacketBrokerInfo, error)
 	// Register with Packet Broker. If no registration exists, it will be created. Any existing registration will be updated.
-	// All registration settings are taken from Packet Broker Agent configuration and caller context.
+	// Registration settings not in the request message are taken from Packet Broker Agent configuration and caller context.
 	// Packet Broker registration requires administrative access.
-	Register(context.Context, *types.Empty) (*PacketBrokerNetwork, error)
+	// Packet Broker registration is only supported for tenants and requires Packet Broker Agent to be configured with
+	// NetID level authentication. Use rpc GetInfo and check register_enabled to check whether this rpc is enabled.
+	Register(context.Context, *PacketBrokerRegisterRequest) (*PacketBrokerNetwork, error)
 	// Deregister from Packet Broker.
 	// Packet Broker deregistration requires administrative access.
+	// Packet Broker deregistration is only supported for tenants and requires Packet Broker Agent to be configured with
+	// NetID level authentication. Use rpc GetInfo and check register_enabled to check whether this rpc is enabled.
 	Deregister(context.Context, *types.Empty) (*types.Empty, error)
 	// Get the default routing policy.
 	// Getting routing policies requires administrative access.
@@ -2405,6 +2161,15 @@ type PbaServer interface {
 	// Delete the routing policy for the given Home Network.
 	// Deleting routing policies requires administrative access.
 	DeleteHomeNetworkRoutingPolicy(context.Context, *PacketBrokerNetworkIdentifier) (*types.Empty, error)
+	// Get the default gateway visibility.
+	// Getting gateway visibilities requires administrative access.
+	GetHomeNetworkDefaultGatewayVisibility(context.Context, *types.Empty) (*PacketBrokerDefaultGatewayVisibility, error)
+	// Set the default gateway visibility.
+	// Setting gateway visibilities requires administrative access.
+	SetHomeNetworkDefaultGatewayVisibility(context.Context, *SetPacketBrokerDefaultGatewayVisibilityRequest) (*types.Empty, error)
+	// Deletes the default gateway visibility.
+	// Deleting gateway visibilities requires administrative access.
+	DeleteHomeNetworkDefaultGatewayVisibility(context.Context, *types.Empty) (*types.Empty, error)
 	// List all listed networks.
 	// Listing networks requires administrative access.
 	ListNetworks(context.Context, *ListPacketBrokerNetworksRequest) (*PacketBrokerNetworks, error)
@@ -2423,7 +2188,7 @@ type UnimplementedPbaServer struct {
 func (*UnimplementedPbaServer) GetInfo(ctx context.Context, req *types.Empty) (*PacketBrokerInfo, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetInfo not implemented")
 }
-func (*UnimplementedPbaServer) Register(ctx context.Context, req *types.Empty) (*PacketBrokerNetwork, error) {
+func (*UnimplementedPbaServer) Register(ctx context.Context, req *PacketBrokerRegisterRequest) (*PacketBrokerNetwork, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Register not implemented")
 }
 func (*UnimplementedPbaServer) Deregister(ctx context.Context, req *types.Empty) (*types.Empty, error) {
@@ -2449,6 +2214,15 @@ func (*UnimplementedPbaServer) SetHomeNetworkRoutingPolicy(ctx context.Context, 
 }
 func (*UnimplementedPbaServer) DeleteHomeNetworkRoutingPolicy(ctx context.Context, req *PacketBrokerNetworkIdentifier) (*types.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteHomeNetworkRoutingPolicy not implemented")
+}
+func (*UnimplementedPbaServer) GetHomeNetworkDefaultGatewayVisibility(ctx context.Context, req *types.Empty) (*PacketBrokerDefaultGatewayVisibility, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetHomeNetworkDefaultGatewayVisibility not implemented")
+}
+func (*UnimplementedPbaServer) SetHomeNetworkDefaultGatewayVisibility(ctx context.Context, req *SetPacketBrokerDefaultGatewayVisibilityRequest) (*types.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SetHomeNetworkDefaultGatewayVisibility not implemented")
+}
+func (*UnimplementedPbaServer) DeleteHomeNetworkDefaultGatewayVisibility(ctx context.Context, req *types.Empty) (*types.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteHomeNetworkDefaultGatewayVisibility not implemented")
 }
 func (*UnimplementedPbaServer) ListNetworks(ctx context.Context, req *ListPacketBrokerNetworksRequest) (*PacketBrokerNetworks, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListNetworks not implemented")
@@ -2483,7 +2257,7 @@ func _Pba_GetInfo_Handler(srv interface{}, ctx context.Context, dec func(interfa
 }
 
 func _Pba_Register_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(types.Empty)
+	in := new(PacketBrokerRegisterRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -2495,7 +2269,7 @@ func _Pba_Register_Handler(srv interface{}, ctx context.Context, dec func(interf
 		FullMethod: "/ttn.lorawan.v3.Pba/Register",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(PbaServer).Register(ctx, req.(*types.Empty))
+		return srv.(PbaServer).Register(ctx, req.(*PacketBrokerRegisterRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -2644,6 +2418,60 @@ func _Pba_DeleteHomeNetworkRoutingPolicy_Handler(srv interface{}, ctx context.Co
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Pba_GetHomeNetworkDefaultGatewayVisibility_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(types.Empty)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PbaServer).GetHomeNetworkDefaultGatewayVisibility(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/ttn.lorawan.v3.Pba/GetHomeNetworkDefaultGatewayVisibility",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PbaServer).GetHomeNetworkDefaultGatewayVisibility(ctx, req.(*types.Empty))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Pba_SetHomeNetworkDefaultGatewayVisibility_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SetPacketBrokerDefaultGatewayVisibilityRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PbaServer).SetHomeNetworkDefaultGatewayVisibility(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/ttn.lorawan.v3.Pba/SetHomeNetworkDefaultGatewayVisibility",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PbaServer).SetHomeNetworkDefaultGatewayVisibility(ctx, req.(*SetPacketBrokerDefaultGatewayVisibilityRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Pba_DeleteHomeNetworkDefaultGatewayVisibility_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(types.Empty)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PbaServer).DeleteHomeNetworkDefaultGatewayVisibility(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/ttn.lorawan.v3.Pba/DeleteHomeNetworkDefaultGatewayVisibility",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PbaServer).DeleteHomeNetworkDefaultGatewayVisibility(ctx, req.(*types.Empty))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Pba_ListNetworks_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ListPacketBrokerNetworksRequest)
 	if err := dec(in); err != nil {
@@ -2743,6 +2571,18 @@ var _Pba_serviceDesc = grpc.ServiceDesc{
 			Handler:    _Pba_DeleteHomeNetworkRoutingPolicy_Handler,
 		},
 		{
+			MethodName: "GetHomeNetworkDefaultGatewayVisibility",
+			Handler:    _Pba_GetHomeNetworkDefaultGatewayVisibility_Handler,
+		},
+		{
+			MethodName: "SetHomeNetworkDefaultGatewayVisibility",
+			Handler:    _Pba_SetHomeNetworkDefaultGatewayVisibility_Handler,
+		},
+		{
+			MethodName: "DeleteHomeNetworkDefaultGatewayVisibility",
+			Handler:    _Pba_DeleteHomeNetworkDefaultGatewayVisibility_Handler,
+		},
+		{
 			MethodName: "ListNetworks",
 			Handler:    _Pba_ListNetworks_Handler,
 		},
@@ -2757,287 +2597,4 @@ var _Pba_serviceDesc = grpc.ServiceDesc{
 	},
 	Streams:  []grpc.StreamDesc{},
 	Metadata: "lorawan-stack/api/packetbrokeragent.proto",
-}
-
-func (this *PacketBrokerGateway) String() string {
-	if this == nil {
-		return "nil"
-	}
-	repeatedStringForContactInfo := "[]*ContactInfo{"
-	for _, f := range this.ContactInfo {
-		repeatedStringForContactInfo += strings.Replace(fmt.Sprintf("%v", f), "ContactInfo", "ContactInfo", 1) + ","
-	}
-	repeatedStringForContactInfo += "}"
-	repeatedStringForAntennas := "[]*GatewayAntenna{"
-	for _, f := range this.Antennas {
-		repeatedStringForAntennas += strings.Replace(fmt.Sprintf("%v", f), "GatewayAntenna", "GatewayAntenna", 1) + ","
-	}
-	repeatedStringForAntennas += "}"
-	s := strings.Join([]string{`&PacketBrokerGateway{`,
-		`Ids:` + strings.Replace(fmt.Sprintf("%v", this.Ids), "PacketBrokerGateway_GatewayIdentifiers", "PacketBrokerGateway_GatewayIdentifiers", 1) + `,`,
-		`ContactInfo:` + repeatedStringForContactInfo + `,`,
-		`Antennas:` + repeatedStringForAntennas + `,`,
-		`StatusPublic:` + fmt.Sprintf("%v", this.StatusPublic) + `,`,
-		`LocationPublic:` + fmt.Sprintf("%v", this.LocationPublic) + `,`,
-		`FrequencyPlanIds:` + fmt.Sprintf("%v", this.FrequencyPlanIds) + `,`,
-		`UpdateLocationFromStatus:` + fmt.Sprintf("%v", this.UpdateLocationFromStatus) + `,`,
-		`Online:` + fmt.Sprintf("%v", this.Online) + `,`,
-		`RxRate:` + strings.Replace(fmt.Sprintf("%v", this.RxRate), "FloatValue", "types.FloatValue", 1) + `,`,
-		`TxRate:` + strings.Replace(fmt.Sprintf("%v", this.TxRate), "FloatValue", "types.FloatValue", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *PacketBrokerGateway_GatewayIdentifiers) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&PacketBrokerGateway_GatewayIdentifiers{`,
-		`GatewayId:` + fmt.Sprintf("%v", this.GatewayId) + `,`,
-		`Eui:` + fmt.Sprintf("%v", this.Eui) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *UpdatePacketBrokerGatewayRequest) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&UpdatePacketBrokerGatewayRequest{`,
-		`Gateway:` + strings.Replace(this.Gateway.String(), "PacketBrokerGateway", "PacketBrokerGateway", 1) + `,`,
-		`FieldMask:` + strings.Replace(fmt.Sprintf("%v", this.FieldMask), "FieldMask", "types.FieldMask", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *UpdatePacketBrokerGatewayResponse) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&UpdatePacketBrokerGatewayResponse{`,
-		`OnlineTtl:` + strings.Replace(fmt.Sprintf("%v", this.OnlineTtl), "Duration", "types.Duration", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *PacketBrokerNetworkIdentifier) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&PacketBrokerNetworkIdentifier{`,
-		`NetId:` + fmt.Sprintf("%v", this.NetId) + `,`,
-		`TenantId:` + fmt.Sprintf("%v", this.TenantId) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *PacketBrokerDevAddrBlock) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&PacketBrokerDevAddrBlock{`,
-		`DevAddrPrefix:` + strings.Replace(fmt.Sprintf("%v", this.DevAddrPrefix), "DevAddrPrefix", "DevAddrPrefix", 1) + `,`,
-		`HomeNetworkClusterId:` + fmt.Sprintf("%v", this.HomeNetworkClusterId) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *PacketBrokerNetwork) String() string {
-	if this == nil {
-		return "nil"
-	}
-	repeatedStringForDevAddrBlocks := "[]*PacketBrokerDevAddrBlock{"
-	for _, f := range this.DevAddrBlocks {
-		repeatedStringForDevAddrBlocks += strings.Replace(f.String(), "PacketBrokerDevAddrBlock", "PacketBrokerDevAddrBlock", 1) + ","
-	}
-	repeatedStringForDevAddrBlocks += "}"
-	repeatedStringForContactInfo := "[]*ContactInfo{"
-	for _, f := range this.ContactInfo {
-		repeatedStringForContactInfo += strings.Replace(fmt.Sprintf("%v", f), "ContactInfo", "ContactInfo", 1) + ","
-	}
-	repeatedStringForContactInfo += "}"
-	s := strings.Join([]string{`&PacketBrokerNetwork{`,
-		`Id:` + strings.Replace(this.Id.String(), "PacketBrokerNetworkIdentifier", "PacketBrokerNetworkIdentifier", 1) + `,`,
-		`Name:` + fmt.Sprintf("%v", this.Name) + `,`,
-		`DevAddrBlocks:` + repeatedStringForDevAddrBlocks + `,`,
-		`ContactInfo:` + repeatedStringForContactInfo + `,`,
-		`Listed:` + fmt.Sprintf("%v", this.Listed) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *PacketBrokerNetworks) String() string {
-	if this == nil {
-		return "nil"
-	}
-	repeatedStringForNetworks := "[]*PacketBrokerNetwork{"
-	for _, f := range this.Networks {
-		repeatedStringForNetworks += strings.Replace(f.String(), "PacketBrokerNetwork", "PacketBrokerNetwork", 1) + ","
-	}
-	repeatedStringForNetworks += "}"
-	s := strings.Join([]string{`&PacketBrokerNetworks{`,
-		`Networks:` + repeatedStringForNetworks + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *PacketBrokerInfo) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&PacketBrokerInfo{`,
-		`Registration:` + strings.Replace(this.Registration.String(), "PacketBrokerNetwork", "PacketBrokerNetwork", 1) + `,`,
-		`ForwarderEnabled:` + fmt.Sprintf("%v", this.ForwarderEnabled) + `,`,
-		`HomeNetworkEnabled:` + fmt.Sprintf("%v", this.HomeNetworkEnabled) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *PacketBrokerRoutingPolicyUplink) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&PacketBrokerRoutingPolicyUplink{`,
-		`JoinRequest:` + fmt.Sprintf("%v", this.JoinRequest) + `,`,
-		`MacData:` + fmt.Sprintf("%v", this.MacData) + `,`,
-		`ApplicationData:` + fmt.Sprintf("%v", this.ApplicationData) + `,`,
-		`SignalQuality:` + fmt.Sprintf("%v", this.SignalQuality) + `,`,
-		`Localization:` + fmt.Sprintf("%v", this.Localization) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *PacketBrokerRoutingPolicyDownlink) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&PacketBrokerRoutingPolicyDownlink{`,
-		`JoinAccept:` + fmt.Sprintf("%v", this.JoinAccept) + `,`,
-		`MacData:` + fmt.Sprintf("%v", this.MacData) + `,`,
-		`ApplicationData:` + fmt.Sprintf("%v", this.ApplicationData) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *PacketBrokerDefaultRoutingPolicy) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&PacketBrokerDefaultRoutingPolicy{`,
-		`UpdatedAt:` + strings.Replace(fmt.Sprintf("%v", this.UpdatedAt), "Timestamp", "types.Timestamp", 1) + `,`,
-		`Uplink:` + strings.Replace(this.Uplink.String(), "PacketBrokerRoutingPolicyUplink", "PacketBrokerRoutingPolicyUplink", 1) + `,`,
-		`Downlink:` + strings.Replace(this.Downlink.String(), "PacketBrokerRoutingPolicyDownlink", "PacketBrokerRoutingPolicyDownlink", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *PacketBrokerRoutingPolicy) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&PacketBrokerRoutingPolicy{`,
-		`ForwarderId:` + strings.Replace(this.ForwarderId.String(), "PacketBrokerNetworkIdentifier", "PacketBrokerNetworkIdentifier", 1) + `,`,
-		`HomeNetworkId:` + strings.Replace(this.HomeNetworkId.String(), "PacketBrokerNetworkIdentifier", "PacketBrokerNetworkIdentifier", 1) + `,`,
-		`UpdatedAt:` + strings.Replace(fmt.Sprintf("%v", this.UpdatedAt), "Timestamp", "types.Timestamp", 1) + `,`,
-		`Uplink:` + strings.Replace(this.Uplink.String(), "PacketBrokerRoutingPolicyUplink", "PacketBrokerRoutingPolicyUplink", 1) + `,`,
-		`Downlink:` + strings.Replace(this.Downlink.String(), "PacketBrokerRoutingPolicyDownlink", "PacketBrokerRoutingPolicyDownlink", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *SetPacketBrokerDefaultRoutingPolicyRequest) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&SetPacketBrokerDefaultRoutingPolicyRequest{`,
-		`Uplink:` + strings.Replace(this.Uplink.String(), "PacketBrokerRoutingPolicyUplink", "PacketBrokerRoutingPolicyUplink", 1) + `,`,
-		`Downlink:` + strings.Replace(this.Downlink.String(), "PacketBrokerRoutingPolicyDownlink", "PacketBrokerRoutingPolicyDownlink", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *ListHomeNetworkRoutingPoliciesRequest) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&ListHomeNetworkRoutingPoliciesRequest{`,
-		`Limit:` + fmt.Sprintf("%v", this.Limit) + `,`,
-		`Page:` + fmt.Sprintf("%v", this.Page) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *PacketBrokerRoutingPolicies) String() string {
-	if this == nil {
-		return "nil"
-	}
-	repeatedStringForPolicies := "[]*PacketBrokerRoutingPolicy{"
-	for _, f := range this.Policies {
-		repeatedStringForPolicies += strings.Replace(f.String(), "PacketBrokerRoutingPolicy", "PacketBrokerRoutingPolicy", 1) + ","
-	}
-	repeatedStringForPolicies += "}"
-	s := strings.Join([]string{`&PacketBrokerRoutingPolicies{`,
-		`Policies:` + repeatedStringForPolicies + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *SetPacketBrokerRoutingPolicyRequest) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&SetPacketBrokerRoutingPolicyRequest{`,
-		`HomeNetworkId:` + strings.Replace(this.HomeNetworkId.String(), "PacketBrokerNetworkIdentifier", "PacketBrokerNetworkIdentifier", 1) + `,`,
-		`Uplink:` + strings.Replace(this.Uplink.String(), "PacketBrokerRoutingPolicyUplink", "PacketBrokerRoutingPolicyUplink", 1) + `,`,
-		`Downlink:` + strings.Replace(this.Downlink.String(), "PacketBrokerRoutingPolicyDownlink", "PacketBrokerRoutingPolicyDownlink", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *ListPacketBrokerNetworksRequest) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&ListPacketBrokerNetworksRequest{`,
-		`Limit:` + fmt.Sprintf("%v", this.Limit) + `,`,
-		`Page:` + fmt.Sprintf("%v", this.Page) + `,`,
-		`WithRoutingPolicy:` + fmt.Sprintf("%v", this.WithRoutingPolicy) + `,`,
-		`TenantIdContains:` + fmt.Sprintf("%v", this.TenantIdContains) + `,`,
-		`NameContains:` + fmt.Sprintf("%v", this.NameContains) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *ListPacketBrokerHomeNetworksRequest) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&ListPacketBrokerHomeNetworksRequest{`,
-		`Limit:` + fmt.Sprintf("%v", this.Limit) + `,`,
-		`Page:` + fmt.Sprintf("%v", this.Page) + `,`,
-		`TenantIdContains:` + fmt.Sprintf("%v", this.TenantIdContains) + `,`,
-		`NameContains:` + fmt.Sprintf("%v", this.NameContains) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *ListForwarderRoutingPoliciesRequest) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&ListForwarderRoutingPoliciesRequest{`,
-		`HomeNetworkId:` + strings.Replace(this.HomeNetworkId.String(), "PacketBrokerNetworkIdentifier", "PacketBrokerNetworkIdentifier", 1) + `,`,
-		`Limit:` + fmt.Sprintf("%v", this.Limit) + `,`,
-		`Page:` + fmt.Sprintf("%v", this.Page) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func valueToStringPacketbrokeragent(v interface{}) string {
-	rv := reflect.ValueOf(v)
-	if rv.IsNil() {
-		return "nil"
-	}
-	pv := reflect.Indirect(rv).Interface()
-	return fmt.Sprintf("*%v", pv)
 }

@@ -6,16 +6,17 @@ package ttnpb
 import (
 	context "context"
 	fmt "fmt"
+	_ "github.com/TheThingsIndustries/protoc-gen-go-flags/annotations"
+	_ "github.com/envoyproxy/protoc-gen-validate/validate"
 	_ "github.com/gogo/protobuf/gogoproto"
 	proto "github.com/gogo/protobuf/proto"
+	types "github.com/gogo/protobuf/types"
 	golang_proto "github.com/golang/protobuf/proto"
 	_ "google.golang.org/genproto/googleapis/api/annotations"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
 	math "math"
-	reflect "reflect"
-	strings "strings"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -34,11 +35,13 @@ type ListFrequencyPlansRequest struct {
 	// Optional base frequency in MHz for hardware support (433, 470, 868 or 915)
 	BaseFrequency        uint32   `protobuf:"varint,1,opt,name=base_frequency,json=baseFrequency,proto3" json:"base_frequency,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *ListFrequencyPlansRequest) Reset()      { *m = ListFrequencyPlansRequest{} }
-func (*ListFrequencyPlansRequest) ProtoMessage() {}
+func (m *ListFrequencyPlansRequest) Reset()         { *m = ListFrequencyPlansRequest{} }
+func (m *ListFrequencyPlansRequest) String() string { return proto.CompactTextString(m) }
+func (*ListFrequencyPlansRequest) ProtoMessage()    {}
 func (*ListFrequencyPlansRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_2ed64f51a0283877, []int{0}
 }
@@ -75,11 +78,13 @@ type FrequencyPlanDescription struct {
 	// Base frequency in MHz for hardware support (433, 470, 868 or 915)
 	BaseFrequency        uint32   `protobuf:"varint,4,opt,name=base_frequency,json=baseFrequency,proto3" json:"base_frequency,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *FrequencyPlanDescription) Reset()      { *m = FrequencyPlanDescription{} }
-func (*FrequencyPlanDescription) ProtoMessage() {}
+func (m *FrequencyPlanDescription) Reset()         { *m = FrequencyPlanDescription{} }
+func (m *FrequencyPlanDescription) String() string { return proto.CompactTextString(m) }
+func (*FrequencyPlanDescription) ProtoMessage()    {}
 func (*FrequencyPlanDescription) Descriptor() ([]byte, []int) {
 	return fileDescriptor_2ed64f51a0283877, []int{1}
 }
@@ -132,11 +137,13 @@ func (m *FrequencyPlanDescription) GetBaseFrequency() uint32 {
 type ListFrequencyPlansResponse struct {
 	FrequencyPlans       []*FrequencyPlanDescription `protobuf:"bytes,1,rep,name=frequency_plans,json=frequencyPlans,proto3" json:"frequency_plans,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}                    `json:"-"`
+	XXX_unrecognized     []byte                      `json:"-"`
 	XXX_sizecache        int32                       `json:"-"`
 }
 
-func (m *ListFrequencyPlansResponse) Reset()      { *m = ListFrequencyPlansResponse{} }
-func (*ListFrequencyPlansResponse) ProtoMessage() {}
+func (m *ListFrequencyPlansResponse) Reset()         { *m = ListFrequencyPlansResponse{} }
+func (m *ListFrequencyPlansResponse) String() string { return proto.CompactTextString(m) }
+func (*ListFrequencyPlansResponse) ProtoMessage()    {}
 func (*ListFrequencyPlansResponse) Descriptor() ([]byte, []int) {
 	return fileDescriptor_2ed64f51a0283877, []int{2}
 }
@@ -165,6 +172,806 @@ func (m *ListFrequencyPlansResponse) GetFrequencyPlans() []*FrequencyPlanDescrip
 	return nil
 }
 
+type GetPhyVersionsRequest struct {
+	// Optional Band ID to filter the results.
+	// If unused, all supported Bands and their versions are returned.
+	BandId               string   `protobuf:"bytes,1,opt,name=band_id,json=bandId,proto3" json:"band_id,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *GetPhyVersionsRequest) Reset()         { *m = GetPhyVersionsRequest{} }
+func (m *GetPhyVersionsRequest) String() string { return proto.CompactTextString(m) }
+func (*GetPhyVersionsRequest) ProtoMessage()    {}
+func (*GetPhyVersionsRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_2ed64f51a0283877, []int{3}
+}
+func (m *GetPhyVersionsRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_GetPhyVersionsRequest.Unmarshal(m, b)
+}
+func (m *GetPhyVersionsRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_GetPhyVersionsRequest.Marshal(b, m, deterministic)
+}
+func (m *GetPhyVersionsRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetPhyVersionsRequest.Merge(m, src)
+}
+func (m *GetPhyVersionsRequest) XXX_Size() int {
+	return xxx_messageInfo_GetPhyVersionsRequest.Size(m)
+}
+func (m *GetPhyVersionsRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetPhyVersionsRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GetPhyVersionsRequest proto.InternalMessageInfo
+
+func (m *GetPhyVersionsRequest) GetBandId() string {
+	if m != nil {
+		return m.BandId
+	}
+	return ""
+}
+
+type GetPhyVersionsResponse struct {
+	VersionInfo          []*GetPhyVersionsResponse_VersionInfo `protobuf:"bytes,2,rep,name=version_info,json=versionInfo,proto3" json:"version_info,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}                              `json:"-"`
+	XXX_unrecognized     []byte                                `json:"-"`
+	XXX_sizecache        int32                                 `json:"-"`
+}
+
+func (m *GetPhyVersionsResponse) Reset()         { *m = GetPhyVersionsResponse{} }
+func (m *GetPhyVersionsResponse) String() string { return proto.CompactTextString(m) }
+func (*GetPhyVersionsResponse) ProtoMessage()    {}
+func (*GetPhyVersionsResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_2ed64f51a0283877, []int{4}
+}
+func (m *GetPhyVersionsResponse) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_GetPhyVersionsResponse.Unmarshal(m, b)
+}
+func (m *GetPhyVersionsResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_GetPhyVersionsResponse.Marshal(b, m, deterministic)
+}
+func (m *GetPhyVersionsResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetPhyVersionsResponse.Merge(m, src)
+}
+func (m *GetPhyVersionsResponse) XXX_Size() int {
+	return xxx_messageInfo_GetPhyVersionsResponse.Size(m)
+}
+func (m *GetPhyVersionsResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetPhyVersionsResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GetPhyVersionsResponse proto.InternalMessageInfo
+
+func (m *GetPhyVersionsResponse) GetVersionInfo() []*GetPhyVersionsResponse_VersionInfo {
+	if m != nil {
+		return m.VersionInfo
+	}
+	return nil
+}
+
+type GetPhyVersionsResponse_VersionInfo struct {
+	BandId               string       `protobuf:"bytes,1,opt,name=band_id,json=bandId,proto3" json:"band_id,omitempty"`
+	PhyVersions          []PHYVersion `protobuf:"varint,2,rep,packed,name=phy_versions,json=phyVersions,proto3,enum=ttn.lorawan.v3.PHYVersion" json:"phy_versions,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}     `json:"-"`
+	XXX_unrecognized     []byte       `json:"-"`
+	XXX_sizecache        int32        `json:"-"`
+}
+
+func (m *GetPhyVersionsResponse_VersionInfo) Reset()         { *m = GetPhyVersionsResponse_VersionInfo{} }
+func (m *GetPhyVersionsResponse_VersionInfo) String() string { return proto.CompactTextString(m) }
+func (*GetPhyVersionsResponse_VersionInfo) ProtoMessage()    {}
+func (*GetPhyVersionsResponse_VersionInfo) Descriptor() ([]byte, []int) {
+	return fileDescriptor_2ed64f51a0283877, []int{4, 0}
+}
+func (m *GetPhyVersionsResponse_VersionInfo) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_GetPhyVersionsResponse_VersionInfo.Unmarshal(m, b)
+}
+func (m *GetPhyVersionsResponse_VersionInfo) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_GetPhyVersionsResponse_VersionInfo.Marshal(b, m, deterministic)
+}
+func (m *GetPhyVersionsResponse_VersionInfo) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetPhyVersionsResponse_VersionInfo.Merge(m, src)
+}
+func (m *GetPhyVersionsResponse_VersionInfo) XXX_Size() int {
+	return xxx_messageInfo_GetPhyVersionsResponse_VersionInfo.Size(m)
+}
+func (m *GetPhyVersionsResponse_VersionInfo) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetPhyVersionsResponse_VersionInfo.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GetPhyVersionsResponse_VersionInfo proto.InternalMessageInfo
+
+func (m *GetPhyVersionsResponse_VersionInfo) GetBandId() string {
+	if m != nil {
+		return m.BandId
+	}
+	return ""
+}
+
+func (m *GetPhyVersionsResponse_VersionInfo) GetPhyVersions() []PHYVersion {
+	if m != nil {
+		return m.PhyVersions
+	}
+	return nil
+}
+
+type ListBandsRequest struct {
+	// Optional Band ID to filter the results.
+	// If unused, all supported Bands are returned.
+	BandId string `protobuf:"bytes,1,opt,name=band_id,json=bandId,proto3" json:"band_id,omitempty"`
+	// Optional PHY version to filter the results.
+	// If unused, all supported versions are returned.
+	PhyVersion           PHYVersion `protobuf:"varint,2,opt,name=phy_version,json=phyVersion,proto3,enum=ttn.lorawan.v3.PHYVersion" json:"phy_version,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}   `json:"-"`
+	XXX_unrecognized     []byte     `json:"-"`
+	XXX_sizecache        int32      `json:"-"`
+}
+
+func (m *ListBandsRequest) Reset()         { *m = ListBandsRequest{} }
+func (m *ListBandsRequest) String() string { return proto.CompactTextString(m) }
+func (*ListBandsRequest) ProtoMessage()    {}
+func (*ListBandsRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_2ed64f51a0283877, []int{5}
+}
+func (m *ListBandsRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_ListBandsRequest.Unmarshal(m, b)
+}
+func (m *ListBandsRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_ListBandsRequest.Marshal(b, m, deterministic)
+}
+func (m *ListBandsRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListBandsRequest.Merge(m, src)
+}
+func (m *ListBandsRequest) XXX_Size() int {
+	return xxx_messageInfo_ListBandsRequest.Size(m)
+}
+func (m *ListBandsRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_ListBandsRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ListBandsRequest proto.InternalMessageInfo
+
+func (m *ListBandsRequest) GetBandId() string {
+	if m != nil {
+		return m.BandId
+	}
+	return ""
+}
+
+func (m *ListBandsRequest) GetPhyVersion() PHYVersion {
+	if m != nil {
+		return m.PhyVersion
+	}
+	return PHYVersion_PHY_UNKNOWN
+}
+
+type BandDescription struct {
+	Id                     string                                   `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	Beacon                 *BandDescription_Beacon                  `protobuf:"bytes,2,opt,name=beacon,proto3" json:"beacon,omitempty"`
+	PingSlotFrequencies    []uint64                                 `protobuf:"varint,32,rep,packed,name=ping_slot_frequencies,json=pingSlotFrequencies,proto3" json:"ping_slot_frequencies,omitempty"`
+	MaxUplinkChannels      uint32                                   `protobuf:"varint,4,opt,name=max_uplink_channels,json=maxUplinkChannels,proto3" json:"max_uplink_channels,omitempty"`
+	UplinkChannels         []*BandDescription_Channel               `protobuf:"bytes,5,rep,name=uplink_channels,json=uplinkChannels,proto3" json:"uplink_channels,omitempty"`
+	MaxDownlinkChannels    uint32                                   `protobuf:"varint,6,opt,name=max_downlink_channels,json=maxDownlinkChannels,proto3" json:"max_downlink_channels,omitempty"`
+	DownlinkChannels       []*BandDescription_Channel               `protobuf:"bytes,7,rep,name=downlink_channels,json=downlinkChannels,proto3" json:"downlink_channels,omitempty"`
+	SubBands               []*BandDescription_SubBandParameters     `protobuf:"bytes,8,rep,name=sub_bands,json=subBands,proto3" json:"sub_bands,omitempty"`
+	DataRates              map[uint32]*BandDescription_BandDataRate `protobuf:"bytes,9,rep,name=data_rates,json=dataRates,proto3" json:"data_rates,omitempty" protobuf_key:"varint,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	FreqMultiplier         uint64                                   `protobuf:"varint,10,opt,name=freq_multiplier,json=freqMultiplier,proto3" json:"freq_multiplier,omitempty"`
+	ImplementsCfList       bool                                     `protobuf:"varint,11,opt,name=implements_cf_list,json=implementsCfList,proto3" json:"implements_cf_list,omitempty"`
+	CfListType             CFListType                               `protobuf:"varint,12,opt,name=cf_list_type,json=cfListType,proto3,enum=ttn.lorawan.v3.CFListType" json:"cf_list_type,omitempty"`
+	ReceiveDelay_1         *types.Duration                          `protobuf:"bytes,13,opt,name=receive_delay_1,json=receiveDelay1,proto3" json:"receive_delay_1,omitempty"`
+	ReceiveDelay_2         *types.Duration                          `protobuf:"bytes,14,opt,name=receive_delay_2,json=receiveDelay2,proto3" json:"receive_delay_2,omitempty"`
+	JoinAcceptDelay_1      *types.Duration                          `protobuf:"bytes,15,opt,name=join_accept_delay_1,json=joinAcceptDelay1,proto3" json:"join_accept_delay_1,omitempty"`
+	JoinAcceptDelay_2      *types.Duration                          `protobuf:"bytes,16,opt,name=join_accept_delay_2,json=joinAcceptDelay2,proto3" json:"join_accept_delay_2,omitempty"`
+	MaxFcntGap             uint64                                   `protobuf:"varint,17,opt,name=max_fcnt_gap,json=maxFcntGap,proto3" json:"max_fcnt_gap,omitempty"`
+	SupportsDynamicAdr     bool                                     `protobuf:"varint,18,opt,name=supports_dynamic_adr,json=supportsDynamicAdr,proto3" json:"supports_dynamic_adr,omitempty"`
+	AdrAckLimit            ADRAckLimitExponent                      `protobuf:"varint,19,opt,name=adr_ack_limit,json=adrAckLimit,proto3,enum=ttn.lorawan.v3.ADRAckLimitExponent" json:"adr_ack_limit,omitempty"`
+	MinRetransmitTimeout   *types.Duration                          `protobuf:"bytes,20,opt,name=min_retransmit_timeout,json=minRetransmitTimeout,proto3" json:"min_retransmit_timeout,omitempty"`
+	MaxRetransmitTimeout   *types.Duration                          `protobuf:"bytes,21,opt,name=max_retransmit_timeout,json=maxRetransmitTimeout,proto3" json:"max_retransmit_timeout,omitempty"`
+	TxOffset               []float32                                `protobuf:"fixed32,22,rep,packed,name=tx_offset,json=txOffset,proto3" json:"tx_offset,omitempty"`
+	MaxAdrDataRateIndex    DataRateIndex                            `protobuf:"varint,23,opt,name=max_adr_data_rate_index,json=maxAdrDataRateIndex,proto3,enum=ttn.lorawan.v3.DataRateIndex" json:"max_adr_data_rate_index,omitempty"`
+	TxParamSetupReqSupport bool                                     `protobuf:"varint,24,opt,name=tx_param_setup_req_support,json=txParamSetupReqSupport,proto3" json:"tx_param_setup_req_support,omitempty"`
+	DefaultMaxEirp         float32                                  `protobuf:"fixed32,25,opt,name=default_max_eirp,json=defaultMaxEirp,proto3" json:"default_max_eirp,omitempty"`
+	DefaultRx2Parameters   *BandDescription_Rx2Parameters           `protobuf:"bytes,30,opt,name=default_rx2_parameters,json=defaultRx2Parameters,proto3" json:"default_rx2_parameters,omitempty"`
+	BootDwellTime          *BandDescription_DwellTime               `protobuf:"bytes,31,opt,name=boot_dwell_time,json=bootDwellTime,proto3" json:"boot_dwell_time,omitempty"`
+	XXX_NoUnkeyedLiteral   struct{}                                 `json:"-"`
+	XXX_unrecognized       []byte                                   `json:"-"`
+	XXX_sizecache          int32                                    `json:"-"`
+}
+
+func (m *BandDescription) Reset()         { *m = BandDescription{} }
+func (m *BandDescription) String() string { return proto.CompactTextString(m) }
+func (*BandDescription) ProtoMessage()    {}
+func (*BandDescription) Descriptor() ([]byte, []int) {
+	return fileDescriptor_2ed64f51a0283877, []int{6}
+}
+func (m *BandDescription) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_BandDescription.Unmarshal(m, b)
+}
+func (m *BandDescription) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_BandDescription.Marshal(b, m, deterministic)
+}
+func (m *BandDescription) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_BandDescription.Merge(m, src)
+}
+func (m *BandDescription) XXX_Size() int {
+	return xxx_messageInfo_BandDescription.Size(m)
+}
+func (m *BandDescription) XXX_DiscardUnknown() {
+	xxx_messageInfo_BandDescription.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_BandDescription proto.InternalMessageInfo
+
+func (m *BandDescription) GetId() string {
+	if m != nil {
+		return m.Id
+	}
+	return ""
+}
+
+func (m *BandDescription) GetBeacon() *BandDescription_Beacon {
+	if m != nil {
+		return m.Beacon
+	}
+	return nil
+}
+
+func (m *BandDescription) GetPingSlotFrequencies() []uint64 {
+	if m != nil {
+		return m.PingSlotFrequencies
+	}
+	return nil
+}
+
+func (m *BandDescription) GetMaxUplinkChannels() uint32 {
+	if m != nil {
+		return m.MaxUplinkChannels
+	}
+	return 0
+}
+
+func (m *BandDescription) GetUplinkChannels() []*BandDescription_Channel {
+	if m != nil {
+		return m.UplinkChannels
+	}
+	return nil
+}
+
+func (m *BandDescription) GetMaxDownlinkChannels() uint32 {
+	if m != nil {
+		return m.MaxDownlinkChannels
+	}
+	return 0
+}
+
+func (m *BandDescription) GetDownlinkChannels() []*BandDescription_Channel {
+	if m != nil {
+		return m.DownlinkChannels
+	}
+	return nil
+}
+
+func (m *BandDescription) GetSubBands() []*BandDescription_SubBandParameters {
+	if m != nil {
+		return m.SubBands
+	}
+	return nil
+}
+
+func (m *BandDescription) GetDataRates() map[uint32]*BandDescription_BandDataRate {
+	if m != nil {
+		return m.DataRates
+	}
+	return nil
+}
+
+func (m *BandDescription) GetFreqMultiplier() uint64 {
+	if m != nil {
+		return m.FreqMultiplier
+	}
+	return 0
+}
+
+func (m *BandDescription) GetImplementsCfList() bool {
+	if m != nil {
+		return m.ImplementsCfList
+	}
+	return false
+}
+
+func (m *BandDescription) GetCfListType() CFListType {
+	if m != nil {
+		return m.CfListType
+	}
+	return CFListType_FREQUENCIES
+}
+
+func (m *BandDescription) GetReceiveDelay_1() *types.Duration {
+	if m != nil {
+		return m.ReceiveDelay_1
+	}
+	return nil
+}
+
+func (m *BandDescription) GetReceiveDelay_2() *types.Duration {
+	if m != nil {
+		return m.ReceiveDelay_2
+	}
+	return nil
+}
+
+func (m *BandDescription) GetJoinAcceptDelay_1() *types.Duration {
+	if m != nil {
+		return m.JoinAcceptDelay_1
+	}
+	return nil
+}
+
+func (m *BandDescription) GetJoinAcceptDelay_2() *types.Duration {
+	if m != nil {
+		return m.JoinAcceptDelay_2
+	}
+	return nil
+}
+
+func (m *BandDescription) GetMaxFcntGap() uint64 {
+	if m != nil {
+		return m.MaxFcntGap
+	}
+	return 0
+}
+
+func (m *BandDescription) GetSupportsDynamicAdr() bool {
+	if m != nil {
+		return m.SupportsDynamicAdr
+	}
+	return false
+}
+
+func (m *BandDescription) GetAdrAckLimit() ADRAckLimitExponent {
+	if m != nil {
+		return m.AdrAckLimit
+	}
+	return ADRAckLimitExponent_ADR_ACK_LIMIT_1
+}
+
+func (m *BandDescription) GetMinRetransmitTimeout() *types.Duration {
+	if m != nil {
+		return m.MinRetransmitTimeout
+	}
+	return nil
+}
+
+func (m *BandDescription) GetMaxRetransmitTimeout() *types.Duration {
+	if m != nil {
+		return m.MaxRetransmitTimeout
+	}
+	return nil
+}
+
+func (m *BandDescription) GetTxOffset() []float32 {
+	if m != nil {
+		return m.TxOffset
+	}
+	return nil
+}
+
+func (m *BandDescription) GetMaxAdrDataRateIndex() DataRateIndex {
+	if m != nil {
+		return m.MaxAdrDataRateIndex
+	}
+	return DataRateIndex_DATA_RATE_0
+}
+
+func (m *BandDescription) GetTxParamSetupReqSupport() bool {
+	if m != nil {
+		return m.TxParamSetupReqSupport
+	}
+	return false
+}
+
+func (m *BandDescription) GetDefaultMaxEirp() float32 {
+	if m != nil {
+		return m.DefaultMaxEirp
+	}
+	return 0
+}
+
+func (m *BandDescription) GetDefaultRx2Parameters() *BandDescription_Rx2Parameters {
+	if m != nil {
+		return m.DefaultRx2Parameters
+	}
+	return nil
+}
+
+func (m *BandDescription) GetBootDwellTime() *BandDescription_DwellTime {
+	if m != nil {
+		return m.BootDwellTime
+	}
+	return nil
+}
+
+type BandDescription_Beacon struct {
+	DataRateIndex        DataRateIndex `protobuf:"varint,1,opt,name=data_rate_index,json=dataRateIndex,proto3,enum=ttn.lorawan.v3.DataRateIndex" json:"data_rate_index,omitempty"`
+	CodingRate           string        `protobuf:"bytes,2,opt,name=coding_rate,json=codingRate,proto3" json:"coding_rate,omitempty"`
+	Frequencies          []uint64      `protobuf:"varint,5,rep,packed,name=frequencies,proto3" json:"frequencies,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}      `json:"-"`
+	XXX_unrecognized     []byte        `json:"-"`
+	XXX_sizecache        int32         `json:"-"`
+}
+
+func (m *BandDescription_Beacon) Reset()         { *m = BandDescription_Beacon{} }
+func (m *BandDescription_Beacon) String() string { return proto.CompactTextString(m) }
+func (*BandDescription_Beacon) ProtoMessage()    {}
+func (*BandDescription_Beacon) Descriptor() ([]byte, []int) {
+	return fileDescriptor_2ed64f51a0283877, []int{6, 0}
+}
+func (m *BandDescription_Beacon) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_BandDescription_Beacon.Unmarshal(m, b)
+}
+func (m *BandDescription_Beacon) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_BandDescription_Beacon.Marshal(b, m, deterministic)
+}
+func (m *BandDescription_Beacon) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_BandDescription_Beacon.Merge(m, src)
+}
+func (m *BandDescription_Beacon) XXX_Size() int {
+	return xxx_messageInfo_BandDescription_Beacon.Size(m)
+}
+func (m *BandDescription_Beacon) XXX_DiscardUnknown() {
+	xxx_messageInfo_BandDescription_Beacon.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_BandDescription_Beacon proto.InternalMessageInfo
+
+func (m *BandDescription_Beacon) GetDataRateIndex() DataRateIndex {
+	if m != nil {
+		return m.DataRateIndex
+	}
+	return DataRateIndex_DATA_RATE_0
+}
+
+func (m *BandDescription_Beacon) GetCodingRate() string {
+	if m != nil {
+		return m.CodingRate
+	}
+	return ""
+}
+
+func (m *BandDescription_Beacon) GetFrequencies() []uint64 {
+	if m != nil {
+		return m.Frequencies
+	}
+	return nil
+}
+
+type BandDescription_Channel struct {
+	Frequency            uint64        `protobuf:"varint,1,opt,name=frequency,proto3" json:"frequency,omitempty"`
+	MinDataRate          DataRateIndex `protobuf:"varint,2,opt,name=min_data_rate,json=minDataRate,proto3,enum=ttn.lorawan.v3.DataRateIndex" json:"min_data_rate,omitempty"`
+	MaxDataRate          DataRateIndex `protobuf:"varint,3,opt,name=max_data_rate,json=maxDataRate,proto3,enum=ttn.lorawan.v3.DataRateIndex" json:"max_data_rate,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}      `json:"-"`
+	XXX_unrecognized     []byte        `json:"-"`
+	XXX_sizecache        int32         `json:"-"`
+}
+
+func (m *BandDescription_Channel) Reset()         { *m = BandDescription_Channel{} }
+func (m *BandDescription_Channel) String() string { return proto.CompactTextString(m) }
+func (*BandDescription_Channel) ProtoMessage()    {}
+func (*BandDescription_Channel) Descriptor() ([]byte, []int) {
+	return fileDescriptor_2ed64f51a0283877, []int{6, 1}
+}
+func (m *BandDescription_Channel) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_BandDescription_Channel.Unmarshal(m, b)
+}
+func (m *BandDescription_Channel) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_BandDescription_Channel.Marshal(b, m, deterministic)
+}
+func (m *BandDescription_Channel) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_BandDescription_Channel.Merge(m, src)
+}
+func (m *BandDescription_Channel) XXX_Size() int {
+	return xxx_messageInfo_BandDescription_Channel.Size(m)
+}
+func (m *BandDescription_Channel) XXX_DiscardUnknown() {
+	xxx_messageInfo_BandDescription_Channel.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_BandDescription_Channel proto.InternalMessageInfo
+
+func (m *BandDescription_Channel) GetFrequency() uint64 {
+	if m != nil {
+		return m.Frequency
+	}
+	return 0
+}
+
+func (m *BandDescription_Channel) GetMinDataRate() DataRateIndex {
+	if m != nil {
+		return m.MinDataRate
+	}
+	return DataRateIndex_DATA_RATE_0
+}
+
+func (m *BandDescription_Channel) GetMaxDataRate() DataRateIndex {
+	if m != nil {
+		return m.MaxDataRate
+	}
+	return DataRateIndex_DATA_RATE_0
+}
+
+type BandDescription_SubBandParameters struct {
+	MinFrequency         uint64   `protobuf:"varint,1,opt,name=min_frequency,json=minFrequency,proto3" json:"min_frequency,omitempty"`
+	MaxFrequency         uint64   `protobuf:"varint,2,opt,name=max_frequency,json=maxFrequency,proto3" json:"max_frequency,omitempty"`
+	DutyCycle            float32  `protobuf:"fixed32,3,opt,name=duty_cycle,json=dutyCycle,proto3" json:"duty_cycle,omitempty"`
+	MaxEirp              float32  `protobuf:"fixed32,4,opt,name=max_eirp,json=maxEirp,proto3" json:"max_eirp,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *BandDescription_SubBandParameters) Reset()         { *m = BandDescription_SubBandParameters{} }
+func (m *BandDescription_SubBandParameters) String() string { return proto.CompactTextString(m) }
+func (*BandDescription_SubBandParameters) ProtoMessage()    {}
+func (*BandDescription_SubBandParameters) Descriptor() ([]byte, []int) {
+	return fileDescriptor_2ed64f51a0283877, []int{6, 2}
+}
+func (m *BandDescription_SubBandParameters) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_BandDescription_SubBandParameters.Unmarshal(m, b)
+}
+func (m *BandDescription_SubBandParameters) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_BandDescription_SubBandParameters.Marshal(b, m, deterministic)
+}
+func (m *BandDescription_SubBandParameters) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_BandDescription_SubBandParameters.Merge(m, src)
+}
+func (m *BandDescription_SubBandParameters) XXX_Size() int {
+	return xxx_messageInfo_BandDescription_SubBandParameters.Size(m)
+}
+func (m *BandDescription_SubBandParameters) XXX_DiscardUnknown() {
+	xxx_messageInfo_BandDescription_SubBandParameters.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_BandDescription_SubBandParameters proto.InternalMessageInfo
+
+func (m *BandDescription_SubBandParameters) GetMinFrequency() uint64 {
+	if m != nil {
+		return m.MinFrequency
+	}
+	return 0
+}
+
+func (m *BandDescription_SubBandParameters) GetMaxFrequency() uint64 {
+	if m != nil {
+		return m.MaxFrequency
+	}
+	return 0
+}
+
+func (m *BandDescription_SubBandParameters) GetDutyCycle() float32 {
+	if m != nil {
+		return m.DutyCycle
+	}
+	return 0
+}
+
+func (m *BandDescription_SubBandParameters) GetMaxEirp() float32 {
+	if m != nil {
+		return m.MaxEirp
+	}
+	return 0
+}
+
+type BandDescription_BandDataRate struct {
+	Rate                 *DataRate `protobuf:"bytes,1,opt,name=rate,proto3" json:"rate,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}  `json:"-"`
+	XXX_unrecognized     []byte    `json:"-"`
+	XXX_sizecache        int32     `json:"-"`
+}
+
+func (m *BandDescription_BandDataRate) Reset()         { *m = BandDescription_BandDataRate{} }
+func (m *BandDescription_BandDataRate) String() string { return proto.CompactTextString(m) }
+func (*BandDescription_BandDataRate) ProtoMessage()    {}
+func (*BandDescription_BandDataRate) Descriptor() ([]byte, []int) {
+	return fileDescriptor_2ed64f51a0283877, []int{6, 3}
+}
+func (m *BandDescription_BandDataRate) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_BandDescription_BandDataRate.Unmarshal(m, b)
+}
+func (m *BandDescription_BandDataRate) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_BandDescription_BandDataRate.Marshal(b, m, deterministic)
+}
+func (m *BandDescription_BandDataRate) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_BandDescription_BandDataRate.Merge(m, src)
+}
+func (m *BandDescription_BandDataRate) XXX_Size() int {
+	return xxx_messageInfo_BandDescription_BandDataRate.Size(m)
+}
+func (m *BandDescription_BandDataRate) XXX_DiscardUnknown() {
+	xxx_messageInfo_BandDescription_BandDataRate.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_BandDescription_BandDataRate proto.InternalMessageInfo
+
+func (m *BandDescription_BandDataRate) GetRate() *DataRate {
+	if m != nil {
+		return m.Rate
+	}
+	return nil
+}
+
+type BandDescription_Rx2Parameters struct {
+	DataRateIndex        DataRateIndex `protobuf:"varint,1,opt,name=data_rate_index,json=dataRateIndex,proto3,enum=ttn.lorawan.v3.DataRateIndex" json:"data_rate_index,omitempty"`
+	Frequency            uint64        `protobuf:"varint,2,opt,name=frequency,proto3" json:"frequency,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}      `json:"-"`
+	XXX_unrecognized     []byte        `json:"-"`
+	XXX_sizecache        int32         `json:"-"`
+}
+
+func (m *BandDescription_Rx2Parameters) Reset()         { *m = BandDescription_Rx2Parameters{} }
+func (m *BandDescription_Rx2Parameters) String() string { return proto.CompactTextString(m) }
+func (*BandDescription_Rx2Parameters) ProtoMessage()    {}
+func (*BandDescription_Rx2Parameters) Descriptor() ([]byte, []int) {
+	return fileDescriptor_2ed64f51a0283877, []int{6, 5}
+}
+func (m *BandDescription_Rx2Parameters) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_BandDescription_Rx2Parameters.Unmarshal(m, b)
+}
+func (m *BandDescription_Rx2Parameters) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_BandDescription_Rx2Parameters.Marshal(b, m, deterministic)
+}
+func (m *BandDescription_Rx2Parameters) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_BandDescription_Rx2Parameters.Merge(m, src)
+}
+func (m *BandDescription_Rx2Parameters) XXX_Size() int {
+	return xxx_messageInfo_BandDescription_Rx2Parameters.Size(m)
+}
+func (m *BandDescription_Rx2Parameters) XXX_DiscardUnknown() {
+	xxx_messageInfo_BandDescription_Rx2Parameters.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_BandDescription_Rx2Parameters proto.InternalMessageInfo
+
+func (m *BandDescription_Rx2Parameters) GetDataRateIndex() DataRateIndex {
+	if m != nil {
+		return m.DataRateIndex
+	}
+	return DataRateIndex_DATA_RATE_0
+}
+
+func (m *BandDescription_Rx2Parameters) GetFrequency() uint64 {
+	if m != nil {
+		return m.Frequency
+	}
+	return 0
+}
+
+type BandDescription_DwellTime struct {
+	Uplinks              *types.BoolValue `protobuf:"bytes,1,opt,name=uplinks,proto3" json:"uplinks,omitempty"`
+	Downlinks            *types.BoolValue `protobuf:"bytes,2,opt,name=downlinks,proto3" json:"downlinks,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}         `json:"-"`
+	XXX_unrecognized     []byte           `json:"-"`
+	XXX_sizecache        int32            `json:"-"`
+}
+
+func (m *BandDescription_DwellTime) Reset()         { *m = BandDescription_DwellTime{} }
+func (m *BandDescription_DwellTime) String() string { return proto.CompactTextString(m) }
+func (*BandDescription_DwellTime) ProtoMessage()    {}
+func (*BandDescription_DwellTime) Descriptor() ([]byte, []int) {
+	return fileDescriptor_2ed64f51a0283877, []int{6, 6}
+}
+func (m *BandDescription_DwellTime) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_BandDescription_DwellTime.Unmarshal(m, b)
+}
+func (m *BandDescription_DwellTime) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_BandDescription_DwellTime.Marshal(b, m, deterministic)
+}
+func (m *BandDescription_DwellTime) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_BandDescription_DwellTime.Merge(m, src)
+}
+func (m *BandDescription_DwellTime) XXX_Size() int {
+	return xxx_messageInfo_BandDescription_DwellTime.Size(m)
+}
+func (m *BandDescription_DwellTime) XXX_DiscardUnknown() {
+	xxx_messageInfo_BandDescription_DwellTime.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_BandDescription_DwellTime proto.InternalMessageInfo
+
+func (m *BandDescription_DwellTime) GetUplinks() *types.BoolValue {
+	if m != nil {
+		return m.Uplinks
+	}
+	return nil
+}
+
+func (m *BandDescription_DwellTime) GetDownlinks() *types.BoolValue {
+	if m != nil {
+		return m.Downlinks
+	}
+	return nil
+}
+
+type ListBandsResponse struct {
+	Descriptions         map[string]*ListBandsResponse_VersionedBandDescription `protobuf:"bytes,1,rep,name=descriptions,proto3" json:"descriptions,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	XXX_NoUnkeyedLiteral struct{}                                               `json:"-"`
+	XXX_unrecognized     []byte                                                 `json:"-"`
+	XXX_sizecache        int32                                                  `json:"-"`
+}
+
+func (m *ListBandsResponse) Reset()         { *m = ListBandsResponse{} }
+func (m *ListBandsResponse) String() string { return proto.CompactTextString(m) }
+func (*ListBandsResponse) ProtoMessage()    {}
+func (*ListBandsResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_2ed64f51a0283877, []int{7}
+}
+func (m *ListBandsResponse) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_ListBandsResponse.Unmarshal(m, b)
+}
+func (m *ListBandsResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_ListBandsResponse.Marshal(b, m, deterministic)
+}
+func (m *ListBandsResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListBandsResponse.Merge(m, src)
+}
+func (m *ListBandsResponse) XXX_Size() int {
+	return xxx_messageInfo_ListBandsResponse.Size(m)
+}
+func (m *ListBandsResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_ListBandsResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ListBandsResponse proto.InternalMessageInfo
+
+func (m *ListBandsResponse) GetDescriptions() map[string]*ListBandsResponse_VersionedBandDescription {
+	if m != nil {
+		return m.Descriptions
+	}
+	return nil
+}
+
+type ListBandsResponse_VersionedBandDescription struct {
+	Band                 map[string]*BandDescription `protobuf:"bytes,1,rep,name=band,proto3" json:"band,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	XXX_NoUnkeyedLiteral struct{}                    `json:"-"`
+	XXX_unrecognized     []byte                      `json:"-"`
+	XXX_sizecache        int32                       `json:"-"`
+}
+
+func (m *ListBandsResponse_VersionedBandDescription) Reset() {
+	*m = ListBandsResponse_VersionedBandDescription{}
+}
+func (m *ListBandsResponse_VersionedBandDescription) String() string {
+	return proto.CompactTextString(m)
+}
+func (*ListBandsResponse_VersionedBandDescription) ProtoMessage() {}
+func (*ListBandsResponse_VersionedBandDescription) Descriptor() ([]byte, []int) {
+	return fileDescriptor_2ed64f51a0283877, []int{7, 0}
+}
+func (m *ListBandsResponse_VersionedBandDescription) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_ListBandsResponse_VersionedBandDescription.Unmarshal(m, b)
+}
+func (m *ListBandsResponse_VersionedBandDescription) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_ListBandsResponse_VersionedBandDescription.Marshal(b, m, deterministic)
+}
+func (m *ListBandsResponse_VersionedBandDescription) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListBandsResponse_VersionedBandDescription.Merge(m, src)
+}
+func (m *ListBandsResponse_VersionedBandDescription) XXX_Size() int {
+	return xxx_messageInfo_ListBandsResponse_VersionedBandDescription.Size(m)
+}
+func (m *ListBandsResponse_VersionedBandDescription) XXX_DiscardUnknown() {
+	xxx_messageInfo_ListBandsResponse_VersionedBandDescription.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ListBandsResponse_VersionedBandDescription proto.InternalMessageInfo
+
+func (m *ListBandsResponse_VersionedBandDescription) GetBand() map[string]*BandDescription {
+	if m != nil {
+		return m.Band
+	}
+	return nil
+}
+
 func init() {
 	proto.RegisterType((*ListFrequencyPlansRequest)(nil), "ttn.lorawan.v3.ListFrequencyPlansRequest")
 	golang_proto.RegisterType((*ListFrequencyPlansRequest)(nil), "ttn.lorawan.v3.ListFrequencyPlansRequest")
@@ -172,6 +979,38 @@ func init() {
 	golang_proto.RegisterType((*FrequencyPlanDescription)(nil), "ttn.lorawan.v3.FrequencyPlanDescription")
 	proto.RegisterType((*ListFrequencyPlansResponse)(nil), "ttn.lorawan.v3.ListFrequencyPlansResponse")
 	golang_proto.RegisterType((*ListFrequencyPlansResponse)(nil), "ttn.lorawan.v3.ListFrequencyPlansResponse")
+	proto.RegisterType((*GetPhyVersionsRequest)(nil), "ttn.lorawan.v3.GetPhyVersionsRequest")
+	golang_proto.RegisterType((*GetPhyVersionsRequest)(nil), "ttn.lorawan.v3.GetPhyVersionsRequest")
+	proto.RegisterType((*GetPhyVersionsResponse)(nil), "ttn.lorawan.v3.GetPhyVersionsResponse")
+	golang_proto.RegisterType((*GetPhyVersionsResponse)(nil), "ttn.lorawan.v3.GetPhyVersionsResponse")
+	proto.RegisterType((*GetPhyVersionsResponse_VersionInfo)(nil), "ttn.lorawan.v3.GetPhyVersionsResponse.VersionInfo")
+	golang_proto.RegisterType((*GetPhyVersionsResponse_VersionInfo)(nil), "ttn.lorawan.v3.GetPhyVersionsResponse.VersionInfo")
+	proto.RegisterType((*ListBandsRequest)(nil), "ttn.lorawan.v3.ListBandsRequest")
+	golang_proto.RegisterType((*ListBandsRequest)(nil), "ttn.lorawan.v3.ListBandsRequest")
+	proto.RegisterType((*BandDescription)(nil), "ttn.lorawan.v3.BandDescription")
+	golang_proto.RegisterType((*BandDescription)(nil), "ttn.lorawan.v3.BandDescription")
+	proto.RegisterMapType((map[uint32]*BandDescription_BandDataRate)(nil), "ttn.lorawan.v3.BandDescription.DataRatesEntry")
+	golang_proto.RegisterMapType((map[uint32]*BandDescription_BandDataRate)(nil), "ttn.lorawan.v3.BandDescription.DataRatesEntry")
+	proto.RegisterType((*BandDescription_Beacon)(nil), "ttn.lorawan.v3.BandDescription.Beacon")
+	golang_proto.RegisterType((*BandDescription_Beacon)(nil), "ttn.lorawan.v3.BandDescription.Beacon")
+	proto.RegisterType((*BandDescription_Channel)(nil), "ttn.lorawan.v3.BandDescription.Channel")
+	golang_proto.RegisterType((*BandDescription_Channel)(nil), "ttn.lorawan.v3.BandDescription.Channel")
+	proto.RegisterType((*BandDescription_SubBandParameters)(nil), "ttn.lorawan.v3.BandDescription.SubBandParameters")
+	golang_proto.RegisterType((*BandDescription_SubBandParameters)(nil), "ttn.lorawan.v3.BandDescription.SubBandParameters")
+	proto.RegisterType((*BandDescription_BandDataRate)(nil), "ttn.lorawan.v3.BandDescription.BandDataRate")
+	golang_proto.RegisterType((*BandDescription_BandDataRate)(nil), "ttn.lorawan.v3.BandDescription.BandDataRate")
+	proto.RegisterType((*BandDescription_Rx2Parameters)(nil), "ttn.lorawan.v3.BandDescription.Rx2Parameters")
+	golang_proto.RegisterType((*BandDescription_Rx2Parameters)(nil), "ttn.lorawan.v3.BandDescription.Rx2Parameters")
+	proto.RegisterType((*BandDescription_DwellTime)(nil), "ttn.lorawan.v3.BandDescription.DwellTime")
+	golang_proto.RegisterType((*BandDescription_DwellTime)(nil), "ttn.lorawan.v3.BandDescription.DwellTime")
+	proto.RegisterType((*ListBandsResponse)(nil), "ttn.lorawan.v3.ListBandsResponse")
+	golang_proto.RegisterType((*ListBandsResponse)(nil), "ttn.lorawan.v3.ListBandsResponse")
+	proto.RegisterMapType((map[string]*ListBandsResponse_VersionedBandDescription)(nil), "ttn.lorawan.v3.ListBandsResponse.DescriptionsEntry")
+	golang_proto.RegisterMapType((map[string]*ListBandsResponse_VersionedBandDescription)(nil), "ttn.lorawan.v3.ListBandsResponse.DescriptionsEntry")
+	proto.RegisterType((*ListBandsResponse_VersionedBandDescription)(nil), "ttn.lorawan.v3.ListBandsResponse.VersionedBandDescription")
+	golang_proto.RegisterType((*ListBandsResponse_VersionedBandDescription)(nil), "ttn.lorawan.v3.ListBandsResponse.VersionedBandDescription")
+	proto.RegisterMapType((map[string]*BandDescription)(nil), "ttn.lorawan.v3.ListBandsResponse.VersionedBandDescription.BandEntry")
+	golang_proto.RegisterMapType((map[string]*BandDescription)(nil), "ttn.lorawan.v3.ListBandsResponse.VersionedBandDescription.BandEntry")
 }
 
 func init() {
@@ -182,120 +1021,119 @@ func init() {
 }
 
 var fileDescriptor_2ed64f51a0283877 = []byte{
-	// 401 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x8c, 0x52, 0xc1, 0xaa, 0x13, 0x31,
-	0x14, 0x6d, 0xa6, 0xa5, 0x62, 0xa4, 0x23, 0x64, 0xe3, 0x38, 0x48, 0x28, 0x05, 0xa5, 0x0a, 0x4d,
-	0xa0, 0xfd, 0x83, 0x2a, 0x82, 0xa0, 0xa0, 0xb3, 0x74, 0x53, 0x32, 0x33, 0x99, 0x34, 0xb4, 0x4d,
-	0xc6, 0x49, 0xa6, 0xc5, 0x8d, 0x88, 0x5f, 0x20, 0xf4, 0x1b, 0x04, 0x3f, 0xc3, 0x7f, 0x70, 0xe3,
-	0xd6, 0xa9, 0x0b, 0x97, 0xef, 0x13, 0x1e, 0x93, 0xbe, 0x96, 0x37, 0xef, 0xb5, 0xf0, 0x76, 0x39,
-	0xf7, 0xde, 0x73, 0xcf, 0x3d, 0x37, 0x17, 0x92, 0xa5, 0x2e, 0xd8, 0x86, 0xa9, 0x91, 0xb1, 0x2c,
-	0x59, 0x50, 0x96, 0x4b, 0x9a, 0x68, 0x95, 0x49, 0x51, 0x16, 0xcc, 0x4a, 0xad, 0x66, 0x86, 0x17,
-	0x6b, 0x99, 0x70, 0x43, 0xf2, 0x42, 0x5b, 0x8d, 0x7c, 0x6b, 0xd5, 0x81, 0x43, 0xd6, 0x93, 0x70,
-	0x24, 0xa4, 0x9d, 0x97, 0x31, 0x49, 0xf4, 0x8a, 0x0a, 0x2d, 0x34, 0x75, 0x65, 0x71, 0x99, 0x39,
-	0xe4, 0x80, 0x7b, 0xed, 0xe9, 0xe1, 0x13, 0xa1, 0xb5, 0x58, 0x72, 0xa7, 0xc3, 0x94, 0xd2, 0xd6,
-	0x89, 0x5c, 0x35, 0x1f, 0x4c, 0xe1, 0xe3, 0xb7, 0xd2, 0xd8, 0xd7, 0x05, 0xff, 0x54, 0x72, 0x95,
-	0x7c, 0x7e, 0xbf, 0x64, 0xca, 0x44, 0x35, 0x30, 0x16, 0x3d, 0x85, 0x7e, 0xcc, 0x0c, 0x9f, 0x65,
-	0x87, 0x6c, 0x00, 0xfa, 0x60, 0xd8, 0x8b, 0x7a, 0x75, 0xf4, 0x48, 0x19, 0x7c, 0x81, 0x41, 0x83,
-	0xff, 0x8a, 0x9b, 0xa4, 0x90, 0x79, 0x2d, 0x83, 0x7c, 0xe8, 0xc9, 0xd4, 0xd1, 0xee, 0x47, 0x9e,
-	0x4c, 0xd1, 0x23, 0x78, 0xcf, 0xb5, 0x94, 0x69, 0xe0, 0xb9, 0x60, 0xb7, 0x86, 0x6f, 0x52, 0x84,
-	0x60, 0x47, 0xb1, 0x15, 0x0f, 0xda, 0x2e, 0xea, 0xde, 0x27, 0xf4, 0x3b, 0xa7, 0xf4, 0x35, 0x0c,
-	0x4f, 0x79, 0x30, 0xb9, 0x56, 0x86, 0xa3, 0x0f, 0xf0, 0xe1, 0x91, 0x3f, 0xcb, 0xeb, 0x54, 0x00,
-	0xfa, 0xed, 0xe1, 0x83, 0xf1, 0x90, 0x34, 0x17, 0x4b, 0xce, 0x99, 0x88, 0xfc, 0xac, 0xd1, 0x7a,
-	0xfc, 0x03, 0xc0, 0xde, 0xcb, 0xeb, 0x5f, 0x86, 0xb6, 0x00, 0xa2, 0xdb, 0x33, 0xa0, 0xe7, 0x37,
-	0x25, 0xce, 0xee, 0x3a, 0x7c, 0x71, 0x97, 0xd2, 0xbd, 0xa5, 0xc1, 0xb3, 0x6f, 0xbf, 0xff, 0x6d,
-	0xbd, 0x3e, 0xc2, 0xcd, 0xc3, 0xa1, 0xc7, 0x31, 0x47, 0xce, 0xe7, 0xf4, 0xdd, 0x9f, 0xbf, 0xb8,
-	0xf5, 0xb5, 0xc2, 0xe0, 0x67, 0x85, 0xc1, 0xff, 0x0a, 0xb7, 0x2e, 0x2a, 0x0c, 0xbe, 0xef, 0x70,
-	0xeb, 0xd7, 0x0e, 0x83, 0x8f, 0x54, 0x68, 0x62, 0xe7, 0xdc, 0xce, 0xa5, 0x12, 0x86, 0x28, 0x6e,
-	0x37, 0xba, 0x58, 0xd0, 0xe6, 0x71, 0xae, 0x27, 0x34, 0x5f, 0x08, 0x6a, 0xad, 0xca, 0xe3, 0xb8,
-	0xeb, 0x4e, 0x66, 0x72, 0x19, 0x00, 0x00, 0xff, 0xff, 0x55, 0xda, 0x9f, 0x07, 0xc1, 0x02, 0x00,
-	0x00,
-}
-
-func (this *ListFrequencyPlansRequest) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ListFrequencyPlansRequest)
-	if !ok {
-		that2, ok := that.(ListFrequencyPlansRequest)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.BaseFrequency != that1.BaseFrequency {
-		return false
-	}
-	return true
-}
-func (this *FrequencyPlanDescription) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*FrequencyPlanDescription)
-	if !ok {
-		that2, ok := that.(FrequencyPlanDescription)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.Id != that1.Id {
-		return false
-	}
-	if this.BaseId != that1.BaseId {
-		return false
-	}
-	if this.Name != that1.Name {
-		return false
-	}
-	if this.BaseFrequency != that1.BaseFrequency {
-		return false
-	}
-	return true
-}
-func (this *ListFrequencyPlansResponse) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ListFrequencyPlansResponse)
-	if !ok {
-		that2, ok := that.(ListFrequencyPlansResponse)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if len(this.FrequencyPlans) != len(that1.FrequencyPlans) {
-		return false
-	}
-	for i := range this.FrequencyPlans {
-		if !this.FrequencyPlans[i].Equal(that1.FrequencyPlans[i]) {
-			return false
-		}
-	}
-	return true
+	// 1783 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xac, 0x58, 0x4f, 0x6f, 0xdb, 0xc8,
+	0x15, 0x2f, 0x25, 0xd9, 0x96, 0x9e, 0x2c, 0x59, 0x9e, 0x38, 0x0e, 0xcd, 0xc4, 0x8e, 0xea, 0x60,
+	0xb3, 0xda, 0x22, 0x96, 0x1a, 0xa5, 0x0b, 0x2c, 0x8c, 0xb6, 0x80, 0x6d, 0x39, 0x59, 0x1b, 0x49,
+	0xd7, 0xa5, 0xbd, 0xdb, 0x6d, 0x2e, 0xc4, 0x88, 0x1c, 0x49, 0xb3, 0x26, 0x87, 0x5c, 0x72, 0x24,
+	0x4b, 0x48, 0xb7, 0x87, 0x45, 0xbf, 0xc1, 0x1e, 0x7a, 0xeb, 0x07, 0x28, 0xd0, 0x2f, 0xd0, 0xd3,
+	0x7e, 0x82, 0x5e, 0x0a, 0xf4, 0x0b, 0xb4, 0xa7, 0x5e, 0x0a, 0xf4, 0xd8, 0x53, 0x31, 0xc3, 0x3f,
+	0x22, 0x25, 0xc5, 0x4a, 0x8a, 0xde, 0x38, 0xef, 0xcf, 0xef, 0xbd, 0x79, 0xf3, 0x9b, 0x99, 0x37,
+	0x84, 0xa6, 0xed, 0xfa, 0xf8, 0x06, 0xb3, 0x83, 0x80, 0x63, 0xf3, 0xba, 0x85, 0x3d, 0xda, 0x32,
+	0x5d, 0xd6, 0xa3, 0xfd, 0xa1, 0x8f, 0x39, 0x75, 0x99, 0x11, 0x10, 0x7f, 0x44, 0x4d, 0x12, 0x34,
+	0x3d, 0xdf, 0xe5, 0x2e, 0xaa, 0x72, 0xce, 0x62, 0x9f, 0xe6, 0xe8, 0x99, 0xd6, 0xe9, 0x53, 0x3e,
+	0x18, 0x76, 0x9b, 0xa6, 0xeb, 0xb4, 0xae, 0x06, 0xe4, 0x6a, 0x40, 0x59, 0x3f, 0x38, 0x63, 0xd6,
+	0x30, 0xe0, 0x3e, 0x25, 0x41, 0x4b, 0x7a, 0x99, 0x07, 0x7d, 0xc2, 0x0e, 0xfa, 0xee, 0x41, 0xcf,
+	0xc6, 0xfd, 0xa0, 0x85, 0x19, 0x73, 0xb9, 0x44, 0x8f, 0x50, 0xb5, 0xa3, 0x14, 0x0a, 0x61, 0x23,
+	0x77, 0xe2, 0xf9, 0xee, 0x78, 0x92, 0x76, 0x1e, 0x61, 0x9b, 0x5a, 0x98, 0x93, 0xd6, 0xdc, 0x47,
+	0x04, 0x71, 0x90, 0x82, 0xe8, 0xbb, 0x7d, 0x37, 0x74, 0xee, 0x0e, 0x7b, 0x72, 0x24, 0x07, 0xf2,
+	0x2b, 0x32, 0xdf, 0xeb, 0xbb, 0x6e, 0xdf, 0x26, 0x53, 0x2b, 0x2b, 0x9a, 0x70, 0xa4, 0x7f, 0x10,
+	0xe9, 0x45, 0x41, 0xe6, 0xf3, 0x9d, 0xf3, 0xbe, 0xf1, 0xb1, 0xe7, 0x11, 0x3f, 0xd6, 0x3f, 0x9c,
+	0xaf, 0x6a, 0x5c, 0x33, 0x69, 0xb0, 0xff, 0x12, 0x76, 0x5e, 0xd2, 0x80, 0x3f, 0xf7, 0xc9, 0xd7,
+	0x43, 0xc2, 0xcc, 0xc9, 0x85, 0x8d, 0x59, 0xa0, 0x8b, 0x41, 0xc0, 0xd1, 0x07, 0x50, 0xed, 0xe2,
+	0x80, 0x18, 0xbd, 0x58, 0xab, 0x2a, 0x75, 0xa5, 0x51, 0xd1, 0x2b, 0x42, 0x9a, 0xb8, 0x1c, 0x16,
+	0xff, 0xfd, 0xc7, 0x9d, 0x42, 0xf1, 0x07, 0x35, 0x65, 0xff, 0xb7, 0xa0, 0x66, 0x90, 0x3a, 0x24,
+	0x30, 0x7d, 0xea, 0x89, 0x8c, 0x51, 0x15, 0x72, 0xd4, 0x92, 0x00, 0x25, 0x3d, 0x47, 0x2d, 0x74,
+	0x0f, 0xd6, 0x24, 0x38, 0xb5, 0xd4, 0x9c, 0x14, 0xae, 0x8a, 0xe1, 0x99, 0x85, 0x10, 0x14, 0x18,
+	0x76, 0x88, 0x9a, 0x97, 0x52, 0xf9, 0xbd, 0x20, 0x93, 0xc2, 0x82, 0x4c, 0xf6, 0x5d, 0xd0, 0x16,
+	0xcd, 0x26, 0xf0, 0x5c, 0x16, 0x10, 0xf4, 0x4b, 0xd8, 0x48, 0xfc, 0x0d, 0x4f, 0xa8, 0x54, 0xa5,
+	0x9e, 0x6f, 0x94, 0xdb, 0x8d, 0x66, 0x96, 0x4c, 0xcd, 0xb7, 0x4d, 0x42, 0xaf, 0xf6, 0x32, 0xd0,
+	0xfb, 0x87, 0x70, 0xf7, 0x05, 0xe1, 0x17, 0x83, 0xc9, 0x17, 0xc4, 0x0f, 0xc4, 0xba, 0xc4, 0xa5,
+	0x93, 0xb3, 0x63, 0x96, 0x91, 0x4c, 0x79, 0x55, 0x0c, 0xcf, 0xac, 0x54, 0xb1, 0xfe, 0xa6, 0xc0,
+	0xf6, 0xac, 0x73, 0x94, 0xe9, 0xe7, 0xb0, 0x3e, 0x0a, 0x65, 0x06, 0x65, 0x3d, 0x57, 0xcd, 0xc9,
+	0x34, 0xdb, 0xb3, 0x69, 0x2e, 0xf6, 0x6e, 0x46, 0x82, 0x33, 0xd6, 0x73, 0xf5, 0xf2, 0x68, 0x3a,
+	0xd0, 0x08, 0x94, 0x53, 0xba, 0xb7, 0xe6, 0x88, 0x7e, 0x06, 0xeb, 0xde, 0x60, 0x62, 0x44, 0xae,
+	0x81, 0x0c, 0x5f, 0x6d, 0x6b, 0xb3, 0xe1, 0x2f, 0x3e, 0xfd, 0x75, 0x04, 0xa7, 0x97, 0xbd, 0x69,
+	0x1e, 0xfb, 0xbf, 0x81, 0x9a, 0x58, 0x85, 0x63, 0xcc, 0xac, 0xa5, 0xf5, 0x40, 0xa7, 0x50, 0x4e,
+	0xc5, 0x92, 0x54, 0xb8, 0x35, 0xd4, 0x71, 0xf1, 0x3f, 0xc7, 0x2b, 0xdf, 0x2a, 0xb9, 0x9a, 0xa2,
+	0xc3, 0x34, 0x68, 0xaa, 0xac, 0xff, 0xdc, 0x82, 0x0d, 0x11, 0xfa, 0x36, 0xee, 0xfd, 0x1c, 0x56,
+	0xbb, 0x04, 0x9b, 0x51, 0xbc, 0x72, 0xfb, 0xf1, 0x6c, 0xbc, 0x19, 0x80, 0xe6, 0xb1, 0xb4, 0xd6,
+	0x23, 0x2f, 0xd4, 0x86, 0xbb, 0x1e, 0x65, 0x7d, 0x23, 0xb0, 0x5d, 0x9e, 0x70, 0x92, 0x92, 0x40,
+	0xad, 0xd7, 0xf3, 0x8d, 0x82, 0x7e, 0x47, 0x28, 0x2f, 0x6d, 0x37, 0x21, 0x22, 0x25, 0x01, 0x6a,
+	0xc2, 0x1d, 0x07, 0x8f, 0x8d, 0xa1, 0x67, 0x53, 0x76, 0x6d, 0x98, 0x03, 0xcc, 0x18, 0xb1, 0x83,
+	0x88, 0xc7, 0x9b, 0x0e, 0x1e, 0x7f, 0x2e, 0x35, 0x27, 0x91, 0x02, 0x5d, 0xc0, 0xc6, 0xac, 0xed,
+	0x8a, 0xa4, 0xc1, 0x87, 0xcb, 0x92, 0x8d, 0x20, 0xf4, 0xea, 0x30, 0x8b, 0xd8, 0x86, 0xbb, 0x22,
+	0x03, 0xcb, 0xbd, 0x61, 0x59, 0xdc, 0x55, 0x99, 0x83, 0x48, 0xaf, 0x13, 0xe9, 0x12, 0x9f, 0x2b,
+	0xd8, 0x9c, 0xb7, 0x5f, 0x7b, 0xbf, 0x3c, 0x6a, 0xd6, 0x2c, 0xea, 0x2f, 0xa0, 0x14, 0x0c, 0xbb,
+	0x86, 0xa0, 0x40, 0xa0, 0x16, 0x25, 0xda, 0xd3, 0x65, 0x68, 0x97, 0xc3, 0xae, 0x10, 0x5d, 0x60,
+	0x1f, 0x3b, 0x84, 0x13, 0x3f, 0xd0, 0x8b, 0x41, 0x28, 0x0a, 0xd0, 0x2b, 0x00, 0x0b, 0x73, 0x6c,
+	0xf8, 0x98, 0x93, 0x40, 0x2d, 0x49, 0xc0, 0xe6, 0x32, 0xc0, 0x0e, 0xe6, 0x58, 0x17, 0x0e, 0xa7,
+	0x8c, 0xfb, 0x13, 0xbd, 0x64, 0xc5, 0x63, 0xf4, 0x61, 0x78, 0x50, 0x18, 0xce, 0xd0, 0xe6, 0xd4,
+	0xb3, 0x29, 0xf1, 0x55, 0xa8, 0x2b, 0x8d, 0x42, 0xb8, 0xfd, 0x5f, 0x25, 0x52, 0xf4, 0x04, 0x10,
+	0x75, 0x3c, 0x9b, 0x38, 0x84, 0xf1, 0xc0, 0x30, 0x7b, 0x86, 0x4d, 0x03, 0xae, 0x96, 0xeb, 0x4a,
+	0xa3, 0xa8, 0xd7, 0xa6, 0x9a, 0x93, 0x9e, 0xd8, 0x0f, 0xe8, 0xa7, 0xb0, 0x1e, 0x99, 0x18, 0x7c,
+	0xe2, 0x11, 0x75, 0x7d, 0x31, 0xd7, 0x4f, 0x9e, 0x0b, 0xeb, 0xab, 0x89, 0x47, 0x74, 0x30, 0x7b,
+	0xf1, 0x37, 0x3a, 0x82, 0x0d, 0x9f, 0x98, 0x84, 0x8e, 0x88, 0x61, 0x11, 0x1b, 0x4f, 0x8c, 0xa7,
+	0x6a, 0x45, 0x92, 0x77, 0xa7, 0x19, 0x5e, 0x02, 0xcd, 0xf8, 0x12, 0x68, 0x76, 0xa2, 0x2b, 0x44,
+	0xaf, 0x44, 0x1e, 0x1d, 0xe1, 0xf0, 0x74, 0x1e, 0xa2, 0xad, 0x56, 0xdf, 0x0b, 0xa2, 0x8d, 0x3e,
+	0x85, 0x3b, 0x5f, 0xb9, 0x94, 0x19, 0xd8, 0x34, 0x89, 0xc7, 0x93, 0x4c, 0x36, 0x96, 0xc1, 0xd4,
+	0x84, 0xd7, 0x91, 0x74, 0x8a, 0x92, 0x59, 0x88, 0xd4, 0x56, 0x6b, 0xef, 0x8b, 0xd4, 0x46, 0x75,
+	0x58, 0x17, 0xbc, 0xee, 0x99, 0x8c, 0x1b, 0x7d, 0xec, 0xa9, 0x9b, 0x72, 0xad, 0xc0, 0xc1, 0xe3,
+	0xe7, 0x26, 0xe3, 0x2f, 0xb0, 0x87, 0x7e, 0x0c, 0x5b, 0xc1, 0xd0, 0xf3, 0x5c, 0x9f, 0x07, 0x86,
+	0x35, 0x61, 0xd8, 0xa1, 0xa6, 0x81, 0x2d, 0x5f, 0x45, 0x72, 0xa5, 0x50, 0xac, 0xeb, 0x84, 0xaa,
+	0x23, 0xcb, 0x47, 0x2f, 0xa0, 0x82, 0x2d, 0xdf, 0xc0, 0xe6, 0xb5, 0x61, 0x53, 0x87, 0x72, 0xf5,
+	0x8e, 0x5c, 0xac, 0x47, 0xb3, 0x8b, 0x75, 0xd4, 0xd1, 0x8f, 0xcc, 0xeb, 0x97, 0xc2, 0xe4, 0x74,
+	0xec, 0xb9, 0x8c, 0x30, 0xae, 0x97, 0xb1, 0xe5, 0xc7, 0x42, 0xf4, 0x19, 0x6c, 0x3b, 0x94, 0x19,
+	0x3e, 0xe1, 0x3e, 0x66, 0x81, 0x43, 0xb9, 0xc1, 0xa9, 0x43, 0xdc, 0x21, 0x57, 0xb7, 0x96, 0xcd,
+	0x74, 0xcb, 0xa1, 0x4c, 0x4f, 0xfc, 0xae, 0x42, 0x37, 0x09, 0x88, 0xc7, 0x8b, 0x00, 0xef, 0x2e,
+	0x07, 0xc4, 0xe3, 0x79, 0xc0, 0xfb, 0x50, 0xe2, 0x63, 0xc3, 0xed, 0xf5, 0x02, 0xc2, 0xd5, 0xed,
+	0x7a, 0xbe, 0x91, 0xd3, 0x8b, 0x7c, 0xfc, 0x99, 0x1c, 0xa3, 0x4b, 0xb8, 0x27, 0xa2, 0x89, 0x5a,
+	0x24, 0x3b, 0xcc, 0xa0, 0xcc, 0x22, 0x63, 0xf5, 0x9e, 0xac, 0xc8, 0xee, 0x6c, 0x45, 0xe2, 0x6d,
+	0x75, 0x26, 0x8c, 0xe4, 0xa1, 0x72, 0x64, 0xf9, 0x19, 0x21, 0x3a, 0x04, 0x8d, 0x8f, 0x0d, 0x4f,
+	0xec, 0x64, 0x23, 0x20, 0x7c, 0xe8, 0x19, 0x62, 0xb7, 0x45, 0xab, 0xa0, 0xaa, 0x72, 0x51, 0xb6,
+	0xf9, 0x58, 0x6e, 0xf5, 0x4b, 0xa1, 0xd7, 0xc9, 0xd7, 0x97, 0xa1, 0x16, 0x35, 0xa0, 0x66, 0x91,
+	0x1e, 0x1e, 0xda, 0xdc, 0x10, 0x89, 0x11, 0xea, 0x7b, 0xea, 0x4e, 0x5d, 0x69, 0xe4, 0xf4, 0x6a,
+	0x24, 0x7f, 0x85, 0xc7, 0xa7, 0xd4, 0xf7, 0x90, 0x09, 0xdb, 0xb1, 0xa5, 0x3f, 0x6e, 0x87, 0xe1,
+	0xe4, 0xc1, 0xa1, 0xee, 0xc9, 0x42, 0x1d, 0x2c, 0x3b, 0x20, 0xf4, 0x71, 0x3b, 0x75, 0xda, 0x6c,
+	0x45, 0x60, 0x19, 0xa9, 0xe8, 0x29, 0xba, 0xae, 0xcb, 0x0d, 0xeb, 0x86, 0xd8, 0xb6, 0x5c, 0x09,
+	0xf5, 0xa1, 0x44, 0xff, 0x68, 0xe9, 0xf1, 0x23, 0x3c, 0xc4, 0x1a, 0xe8, 0x15, 0x81, 0x90, 0x0c,
+	0xb5, 0x3f, 0x28, 0xb0, 0x1a, 0xde, 0x37, 0xe8, 0x14, 0x36, 0x66, 0xab, 0xae, 0xbc, 0x4b, 0xd5,
+	0x2b, 0x56, 0xa6, 0xde, 0x0f, 0xa1, 0x6c, 0xba, 0x96, 0xb8, 0xb0, 0x04, 0x50, 0xd4, 0x6e, 0x41,
+	0x28, 0x12, 0x56, 0xa8, 0x0e, 0xe5, 0xf4, 0x2d, 0xb6, 0x22, 0x6f, 0xb1, 0xb4, 0xe8, 0xbc, 0x50,
+	0xcc, 0xd7, 0x0a, 0xe7, 0x85, 0x62, 0xa1, 0xb6, 0xa2, 0xfd, 0x49, 0x81, 0xb5, 0xe8, 0x28, 0x47,
+	0x0f, 0xa0, 0x94, 0xed, 0x0e, 0x0b, 0xfa, 0x54, 0x80, 0x8e, 0xa0, 0x22, 0xc8, 0x9f, 0xcc, 0x21,
+	0xba, 0xde, 0x97, 0x64, 0x5f, 0x76, 0x28, 0x8b, 0x25, 0x12, 0x42, 0x5c, 0x5a, 0x09, 0x44, 0xfe,
+	0xdd, 0x20, 0xf0, 0x38, 0x96, 0x68, 0xbf, 0x57, 0x60, 0x73, 0xee, 0xf6, 0x40, 0x8f, 0xc2, 0xdc,
+	0x66, 0xb3, 0x5f, 0x77, 0x28, 0x4b, 0xda, 0x3f, 0x69, 0x24, 0x8e, 0x96, 0xc4, 0x28, 0x17, 0x19,
+	0xe1, 0xf1, 0xd4, 0x68, 0x17, 0xc0, 0x1a, 0xf2, 0x89, 0x61, 0x4e, 0x4c, 0x3b, 0xcc, 0x2f, 0xa7,
+	0x97, 0x84, 0xe4, 0x44, 0x08, 0xd0, 0x0e, 0x14, 0x13, 0xa6, 0x16, 0xa4, 0x72, 0xcd, 0x09, 0x29,
+	0xaa, 0x1d, 0xc3, 0xba, 0xa4, 0x45, 0x3c, 0xd9, 0x27, 0x50, 0x90, 0x73, 0x54, 0x24, 0x85, 0xd4,
+	0xb7, 0xcd, 0x51, 0x97, 0x56, 0xe7, 0x85, 0x62, 0xae, 0x96, 0xd7, 0xbe, 0x82, 0x6a, 0xf6, 0x26,
+	0x43, 0x35, 0xc8, 0x5f, 0x93, 0xb8, 0x57, 0x17, 0x9f, 0xe8, 0x18, 0x56, 0x46, 0xd8, 0x1e, 0x92,
+	0xa8, 0xdd, 0x79, 0xb2, 0xb4, 0xdd, 0x49, 0x25, 0xa5, 0x87, 0xae, 0x87, 0xb9, 0x4f, 0x14, 0x8d,
+	0x43, 0x25, 0x4b, 0xff, 0xff, 0x13, 0x41, 0x33, 0x2c, 0xca, 0xcd, 0xb0, 0x48, 0x7b, 0x03, 0xa5,
+	0x64, 0x77, 0xa0, 0x9f, 0xc0, 0x5a, 0xd8, 0xd6, 0x04, 0x51, 0x95, 0xb4, 0xb9, 0xf3, 0xee, 0xd8,
+	0x75, 0xed, 0x2f, 0x44, 0xce, 0x7a, 0x6c, 0x8a, 0x3e, 0x81, 0x52, 0xdc, 0x84, 0x04, 0x51, 0x11,
+	0x6e, 0xf3, 0x9b, 0x1a, 0x27, 0xc4, 0xd7, 0x6a, 0xf7, 0xcf, 0x0b, 0xc5, 0xfb, 0xb5, 0x07, 0xe7,
+	0x85, 0xe2, 0x83, 0xda, 0xee, 0x79, 0xa1, 0xb8, 0x5b, 0xdb, 0xdb, 0xff, 0x73, 0x1e, 0x36, 0x53,
+	0xbd, 0x6e, 0xd4, 0xbe, 0xff, 0x0a, 0xd6, 0xad, 0x69, 0x35, 0xe3, 0x57, 0xc6, 0xb3, 0xd9, 0x92,
+	0xcc, 0x39, 0x36, 0x53, 0x6b, 0x10, 0x75, 0x25, 0x19, 0x20, 0xed, 0x2f, 0x0a, 0xa8, 0x51, 0xc7,
+	0x4b, 0xac, 0xd9, 0x26, 0xf7, 0x4b, 0x28, 0x88, 0x86, 0x2a, 0x8a, 0xd6, 0x59, 0x1e, 0xed, 0x6d,
+	0x48, 0x72, 0xf9, 0xc3, 0xf0, 0x12, 0x51, 0xfb, 0x12, 0x4a, 0x89, 0x28, 0xcd, 0xae, 0x52, 0xc8,
+	0xae, 0x8f, 0xb3, 0xec, 0x7a, 0xb8, 0x84, 0x5d, 0x69, 0x42, 0xbd, 0x81, 0xcd, 0xb9, 0x39, 0x2f,
+	0x88, 0x70, 0x91, 0x8d, 0x70, 0xf8, 0xbf, 0xcf, 0x2d, 0x15, 0xbc, 0xfd, 0xaf, 0x3c, 0x54, 0x4e,
+	0xd2, 0xff, 0x18, 0xd0, 0x77, 0x0a, 0xa0, 0xf9, 0x07, 0x24, 0xfa, 0x68, 0x51, 0xbc, 0x85, 0x4f,
+	0x66, 0xed, 0x47, 0xef, 0x62, 0x1a, 0xe6, 0xb8, 0xff, 0xf8, 0xdb, 0xbf, 0xfe, 0xe3, 0xbb, 0x5c,
+	0x1d, 0xed, 0x65, 0xff, 0x74, 0xb4, 0x12, 0xe6, 0x1f, 0xc8, 0x47, 0x2a, 0xfa, 0x9d, 0x02, 0xd5,
+	0xec, 0x53, 0x0f, 0x7d, 0xb0, 0xec, 0x29, 0x18, 0x66, 0xf3, 0xf8, 0xdd, 0x5e, 0x8c, 0xfb, 0x8f,
+	0x64, 0x26, 0xbb, 0xe8, 0xfe, 0x4c, 0x26, 0xde, 0x60, 0x72, 0x10, 0xbf, 0x02, 0xd1, 0xf7, 0x0a,
+	0x94, 0x92, 0x42, 0xa3, 0xfa, 0x2d, 0x6b, 0x10, 0x06, 0xff, 0xe1, 0xd2, 0x55, 0xda, 0x67, 0x32,
+	0xee, 0x00, 0x6d, 0xcd, 0xc4, 0x95, 0x0f, 0x83, 0xd7, 0xf3, 0x95, 0x91, 0xf2, 0xd6, 0x9b, 0xe8,
+	0x25, 0xf9, 0xcd, 0xeb, 0x26, 0x7a, 0x72, 0xbb, 0x45, 0xeb, 0x4d, 0xea, 0x71, 0xf9, 0xcd, 0xf1,
+	0xc7, 0xdf, 0xff, 0x7d, 0x4f, 0x79, 0xdd, 0xea, 0xbb, 0x4d, 0x3e, 0x20, 0x5c, 0xfe, 0x22, 0x6a,
+	0x32, 0xc2, 0x6f, 0x5c, 0xff, 0xba, 0x95, 0xfd, 0x53, 0x32, 0x7a, 0xd6, 0xf2, 0xae, 0xfb, 0x2d,
+	0xce, 0x99, 0xd7, 0xed, 0xae, 0xca, 0x23, 0xe2, 0xd9, 0x7f, 0x03, 0x00, 0x00, 0xff, 0xff, 0x10,
+	0xd8, 0x59, 0x00, 0xa4, 0x12, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -311,6 +1149,9 @@ const _ = grpc.SupportPackageIsVersion4
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type ConfigurationClient interface {
 	ListFrequencyPlans(ctx context.Context, in *ListFrequencyPlansRequest, opts ...grpc.CallOption) (*ListFrequencyPlansResponse, error)
+	// Returns a list of supported LoRaWAN PHY Versions for the given Band ID.
+	GetPhyVersions(ctx context.Context, in *GetPhyVersionsRequest, opts ...grpc.CallOption) (*GetPhyVersionsResponse, error)
+	ListBands(ctx context.Context, in *ListBandsRequest, opts ...grpc.CallOption) (*ListBandsResponse, error)
 }
 
 type configurationClient struct {
@@ -330,9 +1171,30 @@ func (c *configurationClient) ListFrequencyPlans(ctx context.Context, in *ListFr
 	return out, nil
 }
 
+func (c *configurationClient) GetPhyVersions(ctx context.Context, in *GetPhyVersionsRequest, opts ...grpc.CallOption) (*GetPhyVersionsResponse, error) {
+	out := new(GetPhyVersionsResponse)
+	err := c.cc.Invoke(ctx, "/ttn.lorawan.v3.Configuration/GetPhyVersions", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *configurationClient) ListBands(ctx context.Context, in *ListBandsRequest, opts ...grpc.CallOption) (*ListBandsResponse, error) {
+	out := new(ListBandsResponse)
+	err := c.cc.Invoke(ctx, "/ttn.lorawan.v3.Configuration/ListBands", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ConfigurationServer is the server API for Configuration service.
 type ConfigurationServer interface {
 	ListFrequencyPlans(context.Context, *ListFrequencyPlansRequest) (*ListFrequencyPlansResponse, error)
+	// Returns a list of supported LoRaWAN PHY Versions for the given Band ID.
+	GetPhyVersions(context.Context, *GetPhyVersionsRequest) (*GetPhyVersionsResponse, error)
+	ListBands(context.Context, *ListBandsRequest) (*ListBandsResponse, error)
 }
 
 // UnimplementedConfigurationServer can be embedded to have forward compatible implementations.
@@ -341,6 +1203,12 @@ type UnimplementedConfigurationServer struct {
 
 func (*UnimplementedConfigurationServer) ListFrequencyPlans(ctx context.Context, req *ListFrequencyPlansRequest) (*ListFrequencyPlansResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListFrequencyPlans not implemented")
+}
+func (*UnimplementedConfigurationServer) GetPhyVersions(ctx context.Context, req *GetPhyVersionsRequest) (*GetPhyVersionsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetPhyVersions not implemented")
+}
+func (*UnimplementedConfigurationServer) ListBands(ctx context.Context, req *ListBandsRequest) (*ListBandsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListBands not implemented")
 }
 
 func RegisterConfigurationServer(s *grpc.Server, srv ConfigurationServer) {
@@ -365,6 +1233,42 @@ func _Configuration_ListFrequencyPlans_Handler(srv interface{}, ctx context.Cont
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Configuration_GetPhyVersions_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetPhyVersionsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ConfigurationServer).GetPhyVersions(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/ttn.lorawan.v3.Configuration/GetPhyVersions",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ConfigurationServer).GetPhyVersions(ctx, req.(*GetPhyVersionsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Configuration_ListBands_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListBandsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ConfigurationServer).ListBands(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/ttn.lorawan.v3.Configuration/ListBands",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ConfigurationServer).ListBands(ctx, req.(*ListBandsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var _Configuration_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "ttn.lorawan.v3.Configuration",
 	HandlerType: (*ConfigurationServer)(nil),
@@ -373,54 +1277,15 @@ var _Configuration_serviceDesc = grpc.ServiceDesc{
 			MethodName: "ListFrequencyPlans",
 			Handler:    _Configuration_ListFrequencyPlans_Handler,
 		},
+		{
+			MethodName: "GetPhyVersions",
+			Handler:    _Configuration_GetPhyVersions_Handler,
+		},
+		{
+			MethodName: "ListBands",
+			Handler:    _Configuration_ListBands_Handler,
+		},
 	},
 	Streams:  []grpc.StreamDesc{},
 	Metadata: "lorawan-stack/api/configuration_services.proto",
-}
-
-func (this *ListFrequencyPlansRequest) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&ListFrequencyPlansRequest{`,
-		`BaseFrequency:` + fmt.Sprintf("%v", this.BaseFrequency) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *FrequencyPlanDescription) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&FrequencyPlanDescription{`,
-		`Id:` + fmt.Sprintf("%v", this.Id) + `,`,
-		`BaseId:` + fmt.Sprintf("%v", this.BaseId) + `,`,
-		`Name:` + fmt.Sprintf("%v", this.Name) + `,`,
-		`BaseFrequency:` + fmt.Sprintf("%v", this.BaseFrequency) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *ListFrequencyPlansResponse) String() string {
-	if this == nil {
-		return "nil"
-	}
-	repeatedStringForFrequencyPlans := "[]*FrequencyPlanDescription{"
-	for _, f := range this.FrequencyPlans {
-		repeatedStringForFrequencyPlans += strings.Replace(f.String(), "FrequencyPlanDescription", "FrequencyPlanDescription", 1) + ","
-	}
-	repeatedStringForFrequencyPlans += "}"
-	s := strings.Join([]string{`&ListFrequencyPlansResponse{`,
-		`FrequencyPlans:` + repeatedStringForFrequencyPlans + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func valueToStringConfigurationServices(v interface{}) string {
-	rv := reflect.ValueOf(v)
-	if rv.IsNil() {
-		return "nil"
-	}
-	pv := reflect.Indirect(rv).Interface()
-	return fmt.Sprintf("*%v", pv)
 }

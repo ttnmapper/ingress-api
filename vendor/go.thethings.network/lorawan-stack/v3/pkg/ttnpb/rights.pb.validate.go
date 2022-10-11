@@ -172,7 +172,7 @@ func (m *APIKey) ValidateFields(paths ...string) error {
 
 		case "created_at":
 
-			if v, ok := interface{}(&m.CreatedAt).(interface{ ValidateFields(...string) error }); ok {
+			if v, ok := interface{}(m.GetCreatedAt()).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return APIKeyValidationError{
 						field:  "created_at",
@@ -184,7 +184,7 @@ func (m *APIKey) ValidateFields(paths ...string) error {
 
 		case "updated_at":
 
-			if v, ok := interface{}(&m.UpdatedAt).(interface{ ValidateFields(...string) error }); ok {
+			if v, ok := interface{}(m.GetUpdatedAt()).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return APIKeyValidationError{
 						field:  "updated_at",
@@ -196,7 +196,15 @@ func (m *APIKey) ValidateFields(paths ...string) error {
 
 		case "expires_at":
 
-			if ts := m.GetExpiresAt(); ts != nil {
+			if t := m.GetExpiresAt(); t != nil {
+				ts, err := types.TimestampFromProto(t)
+				if err != nil {
+					return APIKeyValidationError{
+						field:  "expires_at",
+						reason: "value is not a valid timestamp",
+						cause:  err,
+					}
+				}
 
 				now := time.Now()
 
@@ -386,7 +394,14 @@ func (m *Collaborator) ValidateFields(paths ...string) error {
 		switch name {
 		case "ids":
 
-			if v, ok := interface{}(&m.OrganizationOrUserIdentifiers).(interface{ ValidateFields(...string) error }); ok {
+			if m.GetIds() == nil {
+				return CollaboratorValidationError{
+					field:  "ids",
+					reason: "value is required",
+				}
+			}
+
+			if v, ok := interface{}(m.GetIds()).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return CollaboratorValidationError{
 						field:  "ids",
@@ -491,7 +506,7 @@ func (m *GetCollaboratorResponse) ValidateFields(paths ...string) error {
 		switch name {
 		case "ids":
 
-			if v, ok := interface{}(&m.OrganizationOrUserIdentifiers).(interface{ ValidateFields(...string) error }); ok {
+			if v, ok := interface{}(m.GetIds()).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return GetCollaboratorResponseValidationError{
 						field:  "ids",

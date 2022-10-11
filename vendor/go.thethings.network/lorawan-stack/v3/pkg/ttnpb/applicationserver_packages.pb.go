@@ -6,6 +6,7 @@ package ttnpb
 import (
 	context "context"
 	fmt "fmt"
+	_ "github.com/TheThingsIndustries/protoc-gen-go-flags/annotations"
 	_ "github.com/envoyproxy/protoc-gen-validate/validate"
 	_ "github.com/gogo/protobuf/gogoproto"
 	proto "github.com/gogo/protobuf/proto"
@@ -16,9 +17,6 @@ import (
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
 	math "math"
-	reflect "reflect"
-	strings "strings"
-	time "time"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -26,7 +24,6 @@ var _ = proto.Marshal
 var _ = golang_proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
-var _ = time.Kitchen
 
 // This is a compile-time assertion to ensure that this generated file
 // is compatible with the proto package it is being compiled against.
@@ -38,11 +35,13 @@ type ApplicationPackage struct {
 	Name                 string   `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
 	DefaultFPort         uint32   `protobuf:"varint,2,opt,name=default_f_port,json=defaultFPort,proto3" json:"default_f_port,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *ApplicationPackage) Reset()      { *m = ApplicationPackage{} }
-func (*ApplicationPackage) ProtoMessage() {}
+func (m *ApplicationPackage) Reset()         { *m = ApplicationPackage{} }
+func (m *ApplicationPackage) String() string { return proto.CompactTextString(m) }
+func (*ApplicationPackage) ProtoMessage()    {}
 func (*ApplicationPackage) Descriptor() ([]byte, []int) {
 	return fileDescriptor_aa4ce58e965b6ca0, []int{0}
 }
@@ -81,11 +80,13 @@ func (m *ApplicationPackage) GetDefaultFPort() uint32 {
 type ApplicationPackages struct {
 	Packages             []*ApplicationPackage `protobuf:"bytes,1,rep,name=packages,proto3" json:"packages,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}              `json:"-"`
+	XXX_unrecognized     []byte                `json:"-"`
 	XXX_sizecache        int32                 `json:"-"`
 }
 
-func (m *ApplicationPackages) Reset()      { *m = ApplicationPackages{} }
-func (*ApplicationPackages) ProtoMessage() {}
+func (m *ApplicationPackages) Reset()         { *m = ApplicationPackages{} }
+func (m *ApplicationPackages) String() string { return proto.CompactTextString(m) }
+func (*ApplicationPackages) ProtoMessage()    {}
 func (*ApplicationPackages) Descriptor() ([]byte, []int) {
 	return fileDescriptor_aa4ce58e965b6ca0, []int{1}
 }
@@ -115,16 +116,18 @@ func (m *ApplicationPackages) GetPackages() []*ApplicationPackage {
 }
 
 type ApplicationPackageAssociationIdentifiers struct {
-	EndDeviceIdentifiers `protobuf:"bytes,1,opt,name=end_device_ids,json=endDeviceIds,proto3,embedded=end_device_ids" json:"end_device_ids"`
-	FPort                uint32   `protobuf:"varint,2,opt,name=f_port,json=fPort,proto3" json:"f_port,omitempty"`
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
+	EndDeviceIds         *EndDeviceIdentifiers `protobuf:"bytes,1,opt,name=end_device_ids,json=endDeviceIds,proto3" json:"end_device_ids,omitempty"`
+	FPort                uint32                `protobuf:"varint,2,opt,name=f_port,json=fPort,proto3" json:"f_port,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}              `json:"-"`
+	XXX_unrecognized     []byte                `json:"-"`
+	XXX_sizecache        int32                 `json:"-"`
 }
 
 func (m *ApplicationPackageAssociationIdentifiers) Reset() {
 	*m = ApplicationPackageAssociationIdentifiers{}
 }
-func (*ApplicationPackageAssociationIdentifiers) ProtoMessage() {}
+func (m *ApplicationPackageAssociationIdentifiers) String() string { return proto.CompactTextString(m) }
+func (*ApplicationPackageAssociationIdentifiers) ProtoMessage()    {}
 func (*ApplicationPackageAssociationIdentifiers) Descriptor() ([]byte, []int) {
 	return fileDescriptor_aa4ce58e965b6ca0, []int{2}
 }
@@ -146,6 +149,13 @@ func (m *ApplicationPackageAssociationIdentifiers) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_ApplicationPackageAssociationIdentifiers proto.InternalMessageInfo
 
+func (m *ApplicationPackageAssociationIdentifiers) GetEndDeviceIds() *EndDeviceIdentifiers {
+	if m != nil {
+		return m.EndDeviceIds
+	}
+	return nil
+}
+
 func (m *ApplicationPackageAssociationIdentifiers) GetFPort() uint32 {
 	if m != nil {
 		return m.FPort
@@ -154,17 +164,19 @@ func (m *ApplicationPackageAssociationIdentifiers) GetFPort() uint32 {
 }
 
 type ApplicationPackageAssociation struct {
-	ApplicationPackageAssociationIdentifiers `protobuf:"bytes,1,opt,name=ids,proto3,embedded=ids" json:"ids"`
-	CreatedAt                                time.Time     `protobuf:"bytes,2,opt,name=created_at,json=createdAt,proto3,stdtime" json:"created_at"`
-	UpdatedAt                                time.Time     `protobuf:"bytes,3,opt,name=updated_at,json=updatedAt,proto3,stdtime" json:"updated_at"`
-	PackageName                              string        `protobuf:"bytes,4,opt,name=package_name,json=packageName,proto3" json:"package_name,omitempty"`
-	Data                                     *types.Struct `protobuf:"bytes,5,opt,name=data,proto3" json:"data,omitempty"`
-	XXX_NoUnkeyedLiteral                     struct{}      `json:"-"`
-	XXX_sizecache                            int32         `json:"-"`
+	Ids                  *ApplicationPackageAssociationIdentifiers `protobuf:"bytes,1,opt,name=ids,proto3" json:"ids,omitempty"`
+	CreatedAt            *types.Timestamp                          `protobuf:"bytes,2,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
+	UpdatedAt            *types.Timestamp                          `protobuf:"bytes,3,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
+	PackageName          string                                    `protobuf:"bytes,4,opt,name=package_name,json=packageName,proto3" json:"package_name,omitempty"`
+	Data                 *types.Struct                             `protobuf:"bytes,5,opt,name=data,proto3" json:"data,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}                                  `json:"-"`
+	XXX_unrecognized     []byte                                    `json:"-"`
+	XXX_sizecache        int32                                     `json:"-"`
 }
 
-func (m *ApplicationPackageAssociation) Reset()      { *m = ApplicationPackageAssociation{} }
-func (*ApplicationPackageAssociation) ProtoMessage() {}
+func (m *ApplicationPackageAssociation) Reset()         { *m = ApplicationPackageAssociation{} }
+func (m *ApplicationPackageAssociation) String() string { return proto.CompactTextString(m) }
+func (*ApplicationPackageAssociation) ProtoMessage()    {}
 func (*ApplicationPackageAssociation) Descriptor() ([]byte, []int) {
 	return fileDescriptor_aa4ce58e965b6ca0, []int{3}
 }
@@ -186,18 +198,25 @@ func (m *ApplicationPackageAssociation) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_ApplicationPackageAssociation proto.InternalMessageInfo
 
-func (m *ApplicationPackageAssociation) GetCreatedAt() time.Time {
+func (m *ApplicationPackageAssociation) GetIds() *ApplicationPackageAssociationIdentifiers {
+	if m != nil {
+		return m.Ids
+	}
+	return nil
+}
+
+func (m *ApplicationPackageAssociation) GetCreatedAt() *types.Timestamp {
 	if m != nil {
 		return m.CreatedAt
 	}
-	return time.Time{}
+	return nil
 }
 
-func (m *ApplicationPackageAssociation) GetUpdatedAt() time.Time {
+func (m *ApplicationPackageAssociation) GetUpdatedAt() *types.Timestamp {
 	if m != nil {
 		return m.UpdatedAt
 	}
-	return time.Time{}
+	return nil
 }
 
 func (m *ApplicationPackageAssociation) GetPackageName() string {
@@ -217,11 +236,13 @@ func (m *ApplicationPackageAssociation) GetData() *types.Struct {
 type ApplicationPackageAssociations struct {
 	Associations         []*ApplicationPackageAssociation `protobuf:"bytes,1,rep,name=associations,proto3" json:"associations,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}                         `json:"-"`
+	XXX_unrecognized     []byte                           `json:"-"`
 	XXX_sizecache        int32                            `json:"-"`
 }
 
-func (m *ApplicationPackageAssociations) Reset()      { *m = ApplicationPackageAssociations{} }
-func (*ApplicationPackageAssociations) ProtoMessage() {}
+func (m *ApplicationPackageAssociations) Reset()         { *m = ApplicationPackageAssociations{} }
+func (m *ApplicationPackageAssociations) String() string { return proto.CompactTextString(m) }
+func (*ApplicationPackageAssociations) ProtoMessage()    {}
 func (*ApplicationPackageAssociations) Descriptor() ([]byte, []int) {
 	return fileDescriptor_aa4ce58e965b6ca0, []int{4}
 }
@@ -251,16 +272,18 @@ func (m *ApplicationPackageAssociations) GetAssociations() []*ApplicationPackage
 }
 
 type GetApplicationPackageAssociationRequest struct {
-	ApplicationPackageAssociationIdentifiers `protobuf:"bytes,1,opt,name=ids,proto3,embedded=ids" json:"ids"`
-	FieldMask                                *types.FieldMask `protobuf:"bytes,2,opt,name=field_mask,json=fieldMask,proto3" json:"field_mask,omitempty"`
-	XXX_NoUnkeyedLiteral                     struct{}         `json:"-"`
-	XXX_sizecache                            int32            `json:"-"`
+	Ids                  *ApplicationPackageAssociationIdentifiers `protobuf:"bytes,1,opt,name=ids,proto3" json:"ids,omitempty"`
+	FieldMask            *types.FieldMask                          `protobuf:"bytes,2,opt,name=field_mask,json=fieldMask,proto3" json:"field_mask,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}                                  `json:"-"`
+	XXX_unrecognized     []byte                                    `json:"-"`
+	XXX_sizecache        int32                                     `json:"-"`
 }
 
 func (m *GetApplicationPackageAssociationRequest) Reset() {
 	*m = GetApplicationPackageAssociationRequest{}
 }
-func (*GetApplicationPackageAssociationRequest) ProtoMessage() {}
+func (m *GetApplicationPackageAssociationRequest) String() string { return proto.CompactTextString(m) }
+func (*GetApplicationPackageAssociationRequest) ProtoMessage()    {}
 func (*GetApplicationPackageAssociationRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_aa4ce58e965b6ca0, []int{5}
 }
@@ -282,6 +305,13 @@ func (m *GetApplicationPackageAssociationRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_GetApplicationPackageAssociationRequest proto.InternalMessageInfo
 
+func (m *GetApplicationPackageAssociationRequest) GetIds() *ApplicationPackageAssociationIdentifiers {
+	if m != nil {
+		return m.Ids
+	}
+	return nil
+}
+
 func (m *GetApplicationPackageAssociationRequest) GetFieldMask() *types.FieldMask {
 	if m != nil {
 		return m.FieldMask
@@ -290,7 +320,7 @@ func (m *GetApplicationPackageAssociationRequest) GetFieldMask() *types.FieldMas
 }
 
 type ListApplicationPackageAssociationRequest struct {
-	EndDeviceIdentifiers `protobuf:"bytes,1,opt,name=ids,proto3,embedded=ids" json:"ids"`
+	Ids *EndDeviceIdentifiers `protobuf:"bytes,1,opt,name=ids,proto3" json:"ids,omitempty"`
 	// Limit the number of results per page.
 	// Each page is ordered by the FPort.
 	Limit uint32 `protobuf:"varint,2,opt,name=limit,proto3" json:"limit,omitempty"`
@@ -298,13 +328,15 @@ type ListApplicationPackageAssociationRequest struct {
 	Page                 uint32           `protobuf:"varint,3,opt,name=page,proto3" json:"page,omitempty"`
 	FieldMask            *types.FieldMask `protobuf:"bytes,4,opt,name=field_mask,json=fieldMask,proto3" json:"field_mask,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}         `json:"-"`
+	XXX_unrecognized     []byte           `json:"-"`
 	XXX_sizecache        int32            `json:"-"`
 }
 
 func (m *ListApplicationPackageAssociationRequest) Reset() {
 	*m = ListApplicationPackageAssociationRequest{}
 }
-func (*ListApplicationPackageAssociationRequest) ProtoMessage() {}
+func (m *ListApplicationPackageAssociationRequest) String() string { return proto.CompactTextString(m) }
+func (*ListApplicationPackageAssociationRequest) ProtoMessage()    {}
 func (*ListApplicationPackageAssociationRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_aa4ce58e965b6ca0, []int{6}
 }
@@ -325,6 +357,13 @@ func (m *ListApplicationPackageAssociationRequest) XXX_DiscardUnknown() {
 }
 
 var xxx_messageInfo_ListApplicationPackageAssociationRequest proto.InternalMessageInfo
+
+func (m *ListApplicationPackageAssociationRequest) GetIds() *EndDeviceIdentifiers {
+	if m != nil {
+		return m.Ids
+	}
+	return nil
+}
 
 func (m *ListApplicationPackageAssociationRequest) GetLimit() uint32 {
 	if m != nil {
@@ -348,16 +387,18 @@ func (m *ListApplicationPackageAssociationRequest) GetFieldMask() *types.FieldMa
 }
 
 type SetApplicationPackageAssociationRequest struct {
-	ApplicationPackageAssociation `protobuf:"bytes,1,opt,name=association,proto3,embedded=association" json:"association"`
-	FieldMask                     *types.FieldMask `protobuf:"bytes,2,opt,name=field_mask,json=fieldMask,proto3" json:"field_mask,omitempty"`
-	XXX_NoUnkeyedLiteral          struct{}         `json:"-"`
-	XXX_sizecache                 int32            `json:"-"`
+	Association          *ApplicationPackageAssociation `protobuf:"bytes,1,opt,name=association,proto3" json:"association,omitempty"`
+	FieldMask            *types.FieldMask               `protobuf:"bytes,2,opt,name=field_mask,json=fieldMask,proto3" json:"field_mask,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}                       `json:"-"`
+	XXX_unrecognized     []byte                         `json:"-"`
+	XXX_sizecache        int32                          `json:"-"`
 }
 
 func (m *SetApplicationPackageAssociationRequest) Reset() {
 	*m = SetApplicationPackageAssociationRequest{}
 }
-func (*SetApplicationPackageAssociationRequest) ProtoMessage() {}
+func (m *SetApplicationPackageAssociationRequest) String() string { return proto.CompactTextString(m) }
+func (*SetApplicationPackageAssociationRequest) ProtoMessage()    {}
 func (*SetApplicationPackageAssociationRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_aa4ce58e965b6ca0, []int{7}
 }
@@ -379,6 +420,13 @@ func (m *SetApplicationPackageAssociationRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_SetApplicationPackageAssociationRequest proto.InternalMessageInfo
 
+func (m *SetApplicationPackageAssociationRequest) GetAssociation() *ApplicationPackageAssociation {
+	if m != nil {
+		return m.Association
+	}
+	return nil
+}
+
 func (m *SetApplicationPackageAssociationRequest) GetFieldMask() *types.FieldMask {
 	if m != nil {
 		return m.FieldMask
@@ -387,14 +435,18 @@ func (m *SetApplicationPackageAssociationRequest) GetFieldMask() *types.FieldMas
 }
 
 type ApplicationPackageDefaultAssociationIdentifiers struct {
-	ApplicationIdentifiers `protobuf:"bytes,1,opt,name=application_ids,json=applicationIds,proto3,embedded=application_ids" json:"application_ids"`
-	FPort                  uint32   `protobuf:"varint,2,opt,name=f_port,json=fPort,proto3" json:"f_port,omitempty"`
-	XXX_NoUnkeyedLiteral   struct{} `json:"-"`
-	XXX_sizecache          int32    `json:"-"`
+	ApplicationIds       *ApplicationIdentifiers `protobuf:"bytes,1,opt,name=application_ids,json=applicationIds,proto3" json:"application_ids,omitempty"`
+	FPort                uint32                  `protobuf:"varint,2,opt,name=f_port,json=fPort,proto3" json:"f_port,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}                `json:"-"`
+	XXX_unrecognized     []byte                  `json:"-"`
+	XXX_sizecache        int32                   `json:"-"`
 }
 
 func (m *ApplicationPackageDefaultAssociationIdentifiers) Reset() {
 	*m = ApplicationPackageDefaultAssociationIdentifiers{}
+}
+func (m *ApplicationPackageDefaultAssociationIdentifiers) String() string {
+	return proto.CompactTextString(m)
 }
 func (*ApplicationPackageDefaultAssociationIdentifiers) ProtoMessage() {}
 func (*ApplicationPackageDefaultAssociationIdentifiers) Descriptor() ([]byte, []int) {
@@ -418,6 +470,13 @@ func (m *ApplicationPackageDefaultAssociationIdentifiers) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_ApplicationPackageDefaultAssociationIdentifiers proto.InternalMessageInfo
 
+func (m *ApplicationPackageDefaultAssociationIdentifiers) GetApplicationIds() *ApplicationIdentifiers {
+	if m != nil {
+		return m.ApplicationIds
+	}
+	return nil
+}
+
 func (m *ApplicationPackageDefaultAssociationIdentifiers) GetFPort() uint32 {
 	if m != nil {
 		return m.FPort
@@ -426,17 +485,19 @@ func (m *ApplicationPackageDefaultAssociationIdentifiers) GetFPort() uint32 {
 }
 
 type ApplicationPackageDefaultAssociation struct {
-	ApplicationPackageDefaultAssociationIdentifiers `protobuf:"bytes,1,opt,name=ids,proto3,embedded=ids" json:"ids"`
-	CreatedAt                                       time.Time     `protobuf:"bytes,2,opt,name=created_at,json=createdAt,proto3,stdtime" json:"created_at"`
-	UpdatedAt                                       time.Time     `protobuf:"bytes,3,opt,name=updated_at,json=updatedAt,proto3,stdtime" json:"updated_at"`
-	PackageName                                     string        `protobuf:"bytes,4,opt,name=package_name,json=packageName,proto3" json:"package_name,omitempty"`
-	Data                                            *types.Struct `protobuf:"bytes,5,opt,name=data,proto3" json:"data,omitempty"`
-	XXX_NoUnkeyedLiteral                            struct{}      `json:"-"`
-	XXX_sizecache                                   int32         `json:"-"`
+	Ids                  *ApplicationPackageDefaultAssociationIdentifiers `protobuf:"bytes,1,opt,name=ids,proto3" json:"ids,omitempty"`
+	CreatedAt            *types.Timestamp                                 `protobuf:"bytes,2,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
+	UpdatedAt            *types.Timestamp                                 `protobuf:"bytes,3,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
+	PackageName          string                                           `protobuf:"bytes,4,opt,name=package_name,json=packageName,proto3" json:"package_name,omitempty"`
+	Data                 *types.Struct                                    `protobuf:"bytes,5,opt,name=data,proto3" json:"data,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}                                         `json:"-"`
+	XXX_unrecognized     []byte                                           `json:"-"`
+	XXX_sizecache        int32                                            `json:"-"`
 }
 
-func (m *ApplicationPackageDefaultAssociation) Reset()      { *m = ApplicationPackageDefaultAssociation{} }
-func (*ApplicationPackageDefaultAssociation) ProtoMessage() {}
+func (m *ApplicationPackageDefaultAssociation) Reset()         { *m = ApplicationPackageDefaultAssociation{} }
+func (m *ApplicationPackageDefaultAssociation) String() string { return proto.CompactTextString(m) }
+func (*ApplicationPackageDefaultAssociation) ProtoMessage()    {}
 func (*ApplicationPackageDefaultAssociation) Descriptor() ([]byte, []int) {
 	return fileDescriptor_aa4ce58e965b6ca0, []int{9}
 }
@@ -458,18 +519,25 @@ func (m *ApplicationPackageDefaultAssociation) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_ApplicationPackageDefaultAssociation proto.InternalMessageInfo
 
-func (m *ApplicationPackageDefaultAssociation) GetCreatedAt() time.Time {
+func (m *ApplicationPackageDefaultAssociation) GetIds() *ApplicationPackageDefaultAssociationIdentifiers {
+	if m != nil {
+		return m.Ids
+	}
+	return nil
+}
+
+func (m *ApplicationPackageDefaultAssociation) GetCreatedAt() *types.Timestamp {
 	if m != nil {
 		return m.CreatedAt
 	}
-	return time.Time{}
+	return nil
 }
 
-func (m *ApplicationPackageDefaultAssociation) GetUpdatedAt() time.Time {
+func (m *ApplicationPackageDefaultAssociation) GetUpdatedAt() *types.Timestamp {
 	if m != nil {
 		return m.UpdatedAt
 	}
-	return time.Time{}
+	return nil
 }
 
 func (m *ApplicationPackageDefaultAssociation) GetPackageName() string {
@@ -489,11 +557,13 @@ func (m *ApplicationPackageDefaultAssociation) GetData() *types.Struct {
 type ApplicationPackageDefaultAssociations struct {
 	Defaults             []*ApplicationPackageDefaultAssociation `protobuf:"bytes,1,rep,name=defaults,proto3" json:"defaults,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}                                `json:"-"`
+	XXX_unrecognized     []byte                                  `json:"-"`
 	XXX_sizecache        int32                                   `json:"-"`
 }
 
-func (m *ApplicationPackageDefaultAssociations) Reset()      { *m = ApplicationPackageDefaultAssociations{} }
-func (*ApplicationPackageDefaultAssociations) ProtoMessage() {}
+func (m *ApplicationPackageDefaultAssociations) Reset()         { *m = ApplicationPackageDefaultAssociations{} }
+func (m *ApplicationPackageDefaultAssociations) String() string { return proto.CompactTextString(m) }
+func (*ApplicationPackageDefaultAssociations) ProtoMessage()    {}
 func (*ApplicationPackageDefaultAssociations) Descriptor() ([]byte, []int) {
 	return fileDescriptor_aa4ce58e965b6ca0, []int{10}
 }
@@ -523,14 +593,18 @@ func (m *ApplicationPackageDefaultAssociations) GetDefaults() []*ApplicationPack
 }
 
 type GetApplicationPackageDefaultAssociationRequest struct {
-	ApplicationPackageDefaultAssociationIdentifiers `protobuf:"bytes,1,opt,name=ids,proto3,embedded=ids" json:"ids"`
-	FieldMask                                       *types.FieldMask `protobuf:"bytes,2,opt,name=field_mask,json=fieldMask,proto3" json:"field_mask,omitempty"`
-	XXX_NoUnkeyedLiteral                            struct{}         `json:"-"`
-	XXX_sizecache                                   int32            `json:"-"`
+	Ids                  *ApplicationPackageDefaultAssociationIdentifiers `protobuf:"bytes,1,opt,name=ids,proto3" json:"ids,omitempty"`
+	FieldMask            *types.FieldMask                                 `protobuf:"bytes,2,opt,name=field_mask,json=fieldMask,proto3" json:"field_mask,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}                                         `json:"-"`
+	XXX_unrecognized     []byte                                           `json:"-"`
+	XXX_sizecache        int32                                            `json:"-"`
 }
 
 func (m *GetApplicationPackageDefaultAssociationRequest) Reset() {
 	*m = GetApplicationPackageDefaultAssociationRequest{}
+}
+func (m *GetApplicationPackageDefaultAssociationRequest) String() string {
+	return proto.CompactTextString(m)
 }
 func (*GetApplicationPackageDefaultAssociationRequest) ProtoMessage() {}
 func (*GetApplicationPackageDefaultAssociationRequest) Descriptor() ([]byte, []int) {
@@ -554,6 +628,13 @@ func (m *GetApplicationPackageDefaultAssociationRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_GetApplicationPackageDefaultAssociationRequest proto.InternalMessageInfo
 
+func (m *GetApplicationPackageDefaultAssociationRequest) GetIds() *ApplicationPackageDefaultAssociationIdentifiers {
+	if m != nil {
+		return m.Ids
+	}
+	return nil
+}
+
 func (m *GetApplicationPackageDefaultAssociationRequest) GetFieldMask() *types.FieldMask {
 	if m != nil {
 		return m.FieldMask
@@ -562,7 +643,7 @@ func (m *GetApplicationPackageDefaultAssociationRequest) GetFieldMask() *types.F
 }
 
 type ListApplicationPackageDefaultAssociationRequest struct {
-	ApplicationIdentifiers `protobuf:"bytes,1,opt,name=ids,proto3,embedded=ids" json:"ids"`
+	Ids *ApplicationIdentifiers `protobuf:"bytes,1,opt,name=ids,proto3" json:"ids,omitempty"`
 	// Limit the number of results per page.
 	// Each page is ordered by the FPort.
 	Limit uint32 `protobuf:"varint,2,opt,name=limit,proto3" json:"limit,omitempty"`
@@ -570,11 +651,15 @@ type ListApplicationPackageDefaultAssociationRequest struct {
 	Page                 uint32           `protobuf:"varint,3,opt,name=page,proto3" json:"page,omitempty"`
 	FieldMask            *types.FieldMask `protobuf:"bytes,4,opt,name=field_mask,json=fieldMask,proto3" json:"field_mask,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}         `json:"-"`
+	XXX_unrecognized     []byte           `json:"-"`
 	XXX_sizecache        int32            `json:"-"`
 }
 
 func (m *ListApplicationPackageDefaultAssociationRequest) Reset() {
 	*m = ListApplicationPackageDefaultAssociationRequest{}
+}
+func (m *ListApplicationPackageDefaultAssociationRequest) String() string {
+	return proto.CompactTextString(m)
 }
 func (*ListApplicationPackageDefaultAssociationRequest) ProtoMessage() {}
 func (*ListApplicationPackageDefaultAssociationRequest) Descriptor() ([]byte, []int) {
@@ -598,6 +683,13 @@ func (m *ListApplicationPackageDefaultAssociationRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_ListApplicationPackageDefaultAssociationRequest proto.InternalMessageInfo
 
+func (m *ListApplicationPackageDefaultAssociationRequest) GetIds() *ApplicationIdentifiers {
+	if m != nil {
+		return m.Ids
+	}
+	return nil
+}
+
 func (m *ListApplicationPackageDefaultAssociationRequest) GetLimit() uint32 {
 	if m != nil {
 		return m.Limit
@@ -620,14 +712,18 @@ func (m *ListApplicationPackageDefaultAssociationRequest) GetFieldMask() *types.
 }
 
 type SetApplicationPackageDefaultAssociationRequest struct {
-	ApplicationPackageDefaultAssociation `protobuf:"bytes,1,opt,name=default,proto3,embedded=default" json:"default"`
-	FieldMask                            *types.FieldMask `protobuf:"bytes,2,opt,name=field_mask,json=fieldMask,proto3" json:"field_mask,omitempty"`
-	XXX_NoUnkeyedLiteral                 struct{}         `json:"-"`
-	XXX_sizecache                        int32            `json:"-"`
+	Default              *ApplicationPackageDefaultAssociation `protobuf:"bytes,1,opt,name=default,proto3" json:"default,omitempty"`
+	FieldMask            *types.FieldMask                      `protobuf:"bytes,2,opt,name=field_mask,json=fieldMask,proto3" json:"field_mask,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}                              `json:"-"`
+	XXX_unrecognized     []byte                                `json:"-"`
+	XXX_sizecache        int32                                 `json:"-"`
 }
 
 func (m *SetApplicationPackageDefaultAssociationRequest) Reset() {
 	*m = SetApplicationPackageDefaultAssociationRequest{}
+}
+func (m *SetApplicationPackageDefaultAssociationRequest) String() string {
+	return proto.CompactTextString(m)
 }
 func (*SetApplicationPackageDefaultAssociationRequest) ProtoMessage() {}
 func (*SetApplicationPackageDefaultAssociationRequest) Descriptor() ([]byte, []int) {
@@ -650,6 +746,13 @@ func (m *SetApplicationPackageDefaultAssociationRequest) XXX_DiscardUnknown() {
 }
 
 var xxx_messageInfo_SetApplicationPackageDefaultAssociationRequest proto.InternalMessageInfo
+
+func (m *SetApplicationPackageDefaultAssociationRequest) GetDefault() *ApplicationPackageDefaultAssociation {
+	if m != nil {
+		return m.Default
+	}
+	return nil
+}
 
 func (m *SetApplicationPackageDefaultAssociationRequest) GetFieldMask() *types.FieldMask {
 	if m != nil {
@@ -697,502 +800,88 @@ func init() {
 }
 
 var fileDescriptor_aa4ce58e965b6ca0 = []byte{
-	// 1275 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x58, 0x4d, 0x6c, 0x1b, 0x45,
-	0x14, 0xce, 0xf8, 0xa7, 0x49, 0x26, 0xa9, 0x49, 0x07, 0x95, 0x5a, 0x06, 0x9c, 0xb0, 0x0d, 0xc4,
-	0x04, 0xbc, 0x5b, 0x39, 0x20, 0x68, 0x2b, 0x1a, 0xc5, 0x4d, 0x5b, 0xa8, 0x68, 0x15, 0xd6, 0x80,
-	0xaa, 0xfe, 0xe0, 0x4e, 0xec, 0xf1, 0x66, 0x65, 0x7b, 0x77, 0xd9, 0x19, 0xbb, 0x98, 0x28, 0x52,
-	0x15, 0xc4, 0x05, 0xa1, 0xaa, 0xa8, 0x17, 0x4e, 0x9c, 0x41, 0xdc, 0xb8, 0x80, 0xb8, 0x80, 0xb8,
-	0xc0, 0xa5, 0x52, 0x25, 0x24, 0xc4, 0xa9, 0x88, 0x84, 0x43, 0x91, 0x90, 0xe0, 0xc0, 0x29, 0x17,
-	0x90, 0x67, 0xd7, 0xc9, 0xda, 0xbb, 0xb6, 0x77, 0x6d, 0xb5, 0x5c, 0xb8, 0xed, 0x66, 0xde, 0x7b,
-	0xfb, 0xbe, 0xf7, 0xbe, 0xf7, 0xcd, 0x73, 0x60, 0xa6, 0xa2, 0x9b, 0xf8, 0x1a, 0xd6, 0xd2, 0x94,
-	0xe1, 0x42, 0x59, 0xc2, 0x86, 0x2a, 0x61, 0xc3, 0xa8, 0xa8, 0x05, 0xcc, 0x54, 0x5d, 0xa3, 0xc4,
-	0xac, 0x13, 0x33, 0x6f, 0xe0, 0x42, 0x19, 0x2b, 0x84, 0x8a, 0x86, 0xa9, 0x33, 0x1d, 0xc5, 0x18,
-	0xd3, 0x44, 0xdb, 0x4f, 0xac, 0x2f, 0x24, 0x96, 0x14, 0x95, 0xad, 0xd5, 0x56, 0xc5, 0x82, 0x5e,
-	0x95, 0x88, 0x56, 0xd7, 0x1b, 0x86, 0xa9, 0xbf, 0xd3, 0x90, 0xb8, 0x71, 0x21, 0xad, 0x10, 0x2d,
-	0x5d, 0xc7, 0x15, 0xb5, 0x88, 0x19, 0x91, 0x5c, 0x0f, 0x56, 0xc8, 0x44, 0xda, 0x11, 0x42, 0xd1,
-	0x15, 0xdd, 0x72, 0x5e, 0xad, 0x95, 0xf8, 0x1b, 0x7f, 0xe1, 0x4f, 0xb6, 0xf9, 0x63, 0x8a, 0xae,
-	0x2b, 0x15, 0x62, 0xa5, 0xab, 0x69, 0x3a, 0xb3, 0xb2, 0xb5, 0x4f, 0x1f, 0xb5, 0x4f, 0x77, 0x63,
-	0x90, 0xaa, 0xc1, 0x1a, 0xf6, 0xe1, 0x4c, 0xe7, 0x61, 0x49, 0x25, 0x95, 0x62, 0xbe, 0x8a, 0x69,
-	0xd9, 0xb6, 0x98, 0xee, 0xb4, 0x60, 0x6a, 0x95, 0x50, 0x86, 0xab, 0x46, 0xc7, 0xd7, 0x77, 0x0d,
-	0x28, 0x33, 0x6b, 0x05, 0x66, 0x9f, 0x1e, 0x76, 0x57, 0x54, 0x2d, 0x12, 0x8d, 0xa9, 0x25, 0x95,
-	0x98, 0x76, 0x8a, 0xc2, 0x7b, 0x00, 0xa2, 0xa5, 0xbd, 0x3a, 0xaf, 0x58, 0x05, 0x46, 0xc7, 0x61,
-	0x44, 0xc3, 0x55, 0x12, 0x07, 0x33, 0x20, 0x35, 0x9e, 0x9d, 0xdb, 0xc9, 0xce, 0x9a, 0x42, 0x7c,
-	0x36, 0x93, 0x7c, 0xeb, 0x12, 0x4e, 0xbf, 0x7b, 0x24, 0x7d, 0xf4, 0x4a, 0x6a, 0xf1, 0xd8, 0xa5,
-	0xf4, 0x95, 0xc5, 0xd6, 0xeb, 0xd3, 0xeb, 0x99, 0x67, 0x37, 0x66, 0x65, 0xee, 0x84, 0x8e, 0xc0,
-	0x58, 0x91, 0x94, 0x70, 0xad, 0xc2, 0xf2, 0xa5, 0xbc, 0xa1, 0x9b, 0x2c, 0x1e, 0x9a, 0x01, 0xa9,
-	0xfd, 0x59, 0xb8, 0x93, 0x1d, 0x9d, 0x8f, 0xc6, 0xff, 0x01, 0x29, 0x20, 0x4f, 0xda, 0x16, 0xa7,
-	0x57, 0x74, 0x93, 0x09, 0x6f, 0xc0, 0x87, 0xdd, 0x49, 0x50, 0x74, 0x02, 0x8e, 0xb5, 0x3a, 0x1e,
-	0x07, 0x33, 0xe1, 0xd4, 0x44, 0x46, 0x10, 0xdb, 0x5b, 0x2e, 0xba, 0xdd, 0xe4, 0x5d, 0x1f, 0xe1,
-	0x73, 0x00, 0x53, 0x6e, 0x83, 0x25, 0x4a, 0xf5, 0x82, 0xca, 0xff, 0xf2, 0xca, 0x5e, 0x3d, 0xd0,
-	0x65, 0x18, 0x23, 0x5a, 0x31, 0x5f, 0x24, 0x75, 0xb5, 0x40, 0xf2, 0x6a, 0x91, 0x72, 0xf0, 0x13,
-	0x99, 0xd9, 0xce, 0x4f, 0x9e, 0xd2, 0x8a, 0xcb, 0xdc, 0xc8, 0xe1, 0x9d, 0x9d, 0xda, 0xc9, 0x46,
-	0x3f, 0x00, 0xa1, 0x29, 0xf0, 0xc3, 0xdd, 0xe9, 0x91, 0x3b, 0x77, 0xa7, 0x81, 0x3c, 0x49, 0xf6,
-	0xec, 0x28, 0x7a, 0x02, 0xee, 0xeb, 0x5a, 0x8b, 0x68, 0x89, 0x17, 0xe1, 0x7a, 0x18, 0x3e, 0xde,
-	0x33, 0x5b, 0x74, 0x19, 0x86, 0xf7, 0xf2, 0x7a, 0xb1, 0x7f, 0x29, 0xbc, 0x91, 0x7a, 0xe4, 0xda,
-	0x0c, 0x8b, 0x4e, 0x42, 0x58, 0x30, 0x09, 0x66, 0xa4, 0x98, 0xc7, 0x56, 0x9a, 0x13, 0x99, 0x84,
-	0x68, 0x51, 0x4c, 0x6c, 0x51, 0x4c, 0x7c, 0xbd, 0xc5, 0xc1, 0xec, 0x58, 0xd3, 0xfd, 0xe6, 0x2f,
-	0xd3, 0x40, 0x1e, 0xb7, 0xfd, 0x96, 0x58, 0x33, 0x48, 0xcd, 0x28, 0xb6, 0x82, 0x84, 0x83, 0x04,
-	0xb1, 0xfd, 0x96, 0x18, 0x3a, 0x0b, 0x27, 0xed, 0x1e, 0xe6, 0x39, 0x0b, 0x23, 0xc1, 0x58, 0x38,
-	0x61, 0x3b, 0x9f, 0x6f, 0x92, 0xf1, 0x19, 0x18, 0x29, 0x62, 0x86, 0xe3, 0x51, 0x9e, 0xca, 0x21,
-	0x57, 0x2a, 0x39, 0x3e, 0x32, 0x32, 0x37, 0x12, 0x28, 0x4c, 0xf6, 0xac, 0x22, 0x45, 0xaf, 0xc1,
-	0x49, 0xec, 0x78, 0xb7, 0x69, 0x99, 0x0e, 0xd4, 0x0b, 0xb9, 0x2d, 0x84, 0xf0, 0x1d, 0x80, 0x73,
-	0x67, 0x08, 0xeb, 0xed, 0x42, 0xde, 0xae, 0x11, 0xca, 0xee, 0x33, 0x03, 0x8e, 0x42, 0xb8, 0x27,
-	0x42, 0x5d, 0x19, 0x70, 0xba, 0x69, 0x72, 0x0e, 0xd3, 0xb2, 0x3c, 0x5e, 0x6a, 0x3d, 0x0a, 0xdb,
-	0x00, 0xa6, 0x5e, 0x55, 0xa9, 0x3f, 0x14, 0x2f, 0x3b, 0x51, 0x0c, 0x3a, 0x5f, 0x3c, 0xe3, 0x24,
-	0x8c, 0x56, 0xd4, 0xaa, 0xda, 0x9a, 0xaa, 0xb1, 0x9d, 0x6c, 0x74, 0x3e, 0x1c, 0xbf, 0x37, 0x2a,
-	0x5b, 0x7f, 0x46, 0x08, 0x46, 0x0c, 0xac, 0x10, 0x4e, 0xc4, 0xfd, 0x32, 0x7f, 0xee, 0x40, 0x19,
-	0x09, 0x82, 0xf2, 0x7b, 0x00, 0xe7, 0x72, 0x3e, 0x5b, 0x85, 0xe1, 0x84, 0xa3, 0xcd, 0x36, 0xd8,
-	0x60, 0x44, 0xf1, 0x40, 0xed, 0x8c, 0x39, 0x4c, 0xbf, 0xbe, 0x04, 0x50, 0x72, 0x7f, 0x7b, 0xd9,
-	0x12, 0xe5, 0x2e, 0x0a, 0x89, 0xe1, 0x43, 0x8e, 0x2b, 0xd9, 0x21, 0x91, 0x4f, 0xf5, 0x40, 0xd5,
-	0xbb, 0x89, 0x31, 0xec, 0xb4, 0xf4, 0x25, 0x93, 0x37, 0xc2, 0x70, 0xd6, 0x4f, 0xe6, 0xa8, 0xe0,
-	0x64, 0xd9, 0x62, 0xff, 0xc2, 0xf7, 0x04, 0xff, 0xbf, 0x68, 0x76, 0x15, 0xcd, 0x06, 0x7c, 0xd2,
-	0x4f, 0x31, 0x29, 0x5a, 0x81, 0x63, 0xf6, 0xad, 0xdf, 0xd2, 0xcd, 0xe7, 0x06, 0xe9, 0x8a, 0xbc,
-	0x1b, 0x45, 0xb8, 0x03, 0xa0, 0xe8, 0x29, 0x9d, 0x1e, 0x5e, 0xf6, 0x58, 0x3e, 0x10, 0x56, 0x0c,
-	0x31, 0x98, 0x7f, 0x00, 0x28, 0x79, 0x0b, 0x69, 0x77, 0x4c, 0x67, 0x9d, 0x98, 0x06, 0x1f, 0xc6,
-	0xff, 0x42, 0x51, 0x6f, 0x03, 0x28, 0xe6, 0x82, 0x75, 0xf0, 0x2a, 0x1c, 0xb5, 0x09, 0x60, 0x23,
-	0x1e, 0x88, 0x45, 0x1e, 0xf8, 0x5b, 0x61, 0x87, 0x68, 0x5f, 0xe6, 0x93, 0x03, 0x30, 0xe1, 0xb1,
-	0x93, 0x12, 0x45, 0xa5, 0xcc, 0x6c, 0xa0, 0xcf, 0x00, 0x8c, 0x34, 0xbb, 0x8b, 0x7c, 0xdd, 0x7a,
-	0x89, 0xc3, 0xfd, 0x91, 0x51, 0xe1, 0xcd, 0xcd, 0x1f, 0x7f, 0xbb, 0x15, 0x5a, 0x41, 0xe7, 0x25,
-	0x4c, 0xdb, 0x7e, 0x33, 0x49, 0xeb, 0x1d, 0x72, 0x2d, 0xb6, 0xbf, 0x6f, 0x48, 0xd6, 0xb2, 0x4b,
-	0xa5, 0xf5, 0xdd, 0xad, 0x77, 0x43, 0x6a, 0x6d, 0xcf, 0xe8, 0x56, 0x08, 0xc6, 0x9a, 0xc3, 0xe5,
-	0x90, 0xd4, 0x17, 0x3a, 0xf3, 0xf1, 0xb9, 0xb7, 0x24, 0x82, 0xdd, 0x7b, 0xc2, 0xc7, 0x80, 0x63,
-	0xfa, 0x08, 0xa0, 0x1b, 0xc0, 0x8d, 0xaa, 0x89, 0xa4, 0x7d, 0x55, 0x17, 0x7d, 0x03, 0xf5, 0xf0,
-	0xf5, 0xc0, 0x2e, 0x39, 0x17, 0x34, 0xcb, 0xc9, 0xba, 0x96, 0x36, 0xd0, 0xef, 0x00, 0x4e, 0xf1,
-	0xf9, 0x74, 0x2a, 0x9b, 0x6b, 0x13, 0xf3, 0xbb, 0x0a, 0x25, 0xc4, 0x40, 0x85, 0xa1, 0x42, 0x99,
-	0x17, 0x86, 0xa0, 0x82, 0x77, 0x59, 0x02, 0xd5, 0xa1, 0x1f, 0x70, 0xf4, 0x75, 0x08, 0xc6, 0x72,
-	0x7d, 0x18, 0x90, 0xbb, 0x3f, 0x0c, 0xf8, 0xc6, 0x62, 0xc0, 0x57, 0x20, 0xf1, 0x85, 0x07, 0x03,
-	0x1c, 0x59, 0x8a, 0xc3, 0xb0, 0xa1, 0x4f, 0x9c, 0xfe, 0xcc, 0xe8, 0x0c, 0x60, 0xb3, 0xe4, 0x18,
-	0x98, 0x47, 0x7f, 0x03, 0x78, 0x60, 0x99, 0x54, 0x08, 0x6b, 0xfb, 0x09, 0x37, 0xf0, 0xce, 0x9e,
-	0x78, 0xc4, 0x25, 0x40, 0xa7, 0xaa, 0x06, 0x6b, 0x08, 0x1f, 0x5a, 0x95, 0x7a, 0x1f, 0xcc, 0x6f,
-	0x7a, 0x54, 0x6a, 0xd0, 0xca, 0x04, 0xae, 0x44, 0x6b, 0x3e, 0xfe, 0x04, 0xf0, 0xe0, 0x19, 0xc2,
-	0x3c, 0xf6, 0xb1, 0x13, 0xbe, 0xc4, 0xa3, 0xab, 0xee, 0x27, 0x06, 0x92, 0x79, 0xe1, 0x2a, 0xaf,
-	0xce, 0x45, 0x74, 0x61, 0xb0, 0x81, 0xf1, 0xa1, 0x08, 0x3f, 0x01, 0x78, 0xa8, 0x39, 0xef, 0x5e,
-	0x2b, 0xcf, 0xa2, 0x3f, 0x61, 0xe8, 0x0e, 0xfa, 0xf9, 0x41, 0x40, 0x53, 0xe1, 0x24, 0x47, 0xfd,
-	0x12, 0x3a, 0xee, 0x07, 0x75, 0xb7, 0xf1, 0xdf, 0x0c, 0xc1, 0x83, 0x39, 0x7f, 0xad, 0xcc, 0x3d,
-	0x88, 0x56, 0x52, 0x0e, 0xaa, 0x9a, 0x58, 0x73, 0x83, 0xb2, 0x6f, 0x6e, 0x71, 0x88, 0x96, 0x3a,
-	0x43, 0x38, 0xc6, 0xf8, 0x36, 0x80, 0x71, 0x6b, 0x8c, 0x3d, 0xea, 0x30, 0xec, 0xfe, 0xd8, 0x75,
-	0xa8, 0x2f, 0x70, 0xa8, 0xf2, 0xfc, 0x4a, 0xf0, 0x3b, 0xbd, 0xf7, 0x7c, 0x66, 0xcf, 0xfd, 0xfc,
-	0x6b, 0x72, 0xe4, 0xfa, 0x56, 0x12, 0x7c, 0xba, 0x95, 0x04, 0xf7, 0xb6, 0x92, 0x23, 0x7f, 0x6d,
-	0x25, 0xc1, 0xcd, 0xed, 0xe4, 0xc8, 0xb7, 0xdb, 0x49, 0x70, 0x51, 0x52, 0x74, 0x91, 0xad, 0x11,
-	0xb6, 0xa6, 0x6a, 0x0a, 0x15, 0x35, 0xc2, 0xae, 0xe9, 0x66, 0x59, 0x6a, 0xff, 0x47, 0x62, 0x7d,
-	0x41, 0x32, 0xca, 0x8a, 0xc4, 0x98, 0x66, 0xac, 0xae, 0xee, 0xe3, 0x89, 0x2f, 0xfc, 0x1b, 0x00,
-	0x00, 0xff, 0xff, 0xab, 0x85, 0xf7, 0xc8, 0xbf, 0x15, 0x00, 0x00,
-}
-
-func (this *ApplicationPackage) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ApplicationPackage)
-	if !ok {
-		that2, ok := that.(ApplicationPackage)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.Name != that1.Name {
-		return false
-	}
-	if this.DefaultFPort != that1.DefaultFPort {
-		return false
-	}
-	return true
-}
-func (this *ApplicationPackages) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ApplicationPackages)
-	if !ok {
-		that2, ok := that.(ApplicationPackages)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if len(this.Packages) != len(that1.Packages) {
-		return false
-	}
-	for i := range this.Packages {
-		if !this.Packages[i].Equal(that1.Packages[i]) {
-			return false
-		}
-	}
-	return true
-}
-func (this *ApplicationPackageAssociationIdentifiers) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ApplicationPackageAssociationIdentifiers)
-	if !ok {
-		that2, ok := that.(ApplicationPackageAssociationIdentifiers)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.EndDeviceIdentifiers.Equal(&that1.EndDeviceIdentifiers) {
-		return false
-	}
-	if this.FPort != that1.FPort {
-		return false
-	}
-	return true
-}
-func (this *ApplicationPackageAssociation) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ApplicationPackageAssociation)
-	if !ok {
-		that2, ok := that.(ApplicationPackageAssociation)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.ApplicationPackageAssociationIdentifiers.Equal(&that1.ApplicationPackageAssociationIdentifiers) {
-		return false
-	}
-	if !this.CreatedAt.Equal(that1.CreatedAt) {
-		return false
-	}
-	if !this.UpdatedAt.Equal(that1.UpdatedAt) {
-		return false
-	}
-	if this.PackageName != that1.PackageName {
-		return false
-	}
-	if !this.Data.Equal(that1.Data) {
-		return false
-	}
-	return true
-}
-func (this *ApplicationPackageAssociations) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ApplicationPackageAssociations)
-	if !ok {
-		that2, ok := that.(ApplicationPackageAssociations)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if len(this.Associations) != len(that1.Associations) {
-		return false
-	}
-	for i := range this.Associations {
-		if !this.Associations[i].Equal(that1.Associations[i]) {
-			return false
-		}
-	}
-	return true
-}
-func (this *GetApplicationPackageAssociationRequest) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*GetApplicationPackageAssociationRequest)
-	if !ok {
-		that2, ok := that.(GetApplicationPackageAssociationRequest)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.ApplicationPackageAssociationIdentifiers.Equal(&that1.ApplicationPackageAssociationIdentifiers) {
-		return false
-	}
-	if !this.FieldMask.Equal(that1.FieldMask) {
-		return false
-	}
-	return true
-}
-func (this *ListApplicationPackageAssociationRequest) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ListApplicationPackageAssociationRequest)
-	if !ok {
-		that2, ok := that.(ListApplicationPackageAssociationRequest)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.EndDeviceIdentifiers.Equal(&that1.EndDeviceIdentifiers) {
-		return false
-	}
-	if this.Limit != that1.Limit {
-		return false
-	}
-	if this.Page != that1.Page {
-		return false
-	}
-	if !this.FieldMask.Equal(that1.FieldMask) {
-		return false
-	}
-	return true
-}
-func (this *SetApplicationPackageAssociationRequest) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*SetApplicationPackageAssociationRequest)
-	if !ok {
-		that2, ok := that.(SetApplicationPackageAssociationRequest)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.ApplicationPackageAssociation.Equal(&that1.ApplicationPackageAssociation) {
-		return false
-	}
-	if !this.FieldMask.Equal(that1.FieldMask) {
-		return false
-	}
-	return true
-}
-func (this *ApplicationPackageDefaultAssociationIdentifiers) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ApplicationPackageDefaultAssociationIdentifiers)
-	if !ok {
-		that2, ok := that.(ApplicationPackageDefaultAssociationIdentifiers)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.ApplicationIdentifiers.Equal(&that1.ApplicationIdentifiers) {
-		return false
-	}
-	if this.FPort != that1.FPort {
-		return false
-	}
-	return true
-}
-func (this *ApplicationPackageDefaultAssociation) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ApplicationPackageDefaultAssociation)
-	if !ok {
-		that2, ok := that.(ApplicationPackageDefaultAssociation)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.ApplicationPackageDefaultAssociationIdentifiers.Equal(&that1.ApplicationPackageDefaultAssociationIdentifiers) {
-		return false
-	}
-	if !this.CreatedAt.Equal(that1.CreatedAt) {
-		return false
-	}
-	if !this.UpdatedAt.Equal(that1.UpdatedAt) {
-		return false
-	}
-	if this.PackageName != that1.PackageName {
-		return false
-	}
-	if !this.Data.Equal(that1.Data) {
-		return false
-	}
-	return true
-}
-func (this *ApplicationPackageDefaultAssociations) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ApplicationPackageDefaultAssociations)
-	if !ok {
-		that2, ok := that.(ApplicationPackageDefaultAssociations)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if len(this.Defaults) != len(that1.Defaults) {
-		return false
-	}
-	for i := range this.Defaults {
-		if !this.Defaults[i].Equal(that1.Defaults[i]) {
-			return false
-		}
-	}
-	return true
-}
-func (this *GetApplicationPackageDefaultAssociationRequest) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*GetApplicationPackageDefaultAssociationRequest)
-	if !ok {
-		that2, ok := that.(GetApplicationPackageDefaultAssociationRequest)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.ApplicationPackageDefaultAssociationIdentifiers.Equal(&that1.ApplicationPackageDefaultAssociationIdentifiers) {
-		return false
-	}
-	if !this.FieldMask.Equal(that1.FieldMask) {
-		return false
-	}
-	return true
-}
-func (this *ListApplicationPackageDefaultAssociationRequest) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ListApplicationPackageDefaultAssociationRequest)
-	if !ok {
-		that2, ok := that.(ListApplicationPackageDefaultAssociationRequest)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.ApplicationIdentifiers.Equal(&that1.ApplicationIdentifiers) {
-		return false
-	}
-	if this.Limit != that1.Limit {
-		return false
-	}
-	if this.Page != that1.Page {
-		return false
-	}
-	if !this.FieldMask.Equal(that1.FieldMask) {
-		return false
-	}
-	return true
-}
-func (this *SetApplicationPackageDefaultAssociationRequest) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*SetApplicationPackageDefaultAssociationRequest)
-	if !ok {
-		that2, ok := that.(SetApplicationPackageDefaultAssociationRequest)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.ApplicationPackageDefaultAssociation.Equal(&that1.ApplicationPackageDefaultAssociation) {
-		return false
-	}
-	if !this.FieldMask.Equal(that1.FieldMask) {
-		return false
-	}
-	return true
+	// 1289 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x58, 0x41, 0x6c, 0xdb, 0x54,
+	0x18, 0xee, 0x4b, 0xd2, 0xb5, 0x7d, 0xed, 0x42, 0xf7, 0xd0, 0x58, 0x08, 0x50, 0x8a, 0x57, 0x68,
+	0x28, 0xc4, 0x9e, 0x52, 0x26, 0x58, 0x27, 0x56, 0x9a, 0x75, 0x9b, 0x86, 0x60, 0x2a, 0x4e, 0x41,
+	0xdd, 0xca, 0x08, 0xaf, 0xf1, 0x8b, 0x6b, 0x25, 0xb1, 0x8d, 0xdf, 0x4b, 0x46, 0xa8, 0x7a, 0x29,
+	0xe2, 0x32, 0x21, 0x24, 0xb4, 0xcb, 0x4e, 0xdc, 0x41, 0xe2, 0xc2, 0x09, 0x76, 0x19, 0x17, 0x24,
+	0x2e, 0x9c, 0x90, 0xb8, 0x70, 0x64, 0x07, 0x38, 0x21, 0x21, 0x4e, 0xbd, 0x80, 0xf2, 0x6c, 0x37,
+	0x4e, 0xec, 0x24, 0x76, 0x5a, 0xe0, 0xc2, 0xcd, 0xce, 0x7b, 0xff, 0xff, 0xfe, 0xef, 0xff, 0xbf,
+	0xff, 0x7b, 0x7f, 0x0c, 0x73, 0x55, 0xc3, 0xc2, 0xb7, 0xb0, 0x9e, 0xa5, 0x0c, 0x97, 0x2a, 0x12,
+	0x36, 0x35, 0x09, 0x9b, 0x66, 0x55, 0x2b, 0x61, 0xa6, 0x19, 0x3a, 0x25, 0x56, 0x83, 0x58, 0x45,
+	0x13, 0x97, 0x2a, 0x58, 0x25, 0x54, 0x34, 0x2d, 0x83, 0x19, 0x28, 0xc9, 0x98, 0x2e, 0x3a, 0x76,
+	0x62, 0x63, 0x31, 0xbd, 0xaa, 0x6a, 0x6c, 0xbb, 0xbe, 0x25, 0x96, 0x8c, 0x9a, 0xb4, 0xbe, 0x4d,
+	0xd6, 0xb7, 0x35, 0x5d, 0xa5, 0x57, 0x75, 0xa5, 0x4e, 0x99, 0xa5, 0x11, 0x2a, 0x71, 0xab, 0x52,
+	0x56, 0x25, 0x7a, 0x56, 0x35, 0xb2, 0xe5, 0x2a, 0x56, 0xa9, 0x84, 0x75, 0xdd, 0x60, 0xf6, 0x19,
+	0xb6, 0xd7, 0xf4, 0x8a, 0xc7, 0x0b, 0xd1, 0x1b, 0x46, 0xd3, 0xb4, 0x8c, 0xf7, 0x9b, 0x5e, 0xe3,
+	0x06, 0xae, 0x6a, 0x0a, 0x66, 0x44, 0xf2, 0x3d, 0x38, 0x2e, 0xb2, 0x1e, 0x17, 0xaa, 0xa1, 0x1a,
+	0xb6, 0xf1, 0x56, 0xbd, 0xcc, 0xdf, 0xf8, 0x0b, 0x7f, 0x72, 0xb6, 0x3f, 0xae, 0x1a, 0x86, 0x5a,
+	0x25, 0x36, 0x68, 0x5f, 0x3c, 0x8f, 0x39, 0xab, 0x07, 0x3e, 0x48, 0xcd, 0x64, 0x4d, 0x67, 0x71,
+	0xb6, 0x7b, 0xb1, 0xac, 0x91, 0xaa, 0x52, 0xac, 0x61, 0x5a, 0x71, 0x76, 0x3c, 0xd9, 0xbd, 0x83,
+	0x69, 0x35, 0x42, 0x19, 0xae, 0x99, 0x5d, 0xa7, 0x1f, 0x6c, 0xa0, 0xcc, 0xaa, 0x97, 0x98, 0xb3,
+	0x7a, 0xda, 0x5f, 0x17, 0x4d, 0x21, 0x3a, 0xd3, 0xca, 0x1a, 0xb1, 0x9c, 0x10, 0x85, 0x0f, 0x01,
+	0x44, 0x2b, 0xed, 0x6a, 0xad, 0xd9, 0x65, 0x42, 0xe7, 0x61, 0x42, 0xc7, 0x35, 0x92, 0x02, 0xb3,
+	0x20, 0x33, 0x91, 0x9f, 0xdf, 0xcf, 0xcf, 0x59, 0x42, 0x6a, 0x2e, 0x37, 0xf3, 0xce, 0x26, 0xce,
+	0x7e, 0x70, 0x26, 0x7b, 0xee, 0x66, 0x66, 0x79, 0x69, 0x33, 0x7b, 0x73, 0xd9, 0x7d, 0x7d, 0x76,
+	0x27, 0xf7, 0xfc, 0xee, 0x9c, 0xcc, 0x8d, 0xd0, 0x19, 0x98, 0x54, 0x48, 0x19, 0xd7, 0xab, 0xac,
+	0x58, 0x2e, 0x9a, 0x86, 0xc5, 0x52, 0xb1, 0x59, 0x90, 0x39, 0x9e, 0x87, 0xfb, 0xf9, 0xb1, 0x85,
+	0xd1, 0xd4, 0x5f, 0x20, 0x03, 0xe4, 0x29, 0x67, 0xc7, 0xe5, 0x35, 0xc3, 0x62, 0xc2, 0x9b, 0xf0,
+	0x61, 0x7f, 0x10, 0x14, 0x5d, 0x80, 0xe3, 0x2e, 0x6f, 0x52, 0x60, 0x36, 0x9e, 0x99, 0xcc, 0x09,
+	0x62, 0x27, 0x71, 0x44, 0xbf, 0x99, 0x7c, 0x60, 0x23, 0x7c, 0x09, 0x60, 0xc6, 0xbf, 0x61, 0x85,
+	0x52, 0xa3, 0xa4, 0xf1, 0x5f, 0xae, 0xb6, 0xf3, 0x81, 0xd6, 0x61, 0x92, 0xe8, 0x4a, 0x51, 0x21,
+	0x0d, 0xad, 0x44, 0x8a, 0x9a, 0x42, 0x39, 0xf8, 0xc9, 0xdc, 0x5c, 0xf7, 0x91, 0x97, 0x74, 0x65,
+	0x95, 0x6f, 0xf2, 0x58, 0xe7, 0xc7, 0xf7, 0xf3, 0xa3, 0xb7, 0x41, 0x6c, 0x1a, 0xc8, 0x53, 0xa4,
+	0xbd, 0x4e, 0xd1, 0x53, 0xf0, 0x58, 0xcf, 0x1c, 0x8c, 0x96, 0x5b, 0xe0, 0x97, 0xc6, 0xff, 0xf8,
+	0xe2, 0xd1, 0xc4, 0x38, 0x98, 0x06, 0xc2, 0xed, 0x38, 0x7c, 0xa2, 0x6f, 0xbc, 0xe8, 0x6d, 0x18,
+	0x6f, 0x47, 0xf6, 0xd2, 0xe0, 0x64, 0x04, 0x63, 0xcd, 0x4f, 0xbb, 0xd1, 0xf2, 0xa3, 0x47, 0x32,
+	0x40, 0x6e, 0xb9, 0x45, 0x17, 0x21, 0x2c, 0x59, 0x04, 0x33, 0xa2, 0x14, 0xb1, 0x1d, 0xf0, 0x64,
+	0x2e, 0x2d, 0xda, 0x24, 0x13, 0x5d, 0x92, 0x89, 0xeb, 0x2e, 0x0b, 0xf3, 0x76, 0xe4, 0x23, 0xd3,
+	0x23, 0xf2, 0x84, 0x63, 0xb7, 0xc2, 0x5a, 0x4e, 0xea, 0xa6, 0xe2, 0x3a, 0x89, 0x47, 0x71, 0xe2,
+	0xd8, 0xad, 0x30, 0xf4, 0x2a, 0x9c, 0x72, 0xaa, 0x58, 0xe4, 0x3c, 0x4c, 0x44, 0xe3, 0xe1, 0xa4,
+	0x63, 0x7c, 0xad, 0x45, 0xc7, 0xe7, 0x60, 0x42, 0xc1, 0x0c, 0xa7, 0x46, 0x79, 0x28, 0xa7, 0x7c,
+	0xa1, 0x14, 0x78, 0xd3, 0xc8, 0x7c, 0x93, 0xa7, 0x18, 0x14, 0xce, 0xf4, 0xcd, 0x27, 0x45, 0x6f,
+	0xc0, 0x29, 0xec, 0x79, 0x77, 0x28, 0x9a, 0x8d, 0x54, 0x15, 0xb9, 0xc3, 0x85, 0x70, 0x0f, 0xc0,
+	0xf9, 0x2b, 0x84, 0xf5, 0x37, 0x21, 0xef, 0xd5, 0x09, 0x65, 0x68, 0xfd, 0x68, 0xb8, 0xd0, 0x66,
+	0x2e, 0xe7, 0xc0, 0x39, 0x08, 0xdb, 0x42, 0xd4, 0x93, 0x03, 0x97, 0x5b, 0x5b, 0x5e, 0xc7, 0xb4,
+	0x22, 0x4f, 0x94, 0xdd, 0x47, 0xe1, 0x67, 0x00, 0x33, 0xaf, 0x69, 0x34, 0x5c, 0xf4, 0xaf, 0x78,
+	0xa3, 0x8f, 0xda, 0x63, 0x3c, 0xd2, 0x19, 0x38, 0x5a, 0xd5, 0x6a, 0x9a, 0xdb, 0x59, 0xad, 0xd5,
+	0x85, 0x78, 0xea, 0xd7, 0x31, 0xd9, 0xfe, 0x19, 0x21, 0x98, 0x30, 0xb1, 0x4a, 0x38, 0x05, 0x8f,
+	0xcb, 0xfc, 0xb9, 0x0b, 0x5d, 0x22, 0x0a, 0xba, 0xfb, 0x00, 0xce, 0x17, 0x42, 0x96, 0xe6, 0x3a,
+	0x9c, 0xf4, 0x94, 0xd5, 0x01, 0x19, 0x8d, 0x18, 0x1e, 0xb4, 0x5e, 0x5f, 0x87, 0xa9, 0xcf, 0x37,
+	0x00, 0x4a, 0xfe, 0x33, 0x57, 0x6d, 0x21, 0xee, 0xa1, 0x8a, 0xd7, 0xe1, 0x43, 0x9e, 0xcb, 0xdc,
+	0x23, 0x8b, 0xcf, 0xf4, 0x41, 0x13, 0x5c, 0xb4, 0x24, 0xf6, 0xee, 0x88, 0x28, 0x8d, 0x77, 0xe3,
+	0x70, 0x2e, 0x4c, 0xec, 0xa8, 0xe4, 0xe5, 0xd5, 0xf2, 0xe0, 0x94, 0xf7, 0x85, 0xff, 0xbf, 0x50,
+	0x86, 0x10, 0xca, 0x26, 0x7c, 0x3a, 0x4c, 0x5a, 0x29, 0x5a, 0x83, 0xe3, 0xce, 0xad, 0xef, 0x6a,
+	0xe5, 0x0b, 0xc3, 0xd4, 0x47, 0x3e, 0xf0, 0x22, 0x7c, 0x0f, 0xa0, 0x18, 0x28, 0x97, 0x01, 0x56,
+	0x4e, 0x6b, 0x6e, 0x1e, 0x29, 0x3f, 0x8e, 0x4e, 0x3c, 0x1f, 0x00, 0x28, 0x05, 0x8b, 0x67, 0x6f,
+	0x2c, 0x79, 0x2f, 0x96, 0xe8, 0x0d, 0xf9, 0x5f, 0xa8, 0xe8, 0x77, 0x00, 0x8a, 0x85, 0x68, 0x15,
+	0xdb, 0x80, 0x63, 0x4e, 0xc1, 0x1d, 0xa4, 0x43, 0xb1, 0xc6, 0x83, 0xdb, 0x75, 0x77, 0x88, 0x72,
+	0xe5, 0x3e, 0x3b, 0x01, 0xd3, 0x01, 0xb3, 0x27, 0x51, 0x35, 0xca, 0xac, 0x26, 0xfa, 0x1c, 0xc0,
+	0x44, 0xab, 0x9a, 0x28, 0xd4, 0xcd, 0x96, 0x3e, 0x3d, 0x18, 0x11, 0x15, 0xde, 0xda, 0xfb, 0xf1,
+	0xc1, 0x9d, 0xd8, 0x1a, 0xba, 0x26, 0x61, 0xda, 0xf1, 0x0f, 0x4b, 0xda, 0xe9, 0x92, 0x68, 0xb1,
+	0xf3, 0x7d, 0x57, 0xb2, 0x87, 0x5a, 0x2a, 0xed, 0x1c, 0x4c, 0xb7, 0xbb, 0x92, 0x3b, 0x25, 0xa3,
+	0x3b, 0x31, 0x98, 0x6c, 0x35, 0x91, 0x47, 0x44, 0x5f, 0xec, 0x8e, 0x27, 0xe4, 0x4c, 0x92, 0x8e,
+	0x76, 0xc7, 0x09, 0x77, 0x01, 0xc7, 0xf4, 0x29, 0x40, 0x9f, 0x00, 0x3f, 0xaa, 0x16, 0x92, 0xce,
+	0x91, 0x5c, 0x0c, 0x0d, 0x34, 0xc0, 0x36, 0x00, 0xbb, 0xe4, 0x1d, 0xbe, 0x6c, 0x23, 0xfb, 0x4a,
+	0xda, 0x45, 0xbf, 0x01, 0x38, 0xcd, 0xfb, 0xd1, 0xab, 0x60, 0xbe, 0x29, 0x2b, 0xec, 0xb8, 0x93,
+	0x16, 0x23, 0x25, 0x86, 0x0a, 0x15, 0x9e, 0x18, 0x82, 0x4a, 0xc1, 0x69, 0x89, 0x94, 0x87, 0x41,
+	0xc0, 0xd1, 0xbd, 0x18, 0x4c, 0x16, 0x06, 0x30, 0xa0, 0xf0, 0xcf, 0x30, 0xe0, 0xbe, 0xcd, 0x80,
+	0xaf, 0x41, 0xfa, 0xab, 0x00, 0x06, 0x78, 0xa2, 0x14, 0x0f, 0xc3, 0x86, 0x01, 0x7e, 0x06, 0x33,
+	0xa3, 0xdb, 0x81, 0xc3, 0x92, 0x25, 0xb0, 0x80, 0xfe, 0x04, 0xf0, 0xc4, 0x2a, 0xa9, 0x12, 0xd6,
+	0xf1, 0x47, 0x6d, 0xe8, 0x79, 0x3c, 0xfd, 0x88, 0x4f, 0x80, 0x2e, 0xd5, 0x4c, 0xd6, 0x14, 0x3e,
+	0xb6, 0x33, 0xf5, 0x11, 0x58, 0xd8, 0x0b, 0xc8, 0xd4, 0xb0, 0x99, 0x89, 0x9c, 0x09, 0xb7, 0x3f,
+	0x7e, 0x07, 0xf0, 0xe4, 0x15, 0xc2, 0x02, 0x26, 0xb0, 0x0b, 0xa1, 0xc4, 0xa3, 0xa7, 0xde, 0xa7,
+	0x87, 0x92, 0x77, 0xe1, 0x5d, 0x9e, 0x9d, 0x1b, 0x68, 0x63, 0xb8, 0x86, 0x09, 0xa1, 0x08, 0x3f,
+	0x01, 0x78, 0xaa, 0xd5, 0xef, 0x41, 0xa3, 0xcd, 0x72, 0x38, 0x61, 0xe8, 0x0d, 0xfa, 0xec, 0x30,
+	0xa0, 0xa9, 0x70, 0x91, 0xa3, 0x7e, 0x19, 0x9d, 0x0f, 0x83, 0xba, 0x57, 0xfb, 0xef, 0xc5, 0xe0,
+	0xc9, 0x42, 0xb8, 0x52, 0x16, 0xfe, 0x8d, 0x52, 0x52, 0x0e, 0xaa, 0x96, 0xde, 0xf6, 0x83, 0x72,
+	0x6e, 0x6e, 0xf1, 0x10, 0x25, 0xf5, 0xba, 0xf0, 0xb4, 0xf1, 0x0f, 0x00, 0xa6, 0xec, 0x36, 0x0e,
+	0xc8, 0xc3, 0x61, 0xe7, 0xc4, 0x9e, 0x4d, 0xbd, 0xc1, 0xa1, 0xca, 0x0b, 0x6b, 0xd1, 0xef, 0xf4,
+	0xfe, 0xfd, 0x99, 0x3f, 0xfb, 0xed, 0x2f, 0x33, 0xe0, 0x86, 0xa4, 0x1a, 0x22, 0xdb, 0x26, 0x8c,
+	0x7f, 0x4f, 0x15, 0x75, 0xc2, 0x6e, 0x19, 0x56, 0x45, 0xea, 0xfc, 0x30, 0xd8, 0x58, 0x94, 0xcc,
+	0x8a, 0x2a, 0x31, 0xa6, 0x9b, 0x5b, 0x5b, 0xc7, 0x78, 0x80, 0x8b, 0x7f, 0x07, 0x00, 0x00, 0xff,
+	0xff, 0xeb, 0xd9, 0xe0, 0x56, 0xd5, 0x15, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -1579,189 +1268,4 @@ var _ApplicationPackageRegistry_serviceDesc = grpc.ServiceDesc{
 	},
 	Streams:  []grpc.StreamDesc{},
 	Metadata: "lorawan-stack/api/applicationserver_packages.proto",
-}
-
-func (this *ApplicationPackage) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&ApplicationPackage{`,
-		`Name:` + fmt.Sprintf("%v", this.Name) + `,`,
-		`DefaultFPort:` + fmt.Sprintf("%v", this.DefaultFPort) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *ApplicationPackages) String() string {
-	if this == nil {
-		return "nil"
-	}
-	repeatedStringForPackages := "[]*ApplicationPackage{"
-	for _, f := range this.Packages {
-		repeatedStringForPackages += strings.Replace(f.String(), "ApplicationPackage", "ApplicationPackage", 1) + ","
-	}
-	repeatedStringForPackages += "}"
-	s := strings.Join([]string{`&ApplicationPackages{`,
-		`Packages:` + repeatedStringForPackages + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *ApplicationPackageAssociationIdentifiers) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&ApplicationPackageAssociationIdentifiers{`,
-		`EndDeviceIdentifiers:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.EndDeviceIdentifiers), "EndDeviceIdentifiers", "EndDeviceIdentifiers", 1), `&`, ``, 1) + `,`,
-		`FPort:` + fmt.Sprintf("%v", this.FPort) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *ApplicationPackageAssociation) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&ApplicationPackageAssociation{`,
-		`ApplicationPackageAssociationIdentifiers:` + strings.Replace(strings.Replace(this.ApplicationPackageAssociationIdentifiers.String(), "ApplicationPackageAssociationIdentifiers", "ApplicationPackageAssociationIdentifiers", 1), `&`, ``, 1) + `,`,
-		`CreatedAt:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.CreatedAt), "Timestamp", "types.Timestamp", 1), `&`, ``, 1) + `,`,
-		`UpdatedAt:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.UpdatedAt), "Timestamp", "types.Timestamp", 1), `&`, ``, 1) + `,`,
-		`PackageName:` + fmt.Sprintf("%v", this.PackageName) + `,`,
-		`Data:` + strings.Replace(fmt.Sprintf("%v", this.Data), "Struct", "types.Struct", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *ApplicationPackageAssociations) String() string {
-	if this == nil {
-		return "nil"
-	}
-	repeatedStringForAssociations := "[]*ApplicationPackageAssociation{"
-	for _, f := range this.Associations {
-		repeatedStringForAssociations += strings.Replace(f.String(), "ApplicationPackageAssociation", "ApplicationPackageAssociation", 1) + ","
-	}
-	repeatedStringForAssociations += "}"
-	s := strings.Join([]string{`&ApplicationPackageAssociations{`,
-		`Associations:` + repeatedStringForAssociations + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *GetApplicationPackageAssociationRequest) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&GetApplicationPackageAssociationRequest{`,
-		`ApplicationPackageAssociationIdentifiers:` + strings.Replace(strings.Replace(this.ApplicationPackageAssociationIdentifiers.String(), "ApplicationPackageAssociationIdentifiers", "ApplicationPackageAssociationIdentifiers", 1), `&`, ``, 1) + `,`,
-		`FieldMask:` + strings.Replace(fmt.Sprintf("%v", this.FieldMask), "FieldMask", "types.FieldMask", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *ListApplicationPackageAssociationRequest) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&ListApplicationPackageAssociationRequest{`,
-		`EndDeviceIdentifiers:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.EndDeviceIdentifiers), "EndDeviceIdentifiers", "EndDeviceIdentifiers", 1), `&`, ``, 1) + `,`,
-		`Limit:` + fmt.Sprintf("%v", this.Limit) + `,`,
-		`Page:` + fmt.Sprintf("%v", this.Page) + `,`,
-		`FieldMask:` + strings.Replace(fmt.Sprintf("%v", this.FieldMask), "FieldMask", "types.FieldMask", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *SetApplicationPackageAssociationRequest) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&SetApplicationPackageAssociationRequest{`,
-		`ApplicationPackageAssociation:` + strings.Replace(strings.Replace(this.ApplicationPackageAssociation.String(), "ApplicationPackageAssociation", "ApplicationPackageAssociation", 1), `&`, ``, 1) + `,`,
-		`FieldMask:` + strings.Replace(fmt.Sprintf("%v", this.FieldMask), "FieldMask", "types.FieldMask", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *ApplicationPackageDefaultAssociationIdentifiers) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&ApplicationPackageDefaultAssociationIdentifiers{`,
-		`ApplicationIdentifiers:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.ApplicationIdentifiers), "ApplicationIdentifiers", "ApplicationIdentifiers", 1), `&`, ``, 1) + `,`,
-		`FPort:` + fmt.Sprintf("%v", this.FPort) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *ApplicationPackageDefaultAssociation) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&ApplicationPackageDefaultAssociation{`,
-		`ApplicationPackageDefaultAssociationIdentifiers:` + strings.Replace(strings.Replace(this.ApplicationPackageDefaultAssociationIdentifiers.String(), "ApplicationPackageDefaultAssociationIdentifiers", "ApplicationPackageDefaultAssociationIdentifiers", 1), `&`, ``, 1) + `,`,
-		`CreatedAt:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.CreatedAt), "Timestamp", "types.Timestamp", 1), `&`, ``, 1) + `,`,
-		`UpdatedAt:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.UpdatedAt), "Timestamp", "types.Timestamp", 1), `&`, ``, 1) + `,`,
-		`PackageName:` + fmt.Sprintf("%v", this.PackageName) + `,`,
-		`Data:` + strings.Replace(fmt.Sprintf("%v", this.Data), "Struct", "types.Struct", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *ApplicationPackageDefaultAssociations) String() string {
-	if this == nil {
-		return "nil"
-	}
-	repeatedStringForDefaults := "[]*ApplicationPackageDefaultAssociation{"
-	for _, f := range this.Defaults {
-		repeatedStringForDefaults += strings.Replace(f.String(), "ApplicationPackageDefaultAssociation", "ApplicationPackageDefaultAssociation", 1) + ","
-	}
-	repeatedStringForDefaults += "}"
-	s := strings.Join([]string{`&ApplicationPackageDefaultAssociations{`,
-		`Defaults:` + repeatedStringForDefaults + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *GetApplicationPackageDefaultAssociationRequest) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&GetApplicationPackageDefaultAssociationRequest{`,
-		`ApplicationPackageDefaultAssociationIdentifiers:` + strings.Replace(strings.Replace(this.ApplicationPackageDefaultAssociationIdentifiers.String(), "ApplicationPackageDefaultAssociationIdentifiers", "ApplicationPackageDefaultAssociationIdentifiers", 1), `&`, ``, 1) + `,`,
-		`FieldMask:` + strings.Replace(fmt.Sprintf("%v", this.FieldMask), "FieldMask", "types.FieldMask", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *ListApplicationPackageDefaultAssociationRequest) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&ListApplicationPackageDefaultAssociationRequest{`,
-		`ApplicationIdentifiers:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.ApplicationIdentifiers), "ApplicationIdentifiers", "ApplicationIdentifiers", 1), `&`, ``, 1) + `,`,
-		`Limit:` + fmt.Sprintf("%v", this.Limit) + `,`,
-		`Page:` + fmt.Sprintf("%v", this.Page) + `,`,
-		`FieldMask:` + strings.Replace(fmt.Sprintf("%v", this.FieldMask), "FieldMask", "types.FieldMask", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *SetApplicationPackageDefaultAssociationRequest) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&SetApplicationPackageDefaultAssociationRequest{`,
-		`ApplicationPackageDefaultAssociation:` + strings.Replace(strings.Replace(this.ApplicationPackageDefaultAssociation.String(), "ApplicationPackageDefaultAssociation", "ApplicationPackageDefaultAssociation", 1), `&`, ``, 1) + `,`,
-		`FieldMask:` + strings.Replace(fmt.Sprintf("%v", this.FieldMask), "FieldMask", "types.FieldMask", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func valueToStringApplicationserverPackages(v interface{}) string {
-	rv := reflect.ValueOf(v)
-	if rv.IsNil() {
-		return "nil"
-	}
-	pv := reflect.Indirect(rv).Interface()
-	return fmt.Sprintf("*%v", pv)
 }

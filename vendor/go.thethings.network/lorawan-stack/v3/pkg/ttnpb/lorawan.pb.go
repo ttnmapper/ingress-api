@@ -4,20 +4,16 @@
 package ttnpb
 
 import (
-	bytes "bytes"
 	fmt "fmt"
+	_ "github.com/TheThingsIndustries/protoc-gen-go-flags/annotations"
+	_ "github.com/TheThingsIndustries/protoc-gen-go-json/annotations"
 	_ "github.com/envoyproxy/protoc-gen-validate/validate"
 	_ "github.com/gogo/protobuf/gogoproto"
 	proto "github.com/gogo/protobuf/proto"
-	github_com_gogo_protobuf_types "github.com/gogo/protobuf/types"
 	types "github.com/gogo/protobuf/types"
 	golang_proto "github.com/golang/protobuf/proto"
-	go_thethings_network_lorawan_stack_v3_pkg_types "go.thethings.network/lorawan-stack/v3/pkg/types"
+	_ "github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-openapiv2/options"
 	math "math"
-	reflect "reflect"
-	strconv "strconv"
-	strings "strings"
-	time "time"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -25,7 +21,6 @@ var _ = proto.Marshal
 var _ = golang_proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
-var _ = time.Kitchen
 
 // This is a compile-time assertion to ensure that this generated file
 // is compatible with the proto package it is being compiled against.
@@ -68,6 +63,10 @@ var MType_value = map[string]int32{
 	"PROPRIETARY":      7,
 }
 
+func (x MType) String() string {
+	return proto.EnumName(MType_name, int32(x))
+}
+
 func (MType) EnumDescriptor() ([]byte, []int) {
 	return fileDescriptor_2084d1d5a227b67e, []int{0}
 }
@@ -86,6 +85,10 @@ var Major_value = map[string]int32{
 	"LORAWAN_R1": 0,
 }
 
+func (x Major) String() string {
+	return proto.EnumName(Major_name, int32(x))
+}
+
 func (Major) EnumDescriptor() ([]byte, []int) {
 	return fileDescriptor_2084d1d5a227b67e, []int{1}
 }
@@ -93,13 +96,13 @@ func (Major) EnumDescriptor() ([]byte, []int) {
 type MACVersion int32
 
 const (
-	MAC_UNKNOWN MACVersion = 0
-	MAC_V1_0    MACVersion = 1
-	MAC_V1_0_1  MACVersion = 2
-	MAC_V1_0_2  MACVersion = 3
-	MAC_V1_1    MACVersion = 4
-	MAC_V1_0_3  MACVersion = 5
-	MAC_V1_0_4  MACVersion = 6
+	MACVersion_MAC_UNKNOWN MACVersion = 0
+	MACVersion_MAC_V1_0    MACVersion = 1
+	MACVersion_MAC_V1_0_1  MACVersion = 2
+	MACVersion_MAC_V1_0_2  MACVersion = 3
+	MACVersion_MAC_V1_1    MACVersion = 4
+	MACVersion_MAC_V1_0_3  MACVersion = 5
+	MACVersion_MAC_V1_0_4  MACVersion = 6
 )
 
 var MACVersion_name = map[int32]string{
@@ -122,6 +125,10 @@ var MACVersion_value = map[string]int32{
 	"MAC_V1_0_4":  6,
 }
 
+func (x MACVersion) String() string {
+	return proto.EnumName(MACVersion_name, int32(x))
+}
+
 func (MACVersion) EnumDescriptor() ([]byte, []int) {
 	return fileDescriptor_2084d1d5a227b67e, []int{2}
 }
@@ -129,29 +136,43 @@ func (MACVersion) EnumDescriptor() ([]byte, []int) {
 type PHYVersion int32
 
 const (
-	PHY_UNKNOWN        PHYVersion = 0
-	TS001_V1_0         PHYVersion = 1
-	TS001_V1_0_1       PHYVersion = 2
-	RP001_V1_0_2       PHYVersion = 3
-	RP001_V1_0_2_REV_B PHYVersion = 4
-	RP001_V1_1_REV_A   PHYVersion = 5
-	RP001_V1_1_REV_B   PHYVersion = 6
-	RP001_V1_0_3_REV_A PHYVersion = 7
-	RP002_V1_0_0       PHYVersion = 8
-	RP002_V1_0_1       PHYVersion = 9
-	RP002_V1_0_2       PHYVersion = 10
-	RP002_V1_0_3       PHYVersion = 11
+	PHYVersion_PHY_UNKNOWN        PHYVersion = 0
+	PHYVersion_PHY_V1_0           PHYVersion = 1
+	PHYVersion_TS001_V1_0         PHYVersion = 1
+	PHYVersion_PHY_V1_0_1         PHYVersion = 2
+	PHYVersion_TS001_V1_0_1       PHYVersion = 2
+	PHYVersion_PHY_V1_0_2_REV_A   PHYVersion = 3
+	PHYVersion_RP001_V1_0_2       PHYVersion = 3
+	PHYVersion_PHY_V1_0_2_REV_B   PHYVersion = 4
+	PHYVersion_RP001_V1_0_2_REV_B PHYVersion = 4
+	PHYVersion_PHY_V1_1_REV_A     PHYVersion = 5
+	PHYVersion_RP001_V1_1_REV_A   PHYVersion = 5
+	PHYVersion_PHY_V1_1_REV_B     PHYVersion = 6
+	PHYVersion_RP001_V1_1_REV_B   PHYVersion = 6
+	PHYVersion_PHY_V1_0_3_REV_A   PHYVersion = 7
+	PHYVersion_RP001_V1_0_3_REV_A PHYVersion = 7
+	PHYVersion_RP002_V1_0_0       PHYVersion = 8
+	PHYVersion_RP002_V1_0_1       PHYVersion = 9
+	PHYVersion_RP002_V1_0_2       PHYVersion = 10
+	PHYVersion_RP002_V1_0_3       PHYVersion = 11
 )
 
 var PHYVersion_name = map[int32]string{
-	0:  "PHY_UNKNOWN",
-	1:  "TS001_V1_0",
-	2:  "TS001_V1_0_1",
-	3:  "RP001_V1_0_2",
-	4:  "RP001_V1_0_2_REV_B",
-	5:  "RP001_V1_1_REV_A",
-	6:  "RP001_V1_1_REV_B",
-	7:  "RP001_V1_0_3_REV_A",
+	0: "PHY_UNKNOWN",
+	1: "PHY_V1_0",
+	// Duplicate value: 1: "TS001_V1_0",
+	2: "PHY_V1_0_1",
+	// Duplicate value: 2: "TS001_V1_0_1",
+	3: "PHY_V1_0_2_REV_A",
+	// Duplicate value: 3: "RP001_V1_0_2",
+	4: "PHY_V1_0_2_REV_B",
+	// Duplicate value: 4: "RP001_V1_0_2_REV_B",
+	5: "PHY_V1_1_REV_A",
+	// Duplicate value: 5: "RP001_V1_1_REV_A",
+	6: "PHY_V1_1_REV_B",
+	// Duplicate value: 6: "RP001_V1_1_REV_B",
+	7: "PHY_V1_0_3_REV_A",
+	// Duplicate value: 7: "RP001_V1_0_3_REV_A",
 	8:  "RP002_V1_0_0",
 	9:  "RP002_V1_0_1",
 	10: "RP002_V1_0_2",
@@ -160,17 +181,28 @@ var PHYVersion_name = map[int32]string{
 
 var PHYVersion_value = map[string]int32{
 	"PHY_UNKNOWN":        0,
+	"PHY_V1_0":           1,
 	"TS001_V1_0":         1,
+	"PHY_V1_0_1":         2,
 	"TS001_V1_0_1":       2,
+	"PHY_V1_0_2_REV_A":   3,
 	"RP001_V1_0_2":       3,
+	"PHY_V1_0_2_REV_B":   4,
 	"RP001_V1_0_2_REV_B": 4,
+	"PHY_V1_1_REV_A":     5,
 	"RP001_V1_1_REV_A":   5,
+	"PHY_V1_1_REV_B":     6,
 	"RP001_V1_1_REV_B":   6,
+	"PHY_V1_0_3_REV_A":   7,
 	"RP001_V1_0_3_REV_A": 7,
 	"RP002_V1_0_0":       8,
 	"RP002_V1_0_1":       9,
 	"RP002_V1_0_2":       10,
 	"RP002_V1_0_3":       11,
+}
+
+func (x PHYVersion) String() string {
+	return proto.EnumName(PHYVersion_name, int32(x))
 }
 
 func (PHYVersion) EnumDescriptor() ([]byte, []int) {
@@ -180,22 +212,22 @@ func (PHYVersion) EnumDescriptor() ([]byte, []int) {
 type DataRateIndex int32
 
 const (
-	DATA_RATE_0  DataRateIndex = 0
-	DATA_RATE_1  DataRateIndex = 1
-	DATA_RATE_2  DataRateIndex = 2
-	DATA_RATE_3  DataRateIndex = 3
-	DATA_RATE_4  DataRateIndex = 4
-	DATA_RATE_5  DataRateIndex = 5
-	DATA_RATE_6  DataRateIndex = 6
-	DATA_RATE_7  DataRateIndex = 7
-	DATA_RATE_8  DataRateIndex = 8
-	DATA_RATE_9  DataRateIndex = 9
-	DATA_RATE_10 DataRateIndex = 10
-	DATA_RATE_11 DataRateIndex = 11
-	DATA_RATE_12 DataRateIndex = 12
-	DATA_RATE_13 DataRateIndex = 13
-	DATA_RATE_14 DataRateIndex = 14
-	DATA_RATE_15 DataRateIndex = 15
+	DataRateIndex_DATA_RATE_0  DataRateIndex = 0
+	DataRateIndex_DATA_RATE_1  DataRateIndex = 1
+	DataRateIndex_DATA_RATE_2  DataRateIndex = 2
+	DataRateIndex_DATA_RATE_3  DataRateIndex = 3
+	DataRateIndex_DATA_RATE_4  DataRateIndex = 4
+	DataRateIndex_DATA_RATE_5  DataRateIndex = 5
+	DataRateIndex_DATA_RATE_6  DataRateIndex = 6
+	DataRateIndex_DATA_RATE_7  DataRateIndex = 7
+	DataRateIndex_DATA_RATE_8  DataRateIndex = 8
+	DataRateIndex_DATA_RATE_9  DataRateIndex = 9
+	DataRateIndex_DATA_RATE_10 DataRateIndex = 10
+	DataRateIndex_DATA_RATE_11 DataRateIndex = 11
+	DataRateIndex_DATA_RATE_12 DataRateIndex = 12
+	DataRateIndex_DATA_RATE_13 DataRateIndex = 13
+	DataRateIndex_DATA_RATE_14 DataRateIndex = 14
+	DataRateIndex_DATA_RATE_15 DataRateIndex = 15
 )
 
 var DataRateIndex_name = map[int32]string{
@@ -234,6 +266,10 @@ var DataRateIndex_value = map[string]int32{
 	"DATA_RATE_13": 13,
 	"DATA_RATE_14": 14,
 	"DATA_RATE_15": 15,
+}
+
+func (x DataRateIndex) String() string {
+	return proto.EnumName(DataRateIndex_name, int32(x))
 }
 
 func (DataRateIndex) EnumDescriptor() ([]byte, []int) {
@@ -275,6 +311,10 @@ var DataRateOffset_value = map[string]int32{
 	"DATA_RATE_OFFSET_7": 7,
 }
 
+func (x DataRateOffset) String() string {
+	return proto.EnumName(DataRateOffset_name, int32(x))
+}
+
 func (DataRateOffset) EnumDescriptor() ([]byte, []int) {
 	return fileDescriptor_2084d1d5a227b67e, []int{5}
 }
@@ -302,6 +342,10 @@ var JoinRequestType_value = map[string]int32{
 	"JOIN":           255,
 }
 
+func (x JoinRequestType) String() string {
+	return proto.EnumName(JoinRequestType_name, int32(x))
+}
+
 func (JoinRequestType) EnumDescriptor() ([]byte, []int) {
 	return fileDescriptor_2084d1d5a227b67e, []int{6}
 }
@@ -326,6 +370,10 @@ var RejoinRequestType_value = map[string]int32{
 	"KEYS":    2,
 }
 
+func (x RejoinRequestType) String() string {
+	return proto.EnumName(RejoinRequestType_name, int32(x))
+}
+
 func (RejoinRequestType) EnumDescriptor() ([]byte, []int) {
 	return fileDescriptor_2084d1d5a227b67e, []int{7}
 }
@@ -347,6 +395,10 @@ var CFListType_value = map[string]int32{
 	"CHANNEL_MASKS": 1,
 }
 
+func (x CFListType) String() string {
+	return proto.EnumName(CFListType_name, int32(x))
+}
+
 func (CFListType) EnumDescriptor() ([]byte, []int) {
 	return fileDescriptor_2084d1d5a227b67e, []int{8}
 }
@@ -354,9 +406,9 @@ func (CFListType) EnumDescriptor() ([]byte, []int) {
 type Class int32
 
 const (
-	CLASS_A Class = 0
-	CLASS_B Class = 1
-	CLASS_C Class = 2
+	Class_CLASS_A Class = 0
+	Class_CLASS_B Class = 1
+	Class_CLASS_C Class = 2
 )
 
 var Class_name = map[int32]string{
@@ -369,6 +421,10 @@ var Class_value = map[string]int32{
 	"CLASS_A": 0,
 	"CLASS_B": 1,
 	"CLASS_C": 2,
+}
+
+func (x Class) String() string {
+	return proto.EnumName(Class_name, int32(x))
 }
 
 func (Class) EnumDescriptor() ([]byte, []int) {
@@ -407,6 +463,10 @@ var TxSchedulePriority_value = map[string]int32{
 	"HIGHEST":      6,
 }
 
+func (x TxSchedulePriority) String() string {
+	return proto.EnumName(TxSchedulePriority_name, int32(x))
+}
+
 func (TxSchedulePriority) EnumDescriptor() ([]byte, []int) {
 	return fileDescriptor_2084d1d5a227b67e, []int{10}
 }
@@ -414,27 +474,27 @@ func (TxSchedulePriority) EnumDescriptor() ([]byte, []int) {
 type MACCommandIdentifier int32
 
 const (
-	CID_RFU_0              MACCommandIdentifier = 0
-	CID_RESET              MACCommandIdentifier = 1
-	CID_LINK_CHECK         MACCommandIdentifier = 2
-	CID_LINK_ADR           MACCommandIdentifier = 3
-	CID_DUTY_CYCLE         MACCommandIdentifier = 4
-	CID_RX_PARAM_SETUP     MACCommandIdentifier = 5
-	CID_DEV_STATUS         MACCommandIdentifier = 6
-	CID_NEW_CHANNEL        MACCommandIdentifier = 7
-	CID_RX_TIMING_SETUP    MACCommandIdentifier = 8
-	CID_TX_PARAM_SETUP     MACCommandIdentifier = 9
-	CID_DL_CHANNEL         MACCommandIdentifier = 10
-	CID_REKEY              MACCommandIdentifier = 11
-	CID_ADR_PARAM_SETUP    MACCommandIdentifier = 12
-	CID_DEVICE_TIME        MACCommandIdentifier = 13
-	CID_FORCE_REJOIN       MACCommandIdentifier = 14
-	CID_REJOIN_PARAM_SETUP MACCommandIdentifier = 15
-	CID_PING_SLOT_INFO     MACCommandIdentifier = 16
-	CID_PING_SLOT_CHANNEL  MACCommandIdentifier = 17
-	CID_BEACON_TIMING      MACCommandIdentifier = 18
-	CID_BEACON_FREQ        MACCommandIdentifier = 19
-	CID_DEVICE_MODE        MACCommandIdentifier = 32
+	MACCommandIdentifier_CID_RFU_0              MACCommandIdentifier = 0
+	MACCommandIdentifier_CID_RESET              MACCommandIdentifier = 1
+	MACCommandIdentifier_CID_LINK_CHECK         MACCommandIdentifier = 2
+	MACCommandIdentifier_CID_LINK_ADR           MACCommandIdentifier = 3
+	MACCommandIdentifier_CID_DUTY_CYCLE         MACCommandIdentifier = 4
+	MACCommandIdentifier_CID_RX_PARAM_SETUP     MACCommandIdentifier = 5
+	MACCommandIdentifier_CID_DEV_STATUS         MACCommandIdentifier = 6
+	MACCommandIdentifier_CID_NEW_CHANNEL        MACCommandIdentifier = 7
+	MACCommandIdentifier_CID_RX_TIMING_SETUP    MACCommandIdentifier = 8
+	MACCommandIdentifier_CID_TX_PARAM_SETUP     MACCommandIdentifier = 9
+	MACCommandIdentifier_CID_DL_CHANNEL         MACCommandIdentifier = 10
+	MACCommandIdentifier_CID_REKEY              MACCommandIdentifier = 11
+	MACCommandIdentifier_CID_ADR_PARAM_SETUP    MACCommandIdentifier = 12
+	MACCommandIdentifier_CID_DEVICE_TIME        MACCommandIdentifier = 13
+	MACCommandIdentifier_CID_FORCE_REJOIN       MACCommandIdentifier = 14
+	MACCommandIdentifier_CID_REJOIN_PARAM_SETUP MACCommandIdentifier = 15
+	MACCommandIdentifier_CID_PING_SLOT_INFO     MACCommandIdentifier = 16
+	MACCommandIdentifier_CID_PING_SLOT_CHANNEL  MACCommandIdentifier = 17
+	MACCommandIdentifier_CID_BEACON_TIMING      MACCommandIdentifier = 18
+	MACCommandIdentifier_CID_BEACON_FREQ        MACCommandIdentifier = 19
+	MACCommandIdentifier_CID_DEVICE_MODE        MACCommandIdentifier = 32
 )
 
 var MACCommandIdentifier_name = map[int32]string{
@@ -485,6 +545,10 @@ var MACCommandIdentifier_value = map[string]int32{
 	"CID_DEVICE_MODE":        32,
 }
 
+func (x MACCommandIdentifier) String() string {
+	return proto.EnumName(MACCommandIdentifier_name, int32(x))
+}
+
 func (MACCommandIdentifier) EnumDescriptor() ([]byte, []int) {
 	return fileDescriptor_2084d1d5a227b67e, []int{11}
 }
@@ -492,22 +556,22 @@ func (MACCommandIdentifier) EnumDescriptor() ([]byte, []int) {
 type AggregatedDutyCycle int32
 
 const (
-	DUTY_CYCLE_1     AggregatedDutyCycle = 0
-	DUTY_CYCLE_2     AggregatedDutyCycle = 1
-	DUTY_CYCLE_4     AggregatedDutyCycle = 2
-	DUTY_CYCLE_8     AggregatedDutyCycle = 3
-	DUTY_CYCLE_16    AggregatedDutyCycle = 4
-	DUTY_CYCLE_32    AggregatedDutyCycle = 5
-	DUTY_CYCLE_64    AggregatedDutyCycle = 6
-	DUTY_CYCLE_128   AggregatedDutyCycle = 7
-	DUTY_CYCLE_256   AggregatedDutyCycle = 8
-	DUTY_CYCLE_512   AggregatedDutyCycle = 9
-	DUTY_CYCLE_1024  AggregatedDutyCycle = 10
-	DUTY_CYCLE_2048  AggregatedDutyCycle = 11
-	DUTY_CYCLE_4096  AggregatedDutyCycle = 12
-	DUTY_CYCLE_8192  AggregatedDutyCycle = 13
-	DUTY_CYCLE_16384 AggregatedDutyCycle = 14
-	DUTY_CYCLE_32768 AggregatedDutyCycle = 15
+	AggregatedDutyCycle_DUTY_CYCLE_1     AggregatedDutyCycle = 0
+	AggregatedDutyCycle_DUTY_CYCLE_2     AggregatedDutyCycle = 1
+	AggregatedDutyCycle_DUTY_CYCLE_4     AggregatedDutyCycle = 2
+	AggregatedDutyCycle_DUTY_CYCLE_8     AggregatedDutyCycle = 3
+	AggregatedDutyCycle_DUTY_CYCLE_16    AggregatedDutyCycle = 4
+	AggregatedDutyCycle_DUTY_CYCLE_32    AggregatedDutyCycle = 5
+	AggregatedDutyCycle_DUTY_CYCLE_64    AggregatedDutyCycle = 6
+	AggregatedDutyCycle_DUTY_CYCLE_128   AggregatedDutyCycle = 7
+	AggregatedDutyCycle_DUTY_CYCLE_256   AggregatedDutyCycle = 8
+	AggregatedDutyCycle_DUTY_CYCLE_512   AggregatedDutyCycle = 9
+	AggregatedDutyCycle_DUTY_CYCLE_1024  AggregatedDutyCycle = 10
+	AggregatedDutyCycle_DUTY_CYCLE_2048  AggregatedDutyCycle = 11
+	AggregatedDutyCycle_DUTY_CYCLE_4096  AggregatedDutyCycle = 12
+	AggregatedDutyCycle_DUTY_CYCLE_8192  AggregatedDutyCycle = 13
+	AggregatedDutyCycle_DUTY_CYCLE_16384 AggregatedDutyCycle = 14
+	AggregatedDutyCycle_DUTY_CYCLE_32768 AggregatedDutyCycle = 15
 )
 
 var AggregatedDutyCycle_name = map[int32]string{
@@ -548,6 +612,10 @@ var AggregatedDutyCycle_value = map[string]int32{
 	"DUTY_CYCLE_32768": 15,
 }
 
+func (x AggregatedDutyCycle) String() string {
+	return proto.EnumName(AggregatedDutyCycle_name, int32(x))
+}
+
 func (AggregatedDutyCycle) EnumDescriptor() ([]byte, []int) {
 	return fileDescriptor_2084d1d5a227b67e, []int{12}
 }
@@ -555,14 +623,14 @@ func (AggregatedDutyCycle) EnumDescriptor() ([]byte, []int) {
 type PingSlotPeriod int32
 
 const (
-	PING_EVERY_1S   PingSlotPeriod = 0
-	PING_EVERY_2S   PingSlotPeriod = 1
-	PING_EVERY_4S   PingSlotPeriod = 2
-	PING_EVERY_8S   PingSlotPeriod = 3
-	PING_EVERY_16S  PingSlotPeriod = 4
-	PING_EVERY_32S  PingSlotPeriod = 5
-	PING_EVERY_64S  PingSlotPeriod = 6
-	PING_EVERY_128S PingSlotPeriod = 7
+	PingSlotPeriod_PING_EVERY_1S   PingSlotPeriod = 0
+	PingSlotPeriod_PING_EVERY_2S   PingSlotPeriod = 1
+	PingSlotPeriod_PING_EVERY_4S   PingSlotPeriod = 2
+	PingSlotPeriod_PING_EVERY_8S   PingSlotPeriod = 3
+	PingSlotPeriod_PING_EVERY_16S  PingSlotPeriod = 4
+	PingSlotPeriod_PING_EVERY_32S  PingSlotPeriod = 5
+	PingSlotPeriod_PING_EVERY_64S  PingSlotPeriod = 6
+	PingSlotPeriod_PING_EVERY_128S PingSlotPeriod = 7
 )
 
 var PingSlotPeriod_name = map[int32]string{
@@ -587,6 +655,10 @@ var PingSlotPeriod_value = map[string]int32{
 	"PING_EVERY_128S": 7,
 }
 
+func (x PingSlotPeriod) String() string {
+	return proto.EnumName(PingSlotPeriod_name, int32(x))
+}
+
 func (PingSlotPeriod) EnumDescriptor() ([]byte, []int) {
 	return fileDescriptor_2084d1d5a227b67e, []int{13}
 }
@@ -594,22 +666,22 @@ func (PingSlotPeriod) EnumDescriptor() ([]byte, []int) {
 type RejoinCountExponent int32
 
 const (
-	REJOIN_COUNT_16     RejoinCountExponent = 0
-	REJOIN_COUNT_32     RejoinCountExponent = 1
-	REJOIN_COUNT_64     RejoinCountExponent = 2
-	REJOIN_COUNT_128    RejoinCountExponent = 3
-	REJOIN_COUNT_256    RejoinCountExponent = 4
-	REJOIN_COUNT_512    RejoinCountExponent = 5
-	REJOIN_COUNT_1024   RejoinCountExponent = 6
-	REJOIN_COUNT_2048   RejoinCountExponent = 7
-	REJOIN_COUNT_4096   RejoinCountExponent = 8
-	REJOIN_COUNT_8192   RejoinCountExponent = 9
-	REJOIN_COUNT_16384  RejoinCountExponent = 10
-	REJOIN_COUNT_32768  RejoinCountExponent = 11
-	REJOIN_COUNT_65536  RejoinCountExponent = 12
-	REJOIN_COUNT_131072 RejoinCountExponent = 13
-	REJOIN_COUNT_262144 RejoinCountExponent = 14
-	REJOIN_COUNT_524288 RejoinCountExponent = 15
+	RejoinCountExponent_REJOIN_COUNT_16     RejoinCountExponent = 0
+	RejoinCountExponent_REJOIN_COUNT_32     RejoinCountExponent = 1
+	RejoinCountExponent_REJOIN_COUNT_64     RejoinCountExponent = 2
+	RejoinCountExponent_REJOIN_COUNT_128    RejoinCountExponent = 3
+	RejoinCountExponent_REJOIN_COUNT_256    RejoinCountExponent = 4
+	RejoinCountExponent_REJOIN_COUNT_512    RejoinCountExponent = 5
+	RejoinCountExponent_REJOIN_COUNT_1024   RejoinCountExponent = 6
+	RejoinCountExponent_REJOIN_COUNT_2048   RejoinCountExponent = 7
+	RejoinCountExponent_REJOIN_COUNT_4096   RejoinCountExponent = 8
+	RejoinCountExponent_REJOIN_COUNT_8192   RejoinCountExponent = 9
+	RejoinCountExponent_REJOIN_COUNT_16384  RejoinCountExponent = 10
+	RejoinCountExponent_REJOIN_COUNT_32768  RejoinCountExponent = 11
+	RejoinCountExponent_REJOIN_COUNT_65536  RejoinCountExponent = 12
+	RejoinCountExponent_REJOIN_COUNT_131072 RejoinCountExponent = 13
+	RejoinCountExponent_REJOIN_COUNT_262144 RejoinCountExponent = 14
+	RejoinCountExponent_REJOIN_COUNT_524288 RejoinCountExponent = 15
 )
 
 var RejoinCountExponent_name = map[int32]string{
@@ -650,6 +722,10 @@ var RejoinCountExponent_value = map[string]int32{
 	"REJOIN_COUNT_524288": 15,
 }
 
+func (x RejoinCountExponent) String() string {
+	return proto.EnumName(RejoinCountExponent_name, int32(x))
+}
+
 func (RejoinCountExponent) EnumDescriptor() ([]byte, []int) {
 	return fileDescriptor_2084d1d5a227b67e, []int{14}
 }
@@ -657,22 +733,22 @@ func (RejoinCountExponent) EnumDescriptor() ([]byte, []int) {
 type RejoinTimeExponent int32
 
 const (
-	REJOIN_TIME_0  RejoinTimeExponent = 0
-	REJOIN_TIME_1  RejoinTimeExponent = 1
-	REJOIN_TIME_2  RejoinTimeExponent = 2
-	REJOIN_TIME_3  RejoinTimeExponent = 3
-	REJOIN_TIME_4  RejoinTimeExponent = 4
-	REJOIN_TIME_5  RejoinTimeExponent = 5
-	REJOIN_TIME_6  RejoinTimeExponent = 6
-	REJOIN_TIME_7  RejoinTimeExponent = 7
-	REJOIN_TIME_8  RejoinTimeExponent = 8
-	REJOIN_TIME_9  RejoinTimeExponent = 9
-	REJOIN_TIME_10 RejoinTimeExponent = 10
-	REJOIN_TIME_11 RejoinTimeExponent = 11
-	REJOIN_TIME_12 RejoinTimeExponent = 12
-	REJOIN_TIME_13 RejoinTimeExponent = 13
-	REJOIN_TIME_14 RejoinTimeExponent = 14
-	REJOIN_TIME_15 RejoinTimeExponent = 15
+	RejoinTimeExponent_REJOIN_TIME_0  RejoinTimeExponent = 0
+	RejoinTimeExponent_REJOIN_TIME_1  RejoinTimeExponent = 1
+	RejoinTimeExponent_REJOIN_TIME_2  RejoinTimeExponent = 2
+	RejoinTimeExponent_REJOIN_TIME_3  RejoinTimeExponent = 3
+	RejoinTimeExponent_REJOIN_TIME_4  RejoinTimeExponent = 4
+	RejoinTimeExponent_REJOIN_TIME_5  RejoinTimeExponent = 5
+	RejoinTimeExponent_REJOIN_TIME_6  RejoinTimeExponent = 6
+	RejoinTimeExponent_REJOIN_TIME_7  RejoinTimeExponent = 7
+	RejoinTimeExponent_REJOIN_TIME_8  RejoinTimeExponent = 8
+	RejoinTimeExponent_REJOIN_TIME_9  RejoinTimeExponent = 9
+	RejoinTimeExponent_REJOIN_TIME_10 RejoinTimeExponent = 10
+	RejoinTimeExponent_REJOIN_TIME_11 RejoinTimeExponent = 11
+	RejoinTimeExponent_REJOIN_TIME_12 RejoinTimeExponent = 12
+	RejoinTimeExponent_REJOIN_TIME_13 RejoinTimeExponent = 13
+	RejoinTimeExponent_REJOIN_TIME_14 RejoinTimeExponent = 14
+	RejoinTimeExponent_REJOIN_TIME_15 RejoinTimeExponent = 15
 )
 
 var RejoinTimeExponent_name = map[int32]string{
@@ -713,6 +789,10 @@ var RejoinTimeExponent_value = map[string]int32{
 	"REJOIN_TIME_15": 15,
 }
 
+func (x RejoinTimeExponent) String() string {
+	return proto.EnumName(RejoinTimeExponent_name, int32(x))
+}
+
 func (RejoinTimeExponent) EnumDescriptor() ([]byte, []int) {
 	return fileDescriptor_2084d1d5a227b67e, []int{15}
 }
@@ -720,14 +800,14 @@ func (RejoinTimeExponent) EnumDescriptor() ([]byte, []int) {
 type RejoinPeriodExponent int32
 
 const (
-	REJOIN_PERIOD_0 RejoinPeriodExponent = 0
-	REJOIN_PERIOD_1 RejoinPeriodExponent = 1
-	REJOIN_PERIOD_2 RejoinPeriodExponent = 2
-	REJOIN_PERIOD_3 RejoinPeriodExponent = 3
-	REJOIN_PERIOD_4 RejoinPeriodExponent = 4
-	REJOIN_PERIOD_5 RejoinPeriodExponent = 5
-	REJOIN_PERIOD_6 RejoinPeriodExponent = 6
-	REJOIN_PERIOD_7 RejoinPeriodExponent = 7
+	RejoinPeriodExponent_REJOIN_PERIOD_0 RejoinPeriodExponent = 0
+	RejoinPeriodExponent_REJOIN_PERIOD_1 RejoinPeriodExponent = 1
+	RejoinPeriodExponent_REJOIN_PERIOD_2 RejoinPeriodExponent = 2
+	RejoinPeriodExponent_REJOIN_PERIOD_3 RejoinPeriodExponent = 3
+	RejoinPeriodExponent_REJOIN_PERIOD_4 RejoinPeriodExponent = 4
+	RejoinPeriodExponent_REJOIN_PERIOD_5 RejoinPeriodExponent = 5
+	RejoinPeriodExponent_REJOIN_PERIOD_6 RejoinPeriodExponent = 6
+	RejoinPeriodExponent_REJOIN_PERIOD_7 RejoinPeriodExponent = 7
 )
 
 var RejoinPeriodExponent_name = map[int32]string{
@@ -752,6 +832,10 @@ var RejoinPeriodExponent_value = map[string]int32{
 	"REJOIN_PERIOD_7": 7,
 }
 
+func (x RejoinPeriodExponent) String() string {
+	return proto.EnumName(RejoinPeriodExponent_name, int32(x))
+}
+
 func (RejoinPeriodExponent) EnumDescriptor() ([]byte, []int) {
 	return fileDescriptor_2084d1d5a227b67e, []int{16}
 }
@@ -759,22 +843,22 @@ func (RejoinPeriodExponent) EnumDescriptor() ([]byte, []int) {
 type DeviceEIRP int32
 
 const (
-	DEVICE_EIRP_8  DeviceEIRP = 0
-	DEVICE_EIRP_10 DeviceEIRP = 1
-	DEVICE_EIRP_12 DeviceEIRP = 2
-	DEVICE_EIRP_13 DeviceEIRP = 3
-	DEVICE_EIRP_14 DeviceEIRP = 4
-	DEVICE_EIRP_16 DeviceEIRP = 5
-	DEVICE_EIRP_18 DeviceEIRP = 6
-	DEVICE_EIRP_20 DeviceEIRP = 7
-	DEVICE_EIRP_21 DeviceEIRP = 8
-	DEVICE_EIRP_24 DeviceEIRP = 9
-	DEVICE_EIRP_26 DeviceEIRP = 10
-	DEVICE_EIRP_27 DeviceEIRP = 11
-	DEVICE_EIRP_29 DeviceEIRP = 12
-	DEVICE_EIRP_30 DeviceEIRP = 13
-	DEVICE_EIRP_33 DeviceEIRP = 14
-	DEVICE_EIRP_36 DeviceEIRP = 15
+	DeviceEIRP_DEVICE_EIRP_8  DeviceEIRP = 0
+	DeviceEIRP_DEVICE_EIRP_10 DeviceEIRP = 1
+	DeviceEIRP_DEVICE_EIRP_12 DeviceEIRP = 2
+	DeviceEIRP_DEVICE_EIRP_13 DeviceEIRP = 3
+	DeviceEIRP_DEVICE_EIRP_14 DeviceEIRP = 4
+	DeviceEIRP_DEVICE_EIRP_16 DeviceEIRP = 5
+	DeviceEIRP_DEVICE_EIRP_18 DeviceEIRP = 6
+	DeviceEIRP_DEVICE_EIRP_20 DeviceEIRP = 7
+	DeviceEIRP_DEVICE_EIRP_21 DeviceEIRP = 8
+	DeviceEIRP_DEVICE_EIRP_24 DeviceEIRP = 9
+	DeviceEIRP_DEVICE_EIRP_26 DeviceEIRP = 10
+	DeviceEIRP_DEVICE_EIRP_27 DeviceEIRP = 11
+	DeviceEIRP_DEVICE_EIRP_29 DeviceEIRP = 12
+	DeviceEIRP_DEVICE_EIRP_30 DeviceEIRP = 13
+	DeviceEIRP_DEVICE_EIRP_33 DeviceEIRP = 14
+	DeviceEIRP_DEVICE_EIRP_36 DeviceEIRP = 15
 )
 
 var DeviceEIRP_name = map[int32]string{
@@ -815,6 +899,10 @@ var DeviceEIRP_value = map[string]int32{
 	"DEVICE_EIRP_36": 15,
 }
 
+func (x DeviceEIRP) String() string {
+	return proto.EnumName(DeviceEIRP_name, int32(x))
+}
+
 func (DeviceEIRP) EnumDescriptor() ([]byte, []int) {
 	return fileDescriptor_2084d1d5a227b67e, []int{17}
 }
@@ -822,22 +910,22 @@ func (DeviceEIRP) EnumDescriptor() ([]byte, []int) {
 type ADRAckLimitExponent int32
 
 const (
-	ADR_ACK_LIMIT_1     ADRAckLimitExponent = 0
-	ADR_ACK_LIMIT_2     ADRAckLimitExponent = 1
-	ADR_ACK_LIMIT_4     ADRAckLimitExponent = 2
-	ADR_ACK_LIMIT_8     ADRAckLimitExponent = 3
-	ADR_ACK_LIMIT_16    ADRAckLimitExponent = 4
-	ADR_ACK_LIMIT_32    ADRAckLimitExponent = 5
-	ADR_ACK_LIMIT_64    ADRAckLimitExponent = 6
-	ADR_ACK_LIMIT_128   ADRAckLimitExponent = 7
-	ADR_ACK_LIMIT_256   ADRAckLimitExponent = 8
-	ADR_ACK_LIMIT_512   ADRAckLimitExponent = 9
-	ADR_ACK_LIMIT_1024  ADRAckLimitExponent = 10
-	ADR_ACK_LIMIT_2048  ADRAckLimitExponent = 11
-	ADR_ACK_LIMIT_4096  ADRAckLimitExponent = 12
-	ADR_ACK_LIMIT_8192  ADRAckLimitExponent = 13
-	ADR_ACK_LIMIT_16384 ADRAckLimitExponent = 14
-	ADR_ACK_LIMIT_32768 ADRAckLimitExponent = 15
+	ADRAckLimitExponent_ADR_ACK_LIMIT_1     ADRAckLimitExponent = 0
+	ADRAckLimitExponent_ADR_ACK_LIMIT_2     ADRAckLimitExponent = 1
+	ADRAckLimitExponent_ADR_ACK_LIMIT_4     ADRAckLimitExponent = 2
+	ADRAckLimitExponent_ADR_ACK_LIMIT_8     ADRAckLimitExponent = 3
+	ADRAckLimitExponent_ADR_ACK_LIMIT_16    ADRAckLimitExponent = 4
+	ADRAckLimitExponent_ADR_ACK_LIMIT_32    ADRAckLimitExponent = 5
+	ADRAckLimitExponent_ADR_ACK_LIMIT_64    ADRAckLimitExponent = 6
+	ADRAckLimitExponent_ADR_ACK_LIMIT_128   ADRAckLimitExponent = 7
+	ADRAckLimitExponent_ADR_ACK_LIMIT_256   ADRAckLimitExponent = 8
+	ADRAckLimitExponent_ADR_ACK_LIMIT_512   ADRAckLimitExponent = 9
+	ADRAckLimitExponent_ADR_ACK_LIMIT_1024  ADRAckLimitExponent = 10
+	ADRAckLimitExponent_ADR_ACK_LIMIT_2048  ADRAckLimitExponent = 11
+	ADRAckLimitExponent_ADR_ACK_LIMIT_4096  ADRAckLimitExponent = 12
+	ADRAckLimitExponent_ADR_ACK_LIMIT_8192  ADRAckLimitExponent = 13
+	ADRAckLimitExponent_ADR_ACK_LIMIT_16384 ADRAckLimitExponent = 14
+	ADRAckLimitExponent_ADR_ACK_LIMIT_32768 ADRAckLimitExponent = 15
 )
 
 var ADRAckLimitExponent_name = map[int32]string{
@@ -878,6 +966,10 @@ var ADRAckLimitExponent_value = map[string]int32{
 	"ADR_ACK_LIMIT_32768": 15,
 }
 
+func (x ADRAckLimitExponent) String() string {
+	return proto.EnumName(ADRAckLimitExponent_name, int32(x))
+}
+
 func (ADRAckLimitExponent) EnumDescriptor() ([]byte, []int) {
 	return fileDescriptor_2084d1d5a227b67e, []int{18}
 }
@@ -885,22 +977,22 @@ func (ADRAckLimitExponent) EnumDescriptor() ([]byte, []int) {
 type ADRAckDelayExponent int32
 
 const (
-	ADR_ACK_DELAY_1     ADRAckDelayExponent = 0
-	ADR_ACK_DELAY_2     ADRAckDelayExponent = 1
-	ADR_ACK_DELAY_4     ADRAckDelayExponent = 2
-	ADR_ACK_DELAY_8     ADRAckDelayExponent = 3
-	ADR_ACK_DELAY_16    ADRAckDelayExponent = 4
-	ADR_ACK_DELAY_32    ADRAckDelayExponent = 5
-	ADR_ACK_DELAY_64    ADRAckDelayExponent = 6
-	ADR_ACK_DELAY_128   ADRAckDelayExponent = 7
-	ADR_ACK_DELAY_256   ADRAckDelayExponent = 8
-	ADR_ACK_DELAY_512   ADRAckDelayExponent = 9
-	ADR_ACK_DELAY_1024  ADRAckDelayExponent = 10
-	ADR_ACK_DELAY_2048  ADRAckDelayExponent = 11
-	ADR_ACK_DELAY_4096  ADRAckDelayExponent = 12
-	ADR_ACK_DELAY_8192  ADRAckDelayExponent = 13
-	ADR_ACK_DELAY_16384 ADRAckDelayExponent = 14
-	ADR_ACK_DELAY_32768 ADRAckDelayExponent = 15
+	ADRAckDelayExponent_ADR_ACK_DELAY_1     ADRAckDelayExponent = 0
+	ADRAckDelayExponent_ADR_ACK_DELAY_2     ADRAckDelayExponent = 1
+	ADRAckDelayExponent_ADR_ACK_DELAY_4     ADRAckDelayExponent = 2
+	ADRAckDelayExponent_ADR_ACK_DELAY_8     ADRAckDelayExponent = 3
+	ADRAckDelayExponent_ADR_ACK_DELAY_16    ADRAckDelayExponent = 4
+	ADRAckDelayExponent_ADR_ACK_DELAY_32    ADRAckDelayExponent = 5
+	ADRAckDelayExponent_ADR_ACK_DELAY_64    ADRAckDelayExponent = 6
+	ADRAckDelayExponent_ADR_ACK_DELAY_128   ADRAckDelayExponent = 7
+	ADRAckDelayExponent_ADR_ACK_DELAY_256   ADRAckDelayExponent = 8
+	ADRAckDelayExponent_ADR_ACK_DELAY_512   ADRAckDelayExponent = 9
+	ADRAckDelayExponent_ADR_ACK_DELAY_1024  ADRAckDelayExponent = 10
+	ADRAckDelayExponent_ADR_ACK_DELAY_2048  ADRAckDelayExponent = 11
+	ADRAckDelayExponent_ADR_ACK_DELAY_4096  ADRAckDelayExponent = 12
+	ADRAckDelayExponent_ADR_ACK_DELAY_8192  ADRAckDelayExponent = 13
+	ADRAckDelayExponent_ADR_ACK_DELAY_16384 ADRAckDelayExponent = 14
+	ADRAckDelayExponent_ADR_ACK_DELAY_32768 ADRAckDelayExponent = 15
 )
 
 var ADRAckDelayExponent_name = map[int32]string{
@@ -941,6 +1033,10 @@ var ADRAckDelayExponent_value = map[string]int32{
 	"ADR_ACK_DELAY_32768": 15,
 }
 
+func (x ADRAckDelayExponent) String() string {
+	return proto.EnumName(ADRAckDelayExponent_name, int32(x))
+}
+
 func (ADRAckDelayExponent) EnumDescriptor() ([]byte, []int) {
 	return fileDescriptor_2084d1d5a227b67e, []int{19}
 }
@@ -948,22 +1044,22 @@ func (ADRAckDelayExponent) EnumDescriptor() ([]byte, []int) {
 type RxDelay int32
 
 const (
-	RX_DELAY_0  RxDelay = 0
-	RX_DELAY_1  RxDelay = 1
-	RX_DELAY_2  RxDelay = 2
-	RX_DELAY_3  RxDelay = 3
-	RX_DELAY_4  RxDelay = 4
-	RX_DELAY_5  RxDelay = 5
-	RX_DELAY_6  RxDelay = 6
-	RX_DELAY_7  RxDelay = 7
-	RX_DELAY_8  RxDelay = 8
-	RX_DELAY_9  RxDelay = 9
-	RX_DELAY_10 RxDelay = 10
-	RX_DELAY_11 RxDelay = 11
-	RX_DELAY_12 RxDelay = 12
-	RX_DELAY_13 RxDelay = 13
-	RX_DELAY_14 RxDelay = 14
-	RX_DELAY_15 RxDelay = 15
+	RxDelay_RX_DELAY_0  RxDelay = 0
+	RxDelay_RX_DELAY_1  RxDelay = 1
+	RxDelay_RX_DELAY_2  RxDelay = 2
+	RxDelay_RX_DELAY_3  RxDelay = 3
+	RxDelay_RX_DELAY_4  RxDelay = 4
+	RxDelay_RX_DELAY_5  RxDelay = 5
+	RxDelay_RX_DELAY_6  RxDelay = 6
+	RxDelay_RX_DELAY_7  RxDelay = 7
+	RxDelay_RX_DELAY_8  RxDelay = 8
+	RxDelay_RX_DELAY_9  RxDelay = 9
+	RxDelay_RX_DELAY_10 RxDelay = 10
+	RxDelay_RX_DELAY_11 RxDelay = 11
+	RxDelay_RX_DELAY_12 RxDelay = 12
+	RxDelay_RX_DELAY_13 RxDelay = 13
+	RxDelay_RX_DELAY_14 RxDelay = 14
+	RxDelay_RX_DELAY_15 RxDelay = 15
 )
 
 var RxDelay_name = map[int32]string{
@@ -1004,6 +1100,10 @@ var RxDelay_value = map[string]int32{
 	"RX_DELAY_15": 15,
 }
 
+func (x RxDelay) String() string {
+	return proto.EnumName(RxDelay_name, int32(x))
+}
+
 func (RxDelay) EnumDescriptor() ([]byte, []int) {
 	return fileDescriptor_2084d1d5a227b67e, []int{20}
 }
@@ -1011,22 +1111,22 @@ func (RxDelay) EnumDescriptor() ([]byte, []int) {
 type Minor int32
 
 const (
-	MINOR_RFU_0  Minor = 0
-	MINOR_1      Minor = 1
-	MINOR_RFU_2  Minor = 2
-	MINOR_RFU_3  Minor = 3
-	MINOR_RFU_4  Minor = 4
-	MINOR_RFU_5  Minor = 5
-	MINOR_RFU_6  Minor = 6
-	MINOR_RFU_7  Minor = 7
-	MINOR_RFU_8  Minor = 8
-	MINOR_RFU_9  Minor = 9
-	MINOR_RFU_10 Minor = 10
-	MINOR_RFU_11 Minor = 11
-	MINOR_RFU_12 Minor = 12
-	MINOR_RFU_13 Minor = 13
-	MINOR_RFU_14 Minor = 14
-	MINOR_RFU_15 Minor = 15
+	Minor_MINOR_RFU_0  Minor = 0
+	Minor_MINOR_1      Minor = 1
+	Minor_MINOR_RFU_2  Minor = 2
+	Minor_MINOR_RFU_3  Minor = 3
+	Minor_MINOR_RFU_4  Minor = 4
+	Minor_MINOR_RFU_5  Minor = 5
+	Minor_MINOR_RFU_6  Minor = 6
+	Minor_MINOR_RFU_7  Minor = 7
+	Minor_MINOR_RFU_8  Minor = 8
+	Minor_MINOR_RFU_9  Minor = 9
+	Minor_MINOR_RFU_10 Minor = 10
+	Minor_MINOR_RFU_11 Minor = 11
+	Minor_MINOR_RFU_12 Minor = 12
+	Minor_MINOR_RFU_13 Minor = 13
+	Minor_MINOR_RFU_14 Minor = 14
+	Minor_MINOR_RFU_15 Minor = 15
 )
 
 var Minor_name = map[int32]string{
@@ -1067,13 +1167,17 @@ var Minor_value = map[string]int32{
 	"MINOR_RFU_15": 15,
 }
 
+func (x Minor) String() string {
+	return proto.EnumName(Minor_name, int32(x))
+}
+
 func (Minor) EnumDescriptor() ([]byte, []int) {
 	return fileDescriptor_2084d1d5a227b67e, []int{21}
 }
 
 // Message represents a LoRaWAN message
 type Message struct {
-	MHDR `protobuf:"bytes,1,opt,name=m_hdr,json=mHdr,proto3,embedded=m_hdr" json:"m_hdr"`
+	MHdr *MHDR  `protobuf:"bytes,1,opt,name=m_hdr,json=mHdr,proto3" json:"m_hdr,omitempty"`
 	Mic  []byte `protobuf:"bytes,2,opt,name=mic,proto3" json:"mic,omitempty"`
 	// Payload represents either MACPayload, RejoinRequestPayload, JoinRequestPayload or JoinAcceptPayload
 	// - MACPayload length is in range [7:M] bytes, where M is PHY specific.
@@ -1088,11 +1192,13 @@ type Message struct {
 	//	*Message_RejoinRequestPayload
 	Payload              isMessage_Payload `protobuf_oneof:"Payload"`
 	XXX_NoUnkeyedLiteral struct{}          `json:"-"`
+	XXX_unrecognized     []byte            `json:"-"`
 	XXX_sizecache        int32             `json:"-"`
 }
 
-func (m *Message) Reset()      { *m = Message{} }
-func (*Message) ProtoMessage() {}
+func (m *Message) Reset()         { *m = Message{} }
+func (m *Message) String() string { return proto.CompactTextString(m) }
+func (*Message) ProtoMessage()    {}
 func (*Message) Descriptor() ([]byte, []int) {
 	return fileDescriptor_2084d1d5a227b67e, []int{0}
 }
@@ -1116,7 +1222,6 @@ var xxx_messageInfo_Message proto.InternalMessageInfo
 
 type isMessage_Payload interface {
 	isMessage_Payload()
-	Equal(interface{}) bool
 }
 
 type Message_MacPayload struct {
@@ -1140,6 +1245,13 @@ func (*Message_RejoinRequestPayload) isMessage_Payload() {}
 func (m *Message) GetPayload() isMessage_Payload {
 	if m != nil {
 		return m.Payload
+	}
+	return nil
+}
+
+func (m *Message) GetMHdr() *MHDR {
+	if m != nil {
+		return m.MHdr
 	}
 	return nil
 }
@@ -1193,11 +1305,13 @@ type MHDR struct {
 	MType                MType    `protobuf:"varint,1,opt,name=m_type,json=mType,proto3,enum=ttn.lorawan.v3.MType" json:"m_type,omitempty"`
 	Major                Major    `protobuf:"varint,2,opt,name=major,proto3,enum=ttn.lorawan.v3.Major" json:"major,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *MHDR) Reset()      { *m = MHDR{} }
-func (*MHDR) ProtoMessage() {}
+func (m *MHDR) Reset()         { *m = MHDR{} }
+func (m *MHDR) String() string { return proto.CompactTextString(m) }
+func (*MHDR) ProtoMessage()    {}
 func (*MHDR) Descriptor() ([]byte, []int) {
 	return fileDescriptor_2084d1d5a227b67e, []int{1}
 }
@@ -1234,18 +1348,20 @@ func (m *MHDR) GetMajor() Major {
 }
 
 type MACPayload struct {
-	FHDR           `protobuf:"bytes,1,opt,name=f_hdr,json=fHdr,proto3,embedded=f_hdr" json:"f_hdr"`
+	FHdr           *FHDR         `protobuf:"bytes,1,opt,name=f_hdr,json=fHdr,proto3" json:"f_hdr,omitempty"`
 	FPort          uint32        `protobuf:"varint,2,opt,name=f_port,json=fPort,proto3" json:"f_port,omitempty"`
 	FrmPayload     []byte        `protobuf:"bytes,3,opt,name=frm_payload,json=frmPayload,proto3" json:"frm_payload,omitempty"`
 	DecodedPayload *types.Struct `protobuf:"bytes,4,opt,name=decoded_payload,json=decodedPayload,proto3" json:"decoded_payload,omitempty"`
 	// Full 32-bit FCnt value. Used internally by Network Server.
 	FullFCnt             uint32   `protobuf:"varint,5,opt,name=full_f_cnt,json=fullFCnt,proto3" json:"full_f_cnt,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *MACPayload) Reset()      { *m = MACPayload{} }
-func (*MACPayload) ProtoMessage() {}
+func (m *MACPayload) Reset()         { *m = MACPayload{} }
+func (m *MACPayload) String() string { return proto.CompactTextString(m) }
+func (*MACPayload) ProtoMessage()    {}
 func (*MACPayload) Descriptor() ([]byte, []int) {
 	return fileDescriptor_2084d1d5a227b67e, []int{2}
 }
@@ -1266,6 +1382,13 @@ func (m *MACPayload) XXX_DiscardUnknown() {
 }
 
 var xxx_messageInfo_MACPayload proto.InternalMessageInfo
+
+func (m *MACPayload) GetFHdr() *FHDR {
+	if m != nil {
+		return m.FHdr
+	}
+	return nil
+}
 
 func (m *MACPayload) GetFPort() uint32 {
 	if m != nil {
@@ -1296,16 +1419,18 @@ func (m *MACPayload) GetFullFCnt() uint32 {
 }
 
 type FHDR struct {
-	DevAddr              go_thethings_network_lorawan_stack_v3_pkg_types.DevAddr `protobuf:"bytes,1,opt,name=dev_addr,json=devAddr,proto3,customtype=go.thethings.network/lorawan-stack/v3/pkg/types.DevAddr" json:"dev_addr"`
-	FCtrl                `protobuf:"bytes,2,opt,name=f_ctrl,json=fCtrl,proto3,embedded=f_ctrl" json:"f_ctrl"`
+	DevAddr              []byte   `protobuf:"bytes,1,opt,name=dev_addr,json=devAddr,proto3" json:"dev_addr,omitempty"`
+	FCtrl                *FCtrl   `protobuf:"bytes,2,opt,name=f_ctrl,json=fCtrl,proto3" json:"f_ctrl,omitempty"`
 	FCnt                 uint32   `protobuf:"varint,3,opt,name=f_cnt,json=fCnt,proto3" json:"f_cnt,omitempty"`
 	FOpts                []byte   `protobuf:"bytes,4,opt,name=f_opts,json=fOpts,proto3" json:"f_opts,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *FHDR) Reset()      { *m = FHDR{} }
-func (*FHDR) ProtoMessage() {}
+func (m *FHDR) Reset()         { *m = FHDR{} }
+func (m *FHDR) String() string { return proto.CompactTextString(m) }
+func (*FHDR) ProtoMessage()    {}
 func (*FHDR) Descriptor() ([]byte, []int) {
 	return fileDescriptor_2084d1d5a227b67e, []int{3}
 }
@@ -1326,6 +1451,20 @@ func (m *FHDR) XXX_DiscardUnknown() {
 }
 
 var xxx_messageInfo_FHDR proto.InternalMessageInfo
+
+func (m *FHDR) GetDevAddr() []byte {
+	if m != nil {
+		return m.DevAddr
+	}
+	return nil
+}
+
+func (m *FHDR) GetFCtrl() *FCtrl {
+	if m != nil {
+		return m.FCtrl
+	}
+	return nil
+}
 
 func (m *FHDR) GetFCnt() uint32 {
 	if m != nil {
@@ -1348,11 +1487,13 @@ type FCtrl struct {
 	FPending             bool     `protobuf:"varint,4,opt,name=f_pending,json=fPending,proto3" json:"f_pending,omitempty"`
 	ClassB               bool     `protobuf:"varint,5,opt,name=class_b,json=classB,proto3" json:"class_b,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *FCtrl) Reset()      { *m = FCtrl{} }
-func (*FCtrl) ProtoMessage() {}
+func (m *FCtrl) Reset()         { *m = FCtrl{} }
+func (m *FCtrl) String() string { return proto.CompactTextString(m) }
+func (*FCtrl) ProtoMessage()    {}
 func (*FCtrl) Descriptor() ([]byte, []int) {
 	return fileDescriptor_2084d1d5a227b67e, []int{4}
 }
@@ -1410,15 +1551,17 @@ func (m *FCtrl) GetClassB() bool {
 }
 
 type JoinRequestPayload struct {
-	JoinEui              go_thethings_network_lorawan_stack_v3_pkg_types.EUI64    `protobuf:"bytes,1,opt,name=join_eui,json=joinEui,proto3,customtype=go.thethings.network/lorawan-stack/v3/pkg/types.EUI64" json:"join_eui"`
-	DevEui               go_thethings_network_lorawan_stack_v3_pkg_types.EUI64    `protobuf:"bytes,2,opt,name=dev_eui,json=devEui,proto3,customtype=go.thethings.network/lorawan-stack/v3/pkg/types.EUI64" json:"dev_eui"`
-	DevNonce             go_thethings_network_lorawan_stack_v3_pkg_types.DevNonce `protobuf:"bytes,3,opt,name=dev_nonce,json=devNonce,proto3,customtype=go.thethings.network/lorawan-stack/v3/pkg/types.DevNonce" json:"dev_nonce"`
-	XXX_NoUnkeyedLiteral struct{}                                                 `json:"-"`
-	XXX_sizecache        int32                                                    `json:"-"`
+	JoinEui              []byte   `protobuf:"bytes,1,opt,name=join_eui,json=joinEui,proto3" json:"join_eui,omitempty"`
+	DevEui               []byte   `protobuf:"bytes,2,opt,name=dev_eui,json=devEui,proto3" json:"dev_eui,omitempty"`
+	DevNonce             []byte   `protobuf:"bytes,3,opt,name=dev_nonce,json=devNonce,proto3" json:"dev_nonce,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *JoinRequestPayload) Reset()      { *m = JoinRequestPayload{} }
-func (*JoinRequestPayload) ProtoMessage() {}
+func (m *JoinRequestPayload) Reset()         { *m = JoinRequestPayload{} }
+func (m *JoinRequestPayload) String() string { return proto.CompactTextString(m) }
+func (*JoinRequestPayload) ProtoMessage()    {}
 func (*JoinRequestPayload) Descriptor() ([]byte, []int) {
 	return fileDescriptor_2084d1d5a227b67e, []int{5}
 }
@@ -1440,18 +1583,41 @@ func (m *JoinRequestPayload) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_JoinRequestPayload proto.InternalMessageInfo
 
-type RejoinRequestPayload struct {
-	RejoinType           RejoinRequestType                                     `protobuf:"varint,1,opt,name=rejoin_type,json=rejoinType,proto3,enum=ttn.lorawan.v3.RejoinRequestType" json:"rejoin_type,omitempty"`
-	NetId                go_thethings_network_lorawan_stack_v3_pkg_types.NetID `protobuf:"bytes,2,opt,name=net_id,json=netId,proto3,customtype=go.thethings.network/lorawan-stack/v3/pkg/types.NetID" json:"net_id"`
-	JoinEui              go_thethings_network_lorawan_stack_v3_pkg_types.EUI64 `protobuf:"bytes,3,opt,name=join_eui,json=joinEui,proto3,customtype=go.thethings.network/lorawan-stack/v3/pkg/types.EUI64" json:"join_eui"`
-	DevEui               go_thethings_network_lorawan_stack_v3_pkg_types.EUI64 `protobuf:"bytes,4,opt,name=dev_eui,json=devEui,proto3,customtype=go.thethings.network/lorawan-stack/v3/pkg/types.EUI64" json:"dev_eui"`
-	RejoinCnt            uint32                                                `protobuf:"varint,5,opt,name=rejoin_cnt,json=rejoinCnt,proto3" json:"rejoin_cnt,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}                                              `json:"-"`
-	XXX_sizecache        int32                                                 `json:"-"`
+func (m *JoinRequestPayload) GetJoinEui() []byte {
+	if m != nil {
+		return m.JoinEui
+	}
+	return nil
 }
 
-func (m *RejoinRequestPayload) Reset()      { *m = RejoinRequestPayload{} }
-func (*RejoinRequestPayload) ProtoMessage() {}
+func (m *JoinRequestPayload) GetDevEui() []byte {
+	if m != nil {
+		return m.DevEui
+	}
+	return nil
+}
+
+func (m *JoinRequestPayload) GetDevNonce() []byte {
+	if m != nil {
+		return m.DevNonce
+	}
+	return nil
+}
+
+type RejoinRequestPayload struct {
+	RejoinType           RejoinRequestType `protobuf:"varint,1,opt,name=rejoin_type,json=rejoinType,proto3,enum=ttn.lorawan.v3.RejoinRequestType" json:"rejoin_type,omitempty"`
+	NetId                []byte            `protobuf:"bytes,2,opt,name=net_id,json=netId,proto3" json:"net_id,omitempty"`
+	JoinEui              []byte            `protobuf:"bytes,3,opt,name=join_eui,json=joinEui,proto3" json:"join_eui,omitempty"`
+	DevEui               []byte            `protobuf:"bytes,4,opt,name=dev_eui,json=devEui,proto3" json:"dev_eui,omitempty"`
+	RejoinCnt            uint32            `protobuf:"varint,5,opt,name=rejoin_cnt,json=rejoinCnt,proto3" json:"rejoin_cnt,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}          `json:"-"`
+	XXX_unrecognized     []byte            `json:"-"`
+	XXX_sizecache        int32             `json:"-"`
+}
+
+func (m *RejoinRequestPayload) Reset()         { *m = RejoinRequestPayload{} }
+func (m *RejoinRequestPayload) String() string { return proto.CompactTextString(m) }
+func (*RejoinRequestPayload) ProtoMessage()    {}
 func (*RejoinRequestPayload) Descriptor() ([]byte, []int) {
 	return fileDescriptor_2084d1d5a227b67e, []int{6}
 }
@@ -1480,6 +1646,27 @@ func (m *RejoinRequestPayload) GetRejoinType() RejoinRequestType {
 	return RejoinRequestType_CONTEXT
 }
 
+func (m *RejoinRequestPayload) GetNetId() []byte {
+	if m != nil {
+		return m.NetId
+	}
+	return nil
+}
+
+func (m *RejoinRequestPayload) GetJoinEui() []byte {
+	if m != nil {
+		return m.JoinEui
+	}
+	return nil
+}
+
+func (m *RejoinRequestPayload) GetDevEui() []byte {
+	if m != nil {
+		return m.DevEui
+	}
+	return nil
+}
+
 func (m *RejoinRequestPayload) GetRejoinCnt() uint32 {
 	if m != nil {
 		return m.RejoinCnt
@@ -1488,19 +1675,21 @@ func (m *RejoinRequestPayload) GetRejoinCnt() uint32 {
 }
 
 type JoinAcceptPayload struct {
-	Encrypted            []byte                                                    `protobuf:"bytes,1,opt,name=encrypted,proto3" json:"encrypted,omitempty"`
-	JoinNonce            go_thethings_network_lorawan_stack_v3_pkg_types.JoinNonce `protobuf:"bytes,2,opt,name=join_nonce,json=joinNonce,proto3,customtype=go.thethings.network/lorawan-stack/v3/pkg/types.JoinNonce" json:"join_nonce"`
-	NetId                go_thethings_network_lorawan_stack_v3_pkg_types.NetID     `protobuf:"bytes,3,opt,name=net_id,json=netId,proto3,customtype=go.thethings.network/lorawan-stack/v3/pkg/types.NetID" json:"net_id"`
-	DevAddr              go_thethings_network_lorawan_stack_v3_pkg_types.DevAddr   `protobuf:"bytes,4,opt,name=dev_addr,json=devAddr,proto3,customtype=go.thethings.network/lorawan-stack/v3/pkg/types.DevAddr" json:"dev_addr"`
-	DLSettings           `protobuf:"bytes,5,opt,name=dl_settings,json=dlSettings,proto3,embedded=dl_settings" json:"dl_settings"`
-	RxDelay              RxDelay  `protobuf:"varint,6,opt,name=rx_delay,json=rxDelay,proto3,enum=ttn.lorawan.v3.RxDelay" json:"rx_delay,omitempty"`
-	CfList               *CFList  `protobuf:"bytes,7,opt,name=cf_list,json=cfList,proto3" json:"cf_list,omitempty"`
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
+	Encrypted            []byte      `protobuf:"bytes,1,opt,name=encrypted,proto3" json:"encrypted,omitempty"`
+	JoinNonce            []byte      `protobuf:"bytes,2,opt,name=join_nonce,json=joinNonce,proto3" json:"join_nonce,omitempty"`
+	NetId                []byte      `protobuf:"bytes,3,opt,name=net_id,json=netId,proto3" json:"net_id,omitempty"`
+	DevAddr              []byte      `protobuf:"bytes,4,opt,name=dev_addr,json=devAddr,proto3" json:"dev_addr,omitempty"`
+	DlSettings           *DLSettings `protobuf:"bytes,5,opt,name=dl_settings,json=dlSettings,proto3" json:"dl_settings,omitempty"`
+	RxDelay              RxDelay     `protobuf:"varint,6,opt,name=rx_delay,json=rxDelay,proto3,enum=ttn.lorawan.v3.RxDelay" json:"rx_delay,omitempty"`
+	CfList               *CFList     `protobuf:"bytes,7,opt,name=cf_list,json=cfList,proto3" json:"cf_list,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}    `json:"-"`
+	XXX_unrecognized     []byte      `json:"-"`
+	XXX_sizecache        int32       `json:"-"`
 }
 
-func (m *JoinAcceptPayload) Reset()      { *m = JoinAcceptPayload{} }
-func (*JoinAcceptPayload) ProtoMessage() {}
+func (m *JoinAcceptPayload) Reset()         { *m = JoinAcceptPayload{} }
+func (m *JoinAcceptPayload) String() string { return proto.CompactTextString(m) }
+func (*JoinAcceptPayload) ProtoMessage()    {}
 func (*JoinAcceptPayload) Descriptor() ([]byte, []int) {
 	return fileDescriptor_2084d1d5a227b67e, []int{7}
 }
@@ -1529,11 +1718,39 @@ func (m *JoinAcceptPayload) GetEncrypted() []byte {
 	return nil
 }
 
+func (m *JoinAcceptPayload) GetJoinNonce() []byte {
+	if m != nil {
+		return m.JoinNonce
+	}
+	return nil
+}
+
+func (m *JoinAcceptPayload) GetNetId() []byte {
+	if m != nil {
+		return m.NetId
+	}
+	return nil
+}
+
+func (m *JoinAcceptPayload) GetDevAddr() []byte {
+	if m != nil {
+		return m.DevAddr
+	}
+	return nil
+}
+
+func (m *JoinAcceptPayload) GetDlSettings() *DLSettings {
+	if m != nil {
+		return m.DlSettings
+	}
+	return nil
+}
+
 func (m *JoinAcceptPayload) GetRxDelay() RxDelay {
 	if m != nil {
 		return m.RxDelay
 	}
-	return RX_DELAY_0
+	return RxDelay_RX_DELAY_0
 }
 
 func (m *JoinAcceptPayload) GetCfList() *CFList {
@@ -1549,11 +1766,13 @@ type DLSettings struct {
 	// OptNeg is set if Network Server implements LoRaWAN 1.1 or greater.
 	OptNeg               bool     `protobuf:"varint,3,opt,name=opt_neg,json=optNeg,proto3" json:"opt_neg,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *DLSettings) Reset()      { *m = DLSettings{} }
-func (*DLSettings) ProtoMessage() {}
+func (m *DLSettings) Reset()         { *m = DLSettings{} }
+func (m *DLSettings) String() string { return proto.CompactTextString(m) }
+func (*DLSettings) ProtoMessage()    {}
 func (*DLSettings) Descriptor() ([]byte, []int) {
 	return fileDescriptor_2084d1d5a227b67e, []int{8}
 }
@@ -1586,7 +1805,7 @@ func (m *DLSettings) GetRx2Dr() DataRateIndex {
 	if m != nil {
 		return m.Rx2Dr
 	}
-	return DATA_RATE_0
+	return DataRateIndex_DATA_RATE_0
 }
 
 func (m *DLSettings) GetOptNeg() bool {
@@ -1607,11 +1826,13 @@ type CFList struct {
 	// defined by the selected frequency plan.
 	ChMasks              []bool   `protobuf:"varint,3,rep,packed,name=ch_masks,json=chMasks,proto3" json:"ch_masks,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *CFList) Reset()      { *m = CFList{} }
-func (*CFList) ProtoMessage() {}
+func (m *CFList) Reset()         { *m = CFList{} }
+func (m *CFList) String() string { return proto.CompactTextString(m) }
+func (*CFList) ProtoMessage()    {}
 func (*CFList) Descriptor() ([]byte, []int) {
 	return fileDescriptor_2084d1d5a227b67e, []int{9}
 }
@@ -1658,12 +1879,15 @@ type LoRaDataRate struct {
 	// Bandwidth (Hz).
 	Bandwidth            uint32   `protobuf:"varint,1,opt,name=bandwidth,proto3" json:"bandwidth,omitempty"`
 	SpreadingFactor      uint32   `protobuf:"varint,2,opt,name=spreading_factor,json=spreadingFactor,proto3" json:"spreading_factor,omitempty"`
+	CodingRate           string   `protobuf:"bytes,3,opt,name=coding_rate,json=codingRate,proto3" json:"coding_rate,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *LoRaDataRate) Reset()      { *m = LoRaDataRate{} }
-func (*LoRaDataRate) ProtoMessage() {}
+func (m *LoRaDataRate) Reset()         { *m = LoRaDataRate{} }
+func (m *LoRaDataRate) String() string { return proto.CompactTextString(m) }
+func (*LoRaDataRate) ProtoMessage()    {}
 func (*LoRaDataRate) Descriptor() ([]byte, []int) {
 	return fileDescriptor_2084d1d5a227b67e, []int{10}
 }
@@ -1699,15 +1923,24 @@ func (m *LoRaDataRate) GetSpreadingFactor() uint32 {
 	return 0
 }
 
+func (m *LoRaDataRate) GetCodingRate() string {
+	if m != nil {
+		return m.CodingRate
+	}
+	return ""
+}
+
 type FSKDataRate struct {
 	// Bit rate (bps).
 	BitRate              uint32   `protobuf:"varint,1,opt,name=bit_rate,json=bitRate,proto3" json:"bit_rate,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *FSKDataRate) Reset()      { *m = FSKDataRate{} }
-func (*FSKDataRate) ProtoMessage() {}
+func (m *FSKDataRate) Reset()         { *m = FSKDataRate{} }
+func (m *FSKDataRate) String() string { return proto.CompactTextString(m) }
+func (*FSKDataRate) ProtoMessage()    {}
 func (*FSKDataRate) Descriptor() ([]byte, []int) {
 	return fileDescriptor_2084d1d5a227b67e, []int{11}
 }
@@ -1738,14 +1971,17 @@ func (m *FSKDataRate) GetBitRate() uint32 {
 
 type LRFHSSDataRate struct {
 	ModulationType uint32 `protobuf:"varint,1,opt,name=modulation_type,json=modulationType,proto3" json:"modulation_type,omitempty"`
-	// Operating Channel Width (kHz).
+	// Operating Channel Width (Hz).
 	OperatingChannelWidth uint32   `protobuf:"varint,2,opt,name=operating_channel_width,json=operatingChannelWidth,proto3" json:"operating_channel_width,omitempty"`
+	CodingRate            string   `protobuf:"bytes,3,opt,name=coding_rate,json=codingRate,proto3" json:"coding_rate,omitempty"`
 	XXX_NoUnkeyedLiteral  struct{} `json:"-"`
+	XXX_unrecognized      []byte   `json:"-"`
 	XXX_sizecache         int32    `json:"-"`
 }
 
-func (m *LRFHSSDataRate) Reset()      { *m = LRFHSSDataRate{} }
-func (*LRFHSSDataRate) ProtoMessage() {}
+func (m *LRFHSSDataRate) Reset()         { *m = LRFHSSDataRate{} }
+func (m *LRFHSSDataRate) String() string { return proto.CompactTextString(m) }
+func (*LRFHSSDataRate) ProtoMessage()    {}
 func (*LRFHSSDataRate) Descriptor() ([]byte, []int) {
 	return fileDescriptor_2084d1d5a227b67e, []int{12}
 }
@@ -1781,6 +2017,13 @@ func (m *LRFHSSDataRate) GetOperatingChannelWidth() uint32 {
 	return 0
 }
 
+func (m *LRFHSSDataRate) GetCodingRate() string {
+	if m != nil {
+		return m.CodingRate
+	}
+	return ""
+}
+
 type DataRate struct {
 	// Types that are valid to be assigned to Modulation:
 	//	*DataRate_Lora
@@ -1788,11 +2031,13 @@ type DataRate struct {
 	//	*DataRate_Lrfhss
 	Modulation           isDataRate_Modulation `protobuf_oneof:"modulation"`
 	XXX_NoUnkeyedLiteral struct{}              `json:"-"`
+	XXX_unrecognized     []byte                `json:"-"`
 	XXX_sizecache        int32                 `json:"-"`
 }
 
-func (m *DataRate) Reset()      { *m = DataRate{} }
-func (*DataRate) ProtoMessage() {}
+func (m *DataRate) Reset()         { *m = DataRate{} }
+func (m *DataRate) String() string { return proto.CompactTextString(m) }
+func (*DataRate) ProtoMessage()    {}
 func (*DataRate) Descriptor() ([]byte, []int) {
 	return fileDescriptor_2084d1d5a227b67e, []int{13}
 }
@@ -1816,7 +2061,6 @@ var xxx_messageInfo_DataRate proto.InternalMessageInfo
 
 type isDataRate_Modulation interface {
 	isDataRate_Modulation()
-	Equal(interface{}) bool
 }
 
 type DataRate_Lora struct {
@@ -1875,11 +2119,7 @@ func (*DataRate) XXX_OneofWrappers() []interface{} {
 // On downlink, this is a scheduled transmission.
 type TxSettings struct {
 	// Data rate.
-	DataRate DataRate `protobuf:"bytes,1,opt,name=data_rate,json=dataRate,proto3" json:"data_rate"`
-	// LoRaWAN data rate index.
-	DataRateIndex DataRateIndex `protobuf:"varint,2,opt,name=data_rate_index,json=dataRateIndex,proto3,enum=ttn.lorawan.v3.DataRateIndex" json:"data_rate_index,omitempty"`
-	// LoRa coding rate.
-	CodingRate string `protobuf:"bytes,3,opt,name=coding_rate,json=codingRate,proto3" json:"coding_rate,omitempty"`
+	DataRate *DataRate `protobuf:"bytes,1,opt,name=data_rate,json=dataRate,proto3" json:"data_rate,omitempty"`
 	// Frequency (Hz).
 	Frequency uint64 `protobuf:"varint,4,opt,name=frequency,proto3" json:"frequency,omitempty"`
 	// Send a CRC in the packet; only on uplink; on downlink, CRC should not be enabled.
@@ -1889,15 +2129,21 @@ type TxSettings struct {
 	Timestamp uint32 `protobuf:"varint,6,opt,name=timestamp,proto3" json:"timestamp,omitempty"`
 	// Time of the gateway when the uplink message was received, or when the downlink message should be transmitted.
 	// For downlink, this requires the gateway to have GPS time synchronization.
-	Time *time.Time `protobuf:"bytes,7,opt,name=time,proto3,stdtime" json:"time,omitempty"`
+	Time *types.Timestamp `protobuf:"bytes,7,opt,name=time,proto3" json:"time,omitempty"`
 	// Transmission settings for downlink.
-	Downlink             *TxSettings_Downlink `protobuf:"bytes,8,opt,name=downlink,proto3" json:"downlink,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}             `json:"-"`
-	XXX_sizecache        int32                `json:"-"`
+	Downlink *TxSettings_Downlink `protobuf:"bytes,8,opt,name=downlink,proto3" json:"downlink,omitempty"`
+	// Concentrator timestamp for the downlink as calculated by the Gateway Server scheduler.
+	// This value takes into account necessary offsets such as the RTT (Round Trip Time) and TOA (Time Of Arrival).
+	// This field is set and used only by the Gateway Server.
+	ConcentratorTimestamp int64    `protobuf:"varint,9,opt,name=concentrator_timestamp,json=concentratorTimestamp,proto3" json:"concentrator_timestamp,omitempty"`
+	XXX_NoUnkeyedLiteral  struct{} `json:"-"`
+	XXX_unrecognized      []byte   `json:"-"`
+	XXX_sizecache         int32    `json:"-"`
 }
 
-func (m *TxSettings) Reset()      { *m = TxSettings{} }
-func (*TxSettings) ProtoMessage() {}
+func (m *TxSettings) Reset()         { *m = TxSettings{} }
+func (m *TxSettings) String() string { return proto.CompactTextString(m) }
+func (*TxSettings) ProtoMessage()    {}
 func (*TxSettings) Descriptor() ([]byte, []int) {
 	return fileDescriptor_2084d1d5a227b67e, []int{14}
 }
@@ -1919,25 +2165,11 @@ func (m *TxSettings) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_TxSettings proto.InternalMessageInfo
 
-func (m *TxSettings) GetDataRate() DataRate {
+func (m *TxSettings) GetDataRate() *DataRate {
 	if m != nil {
 		return m.DataRate
 	}
-	return DataRate{}
-}
-
-func (m *TxSettings) GetDataRateIndex() DataRateIndex {
-	if m != nil {
-		return m.DataRateIndex
-	}
-	return DATA_RATE_0
-}
-
-func (m *TxSettings) GetCodingRate() string {
-	if m != nil {
-		return m.CodingRate
-	}
-	return ""
+	return nil
 }
 
 func (m *TxSettings) GetFrequency() uint64 {
@@ -1961,7 +2193,7 @@ func (m *TxSettings) GetTimestamp() uint32 {
 	return 0
 }
 
-func (m *TxSettings) GetTime() *time.Time {
+func (m *TxSettings) GetTime() *types.Timestamp {
 	if m != nil {
 		return m.Time
 	}
@@ -1975,6 +2207,13 @@ func (m *TxSettings) GetDownlink() *TxSettings_Downlink {
 	return nil
 }
 
+func (m *TxSettings) GetConcentratorTimestamp() int64 {
+	if m != nil {
+		return m.ConcentratorTimestamp
+	}
+	return 0
+}
+
 // Transmission settings for downlink.
 type TxSettings_Downlink struct {
 	// Index of the antenna on which the uplink was received and/or downlink must be sent.
@@ -1984,11 +2223,13 @@ type TxSettings_Downlink struct {
 	// Invert LoRa polarization; false for LoRaWAN uplink, true for downlink.
 	InvertPolarization   bool     `protobuf:"varint,3,opt,name=invert_polarization,json=invertPolarization,proto3" json:"invert_polarization,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *TxSettings_Downlink) Reset()      { *m = TxSettings_Downlink{} }
-func (*TxSettings_Downlink) ProtoMessage() {}
+func (m *TxSettings_Downlink) Reset()         { *m = TxSettings_Downlink{} }
+func (m *TxSettings_Downlink) String() string { return proto.CompactTextString(m) }
+func (*TxSettings_Downlink) ProtoMessage()    {}
 func (*TxSettings_Downlink) Descriptor() ([]byte, []int) {
 	return fileDescriptor_2084d1d5a227b67e, []int{14, 0}
 }
@@ -2032,14 +2273,16 @@ func (m *TxSettings_Downlink) GetInvertPolarization() bool {
 }
 
 type GatewayAntennaIdentifiers struct {
-	GatewayIdentifiers   `protobuf:"bytes,1,opt,name=gateway_ids,json=gatewayIds,proto3,embedded=gateway_ids" json:"gateway_ids"`
-	AntennaIndex         uint32   `protobuf:"varint,2,opt,name=antenna_index,json=antennaIndex,proto3" json:"antenna_index,omitempty"`
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
+	GatewayIds           *GatewayIdentifiers `protobuf:"bytes,1,opt,name=gateway_ids,json=gatewayIds,proto3" json:"gateway_ids,omitempty"`
+	AntennaIndex         uint32              `protobuf:"varint,2,opt,name=antenna_index,json=antennaIndex,proto3" json:"antenna_index,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}            `json:"-"`
+	XXX_unrecognized     []byte              `json:"-"`
+	XXX_sizecache        int32               `json:"-"`
 }
 
-func (m *GatewayAntennaIdentifiers) Reset()      { *m = GatewayAntennaIdentifiers{} }
-func (*GatewayAntennaIdentifiers) ProtoMessage() {}
+func (m *GatewayAntennaIdentifiers) Reset()         { *m = GatewayAntennaIdentifiers{} }
+func (m *GatewayAntennaIdentifiers) String() string { return proto.CompactTextString(m) }
+func (*GatewayAntennaIdentifiers) ProtoMessage()    {}
 func (*GatewayAntennaIdentifiers) Descriptor() ([]byte, []int) {
 	return fileDescriptor_2084d1d5a227b67e, []int{15}
 }
@@ -2061,6 +2304,13 @@ func (m *GatewayAntennaIdentifiers) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_GatewayAntennaIdentifiers proto.InternalMessageInfo
 
+func (m *GatewayAntennaIdentifiers) GetGatewayIds() *GatewayIdentifiers {
+	if m != nil {
+		return m.GatewayIds
+	}
+	return nil
+}
+
 func (m *GatewayAntennaIdentifiers) GetAntennaIndex() uint32 {
 	if m != nil {
 		return m.AntennaIndex
@@ -2068,21 +2318,79 @@ func (m *GatewayAntennaIdentifiers) GetAntennaIndex() uint32 {
 	return 0
 }
 
-type UplinkToken struct {
-	GatewayAntennaIdentifiers `protobuf:"bytes,1,opt,name=ids,proto3,embedded=ids" json:"ids"`
-	Timestamp                 uint32 `protobuf:"varint,2,opt,name=timestamp,proto3" json:"timestamp,omitempty"`
-	// Absolute time observed by the server when the uplink message has been received.
-	ServerTime time.Time `protobuf:"bytes,3,opt,name=server_time,json=serverTime,proto3,stdtime" json:"server_time"`
-	// Absolute concentrator time as observed by the Gateway Server, accounting for rollovers.
-	ConcentratorTime     int64    `protobuf:"varint,4,opt,name=concentrator_time,json=concentratorTime,proto3" json:"concentrator_time,omitempty"`
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
+type ClassBCGatewayIdentifiers struct {
+	GatewayIds           *GatewayIdentifiers `protobuf:"bytes,1,opt,name=gateway_ids,json=gatewayIds,proto3" json:"gateway_ids,omitempty"`
+	AntennaIndex         uint32              `protobuf:"varint,2,opt,name=antenna_index,json=antennaIndex,proto3" json:"antenna_index,omitempty"`
+	GroupIndex           uint32              `protobuf:"varint,3,opt,name=group_index,json=groupIndex,proto3" json:"group_index,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}            `json:"-"`
+	XXX_unrecognized     []byte              `json:"-"`
+	XXX_sizecache        int32               `json:"-"`
 }
 
-func (m *UplinkToken) Reset()      { *m = UplinkToken{} }
-func (*UplinkToken) ProtoMessage() {}
-func (*UplinkToken) Descriptor() ([]byte, []int) {
+func (m *ClassBCGatewayIdentifiers) Reset()         { *m = ClassBCGatewayIdentifiers{} }
+func (m *ClassBCGatewayIdentifiers) String() string { return proto.CompactTextString(m) }
+func (*ClassBCGatewayIdentifiers) ProtoMessage()    {}
+func (*ClassBCGatewayIdentifiers) Descriptor() ([]byte, []int) {
 	return fileDescriptor_2084d1d5a227b67e, []int{16}
+}
+func (m *ClassBCGatewayIdentifiers) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_ClassBCGatewayIdentifiers.Unmarshal(m, b)
+}
+func (m *ClassBCGatewayIdentifiers) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_ClassBCGatewayIdentifiers.Marshal(b, m, deterministic)
+}
+func (m *ClassBCGatewayIdentifiers) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ClassBCGatewayIdentifiers.Merge(m, src)
+}
+func (m *ClassBCGatewayIdentifiers) XXX_Size() int {
+	return xxx_messageInfo_ClassBCGatewayIdentifiers.Size(m)
+}
+func (m *ClassBCGatewayIdentifiers) XXX_DiscardUnknown() {
+	xxx_messageInfo_ClassBCGatewayIdentifiers.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ClassBCGatewayIdentifiers proto.InternalMessageInfo
+
+func (m *ClassBCGatewayIdentifiers) GetGatewayIds() *GatewayIdentifiers {
+	if m != nil {
+		return m.GatewayIds
+	}
+	return nil
+}
+
+func (m *ClassBCGatewayIdentifiers) GetAntennaIndex() uint32 {
+	if m != nil {
+		return m.AntennaIndex
+	}
+	return 0
+}
+
+func (m *ClassBCGatewayIdentifiers) GetGroupIndex() uint32 {
+	if m != nil {
+		return m.GroupIndex
+	}
+	return 0
+}
+
+type UplinkToken struct {
+	Ids       *GatewayAntennaIdentifiers `protobuf:"bytes,1,opt,name=ids,proto3" json:"ids,omitempty"`
+	Timestamp uint32                     `protobuf:"varint,2,opt,name=timestamp,proto3" json:"timestamp,omitempty"`
+	// Absolute time observed by the server when the uplink message has been received.
+	ServerTime *types.Timestamp `protobuf:"bytes,3,opt,name=server_time,json=serverTime,proto3" json:"server_time,omitempty"`
+	// Absolute concentrator time as observed by the Gateway Server, accounting for rollovers.
+	ConcentratorTime int64 `protobuf:"varint,4,opt,name=concentrator_time,json=concentratorTime,proto3" json:"concentrator_time,omitempty"`
+	// Absolute time observed by the gateway when the uplink has been received.
+	GatewayTime          *types.Timestamp `protobuf:"bytes,5,opt,name=gateway_time,json=gatewayTime,proto3" json:"gateway_time,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}         `json:"-"`
+	XXX_unrecognized     []byte           `json:"-"`
+	XXX_sizecache        int32            `json:"-"`
+}
+
+func (m *UplinkToken) Reset()         { *m = UplinkToken{} }
+func (m *UplinkToken) String() string { return proto.CompactTextString(m) }
+func (*UplinkToken) ProtoMessage()    {}
+func (*UplinkToken) Descriptor() ([]byte, []int) {
+	return fileDescriptor_2084d1d5a227b67e, []int{17}
 }
 func (m *UplinkToken) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_UplinkToken.Unmarshal(m, b)
@@ -2102,6 +2410,13 @@ func (m *UplinkToken) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_UplinkToken proto.InternalMessageInfo
 
+func (m *UplinkToken) GetIds() *GatewayAntennaIdentifiers {
+	if m != nil {
+		return m.Ids
+	}
+	return nil
+}
+
 func (m *UplinkToken) GetTimestamp() uint32 {
 	if m != nil {
 		return m.Timestamp
@@ -2109,11 +2424,11 @@ func (m *UplinkToken) GetTimestamp() uint32 {
 	return 0
 }
 
-func (m *UplinkToken) GetServerTime() time.Time {
+func (m *UplinkToken) GetServerTime() *types.Timestamp {
 	if m != nil {
 		return m.ServerTime
 	}
-	return time.Time{}
+	return nil
 }
 
 func (m *UplinkToken) GetConcentratorTime() int64 {
@@ -2121,6 +2436,13 @@ func (m *UplinkToken) GetConcentratorTime() int64 {
 		return m.ConcentratorTime
 	}
 	return 0
+}
+
+func (m *UplinkToken) GetGatewayTime() *types.Timestamp {
+	if m != nil {
+		return m.GatewayTime
+	}
+	return nil
 }
 
 type DownlinkPath struct {
@@ -2132,13 +2454,15 @@ type DownlinkPath struct {
 	//	*DownlinkPath_Fixed
 	Path                 isDownlinkPath_Path `protobuf_oneof:"path"`
 	XXX_NoUnkeyedLiteral struct{}            `json:"-"`
+	XXX_unrecognized     []byte              `json:"-"`
 	XXX_sizecache        int32               `json:"-"`
 }
 
-func (m *DownlinkPath) Reset()      { *m = DownlinkPath{} }
-func (*DownlinkPath) ProtoMessage() {}
+func (m *DownlinkPath) Reset()         { *m = DownlinkPath{} }
+func (m *DownlinkPath) String() string { return proto.CompactTextString(m) }
+func (*DownlinkPath) ProtoMessage()    {}
 func (*DownlinkPath) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2084d1d5a227b67e, []int{17}
+	return fileDescriptor_2084d1d5a227b67e, []int{18}
 }
 func (m *DownlinkPath) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_DownlinkPath.Unmarshal(m, b)
@@ -2160,7 +2484,6 @@ var xxx_messageInfo_DownlinkPath proto.InternalMessageInfo
 
 type isDownlinkPath_Path interface {
 	isDownlinkPath_Path()
-	Equal(interface{}) bool
 }
 
 type DownlinkPath_UplinkToken struct {
@@ -2214,12 +2537,12 @@ type TxRequest struct {
 	DownlinkPaths []*DownlinkPath `protobuf:"bytes,2,rep,name=downlink_paths,json=downlinkPaths,proto3" json:"downlink_paths,omitempty"`
 	// Rx1 delay (Rx2 delay is Rx1 delay + 1 second).
 	Rx1Delay RxDelay `protobuf:"varint,3,opt,name=rx1_delay,json=rx1Delay,proto3,enum=ttn.lorawan.v3.RxDelay" json:"rx1_delay,omitempty"`
-	// LoRaWAN data rate index for Rx1.
-	Rx1DataRateIndex DataRateIndex `protobuf:"varint,4,opt,name=rx1_data_rate_index,json=rx1DataRateIndex,proto3,enum=ttn.lorawan.v3.DataRateIndex" json:"rx1_data_rate_index,omitempty"`
+	// LoRaWAN data rate for Rx1.
+	Rx1DataRate *DataRate `protobuf:"bytes,12,opt,name=rx1_data_rate,json=rx1DataRate,proto3" json:"rx1_data_rate,omitempty"`
 	// Frequency (Hz) for Rx1.
 	Rx1Frequency uint64 `protobuf:"varint,5,opt,name=rx1_frequency,json=rx1Frequency,proto3" json:"rx1_frequency,omitempty"`
-	// LoRaWAN data rate index for Rx2.
-	Rx2DataRateIndex DataRateIndex `protobuf:"varint,6,opt,name=rx2_data_rate_index,json=rx2DataRateIndex,proto3,enum=ttn.lorawan.v3.DataRateIndex" json:"rx2_data_rate_index,omitempty"`
+	// LoRaWAN data rate for Rx2.
+	Rx2DataRate *DataRate `protobuf:"bytes,13,opt,name=rx2_data_rate,json=rx2DataRate,proto3" json:"rx2_data_rate,omitempty"`
 	// Frequency (Hz) for Rx2.
 	Rx2Frequency uint64 `protobuf:"varint,7,opt,name=rx2_frequency,json=rx2Frequency,proto3" json:"rx2_frequency,omitempty"`
 	// Priority for scheduling.
@@ -2230,23 +2553,23 @@ type TxRequest struct {
 	// This value is only valid for class C downlink; class A downlink uses uplink tokens and class B downlink is scheduled on ping slots.
 	// This requires the gateway to have GPS time sychronization.
 	// If the absolute time is not set, the first available time will be used that does not conflict or violate regional limitations.
-	AbsoluteTime *time.Time `protobuf:"bytes,9,opt,name=absolute_time,json=absoluteTime,proto3,stdtime" json:"absolute_time,omitempty"`
+	AbsoluteTime *types.Timestamp `protobuf:"bytes,9,opt,name=absolute_time,json=absoluteTime,proto3" json:"absolute_time,omitempty"`
 	// Frequency plan ID from which the frequencies in this message are retrieved.
 	FrequencyPlanId string `protobuf:"bytes,10,opt,name=frequency_plan_id,json=frequencyPlanId,proto3" json:"frequency_plan_id,omitempty"`
-	// The regional parameters version used to interpret the data rate indices in this message.
-	LorawanPhyVersion PHYVersion `protobuf:"varint,11,opt,name=lorawan_phy_version,json=lorawanPhyVersion,proto3,enum=ttn.lorawan.v3.PHYVersion" json:"lorawan_phy_version,omitempty"`
 	// Advanced metadata fields
 	// - can be used for advanced information or experimental features that are not yet formally defined in the API
 	// - field names are written in snake_case
 	Advanced             *types.Struct `protobuf:"bytes,99,opt,name=advanced,proto3" json:"advanced,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}      `json:"-"`
+	XXX_unrecognized     []byte        `json:"-"`
 	XXX_sizecache        int32         `json:"-"`
 }
 
-func (m *TxRequest) Reset()      { *m = TxRequest{} }
-func (*TxRequest) ProtoMessage() {}
+func (m *TxRequest) Reset()         { *m = TxRequest{} }
+func (m *TxRequest) String() string { return proto.CompactTextString(m) }
+func (*TxRequest) ProtoMessage()    {}
 func (*TxRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2084d1d5a227b67e, []int{18}
+	return fileDescriptor_2084d1d5a227b67e, []int{19}
 }
 func (m *TxRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_TxRequest.Unmarshal(m, b)
@@ -2270,7 +2593,7 @@ func (m *TxRequest) GetClass() Class {
 	if m != nil {
 		return m.Class
 	}
-	return CLASS_A
+	return Class_CLASS_A
 }
 
 func (m *TxRequest) GetDownlinkPaths() []*DownlinkPath {
@@ -2284,14 +2607,14 @@ func (m *TxRequest) GetRx1Delay() RxDelay {
 	if m != nil {
 		return m.Rx1Delay
 	}
-	return RX_DELAY_0
+	return RxDelay_RX_DELAY_0
 }
 
-func (m *TxRequest) GetRx1DataRateIndex() DataRateIndex {
+func (m *TxRequest) GetRx1DataRate() *DataRate {
 	if m != nil {
-		return m.Rx1DataRateIndex
+		return m.Rx1DataRate
 	}
-	return DATA_RATE_0
+	return nil
 }
 
 func (m *TxRequest) GetRx1Frequency() uint64 {
@@ -2301,11 +2624,11 @@ func (m *TxRequest) GetRx1Frequency() uint64 {
 	return 0
 }
 
-func (m *TxRequest) GetRx2DataRateIndex() DataRateIndex {
+func (m *TxRequest) GetRx2DataRate() *DataRate {
 	if m != nil {
-		return m.Rx2DataRateIndex
+		return m.Rx2DataRate
 	}
-	return DATA_RATE_0
+	return nil
 }
 
 func (m *TxRequest) GetRx2Frequency() uint64 {
@@ -2322,7 +2645,7 @@ func (m *TxRequest) GetPriority() TxSchedulePriority {
 	return TxSchedulePriority_LOWEST
 }
 
-func (m *TxRequest) GetAbsoluteTime() *time.Time {
+func (m *TxRequest) GetAbsoluteTime() *types.Timestamp {
 	if m != nil {
 		return m.AbsoluteTime
 	}
@@ -2334,13 +2657,6 @@ func (m *TxRequest) GetFrequencyPlanId() string {
 		return m.FrequencyPlanId
 	}
 	return ""
-}
-
-func (m *TxRequest) GetLorawanPhyVersion() PHYVersion {
-	if m != nil {
-		return m.LorawanPhyVersion
-	}
-	return PHY_UNKNOWN
 }
 
 func (m *TxRequest) GetAdvanced() *types.Struct {
@@ -2386,13 +2702,15 @@ type MACCommand struct {
 	//	*MACCommand_DeviceModeConf_
 	Payload              isMACCommand_Payload `protobuf_oneof:"payload"`
 	XXX_NoUnkeyedLiteral struct{}             `json:"-"`
+	XXX_unrecognized     []byte               `json:"-"`
 	XXX_sizecache        int32                `json:"-"`
 }
 
-func (m *MACCommand) Reset()      { *m = MACCommand{} }
-func (*MACCommand) ProtoMessage() {}
+func (m *MACCommand) Reset()         { *m = MACCommand{} }
+func (m *MACCommand) String() string { return proto.CompactTextString(m) }
+func (*MACCommand) ProtoMessage()    {}
 func (*MACCommand) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2084d1d5a227b67e, []int{19}
+	return fileDescriptor_2084d1d5a227b67e, []int{20}
 }
 func (m *MACCommand) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_MACCommand.Unmarshal(m, b)
@@ -2414,7 +2732,6 @@ var xxx_messageInfo_MACCommand proto.InternalMessageInfo
 
 type isMACCommand_Payload interface {
 	isMACCommand_Payload()
-	Equal(interface{}) bool
 }
 
 type MACCommand_RawPayload struct {
@@ -2554,7 +2871,7 @@ func (m *MACCommand) GetCid() MACCommandIdentifier {
 	if m != nil {
 		return m.Cid
 	}
-	return CID_RFU_0
+	return MACCommandIdentifier_CID_RFU_0
 }
 
 func (m *MACCommand) GetRawPayload() []byte {
@@ -2814,13 +3131,15 @@ func (*MACCommand) XXX_OneofWrappers() []interface{} {
 type MACCommand_ResetInd struct {
 	MinorVersion         Minor    `protobuf:"varint,1,opt,name=minor_version,json=minorVersion,proto3,enum=ttn.lorawan.v3.Minor" json:"minor_version,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *MACCommand_ResetInd) Reset()      { *m = MACCommand_ResetInd{} }
-func (*MACCommand_ResetInd) ProtoMessage() {}
+func (m *MACCommand_ResetInd) Reset()         { *m = MACCommand_ResetInd{} }
+func (m *MACCommand_ResetInd) String() string { return proto.CompactTextString(m) }
+func (*MACCommand_ResetInd) ProtoMessage()    {}
 func (*MACCommand_ResetInd) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2084d1d5a227b67e, []int{19, 0}
+	return fileDescriptor_2084d1d5a227b67e, []int{20, 0}
 }
 func (m *MACCommand_ResetInd) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_MACCommand_ResetInd.Unmarshal(m, b)
@@ -2844,19 +3163,21 @@ func (m *MACCommand_ResetInd) GetMinorVersion() Minor {
 	if m != nil {
 		return m.MinorVersion
 	}
-	return MINOR_RFU_0
+	return Minor_MINOR_RFU_0
 }
 
 type MACCommand_ResetConf struct {
 	MinorVersion         Minor    `protobuf:"varint,1,opt,name=minor_version,json=minorVersion,proto3,enum=ttn.lorawan.v3.Minor" json:"minor_version,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *MACCommand_ResetConf) Reset()      { *m = MACCommand_ResetConf{} }
-func (*MACCommand_ResetConf) ProtoMessage() {}
+func (m *MACCommand_ResetConf) Reset()         { *m = MACCommand_ResetConf{} }
+func (m *MACCommand_ResetConf) String() string { return proto.CompactTextString(m) }
+func (*MACCommand_ResetConf) ProtoMessage()    {}
 func (*MACCommand_ResetConf) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2084d1d5a227b67e, []int{19, 1}
+	return fileDescriptor_2084d1d5a227b67e, []int{20, 1}
 }
 func (m *MACCommand_ResetConf) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_MACCommand_ResetConf.Unmarshal(m, b)
@@ -2880,7 +3201,7 @@ func (m *MACCommand_ResetConf) GetMinorVersion() Minor {
 	if m != nil {
 		return m.MinorVersion
 	}
-	return MINOR_RFU_0
+	return Minor_MINOR_RFU_0
 }
 
 type MACCommand_LinkCheckAns struct {
@@ -2888,13 +3209,15 @@ type MACCommand_LinkCheckAns struct {
 	Margin               uint32   `protobuf:"varint,1,opt,name=margin,proto3" json:"margin,omitempty"`
 	GatewayCount         uint32   `protobuf:"varint,2,opt,name=gateway_count,json=gatewayCount,proto3" json:"gateway_count,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *MACCommand_LinkCheckAns) Reset()      { *m = MACCommand_LinkCheckAns{} }
-func (*MACCommand_LinkCheckAns) ProtoMessage() {}
+func (m *MACCommand_LinkCheckAns) Reset()         { *m = MACCommand_LinkCheckAns{} }
+func (m *MACCommand_LinkCheckAns) String() string { return proto.CompactTextString(m) }
+func (*MACCommand_LinkCheckAns) ProtoMessage()    {}
 func (*MACCommand_LinkCheckAns) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2084d1d5a227b67e, []int{19, 2}
+	return fileDescriptor_2084d1d5a227b67e, []int{20, 2}
 }
 func (m *MACCommand_LinkCheckAns) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_MACCommand_LinkCheckAns.Unmarshal(m, b)
@@ -2935,13 +3258,15 @@ type MACCommand_LinkADRReq struct {
 	ChannelMaskControl   uint32        `protobuf:"varint,5,opt,name=channel_mask_control,json=channelMaskControl,proto3" json:"channel_mask_control,omitempty"`
 	NbTrans              uint32        `protobuf:"varint,6,opt,name=nb_trans,json=nbTrans,proto3" json:"nb_trans,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}      `json:"-"`
+	XXX_unrecognized     []byte        `json:"-"`
 	XXX_sizecache        int32         `json:"-"`
 }
 
-func (m *MACCommand_LinkADRReq) Reset()      { *m = MACCommand_LinkADRReq{} }
-func (*MACCommand_LinkADRReq) ProtoMessage() {}
+func (m *MACCommand_LinkADRReq) Reset()         { *m = MACCommand_LinkADRReq{} }
+func (m *MACCommand_LinkADRReq) String() string { return proto.CompactTextString(m) }
+func (*MACCommand_LinkADRReq) ProtoMessage()    {}
 func (*MACCommand_LinkADRReq) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2084d1d5a227b67e, []int{19, 3}
+	return fileDescriptor_2084d1d5a227b67e, []int{20, 3}
 }
 func (m *MACCommand_LinkADRReq) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_MACCommand_LinkADRReq.Unmarshal(m, b)
@@ -2965,7 +3290,7 @@ func (m *MACCommand_LinkADRReq) GetDataRateIndex() DataRateIndex {
 	if m != nil {
 		return m.DataRateIndex
 	}
-	return DATA_RATE_0
+	return DataRateIndex_DATA_RATE_0
 }
 
 func (m *MACCommand_LinkADRReq) GetTxPowerIndex() uint32 {
@@ -3001,13 +3326,15 @@ type MACCommand_LinkADRAns struct {
 	DataRateIndexAck     bool     `protobuf:"varint,2,opt,name=data_rate_index_ack,json=dataRateIndexAck,proto3" json:"data_rate_index_ack,omitempty"`
 	TxPowerIndexAck      bool     `protobuf:"varint,3,opt,name=tx_power_index_ack,json=txPowerIndexAck,proto3" json:"tx_power_index_ack,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *MACCommand_LinkADRAns) Reset()      { *m = MACCommand_LinkADRAns{} }
-func (*MACCommand_LinkADRAns) ProtoMessage() {}
+func (m *MACCommand_LinkADRAns) Reset()         { *m = MACCommand_LinkADRAns{} }
+func (m *MACCommand_LinkADRAns) String() string { return proto.CompactTextString(m) }
+func (*MACCommand_LinkADRAns) ProtoMessage()    {}
 func (*MACCommand_LinkADRAns) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2084d1d5a227b67e, []int{19, 4}
+	return fileDescriptor_2084d1d5a227b67e, []int{20, 4}
 }
 func (m *MACCommand_LinkADRAns) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_MACCommand_LinkADRAns.Unmarshal(m, b)
@@ -3051,13 +3378,15 @@ func (m *MACCommand_LinkADRAns) GetTxPowerIndexAck() bool {
 type MACCommand_DutyCycleReq struct {
 	MaxDutyCycle         AggregatedDutyCycle `protobuf:"varint,1,opt,name=max_duty_cycle,json=maxDutyCycle,proto3,enum=ttn.lorawan.v3.AggregatedDutyCycle" json:"max_duty_cycle,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}            `json:"-"`
+	XXX_unrecognized     []byte              `json:"-"`
 	XXX_sizecache        int32               `json:"-"`
 }
 
-func (m *MACCommand_DutyCycleReq) Reset()      { *m = MACCommand_DutyCycleReq{} }
-func (*MACCommand_DutyCycleReq) ProtoMessage() {}
+func (m *MACCommand_DutyCycleReq) Reset()         { *m = MACCommand_DutyCycleReq{} }
+func (m *MACCommand_DutyCycleReq) String() string { return proto.CompactTextString(m) }
+func (*MACCommand_DutyCycleReq) ProtoMessage()    {}
 func (*MACCommand_DutyCycleReq) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2084d1d5a227b67e, []int{19, 5}
+	return fileDescriptor_2084d1d5a227b67e, []int{20, 5}
 }
 func (m *MACCommand_DutyCycleReq) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_MACCommand_DutyCycleReq.Unmarshal(m, b)
@@ -3081,7 +3410,7 @@ func (m *MACCommand_DutyCycleReq) GetMaxDutyCycle() AggregatedDutyCycle {
 	if m != nil {
 		return m.MaxDutyCycle
 	}
-	return DUTY_CYCLE_1
+	return AggregatedDutyCycle_DUTY_CYCLE_1
 }
 
 type MACCommand_RxParamSetupReq struct {
@@ -3089,13 +3418,15 @@ type MACCommand_RxParamSetupReq struct {
 	Rx1DataRateOffset    DataRateOffset `protobuf:"varint,2,opt,name=rx1_data_rate_offset,json=rx1DataRateOffset,proto3,enum=ttn.lorawan.v3.DataRateOffset" json:"rx1_data_rate_offset,omitempty"`
 	Rx2Frequency         uint64         `protobuf:"varint,3,opt,name=rx2_frequency,json=rx2Frequency,proto3" json:"rx2_frequency,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}       `json:"-"`
+	XXX_unrecognized     []byte         `json:"-"`
 	XXX_sizecache        int32          `json:"-"`
 }
 
-func (m *MACCommand_RxParamSetupReq) Reset()      { *m = MACCommand_RxParamSetupReq{} }
-func (*MACCommand_RxParamSetupReq) ProtoMessage() {}
+func (m *MACCommand_RxParamSetupReq) Reset()         { *m = MACCommand_RxParamSetupReq{} }
+func (m *MACCommand_RxParamSetupReq) String() string { return proto.CompactTextString(m) }
+func (*MACCommand_RxParamSetupReq) ProtoMessage()    {}
 func (*MACCommand_RxParamSetupReq) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2084d1d5a227b67e, []int{19, 6}
+	return fileDescriptor_2084d1d5a227b67e, []int{20, 6}
 }
 func (m *MACCommand_RxParamSetupReq) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_MACCommand_RxParamSetupReq.Unmarshal(m, b)
@@ -3119,7 +3450,7 @@ func (m *MACCommand_RxParamSetupReq) GetRx2DataRateIndex() DataRateIndex {
 	if m != nil {
 		return m.Rx2DataRateIndex
 	}
-	return DATA_RATE_0
+	return DataRateIndex_DATA_RATE_0
 }
 
 func (m *MACCommand_RxParamSetupReq) GetRx1DataRateOffset() DataRateOffset {
@@ -3141,13 +3472,15 @@ type MACCommand_RxParamSetupAns struct {
 	Rx1DataRateOffsetAck bool     `protobuf:"varint,2,opt,name=rx1_data_rate_offset_ack,json=rx1DataRateOffsetAck,proto3" json:"rx1_data_rate_offset_ack,omitempty"`
 	Rx2FrequencyAck      bool     `protobuf:"varint,3,opt,name=rx2_frequency_ack,json=rx2FrequencyAck,proto3" json:"rx2_frequency_ack,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *MACCommand_RxParamSetupAns) Reset()      { *m = MACCommand_RxParamSetupAns{} }
-func (*MACCommand_RxParamSetupAns) ProtoMessage() {}
+func (m *MACCommand_RxParamSetupAns) Reset()         { *m = MACCommand_RxParamSetupAns{} }
+func (m *MACCommand_RxParamSetupAns) String() string { return proto.CompactTextString(m) }
+func (*MACCommand_RxParamSetupAns) ProtoMessage()    {}
 func (*MACCommand_RxParamSetupAns) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2084d1d5a227b67e, []int{19, 7}
+	return fileDescriptor_2084d1d5a227b67e, []int{20, 7}
 }
 func (m *MACCommand_RxParamSetupAns) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_MACCommand_RxParamSetupAns.Unmarshal(m, b)
@@ -3197,13 +3530,15 @@ type MACCommand_DevStatusAns struct {
 	// SNR of the last downlink (dB; [-32, +31]).
 	Margin               int32    `protobuf:"varint,2,opt,name=margin,proto3" json:"margin,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *MACCommand_DevStatusAns) Reset()      { *m = MACCommand_DevStatusAns{} }
-func (*MACCommand_DevStatusAns) ProtoMessage() {}
+func (m *MACCommand_DevStatusAns) Reset()         { *m = MACCommand_DevStatusAns{} }
+func (m *MACCommand_DevStatusAns) String() string { return proto.CompactTextString(m) }
+func (*MACCommand_DevStatusAns) ProtoMessage()    {}
 func (*MACCommand_DevStatusAns) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2084d1d5a227b67e, []int{19, 8}
+	return fileDescriptor_2084d1d5a227b67e, []int{20, 8}
 }
 func (m *MACCommand_DevStatusAns) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_MACCommand_DevStatusAns.Unmarshal(m, b)
@@ -3243,13 +3578,15 @@ type MACCommand_NewChannelReq struct {
 	MinDataRateIndex     DataRateIndex `protobuf:"varint,3,opt,name=min_data_rate_index,json=minDataRateIndex,proto3,enum=ttn.lorawan.v3.DataRateIndex" json:"min_data_rate_index,omitempty"`
 	MaxDataRateIndex     DataRateIndex `protobuf:"varint,4,opt,name=max_data_rate_index,json=maxDataRateIndex,proto3,enum=ttn.lorawan.v3.DataRateIndex" json:"max_data_rate_index,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}      `json:"-"`
+	XXX_unrecognized     []byte        `json:"-"`
 	XXX_sizecache        int32         `json:"-"`
 }
 
-func (m *MACCommand_NewChannelReq) Reset()      { *m = MACCommand_NewChannelReq{} }
-func (*MACCommand_NewChannelReq) ProtoMessage() {}
+func (m *MACCommand_NewChannelReq) Reset()         { *m = MACCommand_NewChannelReq{} }
+func (m *MACCommand_NewChannelReq) String() string { return proto.CompactTextString(m) }
+func (*MACCommand_NewChannelReq) ProtoMessage()    {}
 func (*MACCommand_NewChannelReq) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2084d1d5a227b67e, []int{19, 9}
+	return fileDescriptor_2084d1d5a227b67e, []int{20, 9}
 }
 func (m *MACCommand_NewChannelReq) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_MACCommand_NewChannelReq.Unmarshal(m, b)
@@ -3287,27 +3624,29 @@ func (m *MACCommand_NewChannelReq) GetMinDataRateIndex() DataRateIndex {
 	if m != nil {
 		return m.MinDataRateIndex
 	}
-	return DATA_RATE_0
+	return DataRateIndex_DATA_RATE_0
 }
 
 func (m *MACCommand_NewChannelReq) GetMaxDataRateIndex() DataRateIndex {
 	if m != nil {
 		return m.MaxDataRateIndex
 	}
-	return DATA_RATE_0
+	return DataRateIndex_DATA_RATE_0
 }
 
 type MACCommand_NewChannelAns struct {
 	FrequencyAck         bool     `protobuf:"varint,1,opt,name=frequency_ack,json=frequencyAck,proto3" json:"frequency_ack,omitempty"`
 	DataRateAck          bool     `protobuf:"varint,2,opt,name=data_rate_ack,json=dataRateAck,proto3" json:"data_rate_ack,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *MACCommand_NewChannelAns) Reset()      { *m = MACCommand_NewChannelAns{} }
-func (*MACCommand_NewChannelAns) ProtoMessage() {}
+func (m *MACCommand_NewChannelAns) Reset()         { *m = MACCommand_NewChannelAns{} }
+func (m *MACCommand_NewChannelAns) String() string { return proto.CompactTextString(m) }
+func (*MACCommand_NewChannelAns) ProtoMessage()    {}
 func (*MACCommand_NewChannelAns) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2084d1d5a227b67e, []int{19, 10}
+	return fileDescriptor_2084d1d5a227b67e, []int{20, 10}
 }
 func (m *MACCommand_NewChannelAns) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_MACCommand_NewChannelAns.Unmarshal(m, b)
@@ -3345,13 +3684,15 @@ type MACCommand_DLChannelReq struct {
 	ChannelIndex         uint32   `protobuf:"varint,1,opt,name=channel_index,json=channelIndex,proto3" json:"channel_index,omitempty"`
 	Frequency            uint64   `protobuf:"varint,2,opt,name=frequency,proto3" json:"frequency,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *MACCommand_DLChannelReq) Reset()      { *m = MACCommand_DLChannelReq{} }
-func (*MACCommand_DLChannelReq) ProtoMessage() {}
+func (m *MACCommand_DLChannelReq) Reset()         { *m = MACCommand_DLChannelReq{} }
+func (m *MACCommand_DLChannelReq) String() string { return proto.CompactTextString(m) }
+func (*MACCommand_DLChannelReq) ProtoMessage()    {}
 func (*MACCommand_DLChannelReq) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2084d1d5a227b67e, []int{19, 11}
+	return fileDescriptor_2084d1d5a227b67e, []int{20, 11}
 }
 func (m *MACCommand_DLChannelReq) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_MACCommand_DLChannelReq.Unmarshal(m, b)
@@ -3389,13 +3730,15 @@ type MACCommand_DLChannelAns struct {
 	ChannelIndexAck      bool     `protobuf:"varint,1,opt,name=channel_index_ack,json=channelIndexAck,proto3" json:"channel_index_ack,omitempty"`
 	FrequencyAck         bool     `protobuf:"varint,2,opt,name=frequency_ack,json=frequencyAck,proto3" json:"frequency_ack,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *MACCommand_DLChannelAns) Reset()      { *m = MACCommand_DLChannelAns{} }
-func (*MACCommand_DLChannelAns) ProtoMessage() {}
+func (m *MACCommand_DLChannelAns) Reset()         { *m = MACCommand_DLChannelAns{} }
+func (m *MACCommand_DLChannelAns) String() string { return proto.CompactTextString(m) }
+func (*MACCommand_DLChannelAns) ProtoMessage()    {}
 func (*MACCommand_DLChannelAns) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2084d1d5a227b67e, []int{19, 12}
+	return fileDescriptor_2084d1d5a227b67e, []int{20, 12}
 }
 func (m *MACCommand_DLChannelAns) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_MACCommand_DLChannelAns.Unmarshal(m, b)
@@ -3432,13 +3775,15 @@ func (m *MACCommand_DLChannelAns) GetFrequencyAck() bool {
 type MACCommand_RxTimingSetupReq struct {
 	Delay                RxDelay  `protobuf:"varint,1,opt,name=delay,proto3,enum=ttn.lorawan.v3.RxDelay" json:"delay,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *MACCommand_RxTimingSetupReq) Reset()      { *m = MACCommand_RxTimingSetupReq{} }
-func (*MACCommand_RxTimingSetupReq) ProtoMessage() {}
+func (m *MACCommand_RxTimingSetupReq) Reset()         { *m = MACCommand_RxTimingSetupReq{} }
+func (m *MACCommand_RxTimingSetupReq) String() string { return proto.CompactTextString(m) }
+func (*MACCommand_RxTimingSetupReq) ProtoMessage()    {}
 func (*MACCommand_RxTimingSetupReq) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2084d1d5a227b67e, []int{19, 13}
+	return fileDescriptor_2084d1d5a227b67e, []int{20, 13}
 }
 func (m *MACCommand_RxTimingSetupReq) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_MACCommand_RxTimingSetupReq.Unmarshal(m, b)
@@ -3462,7 +3807,7 @@ func (m *MACCommand_RxTimingSetupReq) GetDelay() RxDelay {
 	if m != nil {
 		return m.Delay
 	}
-	return RX_DELAY_0
+	return RxDelay_RX_DELAY_0
 }
 
 type MACCommand_TxParamSetupReq struct {
@@ -3472,13 +3817,15 @@ type MACCommand_TxParamSetupReq struct {
 	UplinkDwellTime      bool       `protobuf:"varint,2,opt,name=uplink_dwell_time,json=uplinkDwellTime,proto3" json:"uplink_dwell_time,omitempty"`
 	DownlinkDwellTime    bool       `protobuf:"varint,3,opt,name=downlink_dwell_time,json=downlinkDwellTime,proto3" json:"downlink_dwell_time,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}   `json:"-"`
+	XXX_unrecognized     []byte     `json:"-"`
 	XXX_sizecache        int32      `json:"-"`
 }
 
-func (m *MACCommand_TxParamSetupReq) Reset()      { *m = MACCommand_TxParamSetupReq{} }
-func (*MACCommand_TxParamSetupReq) ProtoMessage() {}
+func (m *MACCommand_TxParamSetupReq) Reset()         { *m = MACCommand_TxParamSetupReq{} }
+func (m *MACCommand_TxParamSetupReq) String() string { return proto.CompactTextString(m) }
+func (*MACCommand_TxParamSetupReq) ProtoMessage()    {}
 func (*MACCommand_TxParamSetupReq) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2084d1d5a227b67e, []int{19, 14}
+	return fileDescriptor_2084d1d5a227b67e, []int{20, 14}
 }
 func (m *MACCommand_TxParamSetupReq) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_MACCommand_TxParamSetupReq.Unmarshal(m, b)
@@ -3502,7 +3849,7 @@ func (m *MACCommand_TxParamSetupReq) GetMaxEirpIndex() DeviceEIRP {
 	if m != nil {
 		return m.MaxEirpIndex
 	}
-	return DEVICE_EIRP_8
+	return DeviceEIRP_DEVICE_EIRP_8
 }
 
 func (m *MACCommand_TxParamSetupReq) GetUplinkDwellTime() bool {
@@ -3522,13 +3869,15 @@ func (m *MACCommand_TxParamSetupReq) GetDownlinkDwellTime() bool {
 type MACCommand_RekeyInd struct {
 	MinorVersion         Minor    `protobuf:"varint,1,opt,name=minor_version,json=minorVersion,proto3,enum=ttn.lorawan.v3.Minor" json:"minor_version,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *MACCommand_RekeyInd) Reset()      { *m = MACCommand_RekeyInd{} }
-func (*MACCommand_RekeyInd) ProtoMessage() {}
+func (m *MACCommand_RekeyInd) Reset()         { *m = MACCommand_RekeyInd{} }
+func (m *MACCommand_RekeyInd) String() string { return proto.CompactTextString(m) }
+func (*MACCommand_RekeyInd) ProtoMessage()    {}
 func (*MACCommand_RekeyInd) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2084d1d5a227b67e, []int{19, 15}
+	return fileDescriptor_2084d1d5a227b67e, []int{20, 15}
 }
 func (m *MACCommand_RekeyInd) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_MACCommand_RekeyInd.Unmarshal(m, b)
@@ -3552,19 +3901,21 @@ func (m *MACCommand_RekeyInd) GetMinorVersion() Minor {
 	if m != nil {
 		return m.MinorVersion
 	}
-	return MINOR_RFU_0
+	return Minor_MINOR_RFU_0
 }
 
 type MACCommand_RekeyConf struct {
 	MinorVersion         Minor    `protobuf:"varint,1,opt,name=minor_version,json=minorVersion,proto3,enum=ttn.lorawan.v3.Minor" json:"minor_version,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *MACCommand_RekeyConf) Reset()      { *m = MACCommand_RekeyConf{} }
-func (*MACCommand_RekeyConf) ProtoMessage() {}
+func (m *MACCommand_RekeyConf) Reset()         { *m = MACCommand_RekeyConf{} }
+func (m *MACCommand_RekeyConf) String() string { return proto.CompactTextString(m) }
+func (*MACCommand_RekeyConf) ProtoMessage()    {}
 func (*MACCommand_RekeyConf) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2084d1d5a227b67e, []int{19, 16}
+	return fileDescriptor_2084d1d5a227b67e, []int{20, 16}
 }
 func (m *MACCommand_RekeyConf) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_MACCommand_RekeyConf.Unmarshal(m, b)
@@ -3588,7 +3939,7 @@ func (m *MACCommand_RekeyConf) GetMinorVersion() Minor {
 	if m != nil {
 		return m.MinorVersion
 	}
-	return MINOR_RFU_0
+	return Minor_MINOR_RFU_0
 }
 
 type MACCommand_ADRParamSetupReq struct {
@@ -3597,13 +3948,15 @@ type MACCommand_ADRParamSetupReq struct {
 	// Exponent e that configures the ADR_ACK_DELAY = 2^e messages.
 	AdrAckDelayExponent  ADRAckDelayExponent `protobuf:"varint,2,opt,name=adr_ack_delay_exponent,json=adrAckDelayExponent,proto3,enum=ttn.lorawan.v3.ADRAckDelayExponent" json:"adr_ack_delay_exponent,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}            `json:"-"`
+	XXX_unrecognized     []byte              `json:"-"`
 	XXX_sizecache        int32               `json:"-"`
 }
 
-func (m *MACCommand_ADRParamSetupReq) Reset()      { *m = MACCommand_ADRParamSetupReq{} }
-func (*MACCommand_ADRParamSetupReq) ProtoMessage() {}
+func (m *MACCommand_ADRParamSetupReq) Reset()         { *m = MACCommand_ADRParamSetupReq{} }
+func (m *MACCommand_ADRParamSetupReq) String() string { return proto.CompactTextString(m) }
+func (*MACCommand_ADRParamSetupReq) ProtoMessage()    {}
 func (*MACCommand_ADRParamSetupReq) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2084d1d5a227b67e, []int{19, 17}
+	return fileDescriptor_2084d1d5a227b67e, []int{20, 17}
 }
 func (m *MACCommand_ADRParamSetupReq) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_MACCommand_ADRParamSetupReq.Unmarshal(m, b)
@@ -3627,26 +3980,28 @@ func (m *MACCommand_ADRParamSetupReq) GetAdrAckLimitExponent() ADRAckLimitExpone
 	if m != nil {
 		return m.AdrAckLimitExponent
 	}
-	return ADR_ACK_LIMIT_1
+	return ADRAckLimitExponent_ADR_ACK_LIMIT_1
 }
 
 func (m *MACCommand_ADRParamSetupReq) GetAdrAckDelayExponent() ADRAckDelayExponent {
 	if m != nil {
 		return m.AdrAckDelayExponent
 	}
-	return ADR_ACK_DELAY_1
+	return ADRAckDelayExponent_ADR_ACK_DELAY_1
 }
 
 type MACCommand_DeviceTimeAns struct {
-	Time                 time.Time `protobuf:"bytes,7,opt,name=time,proto3,stdtime" json:"time"`
-	XXX_NoUnkeyedLiteral struct{}  `json:"-"`
-	XXX_sizecache        int32     `json:"-"`
+	Time                 *types.Timestamp `protobuf:"bytes,7,opt,name=time,proto3" json:"time,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}         `json:"-"`
+	XXX_unrecognized     []byte           `json:"-"`
+	XXX_sizecache        int32            `json:"-"`
 }
 
-func (m *MACCommand_DeviceTimeAns) Reset()      { *m = MACCommand_DeviceTimeAns{} }
-func (*MACCommand_DeviceTimeAns) ProtoMessage() {}
+func (m *MACCommand_DeviceTimeAns) Reset()         { *m = MACCommand_DeviceTimeAns{} }
+func (m *MACCommand_DeviceTimeAns) String() string { return proto.CompactTextString(m) }
+func (*MACCommand_DeviceTimeAns) ProtoMessage()    {}
 func (*MACCommand_DeviceTimeAns) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2084d1d5a227b67e, []int{19, 18}
+	return fileDescriptor_2084d1d5a227b67e, []int{20, 18}
 }
 func (m *MACCommand_DeviceTimeAns) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_MACCommand_DeviceTimeAns.Unmarshal(m, b)
@@ -3666,11 +4021,11 @@ func (m *MACCommand_DeviceTimeAns) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_MACCommand_DeviceTimeAns proto.InternalMessageInfo
 
-func (m *MACCommand_DeviceTimeAns) GetTime() time.Time {
+func (m *MACCommand_DeviceTimeAns) GetTime() *types.Timestamp {
 	if m != nil {
 		return m.Time
 	}
-	return time.Time{}
+	return nil
 }
 
 type MACCommand_ForceRejoinReq struct {
@@ -3680,13 +4035,15 @@ type MACCommand_ForceRejoinReq struct {
 	// Exponent e that configures the rejoin period = 32 * 2^e + rand(0,32) seconds.
 	PeriodExponent       RejoinPeriodExponent `protobuf:"varint,4,opt,name=period_exponent,json=periodExponent,proto3,enum=ttn.lorawan.v3.RejoinPeriodExponent" json:"period_exponent,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}             `json:"-"`
+	XXX_unrecognized     []byte               `json:"-"`
 	XXX_sizecache        int32                `json:"-"`
 }
 
-func (m *MACCommand_ForceRejoinReq) Reset()      { *m = MACCommand_ForceRejoinReq{} }
-func (*MACCommand_ForceRejoinReq) ProtoMessage() {}
+func (m *MACCommand_ForceRejoinReq) Reset()         { *m = MACCommand_ForceRejoinReq{} }
+func (m *MACCommand_ForceRejoinReq) String() string { return proto.CompactTextString(m) }
+func (*MACCommand_ForceRejoinReq) ProtoMessage()    {}
 func (*MACCommand_ForceRejoinReq) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2084d1d5a227b67e, []int{19, 19}
+	return fileDescriptor_2084d1d5a227b67e, []int{20, 19}
 }
 func (m *MACCommand_ForceRejoinReq) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_MACCommand_ForceRejoinReq.Unmarshal(m, b)
@@ -3717,7 +4074,7 @@ func (m *MACCommand_ForceRejoinReq) GetDataRateIndex() DataRateIndex {
 	if m != nil {
 		return m.DataRateIndex
 	}
-	return DATA_RATE_0
+	return DataRateIndex_DATA_RATE_0
 }
 
 func (m *MACCommand_ForceRejoinReq) GetMaxRetries() uint32 {
@@ -3731,7 +4088,7 @@ func (m *MACCommand_ForceRejoinReq) GetPeriodExponent() RejoinPeriodExponent {
 	if m != nil {
 		return m.PeriodExponent
 	}
-	return REJOIN_PERIOD_0
+	return RejoinPeriodExponent_REJOIN_PERIOD_0
 }
 
 type MACCommand_RejoinParamSetupReq struct {
@@ -3740,13 +4097,15 @@ type MACCommand_RejoinParamSetupReq struct {
 	// Exponent e that configures the rejoin timer = 2^(e+10) seconds.
 	MaxTimeExponent      RejoinTimeExponent `protobuf:"varint,2,opt,name=max_time_exponent,json=maxTimeExponent,proto3,enum=ttn.lorawan.v3.RejoinTimeExponent" json:"max_time_exponent,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}           `json:"-"`
+	XXX_unrecognized     []byte             `json:"-"`
 	XXX_sizecache        int32              `json:"-"`
 }
 
-func (m *MACCommand_RejoinParamSetupReq) Reset()      { *m = MACCommand_RejoinParamSetupReq{} }
-func (*MACCommand_RejoinParamSetupReq) ProtoMessage() {}
+func (m *MACCommand_RejoinParamSetupReq) Reset()         { *m = MACCommand_RejoinParamSetupReq{} }
+func (m *MACCommand_RejoinParamSetupReq) String() string { return proto.CompactTextString(m) }
+func (*MACCommand_RejoinParamSetupReq) ProtoMessage()    {}
 func (*MACCommand_RejoinParamSetupReq) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2084d1d5a227b67e, []int{19, 20}
+	return fileDescriptor_2084d1d5a227b67e, []int{20, 20}
 }
 func (m *MACCommand_RejoinParamSetupReq) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_MACCommand_RejoinParamSetupReq.Unmarshal(m, b)
@@ -3770,26 +4129,28 @@ func (m *MACCommand_RejoinParamSetupReq) GetMaxCountExponent() RejoinCountExpone
 	if m != nil {
 		return m.MaxCountExponent
 	}
-	return REJOIN_COUNT_16
+	return RejoinCountExponent_REJOIN_COUNT_16
 }
 
 func (m *MACCommand_RejoinParamSetupReq) GetMaxTimeExponent() RejoinTimeExponent {
 	if m != nil {
 		return m.MaxTimeExponent
 	}
-	return REJOIN_TIME_0
+	return RejoinTimeExponent_REJOIN_TIME_0
 }
 
 type MACCommand_RejoinParamSetupAns struct {
 	MaxTimeExponentAck   bool     `protobuf:"varint,1,opt,name=max_time_exponent_ack,json=maxTimeExponentAck,proto3" json:"max_time_exponent_ack,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *MACCommand_RejoinParamSetupAns) Reset()      { *m = MACCommand_RejoinParamSetupAns{} }
-func (*MACCommand_RejoinParamSetupAns) ProtoMessage() {}
+func (m *MACCommand_RejoinParamSetupAns) Reset()         { *m = MACCommand_RejoinParamSetupAns{} }
+func (m *MACCommand_RejoinParamSetupAns) String() string { return proto.CompactTextString(m) }
+func (*MACCommand_RejoinParamSetupAns) ProtoMessage()    {}
 func (*MACCommand_RejoinParamSetupAns) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2084d1d5a227b67e, []int{19, 21}
+	return fileDescriptor_2084d1d5a227b67e, []int{20, 21}
 }
 func (m *MACCommand_RejoinParamSetupAns) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_MACCommand_RejoinParamSetupAns.Unmarshal(m, b)
@@ -3819,13 +4180,15 @@ func (m *MACCommand_RejoinParamSetupAns) GetMaxTimeExponentAck() bool {
 type MACCommand_PingSlotInfoReq struct {
 	Period               PingSlotPeriod `protobuf:"varint,1,opt,name=period,proto3,enum=ttn.lorawan.v3.PingSlotPeriod" json:"period,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}       `json:"-"`
+	XXX_unrecognized     []byte         `json:"-"`
 	XXX_sizecache        int32          `json:"-"`
 }
 
-func (m *MACCommand_PingSlotInfoReq) Reset()      { *m = MACCommand_PingSlotInfoReq{} }
-func (*MACCommand_PingSlotInfoReq) ProtoMessage() {}
+func (m *MACCommand_PingSlotInfoReq) Reset()         { *m = MACCommand_PingSlotInfoReq{} }
+func (m *MACCommand_PingSlotInfoReq) String() string { return proto.CompactTextString(m) }
+func (*MACCommand_PingSlotInfoReq) ProtoMessage()    {}
 func (*MACCommand_PingSlotInfoReq) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2084d1d5a227b67e, []int{19, 22}
+	return fileDescriptor_2084d1d5a227b67e, []int{20, 22}
 }
 func (m *MACCommand_PingSlotInfoReq) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_MACCommand_PingSlotInfoReq.Unmarshal(m, b)
@@ -3849,20 +4212,22 @@ func (m *MACCommand_PingSlotInfoReq) GetPeriod() PingSlotPeriod {
 	if m != nil {
 		return m.Period
 	}
-	return PING_EVERY_1S
+	return PingSlotPeriod_PING_EVERY_1S
 }
 
 type MACCommand_PingSlotChannelReq struct {
 	Frequency            uint64        `protobuf:"varint,1,opt,name=frequency,proto3" json:"frequency,omitempty"`
 	DataRateIndex        DataRateIndex `protobuf:"varint,2,opt,name=data_rate_index,json=dataRateIndex,proto3,enum=ttn.lorawan.v3.DataRateIndex" json:"data_rate_index,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}      `json:"-"`
+	XXX_unrecognized     []byte        `json:"-"`
 	XXX_sizecache        int32         `json:"-"`
 }
 
-func (m *MACCommand_PingSlotChannelReq) Reset()      { *m = MACCommand_PingSlotChannelReq{} }
-func (*MACCommand_PingSlotChannelReq) ProtoMessage() {}
+func (m *MACCommand_PingSlotChannelReq) Reset()         { *m = MACCommand_PingSlotChannelReq{} }
+func (m *MACCommand_PingSlotChannelReq) String() string { return proto.CompactTextString(m) }
+func (*MACCommand_PingSlotChannelReq) ProtoMessage()    {}
 func (*MACCommand_PingSlotChannelReq) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2084d1d5a227b67e, []int{19, 23}
+	return fileDescriptor_2084d1d5a227b67e, []int{20, 23}
 }
 func (m *MACCommand_PingSlotChannelReq) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_MACCommand_PingSlotChannelReq.Unmarshal(m, b)
@@ -3893,20 +4258,22 @@ func (m *MACCommand_PingSlotChannelReq) GetDataRateIndex() DataRateIndex {
 	if m != nil {
 		return m.DataRateIndex
 	}
-	return DATA_RATE_0
+	return DataRateIndex_DATA_RATE_0
 }
 
 type MACCommand_PingSlotChannelAns struct {
 	FrequencyAck         bool     `protobuf:"varint,1,opt,name=frequency_ack,json=frequencyAck,proto3" json:"frequency_ack,omitempty"`
 	DataRateIndexAck     bool     `protobuf:"varint,2,opt,name=data_rate_index_ack,json=dataRateIndexAck,proto3" json:"data_rate_index_ack,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *MACCommand_PingSlotChannelAns) Reset()      { *m = MACCommand_PingSlotChannelAns{} }
-func (*MACCommand_PingSlotChannelAns) ProtoMessage() {}
+func (m *MACCommand_PingSlotChannelAns) Reset()         { *m = MACCommand_PingSlotChannelAns{} }
+func (m *MACCommand_PingSlotChannelAns) String() string { return proto.CompactTextString(m) }
+func (*MACCommand_PingSlotChannelAns) ProtoMessage()    {}
 func (*MACCommand_PingSlotChannelAns) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2084d1d5a227b67e, []int{19, 24}
+	return fileDescriptor_2084d1d5a227b67e, []int{20, 24}
 }
 func (m *MACCommand_PingSlotChannelAns) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_MACCommand_PingSlotChannelAns.Unmarshal(m, b)
@@ -3944,13 +4311,15 @@ type MACCommand_BeaconTimingAns struct {
 	Delay                uint32   `protobuf:"varint,1,opt,name=delay,proto3" json:"delay,omitempty"`
 	ChannelIndex         uint32   `protobuf:"varint,2,opt,name=channel_index,json=channelIndex,proto3" json:"channel_index,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *MACCommand_BeaconTimingAns) Reset()      { *m = MACCommand_BeaconTimingAns{} }
-func (*MACCommand_BeaconTimingAns) ProtoMessage() {}
+func (m *MACCommand_BeaconTimingAns) Reset()         { *m = MACCommand_BeaconTimingAns{} }
+func (m *MACCommand_BeaconTimingAns) String() string { return proto.CompactTextString(m) }
+func (*MACCommand_BeaconTimingAns) ProtoMessage()    {}
 func (*MACCommand_BeaconTimingAns) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2084d1d5a227b67e, []int{19, 25}
+	return fileDescriptor_2084d1d5a227b67e, []int{20, 25}
 }
 func (m *MACCommand_BeaconTimingAns) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_MACCommand_BeaconTimingAns.Unmarshal(m, b)
@@ -3987,13 +4356,15 @@ func (m *MACCommand_BeaconTimingAns) GetChannelIndex() uint32 {
 type MACCommand_BeaconFreqReq struct {
 	Frequency            uint64   `protobuf:"varint,1,opt,name=frequency,proto3" json:"frequency,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *MACCommand_BeaconFreqReq) Reset()      { *m = MACCommand_BeaconFreqReq{} }
-func (*MACCommand_BeaconFreqReq) ProtoMessage() {}
+func (m *MACCommand_BeaconFreqReq) Reset()         { *m = MACCommand_BeaconFreqReq{} }
+func (m *MACCommand_BeaconFreqReq) String() string { return proto.CompactTextString(m) }
+func (*MACCommand_BeaconFreqReq) ProtoMessage()    {}
 func (*MACCommand_BeaconFreqReq) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2084d1d5a227b67e, []int{19, 26}
+	return fileDescriptor_2084d1d5a227b67e, []int{20, 26}
 }
 func (m *MACCommand_BeaconFreqReq) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_MACCommand_BeaconFreqReq.Unmarshal(m, b)
@@ -4023,13 +4394,15 @@ func (m *MACCommand_BeaconFreqReq) GetFrequency() uint64 {
 type MACCommand_BeaconFreqAns struct {
 	FrequencyAck         bool     `protobuf:"varint,1,opt,name=frequency_ack,json=frequencyAck,proto3" json:"frequency_ack,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *MACCommand_BeaconFreqAns) Reset()      { *m = MACCommand_BeaconFreqAns{} }
-func (*MACCommand_BeaconFreqAns) ProtoMessage() {}
+func (m *MACCommand_BeaconFreqAns) Reset()         { *m = MACCommand_BeaconFreqAns{} }
+func (m *MACCommand_BeaconFreqAns) String() string { return proto.CompactTextString(m) }
+func (*MACCommand_BeaconFreqAns) ProtoMessage()    {}
 func (*MACCommand_BeaconFreqAns) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2084d1d5a227b67e, []int{19, 27}
+	return fileDescriptor_2084d1d5a227b67e, []int{20, 27}
 }
 func (m *MACCommand_BeaconFreqAns) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_MACCommand_BeaconFreqAns.Unmarshal(m, b)
@@ -4059,13 +4432,15 @@ func (m *MACCommand_BeaconFreqAns) GetFrequencyAck() bool {
 type MACCommand_DeviceModeInd struct {
 	Class                Class    `protobuf:"varint,1,opt,name=class,proto3,enum=ttn.lorawan.v3.Class" json:"class,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *MACCommand_DeviceModeInd) Reset()      { *m = MACCommand_DeviceModeInd{} }
-func (*MACCommand_DeviceModeInd) ProtoMessage() {}
+func (m *MACCommand_DeviceModeInd) Reset()         { *m = MACCommand_DeviceModeInd{} }
+func (m *MACCommand_DeviceModeInd) String() string { return proto.CompactTextString(m) }
+func (*MACCommand_DeviceModeInd) ProtoMessage()    {}
 func (*MACCommand_DeviceModeInd) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2084d1d5a227b67e, []int{19, 28}
+	return fileDescriptor_2084d1d5a227b67e, []int{20, 28}
 }
 func (m *MACCommand_DeviceModeInd) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_MACCommand_DeviceModeInd.Unmarshal(m, b)
@@ -4089,19 +4464,21 @@ func (m *MACCommand_DeviceModeInd) GetClass() Class {
 	if m != nil {
 		return m.Class
 	}
-	return CLASS_A
+	return Class_CLASS_A
 }
 
 type MACCommand_DeviceModeConf struct {
 	Class                Class    `protobuf:"varint,1,opt,name=class,proto3,enum=ttn.lorawan.v3.Class" json:"class,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *MACCommand_DeviceModeConf) Reset()      { *m = MACCommand_DeviceModeConf{} }
-func (*MACCommand_DeviceModeConf) ProtoMessage() {}
+func (m *MACCommand_DeviceModeConf) Reset()         { *m = MACCommand_DeviceModeConf{} }
+func (m *MACCommand_DeviceModeConf) String() string { return proto.CompactTextString(m) }
+func (*MACCommand_DeviceModeConf) ProtoMessage()    {}
 func (*MACCommand_DeviceModeConf) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2084d1d5a227b67e, []int{19, 29}
+	return fileDescriptor_2084d1d5a227b67e, []int{20, 29}
 }
 func (m *MACCommand_DeviceModeConf) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_MACCommand_DeviceModeConf.Unmarshal(m, b)
@@ -4125,19 +4502,59 @@ func (m *MACCommand_DeviceModeConf) GetClass() Class {
 	if m != nil {
 		return m.Class
 	}
-	return CLASS_A
+	return Class_CLASS_A
+}
+
+type MACCommands struct {
+	Commands             []*MACCommand `protobuf:"bytes,1,rep,name=commands,proto3" json:"commands,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}      `json:"-"`
+	XXX_unrecognized     []byte        `json:"-"`
+	XXX_sizecache        int32         `json:"-"`
+}
+
+func (m *MACCommands) Reset()         { *m = MACCommands{} }
+func (m *MACCommands) String() string { return proto.CompactTextString(m) }
+func (*MACCommands) ProtoMessage()    {}
+func (*MACCommands) Descriptor() ([]byte, []int) {
+	return fileDescriptor_2084d1d5a227b67e, []int{21}
+}
+func (m *MACCommands) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_MACCommands.Unmarshal(m, b)
+}
+func (m *MACCommands) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_MACCommands.Marshal(b, m, deterministic)
+}
+func (m *MACCommands) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MACCommands.Merge(m, src)
+}
+func (m *MACCommands) XXX_Size() int {
+	return xxx_messageInfo_MACCommands.Size(m)
+}
+func (m *MACCommands) XXX_DiscardUnknown() {
+	xxx_messageInfo_MACCommands.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MACCommands proto.InternalMessageInfo
+
+func (m *MACCommands) GetCommands() []*MACCommand {
+	if m != nil {
+		return m.Commands
+	}
+	return nil
 }
 
 type FrequencyValue struct {
 	Value                uint64   `protobuf:"varint,1,opt,name=value,proto3" json:"value,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *FrequencyValue) Reset()      { *m = FrequencyValue{} }
-func (*FrequencyValue) ProtoMessage() {}
+func (m *FrequencyValue) Reset()         { *m = FrequencyValue{} }
+func (m *FrequencyValue) String() string { return proto.CompactTextString(m) }
+func (*FrequencyValue) ProtoMessage()    {}
 func (*FrequencyValue) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2084d1d5a227b67e, []int{20}
+	return fileDescriptor_2084d1d5a227b67e, []int{22}
 }
 func (m *FrequencyValue) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_FrequencyValue.Unmarshal(m, b)
@@ -4167,13 +4584,15 @@ func (m *FrequencyValue) GetValue() uint64 {
 type DataRateOffsetValue struct {
 	Value                DataRateOffset `protobuf:"varint,1,opt,name=value,proto3,enum=ttn.lorawan.v3.DataRateOffset" json:"value,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}       `json:"-"`
+	XXX_unrecognized     []byte         `json:"-"`
 	XXX_sizecache        int32          `json:"-"`
 }
 
-func (m *DataRateOffsetValue) Reset()      { *m = DataRateOffsetValue{} }
-func (*DataRateOffsetValue) ProtoMessage() {}
+func (m *DataRateOffsetValue) Reset()         { *m = DataRateOffsetValue{} }
+func (m *DataRateOffsetValue) String() string { return proto.CompactTextString(m) }
+func (*DataRateOffsetValue) ProtoMessage()    {}
 func (*DataRateOffsetValue) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2084d1d5a227b67e, []int{21}
+	return fileDescriptor_2084d1d5a227b67e, []int{23}
 }
 func (m *DataRateOffsetValue) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_DataRateOffsetValue.Unmarshal(m, b)
@@ -4203,13 +4622,15 @@ func (m *DataRateOffsetValue) GetValue() DataRateOffset {
 type DataRateIndexValue struct {
 	Value                DataRateIndex `protobuf:"varint,1,opt,name=value,proto3,enum=ttn.lorawan.v3.DataRateIndex" json:"value,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}      `json:"-"`
+	XXX_unrecognized     []byte        `json:"-"`
 	XXX_sizecache        int32         `json:"-"`
 }
 
-func (m *DataRateIndexValue) Reset()      { *m = DataRateIndexValue{} }
-func (*DataRateIndexValue) ProtoMessage() {}
+func (m *DataRateIndexValue) Reset()         { *m = DataRateIndexValue{} }
+func (m *DataRateIndexValue) String() string { return proto.CompactTextString(m) }
+func (*DataRateIndexValue) ProtoMessage()    {}
 func (*DataRateIndexValue) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2084d1d5a227b67e, []int{22}
+	return fileDescriptor_2084d1d5a227b67e, []int{24}
 }
 func (m *DataRateIndexValue) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_DataRateIndexValue.Unmarshal(m, b)
@@ -4233,19 +4654,21 @@ func (m *DataRateIndexValue) GetValue() DataRateIndex {
 	if m != nil {
 		return m.Value
 	}
-	return DATA_RATE_0
+	return DataRateIndex_DATA_RATE_0
 }
 
 type PingSlotPeriodValue struct {
 	Value                PingSlotPeriod `protobuf:"varint,1,opt,name=value,proto3,enum=ttn.lorawan.v3.PingSlotPeriod" json:"value,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}       `json:"-"`
+	XXX_unrecognized     []byte         `json:"-"`
 	XXX_sizecache        int32          `json:"-"`
 }
 
-func (m *PingSlotPeriodValue) Reset()      { *m = PingSlotPeriodValue{} }
-func (*PingSlotPeriodValue) ProtoMessage() {}
+func (m *PingSlotPeriodValue) Reset()         { *m = PingSlotPeriodValue{} }
+func (m *PingSlotPeriodValue) String() string { return proto.CompactTextString(m) }
+func (*PingSlotPeriodValue) ProtoMessage()    {}
 func (*PingSlotPeriodValue) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2084d1d5a227b67e, []int{23}
+	return fileDescriptor_2084d1d5a227b67e, []int{25}
 }
 func (m *PingSlotPeriodValue) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_PingSlotPeriodValue.Unmarshal(m, b)
@@ -4269,19 +4692,21 @@ func (m *PingSlotPeriodValue) GetValue() PingSlotPeriod {
 	if m != nil {
 		return m.Value
 	}
-	return PING_EVERY_1S
+	return PingSlotPeriod_PING_EVERY_1S
 }
 
 type AggregatedDutyCycleValue struct {
 	Value                AggregatedDutyCycle `protobuf:"varint,1,opt,name=value,proto3,enum=ttn.lorawan.v3.AggregatedDutyCycle" json:"value,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}            `json:"-"`
+	XXX_unrecognized     []byte              `json:"-"`
 	XXX_sizecache        int32               `json:"-"`
 }
 
-func (m *AggregatedDutyCycleValue) Reset()      { *m = AggregatedDutyCycleValue{} }
-func (*AggregatedDutyCycleValue) ProtoMessage() {}
+func (m *AggregatedDutyCycleValue) Reset()         { *m = AggregatedDutyCycleValue{} }
+func (m *AggregatedDutyCycleValue) String() string { return proto.CompactTextString(m) }
+func (*AggregatedDutyCycleValue) ProtoMessage()    {}
 func (*AggregatedDutyCycleValue) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2084d1d5a227b67e, []int{24}
+	return fileDescriptor_2084d1d5a227b67e, []int{26}
 }
 func (m *AggregatedDutyCycleValue) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_AggregatedDutyCycleValue.Unmarshal(m, b)
@@ -4305,19 +4730,21 @@ func (m *AggregatedDutyCycleValue) GetValue() AggregatedDutyCycle {
 	if m != nil {
 		return m.Value
 	}
-	return DUTY_CYCLE_1
+	return AggregatedDutyCycle_DUTY_CYCLE_1
 }
 
 type RxDelayValue struct {
 	Value                RxDelay  `protobuf:"varint,1,opt,name=value,proto3,enum=ttn.lorawan.v3.RxDelay" json:"value,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *RxDelayValue) Reset()      { *m = RxDelayValue{} }
-func (*RxDelayValue) ProtoMessage() {}
+func (m *RxDelayValue) Reset()         { *m = RxDelayValue{} }
+func (m *RxDelayValue) String() string { return proto.CompactTextString(m) }
+func (*RxDelayValue) ProtoMessage()    {}
 func (*RxDelayValue) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2084d1d5a227b67e, []int{25}
+	return fileDescriptor_2084d1d5a227b67e, []int{27}
 }
 func (m *RxDelayValue) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_RxDelayValue.Unmarshal(m, b)
@@ -4341,19 +4768,21 @@ func (m *RxDelayValue) GetValue() RxDelay {
 	if m != nil {
 		return m.Value
 	}
-	return RX_DELAY_0
+	return RxDelay_RX_DELAY_0
 }
 
 type ADRAckLimitExponentValue struct {
 	Value                ADRAckLimitExponent `protobuf:"varint,1,opt,name=value,proto3,enum=ttn.lorawan.v3.ADRAckLimitExponent" json:"value,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}            `json:"-"`
+	XXX_unrecognized     []byte              `json:"-"`
 	XXX_sizecache        int32               `json:"-"`
 }
 
-func (m *ADRAckLimitExponentValue) Reset()      { *m = ADRAckLimitExponentValue{} }
-func (*ADRAckLimitExponentValue) ProtoMessage() {}
+func (m *ADRAckLimitExponentValue) Reset()         { *m = ADRAckLimitExponentValue{} }
+func (m *ADRAckLimitExponentValue) String() string { return proto.CompactTextString(m) }
+func (*ADRAckLimitExponentValue) ProtoMessage()    {}
 func (*ADRAckLimitExponentValue) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2084d1d5a227b67e, []int{26}
+	return fileDescriptor_2084d1d5a227b67e, []int{28}
 }
 func (m *ADRAckLimitExponentValue) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ADRAckLimitExponentValue.Unmarshal(m, b)
@@ -4377,19 +4806,21 @@ func (m *ADRAckLimitExponentValue) GetValue() ADRAckLimitExponent {
 	if m != nil {
 		return m.Value
 	}
-	return ADR_ACK_LIMIT_1
+	return ADRAckLimitExponent_ADR_ACK_LIMIT_1
 }
 
 type ADRAckDelayExponentValue struct {
 	Value                ADRAckDelayExponent `protobuf:"varint,1,opt,name=value,proto3,enum=ttn.lorawan.v3.ADRAckDelayExponent" json:"value,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}            `json:"-"`
+	XXX_unrecognized     []byte              `json:"-"`
 	XXX_sizecache        int32               `json:"-"`
 }
 
-func (m *ADRAckDelayExponentValue) Reset()      { *m = ADRAckDelayExponentValue{} }
-func (*ADRAckDelayExponentValue) ProtoMessage() {}
+func (m *ADRAckDelayExponentValue) Reset()         { *m = ADRAckDelayExponentValue{} }
+func (m *ADRAckDelayExponentValue) String() string { return proto.CompactTextString(m) }
+func (*ADRAckDelayExponentValue) ProtoMessage()    {}
 func (*ADRAckDelayExponentValue) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2084d1d5a227b67e, []int{27}
+	return fileDescriptor_2084d1d5a227b67e, []int{29}
 }
 func (m *ADRAckDelayExponentValue) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ADRAckDelayExponentValue.Unmarshal(m, b)
@@ -4413,19 +4844,21 @@ func (m *ADRAckDelayExponentValue) GetValue() ADRAckDelayExponent {
 	if m != nil {
 		return m.Value
 	}
-	return ADR_ACK_DELAY_1
+	return ADRAckDelayExponent_ADR_ACK_DELAY_1
 }
 
 type DeviceEIRPValue struct {
 	Value                DeviceEIRP `protobuf:"varint,1,opt,name=value,proto3,enum=ttn.lorawan.v3.DeviceEIRP" json:"value,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}   `json:"-"`
+	XXX_unrecognized     []byte     `json:"-"`
 	XXX_sizecache        int32      `json:"-"`
 }
 
-func (m *DeviceEIRPValue) Reset()      { *m = DeviceEIRPValue{} }
-func (*DeviceEIRPValue) ProtoMessage() {}
+func (m *DeviceEIRPValue) Reset()         { *m = DeviceEIRPValue{} }
+func (m *DeviceEIRPValue) String() string { return proto.CompactTextString(m) }
+func (*DeviceEIRPValue) ProtoMessage()    {}
 func (*DeviceEIRPValue) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2084d1d5a227b67e, []int{28}
+	return fileDescriptor_2084d1d5a227b67e, []int{30}
 }
 func (m *DeviceEIRPValue) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_DeviceEIRPValue.Unmarshal(m, b)
@@ -4449,7 +4882,7 @@ func (m *DeviceEIRPValue) GetValue() DeviceEIRP {
 	if m != nil {
 		return m.Value
 	}
-	return DEVICE_EIRP_8
+	return DeviceEIRP_DEVICE_EIRP_8
 }
 
 func init() {
@@ -4531,6 +4964,8 @@ func init() {
 	golang_proto.RegisterType((*TxSettings_Downlink)(nil), "ttn.lorawan.v3.TxSettings.Downlink")
 	proto.RegisterType((*GatewayAntennaIdentifiers)(nil), "ttn.lorawan.v3.GatewayAntennaIdentifiers")
 	golang_proto.RegisterType((*GatewayAntennaIdentifiers)(nil), "ttn.lorawan.v3.GatewayAntennaIdentifiers")
+	proto.RegisterType((*ClassBCGatewayIdentifiers)(nil), "ttn.lorawan.v3.ClassBCGatewayIdentifiers")
+	golang_proto.RegisterType((*ClassBCGatewayIdentifiers)(nil), "ttn.lorawan.v3.ClassBCGatewayIdentifiers")
 	proto.RegisterType((*UplinkToken)(nil), "ttn.lorawan.v3.UplinkToken")
 	golang_proto.RegisterType((*UplinkToken)(nil), "ttn.lorawan.v3.UplinkToken")
 	proto.RegisterType((*DownlinkPath)(nil), "ttn.lorawan.v3.DownlinkPath")
@@ -4599,6 +5034,8 @@ func init() {
 	golang_proto.RegisterType((*MACCommand_DeviceModeInd)(nil), "ttn.lorawan.v3.MACCommand.DeviceModeInd")
 	proto.RegisterType((*MACCommand_DeviceModeConf)(nil), "ttn.lorawan.v3.MACCommand.DeviceModeConf")
 	golang_proto.RegisterType((*MACCommand_DeviceModeConf)(nil), "ttn.lorawan.v3.MACCommand.DeviceModeConf")
+	proto.RegisterType((*MACCommands)(nil), "ttn.lorawan.v3.MACCommands")
+	golang_proto.RegisterType((*MACCommands)(nil), "ttn.lorawan.v3.MACCommands")
 	proto.RegisterType((*FrequencyValue)(nil), "ttn.lorawan.v3.FrequencyValue")
 	golang_proto.RegisterType((*FrequencyValue)(nil), "ttn.lorawan.v3.FrequencyValue")
 	proto.RegisterType((*DataRateOffsetValue)(nil), "ttn.lorawan.v3.DataRateOffsetValue")
@@ -4625,4544 +5062,396 @@ func init() {
 }
 
 var fileDescriptor_2084d1d5a227b67e = []byte{
-	// 5572 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xb4, 0x7b, 0x4b, 0x6c, 0x24, 0xc9,
-	0x71, 0x36, 0xfb, 0xdd, 0x8c, 0x7e, 0x15, 0x93, 0xf3, 0xe0, 0x72, 0x57, 0x9c, 0x11, 0x47, 0x3f,
-	0x34, 0xe2, 0x62, 0x38, 0x64, 0xf3, 0x31, 0x1c, 0xfd, 0xbf, 0xa4, 0xed, 0x17, 0x97, 0xdc, 0xe1,
-	0x4b, 0xd5, 0xcd, 0x99, 0x1d, 0xfd, 0xfa, 0x55, 0x7f, 0xb1, 0xab, 0x9a, 0xec, 0x65, 0x77, 0x55,
-	0x6f, 0x75, 0x91, 0x43, 0x4a, 0x17, 0x43, 0x3a, 0x58, 0xb0, 0x60, 0x40, 0xd0, 0xc5, 0xd6, 0xc5,
-	0x12, 0x60, 0x1b, 0xf0, 0xcd, 0xb6, 0x04, 0x18, 0x3e, 0x18, 0xb0, 0x01, 0xfb, 0xe0, 0xa3, 0xec,
-	0x83, 0x21, 0x18, 0xb0, 0x2c, 0xaf, 0x2e, 0x06, 0x0c, 0x18, 0x3e, 0xf8, 0x60, 0xcc, 0xc1, 0x63,
-	0x44, 0x66, 0x56, 0x55, 0x66, 0x55, 0x73, 0x48, 0x7a, 0xc7, 0x7b, 0x59, 0xe6, 0x97, 0x99, 0x5f,
-	0x46, 0x46, 0x44, 0x46, 0x46, 0x46, 0xf5, 0xc0, 0x9d, 0x9e, 0xed, 0xe8, 0x2f, 0x74, 0xeb, 0xc1,
-	0xd0, 0xd5, 0xdb, 0xc7, 0x0f, 0xf5, 0x41, 0xf7, 0x21, 0x47, 0xe6, 0x07, 0x8e, 0xed, 0xda, 0xa4,
-	0xe8, 0xba, 0xd6, 0xbc, 0x07, 0x9d, 0x2e, 0x4d, 0x57, 0x0e, 0xbb, 0xee, 0xd1, 0xc9, 0xc1, 0x7c,
-	0xdb, 0xee, 0x3f, 0x34, 0xad, 0x53, 0xfb, 0x7c, 0xe0, 0xd8, 0x67, 0xe7, 0x0f, 0xe9, 0xe0, 0xf6,
-	0x83, 0x43, 0xd3, 0x7a, 0x70, 0xaa, 0xf7, 0xba, 0x86, 0xee, 0x9a, 0x0f, 0x23, 0x7f, 0x30, 0xca,
-	0xe9, 0x07, 0x02, 0xc5, 0xa1, 0x7d, 0x68, 0xb3, 0xc9, 0x07, 0x27, 0x1d, 0xda, 0xa2, 0x0d, 0xfa,
-	0x17, 0x1f, 0xfe, 0xce, 0xa1, 0x6d, 0x1f, 0xf6, 0xcc, 0x60, 0xd4, 0xd0, 0x75, 0x4e, 0xda, 0x2e,
-	0xef, 0xbd, 0x13, 0xee, 0x75, 0xbb, 0x7d, 0x73, 0xe8, 0xea, 0xfd, 0x01, 0x1f, 0x70, 0x2f, 0xba,
-	0xc3, 0xae, 0x61, 0x5a, 0x6e, 0xb7, 0xd3, 0x35, 0x9d, 0x21, 0x1b, 0x34, 0xfb, 0x97, 0x09, 0xc8,
-	0x6c, 0x9b, 0xc3, 0xa1, 0x7e, 0x68, 0x92, 0xff, 0x0d, 0xa9, 0xbe, 0x76, 0x64, 0x38, 0x53, 0xb1,
-	0xbb, 0xb1, 0xfb, 0xb9, 0xf2, 0x8d, 0x79, 0x59, 0x03, 0xf3, 0xdb, 0x1b, 0x75, 0xb5, 0xaa, 0xbc,
-	0xac, 0xa6, 0x7e, 0x23, 0x16, 0x57, 0x62, 0x7f, 0xfd, 0x8b, 0x3b, 0x63, 0x3f, 0xfb, 0xc5, 0x9d,
-	0x98, 0x9a, 0xec, 0x6f, 0x18, 0x0e, 0x79, 0x1b, 0x12, 0xfd, 0x6e, 0x7b, 0x2a, 0x7e, 0x37, 0x76,
-	0x3f, 0x5f, 0x1d, 0x7f, 0x59, 0x4d, 0x7f, 0x33, 0xa9, 0x8c, 0x4d, 0x25, 0x55, 0x44, 0xc9, 0x97,
-	0x20, 0xd7, 0xd7, 0xdb, 0xda, 0x40, 0x3f, 0xef, 0xd9, 0xba, 0x31, 0x95, 0xa0, 0xfc, 0xd3, 0x11,
-	0xfe, 0x4a, 0x6d, 0x8f, 0x8d, 0xd8, 0x18, 0x53, 0xa1, 0xaf, 0xb7, 0x79, 0x8b, 0x3c, 0x85, 0x1b,
-	0x1f, 0xd9, 0x5d, 0x4b, 0x73, 0xcc, 0x8f, 0x4f, 0xcc, 0xa1, 0xeb, 0xf3, 0x24, 0x29, 0xcf, 0x6c,
-	0x98, 0xe7, 0x03, 0xbb, 0x6b, 0xa9, 0x6c, 0x68, 0xc0, 0x47, 0x3e, 0x8a, 0xa0, 0xa4, 0x09, 0x93,
-	0x94, 0x57, 0x6f, 0xb7, 0xcd, 0x41, 0x40, 0x9b, 0xa2, 0xb4, 0x9f, 0x1d, 0x45, 0x5b, 0xa1, 0x23,
-	0x03, 0xd6, 0x89, 0x8f, 0xc2, 0x20, 0xf9, 0x3a, 0xdc, 0x72, 0xcc, 0x91, 0xe2, 0xa6, 0x29, 0xef,
-	0xe7, 0xc2, 0xbc, 0xaa, 0xf9, 0xd1, 0x28, 0x81, 0x6f, 0x38, 0x23, 0xf0, 0x6a, 0x11, 0x32, 0xde,
-	0x42, 0x89, 0xff, 0xa8, 0xc6, 0x3e, 0x48, 0x66, 0x33, 0x4a, 0x76, 0xf6, 0x5b, 0x90, 0x44, 0xe3,
-	0x90, 0x55, 0x48, 0xf7, 0x35, 0xf7, 0x7c, 0x60, 0x52, 0x13, 0x16, 0xcb, 0x37, 0x23, 0x2a, 0x6e,
-	0x9d, 0x0f, 0xcc, 0x6a, 0xf6, 0x65, 0x35, 0xf5, 0x6d, 0xb4, 0xa1, 0x9a, 0xea, 0x23, 0x40, 0x56,
-	0x20, 0xd5, 0xd7, 0x3f, 0xb2, 0x1d, 0x6a, 0xbe, 0x51, 0xd3, 0xb0, 0x53, 0x9a, 0x86, 0xc0, 0x17,
-	0x93, 0x7f, 0xfa, 0xe3, 0x3b, 0xb1, 0xd9, 0x7f, 0x89, 0x01, 0x04, 0xa6, 0x43, 0x2f, 0xea, 0xbc,
-	0xce, 0x8b, 0xd6, 0x2f, 0xf0, 0xa2, 0x0e, 0x7a, 0xd1, 0x1d, 0x48, 0x77, 0xb4, 0x81, 0xed, 0xb8,
-	0x54, 0x92, 0x02, 0x5d, 0x72, 0x2e, 0x31, 0xf5, 0x2a, 0xa6, 0xa6, 0x3a, 0x7b, 0xb6, 0xe3, 0x92,
-	0x3b, 0x90, 0xeb, 0x38, 0x7d, 0xc9, 0x93, 0xf2, 0x2a, 0x74, 0x9c, 0xbe, 0xb7, 0xfc, 0x7b, 0x50,
-	0x32, 0xcc, 0xb6, 0x6d, 0x98, 0x46, 0xc8, 0x4d, 0x6e, 0xcf, 0xb3, 0x03, 0x33, 0xef, 0x1d, 0x98,
-	0xf9, 0x26, 0x3d, 0x4e, 0x6a, 0x91, 0x8f, 0xf7, 0x18, 0xde, 0x01, 0xe8, 0x9c, 0xf4, 0x7a, 0x5a,
-	0x47, 0x6b, 0x5b, 0x2e, 0x75, 0x86, 0x82, 0x9a, 0x45, 0x64, 0xbd, 0x66, 0xb9, 0xb3, 0x9f, 0xc4,
-	0x20, 0x89, 0x5b, 0x20, 0x5f, 0x83, 0xac, 0x61, 0x9e, 0x6a, 0xba, 0xc1, 0xb7, 0x9a, 0xaf, 0x7e,
-	0x05, 0x37, 0xf3, 0xf7, 0xbf, 0xb8, 0xf3, 0xe8, 0xd0, 0x9e, 0x77, 0x8f, 0x4c, 0xf7, 0xa8, 0x6b,
-	0x1d, 0x0e, 0xe7, 0x2d, 0xd3, 0x7d, 0x61, 0x3b, 0xc7, 0x0f, 0xe5, 0xd3, 0x78, 0xba, 0xf4, 0x70,
-	0x70, 0x7c, 0xf8, 0x10, 0x6d, 0x35, 0x9c, 0xaf, 0x9b, 0xa7, 0x15, 0xc3, 0x70, 0xd4, 0x8c, 0xc1,
-	0xfe, 0x20, 0x5f, 0x46, 0x35, 0xb4, 0x5d, 0xa7, 0x47, 0xd5, 0x90, 0x8b, 0x1a, 0x64, 0xbd, 0xe6,
-	0x3a, 0xbd, 0x11, 0x5a, 0x4c, 0x75, 0xb0, 0x83, 0xcc, 0xa0, 0x0d, 0x50, 0xfa, 0x04, 0xd5, 0x22,
-	0x1e, 0xc7, 0xb9, 0xe4, 0xd4, 0xab, 0x57, 0x09, 0x35, 0xd9, 0xa9, 0x59, 0x2e, 0x99, 0x41, 0x7e,
-	0x7b, 0xe0, 0x0e, 0xa9, 0x6e, 0xf2, 0xd5, 0xcc, 0xcb, 0x6a, 0xf2, 0x9b, 0xf1, 0xa9, 0x92, 0x9a,
-	0xea, 0xec, 0x0e, 0xdc, 0xe1, 0xec, 0xaf, 0xc7, 0x20, 0x45, 0x97, 0x20, 0x0a, 0x24, 0x74, 0xbe,
-	0xc1, 0xac, 0x8a, 0x7f, 0x92, 0x19, 0xc8, 0xe9, 0x86, 0xa3, 0xe9, 0xed, 0x63, 0x74, 0x70, 0x2a,
-	0x60, 0x56, 0x1d, 0xd7, 0x0d, 0xa7, 0xd2, 0x3e, 0x56, 0xcd, 0x8f, 0xe9, 0x8c, 0xf6, 0x31, 0x5d,
-	0x19, 0x67, 0xb4, 0x8f, 0xc9, 0xdb, 0x30, 0xde, 0xd1, 0x06, 0xa6, 0x65, 0x74, 0xad, 0x43, 0xba,
-	0x60, 0x56, 0xcd, 0x76, 0xf6, 0x58, 0x9b, 0xdc, 0x86, 0x4c, 0xbb, 0xa7, 0x0f, 0x87, 0xda, 0x01,
-	0x55, 0x75, 0x56, 0x4d, 0xd3, 0x66, 0x95, 0x3b, 0xd7, 0xef, 0xc7, 0x81, 0x44, 0xcf, 0x33, 0xf9,
-	0x10, 0xb2, 0xf4, 0x88, 0x99, 0x27, 0x5d, 0xae, 0xfc, 0x2f, 0x71, 0xe5, 0xaf, 0x5c, 0x57, 0xf9,
-	0x8d, 0xfd, 0xcd, 0xd5, 0x65, 0x35, 0x83, 0x74, 0x8d, 0x93, 0x2e, 0x79, 0x0a, 0x68, 0x05, 0x4a,
-	0x1c, 0x7f, 0x13, 0xc4, 0x69, 0xc3, 0x3c, 0x45, 0xde, 0xff, 0x07, 0xe3, 0xc8, 0x6b, 0xd9, 0x56,
-	0xdb, 0x64, 0x6e, 0x5b, 0x7d, 0x8f, 0x33, 0xaf, 0xfd, 0x37, 0xfc, 0x65, 0x07, 0x79, 0x54, 0xf4,
-	0x40, 0xfa, 0xd7, 0xec, 0xf7, 0x12, 0x70, 0x63, 0x54, 0x20, 0x21, 0x5b, 0x90, 0xe3, 0xe1, 0x48,
-	0x88, 0x0b, 0x9f, 0x7d, 0x6d, 0x0c, 0x0a, 0xc5, 0x08, 0x60, 0xf3, 0x69, 0xa0, 0x68, 0x41, 0xda,
-	0x32, 0x5d, 0xad, 0x6b, 0x7c, 0x5a, 0xe5, 0xec, 0x98, 0xee, 0x66, 0x5d, 0x4d, 0x59, 0xa6, 0xbb,
-	0x29, 0x5b, 0x33, 0xf1, 0x3f, 0x65, 0xcd, 0xe4, 0x9b, 0xb4, 0xe6, 0x67, 0x80, 0x6b, 0x45, 0x88,
-	0x11, 0xe3, 0x0c, 0xc1, 0x20, 0xf1, 0x9d, 0x24, 0x4c, 0x44, 0xae, 0x0b, 0xf2, 0x0e, 0x8c, 0x9b,
-	0x56, 0xdb, 0x39, 0x1f, 0xb8, 0xa6, 0xc1, 0xbc, 0x56, 0x0d, 0x00, 0xf2, 0xff, 0x01, 0x28, 0x21,
-	0xf3, 0x10, 0xa6, 0xde, 0x0a, 0x97, 0xf6, 0xf1, 0x75, 0xa5, 0xc5, 0xc5, 0x99, 0x8b, 0x8c, 0x7f,
-	0xe4, 0xfd, 0x29, 0x18, 0x2f, 0xf1, 0x06, 0x8d, 0x27, 0xc6, 0xc1, 0xe4, 0x1b, 0x8e, 0x83, 0xdb,
-	0x90, 0x33, 0x7a, 0xda, 0xd0, 0x74, 0x5d, 0xa4, 0xe0, 0x17, 0x73, 0x24, 0x6f, 0xa8, 0x6f, 0x35,
-	0xf9, 0x88, 0x11, 0x11, 0x11, 0x8c, 0x9e, 0xd7, 0x4b, 0xfe, 0x0f, 0x64, 0x9d, 0x33, 0xcd, 0x30,
-	0x7b, 0xfa, 0x39, 0xbd, 0x8c, 0x8b, 0xe5, 0xdb, 0x91, 0x83, 0x70, 0x56, 0xc7, 0x6e, 0xc1, 0xfd,
-	0x33, 0x0e, 0x83, 0xc8, 0x43, 0xc8, 0xb4, 0x3b, 0x5a, 0xaf, 0x3b, 0x74, 0xa7, 0x32, 0x54, 0x90,
-	0x5b, 0xe1, 0xc9, 0xb5, 0xf5, 0xad, 0xee, 0xd0, 0x55, 0xd3, 0xed, 0x0e, 0xfe, 0x7f, 0xf6, 0xa7,
-	0x31, 0x80, 0x40, 0x36, 0xb2, 0x05, 0x05, 0xe7, 0x6c, 0x51, 0x33, 0x1c, 0xcd, 0xee, 0x74, 0x86,
-	0xa6, 0xcb, 0xcf, 0xe2, 0x4c, 0x64, 0x3b, 0xba, 0xab, 0xab, 0xba, 0x6b, 0xee, 0xd2, 0x51, 0x82,
-	0x24, 0x39, 0xe7, 0x6c, 0xb1, 0xee, 0x30, 0x18, 0xaf, 0x08, 0xe7, 0xac, 0xac, 0x19, 0xde, 0x9d,
-	0xfd, 0x99, 0x8b, 0x68, 0x36, 0x2d, 0xc3, 0x3c, 0x13, 0xef, 0x6e, 0xe7, 0xac, 0x5c, 0x77, 0x30,
-	0xee, 0xda, 0x03, 0x57, 0xb3, 0xcc, 0x43, 0x1e, 0xaa, 0xd3, 0xf6, 0xc0, 0xdd, 0x31, 0x0f, 0x67,
-	0x3f, 0x86, 0x34, 0xdb, 0x07, 0x59, 0x83, 0xa4, 0x10, 0x33, 0xa6, 0x47, 0xef, 0x36, 0x14, 0x2c,
-	0xe8, 0x0c, 0x42, 0x20, 0xd9, 0x61, 0x97, 0x43, 0xe2, 0x7e, 0x41, 0xa5, 0x7f, 0x93, 0xb7, 0x20,
-	0xdb, 0x3e, 0xd2, 0xfa, 0xfa, 0xf0, 0x78, 0x38, 0x95, 0xb8, 0x9b, 0xb8, 0x9f, 0x55, 0x33, 0xed,
-	0xa3, 0x6d, 0x6c, 0xce, 0x3e, 0x83, 0xfc, 0x96, 0xad, 0xea, 0x9e, 0xc4, 0x78, 0x50, 0x0e, 0x74,
-	0xcb, 0x78, 0xd1, 0x35, 0xdc, 0x23, 0xba, 0x7a, 0x41, 0x0d, 0x00, 0xf2, 0x05, 0x50, 0x86, 0x03,
-	0xc7, 0xd4, 0xf1, 0xfa, 0xd0, 0x3a, 0x7a, 0xdb, 0xe5, 0x79, 0x4b, 0x41, 0x2d, 0xf9, 0xf8, 0x3a,
-	0x85, 0x67, 0xef, 0x43, 0x6e, 0xbd, 0xf9, 0xc4, 0xe7, 0x7d, 0x0b, 0xb2, 0x07, 0x5d, 0x57, 0x73,
-	0x74, 0xd7, 0xe4, 0xb4, 0x99, 0x83, 0xae, 0x8b, 0x5d, 0xb3, 0x1f, 0x43, 0x71, 0x4b, 0x5d, 0xdf,
-	0x68, 0x36, 0xfd, 0xc1, 0x9f, 0x87, 0x52, 0xdf, 0x36, 0x4e, 0x7a, 0xba, 0xdb, 0xb5, 0x85, 0xe0,
-	0x59, 0x50, 0x8b, 0x01, 0x4c, 0x63, 0xe2, 0x2a, 0xdc, 0xb6, 0x07, 0xa6, 0xa3, 0xa3, 0x95, 0xb5,
-	0xf6, 0x91, 0x6e, 0x59, 0x66, 0x4f, 0x63, 0xb2, 0x33, 0xb1, 0x6e, 0xfa, 0xdd, 0x35, 0xd6, 0xfb,
-	0x0c, 0x3b, 0x67, 0xff, 0x2c, 0x06, 0x59, 0x7f, 0xb5, 0x32, 0x24, 0x51, 0xb5, 0x3c, 0x69, 0x7a,
-	0x27, 0xac, 0x6b, 0x51, 0x3d, 0x1b, 0x63, 0x2a, 0x1d, 0x4b, 0x1e, 0x42, 0xa2, 0x33, 0x3c, 0xe6,
-	0x29, 0xc2, 0xdb, 0x91, 0x14, 0x21, 0xd8, 0xf8, 0xc6, 0x98, 0x8a, 0x23, 0xc9, 0x1a, 0xa4, 0x7b,
-	0x4e, 0xe7, 0x68, 0x38, 0xe4, 0x19, 0x78, 0xc4, 0xf5, 0x64, 0x15, 0x6c, 0x8c, 0xa9, 0x7c, 0x7c,
-	0x75, 0x02, 0x20, 0xd8, 0x35, 0xcd, 0x3c, 0x67, 0x7f, 0x90, 0x04, 0x68, 0x9d, 0xf9, 0xde, 0x5d,
-	0x83, 0x71, 0x43, 0x77, 0xf5, 0x40, 0xb9, 0xb9, 0xf2, 0xd4, 0x45, 0x2e, 0x59, 0xcd, 0x8b, 0xc7,
-	0x54, 0xcd, 0x1a, 0x9e, 0x16, 0x76, 0xa1, 0xe4, 0x93, 0x68, 0x5d, 0x74, 0xdc, 0xeb, 0x7a, 0x77,
-	0xc1, 0x10, 0x3b, 0x30, 0x5d, 0x6c, 0xdb, 0xd4, 0x51, 0xa8, 0x5c, 0xb8, 0xed, 0x71, 0x15, 0x18,
-	0xe4, 0xb9, 0x5a, 0x87, 0xe6, 0xe9, 0x56, 0xfb, 0x9c, 0x86, 0xaf, 0xa4, 0x1a, 0x00, 0x18, 0xe6,
-	0x4d, 0x4b, 0x3f, 0xe8, 0x99, 0x5a, 0xdb, 0x69, 0xf3, 0xfc, 0x64, 0x9c, 0x21, 0x35, 0xa7, 0x8d,
-	0x93, 0xfd, 0x47, 0x17, 0x0d, 0x28, 0x05, 0x35, 0x00, 0xc8, 0x32, 0x24, 0xb1, 0xc1, 0x83, 0xc5,
-	0x74, 0x24, 0xfd, 0x6c, 0x79, 0x23, 0xab, 0xc9, 0xef, 0xff, 0x23, 0x66, 0xc0, 0x38, 0x9a, 0x7c,
-	0x05, 0xb2, 0x86, 0xfd, 0xc2, 0xea, 0x75, 0xad, 0xe3, 0xa9, 0x2c, 0x9d, 0x79, 0x2f, 0xbc, 0xf7,
-	0x40, 0xeb, 0xf3, 0x75, 0x3e, 0x54, 0xf5, 0x27, 0x4d, 0x7f, 0x0b, 0xb2, 0x1e, 0x4a, 0xee, 0x41,
-	0x41, 0xb7, 0x5c, 0xd3, 0xb2, 0x74, 0xae, 0x4d, 0xe6, 0xc1, 0x79, 0x0e, 0x32, 0x1d, 0xbd, 0x05,
-	0x59, 0xf7, 0x4c, 0x1b, 0xd8, 0x2f, 0x4c, 0x76, 0x8e, 0xe2, 0x6a, 0xc6, 0x3d, 0xdb, 0xc3, 0x26,
-	0x79, 0x08, 0x93, 0x5d, 0xeb, 0xd4, 0x74, 0x5c, 0x6d, 0x60, 0xf7, 0x74, 0xa7, 0xfb, 0x4d, 0x6a,
-	0x7f, 0x1e, 0x30, 0x08, 0xeb, 0xda, 0x13, 0x7a, 0x66, 0x7f, 0x2b, 0x06, 0x6f, 0xbd, 0xaf, 0xbb,
-	0xe6, 0x0b, 0xfd, 0xbc, 0xc2, 0xd7, 0x08, 0x9e, 0x9c, 0x64, 0x1f, 0x72, 0x87, 0xac, 0x53, 0xeb,
-	0x1a, 0x43, 0xee, 0x25, 0x91, 0xe7, 0x1b, 0x9f, 0x2f, 0x4c, 0x1c, 0x15, 0xd6, 0x0f, 0xbd, 0x51,
-	0xc3, 0xe8, 0x2e, 0xe3, 0xd1, 0x5d, 0xce, 0xfe, 0x6b, 0x0c, 0x72, 0xfb, 0x03, 0xd4, 0x4a, 0xcb,
-	0x3e, 0x36, 0x2d, 0xb2, 0x0d, 0x89, 0x40, 0x86, 0x2f, 0x5c, 0x20, 0x43, 0x74, 0x0f, 0x23, 0x44,
-	0x41, 0x1e, 0xd9, 0x15, 0xe2, 0x61, 0x57, 0x68, 0x40, 0x6e, 0x68, 0x3a, 0xa7, 0xa6, 0xa3, 0x51,
-	0x8f, 0x48, 0x5c, 0xea, 0x11, 0x59, 0x64, 0xa7, 0x5e, 0x01, 0x6c, 0x22, 0x76, 0x91, 0x77, 0x61,
-	0xa2, 0x8d, 0x37, 0xb9, 0xe5, 0x3a, 0xba, 0x6b, 0x73, 0x32, 0x74, 0xda, 0x84, 0xaa, 0x88, 0x1d,
-	0x38, 0x78, 0xf6, 0x3b, 0x31, 0xc8, 0x7b, 0x8e, 0xb0, 0xa7, 0xbb, 0x47, 0xe4, 0x1e, 0xe4, 0x4f,
-	0xa8, 0x02, 0x34, 0x17, 0x35, 0xc0, 0x32, 0x90, 0x8d, 0x31, 0x35, 0x77, 0x22, 0xa8, 0xa5, 0x02,
-	0xa9, 0x4e, 0xf7, 0xcc, 0x34, 0x78, 0x54, 0xb9, 0xba, 0x62, 0x36, 0xc6, 0x54, 0x36, 0xb3, 0x9a,
-	0x83, 0xe4, 0x00, 0xd7, 0xa3, 0x51, 0xe2, 0xbb, 0x69, 0x18, 0x6f, 0x9d, 0xf1, 0xc4, 0x92, 0xbc,
-	0x0b, 0x29, 0x9a, 0xdd, 0x5f, 0xf4, 0x3c, 0xad, 0x61, 0xa7, 0xca, 0xc6, 0x90, 0x1a, 0x14, 0x3d,
-	0xa7, 0xd6, 0x90, 0x70, 0x48, 0xaf, 0x93, 0x11, 0xc1, 0x51, 0xdc, 0xa5, 0x5a, 0x30, 0x84, 0xd6,
-	0x90, 0x7c, 0x19, 0xc6, 0xe9, 0xa5, 0x4b, 0xef, 0xfc, 0xc4, 0x55, 0xef, 0xfc, 0x2c, 0xde, 0xb4,
-	0xf4, 0xd2, 0x7f, 0x0a, 0x93, 0x74, 0x7e, 0x28, 0x2a, 0x25, 0xaf, 0x17, 0x95, 0x14, 0xe4, 0x93,
-	0x02, 0xd3, 0x3d, 0x96, 0x0c, 0x04, 0xb1, 0x27, 0x45, 0x63, 0x4f, 0xde, 0x39, 0x5b, 0x5c, 0xf7,
-	0xc3, 0x0f, 0x5d, 0xbc, 0x1c, 0x59, 0x3c, 0x7d, 0xed, 0xc5, 0xcb, 0x23, 0x16, 0x2f, 0x0b, 0x8b,
-	0x67, 0xbc, 0xc5, 0xcb, 0xc1, 0xe2, 0x1b, 0x90, 0x1d, 0x38, 0x5d, 0xdb, 0xe9, 0xba, 0xe7, 0x34,
-	0x10, 0x15, 0xa3, 0x27, 0xb5, 0x75, 0xd6, 0x6c, 0x1f, 0x99, 0xc6, 0x49, 0xcf, 0xdc, 0xe3, 0x23,
-	0x45, 0x1d, 0x7a, 0xb3, 0x49, 0x03, 0x0a, 0xfa, 0xc1, 0xd0, 0xee, 0x9d, 0xb8, 0x26, 0x73, 0xd9,
-	0xf1, 0x2b, 0x46, 0xc4, 0xbc, 0x37, 0x8d, 0x7a, 0xff, 0x12, 0x4c, 0xf8, 0x12, 0x6b, 0x83, 0x9e,
-	0x6e, 0x61, 0x26, 0x0b, 0x18, 0xd1, 0xe9, 0xfb, 0xd5, 0x89, 0x4f, 0xbd, 0xa7, 0x96, 0xfc, 0x11,
-	0x7b, 0x3d, 0xdd, 0xda, 0x34, 0x48, 0x0b, 0x26, 0xb9, 0xc0, 0xda, 0xe0, 0xe8, 0x5c, 0x3b, 0x35,
-	0x9d, 0x21, 0x46, 0xb0, 0xdc, 0xe8, 0x94, 0x66, 0x6f, 0xe3, 0xf9, 0x53, 0x36, 0x42, 0xd8, 0xc8,
-	0x04, 0x1f, 0xb0, 0x77, 0x74, 0xce, 0x3b, 0xc9, 0x12, 0x64, 0x75, 0xe3, 0x54, 0xb7, 0xda, 0xa6,
-	0x31, 0xd5, 0x7e, 0x7d, 0x75, 0xc1, 0x1f, 0x38, 0xfb, 0x27, 0xcb, 0xb4, 0x4e, 0x52, 0xb3, 0xfb,
-	0x7d, 0xdd, 0x32, 0x48, 0x15, 0x12, 0xed, 0xae, 0xc1, 0x4f, 0xc2, 0xe7, 0x46, 0xd4, 0xc2, 0xf8,
-	0xc0, 0xe0, 0x8c, 0x55, 0xe1, 0x65, 0x35, 0xf3, 0xed, 0x58, 0x52, 0x89, 0xdd, 0x1d, 0x53, 0x71,
-	0x32, 0xf9, 0x2c, 0xe4, 0x1c, 0xfd, 0x85, 0x5f, 0xe8, 0x88, 0xf3, 0x13, 0x0d, 0x8e, 0xfe, 0xc2,
-	0x7b, 0x74, 0x54, 0x61, 0xdc, 0x31, 0x87, 0x98, 0xf6, 0x5b, 0x5e, 0xe1, 0xed, 0xde, 0xc5, 0x8b,
-	0xcd, 0xab, 0x38, 0x76, 0xd3, 0x32, 0x36, 0xc6, 0xd4, 0xac, 0xc3, 0xff, 0x26, 0x0d, 0x7c, 0xed,
-	0x20, 0x47, 0xdb, 0xb6, 0x3a, 0xbc, 0x9c, 0xf2, 0xb9, 0xcb, 0x48, 0x6a, 0xb6, 0xd5, 0xd9, 0x18,
-	0x53, 0xd9, 0xea, 0xd8, 0x20, 0xbb, 0x50, 0xa4, 0x87, 0xb9, 0x7d, 0x64, 0xb6, 0x8f, 0x35, 0xdd,
-	0xf2, 0x12, 0xfa, 0xcf, 0xbf, 0x86, 0x6a, 0xab, 0x6b, 0x1d, 0xd7, 0x70, 0x7c, 0xc5, 0xc2, 0x10,
-	0x93, 0xef, 0x09, 0x6d, 0xb2, 0x09, 0xb4, 0xad, 0xe9, 0x86, 0x43, 0x6b, 0x11, 0xac, 0xc0, 0xf6,
-	0xbf, 0x2e, 0xa1, 0xab, 0xd4, 0x55, 0xd5, 0xfc, 0x18, 0xd5, 0x84, 0x93, 0x2b, 0x86, 0xa3, 0x9a,
-	0x1f, 0x4b, 0x54, 0x28, 0x59, 0xe6, 0xaa, 0x54, 0x4c, 0x2e, 0x8f, 0x0a, 0xa5, 0xda, 0x85, 0xa2,
-	0x71, 0xe2, 0x9e, 0x6b, 0xed, 0xf3, 0x76, 0xcf, 0xa4, 0x72, 0x65, 0x2f, 0xdd, 0x66, 0xfd, 0xc4,
-	0x3d, 0xaf, 0xe1, 0x78, 0x26, 0x59, 0xde, 0x10, 0xda, 0xe4, 0x39, 0x10, 0xe7, 0x4c, 0x1b, 0xe8,
-	0x8e, 0xde, 0xc7, 0xb7, 0xd0, 0xc9, 0x80, 0x92, 0xb2, 0x43, 0x34, 0xf7, 0x3a, 0x33, 0x9c, 0xed,
-	0xe1, 0x9c, 0x26, 0x4e, 0x61, 0xbc, 0x25, 0x47, 0x86, 0x46, 0x50, 0xe3, 0xe6, 0xe1, 0x5a, 0xd4,
-	0x4c, 0x03, 0x12, 0xb5, 0xa7, 0x06, 0xf3, 0x54, 0x1b, 0xba, 0xba, 0x7b, 0x32, 0xa4, 0xb4, 0xb9,
-	0xcb, 0xd5, 0x60, 0x9e, 0x36, 0xe9, 0x78, 0x6e, 0x6d, 0x43, 0x68, 0x13, 0x15, 0x4a, 0x96, 0xf9,
-	0xc2, 0xcf, 0xb0, 0x51, 0x07, 0x79, 0xca, 0x78, 0xff, 0x35, 0x8c, 0x3b, 0xe6, 0x0b, 0x9e, 0x74,
-	0x33, 0x0d, 0x14, 0x2c, 0x11, 0x08, 0x73, 0xa2, 0x94, 0x85, 0x6b, 0x70, 0x32, 0x31, 0x05, 0x4e,
-	0x6f, 0xe3, 0x3d, 0x49, 0xcc, 0xe2, 0xe5, 0x1b, 0xdf, 0x92, 0xa4, 0xcc, 0x1b, 0x3d, 0x41, 0x48,
-	0x99, 0x10, 0x65, 0x2c, 0x5d, 0x9d, 0xd0, 0xd3, 0x64, 0x4f, 0x90, 0xf0, 0xeb, 0x78, 0xaf, 0x60,
-	0x28, 0xc6, 0xc4, 0x38, 0xf0, 0x28, 0x85, 0xb2, 0xbe, 0xfb, 0x5a, 0xb3, 0xb7, 0xe8, 0x24, 0xc1,
-	0xa5, 0x14, 0x27, 0x84, 0xa1, 0x4f, 0xb9, 0x51, 0x77, 0x9d, 0xb8, 0xd4, 0xa7, 0x5a, 0x51, 0x77,
-	0x75, 0x43, 0xee, 0x4a, 0x83, 0xd9, 0xb1, 0x79, 0x4e, 0x83, 0x19, 0xb9, 0x42, 0x30, 0x3b, 0x36,
-	0xcf, 0xfd, 0x60, 0xc6, 0xfe, 0x66, 0xc1, 0x0c, 0x39, 0x68, 0x30, 0x9b, 0xbc, 0x42, 0x30, 0x3b,
-	0x36, 0xcf, 0x83, 0x60, 0xc6, 0x1b, 0xa8, 0x43, 0x8c, 0x15, 0xe1, 0x6d, 0xde, 0xb8, 0x54, 0x87,
-	0x95, 0xba, 0x1a, 0xde, 0xa7, 0xa2, 0x1b, 0x8e, 0xbc, 0x51, 0x15, 0x4a, 0x86, 0x79, 0xda, 0x6d,
-	0xb3, 0x0b, 0x93, 0xda, 0xfc, 0xe6, 0xa5, 0x7e, 0x59, 0xa7, 0x33, 0xf0, 0xae, 0xe4, 0x7e, 0x69,
-	0x88, 0x00, 0xd9, 0x07, 0xa5, 0x63, 0x3b, 0x6d, 0x0c, 0x49, 0xde, 0xe7, 0x89, 0xa9, 0x5b, 0xa3,
-	0xb3, 0x3c, 0x81, 0x74, 0x1d, 0xa7, 0xf8, 0xe5, 0xc1, 0x8d, 0x31, 0xb5, 0xd8, 0x91, 0x10, 0x62,
-	0xfa, 0xdf, 0x3b, 0xc2, 0xba, 0xb8, 0x4d, 0xc9, 0xe7, 0x5f, 0xab, 0x5b, 0x9c, 0x18, 0x56, 0xc7,
-	0xa4, 0x13, 0x85, 0x2f, 0x58, 0x06, 0x15, 0x33, 0x75, 0xed, 0x65, 0x98, 0x7a, 0x22, 0xcb, 0xa0,
-	0x92, 0x9e, 0x03, 0x19, 0xd0, 0x53, 0xd1, 0xb3, 0xf1, 0xca, 0xec, 0xd8, 0x74, 0x27, 0x6f, 0x5d,
-	0xea, 0xbc, 0x7b, 0x78, 0x02, 0x7a, 0xb6, 0xbb, 0x69, 0x75, 0x6c, 0xee, 0xbc, 0x03, 0x19, 0x22,
-	0x07, 0x70, 0x33, 0xa0, 0x16, 0xc3, 0xc3, 0x34, 0x65, 0x7f, 0x70, 0x05, 0x76, 0x29, 0x48, 0x90,
-	0x41, 0x04, 0x1d, 0xbd, 0x06, 0x2a, 0xe9, 0xed, 0xeb, 0xae, 0xc1, 0x74, 0x14, 0x5e, 0x03, 0x55,
-	0xf4, 0x21, 0x4c, 0x1c, 0x98, 0x7a, 0xdb, 0xb6, 0xbc, 0x08, 0x82, 0xfc, 0xef, 0x5c, 0xaa, 0xa1,
-	0x2a, 0x9d, 0xc3, 0x62, 0x05, 0xbf, 0x32, 0x0e, 0x64, 0x08, 0xbd, 0x9e, 0x33, 0x63, 0x1a, 0x47,
-	0x75, 0xf3, 0x99, 0x4b, 0xbd, 0x9e, 0xf1, 0x62, 0xde, 0xca, 0x23, 0xfc, 0x81, 0x08, 0x84, 0x39,
-	0x51, 0xd6, 0x99, 0x6b, 0x70, 0xf2, 0x93, 0x74, 0x20, 0x02, 0xc2, 0xe9, 0xec, 0xdb, 0x06, 0xcd,
-	0xca, 0xa7, 0xee, 0x5c, 0xf1, 0x74, 0x6e, 0xdb, 0x86, 0xc9, 0x22, 0x12, 0x3f, 0x9d, 0x1c, 0xc0,
-	0xd3, 0x29, 0x72, 0xd2, 0xe0, 0x74, 0xf7, 0xd2, 0xd3, 0x19, 0x90, 0xf2, 0x08, 0x55, 0x34, 0x24,
-	0x64, 0x5a, 0x85, 0xac, 0x97, 0xd2, 0x91, 0x75, 0x28, 0xf4, 0xbb, 0x96, 0xed, 0xf8, 0x59, 0xf0,
-	0x45, 0x1f, 0x09, 0x71, 0x50, 0x90, 0x6c, 0x4e, 0xc5, 0xd4, 0x3c, 0x9d, 0xc7, 0xb3, 0xdf, 0xe9,
-	0x26, 0x8c, 0xfb, 0x19, 0xde, 0x1b, 0x23, 0xd5, 0x20, 0x2f, 0xe6, 0x7a, 0xe4, 0x2e, 0xa4, 0xfb,
-	0xba, 0x73, 0xd8, 0x65, 0x84, 0xfe, 0x97, 0xc0, 0xff, 0x8c, 0xa9, 0x1c, 0x27, 0x0f, 0xa0, 0xe0,
-	0x55, 0x13, 0xda, 0xf6, 0x89, 0x15, 0xfd, 0x64, 0x98, 0xe7, 0xdd, 0x35, 0xec, 0x9d, 0xfe, 0x9d,
-	0x38, 0x40, 0x90, 0xfe, 0x8d, 0x2a, 0x35, 0xc5, 0x3e, 0x55, 0xa9, 0xe9, 0x01, 0x14, 0xbd, 0x32,
-	0x8a, 0x58, 0x86, 0xa0, 0x6f, 0x93, 0xb9, 0xf8, 0x54, 0x49, 0xcd, 0xf3, 0xaa, 0x0a, 0x1b, 0xfe,
-	0x2e, 0xe4, 0xbd, 0xf3, 0xd9, 0xd7, 0x87, 0xc7, 0xac, 0x24, 0x4a, 0xd9, 0x7f, 0x10, 0x8b, 0x2b,
-	0x8a, 0x9a, 0xe3, 0xbd, 0xdb, 0xfa, 0xf0, 0x98, 0x3c, 0x86, 0x1b, 0xe2, 0x60, 0xf4, 0x0e, 0xd7,
-	0xb1, 0x7b, 0xec, 0xc3, 0x83, 0xb7, 0x42, 0x46, 0x25, 0xc2, 0x9c, 0x1a, 0x1b, 0x42, 0x66, 0x21,
-	0x6b, 0x1d, 0x68, 0xae, 0x83, 0x8e, 0x9f, 0x96, 0x05, 0xca, 0x58, 0x07, 0x2d, 0xc4, 0x3f, 0x48,
-	0x66, 0x93, 0x4a, 0x6a, 0xfa, 0xb7, 0x63, 0xbe, 0x82, 0xd0, 0x00, 0xf7, 0x41, 0x91, 0xd6, 0xd4,
-	0xdb, 0xc7, 0xfc, 0x33, 0x60, 0x51, 0x58, 0xa6, 0xd2, 0x3e, 0x26, 0x0f, 0x60, 0x32, 0xa4, 0x4a,
-	0x3a, 0x98, 0x7d, 0x19, 0x54, 0x24, 0x2d, 0xe1, 0xf0, 0x77, 0x59, 0x7e, 0x10, 0x28, 0x4a, 0x0b,
-	0xbe, 0x17, 0x96, 0x44, 0x1d, 0x55, 0xda, 0xc7, 0xec, 0x2b, 0xe0, 0x74, 0x17, 0xf2, 0x62, 0x86,
-	0x4c, 0x9a, 0x50, 0xec, 0xeb, 0x67, 0x5a, 0x90, 0x66, 0x73, 0xdb, 0x45, 0x92, 0x81, 0xca, 0xe1,
-	0xa1, 0x63, 0xa2, 0x1b, 0x18, 0xfe, 0x7c, 0xc1, 0x82, 0xf9, 0xbe, 0x7e, 0xe6, 0xe3, 0x7c, 0xa9,
-	0x7f, 0x8f, 0x41, 0x29, 0x94, 0x38, 0x5f, 0xf4, 0x0e, 0x8f, 0x7d, 0xda, 0x77, 0xf8, 0x73, 0xb8,
-	0x21, 0x17, 0x17, 0xf8, 0x87, 0x81, 0xf8, 0x35, 0x3f, 0x0c, 0x4c, 0x08, 0xe5, 0x05, 0xfe, 0x79,
-	0x60, 0x3e, 0xfc, 0xc4, 0x47, 0xfd, 0x26, 0xe9, 0x97, 0xe0, 0x72, 0xf2, 0xfe, 0x8f, 0x7f, 0x33,
-	0x2d, 0xbf, 0xf6, 0xa7, 0xff, 0x38, 0xb4, 0x6d, 0xf4, 0x80, 0x65, 0xb8, 0x3d, 0x62, 0xdb, 0x82,
-	0x23, 0x4c, 0x86, 0x77, 0x84, 0xe6, 0x5d, 0x85, 0xa9, 0x51, 0x9b, 0x12, 0x5c, 0xe2, 0x46, 0x44,
-	0x5c, 0x9c, 0x37, 0x07, 0x13, 0x92, 0xc4, 0xa2, 0x57, 0x88, 0xa2, 0x06, 0x5e, 0xf1, 0x0d, 0xc8,
-	0x8b, 0x0f, 0x06, 0x32, 0x0b, 0x99, 0x03, 0xdd, 0x75, 0x4d, 0xe7, 0x5c, 0x8e, 0x19, 0xaf, 0x62,
-	0xaa, 0xd7, 0x41, 0xe6, 0xfc, 0xb0, 0x82, 0xb2, 0xa4, 0xaa, 0xe4, 0x65, 0xb5, 0x34, 0x5d, 0x98,
-	0xba, 0x73, 0xff, 0x97, 0xaf, 0xf8, 0x7f, 0x7e, 0x80, 0x99, 0xfe, 0x61, 0x1c, 0x0a, 0xd2, 0xfb,
-	0x01, 0x43, 0x8e, 0x77, 0x26, 0x84, 0x7a, 0xaa, 0x18, 0x72, 0x78, 0x37, 0xb3, 0xef, 0x17, 0xc4,
-	0xe2, 0x72, 0x9c, 0x1a, 0x20, 0xf7, 0xb2, 0x9a, 0x2d, 0xa7, 0xa7, 0xc6, 0xa8, 0x09, 0x84, 0x4a,
-	0xf3, 0x53, 0x98, 0xec, 0x77, 0xad, 0x88, 0x8b, 0x25, 0xae, 0xe9, 0x62, 0xfd, 0xae, 0x25, 0xbb,
-	0x18, 0xf2, 0xe2, 0x49, 0xf9, 0x94, 0xf5, 0x2b, 0x3c, 0x28, 0x62, 0xdf, 0xf4, 0x37, 0x44, 0xd5,
-	0xa0, 0xf2, 0xef, 0x41, 0x41, 0x36, 0x1d, 0x73, 0x91, 0x7c, 0x47, 0xb0, 0x1b, 0x99, 0x85, 0x42,
-	0x20, 0x49, 0xe0, 0x10, 0x39, 0x2f, 0x46, 0x04, 0xb6, 0xed, 0x40, 0x5e, 0x7c, 0x13, 0x5d, 0x57,
-	0xf3, 0x9f, 0x8f, 0x6a, 0x5e, 0x70, 0xfd, 0xa0, 0x6f, 0xda, 0x14, 0xd6, 0xc1, 0x6d, 0xcc, 0xc1,
-	0x84, 0xb4, 0x8e, 0xb0, 0x95, 0x92, 0xb8, 0x02, 0xee, 0x26, 0xb2, 0xe5, 0x78, 0x74, 0xcb, 0x7c,
-	0x3b, 0x5f, 0x05, 0x25, 0xfc, 0x76, 0x22, 0x8f, 0x20, 0xc5, 0xca, 0x92, 0xb1, 0xab, 0x96, 0x25,
-	0xd9, 0x78, 0x4e, 0xf9, 0xe7, 0x31, 0x28, 0x85, 0x9e, 0x4c, 0xe4, 0x03, 0x16, 0x17, 0xcd, 0xae,
-	0x33, 0x90, 0x62, 0x54, 0xf4, 0x93, 0x29, 0xcd, 0x12, 0x1a, 0x9b, 0xea, 0x5e, 0x28, 0x1c, 0x36,
-	0xba, 0xce, 0x80, 0xa9, 0x70, 0x0e, 0x26, 0x78, 0xb9, 0xd8, 0x78, 0x61, 0xf6, 0x7a, 0xac, 0x72,
-	0xc7, 0x76, 0x58, 0x62, 0x1d, 0x75, 0xc4, 0x69, 0x69, 0x6e, 0x1e, 0x26, 0xfd, 0x52, 0xad, 0x30,
-	0x9a, 0x9d, 0xde, 0x09, 0xaf, 0xcb, 0x1f, 0xcf, 0x77, 0xf0, 0x14, 0x73, 0x13, 0xfe, 0x2a, 0xab,
-	0x5f, 0x2b, 0x8d, 0x10, 0x65, 0x16, 0x92, 0x08, 0xce, 0xfb, 0x0c, 0xf3, 0x13, 0xef, 0x9d, 0xf6,
-	0x26, 0x89, 0x7f, 0x19, 0x03, 0x25, 0xfc, 0x7c, 0x23, 0x07, 0x70, 0xcb, 0xfb, 0x3d, 0x4c, 0xaf,
-	0xdb, 0xef, 0xba, 0x9a, 0x79, 0x36, 0xb0, 0x2d, 0xd3, 0x72, 0x2f, 0xbc, 0x93, 0xea, 0x6a, 0xa5,
-	0x7d, 0xbc, 0x85, 0x63, 0x1b, 0x7c, 0xa8, 0xb0, 0xee, 0x24, 0xfb, 0x25, 0x8d, 0xd4, 0x2d, 0xae,
-	0x41, 0x5d, 0x20, 0x58, 0x23, 0xfe, 0xba, 0x35, 0xa8, 0xff, 0x5c, 0xbc, 0x86, 0xd4, 0xed, 0xeb,
-	0xae, 0x20, 0x3d, 0x23, 0xc9, 0x7b, 0x57, 0xfe, 0x8a, 0xa5, 0xbc, 0xac, 0xa6, 0x7e, 0x12, 0x8b,
-	0x67, 0x63, 0xfe, 0xb7, 0x0b, 0x3a, 0x93, 0x13, 0xff, 0x24, 0x0e, 0x45, 0xf9, 0x2d, 0xf9, 0x86,
-	0x7f, 0x9a, 0xf2, 0xc6, 0xbf, 0x1d, 0xde, 0x87, 0x1c, 0x1e, 0x26, 0xc7, 0x74, 0x9d, 0xae, 0x39,
-	0xe4, 0x3f, 0xa5, 0xf2, 0x73, 0x2d, 0xe8, 0xeb, 0x67, 0x2a, 0xeb, 0x22, 0xcf, 0xa0, 0x34, 0x30,
-	0x9d, 0xae, 0x6d, 0x04, 0x76, 0x49, 0x8e, 0x2e, 0xeb, 0xf2, 0x97, 0x28, 0x1d, 0x3c, 0xc2, 0x30,
-	0xc5, 0x81, 0xd4, 0x33, 0xfd, 0xb7, 0x31, 0x98, 0x1c, 0xf1, 0x46, 0x26, 0xff, 0x17, 0x08, 0x8a,
-	0x46, 0xd3, 0xde, 0x4b, 0xfd, 0x8d, 0x11, 0xd0, 0x24, 0x78, 0xc4, 0x92, 0x18, 0xda, 0xa5, 0x3e,
-	0x7c, 0xdf, 0x21, 0x39, 0x2d, 0x3c, 0x84, 0xfc, 0x6c, 0x76, 0x34, 0x37, 0xfa, 0xc0, 0x08, 0xea,
-	0x52, 0x5f, 0x3f, 0x13, 0xbb, 0xb8, 0x27, 0xec, 0x44, 0xf7, 0x84, 0x8e, 0xb6, 0x08, 0x37, 0x23,
-	0xcb, 0x0a, 0xd1, 0x97, 0x84, 0xc8, 0x82, 0xd8, 0xfa, 0x1c, 0x4a, 0xa1, 0xd7, 0x37, 0x79, 0x0f,
-	0xd2, 0x4c, 0x93, 0x17, 0xfd, 0xc6, 0xc2, 0x9b, 0xc0, 0x2c, 0x21, 0xc8, 0xcc, 0xe7, 0x71, 0xea,
-	0xef, 0xc7, 0x80, 0x44, 0xdf, 0xde, 0xf2, 0xbd, 0x1e, 0x7b, 0xed, 0xbd, 0xfe, 0xa6, 0xbd, 0x72,
-	0xda, 0x8a, 0x48, 0x74, 0xe5, 0xdb, 0xf7, 0x7a, 0x79, 0x3a, 0x57, 0x81, 0x0e, 0xa5, 0xd0, 0xcb,
-	0x9d, 0xdc, 0x11, 0x2f, 0x2e, 0xe9, 0xd7, 0x85, 0x0c, 0x8f, 0x5e, 0xd6, 0xf1, 0xd7, 0x5d, 0xd6,
-	0xd3, 0x5f, 0x84, 0x82, 0xf4, 0x88, 0xbf, 0x86, 0x7e, 0xe5, 0xb9, 0x57, 0xd5, 0x04, 0xdf, 0xda,
-	0x96, 0x17, 0xeb, 0xbc, 0x37, 0xf8, 0xca, 0x55, 0x3e, 0x4f, 0x8a, 0xf7, 0x31, 0x1d, 0xcd, 0xd9,
-	0xb6, 0xa1, 0x28, 0xbf, 0xc6, 0x3f, 0x15, 0x5d, 0x75, 0x1c, 0x32, 0xfc, 0xb3, 0xce, 0xec, 0x22,
-	0x14, 0xfd, 0xec, 0xf7, 0xa9, 0xde, 0x3b, 0x31, 0xd1, 0x02, 0xa7, 0xf8, 0x07, 0x57, 0x8e, 0x90,
-	0xda, 0x30, 0x7c, 0x76, 0x1f, 0x26, 0xe5, 0x0c, 0x9b, 0xcd, 0xfb, 0xb2, 0x38, 0xef, 0x3a, 0x2f,
-	0x0c, 0x4e, 0xdb, 0x04, 0x22, 0xb9, 0x29, 0x63, 0xfd, 0x92, 0xcc, 0x7a, 0xf5, 0x5f, 0x22, 0xf9,
-	0xb2, 0xca, 0xc7, 0xf1, 0x6a, 0xb2, 0x5e, 0x78, 0x84, 0x39, 0xad, 0x06, 0x53, 0x23, 0x5e, 0x7f,
-	0x8c, 0xbb, 0x26, 0x73, 0x5f, 0xf3, 0xd9, 0xc8, 0x17, 0x78, 0x1f, 0xf2, 0x3c, 0x45, 0x63, 0xa4,
-	0x8f, 0x64, 0xd2, 0xab, 0xe4, 0x73, 0x8c, 0xc8, 0x84, 0xa9, 0x11, 0x39, 0xc1, 0x15, 0x25, 0x7d,
-	0x6d, 0x32, 0xc1, 0xe6, 0xf2, 0x9f, 0xd2, 0xfa, 0xcb, 0x48, 0xf7, 0xfe, 0x75, 0x96, 0xb9, 0x28,
-	0x9f, 0x90, 0x96, 0xd9, 0x86, 0x52, 0x90, 0x5d, 0x32, 0xf6, 0x2f, 0xca, 0xec, 0x57, 0xcb, 0x46,
-	0xd9, 0x94, 0xb9, 0x1f, 0xc5, 0x20, 0x45, 0x7f, 0xb5, 0x4e, 0x14, 0xc8, 0x7f, 0xb0, 0xbb, 0xb9,
-	0xa3, 0xa9, 0x8d, 0xaf, 0xee, 0x37, 0x9a, 0x2d, 0x65, 0x8c, 0x94, 0x20, 0x47, 0x91, 0x4a, 0xad,
-	0xd6, 0xd8, 0x6b, 0x29, 0x31, 0x42, 0xa0, 0xb8, 0xbf, 0x53, 0xdb, 0xdd, 0x59, 0xdf, 0x54, 0xb7,
-	0x1b, 0x75, 0x6d, 0x7f, 0x4f, 0x89, 0x93, 0x1b, 0xa0, 0x88, 0x58, 0x7d, 0xf7, 0xd9, 0x8e, 0x92,
-	0x40, 0x32, 0x69, 0x5c, 0x12, 0xe7, 0x86, 0x46, 0xa5, 0x10, 0x53, 0x1b, 0xd2, 0xa2, 0x69, 0x5c,
-	0x74, 0x4f, 0xdd, 0xdd, 0x53, 0x37, 0x1b, 0xad, 0x8a, 0xfa, 0x5c, 0xc9, 0xcc, 0xdd, 0x86, 0x14,
-	0xfd, 0x7d, 0x3c, 0x29, 0x02, 0x6c, 0xed, 0xaa, 0x95, 0x67, 0x95, 0x1d, 0x4d, 0x5d, 0x54, 0xc6,
-	0xe6, 0xbe, 0xc3, 0x7e, 0x18, 0xef, 0x7d, 0x34, 0x2e, 0x41, 0x6e, 0xbb, 0x52, 0xd3, 0xf6, 0x77,
-	0x9e, 0xec, 0x20, 0xfb, 0x18, 0xc9, 0x43, 0x16, 0x81, 0xa7, 0x8b, 0xda, 0x82, 0x12, 0xc3, 0xd9,
-	0x5e, 0x4b, 0x5b, 0x54, 0xe2, 0x52, 0xbb, 0xac, 0x24, 0x84, 0xd1, 0x8b, 0x4a, 0x52, 0xea, 0x5d,
-	0x52, 0x52, 0x52, 0x7b, 0x59, 0x49, 0x4f, 0x67, 0xbf, 0xfb, 0xbb, 0x33, 0x63, 0x7f, 0xf4, 0x7b,
-	0x33, 0x63, 0x73, 0xaf, 0x62, 0x00, 0xc1, 0x77, 0x6d, 0x2a, 0xfe, 0xc6, 0x73, 0x41, 0x8a, 0x22,
-	0x40, 0xab, 0xb9, 0xb0, 0xb0, 0xe8, 0xc9, 0xa1, 0x40, 0x3e, 0x68, 0x53, 0x49, 0x14, 0xc8, 0xab,
-	0x7b, 0x3e, 0x82, 0xb2, 0xdc, 0x02, 0x22, 0x22, 0x9a, 0xda, 0x78, 0xaa, 0x55, 0x95, 0x24, 0xea,
-	0xda, 0xc7, 0x17, 0x29, 0x5a, 0x51, 0x52, 0x23, 0xd0, 0xaa, 0x92, 0x0e, 0x71, 0x2c, 0xf1, 0xd1,
-	0x19, 0x6f, 0xb5, 0x32, 0xc3, 0x17, 0x94, 0x6c, 0x08, 0x59, 0x54, 0xc6, 0x43, 0x48, 0x59, 0x81,
-	0x10, 0xb2, 0xa4, 0xe4, 0x04, 0x0d, 0xfc, 0x61, 0x1c, 0x0a, 0xf2, 0xab, 0xb8, 0x04, 0xb9, 0x7a,
-	0xa5, 0x55, 0xd1, 0xd4, 0x4a, 0xab, 0xa1, 0x2d, 0x30, 0x4f, 0x0a, 0x80, 0x45, 0x25, 0x26, 0x03,
-	0x65, 0x25, 0x2e, 0x03, 0x4b, 0x4a, 0x42, 0x06, 0x96, 0x95, 0xa4, 0x0c, 0xac, 0x28, 0x29, 0x19,
-	0x58, 0x65, 0xae, 0x13, 0x00, 0x8f, 0x94, 0x8c, 0x0c, 0xac, 0x29, 0x59, 0x19, 0x78, 0xcc, 0x76,
-	0x2a, 0x08, 0xb6, 0xc0, 0x76, 0x2a, 0x20, 0x8b, 0x4a, 0x2e, 0x84, 0x94, 0x95, 0x7c, 0x08, 0x59,
-	0x52, 0x0a, 0x21, 0x64, 0x59, 0x29, 0x86, 0x90, 0x15, 0xa5, 0x24, 0x68, 0xec, 0xef, 0x62, 0x50,
-	0x0c, 0x15, 0x94, 0x6e, 0x01, 0x09, 0x86, 0xef, 0xae, 0xaf, 0x37, 0x1b, 0x2d, 0xaa, 0xb9, 0x51,
-	0x38, 0x2a, 0x70, 0x14, 0x8e, 0x7a, 0x1c, 0x85, 0x2f, 0x31, 0x97, 0x8a, 0xe0, 0xa8, 0xd5, 0x51,
-	0x38, 0x2a, 0x77, 0x14, 0xbe, 0xca, 0xdc, 0x2a, 0x82, 0x3f, 0x52, 0x32, 0xd3, 0x49, 0xba, 0xb1,
-	0x7d, 0x28, 0x7d, 0x20, 0xbf, 0x26, 0x84, 0x33, 0x5e, 0xdb, 0xdd, 0x69, 0x35, 0x3e, 0xc4, 0xc0,
-	0x12, 0x60, 0xcd, 0x46, 0xb3, 0xb9, 0xb9, 0xbb, 0xc3, 0x3c, 0x82, 0x63, 0x4f, 0x1a, 0xcf, 0x9b,
-	0x4a, 0x9c, 0x8c, 0x43, 0x12, 0x9b, 0xca, 0xab, 0xd8, 0xdc, 0x23, 0x98, 0x88, 0x3c, 0x53, 0x48,
-	0x0e, 0x32, 0x01, 0x63, 0x0e, 0x32, 0x01, 0x55, 0x16, 0x92, 0x8c, 0x63, 0x6e, 0x01, 0x20, 0xf8,
-	0x19, 0x2d, 0x2e, 0xb1, 0x4e, 0x03, 0xcd, 0x4e, 0x6d, 0xb3, 0xd1, 0x54, 0xc6, 0xc8, 0x04, 0x14,
-	0x6a, 0x1b, 0x95, 0x9d, 0x9d, 0xc6, 0x96, 0xb6, 0x5d, 0x69, 0x3e, 0x69, 0x2a, 0xb1, 0xb9, 0x65,
-	0x48, 0xd1, 0xbc, 0x81, 0xd2, 0x6f, 0x55, 0x9a, 0x4d, 0xad, 0xc2, 0xe8, 0x59, 0xa3, 0xaa, 0xc4,
-	0x82, 0x46, 0x4d, 0x89, 0x4f, 0x27, 0xd1, 0xa8, 0x73, 0x03, 0x20, 0xd1, 0x1f, 0xeb, 0x10, 0x80,
-	0xf4, 0xd6, 0xee, 0x33, 0x16, 0x4b, 0x33, 0x90, 0xd8, 0xda, 0x7d, 0xc6, 0xce, 0x7f, 0xb5, 0xb1,
-	0xb5, 0xfb, 0x4c, 0xdb, 0xd9, 0x55, 0xb7, 0x2b, 0x5b, 0x4a, 0x1c, 0x87, 0xf1, 0xbf, 0x69, 0xdc,
-	0xac, 0x54, 0x77, 0x9f, 0x36, 0xbc, 0xde, 0x24, 0x6e, 0x66, 0x63, 0xf3, 0xfd, 0x0d, 0x25, 0x85,
-	0xeb, 0xe2, 0x5f, 0x34, 0x4c, 0xce, 0xfd, 0x43, 0x02, 0x6e, 0x8c, 0xfa, 0x11, 0x0b, 0x29, 0xc0,
-	0x78, 0x6d, 0xb3, 0xae, 0xa9, 0xeb, 0xfb, 0xd4, 0x7f, 0xbc, 0x66, 0xa3, 0xd9, 0xe0, 0x11, 0x1c,
-	0x9b, 0x5b, 0x9b, 0x3b, 0x4f, 0xb4, 0xda, 0x46, 0xa3, 0xf6, 0x84, 0xc5, 0x1f, 0x1f, 0xab, 0xd4,
-	0x55, 0x25, 0xe1, 0x8d, 0xaa, 0xef, 0xb7, 0x9e, 0x6b, 0xb5, 0xe7, 0xb5, 0xad, 0x06, 0x73, 0x14,
-	0x4a, 0xf4, 0xa1, 0xb6, 0x57, 0x51, 0x2b, 0xdb, 0x5a, 0xb3, 0xd1, 0xda, 0xdf, 0x63, 0x31, 0x9c,
-	0x8e, 0x6d, 0x3c, 0xd5, 0x9a, 0xad, 0x4a, 0x6b, 0xbf, 0xa9, 0xa4, 0xc9, 0x24, 0x94, 0x10, 0xdb,
-	0x69, 0x3c, 0xd3, 0xb8, 0x7e, 0x95, 0x0c, 0xb9, 0x0d, 0x93, 0x9c, 0xa0, 0xb5, 0xb9, 0xbd, 0xb9,
-	0xf3, 0x3e, 0x67, 0xc8, 0x7a, 0xcc, 0x2d, 0x99, 0x79, 0xdc, 0x67, 0xde, 0xf2, 0x49, 0x20, 0xd8,
-	0xce, 0x93, 0xc6, 0x73, 0x25, 0xe7, 0x71, 0x56, 0xea, 0xaa, 0x34, 0x37, 0xef, 0x49, 0x50, 0x6f,
-	0x3c, 0xdd, 0xac, 0x35, 0x70, 0xc1, 0x86, 0x52, 0xc0, 0x40, 0x89, 0xe0, 0xfa, 0xae, 0x5a, 0x6b,
-	0x68, 0xcc, 0xd9, 0x94, 0x22, 0x99, 0x86, 0x5b, 0x8c, 0x92, 0x3a, 0x9f, 0x48, 0x53, 0xf2, 0x44,
-	0xdb, 0xa3, 0xe2, 0x6e, 0xed, 0xb6, 0xb4, 0xcd, 0x9d, 0xf5, 0x5d, 0x45, 0x21, 0x6f, 0xc1, 0x4d,
-	0x19, 0xf7, 0x24, 0x9c, 0x20, 0x37, 0x61, 0x02, 0xbb, 0xaa, 0x8d, 0x4a, 0x6d, 0x77, 0x87, 0x6f,
-	0x55, 0x21, 0x9e, 0x40, 0x1c, 0x46, 0x37, 0x54, 0x26, 0x43, 0x52, 0x6e, 0xef, 0xd6, 0x1b, 0xca,
-	0x5d, 0xee, 0x51, 0x3f, 0x8f, 0xc3, 0xe4, 0x88, 0x34, 0x89, 0x86, 0x15, 0xdf, 0x2c, 0xda, 0xa2,
-	0x32, 0x16, 0x42, 0xca, 0xcc, 0xc5, 0x04, 0x64, 0x99, 0x99, 0x58, 0x40, 0xd6, 0x94, 0x04, 0xba,
-	0xbe, 0xc8, 0xb3, 0xaa, 0x24, 0x43, 0xd0, 0x52, 0x59, 0x49, 0x85, 0xa0, 0xd5, 0x65, 0x25, 0x8d,
-	0x56, 0x11, 0x27, 0x96, 0xd7, 0x94, 0x4c, 0x08, 0x2b, 0xaf, 0xac, 0x2a, 0xd9, 0x10, 0xb6, 0xb2,
-	0x58, 0x56, 0xc6, 0x71, 0xbf, 0xe2, 0xdc, 0x85, 0xf2, 0xb2, 0x02, 0x21, 0xb0, 0xbc, 0xb0, 0xbc,
-	0xa6, 0xe4, 0x42, 0xe0, 0xf2, 0xc2, 0xe3, 0x55, 0x66, 0x54, 0x71, 0x17, 0x8b, 0x8f, 0xcb, 0xcc,
-	0xa8, 0xd2, 0x46, 0x96, 0xd6, 0x30, 0xfa, 0xca, 0xe8, 0x52, 0xf9, 0xd1, 0xea, 0x9a, 0x52, 0xe2,
-	0xaa, 0xfd, 0x69, 0x0c, 0x8a, 0x72, 0x76, 0x8b, 0xfb, 0xa4, 0xb6, 0x6c, 0x3c, 0x6d, 0xa8, 0xcf,
-	0xb5, 0x45, 0x1e, 0x1b, 0x04, 0xa8, 0xdc, 0x54, 0x62, 0x21, 0x68, 0x19, 0x83, 0x94, 0x0c, 0xad,
-	0x35, 0xd9, 0xe1, 0x11, 0xb9, 0x56, 0x9b, 0x2c, 0xf9, 0x11, 0xb0, 0xa5, 0x72, 0x93, 0x1d, 0x1c,
-	0x01, 0x5b, 0x5d, 0xe6, 0x07, 0x47, 0x9c, 0x5b, 0x5e, 0x6b, 0x62, 0x68, 0xa5, 0x52, 0x7f, 0x2f,
-	0xe1, 0xbd, 0xeb, 0xe5, 0x72, 0xc2, 0x24, 0x94, 0xfc, 0xf8, 0xba, 0xbf, 0xd3, 0x42, 0x53, 0x8e,
-	0x45, 0xc0, 0x25, 0x74, 0x8b, 0x30, 0xb8, 0xba, 0xcc, 0xd2, 0x37, 0x79, 0x7a, 0x19, 0xbd, 0x23,
-	0x8c, 0xa2, 0x49, 0x93, 0x11, 0x14, 0x8d, 0x9a, 0x42, 0x87, 0x97, 0x19, 0xd0, 0xac, 0xe9, 0x08,
-	0x4c, 0x0d, 0x9b, 0x89, 0xc0, 0xd4, 0xb4, 0xd9, 0x08, 0x4c, 0x8d, 0x3b, 0x4e, 0x93, 0x18, 0x79,
-	0x73, 0x68, 0x5e, 0x88, 0xe0, 0xcc, 0xc0, 0xb9, 0x08, 0xbe, 0xba, 0xb2, 0xb2, 0x84, 0x9e, 0x73,
-	0x1b, 0x26, 0x65, 0x9e, 0xa5, 0xc5, 0x85, 0x47, 0xe8, 0x3d, 0xe1, 0x8e, 0xf2, 0x6a, 0x79, 0x71,
-	0x19, 0x1d, 0x28, 0xdc, 0xb1, 0x52, 0x5e, 0x2e, 0xaf, 0x05, 0x3e, 0xf4, 0xb3, 0x38, 0x90, 0x68,
-	0x71, 0x06, 0xdd, 0x81, 0xcf, 0xc2, 0x90, 0x43, 0x03, 0x70, 0x08, 0x5a, 0x64, 0x7e, 0x24, 0x42,
-	0x65, 0xe6, 0x47, 0x22, 0xb4, 0xc4, 0x4e, 0xa8, 0x08, 0x2d, 0xb3, 0x13, 0x2a, 0x42, 0x2b, 0xec,
-	0x84, 0x8a, 0x10, 0x5e, 0xd1, 0x21, 0x08, 0x13, 0xa1, 0x10, 0x84, 0xa9, 0x50, 0x08, 0x7a, 0xcc,
-	0x02, 0xae, 0x24, 0x2a, 0xa6, 0x43, 0x61, 0x0c, 0x13, 0xa2, 0x30, 0x86, 0x29, 0x51, 0x18, 0xc3,
-	0xa4, 0x28, 0x8c, 0xa1, 0x5e, 0xc3, 0xd8, 0x8a, 0xaf, 0xd2, 0xbf, 0x8a, 0x79, 0xff, 0xc4, 0x4e,
-	0xae, 0xdf, 0x09, 0x7e, 0xbb, 0xd7, 0x50, 0x37, 0x77, 0xeb, 0x54, 0xad, 0x11, 0x70, 0x51, 0xf2,
-	0x70, 0x0e, 0xa2, 0x6a, 0x23, 0x20, 0x2a, 0x37, 0x02, 0xa2, 0x7a, 0x23, 0x20, 0x2a, 0x38, 0x02,
-	0xae, 0xb2, 0x73, 0x2a, 0x83, 0x8f, 0xfc, 0x73, 0xfa, 0x37, 0x71, 0x80, 0xe0, 0xc1, 0x45, 0x23,
-	0x28, 0x0b, 0xef, 0xd8, 0xd4, 0xd6, 0x58, 0xf6, 0x23, 0x42, 0x8b, 0x0b, 0xec, 0x5e, 0x96, 0x30,
-	0x14, 0x3c, 0x8c, 0x2d, 0xb1, 0xe0, 0x22, 0x61, 0xcb, 0x2c, 0xb8, 0x48, 0xd8, 0x2a, 0x0b, 0x2e,
-	0x12, 0xb6, 0xc6, 0x23, 0xb7, 0x80, 0x95, 0x17, 0x78, 0xe4, 0x16, 0xb1, 0x45, 0x1e, 0xb9, 0x45,
-	0x6c, 0x99, 0xb9, 0x86, 0x84, 0xad, 0x32, 0xd7, 0x90, 0xb0, 0x47, 0xcc, 0x35, 0x24, 0xec, 0x31,
-	0x73, 0x0d, 0x11, 0x5b, 0x5a, 0x60, 0xae, 0x21, 0x61, 0x4b, 0xcc, 0x35, 0x24, 0x6c, 0xd5, 0x77,
-	0x8d, 0xef, 0x26, 0x60, 0x72, 0xc4, 0x4b, 0x1c, 0xcd, 0x80, 0x57, 0x7f, 0xa5, 0xf6, 0x44, 0xdb,
-	0xda, 0xdc, 0xde, 0x6c, 0xd1, 0xfb, 0x30, 0x02, 0xf2, 0xd8, 0x27, 0x83, 0xcb, 0xcc, 0x33, 0x64,
-	0x90, 0x87, 0xbe, 0x10, 0x27, 0x0f, 0x7d, 0x32, 0x4a, 0xaf, 0xc7, 0x08, 0xba, 0xca, 0x23, 0x5f,
-	0x88, 0xa1, 0xcc, 0x23, 0x5f, 0x48, 0xae, 0x15, 0x1e, 0xf9, 0x64, 0x98, 0x5d, 0x95, 0xb7, 0x80,
-	0x84, 0x48, 0xd8, 0x6d, 0x19, 0xc1, 0xf9, 0x85, 0x19, 0xc1, 0xf9, 0x9d, 0x19, 0xc1, 0xf9, 0xb5,
-	0x79, 0x9b, 0x6a, 0x54, 0xda, 0x26, 0xbb, 0x39, 0x23, 0x1d, 0xf2, 0xe5, 0x19, 0x98, 0x42, 0xaa,
-	0x56, 0x88, 0xba, 0xac, 0x37, 0xb6, 0x2a, 0xcf, 0xc3, 0xa6, 0x60, 0x60, 0xc8, 0x14, 0x0c, 0x0c,
-	0x99, 0x82, 0x81, 0x21, 0x53, 0x70, 0xce, 0x90, 0x29, 0x18, 0x1a, 0x36, 0x05, 0x43, 0xc3, 0xa6,
-	0xe0, 0x0c, 0x61, 0x53, 0x70, 0xb9, 0xc2, 0xa6, 0x60, 0x70, 0xc4, 0x14, 0x9c, 0x24, 0x62, 0x0a,
-	0xce, 0x12, 0x31, 0x05, 0xdf, 0x60, 0xc4, 0x14, 0x7c, 0x8f, 0x11, 0x53, 0x78, 0xdb, 0x8c, 0x98,
-	0xc2, 0xdb, 0xa9, 0x68, 0x8a, 0x1f, 0xc6, 0x21, 0xc3, 0x8b, 0x5e, 0xa4, 0x08, 0xa0, 0x7e, 0xc8,
-	0x47, 0x2d, 0xb0, 0xaa, 0x83, 0xdf, 0x5e, 0x64, 0xd5, 0x0f, 0xbf, 0x5d, 0x66, 0xd5, 0x0f, 0xbf,
-	0x8d, 0x71, 0x45, 0x6c, 0x2f, 0xb3, 0xfa, 0x87, 0xdf, 0x5e, 0x61, 0xf5, 0x0f, 0xbf, 0x8d, 0x01,
-	0x50, 0x6c, 0xe3, 0x05, 0x23, 0xb6, 0xf1, 0x76, 0x11, 0xdb, 0x78, 0xb5, 0xe0, 0xeb, 0xce, 0x97,
-	0x07, 0xef, 0x15, 0x09, 0xc0, 0x4b, 0x45, 0x02, 0xf0, 0x46, 0x91, 0x00, 0xbc, 0x4e, 0x24, 0x00,
-	0xf5, 0x23, 0x01, 0xf2, 0x0b, 0xfb, 0x47, 0x71, 0x48, 0xd1, 0x4f, 0x8e, 0xb4, 0x2c, 0xb4, 0xb9,
-	0xb3, 0xab, 0xfa, 0x2f, 0xa2, 0x1c, 0x64, 0x18, 0xc0, 0xeb, 0x10, 0x41, 0x2f, 0xaf, 0x43, 0x04,
-	0x00, 0xaf, 0x43, 0x04, 0x00, 0xaf, 0x43, 0x04, 0x00, 0xaf, 0x43, 0x04, 0x00, 0xaf, 0x43, 0x04,
-	0x00, 0xaf, 0x43, 0x04, 0x00, 0xaf, 0x43, 0x04, 0x00, 0xaf, 0x43, 0x04, 0x80, 0x57, 0x87, 0x10,
-	0x10, 0x5e, 0x87, 0x10, 0x10, 0x5e, 0x87, 0x10, 0x10, 0x5e, 0x87, 0x10, 0x10, 0x5e, 0x87, 0x10,
-	0x10, 0xff, 0xba, 0xad, 0x6e, 0xff, 0xfc, 0x9f, 0x66, 0xc6, 0x7e, 0xed, 0x93, 0x99, 0xd8, 0x1f,
-	0x7c, 0x32, 0x13, 0xfb, 0xe7, 0x4f, 0x66, 0xc6, 0xfe, 0xed, 0x93, 0x99, 0xd8, 0xf7, 0x7f, 0x35,
-	0x33, 0xf6, 0x17, 0xbf, 0x9a, 0x89, 0x7d, 0xed, 0xe1, 0x35, 0xfe, 0x6d, 0xb1, 0x6b, 0x0d, 0x0e,
-	0x0e, 0xd2, 0xf4, 0x8b, 0xe5, 0xd2, 0x7f, 0x05, 0x00, 0x00, 0xff, 0xff, 0xe5, 0x29, 0x95, 0x14,
-	0xf8, 0x45, 0x00, 0x00,
-}
-
-func (x MType) String() string {
-	s, ok := MType_name[int32(x)]
-	if ok {
-		return s
-	}
-	return strconv.Itoa(int(x))
-}
-func (x Major) String() string {
-	s, ok := Major_name[int32(x)]
-	if ok {
-		return s
-	}
-	return strconv.Itoa(int(x))
-}
-func (x JoinRequestType) String() string {
-	s, ok := JoinRequestType_name[int32(x)]
-	if ok {
-		return s
-	}
-	return strconv.Itoa(int(x))
-}
-func (x RejoinRequestType) String() string {
-	s, ok := RejoinRequestType_name[int32(x)]
-	if ok {
-		return s
-	}
-	return strconv.Itoa(int(x))
-}
-func (x CFListType) String() string {
-	s, ok := CFListType_name[int32(x)]
-	if ok {
-		return s
-	}
-	return strconv.Itoa(int(x))
-}
-func (x Class) String() string {
-	s, ok := Class_name[int32(x)]
-	if ok {
-		return s
-	}
-	return strconv.Itoa(int(x))
-}
-func (x TxSchedulePriority) String() string {
-	s, ok := TxSchedulePriority_name[int32(x)]
-	if ok {
-		return s
-	}
-	return strconv.Itoa(int(x))
-}
-func (x MACCommandIdentifier) String() string {
-	s, ok := MACCommandIdentifier_name[int32(x)]
-	if ok {
-		return s
-	}
-	return strconv.Itoa(int(x))
-}
-func (x AggregatedDutyCycle) String() string {
-	s, ok := AggregatedDutyCycle_name[int32(x)]
-	if ok {
-		return s
-	}
-	return strconv.Itoa(int(x))
-}
-func (x PingSlotPeriod) String() string {
-	s, ok := PingSlotPeriod_name[int32(x)]
-	if ok {
-		return s
-	}
-	return strconv.Itoa(int(x))
-}
-func (x RejoinCountExponent) String() string {
-	s, ok := RejoinCountExponent_name[int32(x)]
-	if ok {
-		return s
-	}
-	return strconv.Itoa(int(x))
-}
-func (x RejoinTimeExponent) String() string {
-	s, ok := RejoinTimeExponent_name[int32(x)]
-	if ok {
-		return s
-	}
-	return strconv.Itoa(int(x))
-}
-func (x RejoinPeriodExponent) String() string {
-	s, ok := RejoinPeriodExponent_name[int32(x)]
-	if ok {
-		return s
-	}
-	return strconv.Itoa(int(x))
-}
-func (x DeviceEIRP) String() string {
-	s, ok := DeviceEIRP_name[int32(x)]
-	if ok {
-		return s
-	}
-	return strconv.Itoa(int(x))
-}
-func (x ADRAckLimitExponent) String() string {
-	s, ok := ADRAckLimitExponent_name[int32(x)]
-	if ok {
-		return s
-	}
-	return strconv.Itoa(int(x))
-}
-func (x ADRAckDelayExponent) String() string {
-	s, ok := ADRAckDelayExponent_name[int32(x)]
-	if ok {
-		return s
-	}
-	return strconv.Itoa(int(x))
-}
-func (x Minor) String() string {
-	s, ok := Minor_name[int32(x)]
-	if ok {
-		return s
-	}
-	return strconv.Itoa(int(x))
-}
-func (this *Message) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*Message)
-	if !ok {
-		that2, ok := that.(Message)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.MHDR.Equal(&that1.MHDR) {
-		return false
-	}
-	if !bytes.Equal(this.Mic, that1.Mic) {
-		return false
-	}
-	if that1.Payload == nil {
-		if this.Payload != nil {
-			return false
-		}
-	} else if this.Payload == nil {
-		return false
-	} else if !this.Payload.Equal(that1.Payload) {
-		return false
-	}
-	return true
-}
-func (this *Message_MacPayload) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*Message_MacPayload)
-	if !ok {
-		that2, ok := that.(Message_MacPayload)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.MacPayload.Equal(that1.MacPayload) {
-		return false
-	}
-	return true
-}
-func (this *Message_JoinRequestPayload) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*Message_JoinRequestPayload)
-	if !ok {
-		that2, ok := that.(Message_JoinRequestPayload)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.JoinRequestPayload.Equal(that1.JoinRequestPayload) {
-		return false
-	}
-	return true
-}
-func (this *Message_JoinAcceptPayload) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*Message_JoinAcceptPayload)
-	if !ok {
-		that2, ok := that.(Message_JoinAcceptPayload)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.JoinAcceptPayload.Equal(that1.JoinAcceptPayload) {
-		return false
-	}
-	return true
-}
-func (this *Message_RejoinRequestPayload) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*Message_RejoinRequestPayload)
-	if !ok {
-		that2, ok := that.(Message_RejoinRequestPayload)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.RejoinRequestPayload.Equal(that1.RejoinRequestPayload) {
-		return false
-	}
-	return true
-}
-func (this *MHDR) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*MHDR)
-	if !ok {
-		that2, ok := that.(MHDR)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.MType != that1.MType {
-		return false
-	}
-	if this.Major != that1.Major {
-		return false
-	}
-	return true
-}
-func (this *MACPayload) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*MACPayload)
-	if !ok {
-		that2, ok := that.(MACPayload)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.FHDR.Equal(&that1.FHDR) {
-		return false
-	}
-	if this.FPort != that1.FPort {
-		return false
-	}
-	if !bytes.Equal(this.FrmPayload, that1.FrmPayload) {
-		return false
-	}
-	if !this.DecodedPayload.Equal(that1.DecodedPayload) {
-		return false
-	}
-	if this.FullFCnt != that1.FullFCnt {
-		return false
-	}
-	return true
-}
-func (this *FHDR) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*FHDR)
-	if !ok {
-		that2, ok := that.(FHDR)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.DevAddr.Equal(that1.DevAddr) {
-		return false
-	}
-	if !this.FCtrl.Equal(&that1.FCtrl) {
-		return false
-	}
-	if this.FCnt != that1.FCnt {
-		return false
-	}
-	if !bytes.Equal(this.FOpts, that1.FOpts) {
-		return false
-	}
-	return true
-}
-func (this *FCtrl) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*FCtrl)
-	if !ok {
-		that2, ok := that.(FCtrl)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.Adr != that1.Adr {
-		return false
-	}
-	if this.AdrAckReq != that1.AdrAckReq {
-		return false
-	}
-	if this.Ack != that1.Ack {
-		return false
-	}
-	if this.FPending != that1.FPending {
-		return false
-	}
-	if this.ClassB != that1.ClassB {
-		return false
-	}
-	return true
-}
-func (this *JoinRequestPayload) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*JoinRequestPayload)
-	if !ok {
-		that2, ok := that.(JoinRequestPayload)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.JoinEui.Equal(that1.JoinEui) {
-		return false
-	}
-	if !this.DevEui.Equal(that1.DevEui) {
-		return false
-	}
-	if !this.DevNonce.Equal(that1.DevNonce) {
-		return false
-	}
-	return true
-}
-func (this *RejoinRequestPayload) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*RejoinRequestPayload)
-	if !ok {
-		that2, ok := that.(RejoinRequestPayload)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.RejoinType != that1.RejoinType {
-		return false
-	}
-	if !this.NetId.Equal(that1.NetId) {
-		return false
-	}
-	if !this.JoinEui.Equal(that1.JoinEui) {
-		return false
-	}
-	if !this.DevEui.Equal(that1.DevEui) {
-		return false
-	}
-	if this.RejoinCnt != that1.RejoinCnt {
-		return false
-	}
-	return true
-}
-func (this *JoinAcceptPayload) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*JoinAcceptPayload)
-	if !ok {
-		that2, ok := that.(JoinAcceptPayload)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !bytes.Equal(this.Encrypted, that1.Encrypted) {
-		return false
-	}
-	if !this.JoinNonce.Equal(that1.JoinNonce) {
-		return false
-	}
-	if !this.NetId.Equal(that1.NetId) {
-		return false
-	}
-	if !this.DevAddr.Equal(that1.DevAddr) {
-		return false
-	}
-	if !this.DLSettings.Equal(&that1.DLSettings) {
-		return false
-	}
-	if this.RxDelay != that1.RxDelay {
-		return false
-	}
-	if !this.CfList.Equal(that1.CfList) {
-		return false
-	}
-	return true
-}
-func (this *DLSettings) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*DLSettings)
-	if !ok {
-		that2, ok := that.(DLSettings)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.Rx1DrOffset != that1.Rx1DrOffset {
-		return false
-	}
-	if this.Rx2Dr != that1.Rx2Dr {
-		return false
-	}
-	if this.OptNeg != that1.OptNeg {
-		return false
-	}
-	return true
-}
-func (this *CFList) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*CFList)
-	if !ok {
-		that2, ok := that.(CFList)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.Type != that1.Type {
-		return false
-	}
-	if len(this.Freq) != len(that1.Freq) {
-		return false
-	}
-	for i := range this.Freq {
-		if this.Freq[i] != that1.Freq[i] {
-			return false
-		}
-	}
-	if len(this.ChMasks) != len(that1.ChMasks) {
-		return false
-	}
-	for i := range this.ChMasks {
-		if this.ChMasks[i] != that1.ChMasks[i] {
-			return false
-		}
-	}
-	return true
-}
-func (this *LoRaDataRate) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*LoRaDataRate)
-	if !ok {
-		that2, ok := that.(LoRaDataRate)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.Bandwidth != that1.Bandwidth {
-		return false
-	}
-	if this.SpreadingFactor != that1.SpreadingFactor {
-		return false
-	}
-	return true
-}
-func (this *FSKDataRate) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*FSKDataRate)
-	if !ok {
-		that2, ok := that.(FSKDataRate)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.BitRate != that1.BitRate {
-		return false
-	}
-	return true
-}
-func (this *LRFHSSDataRate) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*LRFHSSDataRate)
-	if !ok {
-		that2, ok := that.(LRFHSSDataRate)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.ModulationType != that1.ModulationType {
-		return false
-	}
-	if this.OperatingChannelWidth != that1.OperatingChannelWidth {
-		return false
-	}
-	return true
-}
-func (this *DataRate) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*DataRate)
-	if !ok {
-		that2, ok := that.(DataRate)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if that1.Modulation == nil {
-		if this.Modulation != nil {
-			return false
-		}
-	} else if this.Modulation == nil {
-		return false
-	} else if !this.Modulation.Equal(that1.Modulation) {
-		return false
-	}
-	return true
-}
-func (this *DataRate_Lora) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*DataRate_Lora)
-	if !ok {
-		that2, ok := that.(DataRate_Lora)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.Lora.Equal(that1.Lora) {
-		return false
-	}
-	return true
-}
-func (this *DataRate_Fsk) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*DataRate_Fsk)
-	if !ok {
-		that2, ok := that.(DataRate_Fsk)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.Fsk.Equal(that1.Fsk) {
-		return false
-	}
-	return true
-}
-func (this *DataRate_Lrfhss) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*DataRate_Lrfhss)
-	if !ok {
-		that2, ok := that.(DataRate_Lrfhss)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.Lrfhss.Equal(that1.Lrfhss) {
-		return false
-	}
-	return true
-}
-func (this *TxSettings) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*TxSettings)
-	if !ok {
-		that2, ok := that.(TxSettings)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.DataRate.Equal(&that1.DataRate) {
-		return false
-	}
-	if this.DataRateIndex != that1.DataRateIndex {
-		return false
-	}
-	if this.CodingRate != that1.CodingRate {
-		return false
-	}
-	if this.Frequency != that1.Frequency {
-		return false
-	}
-	if this.EnableCrc != that1.EnableCrc {
-		return false
-	}
-	if this.Timestamp != that1.Timestamp {
-		return false
-	}
-	if that1.Time == nil {
-		if this.Time != nil {
-			return false
-		}
-	} else if !this.Time.Equal(*that1.Time) {
-		return false
-	}
-	if !this.Downlink.Equal(that1.Downlink) {
-		return false
-	}
-	return true
-}
-func (this *TxSettings_Downlink) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*TxSettings_Downlink)
-	if !ok {
-		that2, ok := that.(TxSettings_Downlink)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.AntennaIndex != that1.AntennaIndex {
-		return false
-	}
-	if this.TxPower != that1.TxPower {
-		return false
-	}
-	if this.InvertPolarization != that1.InvertPolarization {
-		return false
-	}
-	return true
-}
-func (this *GatewayAntennaIdentifiers) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*GatewayAntennaIdentifiers)
-	if !ok {
-		that2, ok := that.(GatewayAntennaIdentifiers)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.GatewayIdentifiers.Equal(&that1.GatewayIdentifiers) {
-		return false
-	}
-	if this.AntennaIndex != that1.AntennaIndex {
-		return false
-	}
-	return true
-}
-func (this *UplinkToken) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*UplinkToken)
-	if !ok {
-		that2, ok := that.(UplinkToken)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.GatewayAntennaIdentifiers.Equal(&that1.GatewayAntennaIdentifiers) {
-		return false
-	}
-	if this.Timestamp != that1.Timestamp {
-		return false
-	}
-	if !this.ServerTime.Equal(that1.ServerTime) {
-		return false
-	}
-	if this.ConcentratorTime != that1.ConcentratorTime {
-		return false
-	}
-	return true
-}
-func (this *DownlinkPath) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*DownlinkPath)
-	if !ok {
-		that2, ok := that.(DownlinkPath)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if that1.Path == nil {
-		if this.Path != nil {
-			return false
-		}
-	} else if this.Path == nil {
-		return false
-	} else if !this.Path.Equal(that1.Path) {
-		return false
-	}
-	return true
-}
-func (this *DownlinkPath_UplinkToken) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*DownlinkPath_UplinkToken)
-	if !ok {
-		that2, ok := that.(DownlinkPath_UplinkToken)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !bytes.Equal(this.UplinkToken, that1.UplinkToken) {
-		return false
-	}
-	return true
-}
-func (this *DownlinkPath_Fixed) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*DownlinkPath_Fixed)
-	if !ok {
-		that2, ok := that.(DownlinkPath_Fixed)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.Fixed.Equal(that1.Fixed) {
-		return false
-	}
-	return true
-}
-func (this *TxRequest) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*TxRequest)
-	if !ok {
-		that2, ok := that.(TxRequest)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.Class != that1.Class {
-		return false
-	}
-	if len(this.DownlinkPaths) != len(that1.DownlinkPaths) {
-		return false
-	}
-	for i := range this.DownlinkPaths {
-		if !this.DownlinkPaths[i].Equal(that1.DownlinkPaths[i]) {
-			return false
-		}
-	}
-	if this.Rx1Delay != that1.Rx1Delay {
-		return false
-	}
-	if this.Rx1DataRateIndex != that1.Rx1DataRateIndex {
-		return false
-	}
-	if this.Rx1Frequency != that1.Rx1Frequency {
-		return false
-	}
-	if this.Rx2DataRateIndex != that1.Rx2DataRateIndex {
-		return false
-	}
-	if this.Rx2Frequency != that1.Rx2Frequency {
-		return false
-	}
-	if this.Priority != that1.Priority {
-		return false
-	}
-	if that1.AbsoluteTime == nil {
-		if this.AbsoluteTime != nil {
-			return false
-		}
-	} else if !this.AbsoluteTime.Equal(*that1.AbsoluteTime) {
-		return false
-	}
-	if this.FrequencyPlanId != that1.FrequencyPlanId {
-		return false
-	}
-	if this.LorawanPhyVersion != that1.LorawanPhyVersion {
-		return false
-	}
-	if !this.Advanced.Equal(that1.Advanced) {
-		return false
-	}
-	return true
-}
-func (this *MACCommand) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*MACCommand)
-	if !ok {
-		that2, ok := that.(MACCommand)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.Cid != that1.Cid {
-		return false
-	}
-	if that1.Payload == nil {
-		if this.Payload != nil {
-			return false
-		}
-	} else if this.Payload == nil {
-		return false
-	} else if !this.Payload.Equal(that1.Payload) {
-		return false
-	}
-	return true
-}
-func (this *MACCommand_RawPayload) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*MACCommand_RawPayload)
-	if !ok {
-		that2, ok := that.(MACCommand_RawPayload)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !bytes.Equal(this.RawPayload, that1.RawPayload) {
-		return false
-	}
-	return true
-}
-func (this *MACCommand_ResetInd_) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*MACCommand_ResetInd_)
-	if !ok {
-		that2, ok := that.(MACCommand_ResetInd_)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.ResetInd.Equal(that1.ResetInd) {
-		return false
-	}
-	return true
-}
-func (this *MACCommand_ResetConf_) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*MACCommand_ResetConf_)
-	if !ok {
-		that2, ok := that.(MACCommand_ResetConf_)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.ResetConf.Equal(that1.ResetConf) {
-		return false
-	}
-	return true
-}
-func (this *MACCommand_LinkCheckAns_) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*MACCommand_LinkCheckAns_)
-	if !ok {
-		that2, ok := that.(MACCommand_LinkCheckAns_)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.LinkCheckAns.Equal(that1.LinkCheckAns) {
-		return false
-	}
-	return true
-}
-func (this *MACCommand_LinkAdrReq) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*MACCommand_LinkAdrReq)
-	if !ok {
-		that2, ok := that.(MACCommand_LinkAdrReq)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.LinkAdrReq.Equal(that1.LinkAdrReq) {
-		return false
-	}
-	return true
-}
-func (this *MACCommand_LinkAdrAns) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*MACCommand_LinkAdrAns)
-	if !ok {
-		that2, ok := that.(MACCommand_LinkAdrAns)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.LinkAdrAns.Equal(that1.LinkAdrAns) {
-		return false
-	}
-	return true
-}
-func (this *MACCommand_DutyCycleReq_) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*MACCommand_DutyCycleReq_)
-	if !ok {
-		that2, ok := that.(MACCommand_DutyCycleReq_)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.DutyCycleReq.Equal(that1.DutyCycleReq) {
-		return false
-	}
-	return true
-}
-func (this *MACCommand_RxParamSetupReq_) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*MACCommand_RxParamSetupReq_)
-	if !ok {
-		that2, ok := that.(MACCommand_RxParamSetupReq_)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.RxParamSetupReq.Equal(that1.RxParamSetupReq) {
-		return false
-	}
-	return true
-}
-func (this *MACCommand_RxParamSetupAns_) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*MACCommand_RxParamSetupAns_)
-	if !ok {
-		that2, ok := that.(MACCommand_RxParamSetupAns_)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.RxParamSetupAns.Equal(that1.RxParamSetupAns) {
-		return false
-	}
-	return true
-}
-func (this *MACCommand_DevStatusAns_) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*MACCommand_DevStatusAns_)
-	if !ok {
-		that2, ok := that.(MACCommand_DevStatusAns_)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.DevStatusAns.Equal(that1.DevStatusAns) {
-		return false
-	}
-	return true
-}
-func (this *MACCommand_NewChannelReq_) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*MACCommand_NewChannelReq_)
-	if !ok {
-		that2, ok := that.(MACCommand_NewChannelReq_)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.NewChannelReq.Equal(that1.NewChannelReq) {
-		return false
-	}
-	return true
-}
-func (this *MACCommand_NewChannelAns_) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*MACCommand_NewChannelAns_)
-	if !ok {
-		that2, ok := that.(MACCommand_NewChannelAns_)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.NewChannelAns.Equal(that1.NewChannelAns) {
-		return false
-	}
-	return true
-}
-func (this *MACCommand_DlChannelReq) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*MACCommand_DlChannelReq)
-	if !ok {
-		that2, ok := that.(MACCommand_DlChannelReq)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.DlChannelReq.Equal(that1.DlChannelReq) {
-		return false
-	}
-	return true
-}
-func (this *MACCommand_DlChannelAns) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*MACCommand_DlChannelAns)
-	if !ok {
-		that2, ok := that.(MACCommand_DlChannelAns)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.DlChannelAns.Equal(that1.DlChannelAns) {
-		return false
-	}
-	return true
-}
-func (this *MACCommand_RxTimingSetupReq_) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*MACCommand_RxTimingSetupReq_)
-	if !ok {
-		that2, ok := that.(MACCommand_RxTimingSetupReq_)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.RxTimingSetupReq.Equal(that1.RxTimingSetupReq) {
-		return false
-	}
-	return true
-}
-func (this *MACCommand_TxParamSetupReq_) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*MACCommand_TxParamSetupReq_)
-	if !ok {
-		that2, ok := that.(MACCommand_TxParamSetupReq_)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.TxParamSetupReq.Equal(that1.TxParamSetupReq) {
-		return false
-	}
-	return true
-}
-func (this *MACCommand_RekeyInd_) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*MACCommand_RekeyInd_)
-	if !ok {
-		that2, ok := that.(MACCommand_RekeyInd_)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.RekeyInd.Equal(that1.RekeyInd) {
-		return false
-	}
-	return true
-}
-func (this *MACCommand_RekeyConf_) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*MACCommand_RekeyConf_)
-	if !ok {
-		that2, ok := that.(MACCommand_RekeyConf_)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.RekeyConf.Equal(that1.RekeyConf) {
-		return false
-	}
-	return true
-}
-func (this *MACCommand_AdrParamSetupReq) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*MACCommand_AdrParamSetupReq)
-	if !ok {
-		that2, ok := that.(MACCommand_AdrParamSetupReq)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.AdrParamSetupReq.Equal(that1.AdrParamSetupReq) {
-		return false
-	}
-	return true
-}
-func (this *MACCommand_DeviceTimeAns_) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*MACCommand_DeviceTimeAns_)
-	if !ok {
-		that2, ok := that.(MACCommand_DeviceTimeAns_)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.DeviceTimeAns.Equal(that1.DeviceTimeAns) {
-		return false
-	}
-	return true
-}
-func (this *MACCommand_ForceRejoinReq_) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*MACCommand_ForceRejoinReq_)
-	if !ok {
-		that2, ok := that.(MACCommand_ForceRejoinReq_)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.ForceRejoinReq.Equal(that1.ForceRejoinReq) {
-		return false
-	}
-	return true
-}
-func (this *MACCommand_RejoinParamSetupReq_) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*MACCommand_RejoinParamSetupReq_)
-	if !ok {
-		that2, ok := that.(MACCommand_RejoinParamSetupReq_)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.RejoinParamSetupReq.Equal(that1.RejoinParamSetupReq) {
-		return false
-	}
-	return true
-}
-func (this *MACCommand_RejoinParamSetupAns_) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*MACCommand_RejoinParamSetupAns_)
-	if !ok {
-		that2, ok := that.(MACCommand_RejoinParamSetupAns_)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.RejoinParamSetupAns.Equal(that1.RejoinParamSetupAns) {
-		return false
-	}
-	return true
-}
-func (this *MACCommand_PingSlotInfoReq_) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*MACCommand_PingSlotInfoReq_)
-	if !ok {
-		that2, ok := that.(MACCommand_PingSlotInfoReq_)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.PingSlotInfoReq.Equal(that1.PingSlotInfoReq) {
-		return false
-	}
-	return true
-}
-func (this *MACCommand_PingSlotChannelReq_) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*MACCommand_PingSlotChannelReq_)
-	if !ok {
-		that2, ok := that.(MACCommand_PingSlotChannelReq_)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.PingSlotChannelReq.Equal(that1.PingSlotChannelReq) {
-		return false
-	}
-	return true
-}
-func (this *MACCommand_PingSlotChannelAns_) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*MACCommand_PingSlotChannelAns_)
-	if !ok {
-		that2, ok := that.(MACCommand_PingSlotChannelAns_)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.PingSlotChannelAns.Equal(that1.PingSlotChannelAns) {
-		return false
-	}
-	return true
-}
-func (this *MACCommand_BeaconTimingAns_) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*MACCommand_BeaconTimingAns_)
-	if !ok {
-		that2, ok := that.(MACCommand_BeaconTimingAns_)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.BeaconTimingAns.Equal(that1.BeaconTimingAns) {
-		return false
-	}
-	return true
-}
-func (this *MACCommand_BeaconFreqReq_) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*MACCommand_BeaconFreqReq_)
-	if !ok {
-		that2, ok := that.(MACCommand_BeaconFreqReq_)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.BeaconFreqReq.Equal(that1.BeaconFreqReq) {
-		return false
-	}
-	return true
-}
-func (this *MACCommand_BeaconFreqAns_) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*MACCommand_BeaconFreqAns_)
-	if !ok {
-		that2, ok := that.(MACCommand_BeaconFreqAns_)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.BeaconFreqAns.Equal(that1.BeaconFreqAns) {
-		return false
-	}
-	return true
-}
-func (this *MACCommand_DeviceModeInd_) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*MACCommand_DeviceModeInd_)
-	if !ok {
-		that2, ok := that.(MACCommand_DeviceModeInd_)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.DeviceModeInd.Equal(that1.DeviceModeInd) {
-		return false
-	}
-	return true
-}
-func (this *MACCommand_DeviceModeConf_) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*MACCommand_DeviceModeConf_)
-	if !ok {
-		that2, ok := that.(MACCommand_DeviceModeConf_)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.DeviceModeConf.Equal(that1.DeviceModeConf) {
-		return false
-	}
-	return true
-}
-func (this *MACCommand_ResetInd) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*MACCommand_ResetInd)
-	if !ok {
-		that2, ok := that.(MACCommand_ResetInd)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.MinorVersion != that1.MinorVersion {
-		return false
-	}
-	return true
-}
-func (this *MACCommand_ResetConf) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*MACCommand_ResetConf)
-	if !ok {
-		that2, ok := that.(MACCommand_ResetConf)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.MinorVersion != that1.MinorVersion {
-		return false
-	}
-	return true
-}
-func (this *MACCommand_LinkCheckAns) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*MACCommand_LinkCheckAns)
-	if !ok {
-		that2, ok := that.(MACCommand_LinkCheckAns)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.Margin != that1.Margin {
-		return false
-	}
-	if this.GatewayCount != that1.GatewayCount {
-		return false
-	}
-	return true
-}
-func (this *MACCommand_LinkADRReq) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*MACCommand_LinkADRReq)
-	if !ok {
-		that2, ok := that.(MACCommand_LinkADRReq)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.DataRateIndex != that1.DataRateIndex {
-		return false
-	}
-	if this.TxPowerIndex != that1.TxPowerIndex {
-		return false
-	}
-	if len(this.ChannelMask) != len(that1.ChannelMask) {
-		return false
-	}
-	for i := range this.ChannelMask {
-		if this.ChannelMask[i] != that1.ChannelMask[i] {
-			return false
-		}
-	}
-	if this.ChannelMaskControl != that1.ChannelMaskControl {
-		return false
-	}
-	if this.NbTrans != that1.NbTrans {
-		return false
-	}
-	return true
-}
-func (this *MACCommand_LinkADRAns) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*MACCommand_LinkADRAns)
-	if !ok {
-		that2, ok := that.(MACCommand_LinkADRAns)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.ChannelMaskAck != that1.ChannelMaskAck {
-		return false
-	}
-	if this.DataRateIndexAck != that1.DataRateIndexAck {
-		return false
-	}
-	if this.TxPowerIndexAck != that1.TxPowerIndexAck {
-		return false
-	}
-	return true
-}
-func (this *MACCommand_DutyCycleReq) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*MACCommand_DutyCycleReq)
-	if !ok {
-		that2, ok := that.(MACCommand_DutyCycleReq)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.MaxDutyCycle != that1.MaxDutyCycle {
-		return false
-	}
-	return true
-}
-func (this *MACCommand_RxParamSetupReq) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*MACCommand_RxParamSetupReq)
-	if !ok {
-		that2, ok := that.(MACCommand_RxParamSetupReq)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.Rx2DataRateIndex != that1.Rx2DataRateIndex {
-		return false
-	}
-	if this.Rx1DataRateOffset != that1.Rx1DataRateOffset {
-		return false
-	}
-	if this.Rx2Frequency != that1.Rx2Frequency {
-		return false
-	}
-	return true
-}
-func (this *MACCommand_RxParamSetupAns) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*MACCommand_RxParamSetupAns)
-	if !ok {
-		that2, ok := that.(MACCommand_RxParamSetupAns)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.Rx2DataRateIndexAck != that1.Rx2DataRateIndexAck {
-		return false
-	}
-	if this.Rx1DataRateOffsetAck != that1.Rx1DataRateOffsetAck {
-		return false
-	}
-	if this.Rx2FrequencyAck != that1.Rx2FrequencyAck {
-		return false
-	}
-	return true
-}
-func (this *MACCommand_DevStatusAns) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*MACCommand_DevStatusAns)
-	if !ok {
-		that2, ok := that.(MACCommand_DevStatusAns)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.Battery != that1.Battery {
-		return false
-	}
-	if this.Margin != that1.Margin {
-		return false
-	}
-	return true
-}
-func (this *MACCommand_NewChannelReq) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*MACCommand_NewChannelReq)
-	if !ok {
-		that2, ok := that.(MACCommand_NewChannelReq)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.ChannelIndex != that1.ChannelIndex {
-		return false
-	}
-	if this.Frequency != that1.Frequency {
-		return false
-	}
-	if this.MinDataRateIndex != that1.MinDataRateIndex {
-		return false
-	}
-	if this.MaxDataRateIndex != that1.MaxDataRateIndex {
-		return false
-	}
-	return true
-}
-func (this *MACCommand_NewChannelAns) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*MACCommand_NewChannelAns)
-	if !ok {
-		that2, ok := that.(MACCommand_NewChannelAns)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.FrequencyAck != that1.FrequencyAck {
-		return false
-	}
-	if this.DataRateAck != that1.DataRateAck {
-		return false
-	}
-	return true
-}
-func (this *MACCommand_DLChannelReq) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*MACCommand_DLChannelReq)
-	if !ok {
-		that2, ok := that.(MACCommand_DLChannelReq)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.ChannelIndex != that1.ChannelIndex {
-		return false
-	}
-	if this.Frequency != that1.Frequency {
-		return false
-	}
-	return true
-}
-func (this *MACCommand_DLChannelAns) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*MACCommand_DLChannelAns)
-	if !ok {
-		that2, ok := that.(MACCommand_DLChannelAns)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.ChannelIndexAck != that1.ChannelIndexAck {
-		return false
-	}
-	if this.FrequencyAck != that1.FrequencyAck {
-		return false
-	}
-	return true
-}
-func (this *MACCommand_RxTimingSetupReq) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*MACCommand_RxTimingSetupReq)
-	if !ok {
-		that2, ok := that.(MACCommand_RxTimingSetupReq)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.Delay != that1.Delay {
-		return false
-	}
-	return true
-}
-func (this *MACCommand_TxParamSetupReq) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*MACCommand_TxParamSetupReq)
-	if !ok {
-		that2, ok := that.(MACCommand_TxParamSetupReq)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.MaxEirpIndex != that1.MaxEirpIndex {
-		return false
-	}
-	if this.UplinkDwellTime != that1.UplinkDwellTime {
-		return false
-	}
-	if this.DownlinkDwellTime != that1.DownlinkDwellTime {
-		return false
-	}
-	return true
-}
-func (this *MACCommand_RekeyInd) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*MACCommand_RekeyInd)
-	if !ok {
-		that2, ok := that.(MACCommand_RekeyInd)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.MinorVersion != that1.MinorVersion {
-		return false
-	}
-	return true
-}
-func (this *MACCommand_RekeyConf) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*MACCommand_RekeyConf)
-	if !ok {
-		that2, ok := that.(MACCommand_RekeyConf)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.MinorVersion != that1.MinorVersion {
-		return false
-	}
-	return true
-}
-func (this *MACCommand_ADRParamSetupReq) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*MACCommand_ADRParamSetupReq)
-	if !ok {
-		that2, ok := that.(MACCommand_ADRParamSetupReq)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.AdrAckLimitExponent != that1.AdrAckLimitExponent {
-		return false
-	}
-	if this.AdrAckDelayExponent != that1.AdrAckDelayExponent {
-		return false
-	}
-	return true
-}
-func (this *MACCommand_DeviceTimeAns) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*MACCommand_DeviceTimeAns)
-	if !ok {
-		that2, ok := that.(MACCommand_DeviceTimeAns)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.Time.Equal(that1.Time) {
-		return false
-	}
-	return true
-}
-func (this *MACCommand_ForceRejoinReq) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*MACCommand_ForceRejoinReq)
-	if !ok {
-		that2, ok := that.(MACCommand_ForceRejoinReq)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.RejoinType != that1.RejoinType {
-		return false
-	}
-	if this.DataRateIndex != that1.DataRateIndex {
-		return false
-	}
-	if this.MaxRetries != that1.MaxRetries {
-		return false
-	}
-	if this.PeriodExponent != that1.PeriodExponent {
-		return false
-	}
-	return true
-}
-func (this *MACCommand_RejoinParamSetupReq) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*MACCommand_RejoinParamSetupReq)
-	if !ok {
-		that2, ok := that.(MACCommand_RejoinParamSetupReq)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.MaxCountExponent != that1.MaxCountExponent {
-		return false
-	}
-	if this.MaxTimeExponent != that1.MaxTimeExponent {
-		return false
-	}
-	return true
-}
-func (this *MACCommand_RejoinParamSetupAns) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*MACCommand_RejoinParamSetupAns)
-	if !ok {
-		that2, ok := that.(MACCommand_RejoinParamSetupAns)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.MaxTimeExponentAck != that1.MaxTimeExponentAck {
-		return false
-	}
-	return true
-}
-func (this *MACCommand_PingSlotInfoReq) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*MACCommand_PingSlotInfoReq)
-	if !ok {
-		that2, ok := that.(MACCommand_PingSlotInfoReq)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.Period != that1.Period {
-		return false
-	}
-	return true
-}
-func (this *MACCommand_PingSlotChannelReq) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*MACCommand_PingSlotChannelReq)
-	if !ok {
-		that2, ok := that.(MACCommand_PingSlotChannelReq)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.Frequency != that1.Frequency {
-		return false
-	}
-	if this.DataRateIndex != that1.DataRateIndex {
-		return false
-	}
-	return true
-}
-func (this *MACCommand_PingSlotChannelAns) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*MACCommand_PingSlotChannelAns)
-	if !ok {
-		that2, ok := that.(MACCommand_PingSlotChannelAns)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.FrequencyAck != that1.FrequencyAck {
-		return false
-	}
-	if this.DataRateIndexAck != that1.DataRateIndexAck {
-		return false
-	}
-	return true
-}
-func (this *MACCommand_BeaconTimingAns) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*MACCommand_BeaconTimingAns)
-	if !ok {
-		that2, ok := that.(MACCommand_BeaconTimingAns)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.Delay != that1.Delay {
-		return false
-	}
-	if this.ChannelIndex != that1.ChannelIndex {
-		return false
-	}
-	return true
-}
-func (this *MACCommand_BeaconFreqReq) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*MACCommand_BeaconFreqReq)
-	if !ok {
-		that2, ok := that.(MACCommand_BeaconFreqReq)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.Frequency != that1.Frequency {
-		return false
-	}
-	return true
-}
-func (this *MACCommand_BeaconFreqAns) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*MACCommand_BeaconFreqAns)
-	if !ok {
-		that2, ok := that.(MACCommand_BeaconFreqAns)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.FrequencyAck != that1.FrequencyAck {
-		return false
-	}
-	return true
-}
-func (this *MACCommand_DeviceModeInd) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*MACCommand_DeviceModeInd)
-	if !ok {
-		that2, ok := that.(MACCommand_DeviceModeInd)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.Class != that1.Class {
-		return false
-	}
-	return true
-}
-func (this *MACCommand_DeviceModeConf) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*MACCommand_DeviceModeConf)
-	if !ok {
-		that2, ok := that.(MACCommand_DeviceModeConf)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.Class != that1.Class {
-		return false
-	}
-	return true
-}
-func (this *FrequencyValue) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*FrequencyValue)
-	if !ok {
-		that2, ok := that.(FrequencyValue)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.Value != that1.Value {
-		return false
-	}
-	return true
-}
-func (this *DataRateOffsetValue) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*DataRateOffsetValue)
-	if !ok {
-		that2, ok := that.(DataRateOffsetValue)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.Value != that1.Value {
-		return false
-	}
-	return true
-}
-func (this *DataRateIndexValue) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*DataRateIndexValue)
-	if !ok {
-		that2, ok := that.(DataRateIndexValue)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.Value != that1.Value {
-		return false
-	}
-	return true
-}
-func (this *PingSlotPeriodValue) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*PingSlotPeriodValue)
-	if !ok {
-		that2, ok := that.(PingSlotPeriodValue)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.Value != that1.Value {
-		return false
-	}
-	return true
-}
-func (this *AggregatedDutyCycleValue) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*AggregatedDutyCycleValue)
-	if !ok {
-		that2, ok := that.(AggregatedDutyCycleValue)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.Value != that1.Value {
-		return false
-	}
-	return true
-}
-func (this *RxDelayValue) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*RxDelayValue)
-	if !ok {
-		that2, ok := that.(RxDelayValue)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.Value != that1.Value {
-		return false
-	}
-	return true
-}
-func (this *ADRAckLimitExponentValue) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ADRAckLimitExponentValue)
-	if !ok {
-		that2, ok := that.(ADRAckLimitExponentValue)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.Value != that1.Value {
-		return false
-	}
-	return true
-}
-func (this *ADRAckDelayExponentValue) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ADRAckDelayExponentValue)
-	if !ok {
-		that2, ok := that.(ADRAckDelayExponentValue)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.Value != that1.Value {
-		return false
-	}
-	return true
-}
-func (this *DeviceEIRPValue) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*DeviceEIRPValue)
-	if !ok {
-		that2, ok := that.(DeviceEIRPValue)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.Value != that1.Value {
-		return false
-	}
-	return true
-}
-func NewPopulatedMHDR(r randyLorawan, easy bool) *MHDR {
-	this := &MHDR{}
-	this.MType = MType([]int32{0, 1, 2, 3, 4, 5, 6, 7}[r.Intn(8)])
-	this.Major = Major([]int32{0}[r.Intn(1)])
-	if !easy && r.Intn(10) != 0 {
-	}
-	return this
-}
-
-func NewPopulatedFCtrl(r randyLorawan, easy bool) *FCtrl {
-	this := &FCtrl{}
-	this.Adr = bool(bool(r.Intn(2) == 0))
-	this.AdrAckReq = bool(bool(r.Intn(2) == 0))
-	this.Ack = bool(bool(r.Intn(2) == 0))
-	this.FPending = bool(bool(r.Intn(2) == 0))
-	this.ClassB = bool(bool(r.Intn(2) == 0))
-	if !easy && r.Intn(10) != 0 {
-	}
-	return this
-}
-
-func NewPopulatedMACCommand_LinkADRAns(r randyLorawan, easy bool) *MACCommand_LinkADRAns {
-	this := &MACCommand_LinkADRAns{}
-	this.ChannelMaskAck = bool(bool(r.Intn(2) == 0))
-	this.DataRateIndexAck = bool(bool(r.Intn(2) == 0))
-	this.TxPowerIndexAck = bool(bool(r.Intn(2) == 0))
-	if !easy && r.Intn(10) != 0 {
-	}
-	return this
-}
-
-func NewPopulatedMACCommand_DutyCycleReq(r randyLorawan, easy bool) *MACCommand_DutyCycleReq {
-	this := &MACCommand_DutyCycleReq{}
-	this.MaxDutyCycle = AggregatedDutyCycle([]int32{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15}[r.Intn(16)])
-	if !easy && r.Intn(10) != 0 {
-	}
-	return this
-}
-
-func NewPopulatedMACCommand_RxParamSetupAns(r randyLorawan, easy bool) *MACCommand_RxParamSetupAns {
-	this := &MACCommand_RxParamSetupAns{}
-	this.Rx2DataRateIndexAck = bool(bool(r.Intn(2) == 0))
-	this.Rx1DataRateOffsetAck = bool(bool(r.Intn(2) == 0))
-	this.Rx2FrequencyAck = bool(bool(r.Intn(2) == 0))
-	if !easy && r.Intn(10) != 0 {
-	}
-	return this
-}
-
-func NewPopulatedMACCommand_NewChannelAns(r randyLorawan, easy bool) *MACCommand_NewChannelAns {
-	this := &MACCommand_NewChannelAns{}
-	this.FrequencyAck = bool(bool(r.Intn(2) == 0))
-	this.DataRateAck = bool(bool(r.Intn(2) == 0))
-	if !easy && r.Intn(10) != 0 {
-	}
-	return this
-}
-
-func NewPopulatedMACCommand_DLChannelAns(r randyLorawan, easy bool) *MACCommand_DLChannelAns {
-	this := &MACCommand_DLChannelAns{}
-	this.ChannelIndexAck = bool(bool(r.Intn(2) == 0))
-	this.FrequencyAck = bool(bool(r.Intn(2) == 0))
-	if !easy && r.Intn(10) != 0 {
-	}
-	return this
-}
-
-func NewPopulatedMACCommand_RxTimingSetupReq(r randyLorawan, easy bool) *MACCommand_RxTimingSetupReq {
-	this := &MACCommand_RxTimingSetupReq{}
-	this.Delay = RxDelay([]int32{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15}[r.Intn(16)])
-	if !easy && r.Intn(10) != 0 {
-	}
-	return this
-}
-
-func NewPopulatedMACCommand_TxParamSetupReq(r randyLorawan, easy bool) *MACCommand_TxParamSetupReq {
-	this := &MACCommand_TxParamSetupReq{}
-	this.MaxEirpIndex = DeviceEIRP([]int32{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15}[r.Intn(16)])
-	this.UplinkDwellTime = bool(bool(r.Intn(2) == 0))
-	this.DownlinkDwellTime = bool(bool(r.Intn(2) == 0))
-	if !easy && r.Intn(10) != 0 {
-	}
-	return this
-}
-
-func NewPopulatedMACCommand_RekeyInd(r randyLorawan, easy bool) *MACCommand_RekeyInd {
-	this := &MACCommand_RekeyInd{}
-	this.MinorVersion = Minor([]int32{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15}[r.Intn(16)])
-	if !easy && r.Intn(10) != 0 {
-	}
-	return this
-}
-
-func NewPopulatedMACCommand_RekeyConf(r randyLorawan, easy bool) *MACCommand_RekeyConf {
-	this := &MACCommand_RekeyConf{}
-	this.MinorVersion = Minor([]int32{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15}[r.Intn(16)])
-	if !easy && r.Intn(10) != 0 {
-	}
-	return this
-}
-
-func NewPopulatedMACCommand_ADRParamSetupReq(r randyLorawan, easy bool) *MACCommand_ADRParamSetupReq {
-	this := &MACCommand_ADRParamSetupReq{}
-	this.AdrAckLimitExponent = ADRAckLimitExponent([]int32{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15}[r.Intn(16)])
-	this.AdrAckDelayExponent = ADRAckDelayExponent([]int32{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15}[r.Intn(16)])
-	if !easy && r.Intn(10) != 0 {
-	}
-	return this
-}
-
-func NewPopulatedMACCommand_DeviceTimeAns(r randyLorawan, easy bool) *MACCommand_DeviceTimeAns {
-	this := &MACCommand_DeviceTimeAns{}
-	v1 := github_com_gogo_protobuf_types.NewPopulatedStdTime(r, easy)
-	this.Time = *v1
-	if !easy && r.Intn(10) != 0 {
-	}
-	return this
-}
-
-func NewPopulatedMACCommand_RejoinParamSetupReq(r randyLorawan, easy bool) *MACCommand_RejoinParamSetupReq {
-	this := &MACCommand_RejoinParamSetupReq{}
-	this.MaxCountExponent = RejoinCountExponent([]int32{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15}[r.Intn(16)])
-	this.MaxTimeExponent = RejoinTimeExponent([]int32{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15}[r.Intn(16)])
-	if !easy && r.Intn(10) != 0 {
-	}
-	return this
-}
-
-func NewPopulatedMACCommand_RejoinParamSetupAns(r randyLorawan, easy bool) *MACCommand_RejoinParamSetupAns {
-	this := &MACCommand_RejoinParamSetupAns{}
-	this.MaxTimeExponentAck = bool(bool(r.Intn(2) == 0))
-	if !easy && r.Intn(10) != 0 {
-	}
-	return this
-}
-
-func NewPopulatedMACCommand_PingSlotInfoReq(r randyLorawan, easy bool) *MACCommand_PingSlotInfoReq {
-	this := &MACCommand_PingSlotInfoReq{}
-	this.Period = PingSlotPeriod([]int32{0, 1, 2, 3, 4, 5, 6, 7}[r.Intn(8)])
-	if !easy && r.Intn(10) != 0 {
-	}
-	return this
-}
-
-func NewPopulatedMACCommand_PingSlotChannelAns(r randyLorawan, easy bool) *MACCommand_PingSlotChannelAns {
-	this := &MACCommand_PingSlotChannelAns{}
-	this.FrequencyAck = bool(bool(r.Intn(2) == 0))
-	this.DataRateIndexAck = bool(bool(r.Intn(2) == 0))
-	if !easy && r.Intn(10) != 0 {
-	}
-	return this
-}
-
-func NewPopulatedMACCommand_BeaconFreqAns(r randyLorawan, easy bool) *MACCommand_BeaconFreqAns {
-	this := &MACCommand_BeaconFreqAns{}
-	this.FrequencyAck = bool(bool(r.Intn(2) == 0))
-	if !easy && r.Intn(10) != 0 {
-	}
-	return this
-}
-
-func NewPopulatedMACCommand_DeviceModeInd(r randyLorawan, easy bool) *MACCommand_DeviceModeInd {
-	this := &MACCommand_DeviceModeInd{}
-	this.Class = Class([]int32{0, 1, 2}[r.Intn(3)])
-	if !easy && r.Intn(10) != 0 {
-	}
-	return this
-}
-
-func NewPopulatedMACCommand_DeviceModeConf(r randyLorawan, easy bool) *MACCommand_DeviceModeConf {
-	this := &MACCommand_DeviceModeConf{}
-	this.Class = Class([]int32{0, 1, 2}[r.Intn(3)])
-	if !easy && r.Intn(10) != 0 {
-	}
-	return this
-}
-
-func NewPopulatedADRAckLimitExponentValue(r randyLorawan, easy bool) *ADRAckLimitExponentValue {
-	this := &ADRAckLimitExponentValue{}
-	this.Value = ADRAckLimitExponent([]int32{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15}[r.Intn(16)])
-	if !easy && r.Intn(10) != 0 {
-	}
-	return this
-}
-
-func NewPopulatedADRAckDelayExponentValue(r randyLorawan, easy bool) *ADRAckDelayExponentValue {
-	this := &ADRAckDelayExponentValue{}
-	this.Value = ADRAckDelayExponent([]int32{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15}[r.Intn(16)])
-	if !easy && r.Intn(10) != 0 {
-	}
-	return this
-}
-
-type randyLorawan interface {
-	Float32() float32
-	Float64() float64
-	Int63() int64
-	Int31() int32
-	Uint32() uint32
-	Intn(n int) int
-}
-
-func randUTF8RuneLorawan(r randyLorawan) rune {
-	ru := r.Intn(62)
-	if ru < 10 {
-		return rune(ru + 48)
-	} else if ru < 36 {
-		return rune(ru + 55)
-	}
-	return rune(ru + 61)
-}
-func randStringLorawan(r randyLorawan) string {
-	v2 := r.Intn(100)
-	tmps := make([]rune, v2)
-	for i := 0; i < v2; i++ {
-		tmps[i] = randUTF8RuneLorawan(r)
-	}
-	return string(tmps)
-}
-func randUnrecognizedLorawan(r randyLorawan, maxFieldNumber int) (dAtA []byte) {
-	l := r.Intn(5)
-	for i := 0; i < l; i++ {
-		wire := r.Intn(4)
-		if wire == 3 {
-			wire = 5
-		}
-		fieldNumber := maxFieldNumber + r.Intn(100)
-		dAtA = randFieldLorawan(dAtA, r, fieldNumber, wire)
-	}
-	return dAtA
-}
-func randFieldLorawan(dAtA []byte, r randyLorawan, fieldNumber int, wire int) []byte {
-	key := uint32(fieldNumber)<<3 | uint32(wire)
-	switch wire {
-	case 0:
-		dAtA = encodeVarintPopulateLorawan(dAtA, uint64(key))
-		v3 := r.Int63()
-		if r.Intn(2) == 0 {
-			v3 *= -1
-		}
-		dAtA = encodeVarintPopulateLorawan(dAtA, uint64(v3))
-	case 1:
-		dAtA = encodeVarintPopulateLorawan(dAtA, uint64(key))
-		dAtA = append(dAtA, byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)))
-	case 2:
-		dAtA = encodeVarintPopulateLorawan(dAtA, uint64(key))
-		ll := r.Intn(100)
-		dAtA = encodeVarintPopulateLorawan(dAtA, uint64(ll))
-		for j := 0; j < ll; j++ {
-			dAtA = append(dAtA, byte(r.Intn(256)))
-		}
-	default:
-		dAtA = encodeVarintPopulateLorawan(dAtA, uint64(key))
-		dAtA = append(dAtA, byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)))
-	}
-	return dAtA
-}
-func encodeVarintPopulateLorawan(dAtA []byte, v uint64) []byte {
-	for v >= 1<<7 {
-		dAtA = append(dAtA, uint8(uint64(v)&0x7f|0x80))
-		v >>= 7
-	}
-	dAtA = append(dAtA, uint8(v))
-	return dAtA
-}
-func (this *Message) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&Message{`,
-		`MHDR:` + strings.Replace(strings.Replace(this.MHDR.String(), "MHDR", "MHDR", 1), `&`, ``, 1) + `,`,
-		`Mic:` + fmt.Sprintf("%v", this.Mic) + `,`,
-		`Payload:` + fmt.Sprintf("%v", this.Payload) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *Message_MacPayload) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&Message_MacPayload{`,
-		`MacPayload:` + strings.Replace(fmt.Sprintf("%v", this.MacPayload), "MACPayload", "MACPayload", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *Message_JoinRequestPayload) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&Message_JoinRequestPayload{`,
-		`JoinRequestPayload:` + strings.Replace(fmt.Sprintf("%v", this.JoinRequestPayload), "JoinRequestPayload", "JoinRequestPayload", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *Message_JoinAcceptPayload) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&Message_JoinAcceptPayload{`,
-		`JoinAcceptPayload:` + strings.Replace(fmt.Sprintf("%v", this.JoinAcceptPayload), "JoinAcceptPayload", "JoinAcceptPayload", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *Message_RejoinRequestPayload) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&Message_RejoinRequestPayload{`,
-		`RejoinRequestPayload:` + strings.Replace(fmt.Sprintf("%v", this.RejoinRequestPayload), "RejoinRequestPayload", "RejoinRequestPayload", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *MHDR) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&MHDR{`,
-		`MType:` + fmt.Sprintf("%v", this.MType) + `,`,
-		`Major:` + fmt.Sprintf("%v", this.Major) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *MACPayload) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&MACPayload{`,
-		`FHDR:` + strings.Replace(strings.Replace(this.FHDR.String(), "FHDR", "FHDR", 1), `&`, ``, 1) + `,`,
-		`FPort:` + fmt.Sprintf("%v", this.FPort) + `,`,
-		`FrmPayload:` + fmt.Sprintf("%v", this.FrmPayload) + `,`,
-		`DecodedPayload:` + strings.Replace(fmt.Sprintf("%v", this.DecodedPayload), "Struct", "types.Struct", 1) + `,`,
-		`FullFCnt:` + fmt.Sprintf("%v", this.FullFCnt) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *FHDR) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&FHDR{`,
-		`DevAddr:` + fmt.Sprintf("%v", this.DevAddr) + `,`,
-		`FCtrl:` + strings.Replace(strings.Replace(this.FCtrl.String(), "FCtrl", "FCtrl", 1), `&`, ``, 1) + `,`,
-		`FCnt:` + fmt.Sprintf("%v", this.FCnt) + `,`,
-		`FOpts:` + fmt.Sprintf("%v", this.FOpts) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *FCtrl) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&FCtrl{`,
-		`Adr:` + fmt.Sprintf("%v", this.Adr) + `,`,
-		`AdrAckReq:` + fmt.Sprintf("%v", this.AdrAckReq) + `,`,
-		`Ack:` + fmt.Sprintf("%v", this.Ack) + `,`,
-		`FPending:` + fmt.Sprintf("%v", this.FPending) + `,`,
-		`ClassB:` + fmt.Sprintf("%v", this.ClassB) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *JoinRequestPayload) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&JoinRequestPayload{`,
-		`JoinEui:` + fmt.Sprintf("%v", this.JoinEui) + `,`,
-		`DevEui:` + fmt.Sprintf("%v", this.DevEui) + `,`,
-		`DevNonce:` + fmt.Sprintf("%v", this.DevNonce) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *RejoinRequestPayload) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&RejoinRequestPayload{`,
-		`RejoinType:` + fmt.Sprintf("%v", this.RejoinType) + `,`,
-		`NetId:` + fmt.Sprintf("%v", this.NetId) + `,`,
-		`JoinEui:` + fmt.Sprintf("%v", this.JoinEui) + `,`,
-		`DevEui:` + fmt.Sprintf("%v", this.DevEui) + `,`,
-		`RejoinCnt:` + fmt.Sprintf("%v", this.RejoinCnt) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *JoinAcceptPayload) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&JoinAcceptPayload{`,
-		`Encrypted:` + fmt.Sprintf("%v", this.Encrypted) + `,`,
-		`JoinNonce:` + fmt.Sprintf("%v", this.JoinNonce) + `,`,
-		`NetId:` + fmt.Sprintf("%v", this.NetId) + `,`,
-		`DevAddr:` + fmt.Sprintf("%v", this.DevAddr) + `,`,
-		`DLSettings:` + strings.Replace(strings.Replace(this.DLSettings.String(), "DLSettings", "DLSettings", 1), `&`, ``, 1) + `,`,
-		`RxDelay:` + fmt.Sprintf("%v", this.RxDelay) + `,`,
-		`CfList:` + strings.Replace(this.CfList.String(), "CFList", "CFList", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *DLSettings) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&DLSettings{`,
-		`Rx1DrOffset:` + fmt.Sprintf("%v", this.Rx1DrOffset) + `,`,
-		`Rx2Dr:` + fmt.Sprintf("%v", this.Rx2Dr) + `,`,
-		`OptNeg:` + fmt.Sprintf("%v", this.OptNeg) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *CFList) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&CFList{`,
-		`Type:` + fmt.Sprintf("%v", this.Type) + `,`,
-		`Freq:` + fmt.Sprintf("%v", this.Freq) + `,`,
-		`ChMasks:` + fmt.Sprintf("%v", this.ChMasks) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *LoRaDataRate) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&LoRaDataRate{`,
-		`Bandwidth:` + fmt.Sprintf("%v", this.Bandwidth) + `,`,
-		`SpreadingFactor:` + fmt.Sprintf("%v", this.SpreadingFactor) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *FSKDataRate) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&FSKDataRate{`,
-		`BitRate:` + fmt.Sprintf("%v", this.BitRate) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *LRFHSSDataRate) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&LRFHSSDataRate{`,
-		`ModulationType:` + fmt.Sprintf("%v", this.ModulationType) + `,`,
-		`OperatingChannelWidth:` + fmt.Sprintf("%v", this.OperatingChannelWidth) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *DataRate) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&DataRate{`,
-		`Modulation:` + fmt.Sprintf("%v", this.Modulation) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *DataRate_Lora) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&DataRate_Lora{`,
-		`Lora:` + strings.Replace(fmt.Sprintf("%v", this.Lora), "LoRaDataRate", "LoRaDataRate", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *DataRate_Fsk) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&DataRate_Fsk{`,
-		`Fsk:` + strings.Replace(fmt.Sprintf("%v", this.Fsk), "FSKDataRate", "FSKDataRate", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *DataRate_Lrfhss) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&DataRate_Lrfhss{`,
-		`Lrfhss:` + strings.Replace(fmt.Sprintf("%v", this.Lrfhss), "LRFHSSDataRate", "LRFHSSDataRate", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *TxSettings) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&TxSettings{`,
-		`DataRate:` + strings.Replace(strings.Replace(this.DataRate.String(), "DataRate", "DataRate", 1), `&`, ``, 1) + `,`,
-		`DataRateIndex:` + fmt.Sprintf("%v", this.DataRateIndex) + `,`,
-		`CodingRate:` + fmt.Sprintf("%v", this.CodingRate) + `,`,
-		`Frequency:` + fmt.Sprintf("%v", this.Frequency) + `,`,
-		`EnableCrc:` + fmt.Sprintf("%v", this.EnableCrc) + `,`,
-		`Timestamp:` + fmt.Sprintf("%v", this.Timestamp) + `,`,
-		`Time:` + strings.Replace(fmt.Sprintf("%v", this.Time), "Timestamp", "types.Timestamp", 1) + `,`,
-		`Downlink:` + strings.Replace(fmt.Sprintf("%v", this.Downlink), "TxSettings_Downlink", "TxSettings_Downlink", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *TxSettings_Downlink) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&TxSettings_Downlink{`,
-		`AntennaIndex:` + fmt.Sprintf("%v", this.AntennaIndex) + `,`,
-		`TxPower:` + fmt.Sprintf("%v", this.TxPower) + `,`,
-		`InvertPolarization:` + fmt.Sprintf("%v", this.InvertPolarization) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *GatewayAntennaIdentifiers) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&GatewayAntennaIdentifiers{`,
-		`GatewayIdentifiers:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.GatewayIdentifiers), "GatewayIdentifiers", "GatewayIdentifiers", 1), `&`, ``, 1) + `,`,
-		`AntennaIndex:` + fmt.Sprintf("%v", this.AntennaIndex) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *UplinkToken) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&UplinkToken{`,
-		`GatewayAntennaIdentifiers:` + strings.Replace(strings.Replace(this.GatewayAntennaIdentifiers.String(), "GatewayAntennaIdentifiers", "GatewayAntennaIdentifiers", 1), `&`, ``, 1) + `,`,
-		`Timestamp:` + fmt.Sprintf("%v", this.Timestamp) + `,`,
-		`ServerTime:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.ServerTime), "Timestamp", "types.Timestamp", 1), `&`, ``, 1) + `,`,
-		`ConcentratorTime:` + fmt.Sprintf("%v", this.ConcentratorTime) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *DownlinkPath) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&DownlinkPath{`,
-		`Path:` + fmt.Sprintf("%v", this.Path) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *DownlinkPath_UplinkToken) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&DownlinkPath_UplinkToken{`,
-		`UplinkToken:` + fmt.Sprintf("%v", this.UplinkToken) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *DownlinkPath_Fixed) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&DownlinkPath_Fixed{`,
-		`Fixed:` + strings.Replace(fmt.Sprintf("%v", this.Fixed), "GatewayAntennaIdentifiers", "GatewayAntennaIdentifiers", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *TxRequest) String() string {
-	if this == nil {
-		return "nil"
-	}
-	repeatedStringForDownlinkPaths := "[]*DownlinkPath{"
-	for _, f := range this.DownlinkPaths {
-		repeatedStringForDownlinkPaths += strings.Replace(f.String(), "DownlinkPath", "DownlinkPath", 1) + ","
-	}
-	repeatedStringForDownlinkPaths += "}"
-	s := strings.Join([]string{`&TxRequest{`,
-		`Class:` + fmt.Sprintf("%v", this.Class) + `,`,
-		`DownlinkPaths:` + repeatedStringForDownlinkPaths + `,`,
-		`Rx1Delay:` + fmt.Sprintf("%v", this.Rx1Delay) + `,`,
-		`Rx1DataRateIndex:` + fmt.Sprintf("%v", this.Rx1DataRateIndex) + `,`,
-		`Rx1Frequency:` + fmt.Sprintf("%v", this.Rx1Frequency) + `,`,
-		`Rx2DataRateIndex:` + fmt.Sprintf("%v", this.Rx2DataRateIndex) + `,`,
-		`Rx2Frequency:` + fmt.Sprintf("%v", this.Rx2Frequency) + `,`,
-		`Priority:` + fmt.Sprintf("%v", this.Priority) + `,`,
-		`AbsoluteTime:` + strings.Replace(fmt.Sprintf("%v", this.AbsoluteTime), "Timestamp", "types.Timestamp", 1) + `,`,
-		`FrequencyPlanId:` + fmt.Sprintf("%v", this.FrequencyPlanId) + `,`,
-		`LorawanPhyVersion:` + fmt.Sprintf("%v", this.LorawanPhyVersion) + `,`,
-		`Advanced:` + strings.Replace(fmt.Sprintf("%v", this.Advanced), "Struct", "types.Struct", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *MACCommand) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&MACCommand{`,
-		`Cid:` + fmt.Sprintf("%v", this.Cid) + `,`,
-		`Payload:` + fmt.Sprintf("%v", this.Payload) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *MACCommand_RawPayload) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&MACCommand_RawPayload{`,
-		`RawPayload:` + fmt.Sprintf("%v", this.RawPayload) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *MACCommand_ResetInd_) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&MACCommand_ResetInd_{`,
-		`ResetInd:` + strings.Replace(fmt.Sprintf("%v", this.ResetInd), "MACCommand_ResetInd", "MACCommand_ResetInd", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *MACCommand_ResetConf_) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&MACCommand_ResetConf_{`,
-		`ResetConf:` + strings.Replace(fmt.Sprintf("%v", this.ResetConf), "MACCommand_ResetConf", "MACCommand_ResetConf", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *MACCommand_LinkCheckAns_) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&MACCommand_LinkCheckAns_{`,
-		`LinkCheckAns:` + strings.Replace(fmt.Sprintf("%v", this.LinkCheckAns), "MACCommand_LinkCheckAns", "MACCommand_LinkCheckAns", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *MACCommand_LinkAdrReq) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&MACCommand_LinkAdrReq{`,
-		`LinkAdrReq:` + strings.Replace(fmt.Sprintf("%v", this.LinkAdrReq), "MACCommand_LinkADRReq", "MACCommand_LinkADRReq", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *MACCommand_LinkAdrAns) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&MACCommand_LinkAdrAns{`,
-		`LinkAdrAns:` + strings.Replace(fmt.Sprintf("%v", this.LinkAdrAns), "MACCommand_LinkADRAns", "MACCommand_LinkADRAns", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *MACCommand_DutyCycleReq_) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&MACCommand_DutyCycleReq_{`,
-		`DutyCycleReq:` + strings.Replace(fmt.Sprintf("%v", this.DutyCycleReq), "MACCommand_DutyCycleReq", "MACCommand_DutyCycleReq", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *MACCommand_RxParamSetupReq_) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&MACCommand_RxParamSetupReq_{`,
-		`RxParamSetupReq:` + strings.Replace(fmt.Sprintf("%v", this.RxParamSetupReq), "MACCommand_RxParamSetupReq", "MACCommand_RxParamSetupReq", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *MACCommand_RxParamSetupAns_) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&MACCommand_RxParamSetupAns_{`,
-		`RxParamSetupAns:` + strings.Replace(fmt.Sprintf("%v", this.RxParamSetupAns), "MACCommand_RxParamSetupAns", "MACCommand_RxParamSetupAns", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *MACCommand_DevStatusAns_) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&MACCommand_DevStatusAns_{`,
-		`DevStatusAns:` + strings.Replace(fmt.Sprintf("%v", this.DevStatusAns), "MACCommand_DevStatusAns", "MACCommand_DevStatusAns", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *MACCommand_NewChannelReq_) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&MACCommand_NewChannelReq_{`,
-		`NewChannelReq:` + strings.Replace(fmt.Sprintf("%v", this.NewChannelReq), "MACCommand_NewChannelReq", "MACCommand_NewChannelReq", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *MACCommand_NewChannelAns_) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&MACCommand_NewChannelAns_{`,
-		`NewChannelAns:` + strings.Replace(fmt.Sprintf("%v", this.NewChannelAns), "MACCommand_NewChannelAns", "MACCommand_NewChannelAns", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *MACCommand_DlChannelReq) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&MACCommand_DlChannelReq{`,
-		`DlChannelReq:` + strings.Replace(fmt.Sprintf("%v", this.DlChannelReq), "MACCommand_DLChannelReq", "MACCommand_DLChannelReq", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *MACCommand_DlChannelAns) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&MACCommand_DlChannelAns{`,
-		`DlChannelAns:` + strings.Replace(fmt.Sprintf("%v", this.DlChannelAns), "MACCommand_DLChannelAns", "MACCommand_DLChannelAns", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *MACCommand_RxTimingSetupReq_) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&MACCommand_RxTimingSetupReq_{`,
-		`RxTimingSetupReq:` + strings.Replace(fmt.Sprintf("%v", this.RxTimingSetupReq), "MACCommand_RxTimingSetupReq", "MACCommand_RxTimingSetupReq", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *MACCommand_TxParamSetupReq_) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&MACCommand_TxParamSetupReq_{`,
-		`TxParamSetupReq:` + strings.Replace(fmt.Sprintf("%v", this.TxParamSetupReq), "MACCommand_TxParamSetupReq", "MACCommand_TxParamSetupReq", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *MACCommand_RekeyInd_) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&MACCommand_RekeyInd_{`,
-		`RekeyInd:` + strings.Replace(fmt.Sprintf("%v", this.RekeyInd), "MACCommand_RekeyInd", "MACCommand_RekeyInd", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *MACCommand_RekeyConf_) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&MACCommand_RekeyConf_{`,
-		`RekeyConf:` + strings.Replace(fmt.Sprintf("%v", this.RekeyConf), "MACCommand_RekeyConf", "MACCommand_RekeyConf", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *MACCommand_AdrParamSetupReq) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&MACCommand_AdrParamSetupReq{`,
-		`AdrParamSetupReq:` + strings.Replace(fmt.Sprintf("%v", this.AdrParamSetupReq), "MACCommand_ADRParamSetupReq", "MACCommand_ADRParamSetupReq", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *MACCommand_DeviceTimeAns_) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&MACCommand_DeviceTimeAns_{`,
-		`DeviceTimeAns:` + strings.Replace(fmt.Sprintf("%v", this.DeviceTimeAns), "MACCommand_DeviceTimeAns", "MACCommand_DeviceTimeAns", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *MACCommand_ForceRejoinReq_) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&MACCommand_ForceRejoinReq_{`,
-		`ForceRejoinReq:` + strings.Replace(fmt.Sprintf("%v", this.ForceRejoinReq), "MACCommand_ForceRejoinReq", "MACCommand_ForceRejoinReq", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *MACCommand_RejoinParamSetupReq_) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&MACCommand_RejoinParamSetupReq_{`,
-		`RejoinParamSetupReq:` + strings.Replace(fmt.Sprintf("%v", this.RejoinParamSetupReq), "MACCommand_RejoinParamSetupReq", "MACCommand_RejoinParamSetupReq", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *MACCommand_RejoinParamSetupAns_) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&MACCommand_RejoinParamSetupAns_{`,
-		`RejoinParamSetupAns:` + strings.Replace(fmt.Sprintf("%v", this.RejoinParamSetupAns), "MACCommand_RejoinParamSetupAns", "MACCommand_RejoinParamSetupAns", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *MACCommand_PingSlotInfoReq_) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&MACCommand_PingSlotInfoReq_{`,
-		`PingSlotInfoReq:` + strings.Replace(fmt.Sprintf("%v", this.PingSlotInfoReq), "MACCommand_PingSlotInfoReq", "MACCommand_PingSlotInfoReq", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *MACCommand_PingSlotChannelReq_) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&MACCommand_PingSlotChannelReq_{`,
-		`PingSlotChannelReq:` + strings.Replace(fmt.Sprintf("%v", this.PingSlotChannelReq), "MACCommand_PingSlotChannelReq", "MACCommand_PingSlotChannelReq", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *MACCommand_PingSlotChannelAns_) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&MACCommand_PingSlotChannelAns_{`,
-		`PingSlotChannelAns:` + strings.Replace(fmt.Sprintf("%v", this.PingSlotChannelAns), "MACCommand_PingSlotChannelAns", "MACCommand_PingSlotChannelAns", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *MACCommand_BeaconTimingAns_) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&MACCommand_BeaconTimingAns_{`,
-		`BeaconTimingAns:` + strings.Replace(fmt.Sprintf("%v", this.BeaconTimingAns), "MACCommand_BeaconTimingAns", "MACCommand_BeaconTimingAns", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *MACCommand_BeaconFreqReq_) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&MACCommand_BeaconFreqReq_{`,
-		`BeaconFreqReq:` + strings.Replace(fmt.Sprintf("%v", this.BeaconFreqReq), "MACCommand_BeaconFreqReq", "MACCommand_BeaconFreqReq", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *MACCommand_BeaconFreqAns_) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&MACCommand_BeaconFreqAns_{`,
-		`BeaconFreqAns:` + strings.Replace(fmt.Sprintf("%v", this.BeaconFreqAns), "MACCommand_BeaconFreqAns", "MACCommand_BeaconFreqAns", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *MACCommand_DeviceModeInd_) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&MACCommand_DeviceModeInd_{`,
-		`DeviceModeInd:` + strings.Replace(fmt.Sprintf("%v", this.DeviceModeInd), "MACCommand_DeviceModeInd", "MACCommand_DeviceModeInd", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *MACCommand_DeviceModeConf_) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&MACCommand_DeviceModeConf_{`,
-		`DeviceModeConf:` + strings.Replace(fmt.Sprintf("%v", this.DeviceModeConf), "MACCommand_DeviceModeConf", "MACCommand_DeviceModeConf", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *MACCommand_ResetInd) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&MACCommand_ResetInd{`,
-		`MinorVersion:` + fmt.Sprintf("%v", this.MinorVersion) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *MACCommand_ResetConf) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&MACCommand_ResetConf{`,
-		`MinorVersion:` + fmt.Sprintf("%v", this.MinorVersion) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *MACCommand_LinkCheckAns) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&MACCommand_LinkCheckAns{`,
-		`Margin:` + fmt.Sprintf("%v", this.Margin) + `,`,
-		`GatewayCount:` + fmt.Sprintf("%v", this.GatewayCount) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *MACCommand_LinkADRReq) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&MACCommand_LinkADRReq{`,
-		`DataRateIndex:` + fmt.Sprintf("%v", this.DataRateIndex) + `,`,
-		`TxPowerIndex:` + fmt.Sprintf("%v", this.TxPowerIndex) + `,`,
-		`ChannelMask:` + fmt.Sprintf("%v", this.ChannelMask) + `,`,
-		`ChannelMaskControl:` + fmt.Sprintf("%v", this.ChannelMaskControl) + `,`,
-		`NbTrans:` + fmt.Sprintf("%v", this.NbTrans) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *MACCommand_LinkADRAns) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&MACCommand_LinkADRAns{`,
-		`ChannelMaskAck:` + fmt.Sprintf("%v", this.ChannelMaskAck) + `,`,
-		`DataRateIndexAck:` + fmt.Sprintf("%v", this.DataRateIndexAck) + `,`,
-		`TxPowerIndexAck:` + fmt.Sprintf("%v", this.TxPowerIndexAck) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *MACCommand_DutyCycleReq) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&MACCommand_DutyCycleReq{`,
-		`MaxDutyCycle:` + fmt.Sprintf("%v", this.MaxDutyCycle) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *MACCommand_RxParamSetupReq) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&MACCommand_RxParamSetupReq{`,
-		`Rx2DataRateIndex:` + fmt.Sprintf("%v", this.Rx2DataRateIndex) + `,`,
-		`Rx1DataRateOffset:` + fmt.Sprintf("%v", this.Rx1DataRateOffset) + `,`,
-		`Rx2Frequency:` + fmt.Sprintf("%v", this.Rx2Frequency) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *MACCommand_RxParamSetupAns) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&MACCommand_RxParamSetupAns{`,
-		`Rx2DataRateIndexAck:` + fmt.Sprintf("%v", this.Rx2DataRateIndexAck) + `,`,
-		`Rx1DataRateOffsetAck:` + fmt.Sprintf("%v", this.Rx1DataRateOffsetAck) + `,`,
-		`Rx2FrequencyAck:` + fmt.Sprintf("%v", this.Rx2FrequencyAck) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *MACCommand_DevStatusAns) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&MACCommand_DevStatusAns{`,
-		`Battery:` + fmt.Sprintf("%v", this.Battery) + `,`,
-		`Margin:` + fmt.Sprintf("%v", this.Margin) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *MACCommand_NewChannelReq) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&MACCommand_NewChannelReq{`,
-		`ChannelIndex:` + fmt.Sprintf("%v", this.ChannelIndex) + `,`,
-		`Frequency:` + fmt.Sprintf("%v", this.Frequency) + `,`,
-		`MinDataRateIndex:` + fmt.Sprintf("%v", this.MinDataRateIndex) + `,`,
-		`MaxDataRateIndex:` + fmt.Sprintf("%v", this.MaxDataRateIndex) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *MACCommand_NewChannelAns) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&MACCommand_NewChannelAns{`,
-		`FrequencyAck:` + fmt.Sprintf("%v", this.FrequencyAck) + `,`,
-		`DataRateAck:` + fmt.Sprintf("%v", this.DataRateAck) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *MACCommand_DLChannelReq) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&MACCommand_DLChannelReq{`,
-		`ChannelIndex:` + fmt.Sprintf("%v", this.ChannelIndex) + `,`,
-		`Frequency:` + fmt.Sprintf("%v", this.Frequency) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *MACCommand_DLChannelAns) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&MACCommand_DLChannelAns{`,
-		`ChannelIndexAck:` + fmt.Sprintf("%v", this.ChannelIndexAck) + `,`,
-		`FrequencyAck:` + fmt.Sprintf("%v", this.FrequencyAck) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *MACCommand_RxTimingSetupReq) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&MACCommand_RxTimingSetupReq{`,
-		`Delay:` + fmt.Sprintf("%v", this.Delay) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *MACCommand_TxParamSetupReq) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&MACCommand_TxParamSetupReq{`,
-		`MaxEirpIndex:` + fmt.Sprintf("%v", this.MaxEirpIndex) + `,`,
-		`UplinkDwellTime:` + fmt.Sprintf("%v", this.UplinkDwellTime) + `,`,
-		`DownlinkDwellTime:` + fmt.Sprintf("%v", this.DownlinkDwellTime) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *MACCommand_RekeyInd) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&MACCommand_RekeyInd{`,
-		`MinorVersion:` + fmt.Sprintf("%v", this.MinorVersion) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *MACCommand_RekeyConf) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&MACCommand_RekeyConf{`,
-		`MinorVersion:` + fmt.Sprintf("%v", this.MinorVersion) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *MACCommand_ADRParamSetupReq) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&MACCommand_ADRParamSetupReq{`,
-		`AdrAckLimitExponent:` + fmt.Sprintf("%v", this.AdrAckLimitExponent) + `,`,
-		`AdrAckDelayExponent:` + fmt.Sprintf("%v", this.AdrAckDelayExponent) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *MACCommand_DeviceTimeAns) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&MACCommand_DeviceTimeAns{`,
-		`Time:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.Time), "Timestamp", "types.Timestamp", 1), `&`, ``, 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *MACCommand_ForceRejoinReq) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&MACCommand_ForceRejoinReq{`,
-		`RejoinType:` + fmt.Sprintf("%v", this.RejoinType) + `,`,
-		`DataRateIndex:` + fmt.Sprintf("%v", this.DataRateIndex) + `,`,
-		`MaxRetries:` + fmt.Sprintf("%v", this.MaxRetries) + `,`,
-		`PeriodExponent:` + fmt.Sprintf("%v", this.PeriodExponent) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *MACCommand_RejoinParamSetupReq) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&MACCommand_RejoinParamSetupReq{`,
-		`MaxCountExponent:` + fmt.Sprintf("%v", this.MaxCountExponent) + `,`,
-		`MaxTimeExponent:` + fmt.Sprintf("%v", this.MaxTimeExponent) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *MACCommand_RejoinParamSetupAns) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&MACCommand_RejoinParamSetupAns{`,
-		`MaxTimeExponentAck:` + fmt.Sprintf("%v", this.MaxTimeExponentAck) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *MACCommand_PingSlotInfoReq) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&MACCommand_PingSlotInfoReq{`,
-		`Period:` + fmt.Sprintf("%v", this.Period) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *MACCommand_PingSlotChannelReq) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&MACCommand_PingSlotChannelReq{`,
-		`Frequency:` + fmt.Sprintf("%v", this.Frequency) + `,`,
-		`DataRateIndex:` + fmt.Sprintf("%v", this.DataRateIndex) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *MACCommand_PingSlotChannelAns) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&MACCommand_PingSlotChannelAns{`,
-		`FrequencyAck:` + fmt.Sprintf("%v", this.FrequencyAck) + `,`,
-		`DataRateIndexAck:` + fmt.Sprintf("%v", this.DataRateIndexAck) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *MACCommand_BeaconTimingAns) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&MACCommand_BeaconTimingAns{`,
-		`Delay:` + fmt.Sprintf("%v", this.Delay) + `,`,
-		`ChannelIndex:` + fmt.Sprintf("%v", this.ChannelIndex) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *MACCommand_BeaconFreqReq) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&MACCommand_BeaconFreqReq{`,
-		`Frequency:` + fmt.Sprintf("%v", this.Frequency) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *MACCommand_BeaconFreqAns) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&MACCommand_BeaconFreqAns{`,
-		`FrequencyAck:` + fmt.Sprintf("%v", this.FrequencyAck) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *MACCommand_DeviceModeInd) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&MACCommand_DeviceModeInd{`,
-		`Class:` + fmt.Sprintf("%v", this.Class) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *MACCommand_DeviceModeConf) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&MACCommand_DeviceModeConf{`,
-		`Class:` + fmt.Sprintf("%v", this.Class) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *FrequencyValue) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&FrequencyValue{`,
-		`Value:` + fmt.Sprintf("%v", this.Value) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *DataRateOffsetValue) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&DataRateOffsetValue{`,
-		`Value:` + fmt.Sprintf("%v", this.Value) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *DataRateIndexValue) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&DataRateIndexValue{`,
-		`Value:` + fmt.Sprintf("%v", this.Value) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *PingSlotPeriodValue) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&PingSlotPeriodValue{`,
-		`Value:` + fmt.Sprintf("%v", this.Value) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *AggregatedDutyCycleValue) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&AggregatedDutyCycleValue{`,
-		`Value:` + fmt.Sprintf("%v", this.Value) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *RxDelayValue) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&RxDelayValue{`,
-		`Value:` + fmt.Sprintf("%v", this.Value) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *ADRAckLimitExponentValue) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&ADRAckLimitExponentValue{`,
-		`Value:` + fmt.Sprintf("%v", this.Value) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *ADRAckDelayExponentValue) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&ADRAckDelayExponentValue{`,
-		`Value:` + fmt.Sprintf("%v", this.Value) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *DeviceEIRPValue) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&DeviceEIRPValue{`,
-		`Value:` + fmt.Sprintf("%v", this.Value) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func valueToStringLorawan(v interface{}) string {
-	rv := reflect.ValueOf(v)
-	if rv.IsNil() {
-		return "nil"
-	}
-	pv := reflect.Indirect(rv).Interface()
-	return fmt.Sprintf("*%v", pv)
+	// 6252 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x7c, 0x5d, 0x6c, 0x23, 0x57,
+	0x76, 0xa6, 0x8a, 0xff, 0x3a, 0x24, 0xc5, 0xea, 0xab, 0xfe, 0x21, 0x69, 0x8f, 0xbb, 0xad, 0xf6,
+	0xee, 0xf4, 0xd0, 0x68, 0x49, 0xa4, 0xd4, 0x6a, 0xd9, 0x3b, 0x1e, 0x9b, 0xa4, 0x28, 0x4b, 0xdd,
+	0xfa, 0x9b, 0xa2, 0xba, 0xdb, 0xbd, 0x3b, 0xbb, 0xb5, 0x25, 0x56, 0x51, 0xa2, 0x45, 0x56, 0xd1,
+	0xc5, 0x92, 0x5a, 0x9a, 0x7d, 0x5a, 0x2f, 0x16, 0x0b, 0x0c, 0xb0, 0x48, 0xe0, 0xb7, 0xc9, 0x04,
+	0xc1, 0x20, 0x2f, 0x09, 0x94, 0x97, 0x60, 0xf2, 0x34, 0x09, 0x02, 0x24, 0x79, 0xc8, 0x53, 0x82,
+	0x20, 0x0f, 0x79, 0x48, 0xf2, 0x90, 0x01, 0x26, 0x48, 0x00, 0x05, 0x99, 0x04, 0x4e, 0x02, 0x04,
+	0x7e, 0x88, 0x83, 0x73, 0xef, 0x2d, 0xd6, 0xad, 0x2a, 0xea, 0xcf, 0x63, 0x67, 0xe6, 0xc1, 0x7e,
+	0x69, 0xd6, 0x77, 0xef, 0xfd, 0xce, 0xb9, 0xe7, 0x9c, 0x7b, 0xee, 0xb9, 0xb7, 0x4a, 0x86, 0xdb,
+	0x5d, 0xcb, 0xd6, 0x5e, 0x68, 0xe6, 0xfd, 0x81, 0xa3, 0xb5, 0xf6, 0x67, 0xb4, 0x7e, 0x67, 0x86,
+	0x23, 0xd3, 0x7d, 0xdb, 0x72, 0x2c, 0x32, 0xe1, 0x38, 0xe6, 0xb4, 0x0b, 0x1d, 0xce, 0x15, 0x97,
+	0x76, 0x3b, 0xce, 0xde, 0xc1, 0xce, 0x74, 0xcb, 0xea, 0xcd, 0x6c, 0xef, 0x19, 0xdb, 0x7b, 0x1d,
+	0x73, 0x77, 0xb0, 0x6a, 0xea, 0x07, 0x03, 0xc7, 0xee, 0x18, 0x83, 0x19, 0x3a, 0xaa, 0x75, 0x7f,
+	0xd7, 0x30, 0xef, 0xef, 0x5a, 0xf7, 0xdb, 0x5d, 0x6d, 0x77, 0x30, 0xa3, 0x99, 0xa6, 0xe5, 0x68,
+	0x4e, 0xc7, 0x32, 0x07, 0x8c, 0xb5, 0x58, 0x15, 0x58, 0x0c, 0xf3, 0xd0, 0x3a, 0xee, 0xdb, 0xd6,
+	0xd1, 0xb1, 0x38, 0xf8, 0x50, 0xeb, 0x76, 0x74, 0xcd, 0x31, 0x66, 0x42, 0x3f, 0x38, 0xc5, 0x7d,
+	0x81, 0x62, 0xd7, 0xda, 0xb5, 0xd8, 0xe0, 0x9d, 0x83, 0x36, 0x7d, 0xa2, 0x0f, 0xf4, 0x17, 0xef,
+	0x5e, 0xbf, 0x92, 0xde, 0xef, 0x0f, 0x2c, 0x73, 0x84, 0xda, 0x2f, 0xef, 0x5a, 0xd6, 0x6e, 0xd7,
+	0xf0, 0x44, 0x0d, 0x1c, 0xfb, 0xa0, 0xe5, 0xf0, 0xd6, 0xdb, 0xc1, 0x56, 0xa7, 0xd3, 0x33, 0x06,
+	0x8e, 0xd6, 0xeb, 0xf3, 0x0e, 0x77, 0xc3, 0xc6, 0xee, 0xe8, 0x86, 0xe9, 0x74, 0xda, 0x1d, 0xc3,
+	0x76, 0x65, 0x4c, 0x0b, 0x9a, 0x58, 0x7d, 0xc3, 0xd4, 0xfa, 0x9d, 0xc3, 0xca, 0x8c, 0xd5, 0xa7,
+	0x7a, 0x84, 0x75, 0x9a, 0xfa, 0x9d, 0x28, 0x24, 0xd7, 0x8d, 0xc1, 0x40, 0xdb, 0x35, 0xc8, 0x1c,
+	0xc4, 0x7b, 0xea, 0x9e, 0x6e, 0xe7, 0xa5, 0x3b, 0xd2, 0xbd, 0x74, 0xe5, 0xfa, 0xb4, 0xdf, 0x79,
+	0xd3, 0xeb, 0x2b, 0x4b, 0x4a, 0x2d, 0xf5, 0x49, 0x2d, 0xfe, 0x1d, 0x29, 0x22, 0x4b, 0x4a, 0xac,
+	0xb7, 0xa2, 0xdb, 0xe4, 0x25, 0x88, 0xf6, 0x3a, 0xad, 0x7c, 0xe4, 0x8e, 0x74, 0x2f, 0x53, 0x1b,
+	0xff, 0xa4, 0x96, 0xf8, 0x76, 0x4c, 0x1e, 0xcb, 0xc7, 0x14, 0x44, 0xc9, 0x5b, 0x90, 0xee, 0x69,
+	0x2d, 0xb5, 0xaf, 0x1d, 0x77, 0x2d, 0x4d, 0xcf, 0x47, 0x29, 0x6f, 0x31, 0xc4, 0x5b, 0xad, 0x6f,
+	0xb1, 0x1e, 0x2b, 0x63, 0x0a, 0xf4, 0xb4, 0x16, 0x7f, 0x22, 0x4f, 0xe1, 0xfa, 0xfb, 0x56, 0xc7,
+	0x54, 0x6d, 0xe3, 0x83, 0x03, 0x63, 0xe0, 0x0c, 0x79, 0x62, 0x94, 0x67, 0x2a, 0xc8, 0xf3, 0xc8,
+	0xea, 0x98, 0x0a, 0xeb, 0xea, 0xf1, 0x91, 0xf7, 0x43, 0x28, 0x69, 0xc2, 0x24, 0xe5, 0xd5, 0x5a,
+	0x2d, 0xa3, 0xef, 0xd1, 0xc6, 0x29, 0xed, 0xab, 0xa3, 0x68, 0xab, 0xb4, 0xa7, 0xc7, 0x7a, 0xed,
+	0xfd, 0x20, 0x48, 0xbe, 0x05, 0x37, 0x6d, 0x63, 0xa4, 0xba, 0x09, 0xca, 0xfb, 0x5a, 0x90, 0x57,
+	0x31, 0xde, 0x1f, 0xa5, 0xf0, 0x75, 0x7b, 0x04, 0x5e, 0x9b, 0x80, 0xa4, 0x2b, 0x28, 0xfa, 0xaf,
+	0x35, 0xe9, 0x51, 0x2c, 0x95, 0x94, 0x53, 0x53, 0x07, 0x10, 0x43, 0xa7, 0x90, 0x05, 0x48, 0xf4,
+	0x54, 0xe7, 0xb8, 0x6f, 0x50, 0xd7, 0x4d, 0x54, 0x6e, 0x84, 0x4c, 0xbc, 0x7d, 0xdc, 0x37, 0xa8,
+	0xef, 0x3e, 0xa4, 0xbe, 0x8b, 0xf7, 0x10, 0x20, 0x0f, 0x20, 0xde, 0xd3, 0xde, 0xb7, 0x6c, 0xea,
+	0xbe, 0x51, 0xc3, 0xb0, 0xd1, 0x37, 0x0c, 0x81, 0xa9, 0x1f, 0x4b, 0x00, 0x9e, 0xd3, 0x30, 0x6e,
+	0xda, 0xe7, 0xc5, 0xcd, 0x72, 0x20, 0x6e, 0xda, 0x18, 0x37, 0xb7, 0x21, 0xd1, 0x56, 0xfb, 0x96,
+	0xed, 0x50, 0xd9, 0x59, 0xda, 0x5e, 0x8a, 0xe6, 0x3f, 0x95, 0x94, 0x78, 0x7b, 0xcb, 0xb2, 0x1d,
+	0x72, 0x1b, 0xd2, 0x6d, 0xbb, 0xe7, 0x8b, 0x9d, 0x8c, 0x02, 0x6d, 0xbb, 0xe7, 0x8a, 0x7d, 0x07,
+	0x72, 0xba, 0xd1, 0xb2, 0x74, 0x43, 0x0f, 0x04, 0xc6, 0xad, 0x69, 0xb6, 0x94, 0xa6, 0xdd, 0xa5,
+	0x34, 0xdd, 0xa4, 0x0b, 0x4d, 0x99, 0xe0, 0xfd, 0x5d, 0x86, 0x97, 0x01, 0xda, 0x07, 0xdd, 0xae,
+	0xda, 0x56, 0x5b, 0xa6, 0x43, 0xdd, 0x9f, 0x55, 0x52, 0x88, 0x2c, 0xd7, 0x4d, 0x67, 0xea, 0x27,
+	0x51, 0x88, 0xa1, 0xea, 0xe4, 0xef, 0x23, 0x90, 0xd2, 0x8d, 0x43, 0x55, 0xd3, 0xf9, 0x1c, 0x33,
+	0xb5, 0x3f, 0x8d, 0x7c, 0x54, 0x2d, 0x3c, 0x82, 0xa9, 0xca, 0xc2, 0xec, 0x6c, 0xb5, 0x56, 0x5f,
+	0x9a, 0xfa, 0xa5, 0x88, 0x94, 0xfc, 0xd5, 0x48, 0x02, 0xd3, 0x81, 0xb9, 0x4b, 0x57, 0xc1, 0x5e,
+	0xac, 0x2f, 0x9d, 0x9e, 0x14, 0x3e, 0x94, 0xe0, 0xed, 0x5d, 0x6b, 0xda, 0xd9, 0x33, 0x1c, 0x9a,
+	0x34, 0xa6, 0x4d, 0xc3, 0x79, 0x61, 0xd9, 0xfb, 0x33, 0xfe, 0xd5, 0x7c, 0x38, 0x37, 0xd3, 0xdf,
+	0xdf, 0x9d, 0x41, 0x1f, 0x0e, 0xa6, 0xd7, 0x35, 0x7b, 0xb0, 0xa7, 0x75, 0x57, 0x1a, 0xef, 0xd5,
+	0x8e, 0x1d, 0x63, 0x40, 0xae, 0x4c, 0xf0, 0xc4, 0xec, 0x31, 0x8a, 0x79, 0x4a, 0xf0, 0xf1, 0x49,
+	0xe1, 0xfb, 0x52, 0x71, 0xe3, 0x72, 0x2c, 0xad, 0x9e, 0x3e, 0xe3, 0x38, 0xe6, 0xfd, 0xee, 0x8b,
+	0xfb, 0xad, 0x6e, 0x67, 0xa6, 0x75, 0x30, 0x70, 0xac, 0x1e, 0xcd, 0xc4, 0xd3, 0x1b, 0xc6, 0x0b,
+	0x46, 0xb8, 0xdc, 0xd5, 0x76, 0xa7, 0x7e, 0x7a, 0xbe, 0x77, 0x0d, 0xa7, 0x71, 0xa4, 0xb5, 0x1c,
+	0xca, 0xa9, 0x24, 0x75, 0xe3, 0xb0, 0xaa, 0xeb, 0x36, 0x46, 0x73, 0x5b, 0x6d, 0x39, 0x76, 0x97,
+	0x86, 0x46, 0x3a, 0x1c, 0x96, 0xcb, 0x75, 0xc7, 0xee, 0x0a, 0x11, 0x15, 0x6f, 0x23, 0x40, 0x5e,
+	0xc1, 0x38, 0x44, 0x4f, 0x46, 0x69, 0x44, 0x61, 0x32, 0x2a, 0xc5, 0xf2, 0x9f, 0x7e, 0x1a, 0x55,
+	0x62, 0xed, 0xba, 0xe9, 0x90, 0x57, 0x90, 0xd7, 0xea, 0x3b, 0x03, 0x1a, 0x27, 0x99, 0x5a, 0xf2,
+	0x93, 0x5a, 0xec, 0xdb, 0x91, 0x7c, 0x4e, 0x89, 0xb7, 0x37, 0xfb, 0xce, 0x60, 0xea, 0x7f, 0x4b,
+	0x10, 0xa7, 0xd4, 0x44, 0x86, 0xa8, 0xc6, 0x7d, 0x9d, 0x52, 0xf0, 0x27, 0x79, 0x05, 0xd2, 0x9a,
+	0x6e, 0xab, 0x5a, 0x6b, 0x1f, 0x97, 0x37, 0x55, 0x2c, 0xa5, 0x8c, 0x6b, 0xba, 0x5d, 0x6d, 0xed,
+	0x2b, 0xc6, 0x07, 0x74, 0x44, 0x6b, 0x9f, 0x4a, 0xc6, 0x11, 0xad, 0x7d, 0xf2, 0x12, 0x8c, 0xb7,
+	0xd5, 0xbe, 0x61, 0xea, 0x1d, 0x73, 0x97, 0x0a, 0x4c, 0x29, 0xa9, 0xf6, 0x16, 0x7b, 0x26, 0xb7,
+	0x20, 0xd9, 0xea, 0x6a, 0x83, 0x81, 0xba, 0x43, 0xc3, 0x2e, 0xa5, 0x24, 0xe8, 0x63, 0x6d, 0xea,
+	0x1f, 0x53, 0x40, 0xc2, 0x79, 0x8c, 0xfc, 0x4b, 0x04, 0x52, 0x34, 0xb7, 0x18, 0x07, 0x1d, 0x1e,
+	0x82, 0x7f, 0x1e, 0xf9, 0xa8, 0xfa, 0xea, 0x23, 0x32, 0xf5, 0x70, 0xb6, 0x36, 0xb7, 0xf4, 0xe0,
+	0x61, 0x63, 0x69, 0xf6, 0xec, 0x50, 0x4c, 0xfd, 0x1c, 0x84, 0xe2, 0xe2, 0xe7, 0x1d, 0x8a, 0x8b,
+	0x5f, 0x60, 0x28, 0xa2, 0xad, 0x1b, 0x07, 0x1d, 0xf2, 0x4f, 0x11, 0xc0, 0xb0, 0xa4, 0x66, 0x8f,
+	0x7c, 0x69, 0xf6, 0x2f, 0xd8, 0xec, 0x09, 0xdd, 0x38, 0x44, 0xab, 0xff, 0x5d, 0x04, 0xc6, 0xd1,
+	0xea, 0xa6, 0x65, 0xb6, 0x0c, 0x96, 0xf9, 0x6b, 0x7f, 0x1c, 0xf9, 0xa8, 0x7a, 0xe3, 0x51, 0x62,
+	0xea, 0x2c, 0x5b, 0x47, 0x7e, 0x0e, 0x6c, 0x5d, 0xf9, 0xbc, 0x6d, 0x5d, 0xf9, 0xe2, 0x6c, 0x8d,
+	0x3b, 0xda, 0x06, 0xda, 0x77, 0xea, 0x2f, 0xc7, 0xe1, 0xfa, 0xa8, 0x5a, 0x84, 0xac, 0x41, 0x9a,
+	0x57, 0x34, 0x42, 0x69, 0xf1, 0xea, 0xb9, 0x65, 0x4c, 0xa0, 0xcc, 0x00, 0x36, 0x9e, 0xd6, 0x1a,
+	0x7f, 0x1b, 0x81, 0x84, 0x69, 0x38, 0x6a, 0x47, 0xe7, 0x2b, 0xe9, 0x4f, 0x22, 0x1f, 0x55, 0x6f,
+	0x3d, 0x4a, 0x4d, 0xcd, 0xce, 0xce, 0xce, 0x96, 0xe7, 0x46, 0xf9, 0x34, 0xfa, 0x73, 0xe0, 0xd3,
+	0xb9, 0xcf, 0xdb, 0xa7, 0x73, 0x5f, 0x9c, 0x4f, 0xe3, 0xa6, 0xe1, 0xac, 0x06, 0x36, 0x8b, 0xe8,
+	0x97, 0x59, 0xeb, 0x67, 0xb1, 0x59, 0xc4, 0xbe, 0x34, 0xfb, 0x7f, 0xd0, 0x66, 0xf1, 0x15, 0xe0,
+	0x59, 0x46, 0x28, 0xe2, 0xc7, 0x19, 0x82, 0x55, 0xfc, 0x6f, 0x01, 0x5c, 0x0b, 0x9d, 0xe0, 0xc8,
+	0xcb, 0x30, 0x6e, 0x98, 0x2d, 0xfb, 0xb8, 0xef, 0x18, 0x3a, 0xab, 0xa7, 0x14, 0x0f, 0x20, 0xff,
+	0x10, 0x01, 0xa0, 0x8c, 0x6c, 0x03, 0xf2, 0xa7, 0x2b, 0xf4, 0x5f, 0x63, 0xf9, 0xcb, 0x74, 0xf5,
+	0xd3, 0x7b, 0x70, 0x1c, 0x6d, 0x4c, 0xf7, 0x20, 0x71, 0x73, 0x88, 0x7e, 0xb9, 0x39, 0x7c, 0x91,
+	0x9b, 0x83, 0xef, 0x30, 0x1b, 0xfb, 0xf2, 0x30, 0xfb, 0x45, 0x1f, 0x66, 0x1b, 0x90, 0xd6, 0xbb,
+	0xea, 0xc0, 0x70, 0x1c, 0x64, 0xe6, 0x77, 0x4c, 0xa1, 0x2b, 0xb0, 0xa5, 0xb5, 0x26, 0xef, 0x21,
+	0x1c, 0x6b, 0x41, 0xef, 0xba, 0x28, 0xf9, 0x3a, 0xa4, 0xec, 0x23, 0x55, 0x37, 0xba, 0xda, 0x31,
+	0xbd, 0x4f, 0x9a, 0xa8, 0xdc, 0x0a, 0x15, 0x62, 0x47, 0x4b, 0xd8, 0x2c, 0x94, 0x5f, 0x49, 0x9b,
+	0x41, 0x64, 0x06, 0x92, 0xad, 0xb6, 0xda, 0xed, 0x0c, 0x9c, 0x7c, 0x92, 0x2a, 0x70, 0x33, 0x38,
+	0xb8, 0xbe, 0xbc, 0xd6, 0x19, 0x38, 0x4a, 0xa2, 0xd5, 0xc6, 0x7f, 0xa7, 0x7e, 0x57, 0x02, 0xf0,
+	0x74, 0x22, 0x6b, 0x90, 0xb5, 0x8f, 0xca, 0xaa, 0x6e, 0xab, 0x56, 0xbb, 0x3d, 0x30, 0x1c, 0x5e,
+	0x0b, 0xbe, 0x12, 0x9a, 0x86, 0xe6, 0x68, 0x8a, 0xe6, 0x18, 0x9b, 0xb4, 0x97, 0xa0, 0x49, 0xda,
+	0x3e, 0x2a, 0x2f, 0xd9, 0x0c, 0x26, 0xdf, 0x80, 0x84, 0x7d, 0x54, 0x51, 0x75, 0xf7, 0xda, 0xe9,
+	0x2b, 0x67, 0xd1, 0xac, 0x9a, 0xba, 0x71, 0x24, 0x5e, 0x3f, 0xd9, 0x47, 0x95, 0x25, 0x1b, 0x0f,
+	0xcf, 0x56, 0xdf, 0x51, 0x4d, 0x63, 0x97, 0x9f, 0xb7, 0x13, 0x56, 0xdf, 0xd9, 0x30, 0x76, 0xdf,
+	0x4c, 0x7d, 0x7c, 0x52, 0x88, 0xa5, 0x24, 0x59, 0x9a, 0xfa, 0x5f, 0x90, 0x60, 0x33, 0x22, 0x8b,
+	0x10, 0x13, 0xaa, 0xd7, 0xe2, 0xe8, 0x79, 0x07, 0xca, 0x56, 0x3a, 0x82, 0x10, 0x88, 0xb5, 0xd9,
+	0x59, 0x3f, 0x7a, 0x2f, 0xab, 0xd0, 0xdf, 0xa4, 0x00, 0xa9, 0xd6, 0x9e, 0xda, 0xd3, 0x06, 0xfb,
+	0x83, 0x7c, 0xf4, 0x4e, 0xf4, 0x5e, 0x4a, 0x49, 0xb6, 0xf6, 0xd6, 0xf1, 0x51, 0x10, 0xfe, 0xa1,
+	0x04, 0x99, 0x35, 0x4b, 0xd1, 0xdc, 0x69, 0xe0, 0x6e, 0xb3, 0xa3, 0x99, 0xfa, 0x8b, 0x8e, 0xee,
+	0xec, 0x51, 0x45, 0xb2, 0x8a, 0x07, 0x90, 0xaf, 0x81, 0x3c, 0xe8, 0xdb, 0x86, 0xa6, 0x77, 0xcc,
+	0x5d, 0xb5, 0xad, 0xb5, 0x1c, 0x7e, 0x1f, 0x97, 0x55, 0x72, 0x43, 0x7c, 0x99, 0xc2, 0xe4, 0x36,
+	0xa4, 0x5b, 0x16, 0xed, 0x67, 0x6b, 0x0e, 0x3b, 0x19, 0x8d, 0x2b, 0xc0, 0x20, 0x94, 0x34, 0x54,
+	0x62, 0x6c, 0xaa, 0x02, 0xe9, 0xe5, 0xe6, 0xe3, 0xa1, 0x0a, 0x05, 0x48, 0xed, 0x74, 0x1c, 0x36,
+	0x8c, 0x69, 0x90, 0xdc, 0xe9, 0x38, 0x81, 0x31, 0xbf, 0x2c, 0xc1, 0xc4, 0x9a, 0xb2, 0xbc, 0xd2,
+	0x6c, 0x0e, 0xc7, 0x7d, 0x15, 0x72, 0x3d, 0x4b, 0x3f, 0xe8, 0xd2, 0x4b, 0x63, 0xef, 0x1c, 0x90,
+	0x55, 0x26, 0x3c, 0x98, 0x96, 0xf7, 0x0b, 0x70, 0xcb, 0xea, 0x1b, 0xb6, 0x86, 0x01, 0xa3, 0xb6,
+	0xf6, 0x34, 0xd3, 0x34, 0xba, 0x2a, 0x9b, 0x31, 0x9b, 0xcc, 0x8d, 0x61, 0x73, 0x9d, 0xb5, 0x3e,
+	0xa3, 0xb3, 0xbf, 0xc2, 0x94, 0xfe, 0x50, 0x82, 0xd4, 0x50, 0xb1, 0x0a, 0xc4, 0xd0, 0x8d, 0xfc,
+	0xce, 0xf1, 0xe5, 0xa0, 0x5f, 0x45, 0xfb, 0xaf, 0x8c, 0x29, 0xb4, 0x2f, 0x99, 0x81, 0x68, 0x7b,
+	0xb0, 0xcf, 0x6f, 0x95, 0x5e, 0x0a, 0xdd, 0x2a, 0x79, 0xe6, 0x5a, 0x19, 0x53, 0xb0, 0x27, 0x59,
+	0x84, 0x44, 0xd7, 0x6e, 0xef, 0x0d, 0x06, 0xfc, 0xea, 0x3a, 0x14, 0xf0, 0x7e, 0x6b, 0xad, 0x8c,
+	0x29, 0xbc, 0xbf, 0xa7, 0x75, 0xed, 0x1a, 0x80, 0x67, 0x2a, 0x7a, 0x79, 0x3b, 0xf5, 0x93, 0x28,
+	0xc0, 0xf6, 0xd1, 0x70, 0x75, 0xbd, 0x0d, 0xe3, 0xba, 0xe6, 0x68, 0x9e, 0x73, 0xd2, 0x95, 0xfc,
+	0x59, 0x4b, 0x42, 0x48, 0x0f, 0x29, 0x5d, 0x88, 0xaf, 0x36, 0xbd, 0x74, 0x36, 0x5b, 0xc7, 0x34,
+	0xa7, 0xc7, 0x14, 0x0f, 0xc0, 0x02, 0xc9, 0x30, 0xb5, 0x9d, 0xae, 0xa1, 0xb6, 0xec, 0x16, 0xbf,
+	0x6e, 0x1a, 0x67, 0x48, 0xdd, 0x6e, 0xe1, 0xe0, 0xe1, 0x9b, 0x06, 0x9a, 0x5a, 0xb2, 0x8a, 0x07,
+	0x90, 0x69, 0x88, 0xe1, 0x03, 0x4f, 0x1b, 0xc5, 0xd0, 0xcd, 0xea, 0xb6, 0xdb, 0x53, 0xa1, 0xfd,
+	0xc8, 0xdb, 0x90, 0xd2, 0xad, 0x17, 0x66, 0xb7, 0x63, 0xee, 0xe7, 0x53, 0x74, 0xcc, 0xdd, 0xe0,
+	0x54, 0xbc, 0x99, 0x4f, 0x2f, 0xf1, 0xae, 0xca, 0x70, 0x10, 0x79, 0x00, 0x37, 0x5b, 0x58, 0x12,
+	0x98, 0x8e, 0xad, 0x39, 0x96, 0xad, 0x7a, 0xba, 0x8d, 0xdf, 0x91, 0xee, 0x45, 0x95, 0x1b, 0x62,
+	0xeb, 0x50, 0x7a, 0xf1, 0xff, 0x62, 0x6c, 0xb8, 0x1c, 0x77, 0x21, 0xab, 0x99, 0x8e, 0x61, 0x9a,
+	0x9a, 0xda, 0xc1, 0x14, 0xc2, 0x43, 0x36, 0xc3, 0x41, 0x9a, 0x56, 0x70, 0x45, 0x38, 0x47, 0x6a,
+	0xdf, 0x7a, 0x61, 0xb0, 0xe5, 0x16, 0x51, 0x92, 0xce, 0xd1, 0x16, 0x3e, 0x92, 0x19, 0x98, 0xec,
+	0x98, 0x87, 0x86, 0xed, 0xa8, 0x7d, 0xab, 0xab, 0xd9, 0x9d, 0x6f, 0x53, 0xdf, 0xf1, 0x64, 0x43,
+	0x58, 0xd3, 0x96, 0xd0, 0xe2, 0x79, 0xdb, 0xfb, 0xf5, 0x28, 0x96, 0x8a, 0xc8, 0xd1, 0x47, 0xb1,
+	0x54, 0x54, 0x8e, 0x4d, 0xfd, 0x82, 0x04, 0x85, 0x77, 0x35, 0xc7, 0x78, 0xa1, 0x1d, 0x57, 0xb9,
+	0x0e, 0xde, 0x9b, 0x1b, 0xb2, 0x0e, 0xe9, 0x5d, 0xd6, 0xa8, 0x76, 0xf4, 0x01, 0x8f, 0x80, 0xd0,
+	0xdb, 0x0d, 0x3e, 0x5e, 0x18, 0x28, 0x6e, 0x15, 0xbb, 0x6e, 0xeb, 0x20, 0x3c, 0xfb, 0x48, 0x78,
+	0xf6, 0x53, 0xbf, 0x29, 0x41, 0xa1, 0x4e, 0xaf, 0x1c, 0xeb, 0x61, 0xe2, 0x9f, 0x85, 0x46, 0x98,
+	0x08, 0x76, 0x6d, 0xeb, 0xa0, 0xcf, 0xbb, 0xd0, 0x3b, 0x5c, 0x05, 0x28, 0xc4, 0x54, 0xfe, 0x5e,
+	0x04, 0xd2, 0x4f, 0xfa, 0xe8, 0xe0, 0x6d, 0x6b, 0xdf, 0x30, 0x49, 0x03, 0xa2, 0x9e, 0x72, 0x5f,
+	0x3b, 0x43, 0xb9, 0xb0, 0xb9, 0x05, 0x1d, 0x71, 0xbc, 0x3f, 0xfe, 0x23, 0xc1, 0xf8, 0xff, 0x2f,
+	0x90, 0x1e, 0x18, 0xf6, 0xa1, 0xc1, 0x02, 0x71, 0xf8, 0x06, 0xeb, 0xec, 0x65, 0x00, 0xac, 0x3b,
+	0x02, 0xe4, 0x75, 0xb8, 0x16, 0x8a, 0x65, 0xba, 0x3e, 0xa3, 0x8a, 0x1c, 0x0c, 0x63, 0xf2, 0x16,
+	0x64, 0x5c, 0x9b, 0xd3, 0x7e, 0xf1, 0x0b, 0x45, 0xb9, 0x3e, 0x42, 0x64, 0xea, 0xff, 0x48, 0x90,
+	0x71, 0x17, 0xc0, 0x96, 0xe6, 0xec, 0x91, 0xbb, 0x90, 0x39, 0xa0, 0xd6, 0x52, 0x1d, 0x34, 0x17,
+	0x3b, 0xe5, 0xac, 0x8c, 0x29, 0xe9, 0x03, 0xc1, 0x86, 0x55, 0x88, 0xb7, 0x3b, 0x47, 0x86, 0xce,
+	0x73, 0xe2, 0xe5, 0xad, 0xb8, 0x32, 0xa6, 0xb0, 0x91, 0xb5, 0x34, 0xc4, 0xfa, 0x28, 0x8f, 0x66,
+	0xb6, 0xef, 0xc4, 0x61, 0x7c, 0xfb, 0x88, 0x5f, 0x06, 0x91, 0xd7, 0x21, 0x4e, 0xaf, 0xb5, 0xcf,
+	0x7a, 0x2b, 0x45, 0x03, 0x50, 0x61, 0x7d, 0x48, 0x1d, 0x26, 0xdc, 0x24, 0xa0, 0x22, 0xe1, 0x80,
+	0x6e, 0xbc, 0x23, 0x52, 0xbb, 0x38, 0x4b, 0x25, 0xab, 0x0b, 0x4f, 0x03, 0xf2, 0x0d, 0x18, 0xa7,
+	0x85, 0x0a, 0xad, 0x93, 0xa2, 0x97, 0xad, 0x93, 0x52, 0x58, 0x9d, 0xd0, 0x42, 0xe9, 0xeb, 0xbc,
+	0xd0, 0x19, 0xa6, 0xe3, 0xcc, 0xf9, 0xe9, 0x98, 0x15, 0x36, 0x6e, 0x1e, 0xbe, 0xcb, 0x46, 0x7b,
+	0xb9, 0x38, 0x4e, 0x73, 0x71, 0xc6, 0x3e, 0x2a, 0x2f, 0x0f, 0xd3, 0x31, 0x15, 0x51, 0x11, 0x44,
+	0x64, 0x2f, 0x16, 0x51, 0xf1, 0x8b, 0xa8, 0x08, 0x22, 0x92, 0xae, 0x88, 0x8a, 0x27, 0x62, 0x05,
+	0x52, 0x7d, 0xbb, 0x63, 0xd9, 0x1d, 0xe7, 0x98, 0x26, 0xe1, 0x89, 0xf0, 0xda, 0xdd, 0x3e, 0x6a,
+	0xb6, 0xf6, 0x0c, 0xfd, 0xa0, 0x6b, 0x6c, 0xf1, 0x9e, 0xa2, 0x3d, 0xdc, 0xd1, 0xe4, 0x6d, 0xc8,
+	0x6a, 0x3b, 0x03, 0xab, 0x7b, 0xe0, 0x18, 0x2c, 0x2a, 0xc7, 0x2f, 0x8c, 0xca, 0x8c, 0x3b, 0x80,
+	0x46, 0xf5, 0x1c, 0x5c, 0x1b, 0xea, 0xaa, 0xf6, 0xbb, 0x9a, 0x89, 0x47, 0x3c, 0xc0, 0x4d, 0x9e,
+	0xbe, 0x7e, 0xb1, 0x23, 0xf9, 0x77, 0x94, 0xdc, 0xb0, 0xc7, 0x56, 0x57, 0x33, 0x57, 0x75, 0x32,
+	0x07, 0x29, 0x4d, 0x3f, 0xd4, 0xcc, 0x96, 0xa1, 0xe7, 0x5b, 0xe7, 0xbf, 0xd2, 0x1b, 0x76, 0x7c,
+	0x14, 0x4b, 0xc5, 0xe4, 0xf8, 0xa3, 0x58, 0x2a, 0x21, 0x27, 0x1f, 0xc5, 0x52, 0x69, 0x39, 0x33,
+	0xf5, 0x07, 0x73, 0xf4, 0x35, 0x65, 0xdd, 0xea, 0xf5, 0x34, 0x53, 0x27, 0x35, 0x88, 0xb6, 0x3a,
+	0x3a, 0x8f, 0xc5, 0xd7, 0x46, 0xbc, 0x84, 0xe6, 0x1d, 0xbd, 0x28, 0xaf, 0xc1, 0x27, 0xb5, 0xe4,
+	0x87, 0x52, 0x4c, 0x96, 0xee, 0x8c, 0x29, 0x38, 0x98, 0xbc, 0x0a, 0x69, 0x5b, 0x7b, 0x31, 0x7c,
+	0xdf, 0x18, 0xe1, 0x6b, 0x0a, 0x6c, 0xed, 0x85, 0x7b, 0xb5, 0x50, 0x83, 0x71, 0xdb, 0x18, 0xe0,
+	0x59, 0xd6, 0x74, 0xdf, 0x78, 0xdf, 0x3d, 0x5b, 0xd8, 0xb4, 0x82, 0x7d, 0x57, 0x4d, 0x7d, 0x65,
+	0x4c, 0x49, 0xd9, 0xfc, 0x37, 0x69, 0x00, 0x30, 0x8e, 0x96, 0x65, 0xb6, 0xf9, 0x5b, 0xcd, 0xd7,
+	0x2e, 0x22, 0xa9, 0x5b, 0x66, 0x7b, 0x65, 0x4c, 0x61, 0xd2, 0xf1, 0x81, 0x6c, 0xc2, 0x04, 0x5d,
+	0x4e, 0xad, 0x3d, 0xa3, 0xb5, 0xaf, 0x6a, 0xa6, 0x7b, 0xfc, 0xf8, 0xea, 0x39, 0x54, 0x6b, 0x1d,
+	0x73, 0xbf, 0x8e, 0xfd, 0xab, 0x26, 0x2e, 0xf2, 0x4c, 0x57, 0x78, 0x26, 0xab, 0x40, 0x9f, 0x55,
+	0x4d, 0xb7, 0xe9, 0x6b, 0x30, 0xf6, 0x66, 0xfb, 0x3f, 0x5d, 0x40, 0x57, 0x5d, 0x52, 0x14, 0xe3,
+	0x03, 0x34, 0x13, 0x0e, 0xae, 0xea, 0xb6, 0x62, 0x7c, 0xe0, 0xa3, 0x42, 0xcd, 0x92, 0x97, 0xa5,
+	0x62, 0x7a, 0xb9, 0x54, 0xa8, 0xd5, 0x26, 0x4c, 0xe8, 0x07, 0xce, 0xb1, 0xda, 0x3a, 0x6e, 0x75,
+	0x0d, 0xaa, 0x57, 0xea, 0xc2, 0x69, 0x2e, 0x1d, 0x38, 0xc7, 0x75, 0xec, 0xcf, 0x34, 0xcb, 0xe8,
+	0xc2, 0x33, 0x79, 0x0e, 0xc4, 0x3e, 0x52, 0xfb, 0x9a, 0xad, 0xf5, 0xf0, 0xe4, 0x76, 0xd0, 0xa7,
+	0xa4, 0x2c, 0xf4, 0x4b, 0xe7, 0xb9, 0xe1, 0x68, 0x0b, 0xc7, 0x34, 0x71, 0x08, 0xe3, 0xcd, 0xd9,
+	0x7e, 0x68, 0x04, 0x35, 0x4e, 0x1e, 0xae, 0x44, 0xcd, 0x2c, 0xe0, 0xa3, 0x76, 0xcd, 0x60, 0x1c,
+	0xaa, 0x03, 0x47, 0x73, 0x0e, 0x06, 0x94, 0x36, 0x7d, 0xb1, 0x19, 0x8c, 0xc3, 0x26, 0xed, 0xcf,
+	0xbd, 0xad, 0x0b, 0xcf, 0x44, 0x81, 0x9c, 0x69, 0xbc, 0x18, 0x16, 0xf3, 0x68, 0x03, 0x96, 0x0e,
+	0xef, 0x9d, 0xc3, 0xb8, 0x61, 0xbc, 0xe0, 0xf5, 0x3d, 0xb3, 0x40, 0xd6, 0x14, 0x81, 0x20, 0x27,
+	0x6a, 0x99, 0xbd, 0x02, 0x27, 0x53, 0x53, 0xe0, 0x74, 0x27, 0xde, 0xf5, 0xa9, 0x39, 0x71, 0xf1,
+	0xc4, 0xd7, 0x7c, 0x5a, 0x66, 0xf4, 0xae, 0xa0, 0xa4, 0x9f, 0x10, 0x75, 0xcc, 0x5d, 0x9e, 0xd0,
+	0xb5, 0x64, 0x57, 0xd0, 0xf0, 0x5b, 0x30, 0x69, 0x1f, 0x61, 0x02, 0xc5, 0x73, 0x8e, 0x17, 0x51,
+	0x32, 0x65, 0x7d, 0xfd, 0x5c, 0xb7, 0x6f, 0xd3, 0x41, 0x42, 0x48, 0xc9, 0x76, 0x00, 0xc3, 0x98,
+	0x72, 0xc2, 0xe1, 0x7a, 0xed, 0xc2, 0x98, 0xda, 0x0e, 0x87, 0xab, 0x13, 0x08, 0x57, 0x9a, 0xcc,
+	0xf6, 0x8d, 0x63, 0x9a, 0xcc, 0xc8, 0x25, 0x92, 0xd9, 0xbe, 0x71, 0x3c, 0x4c, 0x66, 0xec, 0x37,
+	0x4b, 0x66, 0xc8, 0x41, 0x93, 0xd9, 0xe4, 0x25, 0x92, 0xd9, 0xbe, 0x71, 0xec, 0x25, 0x33, 0xfe,
+	0x80, 0x36, 0xc4, 0x5c, 0x11, 0x9c, 0xe6, 0xf5, 0x0b, 0x6d, 0x58, 0x5d, 0x52, 0x82, 0xf3, 0x94,
+	0x35, 0xdd, 0xf6, 0x4f, 0x54, 0x81, 0x9c, 0x6e, 0x1c, 0x76, 0x5a, 0x6c, 0x9b, 0xa3, 0x3e, 0xbf,
+	0x71, 0x61, 0x5c, 0x2e, 0xd1, 0x11, 0xb8, 0xcf, 0xf1, 0xb8, 0xd4, 0x45, 0x80, 0x3c, 0x01, 0xb9,
+	0x6d, 0xd9, 0x2d, 0x4c, 0x49, 0xee, 0x77, 0x41, 0xf9, 0x9b, 0xa3, 0xeb, 0x2c, 0x81, 0x74, 0x19,
+	0x87, 0x0c, 0x5f, 0xaa, 0xad, 0x8c, 0x29, 0x13, 0x6d, 0x1f, 0x42, 0x8c, 0xe1, 0x87, 0x46, 0x41,
+	0x5b, 0xdc, 0xa2, 0xe4, 0xd3, 0xe7, 0xda, 0x16, 0x07, 0x06, 0xcd, 0x31, 0x69, 0x87, 0xe1, 0x33,
+	0xc4, 0xa0, 0x61, 0xf2, 0x57, 0x16, 0xc3, 0xcc, 0x13, 0x12, 0x83, 0x46, 0x7a, 0x0e, 0xa4, 0x4f,
+	0x57, 0x45, 0xd7, 0xc2, 0x2d, 0xb3, 0x6d, 0xd1, 0x99, 0x14, 0x2e, 0x0c, 0xde, 0x2d, 0x5c, 0x01,
+	0x5d, 0xcb, 0x59, 0x35, 0xdb, 0x16, 0x0f, 0xde, 0xbe, 0x1f, 0x22, 0x3b, 0x70, 0xc3, 0xa3, 0x16,
+	0xd3, 0x43, 0x91, 0xb2, 0xdf, 0xbf, 0x04, 0xbb, 0x2f, 0x49, 0x90, 0x7e, 0x08, 0x1d, 0x2d, 0x03,
+	0x8d, 0xf4, 0xd2, 0x55, 0x65, 0x30, 0x1b, 0x05, 0x65, 0xa0, 0x89, 0xde, 0x83, 0x6b, 0x3b, 0x86,
+	0xd6, 0xb2, 0x4c, 0x37, 0x83, 0x20, 0xff, 0xcb, 0x17, 0x5a, 0xa8, 0x46, 0xc7, 0xb0, 0x5c, 0xc1,
+	0xb7, 0x8c, 0x1d, 0x3f, 0x84, 0x51, 0xcf, 0x99, 0xb1, 0x04, 0xa3, 0xb6, 0xf9, 0xca, 0x85, 0x51,
+	0xcf, 0x78, 0xb1, 0xda, 0xe4, 0x19, 0x7e, 0x47, 0x04, 0x82, 0x9c, 0xa8, 0xeb, 0x2b, 0x57, 0xe0,
+	0xe4, 0x2b, 0x69, 0x47, 0x04, 0x84, 0xd5, 0xd9, 0xb3, 0x74, 0x83, 0x26, 0xa3, 0xdb, 0x97, 0x5c,
+	0x9d, 0xeb, 0x96, 0x6e, 0xb0, 0x8c, 0xc4, 0x57, 0x27, 0x07, 0x70, 0x75, 0x8a, 0x9c, 0x34, 0x39,
+	0xdd, 0xb9, 0x70, 0x75, 0x7a, 0xa4, 0x3c, 0x43, 0x4d, 0xe8, 0x3e, 0xa4, 0xa8, 0x40, 0xca, 0x2d,
+	0xe9, 0xc8, 0x32, 0x64, 0x7b, 0x1d, 0xd3, 0xb2, 0xd5, 0x43, 0xc3, 0x1e, 0x74, 0x2c, 0xf3, 0xcc,
+	0xaf, 0xf3, 0xb0, 0x93, 0x57, 0x6c, 0xe6, 0x25, 0x25, 0x43, 0xc7, 0x3d, 0x65, 0xc3, 0x8a, 0x4d,
+	0x18, 0x1f, 0x56, 0x78, 0x9f, 0x1b, 0xa9, 0x0a, 0x19, 0xb1, 0xd6, 0x23, 0x77, 0x20, 0xd1, 0xd3,
+	0xec, 0xdd, 0x0e, 0x23, 0x1c, 0x7e, 0x90, 0xf7, 0x6f, 0x92, 0xc2, 0x71, 0x72, 0x1f, 0xb2, 0xee,
+	0x09, 0xb5, 0x65, 0x1d, 0x98, 0xe1, 0x2f, 0xf7, 0xdc, 0x03, 0x6c, 0x1d, 0x5b, 0x8b, 0xbf, 0x12,
+	0x01, 0xf0, 0xca, 0x3f, 0xb2, 0x09, 0xb9, 0xe1, 0x99, 0x47, 0xb8, 0x96, 0xb9, 0xc2, 0xf5, 0x6f,
+	0x56, 0x17, 0x1b, 0xc8, 0x7d, 0x98, 0x70, 0x2f, 0x70, 0xc4, 0x6b, 0x05, 0x7a, 0xae, 0x28, 0x45,
+	0xf2, 0x39, 0x25, 0xc3, 0xef, 0x73, 0x58, 0xf7, 0xd7, 0x21, 0xe3, 0xae, 0xcf, 0x9e, 0x36, 0xd8,
+	0x67, 0xd7, 0xb7, 0x94, 0xfd, 0x23, 0x29, 0x22, 0xcb, 0x4a, 0x9a, 0xb7, 0xae, 0x6b, 0x83, 0x7d,
+	0xf2, 0x06, 0x5c, 0x17, 0x3b, 0x63, 0x74, 0x38, 0xb6, 0xd5, 0x65, 0xaf, 0x17, 0x5d, 0x09, 0x49,
+	0x85, 0x08, 0x63, 0xea, 0xac, 0x0b, 0x99, 0x82, 0x94, 0xb9, 0xa3, 0x3a, 0x36, 0x06, 0x7e, 0xc2,
+	0xaf, 0x50, 0xd2, 0xdc, 0xd9, 0x46, 0x9c, 0x9d, 0x55, 0x8a, 0x1f, 0x49, 0x43, 0x03, 0xa1, 0x03,
+	0xee, 0x81, 0xec, 0x93, 0xa9, 0xb5, 0xf6, 0xf9, 0x17, 0x68, 0x13, 0x82, 0x98, 0x6a, 0x6b, 0x9f,
+	0xdc, 0x87, 0xc9, 0x80, 0x29, 0x69, 0x67, 0xf6, 0x51, 0x9a, 0xec, 0xb3, 0x12, 0x76, 0x7f, 0x9d,
+	0xd5, 0x07, 0x9e, 0xa1, 0x54, 0xef, 0x53, 0xb5, 0x9c, 0x68, 0xa3, 0x6a, 0x6b, 0xbf, 0xd8, 0x82,
+	0x8c, 0x58, 0x1b, 0x93, 0x26, 0x4c, 0xf4, 0xb4, 0x23, 0xd5, 0x2b, 0xb0, 0xb9, 0xd7, 0x42, 0x65,
+	0x40, 0x75, 0x77, 0xd7, 0x36, 0x30, 0x00, 0xf4, 0xe1, 0x78, 0xc1, 0x77, 0x99, 0x9e, 0x76, 0x34,
+	0xc4, 0x8b, 0xff, 0x2c, 0x41, 0x2e, 0x50, 0x2c, 0x93, 0xa7, 0x58, 0x23, 0x09, 0xe7, 0xe2, 0xcf,
+	0x16, 0x23, 0xb2, 0x70, 0x58, 0x66, 0x7e, 0x7f, 0x0e, 0xd7, 0x7d, 0x47, 0x7a, 0xf7, 0x15, 0x46,
+	0xe4, 0x8a, 0xaf, 0x30, 0xae, 0x09, 0x27, 0x7d, 0xfe, 0x22, 0x63, 0x3a, 0x78, 0x18, 0x47, 0x9b,
+	0xc6, 0xe8, 0x87, 0x87, 0x95, 0xd8, 0xbd, 0xef, 0xff, 0xff, 0x84, 0xff, 0x5c, 0x5e, 0xfc, 0x8d,
+	0xc0, 0xb4, 0xd1, 0xeb, 0xf3, 0x70, 0x6b, 0xc4, 0xb4, 0x05, 0xe7, 0x4f, 0x06, 0x67, 0x84, 0x2e,
+	0x5d, 0x80, 0xfc, 0xa8, 0x49, 0x09, 0x61, 0x70, 0x3d, 0xa4, 0x2e, 0x8e, 0x2b, 0xc1, 0x35, 0x9f,
+	0xc6, 0x62, 0x24, 0x88, 0xaa, 0x62, 0x24, 0xfc, 0x0f, 0xc8, 0x88, 0xc7, 0x03, 0x32, 0x05, 0xc9,
+	0x1d, 0xcd, 0x71, 0x0c, 0xfb, 0xd8, 0x9f, 0x21, 0x3e, 0x95, 0x14, 0xb7, 0x81, 0x94, 0x86, 0x49,
+	0x04, 0xb5, 0x88, 0xd7, 0xc8, 0x27, 0xb5, 0x5c, 0x31, 0x9b, 0xbf, 0x7d, 0xef, 0x47, 0x9f, 0xf2,
+	0xff, 0x86, 0xe9, 0xa4, 0xf8, 0xdd, 0x08, 0x64, 0x7d, 0xa7, 0x05, 0x4c, 0x30, 0xee, 0x0a, 0x10,
+	0xee, 0x6d, 0xc5, 0x04, 0xc3, 0x9b, 0x99, 0x67, 0xbf, 0x26, 0x5e, 0x7b, 0x47, 0xa8, 0xe9, 0xd3,
+	0x9f, 0xd4, 0x52, 0x95, 0x44, 0x7e, 0x8c, 0x1a, 0x5f, 0xb8, 0x03, 0x7f, 0x0a, 0x93, 0xbd, 0x8e,
+	0x19, 0x0a, 0xae, 0xe8, 0x15, 0x83, 0xab, 0xd7, 0x31, 0xfd, 0xc1, 0x85, 0xbc, 0xb8, 0x3a, 0x02,
+	0xbc, 0xb1, 0xab, 0xf2, 0x6a, 0x47, 0xbe, 0xb6, 0xe2, 0x7b, 0xa2, 0x69, 0xd0, 0xf8, 0x77, 0x21,
+	0xeb, 0x77, 0x1a, 0x0b, 0x8e, 0x4c, 0x5b, 0xf0, 0x18, 0x99, 0x82, 0xac, 0xa7, 0x89, 0x17, 0x0a,
+	0x69, 0x37, 0x23, 0xa0, 0x57, 0xdb, 0x90, 0x11, 0xcf, 0x3e, 0x57, 0xb5, 0xf9, 0x57, 0xc3, 0x36,
+	0x17, 0xc2, 0xdd, 0x6b, 0xc3, 0xed, 0x45, 0x3c, 0x12, 0x61, 0xe4, 0xf9, 0xe4, 0x08, 0x93, 0xc8,
+	0x89, 0x12, 0x70, 0x1e, 0xa1, 0xc9, 0x46, 0xc2, 0x93, 0x2d, 0x3e, 0x06, 0x39, 0x78, 0x3a, 0x22,
+	0x0f, 0x21, 0xce, 0xae, 0xfe, 0xa4, 0xcb, 0x5e, 0xfd, 0xb1, 0xfe, 0xc5, 0x1f, 0x4a, 0x90, 0x0b,
+	0x1c, 0x87, 0xc8, 0x23, 0x96, 0xf9, 0x8c, 0x8e, 0xdd, 0xf7, 0xe5, 0xa2, 0xf0, 0xcb, 0x5b, 0x5a,
+	0x01, 0x34, 0x56, 0x95, 0xad, 0x40, 0xc2, 0x6b, 0x74, 0x6c, 0x76, 0x77, 0x8d, 0xb3, 0xe7, 0x97,
+	0xb1, 0xfa, 0x0b, 0xa3, 0xdb, 0x65, 0x77, 0x69, 0x6c, 0x56, 0x39, 0xd6, 0xb0, 0x84, 0x38, 0xbd,
+	0x32, 0x9b, 0x86, 0xc9, 0xe1, 0x45, 0xa8, 0xd0, 0x9b, 0xad, 0xd2, 0x6b, 0x6e, 0xd3, 0xb0, 0x7f,
+	0x71, 0x0b, 0x2b, 0x0e, 0x7e, 0xd6, 0x5a, 0xba, 0x52, 0x71, 0x20, 0x6a, 0x2b, 0x96, 0x06, 0xdf,
+	0xc4, 0x7a, 0xc3, 0x3d, 0x77, 0x7d, 0x3e, 0x94, 0x7f, 0x21, 0x81, 0x1c, 0x3c, 0x88, 0x91, 0x1d,
+	0xb8, 0xe9, 0x7e, 0x54, 0xdd, 0xed, 0xf4, 0x3a, 0x8e, 0x6a, 0x1c, 0xf5, 0x2d, 0xd3, 0x30, 0x9d,
+	0x33, 0xf7, 0x98, 0x25, 0xa5, 0xda, 0xda, 0x5f, 0xc3, 0xbe, 0x0d, 0xde, 0x55, 0x90, 0x38, 0xc9,
+	0x3e, 0xc7, 0xf6, 0x35, 0x8b, 0x32, 0xa8, 0xab, 0x3d, 0x19, 0x91, 0xf3, 0x64, 0xd0, 0x38, 0x39,
+	0x5b, 0x86, 0xaf, 0xb9, 0xb8, 0x0a, 0x59, 0xdf, 0x51, 0x90, 0xbe, 0x74, 0xbe, 0xd4, 0x5b, 0x33,
+	0xca, 0xfc, 0x03, 0x29, 0x92, 0x92, 0xd8, 0xfb, 0xb3, 0xe2, 0x0f, 0x22, 0x30, 0xe1, 0x3f, 0x01,
+	0x7e, 0xce, 0x9f, 0x61, 0x8e, 0x28, 0xc3, 0x22, 0x3f, 0x55, 0x19, 0x76, 0x0f, 0xd2, 0xb8, 0x4c,
+	0x6c, 0x83, 0xfe, 0x25, 0x14, 0xff, 0xf6, 0x7e, 0x58, 0x21, 0x41, 0x4f, 0x3b, 0x52, 0x58, 0x13,
+	0x79, 0x06, 0xb9, 0xbe, 0x61, 0x77, 0x2c, 0xdd, 0xf3, 0x41, 0x6c, 0xf4, 0x65, 0x2c, 0x3f, 0x3f,
+	0xd2, 0xce, 0x23, 0x9c, 0x30, 0xd1, 0xf7, 0xb5, 0x14, 0xff, 0x48, 0x82, 0xc9, 0x11, 0x27, 0x5b,
+	0xf2, 0xdf, 0x80, 0xa0, 0x6a, 0xb4, 0x58, 0xbd, 0x30, 0xb6, 0x18, 0x01, 0x2d, 0x5d, 0x47, 0x88,
+	0xc4, 0x14, 0xed, 0x6b, 0xc3, 0x53, 0x19, 0x92, 0xd3, 0xeb, 0x82, 0x40, 0x4c, 0x4d, 0x8d, 0xe6,
+	0x46, 0xaf, 0x8f, 0xa0, 0xce, 0xf5, 0xb4, 0x23, 0xb1, 0xa9, 0xb8, 0x12, 0x9e, 0x0d, 0x06, 0x55,
+	0x19, 0x6e, 0x84, 0x04, 0x0a, 0x59, 0x94, 0x04, 0x68, 0x30, 0x47, 0x36, 0x21, 0x17, 0x38, 0x27,
+	0x93, 0x77, 0x20, 0xc1, 0xac, 0x77, 0xd6, 0x37, 0x1c, 0xee, 0x00, 0x66, 0x7d, 0x41, 0x4f, 0x3e,
+	0xae, 0xf8, 0x8b, 0x12, 0x90, 0xf0, 0xf9, 0xd8, 0xbf, 0x1b, 0x4b, 0xe7, 0xee, 0xc6, 0x9f, 0x77,
+	0x0c, 0x16, 0xf7, 0x42, 0x1a, 0x5d, 0x7a, 0xcf, 0xbc, 0x5a, 0x2d, 0x5d, 0xd4, 0x20, 0x17, 0x38,
+	0x57, 0x93, 0xdb, 0xe2, 0xa6, 0xe3, 0xfb, 0xb3, 0x13, 0x86, 0x87, 0xb7, 0xd8, 0xc8, 0x79, 0x5b,
+	0x6c, 0xf1, 0x4d, 0xc8, 0xfa, 0x8e, 0xd8, 0x57, 0xb0, 0x6c, 0x71, 0x5e, 0x1c, 0x7b, 0x59, 0x1b,
+	0x14, 0x97, 0xdd, 0xfc, 0xe5, 0x9e, 0x8d, 0x1f, 0x5c, 0xe6, 0xc5, 0x9d, 0xb8, 0x8b, 0xd2, 0xde,
+	0xc5, 0x77, 0x61, 0xc2, 0x7f, 0x3e, 0xfe, 0x8c, 0x44, 0xb5, 0x71, 0x48, 0xf2, 0x57, 0x2c, 0x53,
+	0x0d, 0x48, 0x7b, 0xc7, 0xef, 0x01, 0x59, 0x80, 0x54, 0x8b, 0xff, 0xce, 0x4b, 0xf4, 0xfd, 0x60,
+	0xf1, 0xec, 0xd3, 0xba, 0x32, 0xec, 0x3b, 0x55, 0x87, 0x89, 0x61, 0x71, 0xfb, 0x54, 0xeb, 0x1e,
+	0x18, 0xe8, 0xb6, 0x43, 0xfc, 0xc1, 0x2d, 0x2a, 0x54, 0x31, 0x0c, 0x7f, 0x53, 0x3e, 0x3d, 0x29,
+	0x44, 0xf2, 0xd2, 0xc7, 0x27, 0x85, 0x44, 0x4a, 0xc2, 0x03, 0xf4, 0xd4, 0x2e, 0x4c, 0xfa, 0x4b,
+	0x6a, 0xc6, 0xf4, 0x0d, 0x91, 0xe9, 0x2a, 0x47, 0x8a, 0x33, 0x05, 0x19, 0x40, 0x7c, 0x91, 0xcf,
+	0xe4, 0xbc, 0xe5, 0x97, 0x73, 0xf9, 0xcf, 0xa6, 0xce, 0x99, 0x8f, 0x7f, 0xb5, 0x5f, 0x6e, 0x3e,
+	0x67, 0x66, 0x88, 0x33, 0x05, 0x7d, 0x00, 0xf9, 0x11, 0xc7, 0x43, 0x26, 0xad, 0xee, 0x97, 0x76,
+	0xc5, 0x73, 0xe5, 0x99, 0x22, 0x9f, 0x43, 0x86, 0x57, 0x7b, 0x4c, 0xcc, 0x43, 0xbf, 0x98, 0xcb,
+	0x94, 0x86, 0xe7, 0xcd, 0x26, 0x5c, 0x88, 0x5c, 0x72, 0x36, 0xe7, 0x56, 0x30, 0x17, 0x8b, 0xf4,
+	0x15, 0x1e, 0x57, 0x11, 0x79, 0x56, 0x41, 0x73, 0xa6, 0x48, 0x15, 0x72, 0x5e, 0x61, 0xcb, 0x24,
+	0xbd, 0xe9, 0x97, 0x74, 0xb9, 0x42, 0xf8, 0x2c, 0x01, 0xa5, 0x5f, 0x93, 0x20, 0x4e, 0xff, 0x2e,
+	0x95, 0xc8, 0x90, 0x79, 0xb4, 0xb9, 0xba, 0xa1, 0x2a, 0x8d, 0x6f, 0x3e, 0x69, 0x34, 0xb7, 0xe5,
+	0x31, 0x92, 0x83, 0x34, 0x45, 0xaa, 0xf5, 0x7a, 0x63, 0x6b, 0x5b, 0x96, 0x08, 0x81, 0x89, 0x27,
+	0x1b, 0xf5, 0xcd, 0x8d, 0xe5, 0x55, 0x65, 0xbd, 0xb1, 0xa4, 0x3e, 0xd9, 0x92, 0x23, 0xe4, 0x3a,
+	0xc8, 0x22, 0xb6, 0xb4, 0xf9, 0x6c, 0x43, 0x8e, 0x22, 0x99, 0xaf, 0x5f, 0x0c, 0xc7, 0x06, 0x7a,
+	0xc5, 0x11, 0x53, 0x1a, 0x3e, 0xa1, 0x09, 0x14, 0xba, 0xa5, 0x6c, 0x6e, 0x29, 0xab, 0x8d, 0xed,
+	0xaa, 0xf2, 0x5c, 0x4e, 0x16, 0x13, 0x4c, 0xe7, 0xd2, 0x3d, 0x88, 0xd3, 0xbf, 0x84, 0x25, 0x13,
+	0x00, 0x6b, 0x9b, 0x4a, 0xf5, 0x59, 0x75, 0x43, 0x55, 0xca, 0xf2, 0x58, 0x31, 0x77, 0x7a, 0x52,
+	0x48, 0xe7, 0xa5, 0x52, 0x92, 0xa3, 0xa5, 0x1f, 0x46, 0xe8, 0x2b, 0x67, 0x5e, 0xf5, 0x92, 0x57,
+	0x68, 0xf2, 0x52, 0x9f, 0x6c, 0x3c, 0xde, 0x40, 0xb1, 0x63, 0xc5, 0xec, 0xe9, 0x49, 0x61, 0x9c,
+	0x24, 0x0f, 0xcc, 0x7d, 0xd3, 0x7a, 0x81, 0xed, 0x29, 0x6c, 0x7f, 0x5a, 0x56, 0x67, 0x65, 0xa9,
+	0x88, 0x26, 0xca, 0x90, 0x68, 0x79, 0x7a, 0x96, 0xc4, 0xcb, 0xd3, 0xb3, 0xd3, 0xb3, 0xe4, 0x25,
+	0xca, 0x46, 0xdb, 0xd5, 0xb2, 0x1c, 0x29, 0xa6, 0x4f, 0x4f, 0x0a, 0x49, 0xd6, 0x58, 0xf6, 0x35,
+	0x56, 0xe4, 0xa8, 0xd8, 0x58, 0x11, 0x98, 0xcb, 0x72, 0xcc, 0x63, 0x2e, 0x63, 0x7b, 0x39, 0xc0,
+	0x3c, 0x27, 0xc7, 0xc5, 0xc1, 0x73, 0xbe, 0xc6, 0x79, 0x39, 0x21, 0x36, 0xce, 0x17, 0x9f, 0xe1,
+	0x43, 0x5e, 0x2a, 0x45, 0xd7, 0xab, 0xf5, 0x8f, 0x4f, 0x0a, 0x2b, 0xb0, 0x7c, 0x85, 0x0f, 0x7a,
+	0x1d, 0xb3, 0xbf, 0x33, 0xed, 0x19, 0x48, 0x65, 0x1f, 0xd0, 0xd2, 0x08, 0x29, 0xfd, 0x30, 0x0e,
+	0xb0, 0xb5, 0xf2, 0x5c, 0xb0, 0xdd, 0xd6, 0xca, 0xf3, 0xb3, 0x6d, 0xf7, 0x1a, 0xa4, 0xb0, 0x9d,
+	0xdb, 0xee, 0xe6, 0xe9, 0x49, 0x81, 0xf8, 0x6c, 0x17, 0xc3, 0x16, 0xf4, 0xd8, 0x76, 0x73, 0x76,
+	0xb6, 0xcc, 0xfb, 0x91, 0xbb, 0x54, 0x86, 0x67, 0xd1, 0xc9, 0xd3, 0x93, 0x42, 0xce, 0xb5, 0x68,
+	0x82, 0xc1, 0x18, 0x42, 0xde, 0x20, 0xec, 0x46, 0xde, 0x01, 0x79, 0x38, 0xac, 0xa2, 0x2a, 0x8d,
+	0xa7, 0x6a, 0x55, 0x8e, 0x16, 0x4b, 0xa7, 0x27, 0x85, 0xff, 0xec, 0x5a, 0x3c, 0x49, 0xff, 0xb9,
+	0xaf, 0x71, 0x96, 0x0a, 0xc9, 0x88, 0xbd, 0x91, 0x53, 0xd9, 0x1a, 0x72, 0x56, 0xe4, 0x28, 0x29,
+	0x87, 0x38, 0x6b, 0x72, 0xac, 0xf8, 0xd2, 0xe9, 0x49, 0xe1, 0x96, 0x4b, 0xb6, 0xe3, 0x23, 0xa9,
+	0x91, 0x9b, 0x40, 0x44, 0x12, 0x77, 0x10, 0x99, 0x87, 0x09, 0x4e, 0x55, 0xe6, 0xca, 0xc5, 0x8b,
+	0x77, 0x4e, 0x4f, 0x0a, 0x2f, 0x53, 0x77, 0xdf, 0xd7, 0x90, 0xaf, 0x3c, 0x3d, 0x7b, 0x5f, 0x23,
+	0xe0, 0xf5, 0xc1, 0xf5, 0x33, 0x64, 0x1b, 0x8e, 0x0b, 0x71, 0xd5, 0xe4, 0x84, 0xc8, 0xb5, 0xe3,
+	0x72, 0xed, 0x08, 0x5c, 0xb5, 0x11, 0x5c, 0x35, 0x39, 0xe1, 0x9b, 0xe2, 0x1c, 0x97, 0x90, 0x14,
+	0xa7, 0x38, 0x77, 0x5f, 0xe3, 0x53, 0xe4, 0xcd, 0x81, 0x29, 0x0e, 0x07, 0xb9, 0xf6, 0xab, 0x30,
+	0x7c, 0x56, 0x4e, 0x05, 0x90, 0xb2, 0x3c, 0x1e, 0x40, 0x2a, 0x32, 0x04, 0x90, 0x39, 0x39, 0x5d,
+	0xdc, 0x1e, 0xe6, 0xa1, 0xcf, 0x10, 0xb9, 0x5e, 0x78, 0x8a, 0x91, 0x2b, 0x4b, 0xa5, 0xff, 0x17,
+	0x85, 0xac, 0xff, 0x66, 0x28, 0x07, 0xe9, 0xa5, 0xea, 0x76, 0x55, 0x55, 0xaa, 0xdb, 0x0d, 0x75,
+	0x96, 0xa5, 0x34, 0x0f, 0x28, 0xcb, 0x92, 0x1f, 0xa8, 0xc8, 0x11, 0x3f, 0x30, 0x27, 0x47, 0xfd,
+	0xc0, 0xbc, 0x1c, 0xf3, 0x03, 0x0f, 0xe4, 0xb8, 0x1f, 0x58, 0x60, 0x39, 0xcc, 0x03, 0x1e, 0xca,
+	0x49, 0x3f, 0xb0, 0x28, 0xa7, 0xfc, 0xc0, 0x1b, 0xcc, 0x6a, 0x82, 0x62, 0xb3, 0xcc, 0x6a, 0x02,
+	0x52, 0x96, 0xd3, 0x01, 0xa4, 0x22, 0x67, 0x02, 0xc8, 0x9c, 0x9c, 0x0d, 0x20, 0xf3, 0xf2, 0x44,
+	0x00, 0x79, 0x20, 0xe7, 0x8a, 0xff, 0xf3, 0xf4, 0xa4, 0x90, 0x95, 0xa5, 0xd2, 0xf8, 0x10, 0xff,
+	0xf8, 0xa4, 0xf0, 0x18, 0x56, 0xaf, 0xea, 0x08, 0x9f, 0xad, 0x7d, 0x59, 0xe4, 0xb7, 0x23, 0x30,
+	0x11, 0xb8, 0xa6, 0xbd, 0x09, 0xc4, 0x53, 0x63, 0x73, 0x79, 0xb9, 0xd9, 0xd8, 0xa6, 0x1e, 0x19,
+	0x85, 0xa3, 0x63, 0x46, 0xe1, 0xe8, 0x9f, 0x51, 0x38, 0xba, 0x69, 0x14, 0x8e, 0xde, 0x1a, 0x85,
+	0xa3, 0xd3, 0x46, 0xe1, 0xe8, 0xbb, 0x51, 0xf8, 0x43, 0x39, 0x59, 0xdc, 0x3b, 0x3d, 0x29, 0x5c,
+	0x97, 0xa5, 0x92, 0x1c, 0x6c, 0xfd, 0xf8, 0xa4, 0xb0, 0x06, 0x8f, 0x3e, 0xab, 0xed, 0x98, 0x75,
+	0x7c, 0xc6, 0xfb, 0xef, 0x90, 0x7b, 0xe4, 0xbf, 0x45, 0x10, 0x36, 0xca, 0xfa, 0xe6, 0xc6, 0x76,
+	0xe3, 0x3d, 0xdc, 0x9d, 0x3d, 0xac, 0xd9, 0x68, 0x36, 0x57, 0x37, 0x37, 0x58, 0x34, 0x73, 0xec,
+	0x71, 0xe3, 0x79, 0x53, 0x8e, 0x90, 0x71, 0x88, 0xe1, 0xa3, 0xfc, 0xa9, 0x34, 0xdc, 0x47, 0xdf,
+	0x86, 0x6b, 0xa1, 0x6b, 0x0a, 0x92, 0x86, 0xa4, 0xc7, 0x9c, 0x86, 0xa4, 0x47, 0x99, 0x82, 0x18,
+	0xe3, 0x1a, 0x12, 0x2c, 0x02, 0x78, 0x1f, 0xec, 0xa3, 0xc8, 0x65, 0xba, 0x7b, 0x6f, 0xd4, 0x57,
+	0x1b, 0x4d, 0x79, 0x8c, 0x5c, 0x83, 0x6c, 0x7d, 0xa5, 0xba, 0xb1, 0xd1, 0x58, 0x53, 0xd7, 0xab,
+	0xcd, 0xc7, 0x4d, 0xd9, 0x13, 0xfd, 0x16, 0xc4, 0xe9, 0x59, 0x83, 0x8a, 0x5b, 0xab, 0x36, 0x9b,
+	0x6a, 0x95, 0x89, 0x63, 0x0f, 0x35, 0x59, 0xf2, 0x1e, 0xea, 0x72, 0x84, 0x6d, 0x36, 0x79, 0xa9,
+	0x14, 0xa7, 0x50, 0xe9, 0x08, 0x48, 0xf8, 0x8b, 0x39, 0x02, 0x90, 0x58, 0xdb, 0x7c, 0xc6, 0x2a,
+	0x96, 0x24, 0x44, 0xd7, 0x36, 0x9f, 0xc9, 0x12, 0x06, 0x7d, 0xad, 0xb1, 0xb6, 0xf9, 0x4c, 0xdd,
+	0xd8, 0x54, 0xd6, 0xab, 0x6b, 0x72, 0x04, 0xbb, 0xf1, 0xdf, 0xb4, 0x3a, 0xa9, 0xd6, 0x36, 0x9f,
+	0x36, 0xdc, 0xd6, 0x18, 0xce, 0x72, 0x65, 0xf5, 0xdd, 0x15, 0x39, 0x8e, 0x0a, 0xe0, 0x2f, 0x5a,
+	0x8c, 0x0c, 0x15, 0xff, 0xeb, 0x28, 0x5c, 0x1f, 0xf5, 0x6d, 0x1a, 0xc9, 0xc2, 0x78, 0x7d, 0x75,
+	0x49, 0x55, 0x96, 0x9f, 0xd0, 0x60, 0x76, 0x1f, 0x1b, 0xcd, 0x06, 0xaf, 0x97, 0xf0, 0x71, 0x6d,
+	0x75, 0xe3, 0xb1, 0x5a, 0x5f, 0x69, 0xd4, 0x1f, 0xcb, 0x11, 0x5a, 0x19, 0xb9, 0x58, 0x75, 0x49,
+	0x91, 0xa3, 0x6e, 0xaf, 0xa5, 0x27, 0xdb, 0xcf, 0xd5, 0xfa, 0xf3, 0xfa, 0x5a, 0x83, 0x45, 0x2d,
+	0x25, 0x7a, 0x4f, 0xdd, 0xaa, 0x2a, 0xd5, 0x75, 0xb5, 0xd9, 0xd8, 0x7e, 0xb2, 0xc5, 0x2a, 0x26,
+	0xda, 0xb7, 0xf1, 0x54, 0x6d, 0x6e, 0x57, 0xb7, 0x9f, 0x34, 0xe5, 0x04, 0x99, 0x84, 0x1c, 0x62,
+	0x1b, 0x8d, 0x67, 0x2a, 0x37, 0xbc, 0x9c, 0x24, 0xb7, 0x60, 0x92, 0x13, 0x6c, 0xaf, 0xae, 0xaf,
+	0x6e, 0xbc, 0xcb, 0x19, 0x52, 0x2e, 0xf3, 0xb6, 0x9f, 0x79, 0x7c, 0xc8, 0xbc, 0x36, 0x24, 0x01,
+	0x6f, 0x3a, 0x8f, 0x1b, 0xcf, 0xe5, 0xb4, 0xcb, 0x59, 0x5d, 0x52, 0x7c, 0x63, 0x33, 0xae, 0x06,
+	0x4b, 0x8d, 0xa7, 0xab, 0xf5, 0x06, 0x0a, 0x6c, 0xc8, 0x59, 0xdc, 0x8c, 0x10, 0x5c, 0xde, 0x54,
+	0xea, 0x0d, 0x95, 0x45, 0xa5, 0x3c, 0x41, 0x8a, 0x70, 0x93, 0x51, 0xd2, 0x28, 0x15, 0x69, 0x72,
+	0xae, 0x6a, 0x5b, 0x54, 0xdd, 0xb5, 0xcd, 0x6d, 0x75, 0x75, 0x63, 0x79, 0x53, 0x96, 0x49, 0x01,
+	0x6e, 0xf8, 0x71, 0x57, 0xc3, 0x6b, 0xe4, 0x06, 0x5c, 0xc3, 0xa6, 0x5a, 0xa3, 0x5a, 0xdf, 0xdc,
+	0xe0, 0x53, 0x95, 0x89, 0xab, 0x10, 0x87, 0x31, 0x3e, 0xe5, 0xc9, 0x80, 0x96, 0xeb, 0x9b, 0x4b,
+	0x0d, 0xf9, 0x0e, 0xab, 0xaa, 0xb0, 0x90, 0xaa, 0xaf, 0x2e, 0x95, 0xfe, 0x26, 0x02, 0x93, 0x23,
+	0x4e, 0x3a, 0x34, 0x85, 0x0e, 0xbd, 0xa3, 0x96, 0xe5, 0xb1, 0x00, 0x52, 0x61, 0x11, 0x27, 0x20,
+	0xf3, 0xcc, 0xd3, 0x02, 0xb2, 0x28, 0x47, 0x71, 0x69, 0x88, 0x3c, 0x0b, 0x72, 0x2c, 0x00, 0xcd,
+	0x55, 0xe4, 0x78, 0x00, 0x5a, 0x98, 0x97, 0x13, 0xe8, 0x1c, 0x71, 0x60, 0x65, 0x51, 0x4e, 0x06,
+	0xb0, 0xca, 0x83, 0x05, 0x39, 0x15, 0xc0, 0x1e, 0x94, 0x2b, 0xf2, 0x38, 0x4e, 0x5b, 0x1c, 0x3b,
+	0x5b, 0x99, 0x97, 0x21, 0x00, 0x56, 0x66, 0xe7, 0x17, 0xe5, 0x74, 0x00, 0x9c, 0x9f, 0x7d, 0x63,
+	0x81, 0xf9, 0x56, 0x9c, 0x45, 0xf9, 0x8d, 0x0a, 0xf3, 0xad, 0x6f, 0x22, 0x73, 0x8b, 0xb8, 0xd3,
+	0xf8, 0xd1, 0xb9, 0xca, 0xc3, 0x85, 0x45, 0x39, 0x57, 0x24, 0xa7, 0x27, 0x85, 0x89, 0xbc, 0x54,
+	0x02, 0xaf, 0xad, 0xf4, 0xfb, 0x12, 0x4c, 0xf8, 0x0f, 0xb0, 0x38, 0x6b, 0xea, 0xe0, 0xc6, 0xd3,
+	0x86, 0xf2, 0x5c, 0x2d, 0xf3, 0x4c, 0x22, 0x40, 0x95, 0xa6, 0x2c, 0x05, 0xa0, 0x79, 0x4c, 0x71,
+	0x7e, 0x68, 0xb1, 0xc9, 0x56, 0x94, 0xc8, 0xb5, 0xd0, 0x64, 0xe7, 0x0f, 0x01, 0x9b, 0xab, 0x34,
+	0xd9, 0x6a, 0x12, 0xb0, 0x85, 0x79, 0xbe, 0x9a, 0xc4, 0xb1, 0x95, 0xc5, 0xa6, 0x9c, 0xf4, 0xe6,
+	0xe0, 0x35, 0x95, 0xbe, 0x17, 0x75, 0x6f, 0x08, 0xfd, 0x57, 0x92, 0x93, 0x90, 0x1b, 0xe6, 0xea,
+	0x27, 0x1b, 0xdb, 0xe8, 0xe6, 0xb1, 0x10, 0x38, 0x87, 0x21, 0x13, 0x04, 0x17, 0xe6, 0xd9, 0x79,
+	0xca, 0x3f, 0xbc, 0x82, 0x91, 0x13, 0x44, 0xd1, 0xdd, 0xb1, 0x10, 0x8a, 0x0e, 0x8f, 0xe3, 0x9a,
+	0xf0, 0x33, 0xa0, 0xcb, 0x13, 0x21, 0x98, 0x3a, 0x3d, 0x19, 0x82, 0xa9, 0xdb, 0x53, 0x21, 0x98,
+	0x3a, 0x7e, 0x9c, 0x16, 0x86, 0xfe, 0xc9, 0xa1, 0xeb, 0x21, 0x84, 0x33, 0xe7, 0xa7, 0x43, 0xf8,
+	0xc2, 0x83, 0x07, 0x73, 0x18, 0x55, 0xb7, 0x60, 0xd2, 0xcf, 0x33, 0x57, 0x9e, 0x7d, 0x88, 0x91,
+	0x15, 0x6c, 0xa8, 0x2c, 0x54, 0xca, 0xf3, 0x18, 0x5c, 0xc1, 0x86, 0x07, 0x95, 0xf9, 0xca, 0x22,
+	0xc6, 0xd7, 0xf5, 0xd3, 0x93, 0x82, 0x9c, 0x97, 0x4a, 0x19, 0xb1, 0xb9, 0xf4, 0x57, 0x11, 0x20,
+	0xe1, 0x0b, 0x5f, 0x0c, 0x16, 0xde, 0x0d, 0xb3, 0x14, 0xcd, 0xd9, 0x01, 0xa8, 0xcc, 0xa2, 0x4c,
+	0x84, 0x2a, 0x2c, 0xca, 0x44, 0x68, 0x8e, 0xad, 0x66, 0x11, 0x9a, 0x67, 0xab, 0x59, 0x84, 0x1e,
+	0xb0, 0xd5, 0x2c, 0x42, 0x58, 0x62, 0x04, 0x20, 0x2c, 0x10, 0x03, 0x10, 0x96, 0x88, 0x01, 0xe8,
+	0x0d, 0x96, 0xa3, 0x7d, 0xaa, 0x62, 0x99, 0x18, 0xc4, 0xb0, 0x50, 0x0c, 0x62, 0x58, 0x2a, 0x06,
+	0x31, 0x2c, 0x16, 0x83, 0x18, 0xda, 0x39, 0x88, 0x61, 0xc1, 0x48, 0xcf, 0x67, 0x79, 0xa9, 0x94,
+	0x16, 0x5a, 0x4a, 0x7f, 0x26, 0xb9, 0xff, 0xc7, 0x0a, 0xff, 0x2b, 0x02, 0x21, 0xac, 0xb7, 0x1a,
+	0xca, 0xea, 0xe6, 0x12, 0xb5, 0x72, 0x08, 0x2c, 0xfb, 0x16, 0x00, 0x07, 0xd1, 0xd2, 0x21, 0x10,
+	0x6d, 0x1d, 0x02, 0xd1, 0xda, 0x21, 0x10, 0xed, 0x1d, 0x02, 0x17, 0xd8, 0xa2, 0xf6, 0x83, 0x58,
+	0xd1, 0xdd, 0x38, 0x3d, 0x29, 0x5c, 0xcb, 0x4b, 0xa5, 0xac, 0xaf, 0xa9, 0xf4, 0xa3, 0x08, 0x80,
+	0x77, 0x87, 0x42, 0xb3, 0x31, 0xdb, 0x31, 0xf0, 0x51, 0x5d, 0x64, 0x95, 0x97, 0x08, 0x95, 0x67,
+	0xd9, 0x56, 0xef, 0xc3, 0x70, 0x26, 0x41, 0x6c, 0x8e, 0xa5, 0x26, 0x1f, 0x36, 0xcf, 0x52, 0x93,
+	0x0f, 0x5b, 0x60, 0xa9, 0xc9, 0x87, 0x2d, 0xf2, 0x5d, 0x40, 0xc0, 0x2a, 0xb3, 0x7c, 0x17, 0x10,
+	0xb1, 0x32, 0xdf, 0x05, 0x44, 0x6c, 0x9e, 0x85, 0x8e, 0x0f, 0x5b, 0x60, 0xa1, 0xe3, 0xc3, 0x1e,
+	0xb2, 0xd0, 0xf1, 0x61, 0x6f, 0xb0, 0xd0, 0x11, 0xb1, 0xb9, 0x59, 0x16, 0x3a, 0x3e, 0x6c, 0x8e,
+	0x85, 0x8e, 0x0f, 0x5b, 0x10, 0x43, 0x47, 0x68, 0x29, 0x7d, 0x37, 0x0a, 0x93, 0x23, 0xee, 0xe0,
+	0xd0, 0x4d, 0x58, 0x5c, 0x54, 0xeb, 0x8f, 0xd5, 0xb5, 0xd5, 0xf5, 0xd5, 0x6d, 0xba, 0xd5, 0x86,
+	0x40, 0x9e, 0x3a, 0xfd, 0xe0, 0x3c, 0x8b, 0x1c, 0x3f, 0xc8, 0x33, 0x67, 0x80, 0x93, 0x67, 0x4e,
+	0x3f, 0x4a, 0x77, 0xde, 0x10, 0xba, 0xc0, 0x13, 0x67, 0x80, 0xa1, 0xc2, 0x13, 0x67, 0x40, 0xaf,
+	0x07, 0x3c, 0x71, 0xfa, 0x61, 0xb6, 0x0b, 0xdf, 0x04, 0x12, 0x20, 0x61, 0x1b, 0x71, 0x08, 0xe7,
+	0x7b, 0x71, 0x08, 0xe7, 0xdb, 0x71, 0x08, 0xe7, 0x3b, 0xf2, 0x2d, 0x6a, 0x51, 0xdf, 0x34, 0xd9,
+	0xa6, 0x1c, 0x6a, 0x70, 0xf7, 0xe5, 0x61, 0xf8, 0xfb, 0x9a, 0x05, 0xdf, 0xf8, 0x2e, 0x2b, 0x45,
+	0xe3, 0x2e, 0x35, 0xd6, 0xaa, 0xcf, 0x83, 0xbe, 0x61, 0x60, 0xc0, 0x37, 0x0c, 0x0c, 0xf8, 0x86,
+	0x81, 0x01, 0xdf, 0x70, 0xce, 0x80, 0x6f, 0x18, 0x1a, 0xf4, 0x0d, 0x43, 0x83, 0xbe, 0xe1, 0x0c,
+	0x41, 0xdf, 0x70, 0xbd, 0x82, 0xbe, 0x61, 0x70, 0xc8, 0x37, 0x9c, 0x24, 0xe4, 0x1b, 0xce, 0x12,
+	0xf2, 0x0d, 0x9f, 0x60, 0xc8, 0x37, 0x7c, 0x8e, 0x21, 0xdf, 0xb8, 0xd3, 0x0c, 0xf9, 0xc6, 0x9d,
+	0xe9, 0x19, 0xbe, 0xa1, 0xcd, 0xa5, 0xd3, 0x08, 0x24, 0xf9, 0x15, 0x39, 0x99, 0x00, 0x50, 0xde,
+	0xe3, 0xc3, 0x30, 0xc1, 0x8a, 0xcf, 0x98, 0x5b, 0xc5, 0x67, 0x4c, 0x46, 0xe2, 0x33, 0x26, 0x22,
+	0xf1, 0x19, 0x93, 0x90, 0xf8, 0x8c, 0x79, 0x54, 0x7c, 0xc6, 0x14, 0x2a, 0x3e, 0xe3, 0x8e, 0x25,
+	0x3e, 0xe3, 0x76, 0x25, 0x3e, 0xe3, 0x5e, 0x85, 0x47, 0xd1, 0xa1, 0x3e, 0xb8, 0x51, 0xf9, 0x00,
+	0xdc, 0xa5, 0x7c, 0x00, 0x6e, 0x51, 0x3e, 0x00, 0xf7, 0x27, 0x1f, 0x80, 0x06, 0xf3, 0x01, 0xb8,
+	0x33, 0x3d, 0x3f, 0x3d, 0x29, 0x64, 0x64, 0xa9, 0x94, 0x72, 0xe1, 0x8f, 0x4f, 0x0a, 0x0d, 0xa8,
+	0x5f, 0xf5, 0x34, 0xce, 0x8d, 0xea, 0x3b, 0x86, 0xff, 0x7a, 0x04, 0xe2, 0xf4, 0x73, 0x0a, 0x94,
+	0xba, 0xbe, 0xba, 0xb1, 0xa9, 0x0c, 0x8f, 0x79, 0x69, 0x48, 0x32, 0x80, 0xdf, 0x20, 0x79, 0xad,
+	0xfc, 0x06, 0xc9, 0x03, 0xf8, 0x0d, 0x92, 0x07, 0xf0, 0x1b, 0x24, 0x0f, 0xe0, 0x37, 0x48, 0x1e,
+	0xc0, 0x6f, 0x90, 0x3c, 0x80, 0xdf, 0x20, 0x79, 0x00, 0xbf, 0x41, 0xf2, 0x00, 0x7e, 0x83, 0xe4,
+	0x01, 0xee, 0x0d, 0x92, 0x80, 0xf0, 0x1b, 0x24, 0x01, 0xe1, 0x37, 0x48, 0x02, 0xc2, 0x6f, 0x90,
+	0x04, 0x84, 0xdf, 0x20, 0x09, 0x08, 0x9a, 0x7d, 0x78, 0x30, 0xa7, 0x78, 0xed, 0xc1, 0xef, 0xfd,
+	0xf8, 0x15, 0xe9, 0xbf, 0xce, 0x5c, 0xd1, 0xea, 0x3b, 0x09, 0xfa, 0x29, 0xc6, 0xdc, 0xbf, 0x07,
+	0x00, 0x00, 0xff, 0xff, 0x4a, 0x09, 0xdb, 0x43, 0xc1, 0x56, 0x00, 0x00,
 }

@@ -39,9 +39,9 @@ func (v *JoinRequest) FieldIsZero(p string) bool {
 	case "correlation_ids":
 		return v.CorrelationIds == nil
 	case "dev_addr":
-		return v.DevAddr == types.DevAddr{}
+		return types.MustDevAddr(v.DevAddr).OrZero().IsZero()
 	case "downlink_settings":
-		return v.DownlinkSettings == DLSettings{}
+		return v.DownlinkSettings == nil
 	case "downlink_settings.opt_neg":
 		return v.DownlinkSettings.FieldIsZero("opt_neg")
 	case "downlink_settings.rx1_dr_offset":
@@ -49,7 +49,7 @@ func (v *JoinRequest) FieldIsZero(p string) bool {
 	case "downlink_settings.rx2_dr":
 		return v.DownlinkSettings.FieldIsZero("rx2_dr")
 	case "net_id":
-		return v.NetId == types.NetID{}
+		return types.MustNetID(v.NetId).OrZero().IsZero()
 	case "payload":
 		return v.Payload == nil
 	case "payload.Payload":

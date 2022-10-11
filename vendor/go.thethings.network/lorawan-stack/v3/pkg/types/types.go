@@ -1,4 +1,4 @@
-// Copyright © 2019 The Things Network Foundation, The Things Industries B.V.
+// Copyright © 2022 The Things Network Foundation, The Things Industries B.V.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -17,8 +17,11 @@ package types
 
 import (
 	"bytes"
+	"encoding/base64"
 	"encoding/hex"
+	"strings"
 
+	"github.com/TheThingsIndustries/protoc-gen-go-json/jsonplugin"
 	"go.thethings.network/lorawan-stack/v3/pkg/errors"
 )
 
@@ -27,6 +30,7 @@ type Interface interface {
 	IsZero() bool
 	String() string
 	GoString() string
+	Bytes() []byte
 	Size() int
 	Marshal() ([]byte, error)
 	MarshalTo(data []byte) (int, error)
@@ -42,7 +46,7 @@ type Interface interface {
 var (
 	errScanArgumentType = errors.DefineInternal("src_type", "invalid type for src") // DB schema problem.
 	errInvalidJSON      = errors.DefineInvalidArgument("invalid_json", "invalid JSON: `{json}`")
-	errInvalidLength    = errors.DefineInvalidArgument("invalid_length", "invalid slice length")
+	errInvalidLength    = errors.DefineInvalidArgument("invalid_length", "invalid length: want {want} bytes, got {got}")
 )
 
 func marshalJSONHexBytes(data []byte) ([]byte, error) {
@@ -83,7 +87,7 @@ func unmarshalTextBytes(dst, data []byte) error {
 		return err
 	}
 	if n != len(dst) || copy(dst, b) != len(dst) {
-		return errInvalidLength.New()
+		return errInvalidLength.WithAttributes("want", len(dst), "got", n)
 	}
 	return nil
 }
@@ -96,7 +100,7 @@ func marshalBinaryBytes(data []byte) ([]byte, error) {
 
 func marshalBinaryBytesTo(dst, src []byte) (int, error) {
 	if len(dst) < len(src) {
-		return 0, errInvalidLength.New()
+		return 0, errInvalidLength.WithAttributes("want", len(dst), "got", len(src))
 	}
 	return copy(dst, src), nil
 }
@@ -106,7 +110,61 @@ func unmarshalBinaryBytes(dst, data []byte) error {
 		return nil
 	}
 	if len(data) != len(dst) || copy(dst[:], data) != len(dst) {
-		return errInvalidLength.New()
+		return errInvalidLength.WithAttributes("want", len(dst), "got", len(data))
 	}
 	return nil
 }
+
+// MarshalHEXBytes marshals bytes to JSON as HEX.
+func MarshalHEXBytes(s *jsonplugin.MarshalState, b []byte) {
+	s.WriteString(strings.ToUpper(hex.EncodeToString(b)))
+}
+
+var base64Replacer = strings.NewReplacer("_", "/", "-", "+")
+
+// unmarshalNBytes unmarshals N bytes from JSON. For n > 1, it accepts both hex and base64 encoding.
+func unmarshalNBytes(s *jsonplugin.UnmarshalState, n int) []byte {
+	enc := s.ReadString()
+	if s.Err() != nil {
+		return nil
+	}
+	trimmed := strings.TrimRight(enc, "=")
+
+	switch len(trimmed) {
+	case 0:
+		b := make([]byte, n)
+		return b
+	case hex.EncodedLen(n):
+		b, err := hex.DecodeString(trimmed)
+		if err != nil {
+			s.SetError(err)
+			return nil
+		}
+		return b
+	case base64.RawStdEncoding.EncodedLen(n):
+		b, err := base64.RawStdEncoding.DecodeString(base64Replacer.Replace(trimmed))
+		if err != nil {
+			s.SetError(err)
+			return nil
+		}
+		return b
+	default:
+		s.SetError(errInvalidLength.WithAttributes("want", n, "got", len(enc)))
+		return nil
+	}
+}
+
+// Unmarshal2Bytes unmarshals 2 bytes from JSON. It accepts both hex and base64 encoding.
+func Unmarshal2Bytes(s *jsonplugin.UnmarshalState) []byte { return unmarshalNBytes(s, 2) }
+
+// Unmarshal3Bytes unmarshals 3 bytes from JSON. It accepts both hex and base64 encoding.
+func Unmarshal3Bytes(s *jsonplugin.UnmarshalState) []byte { return unmarshalNBytes(s, 3) }
+
+// Unmarshal4Bytes unmarshals 4 bytes from JSON. It accepts both hex and base64 encoding.
+func Unmarshal4Bytes(s *jsonplugin.UnmarshalState) []byte { return unmarshalNBytes(s, 4) }
+
+// Unmarshal8Bytes unmarshals 8 bytes from JSON. It accepts both hex and base64 encoding.
+func Unmarshal8Bytes(s *jsonplugin.UnmarshalState) []byte { return unmarshalNBytes(s, 8) }
+
+// Unmarshal16Bytes unmarshals 16 bytes from JSON. It accepts both hex and base64 encoding.
+func Unmarshal16Bytes(s *jsonplugin.UnmarshalState) []byte { return unmarshalNBytes(s, 16) }

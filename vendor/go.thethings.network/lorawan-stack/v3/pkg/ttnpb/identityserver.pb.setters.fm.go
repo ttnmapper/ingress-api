@@ -59,99 +59,144 @@ func (dst *AuthInfoResponse) SetFields(src *AuthInfoResponse, paths ...string) e
 			for oneofName, oneofSubs := range subPathMap {
 				switch oneofName {
 				case "api_key":
-					_, srcOk := src.AccessMethod.(*AuthInfoResponse_ApiKey)
-					if !srcOk && src.AccessMethod != nil {
+					var srcTypeOk bool
+					if src != nil {
+						_, srcTypeOk = src.AccessMethod.(*AuthInfoResponse_ApiKey)
+					}
+					if srcValid := srcTypeOk || src == nil || src.AccessMethod == nil || len(oneofSubs) == 0; !srcValid {
 						return fmt.Errorf("attempt to set oneof 'api_key', while different oneof is set in source")
 					}
-					_, dstOk := dst.AccessMethod.(*AuthInfoResponse_ApiKey)
-					if !dstOk && dst.AccessMethod != nil {
+					_, dstTypeOk := dst.AccessMethod.(*AuthInfoResponse_ApiKey)
+					if dstValid := dstTypeOk || dst.AccessMethod == nil || len(oneofSubs) == 0; !dstValid {
 						return fmt.Errorf("attempt to set oneof 'api_key', while different oneof is set in destination")
 					}
 					if len(oneofSubs) > 0 {
 						var newDst, newSrc *AuthInfoResponse_APIKeyAccess
-						if !srcOk && !dstOk {
-							continue
-						}
-						if srcOk {
+						if srcTypeOk {
 							newSrc = src.AccessMethod.(*AuthInfoResponse_ApiKey).ApiKey
 						}
-						if dstOk {
+						if dstTypeOk {
 							newDst = dst.AccessMethod.(*AuthInfoResponse_ApiKey).ApiKey
-						} else {
+						} else if srcTypeOk {
 							newDst = &AuthInfoResponse_APIKeyAccess{}
 							dst.AccessMethod = &AuthInfoResponse_ApiKey{ApiKey: newDst}
+						} else {
+							dst.AccessMethod = nil
+							continue
 						}
 						if err := newDst.SetFields(newSrc, oneofSubs...); err != nil {
 							return err
 						}
 					} else {
-						if src != nil {
+						if srcTypeOk {
 							dst.AccessMethod = src.AccessMethod
 						} else {
 							dst.AccessMethod = nil
 						}
 					}
 				case "oauth_access_token":
-					_, srcOk := src.AccessMethod.(*AuthInfoResponse_OauthAccessToken)
-					if !srcOk && src.AccessMethod != nil {
+					var srcTypeOk bool
+					if src != nil {
+						_, srcTypeOk = src.AccessMethod.(*AuthInfoResponse_OauthAccessToken)
+					}
+					if srcValid := srcTypeOk || src == nil || src.AccessMethod == nil || len(oneofSubs) == 0; !srcValid {
 						return fmt.Errorf("attempt to set oneof 'oauth_access_token', while different oneof is set in source")
 					}
-					_, dstOk := dst.AccessMethod.(*AuthInfoResponse_OauthAccessToken)
-					if !dstOk && dst.AccessMethod != nil {
+					_, dstTypeOk := dst.AccessMethod.(*AuthInfoResponse_OauthAccessToken)
+					if dstValid := dstTypeOk || dst.AccessMethod == nil || len(oneofSubs) == 0; !dstValid {
 						return fmt.Errorf("attempt to set oneof 'oauth_access_token', while different oneof is set in destination")
 					}
 					if len(oneofSubs) > 0 {
 						var newDst, newSrc *OAuthAccessToken
-						if !srcOk && !dstOk {
-							continue
-						}
-						if srcOk {
+						if srcTypeOk {
 							newSrc = src.AccessMethod.(*AuthInfoResponse_OauthAccessToken).OauthAccessToken
 						}
-						if dstOk {
+						if dstTypeOk {
 							newDst = dst.AccessMethod.(*AuthInfoResponse_OauthAccessToken).OauthAccessToken
-						} else {
+						} else if srcTypeOk {
 							newDst = &OAuthAccessToken{}
 							dst.AccessMethod = &AuthInfoResponse_OauthAccessToken{OauthAccessToken: newDst}
+						} else {
+							dst.AccessMethod = nil
+							continue
 						}
 						if err := newDst.SetFields(newSrc, oneofSubs...); err != nil {
 							return err
 						}
 					} else {
-						if src != nil {
+						if srcTypeOk {
 							dst.AccessMethod = src.AccessMethod
 						} else {
 							dst.AccessMethod = nil
 						}
 					}
 				case "user_session":
-					_, srcOk := src.AccessMethod.(*AuthInfoResponse_UserSession)
-					if !srcOk && src.AccessMethod != nil {
+					var srcTypeOk bool
+					if src != nil {
+						_, srcTypeOk = src.AccessMethod.(*AuthInfoResponse_UserSession)
+					}
+					if srcValid := srcTypeOk || src == nil || src.AccessMethod == nil || len(oneofSubs) == 0; !srcValid {
 						return fmt.Errorf("attempt to set oneof 'user_session', while different oneof is set in source")
 					}
-					_, dstOk := dst.AccessMethod.(*AuthInfoResponse_UserSession)
-					if !dstOk && dst.AccessMethod != nil {
+					_, dstTypeOk := dst.AccessMethod.(*AuthInfoResponse_UserSession)
+					if dstValid := dstTypeOk || dst.AccessMethod == nil || len(oneofSubs) == 0; !dstValid {
 						return fmt.Errorf("attempt to set oneof 'user_session', while different oneof is set in destination")
 					}
 					if len(oneofSubs) > 0 {
 						var newDst, newSrc *UserSession
-						if !srcOk && !dstOk {
-							continue
-						}
-						if srcOk {
+						if srcTypeOk {
 							newSrc = src.AccessMethod.(*AuthInfoResponse_UserSession).UserSession
 						}
-						if dstOk {
+						if dstTypeOk {
 							newDst = dst.AccessMethod.(*AuthInfoResponse_UserSession).UserSession
-						} else {
+						} else if srcTypeOk {
 							newDst = &UserSession{}
 							dst.AccessMethod = &AuthInfoResponse_UserSession{UserSession: newDst}
+						} else {
+							dst.AccessMethod = nil
+							continue
 						}
 						if err := newDst.SetFields(newSrc, oneofSubs...); err != nil {
 							return err
 						}
 					} else {
-						if src != nil {
+						if srcTypeOk {
+							dst.AccessMethod = src.AccessMethod
+						} else {
+							dst.AccessMethod = nil
+						}
+					}
+				case "gateway_token":
+					var srcTypeOk bool
+					if src != nil {
+						_, srcTypeOk = src.AccessMethod.(*AuthInfoResponse_GatewayToken_)
+					}
+					if srcValid := srcTypeOk || src == nil || src.AccessMethod == nil || len(oneofSubs) == 0; !srcValid {
+						return fmt.Errorf("attempt to set oneof 'gateway_token', while different oneof is set in source")
+					}
+					_, dstTypeOk := dst.AccessMethod.(*AuthInfoResponse_GatewayToken_)
+					if dstValid := dstTypeOk || dst.AccessMethod == nil || len(oneofSubs) == 0; !dstValid {
+						return fmt.Errorf("attempt to set oneof 'gateway_token', while different oneof is set in destination")
+					}
+					if len(oneofSubs) > 0 {
+						var newDst, newSrc *AuthInfoResponse_GatewayToken
+						if srcTypeOk {
+							newSrc = src.AccessMethod.(*AuthInfoResponse_GatewayToken_).GatewayToken
+						}
+						if dstTypeOk {
+							newDst = dst.AccessMethod.(*AuthInfoResponse_GatewayToken_).GatewayToken
+						} else if srcTypeOk {
+							newDst = &AuthInfoResponse_GatewayToken{}
+							dst.AccessMethod = &AuthInfoResponse_GatewayToken_{GatewayToken: newDst}
+						} else {
+							dst.AccessMethod = nil
+							continue
+						}
+						if err := newDst.SetFields(newSrc, oneofSubs...); err != nil {
+							return err
+						}
+					} else {
+						if srcTypeOk {
 							dst.AccessMethod = src.AccessMethod
 						} else {
 							dst.AccessMethod = nil
@@ -173,9 +218,6 @@ func (dst *AuthInfoResponse) SetFields(src *AuthInfoResponse, paths ...string) e
 func (dst *GetIsConfigurationRequest) SetFields(src *GetIsConfigurationRequest, paths ...string) error {
 	if len(paths) != 0 {
 		return fmt.Errorf("message GetIsConfigurationRequest has no fields, but paths %s were specified", paths)
-	}
-	if src != nil {
-		*dst = *src
 	}
 	return nil
 }
@@ -283,6 +325,56 @@ func (dst *IsConfiguration) SetFields(src *IsConfiguration, paths ...string) err
 					dst.UserRights = nil
 				}
 			}
+		case "user_login":
+			if len(subs) > 0 {
+				var newDst, newSrc *IsConfiguration_UserLogin
+				if (src == nil || src.UserLogin == nil) && dst.UserLogin == nil {
+					continue
+				}
+				if src != nil {
+					newSrc = src.UserLogin
+				}
+				if dst.UserLogin != nil {
+					newDst = dst.UserLogin
+				} else {
+					newDst = &IsConfiguration_UserLogin{}
+					dst.UserLogin = newDst
+				}
+				if err := newDst.SetFields(newSrc, subs...); err != nil {
+					return err
+				}
+			} else {
+				if src != nil {
+					dst.UserLogin = src.UserLogin
+				} else {
+					dst.UserLogin = nil
+				}
+			}
+		case "admin_rights":
+			if len(subs) > 0 {
+				var newDst, newSrc *IsConfiguration_AdminRights
+				if (src == nil || src.AdminRights == nil) && dst.AdminRights == nil {
+					continue
+				}
+				if src != nil {
+					newSrc = src.AdminRights
+				}
+				if dst.AdminRights != nil {
+					newDst = dst.AdminRights
+				} else {
+					newDst = &IsConfiguration_AdminRights{}
+					dst.AdminRights = newDst
+				}
+				if err := newDst.SetFields(newSrc, subs...); err != nil {
+					return err
+				}
+			} else {
+				if src != nil {
+					dst.AdminRights = src.AdminRights
+				} else {
+					dst.AdminRights = nil
+				}
+			}
 
 		default:
 			return fmt.Errorf("invalid field: '%s'", name)
@@ -333,28 +425,43 @@ func (dst *AuthInfoResponse_APIKeyAccess) SetFields(src *AuthInfoResponse_APIKey
 		case "api_key":
 			if len(subs) > 0 {
 				var newDst, newSrc *APIKey
-				if src != nil {
-					newSrc = &src.APIKey
+				if (src == nil || src.ApiKey == nil) && dst.ApiKey == nil {
+					continue
 				}
-				newDst = &dst.APIKey
+				if src != nil {
+					newSrc = src.ApiKey
+				}
+				if dst.ApiKey != nil {
+					newDst = dst.ApiKey
+				} else {
+					newDst = &APIKey{}
+					dst.ApiKey = newDst
+				}
 				if err := newDst.SetFields(newSrc, subs...); err != nil {
 					return err
 				}
 			} else {
 				if src != nil {
-					dst.APIKey = src.APIKey
+					dst.ApiKey = src.ApiKey
 				} else {
-					var zero APIKey
-					dst.APIKey = zero
+					dst.ApiKey = nil
 				}
 			}
 		case "entity_ids":
 			if len(subs) > 0 {
 				var newDst, newSrc *EntityIdentifiers
-				if src != nil {
-					newSrc = &src.EntityIds
+				if (src == nil || src.EntityIds == nil) && dst.EntityIds == nil {
+					continue
 				}
-				newDst = &dst.EntityIds
+				if src != nil {
+					newSrc = src.EntityIds
+				}
+				if dst.EntityIds != nil {
+					newDst = dst.EntityIds
+				} else {
+					newDst = &EntityIdentifiers{}
+					dst.EntityIds = newDst
+				}
 				if err := newDst.SetFields(newSrc, subs...); err != nil {
 					return err
 				}
@@ -362,9 +469,53 @@ func (dst *AuthInfoResponse_APIKeyAccess) SetFields(src *AuthInfoResponse_APIKey
 				if src != nil {
 					dst.EntityIds = src.EntityIds
 				} else {
-					var zero EntityIdentifiers
-					dst.EntityIds = zero
+					dst.EntityIds = nil
 				}
+			}
+
+		default:
+			return fmt.Errorf("invalid field: '%s'", name)
+		}
+	}
+	return nil
+}
+
+func (dst *AuthInfoResponse_GatewayToken) SetFields(src *AuthInfoResponse_GatewayToken, paths ...string) error {
+	for name, subs := range _processPaths(paths) {
+		switch name {
+		case "gateway_ids":
+			if len(subs) > 0 {
+				var newDst, newSrc *GatewayIdentifiers
+				if (src == nil || src.GatewayIds == nil) && dst.GatewayIds == nil {
+					continue
+				}
+				if src != nil {
+					newSrc = src.GatewayIds
+				}
+				if dst.GatewayIds != nil {
+					newDst = dst.GatewayIds
+				} else {
+					newDst = &GatewayIdentifiers{}
+					dst.GatewayIds = newDst
+				}
+				if err := newDst.SetFields(newSrc, subs...); err != nil {
+					return err
+				}
+			} else {
+				if src != nil {
+					dst.GatewayIds = src.GatewayIds
+				} else {
+					dst.GatewayIds = nil
+				}
+			}
+		case "rights":
+			if len(subs) > 0 {
+				return fmt.Errorf("'rights' has no subfields, but %s were specified", subs)
+			}
+			if src != nil {
+				dst.Rights = src.Rights
+			} else {
+				dst.Rights = nil
 			}
 
 		default:
@@ -582,6 +733,46 @@ func (dst *IsConfiguration_UserRights) SetFields(src *IsConfiguration_UserRights
 				dst.CreateOrganizations = src.CreateOrganizations
 			} else {
 				dst.CreateOrganizations = nil
+			}
+
+		default:
+			return fmt.Errorf("invalid field: '%s'", name)
+		}
+	}
+	return nil
+}
+
+func (dst *IsConfiguration_UserLogin) SetFields(src *IsConfiguration_UserLogin, paths ...string) error {
+	for name, subs := range _processPaths(paths) {
+		switch name {
+		case "disable_credentials_login":
+			if len(subs) > 0 {
+				return fmt.Errorf("'disable_credentials_login' has no subfields, but %s were specified", subs)
+			}
+			if src != nil {
+				dst.DisableCredentialsLogin = src.DisableCredentialsLogin
+			} else {
+				dst.DisableCredentialsLogin = nil
+			}
+
+		default:
+			return fmt.Errorf("invalid field: '%s'", name)
+		}
+	}
+	return nil
+}
+
+func (dst *IsConfiguration_AdminRights) SetFields(src *IsConfiguration_AdminRights, paths ...string) error {
+	for name, subs := range _processPaths(paths) {
+		switch name {
+		case "all":
+			if len(subs) > 0 {
+				return fmt.Errorf("'all' has no subfields, but %s were specified", subs)
+			}
+			if src != nil {
+				dst.All = src.All
+			} else {
+				dst.All = nil
 			}
 
 		default:

@@ -2,7 +2,7 @@ package tts
 
 import (
 	"github.com/go-chi/render"
-	"github.com/gogo/protobuf/proto"
+	"github.com/golang/protobuf/proto"
 	"go.thethings.network/lorawan-stack/v3/pkg/jsonpb"
 	"go.thethings.network/lorawan-stack/v3/pkg/ttnpb"
 	"io/ioutil"
@@ -116,11 +116,11 @@ func (handlerContext *Context) PostV3Uplink(w http.ResponseWriter, r *http.Reque
 
 	// 2. If the packetIn contains a solved location, rather use that - this is sent to the /location-solved endpoint, so useless here
 	if packetIn.GetLocationSolved() != nil {
-		packetOut.Latitude = packetIn.GetLocationSolved().Latitude
-		packetOut.Longitude = packetIn.GetLocationSolved().Longitude
-		packetOut.Altitude = float64(packetIn.GetLocationSolved().Altitude)
-		packetOut.AccuracyMeters = float64(packetIn.GetLocationSolved().Accuracy)
-		packetOut.AccuracySource = packetIn.GetLocationSolved().Source.String()
+		packetOut.Latitude = packetIn.GetLocationSolved().Location.Latitude
+		packetOut.Longitude = packetIn.GetLocationSolved().Location.Longitude
+		packetOut.Altitude = float64(packetIn.GetLocationSolved().Location.Altitude)
+		packetOut.AccuracyMeters = float64(packetIn.GetLocationSolved().Location.Accuracy)
+		packetOut.AccuracySource = packetIn.GetLocationSolved().Location.Source.String()
 	}
 
 	// 3. If payload fields are available, try getting coordinates from there

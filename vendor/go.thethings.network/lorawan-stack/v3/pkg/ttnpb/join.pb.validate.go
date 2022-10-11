@@ -72,14 +72,43 @@ func (m *JoinRequest) ValidateFields(paths ...string) error {
 			}
 
 		case "dev_addr":
-			// no validation rules for DevAddr
+
+			if len(m.GetDevAddr()) > 0 {
+
+				if len(m.GetDevAddr()) != 4 {
+					return JoinRequestValidationError{
+						field:  "dev_addr",
+						reason: "value length must be 4 bytes",
+					}
+				}
+
+			}
+
 		case "selected_mac_version":
 			// no validation rules for SelectedMacVersion
 		case "net_id":
-			// no validation rules for NetId
+
+			if len(m.GetNetId()) > 0 {
+
+				if len(m.GetNetId()) != 3 {
+					return JoinRequestValidationError{
+						field:  "net_id",
+						reason: "value length must be 3 bytes",
+					}
+				}
+
+			}
+
 		case "downlink_settings":
 
-			if v, ok := interface{}(&m.DownlinkSettings).(interface{ ValidateFields(...string) error }); ok {
+			if m.GetDownlinkSettings() == nil {
+				return JoinRequestValidationError{
+					field:  "downlink_settings",
+					reason: "value is required",
+				}
+			}
+
+			if v, ok := interface{}(m.GetDownlinkSettings()).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return JoinRequestValidationError{
 						field:  "downlink_settings",
@@ -226,7 +255,14 @@ func (m *JoinResponse) ValidateFields(paths ...string) error {
 
 		case "session_keys":
 
-			if v, ok := interface{}(&m.SessionKeys).(interface{ ValidateFields(...string) error }); ok {
+			if m.GetSessionKeys() == nil {
+				return JoinResponseValidationError{
+					field:  "session_keys",
+					reason: "value is required",
+				}
+			}
+
+			if v, ok := interface{}(m.GetSessionKeys()).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return JoinResponseValidationError{
 						field:  "session_keys",
@@ -238,7 +274,7 @@ func (m *JoinResponse) ValidateFields(paths ...string) error {
 
 		case "lifetime":
 
-			if v, ok := interface{}(&m.Lifetime).(interface{ ValidateFields(...string) error }); ok {
+			if v, ok := interface{}(m.GetLifetime()).(interface{ ValidateFields(...string) error }); ok {
 				if err := v.ValidateFields(subs...); err != nil {
 					return JoinResponseValidationError{
 						field:  "lifetime",

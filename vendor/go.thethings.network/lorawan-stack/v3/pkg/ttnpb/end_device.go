@@ -16,9 +16,7 @@ package ttnpb
 
 import (
 	"fmt"
-	"strconv"
 	"strings"
-	"time"
 
 	"go.thethings.network/lorawan-stack/v3/pkg/types"
 )
@@ -29,16 +27,11 @@ func (v *BoolValue) XXX_WellKnownType() string {
 }
 
 // MarshalText implements encoding.TextMarshaler interface.
-func (v BoolValue) MarshalText() ([]byte, error) {
-	if !v.Value {
+func (v *BoolValue) MarshalText() ([]byte, error) {
+	if !v.GetValue() {
 		return []byte("false"), nil
 	}
 	return []byte("true"), nil
-}
-
-// MarshalJSON implements json.Marshaler interface.
-func (v BoolValue) MarshalJSON() ([]byte, error) {
-	return v.MarshalText()
 }
 
 // UnmarshalText implements encoding.TextUnmarshaler interface.
@@ -54,11 +47,6 @@ func (v *BoolValue) UnmarshalText(b []byte) error {
 	return nil
 }
 
-// UnmarshalJSON implements json.Unmarshaler interface.
-func (v *BoolValue) UnmarshalJSON(b []byte) error {
-	return v.UnmarshalText(b)
-}
-
 // FieldIsZero returns whether path p is zero.
 func (v *BoolValue) FieldIsZero(p string) bool {
 	if v == nil {
@@ -69,42 +57,6 @@ func (v *BoolValue) FieldIsZero(p string) bool {
 		return !v.Value
 	}
 	panic(fmt.Sprintf("unknown path '%s'", p))
-}
-
-// UnmarshalText implements encoding.TextUnmarshaler interface.
-func (v *PowerState) UnmarshalText(b []byte) error {
-	s := string(b)
-	if i, ok := PowerState_value[s]; ok {
-		*v = PowerState(i)
-		return nil
-	}
-	if !strings.HasPrefix(s, "POWER_") {
-		if i, ok := PowerState_value["POWER_"+s]; ok {
-			*v = PowerState(i)
-			return nil
-		}
-	}
-	return errCouldNotParse("PowerState")(string(b))
-}
-
-// UnmarshalJSON implements json.Unmarshaler interface.
-func (v *PowerState) UnmarshalJSON(b []byte) error {
-	if len(b) > 2 && b[0] == '"' && b[len(b)-1] == '"' {
-		return v.UnmarshalText(b[1 : len(b)-1])
-	}
-	i, err := strconv.Atoi(string(b))
-	if err != nil {
-		return errCouldNotParse("PowerState")(string(b)).WithCause(err)
-	}
-	*v = PowerState(i)
-	return nil
-}
-
-func (v *Session) GetSessionKeys() *SessionKeys {
-	if v == nil {
-		return nil
-	}
-	return &v.SessionKeys
 }
 
 // FieldIsZero returns whether path p is zero.
@@ -124,11 +76,191 @@ func (v *EndDeviceAuthenticationCode) FieldIsZero(p string) bool {
 }
 
 // FieldIsZero returns whether path p is zero.
+func (v *ADRSettings_StaticMode) FieldIsZero(p string) bool {
+	if v == nil {
+		return true
+	}
+	switch p {
+	case "data_rate_index":
+		return v.DataRateIndex == 0
+	case "tx_power_index":
+		return v.TxPowerIndex == 0
+	case "nb_trans":
+		return v.NbTrans == 0
+	}
+	panic(fmt.Sprintf("unknown path '%s'", p))
+}
+
+// FieldIsZero returns whether path p is zero.
+func (v *ADRSettings_Static) FieldIsZero(p string) bool {
+	if v == nil {
+		return true
+	}
+	switch p {
+	case "static":
+		return v.Static == nil
+	case "static.data_rate_index":
+		return v.Static.FieldIsZero("data_rate_index")
+	case "static.tx_power_index":
+		return v.Static.FieldIsZero("tx_power_index")
+	case "static.nb_trans":
+		return v.Static.FieldIsZero("nb_trans")
+	}
+	panic(fmt.Sprintf("unknown path '%s'", p))
+}
+
+// FieldIsZero returns whether path p is zero.
+func (v *ADRSettings_DynamicMode) FieldIsZero(p string) bool {
+	if v == nil {
+		return true
+	}
+	switch p {
+	case "margin":
+		return v.Margin == nil
+	case "min_data_rate_index":
+		return v.MinDataRateIndex == nil
+	case "min_data_rate_index.value":
+		return v.MinDataRateIndex.FieldIsZero("value")
+	case "max_data_rate_index":
+		return v.MaxDataRateIndex == nil
+	case "max_data_rate_index.value":
+		return v.MaxDataRateIndex.FieldIsZero("value")
+	case "min_tx_power_index":
+		return v.MinTxPowerIndex == nil
+	case "max_tx_power_index":
+		return v.MaxTxPowerIndex == nil
+	case "min_nb_trans":
+		return v.MinNbTrans == nil
+	case "max_nb_trans":
+		return v.MaxNbTrans == nil
+	}
+	panic(fmt.Sprintf("unknown path '%s'", p))
+}
+
+// FieldIsZero returns whether path p is zero.
+func (v *ADRSettings_Dynamic) FieldIsZero(p string) bool {
+	if v == nil {
+		return true
+	}
+	switch p {
+	case "dynamic":
+		return v.Dynamic == nil
+	case "dynamic.margin":
+		return v.Dynamic.FieldIsZero("margin")
+	case "dynamic.min_data_rate_index":
+		return v.Dynamic.FieldIsZero("min_data_rate_index")
+	case "dynamic.min_data_rate_index.value":
+		return v.Dynamic.FieldIsZero("min_data_rate_index.value")
+	case "dynamic.max_data_rate_index":
+		return v.Dynamic.FieldIsZero("max_data_rate_index")
+	case "dynamic.max_data_rate_index.value":
+		return v.Dynamic.FieldIsZero("max_data_rate_index.value")
+	case "dynamic.min_tx_power_index":
+		return v.Dynamic.FieldIsZero("min_tx_power_index")
+	case "dynamic.max_tx_power_index":
+		return v.Dynamic.FieldIsZero("max_tx_power_index")
+	case "dynamic.min_nb_trans":
+		return v.Dynamic.FieldIsZero("min_nb_trans")
+	case "dynamic.max_nb_trans":
+		return v.Dynamic.FieldIsZero("max_nb_trans")
+	}
+	panic(fmt.Sprintf("unknown path '%s'", p))
+}
+
+// FieldIsZero returns whether path p is zero.
+func (v *ADRSettings_Disabled) FieldIsZero(p string) bool {
+	if v == nil {
+		return true
+	}
+	switch p {
+	case "disabled":
+		return v.Disabled == nil
+	}
+	panic(fmt.Sprintf("unknown path '%s'", p))
+}
+
+// FieldIsZero returns whether path p is zero.
+func (v *ADRSettings) FieldIsZero(p string) bool {
+	if v == nil {
+		return true
+	}
+	switch p {
+	case "mode":
+		return v.Mode == nil
+	case "mode.static":
+		return v.GetStatic() == nil
+	case "mode.static.data_rate_index":
+		return v.GetStatic().FieldIsZero("data_rate_index")
+	case "mode.static.tx_power_index":
+		return v.GetStatic().FieldIsZero("tx_power_index")
+	case "mode.static.nb_trans":
+		return v.GetStatic().FieldIsZero("nb_trans")
+	case "mode.dynamic":
+		return v.GetDynamic() == nil
+	case "mode.dynamic.margin":
+		return v.GetDynamic().FieldIsZero("margin")
+	case "mode.dynamic.min_data_rate_index":
+		return v.GetDynamic().FieldIsZero("min_data_rate_index")
+	case "mode.dynamic.min_data_rate_index.value":
+		return v.GetDynamic().FieldIsZero("min_data_rate_index.value")
+	case "mode.dynamic.max_data_rate_index":
+		return v.GetDynamic().FieldIsZero("max_data_rate_index")
+	case "mode.dynamic.max_data_rate_index.value":
+		return v.GetDynamic().FieldIsZero("max_data_rate_index.value")
+	case "mode.dynamic.min_tx_power_index":
+		return v.GetDynamic().FieldIsZero("min_tx_power_index")
+	case "mode.dynamic.max_tx_power_index":
+		return v.GetDynamic().FieldIsZero("max_tx_power_index")
+	case "mode.dynamic.min_nb_trans":
+		return v.GetDynamic().FieldIsZero("min_nb_trans")
+	case "mode.dynamic.max_nb_trans":
+		return v.GetDynamic().FieldIsZero("max_nb_trans")
+	case "mode.disabled":
+		return v.GetDisabled() == nil
+	}
+	panic(fmt.Sprintf("unknown path '%s'", p))
+}
+
+// FieldIsZero returns whether path p is zero.
 func (v *MACSettings) FieldIsZero(p string) bool {
 	if v == nil {
 		return true
 	}
 	switch p {
+	case "adr":
+		return v.Adr == nil
+	case "adr.mode":
+		return v.Adr.FieldIsZero("mode")
+	case "adr.mode.static":
+		return v.Adr.FieldIsZero("mode.static")
+	case "adr.mode.static.data_rate_index":
+		return v.Adr.FieldIsZero("mode.static.data_rate_index")
+	case "adr.mode.static.tx_power_index":
+		return v.Adr.FieldIsZero("mode.static.tx_power_index")
+	case "adr.mode.static.nb_trans":
+		return v.Adr.FieldIsZero("mode.static.nb_trans")
+	case "adr.mode.dynamic":
+		return v.Adr.FieldIsZero("mode.dynamic")
+	case "adr.mode.dynamic.margin":
+		return v.Adr.FieldIsZero("mode.dynamic.margin")
+	case "adr.mode.dynamic.min_data_rate_index":
+		return v.Adr.FieldIsZero("mode.dynamic.min_data_rate_index")
+	case "adr.mode.dynamic.min_data_rate_index.value":
+		return v.Adr.FieldIsZero("mode.dynamic.min_data_rate_index.value")
+	case "adr.mode.dynamic.max_data_rate_index":
+		return v.Adr.FieldIsZero("mode.dynamic.max_data_rate_index")
+	case "adr.mode.dynamic.max_data_rate_index.value":
+		return v.Adr.FieldIsZero("mode.dynamic.max_data_rate_index.value")
+	case "adr.mode.dynamic.min_tx_power_index":
+		return v.Adr.FieldIsZero("mode.dynamic.min_tx_power_index")
+	case "adr.mode.dynamic.max_tx_power_index":
+		return v.Adr.FieldIsZero("mode.dynamic.max_tx_power_index")
+	case "adr.mode.dynamic.min_nb_trans":
+		return v.Adr.FieldIsZero("mode.dynamic.min_nb_trans")
+	case "adr.mode.dynamic.max_nb_trans":
+		return v.Adr.FieldIsZero("mode.dynamic.max_nb_trans")
+	case "adr.mode.disabled":
+		return v.Adr.FieldIsZero("mode.disabled")
 	case "adr_margin":
 		return v.AdrMargin == nil
 	case "beacon_frequency":
@@ -137,6 +269,8 @@ func (v *MACSettings) FieldIsZero(p string) bool {
 		return v.BeaconFrequency.FieldIsZero("value")
 	case "class_b_timeout":
 		return v.ClassBTimeout == nil
+	case "class_b_c_downlink_interval":
+		return v.ClassBCDownlinkInterval == nil
 	case "class_c_timeout":
 		return v.ClassCTimeout == nil
 	case "desired_adr_ack_delay_exponent":
@@ -221,6 +355,10 @@ func (v *MACSettings) FieldIsZero(p string) bool {
 		return v.Rx2Frequency == nil
 	case "rx2_frequency.value":
 		return v.Rx2Frequency.FieldIsZero("value")
+	case "schedule_downlinks":
+		return v.ScheduleDownlinks == nil
+	case "schedule_downlinks.value":
+		return v.ScheduleDownlinks.FieldIsZero("value")
 	case "status_count_periodicity":
 		return v.StatusCountPeriodicity == nil
 	case "status_time_periodicity":
@@ -233,6 +371,14 @@ func (v *MACSettings) FieldIsZero(p string) bool {
 		return v.UseAdr == nil
 	case "use_adr.value":
 		return v.UseAdr.FieldIsZero("value")
+	case "uplink_dwell_time":
+		return v.UplinkDwellTime == nil
+	case "uplink_dwell_time.value":
+		return v.UplinkDwellTime.FieldIsZero("value")
+	case "downlink_dwell_time":
+		return v.DownlinkDwellTime == nil
+	case "downlink_dwell_time.value":
+		return v.DownlinkDwellTime.FieldIsZero("value")
 	}
 	panic(fmt.Sprintf("unknown path '%s'", p))
 }
@@ -316,7 +462,7 @@ func (v *MACState_JoinRequest) FieldIsZero(p string) bool {
 	case "cf_list.type":
 		return v.CfList.FieldIsZero("type")
 	case "downlink_settings":
-		return v.DownlinkSettings == DLSettings{}
+		return v.DownlinkSettings == nil
 	case "downlink_settings.opt_neg":
 		return v.DownlinkSettings.FieldIsZero("opt_neg")
 	case "downlink_settings.rx1_dr_offset":
@@ -338,9 +484,9 @@ func (v *MACState_JoinAccept) FieldIsZero(p string) bool {
 	case "correlation_ids":
 		return v.CorrelationIds == nil
 	case "dev_addr":
-		return v.DevAddr == types.DevAddr{}
+		return types.MustDevAddr(v.DevAddr).OrZero().IsZero()
 	case "keys":
-		return fieldsAreZero(&v.Keys, SessionKeysFieldPathsTopLevel...)
+		return v.Keys == nil
 	case "keys.app_s_key":
 		return v.Keys.FieldIsZero("app_s_key")
 	case "keys.app_s_key.encrypted_key":
@@ -376,11 +522,11 @@ func (v *MACState_JoinAccept) FieldIsZero(p string) bool {
 	case "keys.session_key_id":
 		return v.Keys.FieldIsZero("session_key_id")
 	case "net_id":
-		return v.NetId == types.NetID{}
+		return types.MustNetID(v.NetId).OrZero().IsZero()
 	case "payload":
 		return v.Payload == nil
 	case "request":
-		return fieldsAreZero(&v.Request, MACState_JoinRequestFieldPathsTopLevel...)
+		return v.Request == nil
 	case "request.cf_list":
 		return v.Request.FieldIsZero("cf_list")
 	case "request.cf_list.ch_masks":
@@ -410,7 +556,7 @@ func (v *MACState) FieldIsZero(p string) bool {
 	}
 	switch p {
 	case "current_parameters":
-		return fieldsAreZero(&v.CurrentParameters, MACParametersFieldPathsTopLevel...)
+		return v.CurrentParameters == nil
 	case "current_parameters.adr_ack_delay":
 		return v.CurrentParameters.FieldIsZero("adr_ack_delay")
 	case "current_parameters.adr_ack_delay_exponent":
@@ -466,7 +612,7 @@ func (v *MACState) FieldIsZero(p string) bool {
 	case "current_parameters.uplink_dwell_time.value":
 		return v.CurrentParameters.FieldIsZero("uplink_dwell_time.value")
 	case "desired_parameters":
-		return fieldsAreZero(&v.DesiredParameters, MACParametersFieldPathsTopLevel...)
+		return v.DesiredParameters == nil
 	case "desired_parameters.adr_ack_delay":
 		return v.DesiredParameters.FieldIsZero("adr_ack_delay")
 	case "desired_parameters.adr_ack_delay_exponent":
@@ -759,6 +905,8 @@ func (v *MACState) FieldIsZero(p string) bool {
 		return v.QueuedResponses == nil
 	case "recent_downlinks":
 		return v.RecentDownlinks == nil
+	case "recent_mac_command_identifiers":
+		return v.RecentMacCommandIdentifiers == nil
 	case "recent_uplinks":
 		return v.RecentUplinks == nil
 	case "rejected_adr_data_rate_indexes":
@@ -782,43 +930,43 @@ func (v *Session) FieldIsZero(p string) bool {
 	}
 	switch p {
 	case "dev_addr":
-		return v.DevAddr == types.DevAddr{}
+		return types.MustDevAddr(v.DevAddr).OrZero().IsZero()
 	case "keys":
-		return fieldsAreZero(&v.SessionKeys, SessionKeysFieldPathsTopLevel...)
+		return fieldsAreZero(v.Keys, SessionKeysFieldPathsTopLevel...)
 	case "keys.app_s_key":
-		return v.SessionKeys.FieldIsZero("app_s_key")
+		return v.GetKeys().FieldIsZero("app_s_key")
 	case "keys.app_s_key.encrypted_key":
-		return v.SessionKeys.FieldIsZero("app_s_key.encrypted_key")
+		return v.GetKeys().FieldIsZero("app_s_key.encrypted_key")
 	case "keys.app_s_key.kek_label":
-		return v.SessionKeys.FieldIsZero("app_s_key.kek_label")
+		return v.GetKeys().FieldIsZero("app_s_key.kek_label")
 	case "keys.app_s_key.key":
-		return v.SessionKeys.FieldIsZero("app_s_key.key")
+		return v.GetKeys().FieldIsZero("app_s_key.key")
 	case "keys.f_nwk_s_int_key":
-		return v.SessionKeys.FieldIsZero("f_nwk_s_int_key")
+		return v.GetKeys().FieldIsZero("f_nwk_s_int_key")
 	case "keys.f_nwk_s_int_key.encrypted_key":
-		return v.SessionKeys.FieldIsZero("f_nwk_s_int_key.encrypted_key")
+		return v.GetKeys().FieldIsZero("f_nwk_s_int_key.encrypted_key")
 	case "keys.f_nwk_s_int_key.kek_label":
-		return v.SessionKeys.FieldIsZero("f_nwk_s_int_key.kek_label")
+		return v.GetKeys().FieldIsZero("f_nwk_s_int_key.kek_label")
 	case "keys.f_nwk_s_int_key.key":
-		return v.SessionKeys.FieldIsZero("f_nwk_s_int_key.key")
+		return v.GetKeys().FieldIsZero("f_nwk_s_int_key.key")
 	case "keys.nwk_s_enc_key":
-		return v.SessionKeys.FieldIsZero("nwk_s_enc_key")
+		return v.GetKeys().FieldIsZero("nwk_s_enc_key")
 	case "keys.nwk_s_enc_key.encrypted_key":
-		return v.SessionKeys.FieldIsZero("nwk_s_enc_key.encrypted_key")
+		return v.GetKeys().FieldIsZero("nwk_s_enc_key.encrypted_key")
 	case "keys.nwk_s_enc_key.kek_label":
-		return v.SessionKeys.FieldIsZero("nwk_s_enc_key.kek_label")
+		return v.GetKeys().FieldIsZero("nwk_s_enc_key.kek_label")
 	case "keys.nwk_s_enc_key.key":
-		return v.SessionKeys.FieldIsZero("nwk_s_enc_key.key")
+		return v.GetKeys().FieldIsZero("nwk_s_enc_key.key")
 	case "keys.s_nwk_s_int_key":
-		return v.SessionKeys.FieldIsZero("s_nwk_s_int_key")
+		return v.GetKeys().FieldIsZero("s_nwk_s_int_key")
 	case "keys.s_nwk_s_int_key.encrypted_key":
-		return v.SessionKeys.FieldIsZero("s_nwk_s_int_key.encrypted_key")
+		return v.GetKeys().FieldIsZero("s_nwk_s_int_key.encrypted_key")
 	case "keys.s_nwk_s_int_key.kek_label":
-		return v.SessionKeys.FieldIsZero("s_nwk_s_int_key.kek_label")
+		return v.GetKeys().FieldIsZero("s_nwk_s_int_key.kek_label")
 	case "keys.s_nwk_s_int_key.key":
-		return v.SessionKeys.FieldIsZero("s_nwk_s_int_key.key")
+		return v.GetKeys().FieldIsZero("s_nwk_s_int_key.key")
 	case "keys.session_key_id":
-		return v.SessionKeys.FieldIsZero("session_key_id")
+		return v.GetKeys().FieldIsZero("session_key_id")
 	case "last_a_f_cnt_down":
 		return v.LastAFCntDown == 0
 	case "last_conf_f_cnt_down":
@@ -830,7 +978,7 @@ func (v *Session) FieldIsZero(p string) bool {
 	case "queued_application_downlinks":
 		return v.QueuedApplicationDownlinks == nil
 	case "started_at":
-		return v.StartedAt == time.Time{}
+		return v.StartedAt == nil
 	}
 	panic(fmt.Sprintf("unknown path '%s'", p))
 }
@@ -851,6 +999,12 @@ func (v *EndDeviceVersionIdentifiers) FieldIsZero(p string) bool {
 		return v.ModelId == ""
 	case "band_id":
 		return v.BandId == ""
+	case "serial_number":
+		return v.SerialNumber == ""
+	case "vendor_id":
+		return v.VendorId == 0
+	case "vendor_profile_id":
+		return v.VendorProfileId == 0
 	}
 	panic(fmt.Sprintf("unknown path '%s'", p))
 }
@@ -882,7 +1036,7 @@ func (v *EndDevice) FieldIsZero(p string) bool {
 	case "claim_authentication_code.value":
 		return v.ClaimAuthenticationCode.FieldIsZero("value")
 	case "created_at":
-		return v.CreatedAt == time.Time{}
+		return v.CreatedAt == nil
 	case "description":
 		return v.Description == ""
 	case "downlink_margin":
@@ -900,19 +1054,19 @@ func (v *EndDevice) FieldIsZero(p string) bool {
 	case "frequency_plan_id":
 		return v.FrequencyPlanId == ""
 	case "ids":
-		return v.EndDeviceIdentifiers == EndDeviceIdentifiers{}
+		return v.Ids == nil
 	case "ids.application_ids":
-		return v.EndDeviceIdentifiers.FieldIsZero("application_ids")
+		return v.Ids.FieldIsZero("application_ids")
 	case "ids.application_ids.application_id":
-		return v.EndDeviceIdentifiers.FieldIsZero("application_ids.application_id")
+		return v.Ids.FieldIsZero("application_ids.application_id")
 	case "ids.dev_addr":
-		return v.EndDeviceIdentifiers.FieldIsZero("dev_addr")
+		return v.Ids.FieldIsZero("dev_addr")
 	case "ids.dev_eui":
-		return v.EndDeviceIdentifiers.FieldIsZero("dev_eui")
+		return v.Ids.FieldIsZero("dev_eui")
 	case "ids.device_id":
-		return v.EndDeviceIdentifiers.FieldIsZero("device_id")
+		return v.Ids.FieldIsZero("device_id")
 	case "ids.join_eui":
-		return v.EndDeviceIdentifiers.FieldIsZero("join_eui")
+		return v.Ids.FieldIsZero("join_eui")
 	case "join_server_address":
 		return v.JoinServerAddress == ""
 	case "last_dev_nonce":
@@ -925,6 +1079,8 @@ func (v *EndDevice) FieldIsZero(p string) bool {
 		return v.LastRjCount_0 == 0
 	case "last_rj_count_1":
 		return v.LastRjCount_1 == 0
+	case "last_seen_at":
+		return v.LastSeenAt == nil
 	case "locations":
 		return v.Locations == nil
 	case "lorawan_phy_version":
@@ -933,6 +1089,40 @@ func (v *EndDevice) FieldIsZero(p string) bool {
 		return v.LorawanVersion == 0
 	case "mac_settings":
 		return v.MacSettings == nil
+	case "mac_settings.adr":
+		return v.MacSettings.FieldIsZero("adr")
+	case "mac_settings.adr.mode":
+		return v.MacSettings.FieldIsZero("adr.mode")
+	case "mac_settings.adr.mode.static":
+		return v.MacSettings.FieldIsZero("adr.mode.static")
+	case "mac_settings.adr.mode.static.data_rate_index":
+		return v.MacSettings.FieldIsZero("adr.mode.static.data_rate_index")
+	case "mac_settings.adr.mode.static.tx_power_index":
+		return v.MacSettings.FieldIsZero("adr.mode.static.tx_power_index")
+	case "mac_settings.adr.mode.static.nb_trans":
+		return v.MacSettings.FieldIsZero("adr.mode.static.nb_trans")
+	case "mac_settings.adr.mode.dynamic":
+		return v.MacSettings.FieldIsZero("adr.mode.dynamic")
+	case "mac_settings.adr.mode.dynamic.margin":
+		return v.MacSettings.FieldIsZero("adr.mode.dynamic.margin")
+	case "mac_settings.adr.mode.dynamic.min_data_rate_index":
+		return v.MacSettings.FieldIsZero("adr.mode.dynamic.min_data_rate_index")
+	case "mac_settings.adr.mode.dynamic.min_data_rate_index.value":
+		return v.MacSettings.FieldIsZero("adr.mode.dynamic.min_data_rate_index.value")
+	case "mac_settings.adr.mode.dynamic.max_data_rate_index":
+		return v.MacSettings.FieldIsZero("adr.mode.dynamic.max_data_rate_index")
+	case "mac_settings.adr.mode.dynamic.max_data_rate_index.value":
+		return v.MacSettings.FieldIsZero("adr.mode.dynamic.max_data_rate_index.value")
+	case "mac_settings.adr.mode.dynamic.min_tx_power_index":
+		return v.MacSettings.FieldIsZero("adr.mode.dynamic.min_tx_power_index")
+	case "mac_settings.adr.mode.dynamic.max_tx_power_index":
+		return v.MacSettings.FieldIsZero("adr.mode.dynamic.max_tx_power_index")
+	case "mac_settings.adr.mode.dynamic.min_nb_trans":
+		return v.MacSettings.FieldIsZero("adr.mode.dynamic.min_nb_trans")
+	case "mac_settings.adr.mode.dynamic.max_nb_trans":
+		return v.MacSettings.FieldIsZero("adr.mode.dynamic.max_nb_trans")
+	case "mac_settings.adr.mode.disabled":
+		return v.MacSettings.FieldIsZero("adr.mode.disabled")
 	case "mac_settings.adr_margin":
 		return v.MacSettings.FieldIsZero("adr_margin")
 	case "mac_settings.beacon_frequency":
@@ -941,6 +1131,8 @@ func (v *EndDevice) FieldIsZero(p string) bool {
 		return v.MacSettings.FieldIsZero("beacon_frequency.value")
 	case "mac_settings.class_b_timeout":
 		return v.MacSettings.FieldIsZero("class_b_timeout")
+	case "mac_settings.class_b_c_downlink_interval":
+		return v.MacSettings.FieldIsZero("class_b_c_downlink_interval")
 	case "mac_settings.class_c_timeout":
 		return v.MacSettings.FieldIsZero("class_c_timeout")
 	case "mac_settings.desired_adr_ack_delay_exponent":
@@ -1025,6 +1217,10 @@ func (v *EndDevice) FieldIsZero(p string) bool {
 		return v.MacSettings.FieldIsZero("rx2_frequency")
 	case "mac_settings.rx2_frequency.value":
 		return v.MacSettings.FieldIsZero("rx2_frequency.value")
+	case "mac_settings.schedule_downlinks":
+		return v.MacSettings.FieldIsZero("schedule_downlinks")
+	case "mac_settings.schedule_downlinks.value":
+		return v.MacSettings.FieldIsZero("schedule_downlinks.value")
 	case "mac_settings.status_count_periodicity":
 		return v.MacSettings.FieldIsZero("status_count_periodicity")
 	case "mac_settings.status_time_periodicity":
@@ -1037,6 +1233,14 @@ func (v *EndDevice) FieldIsZero(p string) bool {
 		return v.MacSettings.FieldIsZero("use_adr")
 	case "mac_settings.use_adr.value":
 		return v.MacSettings.FieldIsZero("use_adr.value")
+	case "mac_settings.uplink_dwell_time":
+		return v.MacSettings.FieldIsZero("uplink_dwell_time")
+	case "mac_settings.uplink_dwell_time.value":
+		return v.MacSettings.FieldIsZero("uplink_dwell_time.value")
+	case "mac_settings.downlink_dwell_time":
+		return v.MacSettings.FieldIsZero("downlink_dwell_time")
+	case "mac_settings.downlink_dwell_time.value":
+		return v.MacSettings.FieldIsZero("downlink_dwell_time.value")
 	case "mac_state":
 		return v.MacState == nil
 	case "max_frequency":
@@ -1048,7 +1252,7 @@ func (v *EndDevice) FieldIsZero(p string) bool {
 	case "name":
 		return v.Name == ""
 	case "net_id":
-		return v.NetId == nil
+		return types.MustNetID(v.NetId).OrZero().IsZero()
 	case "network_server_address":
 		return v.NetworkServerAddress == ""
 	case "network_server_kek_label":
@@ -1212,7 +1416,7 @@ func (v *EndDevice) FieldIsZero(p string) bool {
 	case "supports_join":
 		return !v.SupportsJoin
 	case "updated_at":
-		return v.UpdatedAt == time.Time{}
+		return v.UpdatedAt == nil
 	case "used_dev_nonces":
 		return v.UsedDevNonces == nil
 	case "version_ids":
@@ -1227,6 +1431,12 @@ func (v *EndDevice) FieldIsZero(p string) bool {
 		return v.VersionIds.FieldIsZero("model_id")
 	case "version_ids.band_id":
 		return v.VersionIds.FieldIsZero("band_id")
+	case "version_ids.serial_number":
+		return v.VersionIds.FieldIsZero("serial_number")
+	case "version_ids.vendor_id":
+		return v.VersionIds.FieldIsZero("vendor_id")
+	case "version_ids.vendor_profile_id":
+		return v.VersionIds.FieldIsZero("vendor_profile_id")
 	}
 	switch {
 	case strings.HasPrefix(p, "mac_state."):
@@ -1251,4 +1461,94 @@ func (m *SetEndDeviceRequest) FieldIsZero(p string) bool {
 		return true
 	}
 	return m.EndDevice.FieldIsZero(p)
+}
+
+// All EntityType methods implement the IDStringer interface.
+
+func (m *ResetAndGetEndDeviceRequest) EntityType() string {
+	return m.GetEndDeviceIds().EntityType()
+}
+
+func (m *CreateEndDeviceRequest) EntityType() string {
+	return m.GetEndDevice().EntityType()
+}
+
+func (m *UpdateEndDeviceRequest) EntityType() string {
+	return m.GetEndDevice().EntityType()
+}
+
+func (m *SetEndDeviceRequest) EntityType() string {
+	return m.GetEndDevice().EntityType()
+}
+
+func (m *EndDeviceTemplate) EntityType() string {
+	return m.GetEndDevice().EntityType()
+}
+
+func (m *GetEndDeviceRequest) EntityType() string {
+	return m.GetEndDeviceIds().EntityType()
+}
+
+func (m *EndDevice) EntityType() string {
+	return m.GetIds().EntityType()
+}
+
+// All IDString methods implement the IDStringer interface.
+
+func (m *ResetAndGetEndDeviceRequest) IDString() string {
+	return m.GetEndDeviceIds().IDString()
+}
+
+func (m *CreateEndDeviceRequest) IDString() string {
+	return m.GetEndDevice().IDString()
+}
+
+func (m *UpdateEndDeviceRequest) IDString() string {
+	return m.GetEndDevice().IDString()
+}
+
+func (m *SetEndDeviceRequest) IDString() string {
+	return m.GetEndDevice().IDString()
+}
+
+func (m *EndDeviceTemplate) IDString() string {
+	return m.GetEndDevice().IDString()
+}
+
+func (m *GetEndDeviceRequest) IDString() string {
+	return m.GetEndDeviceIds().IDString()
+}
+
+func (m *EndDevice) IDString() string {
+	return m.GetIds().IDString()
+}
+
+// All ExtractRequestFields methods are used by github.com/grpc-ecosystem/go-grpc-middleware/tags.
+
+func (m *ResetAndGetEndDeviceRequest) ExtractRequestFields(dst map[string]interface{}) {
+	m.GetEndDeviceIds().ExtractRequestFields(dst)
+}
+
+func (m *CreateEndDeviceRequest) ExtractRequestFields(dst map[string]interface{}) {
+	m.GetEndDevice().ExtractRequestFields(dst)
+}
+
+func (m *UpdateEndDeviceRequest) ExtractRequestFields(dst map[string]interface{}) {
+	m.GetEndDevice().ExtractRequestFields(dst)
+}
+
+func (m *SetEndDeviceRequest) ExtractRequestFields(dst map[string]interface{}) {
+	m.GetEndDevice().ExtractRequestFields(dst)
+}
+
+func (m *EndDeviceTemplate) ExtractRequestFields(dst map[string]interface{}) {
+	m.GetEndDevice().ExtractRequestFields(dst)
+}
+
+func (m *GetEndDeviceRequest) ExtractRequestFields(dst map[string]interface{}) {
+	m.GetEndDeviceIds().ExtractRequestFields(dst)
+}
+
+func (m *EndDevice) ExtractRequestFields(dst map[string]interface{}) {
+	m.GetIds().ExtractRequestFields(dst)
 }

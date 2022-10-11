@@ -2,11 +2,7 @@
 
 package ttnpb
 
-import (
-	fmt "fmt"
-	go_thethings_network_lorawan_stack_v3_pkg_types "go.thethings.network/lorawan-stack/v3/pkg/types"
-	time "time"
-)
+import fmt "fmt"
 
 func (dst *Session) SetFields(src *Session, paths ...string) error {
 	for name, subs := range _processPaths(paths) {
@@ -18,25 +14,31 @@ func (dst *Session) SetFields(src *Session, paths ...string) error {
 			if src != nil {
 				dst.DevAddr = src.DevAddr
 			} else {
-				var zero go_thethings_network_lorawan_stack_v3_pkg_types.DevAddr
-				dst.DevAddr = zero
+				dst.DevAddr = nil
 			}
 		case "keys":
 			if len(subs) > 0 {
 				var newDst, newSrc *SessionKeys
-				if src != nil {
-					newSrc = &src.SessionKeys
+				if (src == nil || src.Keys == nil) && dst.Keys == nil {
+					continue
 				}
-				newDst = &dst.SessionKeys
+				if src != nil {
+					newSrc = src.Keys
+				}
+				if dst.Keys != nil {
+					newDst = dst.Keys
+				} else {
+					newDst = &SessionKeys{}
+					dst.Keys = newDst
+				}
 				if err := newDst.SetFields(newSrc, subs...); err != nil {
 					return err
 				}
 			} else {
 				if src != nil {
-					dst.SessionKeys = src.SessionKeys
+					dst.Keys = src.Keys
 				} else {
-					var zero SessionKeys
-					dst.SessionKeys = zero
+					dst.Keys = nil
 				}
 			}
 		case "last_f_cnt_up":
@@ -86,8 +88,7 @@ func (dst *Session) SetFields(src *Session, paths ...string) error {
 			if src != nil {
 				dst.StartedAt = src.StartedAt
 			} else {
-				var zero time.Time
-				dst.StartedAt = zero
+				dst.StartedAt = nil
 			}
 		case "queued_application_downlinks":
 			if len(subs) > 0 {
@@ -438,19 +439,26 @@ func (dst *EndDeviceVersion) SetFields(src *EndDeviceVersion, paths ...string) e
 		case "ids":
 			if len(subs) > 0 {
 				var newDst, newSrc *EndDeviceVersionIdentifiers
-				if src != nil {
-					newSrc = &src.EndDeviceVersionIdentifiers
+				if (src == nil || src.Ids == nil) && dst.Ids == nil {
+					continue
 				}
-				newDst = &dst.EndDeviceVersionIdentifiers
+				if src != nil {
+					newSrc = src.Ids
+				}
+				if dst.Ids != nil {
+					newDst = dst.Ids
+				} else {
+					newDst = &EndDeviceVersionIdentifiers{}
+					dst.Ids = newDst
+				}
 				if err := newDst.SetFields(newSrc, subs...); err != nil {
 					return err
 				}
 			} else {
 				if src != nil {
-					dst.EndDeviceVersionIdentifiers = src.EndDeviceVersionIdentifiers
+					dst.Ids = src.Ids
 				} else {
-					var zero EndDeviceVersionIdentifiers
-					dst.EndDeviceVersionIdentifiers = zero
+					dst.Ids = nil
 				}
 			}
 		case "lorawan_version":
@@ -580,10 +588,18 @@ func (dst *EndDeviceVersion) SetFields(src *EndDeviceVersion, paths ...string) e
 		case "default_formatters":
 			if len(subs) > 0 {
 				var newDst, newSrc *MessagePayloadFormatters
-				if src != nil {
-					newSrc = &src.DefaultFormatters
+				if (src == nil || src.DefaultFormatters == nil) && dst.DefaultFormatters == nil {
+					continue
 				}
-				newDst = &dst.DefaultFormatters
+				if src != nil {
+					newSrc = src.DefaultFormatters
+				}
+				if dst.DefaultFormatters != nil {
+					newDst = dst.DefaultFormatters
+				} else {
+					newDst = &MessagePayloadFormatters{}
+					dst.DefaultFormatters = newDst
+				}
 				if err := newDst.SetFields(newSrc, subs...); err != nil {
 					return err
 				}
@@ -591,8 +607,147 @@ func (dst *EndDeviceVersion) SetFields(src *EndDeviceVersion, paths ...string) e
 				if src != nil {
 					dst.DefaultFormatters = src.DefaultFormatters
 				} else {
-					var zero MessagePayloadFormatters
-					dst.DefaultFormatters = zero
+					dst.DefaultFormatters = nil
+				}
+			}
+
+		default:
+			return fmt.Errorf("invalid field: '%s'", name)
+		}
+	}
+	return nil
+}
+
+func (dst *ADRSettings) SetFields(src *ADRSettings, paths ...string) error {
+	for name, subs := range _processPaths(paths) {
+		switch name {
+
+		case "mode":
+			if len(subs) == 0 && src == nil {
+				dst.Mode = nil
+				continue
+			} else if len(subs) == 0 {
+				dst.Mode = src.Mode
+				continue
+			}
+
+			subPathMap := _processPaths(subs)
+			if len(subPathMap) > 1 {
+				return fmt.Errorf("more than one field specified for oneof field '%s'", name)
+			}
+			for oneofName, oneofSubs := range subPathMap {
+				switch oneofName {
+				case "static":
+					var srcTypeOk bool
+					if src != nil {
+						_, srcTypeOk = src.Mode.(*ADRSettings_Static)
+					}
+					if srcValid := srcTypeOk || src == nil || src.Mode == nil || len(oneofSubs) == 0; !srcValid {
+						return fmt.Errorf("attempt to set oneof 'static', while different oneof is set in source")
+					}
+					_, dstTypeOk := dst.Mode.(*ADRSettings_Static)
+					if dstValid := dstTypeOk || dst.Mode == nil || len(oneofSubs) == 0; !dstValid {
+						return fmt.Errorf("attempt to set oneof 'static', while different oneof is set in destination")
+					}
+					if len(oneofSubs) > 0 {
+						var newDst, newSrc *ADRSettings_StaticMode
+						if srcTypeOk {
+							newSrc = src.Mode.(*ADRSettings_Static).Static
+						}
+						if dstTypeOk {
+							newDst = dst.Mode.(*ADRSettings_Static).Static
+						} else if srcTypeOk {
+							newDst = &ADRSettings_StaticMode{}
+							dst.Mode = &ADRSettings_Static{Static: newDst}
+						} else {
+							dst.Mode = nil
+							continue
+						}
+						if err := newDst.SetFields(newSrc, oneofSubs...); err != nil {
+							return err
+						}
+					} else {
+						if srcTypeOk {
+							dst.Mode = src.Mode
+						} else {
+							dst.Mode = nil
+						}
+					}
+				case "dynamic":
+					var srcTypeOk bool
+					if src != nil {
+						_, srcTypeOk = src.Mode.(*ADRSettings_Dynamic)
+					}
+					if srcValid := srcTypeOk || src == nil || src.Mode == nil || len(oneofSubs) == 0; !srcValid {
+						return fmt.Errorf("attempt to set oneof 'dynamic', while different oneof is set in source")
+					}
+					_, dstTypeOk := dst.Mode.(*ADRSettings_Dynamic)
+					if dstValid := dstTypeOk || dst.Mode == nil || len(oneofSubs) == 0; !dstValid {
+						return fmt.Errorf("attempt to set oneof 'dynamic', while different oneof is set in destination")
+					}
+					if len(oneofSubs) > 0 {
+						var newDst, newSrc *ADRSettings_DynamicMode
+						if srcTypeOk {
+							newSrc = src.Mode.(*ADRSettings_Dynamic).Dynamic
+						}
+						if dstTypeOk {
+							newDst = dst.Mode.(*ADRSettings_Dynamic).Dynamic
+						} else if srcTypeOk {
+							newDst = &ADRSettings_DynamicMode{}
+							dst.Mode = &ADRSettings_Dynamic{Dynamic: newDst}
+						} else {
+							dst.Mode = nil
+							continue
+						}
+						if err := newDst.SetFields(newSrc, oneofSubs...); err != nil {
+							return err
+						}
+					} else {
+						if srcTypeOk {
+							dst.Mode = src.Mode
+						} else {
+							dst.Mode = nil
+						}
+					}
+				case "disabled":
+					var srcTypeOk bool
+					if src != nil {
+						_, srcTypeOk = src.Mode.(*ADRSettings_Disabled)
+					}
+					if srcValid := srcTypeOk || src == nil || src.Mode == nil || len(oneofSubs) == 0; !srcValid {
+						return fmt.Errorf("attempt to set oneof 'disabled', while different oneof is set in source")
+					}
+					_, dstTypeOk := dst.Mode.(*ADRSettings_Disabled)
+					if dstValid := dstTypeOk || dst.Mode == nil || len(oneofSubs) == 0; !dstValid {
+						return fmt.Errorf("attempt to set oneof 'disabled', while different oneof is set in destination")
+					}
+					if len(oneofSubs) > 0 {
+						var newDst, newSrc *ADRSettings_DisabledMode
+						if srcTypeOk {
+							newSrc = src.Mode.(*ADRSettings_Disabled).Disabled
+						}
+						if dstTypeOk {
+							newDst = dst.Mode.(*ADRSettings_Disabled).Disabled
+						} else if srcTypeOk {
+							newDst = &ADRSettings_DisabledMode{}
+							dst.Mode = &ADRSettings_Disabled{Disabled: newDst}
+						} else {
+							dst.Mode = nil
+							continue
+						}
+						if err := newDst.SetFields(newSrc, oneofSubs...); err != nil {
+							return err
+						}
+					} else {
+						if srcTypeOk {
+							dst.Mode = src.Mode
+						} else {
+							dst.Mode = nil
+						}
+					}
+
+				default:
+					return fmt.Errorf("invalid oneof field: '%s.%s'", name, oneofName)
 				}
 			}
 
@@ -1235,6 +1390,115 @@ func (dst *MACSettings) SetFields(src *MACSettings, paths ...string) error {
 					dst.DesiredMaxEirp = nil
 				}
 			}
+		case "class_b_c_downlink_interval":
+			if len(subs) > 0 {
+				return fmt.Errorf("'class_b_c_downlink_interval' has no subfields, but %s were specified", subs)
+			}
+			if src != nil {
+				dst.ClassBCDownlinkInterval = src.ClassBCDownlinkInterval
+			} else {
+				dst.ClassBCDownlinkInterval = nil
+			}
+		case "uplink_dwell_time":
+			if len(subs) > 0 {
+				var newDst, newSrc *BoolValue
+				if (src == nil || src.UplinkDwellTime == nil) && dst.UplinkDwellTime == nil {
+					continue
+				}
+				if src != nil {
+					newSrc = src.UplinkDwellTime
+				}
+				if dst.UplinkDwellTime != nil {
+					newDst = dst.UplinkDwellTime
+				} else {
+					newDst = &BoolValue{}
+					dst.UplinkDwellTime = newDst
+				}
+				if err := newDst.SetFields(newSrc, subs...); err != nil {
+					return err
+				}
+			} else {
+				if src != nil {
+					dst.UplinkDwellTime = src.UplinkDwellTime
+				} else {
+					dst.UplinkDwellTime = nil
+				}
+			}
+		case "downlink_dwell_time":
+			if len(subs) > 0 {
+				var newDst, newSrc *BoolValue
+				if (src == nil || src.DownlinkDwellTime == nil) && dst.DownlinkDwellTime == nil {
+					continue
+				}
+				if src != nil {
+					newSrc = src.DownlinkDwellTime
+				}
+				if dst.DownlinkDwellTime != nil {
+					newDst = dst.DownlinkDwellTime
+				} else {
+					newDst = &BoolValue{}
+					dst.DownlinkDwellTime = newDst
+				}
+				if err := newDst.SetFields(newSrc, subs...); err != nil {
+					return err
+				}
+			} else {
+				if src != nil {
+					dst.DownlinkDwellTime = src.DownlinkDwellTime
+				} else {
+					dst.DownlinkDwellTime = nil
+				}
+			}
+		case "adr":
+			if len(subs) > 0 {
+				var newDst, newSrc *ADRSettings
+				if (src == nil || src.Adr == nil) && dst.Adr == nil {
+					continue
+				}
+				if src != nil {
+					newSrc = src.Adr
+				}
+				if dst.Adr != nil {
+					newDst = dst.Adr
+				} else {
+					newDst = &ADRSettings{}
+					dst.Adr = newDst
+				}
+				if err := newDst.SetFields(newSrc, subs...); err != nil {
+					return err
+				}
+			} else {
+				if src != nil {
+					dst.Adr = src.Adr
+				} else {
+					dst.Adr = nil
+				}
+			}
+		case "schedule_downlinks":
+			if len(subs) > 0 {
+				var newDst, newSrc *BoolValue
+				if (src == nil || src.ScheduleDownlinks == nil) && dst.ScheduleDownlinks == nil {
+					continue
+				}
+				if src != nil {
+					newSrc = src.ScheduleDownlinks
+				}
+				if dst.ScheduleDownlinks != nil {
+					newDst = dst.ScheduleDownlinks
+				} else {
+					newDst = &BoolValue{}
+					dst.ScheduleDownlinks = newDst
+				}
+				if err := newDst.SetFields(newSrc, subs...); err != nil {
+					return err
+				}
+			} else {
+				if src != nil {
+					dst.ScheduleDownlinks = src.ScheduleDownlinks
+				} else {
+					dst.ScheduleDownlinks = nil
+				}
+			}
 
 		default:
 			return fmt.Errorf("invalid field: '%s'", name)
@@ -1249,10 +1513,18 @@ func (dst *MACState) SetFields(src *MACState, paths ...string) error {
 		case "current_parameters":
 			if len(subs) > 0 {
 				var newDst, newSrc *MACParameters
-				if src != nil {
-					newSrc = &src.CurrentParameters
+				if (src == nil || src.CurrentParameters == nil) && dst.CurrentParameters == nil {
+					continue
 				}
-				newDst = &dst.CurrentParameters
+				if src != nil {
+					newSrc = src.CurrentParameters
+				}
+				if dst.CurrentParameters != nil {
+					newDst = dst.CurrentParameters
+				} else {
+					newDst = &MACParameters{}
+					dst.CurrentParameters = newDst
+				}
 				if err := newDst.SetFields(newSrc, subs...); err != nil {
 					return err
 				}
@@ -1260,17 +1532,24 @@ func (dst *MACState) SetFields(src *MACState, paths ...string) error {
 				if src != nil {
 					dst.CurrentParameters = src.CurrentParameters
 				} else {
-					var zero MACParameters
-					dst.CurrentParameters = zero
+					dst.CurrentParameters = nil
 				}
 			}
 		case "desired_parameters":
 			if len(subs) > 0 {
 				var newDst, newSrc *MACParameters
-				if src != nil {
-					newSrc = &src.DesiredParameters
+				if (src == nil || src.DesiredParameters == nil) && dst.DesiredParameters == nil {
+					continue
 				}
-				newDst = &dst.DesiredParameters
+				if src != nil {
+					newSrc = src.DesiredParameters
+				}
+				if dst.DesiredParameters != nil {
+					newDst = dst.DesiredParameters
+				} else {
+					newDst = &MACParameters{}
+					dst.DesiredParameters = newDst
+				}
 				if err := newDst.SetFields(newSrc, subs...); err != nil {
 					return err
 				}
@@ -1278,8 +1557,7 @@ func (dst *MACState) SetFields(src *MACState, paths ...string) error {
 				if src != nil {
 					dst.DesiredParameters = src.DesiredParameters
 				} else {
-					var zero MACParameters
-					dst.DesiredParameters = zero
+					dst.DesiredParameters = nil
 				}
 			}
 		case "device_class":
@@ -1531,6 +1809,15 @@ func (dst *MACState) SetFields(src *MACState, paths ...string) error {
 				var zero uint32
 				dst.LastAdrChangeFCntUp = zero
 			}
+		case "recent_mac_command_identifiers":
+			if len(subs) > 0 {
+				return fmt.Errorf("'recent_mac_command_identifiers' has no subfields, but %s were specified", subs)
+			}
+			if src != nil {
+				dst.RecentMacCommandIdentifiers = src.RecentMacCommandIdentifiers
+			} else {
+				dst.RecentMacCommandIdentifiers = nil
+			}
 
 		default:
 			return fmt.Errorf("invalid field: '%s'", name)
@@ -1584,19 +1871,26 @@ func (dst *EndDevice) SetFields(src *EndDevice, paths ...string) error {
 		case "ids":
 			if len(subs) > 0 {
 				var newDst, newSrc *EndDeviceIdentifiers
-				if src != nil {
-					newSrc = &src.EndDeviceIdentifiers
+				if (src == nil || src.Ids == nil) && dst.Ids == nil {
+					continue
 				}
-				newDst = &dst.EndDeviceIdentifiers
+				if src != nil {
+					newSrc = src.Ids
+				}
+				if dst.Ids != nil {
+					newDst = dst.Ids
+				} else {
+					newDst = &EndDeviceIdentifiers{}
+					dst.Ids = newDst
+				}
 				if err := newDst.SetFields(newSrc, subs...); err != nil {
 					return err
 				}
 			} else {
 				if src != nil {
-					dst.EndDeviceIdentifiers = src.EndDeviceIdentifiers
+					dst.Ids = src.Ids
 				} else {
-					var zero EndDeviceIdentifiers
-					dst.EndDeviceIdentifiers = zero
+					dst.Ids = nil
 				}
 			}
 		case "created_at":
@@ -1606,8 +1900,7 @@ func (dst *EndDevice) SetFields(src *EndDevice, paths ...string) error {
 			if src != nil {
 				dst.CreatedAt = src.CreatedAt
 			} else {
-				var zero time.Time
-				dst.CreatedAt = zero
+				dst.CreatedAt = nil
 			}
 		case "updated_at":
 			if len(subs) > 0 {
@@ -1616,8 +1909,7 @@ func (dst *EndDevice) SetFields(src *EndDevice, paths ...string) error {
 			if src != nil {
 				dst.UpdatedAt = src.UpdatedAt
 			} else {
-				var zero time.Time
-				dst.UpdatedAt = zero
+				dst.UpdatedAt = nil
 			}
 		case "name":
 			if len(subs) > 0 {
@@ -2229,6 +2521,15 @@ func (dst *EndDevice) SetFields(src *EndDevice, paths ...string) error {
 			} else {
 				dst.ActivatedAt = nil
 			}
+		case "last_seen_at":
+			if len(subs) > 0 {
+				return fmt.Errorf("'last_seen_at' has no subfields, but %s were specified", subs)
+			}
+			if src != nil {
+				dst.LastSeenAt = src.LastSeenAt
+			} else {
+				dst.LastSeenAt = nil
+			}
 
 		default:
 			return fmt.Errorf("invalid field: '%s'", name)
@@ -2293,10 +2594,18 @@ func (dst *CreateEndDeviceRequest) SetFields(src *CreateEndDeviceRequest, paths 
 		case "end_device":
 			if len(subs) > 0 {
 				var newDst, newSrc *EndDevice
-				if src != nil {
-					newSrc = &src.EndDevice
+				if (src == nil || src.EndDevice == nil) && dst.EndDevice == nil {
+					continue
 				}
-				newDst = &dst.EndDevice
+				if src != nil {
+					newSrc = src.EndDevice
+				}
+				if dst.EndDevice != nil {
+					newDst = dst.EndDevice
+				} else {
+					newDst = &EndDevice{}
+					dst.EndDevice = newDst
+				}
 				if err := newDst.SetFields(newSrc, subs...); err != nil {
 					return err
 				}
@@ -2304,8 +2613,7 @@ func (dst *CreateEndDeviceRequest) SetFields(src *CreateEndDeviceRequest, paths 
 				if src != nil {
 					dst.EndDevice = src.EndDevice
 				} else {
-					var zero EndDevice
-					dst.EndDevice = zero
+					dst.EndDevice = nil
 				}
 			}
 
@@ -2322,10 +2630,18 @@ func (dst *UpdateEndDeviceRequest) SetFields(src *UpdateEndDeviceRequest, paths 
 		case "end_device":
 			if len(subs) > 0 {
 				var newDst, newSrc *EndDevice
-				if src != nil {
-					newSrc = &src.EndDevice
+				if (src == nil || src.EndDevice == nil) && dst.EndDevice == nil {
+					continue
 				}
-				newDst = &dst.EndDevice
+				if src != nil {
+					newSrc = src.EndDevice
+				}
+				if dst.EndDevice != nil {
+					newDst = dst.EndDevice
+				} else {
+					newDst = &EndDevice{}
+					dst.EndDevice = newDst
+				}
 				if err := newDst.SetFields(newSrc, subs...); err != nil {
 					return err
 				}
@@ -2333,8 +2649,7 @@ func (dst *UpdateEndDeviceRequest) SetFields(src *UpdateEndDeviceRequest, paths 
 				if src != nil {
 					dst.EndDevice = src.EndDevice
 				} else {
-					var zero EndDevice
-					dst.EndDevice = zero
+					dst.EndDevice = nil
 				}
 			}
 		case "field_mask":
@@ -2354,25 +2669,52 @@ func (dst *UpdateEndDeviceRequest) SetFields(src *UpdateEndDeviceRequest, paths 
 	return nil
 }
 
+func (dst *BatchUpdateEndDeviceLastSeenRequest) SetFields(src *BatchUpdateEndDeviceLastSeenRequest, paths ...string) error {
+	for name, subs := range _processPaths(paths) {
+		switch name {
+		case "updates":
+			if len(subs) > 0 {
+				return fmt.Errorf("'updates' has no subfields, but %s were specified", subs)
+			}
+			if src != nil {
+				dst.Updates = src.Updates
+			} else {
+				dst.Updates = nil
+			}
+
+		default:
+			return fmt.Errorf("invalid field: '%s'", name)
+		}
+	}
+	return nil
+}
+
 func (dst *GetEndDeviceRequest) SetFields(src *GetEndDeviceRequest, paths ...string) error {
 	for name, subs := range _processPaths(paths) {
 		switch name {
 		case "end_device_ids":
 			if len(subs) > 0 {
 				var newDst, newSrc *EndDeviceIdentifiers
-				if src != nil {
-					newSrc = &src.EndDeviceIdentifiers
+				if (src == nil || src.EndDeviceIds == nil) && dst.EndDeviceIds == nil {
+					continue
 				}
-				newDst = &dst.EndDeviceIdentifiers
+				if src != nil {
+					newSrc = src.EndDeviceIds
+				}
+				if dst.EndDeviceIds != nil {
+					newDst = dst.EndDeviceIds
+				} else {
+					newDst = &EndDeviceIdentifiers{}
+					dst.EndDeviceIds = newDst
+				}
 				if err := newDst.SetFields(newSrc, subs...); err != nil {
 					return err
 				}
 			} else {
 				if src != nil {
-					dst.EndDeviceIdentifiers = src.EndDeviceIdentifiers
+					dst.EndDeviceIds = src.EndDeviceIds
 				} else {
-					var zero EndDeviceIdentifiers
-					dst.EndDeviceIdentifiers = zero
+					dst.EndDeviceIds = nil
 				}
 			}
 		case "field_mask":
@@ -2402,8 +2744,7 @@ func (dst *GetEndDeviceIdentifiersForEUIsRequest) SetFields(src *GetEndDeviceIde
 			if src != nil {
 				dst.JoinEui = src.JoinEui
 			} else {
-				var zero go_thethings_network_lorawan_stack_v3_pkg_types.EUI64
-				dst.JoinEui = zero
+				dst.JoinEui = nil
 			}
 		case "dev_eui":
 			if len(subs) > 0 {
@@ -2412,8 +2753,7 @@ func (dst *GetEndDeviceIdentifiersForEUIsRequest) SetFields(src *GetEndDeviceIde
 			if src != nil {
 				dst.DevEui = src.DevEui
 			} else {
-				var zero go_thethings_network_lorawan_stack_v3_pkg_types.EUI64
-				dst.DevEui = zero
+				dst.DevEui = nil
 			}
 
 		default:
@@ -2429,19 +2769,26 @@ func (dst *ListEndDevicesRequest) SetFields(src *ListEndDevicesRequest, paths ..
 		case "application_ids":
 			if len(subs) > 0 {
 				var newDst, newSrc *ApplicationIdentifiers
-				if src != nil {
-					newSrc = &src.ApplicationIdentifiers
+				if (src == nil || src.ApplicationIds == nil) && dst.ApplicationIds == nil {
+					continue
 				}
-				newDst = &dst.ApplicationIdentifiers
+				if src != nil {
+					newSrc = src.ApplicationIds
+				}
+				if dst.ApplicationIds != nil {
+					newDst = dst.ApplicationIds
+				} else {
+					newDst = &ApplicationIdentifiers{}
+					dst.ApplicationIds = newDst
+				}
 				if err := newDst.SetFields(newSrc, subs...); err != nil {
 					return err
 				}
 			} else {
 				if src != nil {
-					dst.ApplicationIdentifiers = src.ApplicationIdentifiers
+					dst.ApplicationIds = src.ApplicationIds
 				} else {
-					var zero ApplicationIdentifiers
-					dst.ApplicationIdentifiers = zero
+					dst.ApplicationIds = nil
 				}
 			}
 		case "field_mask":
@@ -2497,10 +2844,18 @@ func (dst *SetEndDeviceRequest) SetFields(src *SetEndDeviceRequest, paths ...str
 		case "end_device":
 			if len(subs) > 0 {
 				var newDst, newSrc *EndDevice
-				if src != nil {
-					newSrc = &src.EndDevice
+				if (src == nil || src.EndDevice == nil) && dst.EndDevice == nil {
+					continue
 				}
-				newDst = &dst.EndDevice
+				if src != nil {
+					newSrc = src.EndDevice
+				}
+				if dst.EndDevice != nil {
+					newDst = dst.EndDevice
+				} else {
+					newDst = &EndDevice{}
+					dst.EndDevice = newDst
+				}
 				if err := newDst.SetFields(newSrc, subs...); err != nil {
 					return err
 				}
@@ -2508,8 +2863,7 @@ func (dst *SetEndDeviceRequest) SetFields(src *SetEndDeviceRequest, paths ...str
 				if src != nil {
 					dst.EndDevice = src.EndDevice
 				} else {
-					var zero EndDevice
-					dst.EndDevice = zero
+					dst.EndDevice = nil
 				}
 			}
 		case "field_mask":
@@ -2535,19 +2889,26 @@ func (dst *ResetAndGetEndDeviceRequest) SetFields(src *ResetAndGetEndDeviceReque
 		case "end_device_ids":
 			if len(subs) > 0 {
 				var newDst, newSrc *EndDeviceIdentifiers
-				if src != nil {
-					newSrc = &src.EndDeviceIdentifiers
+				if (src == nil || src.EndDeviceIds == nil) && dst.EndDeviceIds == nil {
+					continue
 				}
-				newDst = &dst.EndDeviceIdentifiers
+				if src != nil {
+					newSrc = src.EndDeviceIds
+				}
+				if dst.EndDeviceIds != nil {
+					newDst = dst.EndDeviceIds
+				} else {
+					newDst = &EndDeviceIdentifiers{}
+					dst.EndDeviceIds = newDst
+				}
 				if err := newDst.SetFields(newSrc, subs...); err != nil {
 					return err
 				}
 			} else {
 				if src != nil {
-					dst.EndDeviceIdentifiers = src.EndDeviceIdentifiers
+					dst.EndDeviceIds = src.EndDeviceIds
 				} else {
-					var zero EndDeviceIdentifiers
-					dst.EndDeviceIdentifiers = zero
+					dst.EndDeviceIds = nil
 				}
 			}
 		case "field_mask":
@@ -2573,10 +2934,18 @@ func (dst *EndDeviceTemplate) SetFields(src *EndDeviceTemplate, paths ...string)
 		case "end_device":
 			if len(subs) > 0 {
 				var newDst, newSrc *EndDevice
-				if src != nil {
-					newSrc = &src.EndDevice
+				if (src == nil || src.EndDevice == nil) && dst.EndDevice == nil {
+					continue
 				}
-				newDst = &dst.EndDevice
+				if src != nil {
+					newSrc = src.EndDevice
+				}
+				if dst.EndDevice != nil {
+					newDst = dst.EndDevice
+				} else {
+					newDst = &EndDevice{}
+					dst.EndDevice = newDst
+				}
 				if err := newDst.SetFields(newSrc, subs...); err != nil {
 					return err
 				}
@@ -2584,8 +2953,7 @@ func (dst *EndDeviceTemplate) SetFields(src *EndDeviceTemplate, paths ...string)
 				if src != nil {
 					dst.EndDevice = src.EndDevice
 				} else {
-					var zero EndDevice
-					dst.EndDevice = zero
+					dst.EndDevice = nil
 				}
 			}
 		case "field_mask":
@@ -2697,6 +3065,31 @@ func (dst *ConvertEndDeviceTemplateRequest) SetFields(src *ConvertEndDeviceTempl
 			} else {
 				dst.Data = nil
 			}
+		case "end_device_version_ids":
+			if len(subs) > 0 {
+				var newDst, newSrc *EndDeviceVersionIdentifiers
+				if (src == nil || src.EndDeviceVersionIds == nil) && dst.EndDeviceVersionIds == nil {
+					continue
+				}
+				if src != nil {
+					newSrc = src.EndDeviceVersionIds
+				}
+				if dst.EndDeviceVersionIds != nil {
+					newDst = dst.EndDeviceVersionIds
+				} else {
+					newDst = &EndDeviceVersionIdentifiers{}
+					dst.EndDeviceVersionIds = newDst
+				}
+				if err := newDst.SetFields(newSrc, subs...); err != nil {
+					return err
+				}
+			} else {
+				if src != nil {
+					dst.EndDeviceVersionIds = src.EndDeviceVersionIds
+				} else {
+					dst.EndDeviceVersionIds = nil
+				}
+			}
 
 		default:
 			return fmt.Errorf("invalid field: '%s'", name)
@@ -2766,16 +3159,178 @@ func (dst *MACParameters_Channel) SetFields(src *MACParameters_Channel, paths ..
 	return nil
 }
 
+func (dst *ADRSettings_StaticMode) SetFields(src *ADRSettings_StaticMode, paths ...string) error {
+	for name, subs := range _processPaths(paths) {
+		switch name {
+		case "data_rate_index":
+			if len(subs) > 0 {
+				return fmt.Errorf("'data_rate_index' has no subfields, but %s were specified", subs)
+			}
+			if src != nil {
+				dst.DataRateIndex = src.DataRateIndex
+			} else {
+				var zero DataRateIndex
+				dst.DataRateIndex = zero
+			}
+		case "tx_power_index":
+			if len(subs) > 0 {
+				return fmt.Errorf("'tx_power_index' has no subfields, but %s were specified", subs)
+			}
+			if src != nil {
+				dst.TxPowerIndex = src.TxPowerIndex
+			} else {
+				var zero uint32
+				dst.TxPowerIndex = zero
+			}
+		case "nb_trans":
+			if len(subs) > 0 {
+				return fmt.Errorf("'nb_trans' has no subfields, but %s were specified", subs)
+			}
+			if src != nil {
+				dst.NbTrans = src.NbTrans
+			} else {
+				var zero uint32
+				dst.NbTrans = zero
+			}
+
+		default:
+			return fmt.Errorf("invalid field: '%s'", name)
+		}
+	}
+	return nil
+}
+
+func (dst *ADRSettings_DynamicMode) SetFields(src *ADRSettings_DynamicMode, paths ...string) error {
+	for name, subs := range _processPaths(paths) {
+		switch name {
+		case "margin":
+			if len(subs) > 0 {
+				return fmt.Errorf("'margin' has no subfields, but %s were specified", subs)
+			}
+			if src != nil {
+				dst.Margin = src.Margin
+			} else {
+				dst.Margin = nil
+			}
+		case "min_data_rate_index":
+			if len(subs) > 0 {
+				var newDst, newSrc *DataRateIndexValue
+				if (src == nil || src.MinDataRateIndex == nil) && dst.MinDataRateIndex == nil {
+					continue
+				}
+				if src != nil {
+					newSrc = src.MinDataRateIndex
+				}
+				if dst.MinDataRateIndex != nil {
+					newDst = dst.MinDataRateIndex
+				} else {
+					newDst = &DataRateIndexValue{}
+					dst.MinDataRateIndex = newDst
+				}
+				if err := newDst.SetFields(newSrc, subs...); err != nil {
+					return err
+				}
+			} else {
+				if src != nil {
+					dst.MinDataRateIndex = src.MinDataRateIndex
+				} else {
+					dst.MinDataRateIndex = nil
+				}
+			}
+		case "max_data_rate_index":
+			if len(subs) > 0 {
+				var newDst, newSrc *DataRateIndexValue
+				if (src == nil || src.MaxDataRateIndex == nil) && dst.MaxDataRateIndex == nil {
+					continue
+				}
+				if src != nil {
+					newSrc = src.MaxDataRateIndex
+				}
+				if dst.MaxDataRateIndex != nil {
+					newDst = dst.MaxDataRateIndex
+				} else {
+					newDst = &DataRateIndexValue{}
+					dst.MaxDataRateIndex = newDst
+				}
+				if err := newDst.SetFields(newSrc, subs...); err != nil {
+					return err
+				}
+			} else {
+				if src != nil {
+					dst.MaxDataRateIndex = src.MaxDataRateIndex
+				} else {
+					dst.MaxDataRateIndex = nil
+				}
+			}
+		case "min_tx_power_index":
+			if len(subs) > 0 {
+				return fmt.Errorf("'min_tx_power_index' has no subfields, but %s were specified", subs)
+			}
+			if src != nil {
+				dst.MinTxPowerIndex = src.MinTxPowerIndex
+			} else {
+				dst.MinTxPowerIndex = nil
+			}
+		case "max_tx_power_index":
+			if len(subs) > 0 {
+				return fmt.Errorf("'max_tx_power_index' has no subfields, but %s were specified", subs)
+			}
+			if src != nil {
+				dst.MaxTxPowerIndex = src.MaxTxPowerIndex
+			} else {
+				dst.MaxTxPowerIndex = nil
+			}
+		case "min_nb_trans":
+			if len(subs) > 0 {
+				return fmt.Errorf("'min_nb_trans' has no subfields, but %s were specified", subs)
+			}
+			if src != nil {
+				dst.MinNbTrans = src.MinNbTrans
+			} else {
+				dst.MinNbTrans = nil
+			}
+		case "max_nb_trans":
+			if len(subs) > 0 {
+				return fmt.Errorf("'max_nb_trans' has no subfields, but %s were specified", subs)
+			}
+			if src != nil {
+				dst.MaxNbTrans = src.MaxNbTrans
+			} else {
+				dst.MaxNbTrans = nil
+			}
+
+		default:
+			return fmt.Errorf("invalid field: '%s'", name)
+		}
+	}
+	return nil
+}
+
+func (dst *ADRSettings_DisabledMode) SetFields(src *ADRSettings_DisabledMode, paths ...string) error {
+	if len(paths) != 0 {
+		return fmt.Errorf("message ADRSettings_DisabledMode has no fields, but paths %s were specified", paths)
+	}
+	return nil
+}
+
 func (dst *MACState_JoinRequest) SetFields(src *MACState_JoinRequest, paths ...string) error {
 	for name, subs := range _processPaths(paths) {
 		switch name {
 		case "downlink_settings":
 			if len(subs) > 0 {
 				var newDst, newSrc *DLSettings
-				if src != nil {
-					newSrc = &src.DownlinkSettings
+				if (src == nil || src.DownlinkSettings == nil) && dst.DownlinkSettings == nil {
+					continue
 				}
-				newDst = &dst.DownlinkSettings
+				if src != nil {
+					newSrc = src.DownlinkSettings
+				}
+				if dst.DownlinkSettings != nil {
+					newDst = dst.DownlinkSettings
+				} else {
+					newDst = &DLSettings{}
+					dst.DownlinkSettings = newDst
+				}
 				if err := newDst.SetFields(newSrc, subs...); err != nil {
 					return err
 				}
@@ -2783,8 +3338,7 @@ func (dst *MACState_JoinRequest) SetFields(src *MACState_JoinRequest, paths ...s
 				if src != nil {
 					dst.DownlinkSettings = src.DownlinkSettings
 				} else {
-					var zero DLSettings
-					dst.DownlinkSettings = zero
+					dst.DownlinkSettings = nil
 				}
 			}
 		case "rx_delay":
@@ -2845,10 +3399,18 @@ func (dst *MACState_JoinAccept) SetFields(src *MACState_JoinAccept, paths ...str
 		case "request":
 			if len(subs) > 0 {
 				var newDst, newSrc *MACState_JoinRequest
-				if src != nil {
-					newSrc = &src.Request
+				if (src == nil || src.Request == nil) && dst.Request == nil {
+					continue
 				}
-				newDst = &dst.Request
+				if src != nil {
+					newSrc = src.Request
+				}
+				if dst.Request != nil {
+					newDst = dst.Request
+				} else {
+					newDst = &MACState_JoinRequest{}
+					dst.Request = newDst
+				}
 				if err := newDst.SetFields(newSrc, subs...); err != nil {
 					return err
 				}
@@ -2856,17 +3418,24 @@ func (dst *MACState_JoinAccept) SetFields(src *MACState_JoinAccept, paths ...str
 				if src != nil {
 					dst.Request = src.Request
 				} else {
-					var zero MACState_JoinRequest
-					dst.Request = zero
+					dst.Request = nil
 				}
 			}
 		case "keys":
 			if len(subs) > 0 {
 				var newDst, newSrc *SessionKeys
-				if src != nil {
-					newSrc = &src.Keys
+				if (src == nil || src.Keys == nil) && dst.Keys == nil {
+					continue
 				}
-				newDst = &dst.Keys
+				if src != nil {
+					newSrc = src.Keys
+				}
+				if dst.Keys != nil {
+					newDst = dst.Keys
+				} else {
+					newDst = &SessionKeys{}
+					dst.Keys = newDst
+				}
 				if err := newDst.SetFields(newSrc, subs...); err != nil {
 					return err
 				}
@@ -2874,8 +3443,7 @@ func (dst *MACState_JoinAccept) SetFields(src *MACState_JoinAccept, paths ...str
 				if src != nil {
 					dst.Keys = src.Keys
 				} else {
-					var zero SessionKeys
-					dst.Keys = zero
+					dst.Keys = nil
 				}
 			}
 		case "correlation_ids":
@@ -2894,8 +3462,7 @@ func (dst *MACState_JoinAccept) SetFields(src *MACState_JoinAccept, paths ...str
 			if src != nil {
 				dst.DevAddr = src.DevAddr
 			} else {
-				var zero go_thethings_network_lorawan_stack_v3_pkg_types.DevAddr
-				dst.DevAddr = zero
+				dst.DevAddr = nil
 			}
 		case "net_id":
 			if len(subs) > 0 {
@@ -2904,8 +3471,150 @@ func (dst *MACState_JoinAccept) SetFields(src *MACState_JoinAccept, paths ...str
 			if src != nil {
 				dst.NetId = src.NetId
 			} else {
-				var zero go_thethings_network_lorawan_stack_v3_pkg_types.NetID
-				dst.NetId = zero
+				dst.NetId = nil
+			}
+
+		default:
+			return fmt.Errorf("invalid field: '%s'", name)
+		}
+	}
+	return nil
+}
+
+func (dst *MACState_UplinkMessage) SetFields(src *MACState_UplinkMessage, paths ...string) error {
+	for name, subs := range _processPaths(paths) {
+		switch name {
+		case "payload":
+			if len(subs) > 0 {
+				var newDst, newSrc *Message
+				if (src == nil || src.Payload == nil) && dst.Payload == nil {
+					continue
+				}
+				if src != nil {
+					newSrc = src.Payload
+				}
+				if dst.Payload != nil {
+					newDst = dst.Payload
+				} else {
+					newDst = &Message{}
+					dst.Payload = newDst
+				}
+				if err := newDst.SetFields(newSrc, subs...); err != nil {
+					return err
+				}
+			} else {
+				if src != nil {
+					dst.Payload = src.Payload
+				} else {
+					dst.Payload = nil
+				}
+			}
+		case "settings":
+			if len(subs) > 0 {
+				var newDst, newSrc *MACState_UplinkMessage_TxSettings
+				if (src == nil || src.Settings == nil) && dst.Settings == nil {
+					continue
+				}
+				if src != nil {
+					newSrc = src.Settings
+				}
+				if dst.Settings != nil {
+					newDst = dst.Settings
+				} else {
+					newDst = &MACState_UplinkMessage_TxSettings{}
+					dst.Settings = newDst
+				}
+				if err := newDst.SetFields(newSrc, subs...); err != nil {
+					return err
+				}
+			} else {
+				if src != nil {
+					dst.Settings = src.Settings
+				} else {
+					dst.Settings = nil
+				}
+			}
+		case "rx_metadata":
+			if len(subs) > 0 {
+				return fmt.Errorf("'rx_metadata' has no subfields, but %s were specified", subs)
+			}
+			if src != nil {
+				dst.RxMetadata = src.RxMetadata
+			} else {
+				dst.RxMetadata = nil
+			}
+		case "received_at":
+			if len(subs) > 0 {
+				return fmt.Errorf("'received_at' has no subfields, but %s were specified", subs)
+			}
+			if src != nil {
+				dst.ReceivedAt = src.ReceivedAt
+			} else {
+				dst.ReceivedAt = nil
+			}
+		case "correlation_ids":
+			if len(subs) > 0 {
+				return fmt.Errorf("'correlation_ids' has no subfields, but %s were specified", subs)
+			}
+			if src != nil {
+				dst.CorrelationIds = src.CorrelationIds
+			} else {
+				dst.CorrelationIds = nil
+			}
+		case "device_channel_index":
+			if len(subs) > 0 {
+				return fmt.Errorf("'device_channel_index' has no subfields, but %s were specified", subs)
+			}
+			if src != nil {
+				dst.DeviceChannelIndex = src.DeviceChannelIndex
+			} else {
+				var zero uint32
+				dst.DeviceChannelIndex = zero
+			}
+
+		default:
+			return fmt.Errorf("invalid field: '%s'", name)
+		}
+	}
+	return nil
+}
+
+func (dst *MACState_DownlinkMessage) SetFields(src *MACState_DownlinkMessage, paths ...string) error {
+	for name, subs := range _processPaths(paths) {
+		switch name {
+		case "payload":
+			if len(subs) > 0 {
+				var newDst, newSrc *MACState_DownlinkMessage_Message
+				if (src == nil || src.Payload == nil) && dst.Payload == nil {
+					continue
+				}
+				if src != nil {
+					newSrc = src.Payload
+				}
+				if dst.Payload != nil {
+					newDst = dst.Payload
+				} else {
+					newDst = &MACState_DownlinkMessage_Message{}
+					dst.Payload = newDst
+				}
+				if err := newDst.SetFields(newSrc, subs...); err != nil {
+					return err
+				}
+			} else {
+				if src != nil {
+					dst.Payload = src.Payload
+				} else {
+					dst.Payload = nil
+				}
+			}
+		case "correlation_ids":
+			if len(subs) > 0 {
+				return fmt.Errorf("'correlation_ids' has no subfields, but %s were specified", subs)
+			}
+			if src != nil {
+				dst.CorrelationIds = src.CorrelationIds
+			} else {
+				dst.CorrelationIds = nil
 			}
 
 		default:
@@ -2957,6 +3666,307 @@ func (dst *MACState_DataRateRanges) SetFields(src *MACState_DataRateRanges, path
 				dst.Ranges = src.Ranges
 			} else {
 				dst.Ranges = nil
+			}
+
+		default:
+			return fmt.Errorf("invalid field: '%s'", name)
+		}
+	}
+	return nil
+}
+
+func (dst *MACState_UplinkMessage_TxSettings) SetFields(src *MACState_UplinkMessage_TxSettings, paths ...string) error {
+	for name, subs := range _processPaths(paths) {
+		switch name {
+		case "data_rate":
+			if len(subs) > 0 {
+				var newDst, newSrc *DataRate
+				if (src == nil || src.DataRate == nil) && dst.DataRate == nil {
+					continue
+				}
+				if src != nil {
+					newSrc = src.DataRate
+				}
+				if dst.DataRate != nil {
+					newDst = dst.DataRate
+				} else {
+					newDst = &DataRate{}
+					dst.DataRate = newDst
+				}
+				if err := newDst.SetFields(newSrc, subs...); err != nil {
+					return err
+				}
+			} else {
+				if src != nil {
+					dst.DataRate = src.DataRate
+				} else {
+					dst.DataRate = nil
+				}
+			}
+
+		default:
+			return fmt.Errorf("invalid field: '%s'", name)
+		}
+	}
+	return nil
+}
+
+func (dst *MACState_UplinkMessage_RxMetadata) SetFields(src *MACState_UplinkMessage_RxMetadata, paths ...string) error {
+	for name, subs := range _processPaths(paths) {
+		switch name {
+		case "gateway_ids":
+			if len(subs) > 0 {
+				var newDst, newSrc *GatewayIdentifiers
+				if (src == nil || src.GatewayIds == nil) && dst.GatewayIds == nil {
+					continue
+				}
+				if src != nil {
+					newSrc = src.GatewayIds
+				}
+				if dst.GatewayIds != nil {
+					newDst = dst.GatewayIds
+				} else {
+					newDst = &GatewayIdentifiers{}
+					dst.GatewayIds = newDst
+				}
+				if err := newDst.SetFields(newSrc, subs...); err != nil {
+					return err
+				}
+			} else {
+				if src != nil {
+					dst.GatewayIds = src.GatewayIds
+				} else {
+					dst.GatewayIds = nil
+				}
+			}
+		case "channel_rssi":
+			if len(subs) > 0 {
+				return fmt.Errorf("'channel_rssi' has no subfields, but %s were specified", subs)
+			}
+			if src != nil {
+				dst.ChannelRssi = src.ChannelRssi
+			} else {
+				var zero float32
+				dst.ChannelRssi = zero
+			}
+		case "snr":
+			if len(subs) > 0 {
+				return fmt.Errorf("'snr' has no subfields, but %s were specified", subs)
+			}
+			if src != nil {
+				dst.Snr = src.Snr
+			} else {
+				var zero float32
+				dst.Snr = zero
+			}
+		case "downlink_path_constraint":
+			if len(subs) > 0 {
+				return fmt.Errorf("'downlink_path_constraint' has no subfields, but %s were specified", subs)
+			}
+			if src != nil {
+				dst.DownlinkPathConstraint = src.DownlinkPathConstraint
+			} else {
+				var zero DownlinkPathConstraint
+				dst.DownlinkPathConstraint = zero
+			}
+		case "uplink_token":
+			if len(subs) > 0 {
+				return fmt.Errorf("'uplink_token' has no subfields, but %s were specified", subs)
+			}
+			if src != nil {
+				dst.UplinkToken = src.UplinkToken
+			} else {
+				dst.UplinkToken = nil
+			}
+		case "packet_broker":
+			if len(subs) > 0 {
+				var newDst, newSrc *MACState_UplinkMessage_RxMetadata_PacketBrokerMetadata
+				if (src == nil || src.PacketBroker == nil) && dst.PacketBroker == nil {
+					continue
+				}
+				if src != nil {
+					newSrc = src.PacketBroker
+				}
+				if dst.PacketBroker != nil {
+					newDst = dst.PacketBroker
+				} else {
+					newDst = &MACState_UplinkMessage_RxMetadata_PacketBrokerMetadata{}
+					dst.PacketBroker = newDst
+				}
+				if err := newDst.SetFields(newSrc, subs...); err != nil {
+					return err
+				}
+			} else {
+				if src != nil {
+					dst.PacketBroker = src.PacketBroker
+				} else {
+					dst.PacketBroker = nil
+				}
+			}
+
+		default:
+			return fmt.Errorf("invalid field: '%s'", name)
+		}
+	}
+	return nil
+}
+
+func (dst *MACState_UplinkMessage_RxMetadata_PacketBrokerMetadata) SetFields(src *MACState_UplinkMessage_RxMetadata_PacketBrokerMetadata, paths ...string) error {
+	if len(paths) != 0 {
+		return fmt.Errorf("message MACState_UplinkMessage_RxMetadata_PacketBrokerMetadata has no fields, but paths %s were specified", paths)
+	}
+	return nil
+}
+
+func (dst *MACState_DownlinkMessage_Message) SetFields(src *MACState_DownlinkMessage_Message, paths ...string) error {
+	for name, subs := range _processPaths(paths) {
+		switch name {
+		case "m_hdr":
+			if len(subs) > 0 {
+				var newDst, newSrc *MACState_DownlinkMessage_Message_MHDR
+				if (src == nil || src.MHdr == nil) && dst.MHdr == nil {
+					continue
+				}
+				if src != nil {
+					newSrc = src.MHdr
+				}
+				if dst.MHdr != nil {
+					newDst = dst.MHdr
+				} else {
+					newDst = &MACState_DownlinkMessage_Message_MHDR{}
+					dst.MHdr = newDst
+				}
+				if err := newDst.SetFields(newSrc, subs...); err != nil {
+					return err
+				}
+			} else {
+				if src != nil {
+					dst.MHdr = src.MHdr
+				} else {
+					dst.MHdr = nil
+				}
+			}
+		case "mac_payload":
+			if len(subs) > 0 {
+				var newDst, newSrc *MACState_DownlinkMessage_Message_MACPayload
+				if (src == nil || src.MacPayload == nil) && dst.MacPayload == nil {
+					continue
+				}
+				if src != nil {
+					newSrc = src.MacPayload
+				}
+				if dst.MacPayload != nil {
+					newDst = dst.MacPayload
+				} else {
+					newDst = &MACState_DownlinkMessage_Message_MACPayload{}
+					dst.MacPayload = newDst
+				}
+				if err := newDst.SetFields(newSrc, subs...); err != nil {
+					return err
+				}
+			} else {
+				if src != nil {
+					dst.MacPayload = src.MacPayload
+				} else {
+					dst.MacPayload = nil
+				}
+			}
+
+		default:
+			return fmt.Errorf("invalid field: '%s'", name)
+		}
+	}
+	return nil
+}
+
+func (dst *MACState_DownlinkMessage_Message_MHDR) SetFields(src *MACState_DownlinkMessage_Message_MHDR, paths ...string) error {
+	for name, subs := range _processPaths(paths) {
+		switch name {
+		case "m_type":
+			if len(subs) > 0 {
+				return fmt.Errorf("'m_type' has no subfields, but %s were specified", subs)
+			}
+			if src != nil {
+				dst.MType = src.MType
+			} else {
+				var zero MType
+				dst.MType = zero
+			}
+
+		default:
+			return fmt.Errorf("invalid field: '%s'", name)
+		}
+	}
+	return nil
+}
+
+func (dst *MACState_DownlinkMessage_Message_MACPayload) SetFields(src *MACState_DownlinkMessage_Message_MACPayload, paths ...string) error {
+	for name, subs := range _processPaths(paths) {
+		switch name {
+		case "f_port":
+			if len(subs) > 0 {
+				return fmt.Errorf("'f_port' has no subfields, but %s were specified", subs)
+			}
+			if src != nil {
+				dst.FPort = src.FPort
+			} else {
+				var zero uint32
+				dst.FPort = zero
+			}
+		case "full_f_cnt":
+			if len(subs) > 0 {
+				return fmt.Errorf("'full_f_cnt' has no subfields, but %s were specified", subs)
+			}
+			if src != nil {
+				dst.FullFCnt = src.FullFCnt
+			} else {
+				var zero uint32
+				dst.FullFCnt = zero
+			}
+
+		default:
+			return fmt.Errorf("invalid field: '%s'", name)
+		}
+	}
+	return nil
+}
+
+func (dst *BatchUpdateEndDeviceLastSeenRequest_EndDeviceLastSeenUpdate) SetFields(src *BatchUpdateEndDeviceLastSeenRequest_EndDeviceLastSeenUpdate, paths ...string) error {
+	for name, subs := range _processPaths(paths) {
+		switch name {
+		case "ids":
+			if len(subs) > 0 {
+				var newDst, newSrc *EndDeviceIdentifiers
+				if (src == nil || src.Ids == nil) && dst.Ids == nil {
+					continue
+				}
+				if src != nil {
+					newSrc = src.Ids
+				}
+				if dst.Ids != nil {
+					newDst = dst.Ids
+				} else {
+					newDst = &EndDeviceIdentifiers{}
+					dst.Ids = newDst
+				}
+				if err := newDst.SetFields(newSrc, subs...); err != nil {
+					return err
+				}
+			} else {
+				if src != nil {
+					dst.Ids = src.Ids
+				} else {
+					dst.Ids = nil
+				}
+			}
+		case "last_seen_at":
+			if len(subs) > 0 {
+				return fmt.Errorf("'last_seen_at' has no subfields, but %s were specified", subs)
+			}
+			if src != nil {
+				dst.LastSeenAt = src.LastSeenAt
+			} else {
+				dst.LastSeenAt = nil
 			}
 
 		default:

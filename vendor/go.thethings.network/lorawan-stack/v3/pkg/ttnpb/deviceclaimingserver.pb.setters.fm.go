@@ -2,10 +2,7 @@
 
 package ttnpb
 
-import (
-	fmt "fmt"
-	go_thethings_network_lorawan_stack_v3_pkg_types "go.thethings.network/lorawan-stack/v3/pkg/types"
-)
+import fmt "fmt"
 
 func (dst *ClaimEndDeviceRequest) SetFields(src *ClaimEndDeviceRequest, paths ...string) error {
 	for name, subs := range _processPaths(paths) {
@@ -13,10 +10,18 @@ func (dst *ClaimEndDeviceRequest) SetFields(src *ClaimEndDeviceRequest, paths ..
 		case "target_application_ids":
 			if len(subs) > 0 {
 				var newDst, newSrc *ApplicationIdentifiers
-				if src != nil {
-					newSrc = &src.TargetApplicationIds
+				if (src == nil || src.TargetApplicationIds == nil) && dst.TargetApplicationIds == nil {
+					continue
 				}
-				newDst = &dst.TargetApplicationIds
+				if src != nil {
+					newSrc = src.TargetApplicationIds
+				}
+				if dst.TargetApplicationIds != nil {
+					newDst = dst.TargetApplicationIds
+				} else {
+					newDst = &ApplicationIdentifiers{}
+					dst.TargetApplicationIds = newDst
+				}
 				if err := newDst.SetFields(newSrc, subs...); err != nil {
 					return err
 				}
@@ -24,8 +29,7 @@ func (dst *ClaimEndDeviceRequest) SetFields(src *ClaimEndDeviceRequest, paths ..
 				if src != nil {
 					dst.TargetApplicationIds = src.TargetApplicationIds
 				} else {
-					var zero ApplicationIdentifiers
-					dst.TargetApplicationIds = zero
+					dst.TargetApplicationIds = nil
 				}
 			}
 		case "target_device_id":
@@ -124,51 +128,57 @@ func (dst *ClaimEndDeviceRequest) SetFields(src *ClaimEndDeviceRequest, paths ..
 			for oneofName, oneofSubs := range subPathMap {
 				switch oneofName {
 				case "authenticated_identifiers":
-					_, srcOk := src.SourceDevice.(*ClaimEndDeviceRequest_AuthenticatedIdentifiers_)
-					if !srcOk && src.SourceDevice != nil {
+					var srcTypeOk bool
+					if src != nil {
+						_, srcTypeOk = src.SourceDevice.(*ClaimEndDeviceRequest_AuthenticatedIdentifiers_)
+					}
+					if srcValid := srcTypeOk || src == nil || src.SourceDevice == nil || len(oneofSubs) == 0; !srcValid {
 						return fmt.Errorf("attempt to set oneof 'authenticated_identifiers', while different oneof is set in source")
 					}
-					_, dstOk := dst.SourceDevice.(*ClaimEndDeviceRequest_AuthenticatedIdentifiers_)
-					if !dstOk && dst.SourceDevice != nil {
+					_, dstTypeOk := dst.SourceDevice.(*ClaimEndDeviceRequest_AuthenticatedIdentifiers_)
+					if dstValid := dstTypeOk || dst.SourceDevice == nil || len(oneofSubs) == 0; !dstValid {
 						return fmt.Errorf("attempt to set oneof 'authenticated_identifiers', while different oneof is set in destination")
 					}
 					if len(oneofSubs) > 0 {
 						var newDst, newSrc *ClaimEndDeviceRequest_AuthenticatedIdentifiers
-						if !srcOk && !dstOk {
-							continue
-						}
-						if srcOk {
+						if srcTypeOk {
 							newSrc = src.SourceDevice.(*ClaimEndDeviceRequest_AuthenticatedIdentifiers_).AuthenticatedIdentifiers
 						}
-						if dstOk {
+						if dstTypeOk {
 							newDst = dst.SourceDevice.(*ClaimEndDeviceRequest_AuthenticatedIdentifiers_).AuthenticatedIdentifiers
-						} else {
+						} else if srcTypeOk {
 							newDst = &ClaimEndDeviceRequest_AuthenticatedIdentifiers{}
 							dst.SourceDevice = &ClaimEndDeviceRequest_AuthenticatedIdentifiers_{AuthenticatedIdentifiers: newDst}
+						} else {
+							dst.SourceDevice = nil
+							continue
 						}
 						if err := newDst.SetFields(newSrc, oneofSubs...); err != nil {
 							return err
 						}
 					} else {
-						if src != nil {
+						if srcTypeOk {
 							dst.SourceDevice = src.SourceDevice
 						} else {
 							dst.SourceDevice = nil
 						}
 					}
 				case "qr_code":
-					_, srcOk := src.SourceDevice.(*ClaimEndDeviceRequest_QrCode)
-					if !srcOk && src.SourceDevice != nil {
+					var srcTypeOk bool
+					if src != nil {
+						_, srcTypeOk = src.SourceDevice.(*ClaimEndDeviceRequest_QrCode)
+					}
+					if srcValid := srcTypeOk || src == nil || src.SourceDevice == nil || len(oneofSubs) == 0; !srcValid {
 						return fmt.Errorf("attempt to set oneof 'qr_code', while different oneof is set in source")
 					}
-					_, dstOk := dst.SourceDevice.(*ClaimEndDeviceRequest_QrCode)
-					if !dstOk && dst.SourceDevice != nil {
+					_, dstTypeOk := dst.SourceDevice.(*ClaimEndDeviceRequest_QrCode)
+					if dstValid := dstTypeOk || dst.SourceDevice == nil || len(oneofSubs) == 0; !dstValid {
 						return fmt.Errorf("attempt to set oneof 'qr_code', while different oneof is set in destination")
 					}
 					if len(oneofSubs) > 0 {
 						return fmt.Errorf("'qr_code' has no subfields, but %s were specified", oneofSubs)
 					}
-					if src != nil {
+					if srcTypeOk {
 						dst.SourceDevice = src.SourceDevice
 					} else {
 						dst.SourceDevice = nil
@@ -192,19 +202,26 @@ func (dst *AuthorizeApplicationRequest) SetFields(src *AuthorizeApplicationReque
 		case "application_ids":
 			if len(subs) > 0 {
 				var newDst, newSrc *ApplicationIdentifiers
-				if src != nil {
-					newSrc = &src.ApplicationIdentifiers
+				if (src == nil || src.ApplicationIds == nil) && dst.ApplicationIds == nil {
+					continue
 				}
-				newDst = &dst.ApplicationIdentifiers
+				if src != nil {
+					newSrc = src.ApplicationIds
+				}
+				if dst.ApplicationIds != nil {
+					newDst = dst.ApplicationIds
+				} else {
+					newDst = &ApplicationIdentifiers{}
+					dst.ApplicationIds = newDst
+				}
 				if err := newDst.SetFields(newSrc, subs...); err != nil {
 					return err
 				}
 			} else {
 				if src != nil {
-					dst.ApplicationIdentifiers = src.ApplicationIdentifiers
+					dst.ApplicationIds = src.ApplicationIds
 				} else {
-					var zero ApplicationIdentifiers
-					dst.ApplicationIdentifiers = zero
+					dst.ApplicationIds = nil
 				}
 			}
 		case "api_key":
@@ -216,6 +233,135 @@ func (dst *AuthorizeApplicationRequest) SetFields(src *AuthorizeApplicationReque
 			} else {
 				var zero string
 				dst.ApiKey = zero
+			}
+
+		default:
+			return fmt.Errorf("invalid field: '%s'", name)
+		}
+	}
+	return nil
+}
+
+func (dst *GetInfoByJoinEUIRequest) SetFields(src *GetInfoByJoinEUIRequest, paths ...string) error {
+	for name, subs := range _processPaths(paths) {
+		switch name {
+		case "join_eui":
+			if len(subs) > 0 {
+				return fmt.Errorf("'join_eui' has no subfields, but %s were specified", subs)
+			}
+			if src != nil {
+				dst.JoinEui = src.JoinEui
+			} else {
+				dst.JoinEui = nil
+			}
+
+		default:
+			return fmt.Errorf("invalid field: '%s'", name)
+		}
+	}
+	return nil
+}
+
+func (dst *GetInfoByJoinEUIResponse) SetFields(src *GetInfoByJoinEUIResponse, paths ...string) error {
+	for name, subs := range _processPaths(paths) {
+		switch name {
+		case "join_eui":
+			if len(subs) > 0 {
+				return fmt.Errorf("'join_eui' has no subfields, but %s were specified", subs)
+			}
+			if src != nil {
+				dst.JoinEui = src.JoinEui
+			} else {
+				dst.JoinEui = nil
+			}
+		case "supports_claiming":
+			if len(subs) > 0 {
+				return fmt.Errorf("'supports_claiming' has no subfields, but %s were specified", subs)
+			}
+			if src != nil {
+				dst.SupportsClaiming = src.SupportsClaiming
+			} else {
+				var zero bool
+				dst.SupportsClaiming = zero
+			}
+
+		default:
+			return fmt.Errorf("invalid field: '%s'", name)
+		}
+	}
+	return nil
+}
+
+func (dst *GetClaimStatusResponse) SetFields(src *GetClaimStatusResponse, paths ...string) error {
+	for name, subs := range _processPaths(paths) {
+		switch name {
+		case "end_device_ids":
+			if len(subs) > 0 {
+				var newDst, newSrc *EndDeviceIdentifiers
+				if (src == nil || src.EndDeviceIds == nil) && dst.EndDeviceIds == nil {
+					continue
+				}
+				if src != nil {
+					newSrc = src.EndDeviceIds
+				}
+				if dst.EndDeviceIds != nil {
+					newDst = dst.EndDeviceIds
+				} else {
+					newDst = &EndDeviceIdentifiers{}
+					dst.EndDeviceIds = newDst
+				}
+				if err := newDst.SetFields(newSrc, subs...); err != nil {
+					return err
+				}
+			} else {
+				if src != nil {
+					dst.EndDeviceIds = src.EndDeviceIds
+				} else {
+					dst.EndDeviceIds = nil
+				}
+			}
+		case "home_net_id":
+			if len(subs) > 0 {
+				return fmt.Errorf("'home_net_id' has no subfields, but %s were specified", subs)
+			}
+			if src != nil {
+				dst.HomeNetId = src.HomeNetId
+			} else {
+				dst.HomeNetId = nil
+			}
+		case "home_ns_id":
+			if len(subs) > 0 {
+				return fmt.Errorf("'home_ns_id' has no subfields, but %s were specified", subs)
+			}
+			if src != nil {
+				dst.HomeNsId = src.HomeNsId
+			} else {
+				dst.HomeNsId = nil
+			}
+		case "vendor_specific":
+			if len(subs) > 0 {
+				var newDst, newSrc *GetClaimStatusResponse_VendorSpecific
+				if (src == nil || src.VendorSpecific == nil) && dst.VendorSpecific == nil {
+					continue
+				}
+				if src != nil {
+					newSrc = src.VendorSpecific
+				}
+				if dst.VendorSpecific != nil {
+					newDst = dst.VendorSpecific
+				} else {
+					newDst = &GetClaimStatusResponse_VendorSpecific{}
+					dst.VendorSpecific = newDst
+				}
+				if err := newDst.SetFields(newSrc, subs...); err != nil {
+					return err
+				}
+			} else {
+				if src != nil {
+					dst.VendorSpecific = src.VendorSpecific
+				} else {
+					dst.VendorSpecific = nil
+				}
 			}
 
 		default:
@@ -274,54 +420,60 @@ func (dst *CUPSRedirection) SetFields(src *CUPSRedirection, paths ...string) err
 			for oneofName, oneofSubs := range subPathMap {
 				switch oneofName {
 				case "client_tls":
-					_, srcOk := src.GatewayCredentials.(*CUPSRedirection_ClientTls)
-					if !srcOk && src.GatewayCredentials != nil {
+					var srcTypeOk bool
+					if src != nil {
+						_, srcTypeOk = src.GatewayCredentials.(*CUPSRedirection_ClientTls)
+					}
+					if srcValid := srcTypeOk || src == nil || src.GatewayCredentials == nil || len(oneofSubs) == 0; !srcValid {
 						return fmt.Errorf("attempt to set oneof 'client_tls', while different oneof is set in source")
 					}
-					_, dstOk := dst.GatewayCredentials.(*CUPSRedirection_ClientTls)
-					if !dstOk && dst.GatewayCredentials != nil {
+					_, dstTypeOk := dst.GatewayCredentials.(*CUPSRedirection_ClientTls)
+					if dstValid := dstTypeOk || dst.GatewayCredentials == nil || len(oneofSubs) == 0; !dstValid {
 						return fmt.Errorf("attempt to set oneof 'client_tls', while different oneof is set in destination")
 					}
 					if len(oneofSubs) > 0 {
 						var newDst, newSrc *CUPSRedirection_ClientTLS
-						if !srcOk && !dstOk {
-							continue
-						}
-						if srcOk {
+						if srcTypeOk {
 							newSrc = src.GatewayCredentials.(*CUPSRedirection_ClientTls).ClientTls
 						}
-						if dstOk {
+						if dstTypeOk {
 							newDst = dst.GatewayCredentials.(*CUPSRedirection_ClientTls).ClientTls
-						} else {
+						} else if srcTypeOk {
 							newDst = &CUPSRedirection_ClientTLS{}
 							dst.GatewayCredentials = &CUPSRedirection_ClientTls{ClientTls: newDst}
+						} else {
+							dst.GatewayCredentials = nil
+							continue
 						}
 						if err := newDst.SetFields(newSrc, oneofSubs...); err != nil {
 							return err
 						}
 					} else {
-						if src != nil {
+						if srcTypeOk {
 							dst.GatewayCredentials = src.GatewayCredentials
 						} else {
 							dst.GatewayCredentials = nil
 						}
 					}
 				case "auth_token":
-					_, srcOk := src.GatewayCredentials.(*CUPSRedirection_AuthToken)
-					if !srcOk && src.GatewayCredentials != nil {
+					var srcTypeOk bool
+					if src != nil {
+						_, srcTypeOk = src.GatewayCredentials.(*CUPSRedirection_AuthToken)
+					}
+					if srcValid := srcTypeOk || src == nil || src.GatewayCredentials == nil || len(oneofSubs) == 0; !srcValid {
 						return fmt.Errorf("attempt to set oneof 'auth_token', while different oneof is set in source")
 					}
-					_, dstOk := dst.GatewayCredentials.(*CUPSRedirection_AuthToken)
-					if !dstOk && dst.GatewayCredentials != nil {
+					_, dstTypeOk := dst.GatewayCredentials.(*CUPSRedirection_AuthToken)
+					if dstValid := dstTypeOk || dst.GatewayCredentials == nil || len(oneofSubs) == 0; !dstValid {
 						return fmt.Errorf("attempt to set oneof 'auth_token', while different oneof is set in destination")
 					}
 					if len(oneofSubs) > 0 {
 						return fmt.Errorf("'auth_token' has no subfields, but %s were specified", oneofSubs)
 					}
-					if src != nil {
+					if srcTypeOk {
 						dst.GatewayCredentials = src.GatewayCredentials
 					} else {
-						dst.GatewayCredentials = &CUPSRedirection_AuthToken{}
+						dst.GatewayCredentials = nil
 					}
 
 				default:
@@ -342,10 +494,18 @@ func (dst *ClaimGatewayRequest) SetFields(src *ClaimGatewayRequest, paths ...str
 		case "collaborator":
 			if len(subs) > 0 {
 				var newDst, newSrc *OrganizationOrUserIdentifiers
-				if src != nil {
-					newSrc = &src.Collaborator
+				if (src == nil || src.Collaborator == nil) && dst.Collaborator == nil {
+					continue
 				}
-				newDst = &dst.Collaborator
+				if src != nil {
+					newSrc = src.Collaborator
+				}
+				if dst.Collaborator != nil {
+					newDst = dst.Collaborator
+				} else {
+					newDst = &OrganizationOrUserIdentifiers{}
+					dst.Collaborator = newDst
+				}
 				if err := newDst.SetFields(newSrc, subs...); err != nil {
 					return err
 				}
@@ -353,8 +513,7 @@ func (dst *ClaimGatewayRequest) SetFields(src *ClaimGatewayRequest, paths ...str
 				if src != nil {
 					dst.Collaborator = src.Collaborator
 				} else {
-					var zero OrganizationOrUserIdentifiers
-					dst.Collaborator = zero
+					dst.Collaborator = nil
 				}
 			}
 		case "target_gateway_id":
@@ -429,51 +588,57 @@ func (dst *ClaimGatewayRequest) SetFields(src *ClaimGatewayRequest, paths ...str
 			for oneofName, oneofSubs := range subPathMap {
 				switch oneofName {
 				case "authenticated_identifiers":
-					_, srcOk := src.SourceGateway.(*ClaimGatewayRequest_AuthenticatedIdentifiers_)
-					if !srcOk && src.SourceGateway != nil {
+					var srcTypeOk bool
+					if src != nil {
+						_, srcTypeOk = src.SourceGateway.(*ClaimGatewayRequest_AuthenticatedIdentifiers_)
+					}
+					if srcValid := srcTypeOk || src == nil || src.SourceGateway == nil || len(oneofSubs) == 0; !srcValid {
 						return fmt.Errorf("attempt to set oneof 'authenticated_identifiers', while different oneof is set in source")
 					}
-					_, dstOk := dst.SourceGateway.(*ClaimGatewayRequest_AuthenticatedIdentifiers_)
-					if !dstOk && dst.SourceGateway != nil {
+					_, dstTypeOk := dst.SourceGateway.(*ClaimGatewayRequest_AuthenticatedIdentifiers_)
+					if dstValid := dstTypeOk || dst.SourceGateway == nil || len(oneofSubs) == 0; !dstValid {
 						return fmt.Errorf("attempt to set oneof 'authenticated_identifiers', while different oneof is set in destination")
 					}
 					if len(oneofSubs) > 0 {
 						var newDst, newSrc *ClaimGatewayRequest_AuthenticatedIdentifiers
-						if !srcOk && !dstOk {
-							continue
-						}
-						if srcOk {
+						if srcTypeOk {
 							newSrc = src.SourceGateway.(*ClaimGatewayRequest_AuthenticatedIdentifiers_).AuthenticatedIdentifiers
 						}
-						if dstOk {
+						if dstTypeOk {
 							newDst = dst.SourceGateway.(*ClaimGatewayRequest_AuthenticatedIdentifiers_).AuthenticatedIdentifiers
-						} else {
+						} else if srcTypeOk {
 							newDst = &ClaimGatewayRequest_AuthenticatedIdentifiers{}
 							dst.SourceGateway = &ClaimGatewayRequest_AuthenticatedIdentifiers_{AuthenticatedIdentifiers: newDst}
+						} else {
+							dst.SourceGateway = nil
+							continue
 						}
 						if err := newDst.SetFields(newSrc, oneofSubs...); err != nil {
 							return err
 						}
 					} else {
-						if src != nil {
+						if srcTypeOk {
 							dst.SourceGateway = src.SourceGateway
 						} else {
 							dst.SourceGateway = nil
 						}
 					}
 				case "qr_code":
-					_, srcOk := src.SourceGateway.(*ClaimGatewayRequest_QrCode)
-					if !srcOk && src.SourceGateway != nil {
+					var srcTypeOk bool
+					if src != nil {
+						_, srcTypeOk = src.SourceGateway.(*ClaimGatewayRequest_QrCode)
+					}
+					if srcValid := srcTypeOk || src == nil || src.SourceGateway == nil || len(oneofSubs) == 0; !srcValid {
 						return fmt.Errorf("attempt to set oneof 'qr_code', while different oneof is set in source")
 					}
-					_, dstOk := dst.SourceGateway.(*ClaimGatewayRequest_QrCode)
-					if !dstOk && dst.SourceGateway != nil {
+					_, dstTypeOk := dst.SourceGateway.(*ClaimGatewayRequest_QrCode)
+					if dstValid := dstTypeOk || dst.SourceGateway == nil || len(oneofSubs) == 0; !dstValid {
 						return fmt.Errorf("attempt to set oneof 'qr_code', while different oneof is set in destination")
 					}
 					if len(oneofSubs) > 0 {
 						return fmt.Errorf("'qr_code' has no subfields, but %s were specified", oneofSubs)
 					}
-					if src != nil {
+					if srcTypeOk {
 						dst.SourceGateway = src.SourceGateway
 					} else {
 						dst.SourceGateway = nil
@@ -497,19 +662,26 @@ func (dst *AuthorizeGatewayRequest) SetFields(src *AuthorizeGatewayRequest, path
 		case "gateway_ids":
 			if len(subs) > 0 {
 				var newDst, newSrc *GatewayIdentifiers
-				if src != nil {
-					newSrc = &src.GatewayIdentifiers
+				if (src == nil || src.GatewayIds == nil) && dst.GatewayIds == nil {
+					continue
 				}
-				newDst = &dst.GatewayIdentifiers
+				if src != nil {
+					newSrc = src.GatewayIds
+				}
+				if dst.GatewayIds != nil {
+					newDst = dst.GatewayIds
+				} else {
+					newDst = &GatewayIdentifiers{}
+					dst.GatewayIds = newDst
+				}
 				if err := newDst.SetFields(newSrc, subs...); err != nil {
 					return err
 				}
 			} else {
 				if src != nil {
-					dst.GatewayIdentifiers = src.GatewayIdentifiers
+					dst.GatewayIds = src.GatewayIds
 				} else {
-					var zero GatewayIdentifiers
-					dst.GatewayIdentifiers = zero
+					dst.GatewayIds = nil
 				}
 			}
 		case "api_key":
@@ -540,8 +712,7 @@ func (dst *ClaimEndDeviceRequest_AuthenticatedIdentifiers) SetFields(src *ClaimE
 			if src != nil {
 				dst.JoinEui = src.JoinEui
 			} else {
-				var zero go_thethings_network_lorawan_stack_v3_pkg_types.EUI64
-				dst.JoinEui = zero
+				dst.JoinEui = nil
 			}
 		case "dev_eui":
 			if len(subs) > 0 {
@@ -550,8 +721,7 @@ func (dst *ClaimEndDeviceRequest_AuthenticatedIdentifiers) SetFields(src *ClaimE
 			if src != nil {
 				dst.DevEui = src.DevEui
 			} else {
-				var zero go_thethings_network_lorawan_stack_v3_pkg_types.EUI64
-				dst.DevEui = zero
+				dst.DevEui = nil
 			}
 		case "authentication_code":
 			if len(subs) > 0 {
@@ -562,6 +732,36 @@ func (dst *ClaimEndDeviceRequest_AuthenticatedIdentifiers) SetFields(src *ClaimE
 			} else {
 				var zero string
 				dst.AuthenticationCode = zero
+			}
+
+		default:
+			return fmt.Errorf("invalid field: '%s'", name)
+		}
+	}
+	return nil
+}
+
+func (dst *GetClaimStatusResponse_VendorSpecific) SetFields(src *GetClaimStatusResponse_VendorSpecific, paths ...string) error {
+	for name, subs := range _processPaths(paths) {
+		switch name {
+		case "organization_unique_identifier":
+			if len(subs) > 0 {
+				return fmt.Errorf("'organization_unique_identifier' has no subfields, but %s were specified", subs)
+			}
+			if src != nil {
+				dst.OrganizationUniqueIdentifier = src.OrganizationUniqueIdentifier
+			} else {
+				var zero uint32
+				dst.OrganizationUniqueIdentifier = zero
+			}
+		case "data":
+			if len(subs) > 0 {
+				return fmt.Errorf("'data' has no subfields, but %s were specified", subs)
+			}
+			if src != nil {
+				dst.Data = src.Data
+			} else {
+				dst.Data = nil
 			}
 
 		default:
@@ -610,8 +810,7 @@ func (dst *ClaimGatewayRequest_AuthenticatedIdentifiers) SetFields(src *ClaimGat
 			if src != nil {
 				dst.GatewayEui = src.GatewayEui
 			} else {
-				var zero go_thethings_network_lorawan_stack_v3_pkg_types.EUI64
-				dst.GatewayEui = zero
+				dst.GatewayEui = nil
 			}
 		case "authentication_code":
 			if len(subs) > 0 {

@@ -5,18 +5,14 @@ package ttnpb
 
 import (
 	fmt "fmt"
+	_ "github.com/TheThingsIndustries/protoc-gen-go-flags/annotations"
+	_ "github.com/TheThingsIndustries/protoc-gen-go-json/annotations"
 	_ "github.com/envoyproxy/protoc-gen-validate/validate"
 	_ "github.com/gogo/protobuf/gogoproto"
 	proto "github.com/gogo/protobuf/proto"
-	github_com_gogo_protobuf_sortkeys "github.com/gogo/protobuf/sortkeys"
-	github_com_gogo_protobuf_types "github.com/gogo/protobuf/types"
 	types "github.com/gogo/protobuf/types"
 	golang_proto "github.com/golang/protobuf/proto"
 	math "math"
-	reflect "reflect"
-	strconv "strconv"
-	strings "strings"
-	time "time"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -24,7 +20,6 @@ var _ = proto.Marshal
 var _ = golang_proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
-var _ = time.Kitchen
 
 // This is a compile-time assertion to ensure that this generated file
 // is compatible with the proto package it is being compiled against.
@@ -37,11 +32,11 @@ type GrantType int32
 
 const (
 	// Grant type used to exchange an authorization code for an access token.
-	GRANT_AUTHORIZATION_CODE GrantType = 0
+	GrantType_GRANT_AUTHORIZATION_CODE GrantType = 0
 	// Grant type used to exchange a user ID and password for an access token.
-	GRANT_PASSWORD GrantType = 1
+	GrantType_GRANT_PASSWORD GrantType = 1
 	// Grant type used to exchange a refresh token for an access token.
-	GRANT_REFRESH_TOKEN GrantType = 2
+	GrantType_GRANT_REFRESH_TOKEN GrantType = 2
 )
 
 var GrantType_name = map[int32]string{
@@ -56,33 +51,50 @@ var GrantType_value = map[string]int32{
 	"GRANT_REFRESH_TOKEN":      2,
 }
 
+func (x GrantType) String() string {
+	return proto.EnumName(GrantType_name, int32(x))
+}
+
 func (GrantType) EnumDescriptor() ([]byte, []int) {
 	return fileDescriptor_c5f33a3b812bf10c, []int{0}
 }
 
 // An OAuth client on the network.
 type Client struct {
-	ClientIdentifiers `protobuf:"bytes,1,opt,name=ids,proto3,embedded=ids" json:"ids"`
-	CreatedAt         time.Time  `protobuf:"bytes,2,opt,name=created_at,json=createdAt,proto3,stdtime" json:"created_at"`
-	UpdatedAt         time.Time  `protobuf:"bytes,3,opt,name=updated_at,json=updatedAt,proto3,stdtime" json:"updated_at"`
-	DeletedAt         *time.Time `protobuf:"bytes,16,opt,name=deleted_at,json=deletedAt,proto3,stdtime" json:"deleted_at,omitempty"`
-	Name              string     `protobuf:"bytes,4,opt,name=name,proto3" json:"name,omitempty"`
-	Description       string     `protobuf:"bytes,5,opt,name=description,proto3" json:"description,omitempty"`
+	// The identifiers of the OAuth client. These are public and can be seen by any authenticated user in the network.
+	Ids *ClientIdentifiers `protobuf:"bytes,1,opt,name=ids,proto3" json:"ids,omitempty"`
+	// When the OAuth client was created. This information is public and can be seen by any authenticated user in the network.
+	CreatedAt *types.Timestamp `protobuf:"bytes,2,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
+	// When the OAuth client was last updated. This information is public and can be seen by any authenticated user in the network.
+	UpdatedAt *types.Timestamp `protobuf:"bytes,3,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
+	// When the OAuth client was deleted. This information is public and can be seen by any authenticated user in the network.
+	DeletedAt *types.Timestamp `protobuf:"bytes,16,opt,name=deleted_at,json=deletedAt,proto3" json:"deleted_at,omitempty"`
+	// The name of the OAuth client. This information is public and can be seen by any authenticated user in the network.
+	Name string `protobuf:"bytes,4,opt,name=name,proto3" json:"name,omitempty"`
+	// A description for the OAuth client. This information is public and can be seen by any authenticated user in the network.
+	Description string `protobuf:"bytes,5,opt,name=description,proto3" json:"description,omitempty"`
 	// Key-value attributes for this client. Typically used for organizing clients or for storing integration-specific data.
 	Attributes map[string]string `protobuf:"bytes,6,rep,name=attributes,proto3" json:"attributes,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 	// Contact information for this client. Typically used to indicate who to contact with technical/security questions about the application.
-	ContactInfo []*ContactInfo `protobuf:"bytes,7,rep,name=contact_info,json=contactInfo,proto3" json:"contact_info,omitempty"`
+	// This information is public and can be seen by any authenticated user in the network.
+	// This field is deprecated. Use administrative_contact and technical_contact instead.
+	ContactInfo           []*ContactInfo                 `protobuf:"bytes,7,rep,name=contact_info,json=contactInfo,proto3" json:"contact_info,omitempty"` // Deprecated: Do not use.
+	AdministrativeContact *OrganizationOrUserIdentifiers `protobuf:"bytes,18,opt,name=administrative_contact,json=administrativeContact,proto3" json:"administrative_contact,omitempty"`
+	TechnicalContact      *OrganizationOrUserIdentifiers `protobuf:"bytes,19,opt,name=technical_contact,json=technicalContact,proto3" json:"technical_contact,omitempty"`
 	// The client secret is only visible to collaborators of the client.
 	Secret string `protobuf:"bytes,8,opt,name=secret,proto3" json:"secret,omitempty"`
 	// The allowed redirect URIs against which authorization requests are checked.
 	// If the authorization request does not pass a redirect URI, the first one
 	// from this list is taken.
+	// This information is public and can be seen by any authenticated user in the network.
 	RedirectUris []string `protobuf:"bytes,9,rep,name=redirect_uris,json=redirectUris,proto3" json:"redirect_uris,omitempty"`
 	// The allowed logout redirect URIs against which client initiated logout
 	// requests are checked. If the authorization request does not pass a redirect
 	// URI, the first one from this list is taken.
+	// This information is public and can be seen by any authenticated user in the network.
 	LogoutRedirectUris []string `protobuf:"bytes,15,rep,name=logout_redirect_uris,json=logoutRedirectUris,proto3" json:"logout_redirect_uris,omitempty"`
 	// The reviewing state of the client.
+	// This information is public and can be seen by any authenticated user in the network.
 	// This field can only be modified by admins.
 	// If state_description is not updated when updating state, state_description is cleared.
 	State State `protobuf:"varint,10,opt,name=state,proto3,enum=ttn.lorawan.v3.State" json:"state,omitempty"`
@@ -91,24 +103,30 @@ type Client struct {
 	// when also updating `state`.
 	StateDescription string `protobuf:"bytes,17,opt,name=state_description,json=stateDescription,proto3" json:"state_description,omitempty"`
 	// If set, the authorization page will be skipped.
+	// This information is public and can be seen by any authenticated user in the network.
 	// This field can only be modified by admins.
 	SkipAuthorization bool `protobuf:"varint,11,opt,name=skip_authorization,json=skipAuthorization,proto3" json:"skip_authorization,omitempty"`
 	// If set, the authorization page will show endorsement.
+	// This information is public and can be seen by any authenticated user in the network.
 	// This field can only be modified by admins.
 	Endorsed bool `protobuf:"varint,12,opt,name=endorsed,proto3" json:"endorsed,omitempty"`
 	// OAuth flows that can be used for the client to get a token.
+	// This information is public and can be seen by any authenticated user in the network.
 	// After a client is created, this field can only be modified by admins.
 	Grants []GrantType `protobuf:"varint,13,rep,packed,name=grants,proto3,enum=ttn.lorawan.v3.GrantType" json:"grants,omitempty"`
 	// Rights denotes what rights the client will have access to.
+	// This information is public and can be seen by any authenticated user in the network.
 	// Users that previously authorized this client will have to re-authorize the
 	// client after rights are added to this list.
 	Rights               []Right  `protobuf:"varint,14,rep,packed,name=rights,proto3,enum=ttn.lorawan.v3.Right" json:"rights,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *Client) Reset()      { *m = Client{} }
-func (*Client) ProtoMessage() {}
+func (m *Client) Reset()         { *m = Client{} }
+func (m *Client) String() string { return proto.CompactTextString(m) }
+func (*Client) ProtoMessage()    {}
 func (*Client) Descriptor() ([]byte, []int) {
 	return fileDescriptor_c5f33a3b812bf10c, []int{0}
 }
@@ -130,21 +148,28 @@ func (m *Client) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_Client proto.InternalMessageInfo
 
-func (m *Client) GetCreatedAt() time.Time {
+func (m *Client) GetIds() *ClientIdentifiers {
+	if m != nil {
+		return m.Ids
+	}
+	return nil
+}
+
+func (m *Client) GetCreatedAt() *types.Timestamp {
 	if m != nil {
 		return m.CreatedAt
 	}
-	return time.Time{}
+	return nil
 }
 
-func (m *Client) GetUpdatedAt() time.Time {
+func (m *Client) GetUpdatedAt() *types.Timestamp {
 	if m != nil {
 		return m.UpdatedAt
 	}
-	return time.Time{}
+	return nil
 }
 
-func (m *Client) GetDeletedAt() *time.Time {
+func (m *Client) GetDeletedAt() *types.Timestamp {
 	if m != nil {
 		return m.DeletedAt
 	}
@@ -172,9 +197,24 @@ func (m *Client) GetAttributes() map[string]string {
 	return nil
 }
 
+// Deprecated: Do not use.
 func (m *Client) GetContactInfo() []*ContactInfo {
 	if m != nil {
 		return m.ContactInfo
+	}
+	return nil
+}
+
+func (m *Client) GetAdministrativeContact() *OrganizationOrUserIdentifiers {
+	if m != nil {
+		return m.AdministrativeContact
+	}
+	return nil
+}
+
+func (m *Client) GetTechnicalContact() *OrganizationOrUserIdentifiers {
+	if m != nil {
+		return m.TechnicalContact
 	}
 	return nil
 }
@@ -204,7 +244,7 @@ func (m *Client) GetState() State {
 	if m != nil {
 		return m.State
 	}
-	return STATE_REQUESTED
+	return State_STATE_REQUESTED
 }
 
 func (m *Client) GetStateDescription() string {
@@ -245,11 +285,13 @@ func (m *Client) GetRights() []Right {
 type Clients struct {
 	Clients              []*Client `protobuf:"bytes,1,rep,name=clients,proto3" json:"clients,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}  `json:"-"`
+	XXX_unrecognized     []byte    `json:"-"`
 	XXX_sizecache        int32     `json:"-"`
 }
 
-func (m *Clients) Reset()      { *m = Clients{} }
-func (*Clients) ProtoMessage() {}
+func (m *Clients) Reset()         { *m = Clients{} }
+func (m *Clients) String() string { return proto.CompactTextString(m) }
+func (*Clients) ProtoMessage()    {}
 func (*Clients) Descriptor() ([]byte, []int) {
 	return fileDescriptor_c5f33a3b812bf10c, []int{1}
 }
@@ -279,15 +321,17 @@ func (m *Clients) GetClients() []*Client {
 }
 
 type GetClientRequest struct {
-	ClientIdentifiers `protobuf:"bytes,1,opt,name=client_ids,json=clientIds,proto3,embedded=client_ids" json:"client_ids"`
+	ClientIds *ClientIdentifiers `protobuf:"bytes,1,opt,name=client_ids,json=clientIds,proto3" json:"client_ids,omitempty"`
 	// The names of the client fields that should be returned.
 	FieldMask            *types.FieldMask `protobuf:"bytes,2,opt,name=field_mask,json=fieldMask,proto3" json:"field_mask,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}         `json:"-"`
+	XXX_unrecognized     []byte           `json:"-"`
 	XXX_sizecache        int32            `json:"-"`
 }
 
-func (m *GetClientRequest) Reset()      { *m = GetClientRequest{} }
-func (*GetClientRequest) ProtoMessage() {}
+func (m *GetClientRequest) Reset()         { *m = GetClientRequest{} }
+func (m *GetClientRequest) String() string { return proto.CompactTextString(m) }
+func (*GetClientRequest) ProtoMessage()    {}
 func (*GetClientRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_c5f33a3b812bf10c, []int{2}
 }
@@ -308,6 +352,13 @@ func (m *GetClientRequest) XXX_DiscardUnknown() {
 }
 
 var xxx_messageInfo_GetClientRequest proto.InternalMessageInfo
+
+func (m *GetClientRequest) GetClientIds() *ClientIdentifiers {
+	if m != nil {
+		return m.ClientIds
+	}
+	return nil
+}
 
 func (m *GetClientRequest) GetFieldMask() *types.FieldMask {
 	if m != nil {
@@ -333,11 +384,13 @@ type ListClientsRequest struct {
 	// Only return recently deleted clients.
 	Deleted              bool     `protobuf:"varint,6,opt,name=deleted,proto3" json:"deleted,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *ListClientsRequest) Reset()      { *m = ListClientsRequest{} }
-func (*ListClientsRequest) ProtoMessage() {}
+func (m *ListClientsRequest) Reset()         { *m = ListClientsRequest{} }
+func (m *ListClientsRequest) String() string { return proto.CompactTextString(m) }
+func (*ListClientsRequest) ProtoMessage()    {}
 func (*ListClientsRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_c5f33a3b812bf10c, []int{3}
 }
@@ -402,15 +455,17 @@ func (m *ListClientsRequest) GetDeleted() bool {
 }
 
 type CreateClientRequest struct {
-	Client `protobuf:"bytes,1,opt,name=client,proto3,embedded=client" json:"client"`
+	Client *Client `protobuf:"bytes,1,opt,name=client,proto3" json:"client,omitempty"`
 	// Collaborator to grant all rights on the newly created client.
-	Collaborator         OrganizationOrUserIdentifiers `protobuf:"bytes,2,opt,name=collaborator,proto3" json:"collaborator"`
-	XXX_NoUnkeyedLiteral struct{}                      `json:"-"`
-	XXX_sizecache        int32                         `json:"-"`
+	Collaborator         *OrganizationOrUserIdentifiers `protobuf:"bytes,2,opt,name=collaborator,proto3" json:"collaborator,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}                       `json:"-"`
+	XXX_unrecognized     []byte                         `json:"-"`
+	XXX_sizecache        int32                          `json:"-"`
 }
 
-func (m *CreateClientRequest) Reset()      { *m = CreateClientRequest{} }
-func (*CreateClientRequest) ProtoMessage() {}
+func (m *CreateClientRequest) Reset()         { *m = CreateClientRequest{} }
+func (m *CreateClientRequest) String() string { return proto.CompactTextString(m) }
+func (*CreateClientRequest) ProtoMessage()    {}
 func (*CreateClientRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_c5f33a3b812bf10c, []int{4}
 }
@@ -432,23 +487,32 @@ func (m *CreateClientRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_CreateClientRequest proto.InternalMessageInfo
 
-func (m *CreateClientRequest) GetCollaborator() OrganizationOrUserIdentifiers {
+func (m *CreateClientRequest) GetClient() *Client {
+	if m != nil {
+		return m.Client
+	}
+	return nil
+}
+
+func (m *CreateClientRequest) GetCollaborator() *OrganizationOrUserIdentifiers {
 	if m != nil {
 		return m.Collaborator
 	}
-	return OrganizationOrUserIdentifiers{}
+	return nil
 }
 
 type UpdateClientRequest struct {
-	Client `protobuf:"bytes,1,opt,name=client,proto3,embedded=client" json:"client"`
+	Client *Client `protobuf:"bytes,1,opt,name=client,proto3" json:"client,omitempty"`
 	// The names of the client fields that should be updated.
 	FieldMask            *types.FieldMask `protobuf:"bytes,2,opt,name=field_mask,json=fieldMask,proto3" json:"field_mask,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}         `json:"-"`
+	XXX_unrecognized     []byte           `json:"-"`
 	XXX_sizecache        int32            `json:"-"`
 }
 
-func (m *UpdateClientRequest) Reset()      { *m = UpdateClientRequest{} }
-func (*UpdateClientRequest) ProtoMessage() {}
+func (m *UpdateClientRequest) Reset()         { *m = UpdateClientRequest{} }
+func (m *UpdateClientRequest) String() string { return proto.CompactTextString(m) }
+func (*UpdateClientRequest) ProtoMessage()    {}
 func (*UpdateClientRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_c5f33a3b812bf10c, []int{5}
 }
@@ -470,6 +534,13 @@ func (m *UpdateClientRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_UpdateClientRequest proto.InternalMessageInfo
 
+func (m *UpdateClientRequest) GetClient() *Client {
+	if m != nil {
+		return m.Client
+	}
+	return nil
+}
+
 func (m *UpdateClientRequest) GetFieldMask() *types.FieldMask {
 	if m != nil {
 		return m.FieldMask
@@ -478,17 +549,22 @@ func (m *UpdateClientRequest) GetFieldMask() *types.FieldMask {
 }
 
 type ListClientCollaboratorsRequest struct {
-	ClientIdentifiers `protobuf:"bytes,1,opt,name=client_ids,json=clientIds,proto3,embedded=client_ids" json:"client_ids"`
+	ClientIds *ClientIdentifiers `protobuf:"bytes,1,opt,name=client_ids,json=clientIds,proto3" json:"client_ids,omitempty"`
 	// Limit the number of results per page.
 	Limit uint32 `protobuf:"varint,2,opt,name=limit,proto3" json:"limit,omitempty"`
 	// Page number for pagination. 0 is interpreted as 1.
-	Page                 uint32   `protobuf:"varint,3,opt,name=page,proto3" json:"page,omitempty"`
+	Page uint32 `protobuf:"varint,3,opt,name=page,proto3" json:"page,omitempty"`
+	// Order the results by this field path (must be present in the field mask).
+	// Default ordering is by ID. Prepend with a minus (-) to reverse the order.
+	Order                string   `protobuf:"bytes,4,opt,name=order,proto3" json:"order,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *ListClientCollaboratorsRequest) Reset()      { *m = ListClientCollaboratorsRequest{} }
-func (*ListClientCollaboratorsRequest) ProtoMessage() {}
+func (m *ListClientCollaboratorsRequest) Reset()         { *m = ListClientCollaboratorsRequest{} }
+func (m *ListClientCollaboratorsRequest) String() string { return proto.CompactTextString(m) }
+func (*ListClientCollaboratorsRequest) ProtoMessage()    {}
 func (*ListClientCollaboratorsRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_c5f33a3b812bf10c, []int{6}
 }
@@ -510,6 +586,13 @@ func (m *ListClientCollaboratorsRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_ListClientCollaboratorsRequest proto.InternalMessageInfo
 
+func (m *ListClientCollaboratorsRequest) GetClientIds() *ClientIdentifiers {
+	if m != nil {
+		return m.ClientIds
+	}
+	return nil
+}
+
 func (m *ListClientCollaboratorsRequest) GetLimit() uint32 {
 	if m != nil {
 		return m.Limit
@@ -524,15 +607,24 @@ func (m *ListClientCollaboratorsRequest) GetPage() uint32 {
 	return 0
 }
 
-type GetClientCollaboratorRequest struct {
-	ClientIdentifiers             `protobuf:"bytes,1,opt,name=client_ids,json=clientIds,proto3,embedded=client_ids" json:"client_ids"`
-	OrganizationOrUserIdentifiers `protobuf:"bytes,2,opt,name=collaborator,proto3,embedded=collaborator" json:"collaborator"`
-	XXX_NoUnkeyedLiteral          struct{} `json:"-"`
-	XXX_sizecache                 int32    `json:"-"`
+func (m *ListClientCollaboratorsRequest) GetOrder() string {
+	if m != nil {
+		return m.Order
+	}
+	return ""
 }
 
-func (m *GetClientCollaboratorRequest) Reset()      { *m = GetClientCollaboratorRequest{} }
-func (*GetClientCollaboratorRequest) ProtoMessage() {}
+type GetClientCollaboratorRequest struct {
+	ClientIds            *ClientIdentifiers             `protobuf:"bytes,1,opt,name=client_ids,json=clientIds,proto3" json:"client_ids,omitempty"`
+	Collaborator         *OrganizationOrUserIdentifiers `protobuf:"bytes,2,opt,name=collaborator,proto3" json:"collaborator,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}                       `json:"-"`
+	XXX_unrecognized     []byte                         `json:"-"`
+	XXX_sizecache        int32                          `json:"-"`
+}
+
+func (m *GetClientCollaboratorRequest) Reset()         { *m = GetClientCollaboratorRequest{} }
+func (m *GetClientCollaboratorRequest) String() string { return proto.CompactTextString(m) }
+func (*GetClientCollaboratorRequest) ProtoMessage()    {}
 func (*GetClientCollaboratorRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_c5f33a3b812bf10c, []int{7}
 }
@@ -554,15 +646,31 @@ func (m *GetClientCollaboratorRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_GetClientCollaboratorRequest proto.InternalMessageInfo
 
-type SetClientCollaboratorRequest struct {
-	ClientIdentifiers    `protobuf:"bytes,1,opt,name=client_ids,json=clientIds,proto3,embedded=client_ids" json:"client_ids"`
-	Collaborator         Collaborator `protobuf:"bytes,2,opt,name=collaborator,proto3" json:"collaborator"`
-	XXX_NoUnkeyedLiteral struct{}     `json:"-"`
-	XXX_sizecache        int32        `json:"-"`
+func (m *GetClientCollaboratorRequest) GetClientIds() *ClientIdentifiers {
+	if m != nil {
+		return m.ClientIds
+	}
+	return nil
 }
 
-func (m *SetClientCollaboratorRequest) Reset()      { *m = SetClientCollaboratorRequest{} }
-func (*SetClientCollaboratorRequest) ProtoMessage() {}
+func (m *GetClientCollaboratorRequest) GetCollaborator() *OrganizationOrUserIdentifiers {
+	if m != nil {
+		return m.Collaborator
+	}
+	return nil
+}
+
+type SetClientCollaboratorRequest struct {
+	ClientIds            *ClientIdentifiers `protobuf:"bytes,1,opt,name=client_ids,json=clientIds,proto3" json:"client_ids,omitempty"`
+	Collaborator         *Collaborator      `protobuf:"bytes,2,opt,name=collaborator,proto3" json:"collaborator,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}           `json:"-"`
+	XXX_unrecognized     []byte             `json:"-"`
+	XXX_sizecache        int32              `json:"-"`
+}
+
+func (m *SetClientCollaboratorRequest) Reset()         { *m = SetClientCollaboratorRequest{} }
+func (m *SetClientCollaboratorRequest) String() string { return proto.CompactTextString(m) }
+func (*SetClientCollaboratorRequest) ProtoMessage()    {}
 func (*SetClientCollaboratorRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_c5f33a3b812bf10c, []int{8}
 }
@@ -584,11 +692,18 @@ func (m *SetClientCollaboratorRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_SetClientCollaboratorRequest proto.InternalMessageInfo
 
-func (m *SetClientCollaboratorRequest) GetCollaborator() Collaborator {
+func (m *SetClientCollaboratorRequest) GetClientIds() *ClientIdentifiers {
+	if m != nil {
+		return m.ClientIds
+	}
+	return nil
+}
+
+func (m *SetClientCollaboratorRequest) GetCollaborator() *Collaborator {
 	if m != nil {
 		return m.Collaborator
 	}
-	return Collaborator{}
+	return nil
 }
 
 func init() {
@@ -622,704 +737,88 @@ func init() {
 }
 
 var fileDescriptor_c5f33a3b812bf10c = []byte{
-	// 1221 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xbc, 0x56, 0xcd, 0x6f, 0x1b, 0x45,
-	0x14, 0xf7, 0xf8, 0x33, 0x7e, 0xf9, 0x72, 0xa7, 0x05, 0x96, 0x34, 0x38, 0xc6, 0x44, 0xc8, 0x44,
-	0xd8, 0xae, 0x5c, 0x2a, 0xd1, 0x02, 0x4a, 0xbd, 0x49, 0xda, 0x46, 0xd0, 0x18, 0x26, 0x89, 0x90,
-	0x5a, 0xca, 0x6a, 0xe3, 0x1d, 0x6f, 0x46, 0xb6, 0x77, 0xcd, 0xec, 0x38, 0x25, 0x45, 0x95, 0x2a,
-	0x4e, 0x88, 0x53, 0x95, 0x23, 0x27, 0x10, 0x97, 0xfe, 0x09, 0x3d, 0x22, 0x24, 0xa4, 0x1e, 0x38,
-	0xf4, 0x06, 0xa7, 0x22, 0xd2, 0x4b, 0x8f, 0x9c, 0x7d, 0x42, 0x3b, 0xbb, 0x1b, 0xaf, 0x3f, 0x5a,
-	0x04, 0x69, 0x39, 0x79, 0x66, 0xde, 0xef, 0xbd, 0xf9, 0xbd, 0x37, 0xbf, 0xf7, 0xd6, 0x90, 0x6d,
-	0xd9, 0x5c, 0xbf, 0xa9, 0x5b, 0x45, 0x47, 0xe8, 0xf5, 0x66, 0x59, 0xef, 0xb0, 0x72, 0xbd, 0xc5,
-	0xa8, 0x25, 0x4a, 0x1d, 0x6e, 0x0b, 0x1b, 0xcf, 0x08, 0x61, 0x95, 0x7c, 0x4c, 0x69, 0xef, 0xec,
-	0x5c, 0xd5, 0x64, 0x62, 0xb7, 0xbb, 0x53, 0xaa, 0xdb, 0xed, 0x32, 0xb5, 0xf6, 0xec, 0xfd, 0x0e,
-	0xb7, 0xbf, 0xdc, 0x2f, 0x4b, 0x70, 0xbd, 0x68, 0x52, 0xab, 0xb8, 0xa7, 0xb7, 0x98, 0xa1, 0x0b,
-	0x5a, 0x1e, 0x59, 0x78, 0x21, 0xe7, 0x8a, 0xa1, 0x10, 0xa6, 0x6d, 0xda, 0x9e, 0xf3, 0x4e, 0xb7,
-	0x21, 0x77, 0x72, 0x23, 0x57, 0x3e, 0x3c, 0x67, 0xda, 0xb6, 0xd9, 0xa2, 0x7d, 0x54, 0x83, 0xd1,
-	0x96, 0xa1, 0xb5, 0x75, 0xa7, 0xe9, 0x23, 0x16, 0x86, 0x11, 0x82, 0xb5, 0xa9, 0x23, 0xf4, 0x76,
-	0xc7, 0x07, 0x2c, 0x8e, 0x49, 0xd2, 0xb6, 0x84, 0x5e, 0x17, 0x1a, 0xb3, 0x1a, 0xc1, 0x45, 0xaf,
-	0x8d, 0xa2, 0xa8, 0xd5, 0x6d, 0x3b, 0xbe, 0xf9, 0x8d, 0x51, 0x33, 0x33, 0xa8, 0x25, 0x58, 0x83,
-	0x51, 0x1e, 0x80, 0xc6, 0x94, 0x93, 0x33, 0x73, 0x57, 0xf8, 0xf6, 0xfc, 0x2f, 0x13, 0x90, 0x5c,
-	0x91, 0xf5, 0xc5, 0x6b, 0x10, 0x63, 0x86, 0xa3, 0xa0, 0x1c, 0x2a, 0x4c, 0x56, 0x5e, 0x2f, 0x0d,
-	0xd6, 0xb9, 0xe4, 0x81, 0xd6, 0xfb, 0x17, 0xa8, 0x99, 0x9e, 0x9a, 0xf8, 0x16, 0x45, 0x33, 0xe8,
-	0xc1, 0xa3, 0x85, 0xc8, 0xc3, 0x47, 0x0b, 0x88, 0xb8, 0xfe, 0x78, 0x05, 0xa0, 0xce, 0xa9, 0x2e,
-	0xa8, 0xa1, 0xe9, 0x42, 0x89, 0xca, 0x68, 0x73, 0x25, 0xaf, 0x22, 0xa5, 0xa0, 0x22, 0xa5, 0xad,
-	0xa0, 0x22, 0xea, 0x84, 0xeb, 0x7e, 0xf7, 0x8f, 0x05, 0x44, 0xd2, 0xbe, 0x5f, 0x55, 0xb8, 0x41,
-	0xba, 0x1d, 0x23, 0x08, 0x12, 0xfb, 0x37, 0x41, 0x7c, 0xbf, 0xaa, 0xc0, 0xcb, 0x00, 0x06, 0x6d,
-	0x51, 0x3f, 0x48, 0xe6, 0x1f, 0x83, 0xc4, 0xbd, 0x00, 0xbe, 0x4f, 0x55, 0xe0, 0xd3, 0x10, 0xb7,
-	0xf4, 0x36, 0x55, 0xe2, 0x39, 0x54, 0x48, 0xab, 0xa9, 0x9e, 0x1a, 0xe7, 0x51, 0xa5, 0x42, 0xe4,
-	0x21, 0x5e, 0x82, 0x49, 0x83, 0x3a, 0x75, 0xce, 0x3a, 0x82, 0xd9, 0x96, 0x92, 0x90, 0x98, 0x89,
-	0x9e, 0x9a, 0xe0, 0x31, 0xe5, 0xe1, 0x2c, 0x09, 0x1b, 0xf1, 0x6d, 0x00, 0x5d, 0x08, 0xce, 0x76,
-	0xba, 0x82, 0x3a, 0x4a, 0x32, 0x17, 0x2b, 0x4c, 0x56, 0xde, 0x1c, 0x5f, 0xe1, 0x52, 0xf5, 0x08,
-	0xb8, 0x66, 0x09, 0xbe, 0xaf, 0x9e, 0xeb, 0xa9, 0x95, 0xef, 0x50, 0x39, 0x03, 0xf9, 0x45, 0x9e,
-	0x57, 0x16, 0x2b, 0xd9, 0xcf, 0xaf, 0xeb, 0xc5, 0x5b, 0x67, 0x8a, 0xe7, 0x6f, 0x14, 0x96, 0x2f,
-	0x5c, 0x2f, 0xde, 0x58, 0x0e, 0xb6, 0x6f, 0x7d, 0x55, 0x79, 0xfb, 0xf6, 0xe2, 0x92, 0x7b, 0xff,
-	0x03, 0x44, 0x42, 0x17, 0xe2, 0x2b, 0x30, 0x15, 0x96, 0x97, 0x92, 0x92, 0x04, 0x4e, 0x8f, 0x10,
-	0xf0, 0x30, 0xeb, 0x56, 0xc3, 0x96, 0x89, 0x1c, 0xa0, 0x68, 0x06, 0xc8, 0x64, 0xbd, 0x7f, 0x8c,
-	0x73, 0x90, 0x74, 0x68, 0x9d, 0x53, 0xa1, 0x4c, 0x84, 0xf3, 0xbd, 0x83, 0x88, 0x7f, 0x8e, 0xdf,
-	0x81, 0x69, 0x4e, 0x0d, 0xc6, 0x69, 0x5d, 0x68, 0x5d, 0xce, 0x1c, 0x25, 0x9d, 0x8b, 0x15, 0xd2,
-	0xea, 0x6c, 0x4f, 0x9d, 0x3a, 0x40, 0xe9, 0x0c, 0xe4, 0x7d, 0xfc, 0x54, 0x80, 0xda, 0xe6, 0xcc,
-	0xc1, 0x55, 0x38, 0xd5, 0xb2, 0x4d, 0xbb, 0x2b, 0xb4, 0x41, 0xe7, 0xd9, 0xf1, 0xce, 0xd8, 0x03,
-	0x93, 0x70, 0x88, 0x73, 0x90, 0x70, 0x84, 0x2e, 0xa8, 0x02, 0x39, 0x54, 0x98, 0xa9, 0xbc, 0x34,
-	0x9c, 0xdd, 0xa6, 0x6b, 0x94, 0x84, 0xbf, 0x76, 0x45, 0x4b, 0x3c, 0x34, 0x3e, 0x07, 0x27, 0xe4,
-	0x42, 0x0b, 0x3f, 0xe6, 0x89, 0xa1, 0xe4, 0x32, 0x12, 0xb2, 0x1a, 0x7a, 0xd1, 0x22, 0x60, 0xa7,
-	0xc9, 0x3a, 0x9a, 0xde, 0x15, 0xbb, 0x36, 0x67, 0xb7, 0x74, 0xe9, 0x37, 0x99, 0x43, 0x85, 0x09,
-	0x72, 0xc2, 0xb5, 0x54, 0xc3, 0x06, 0x3c, 0x07, 0x13, 0xd4, 0x32, 0x6c, 0xee, 0x50, 0x43, 0x99,
-	0x92, 0xa0, 0xa3, 0x3d, 0xbe, 0x08, 0x49, 0x93, 0xeb, 0x96, 0x70, 0x94, 0xe9, 0x5c, 0xac, 0x30,
-	0x53, 0x79, 0x75, 0x98, 0xf9, 0x65, 0xd7, 0xba, 0xb5, 0xdf, 0xa1, 0xea, 0x74, 0x4f, 0x85, 0x03,
-	0x94, 0xca, 0xfb, 0x29, 0xf8, 0x7e, 0xf8, 0x7d, 0x48, 0x7a, 0x4d, 0xad, 0xcc, 0xc8, 0x08, 0x23,
-	0xb9, 0x13, 0xd7, 0x3a, 0xe2, 0xed, 0xf9, 0xcc, 0x7d, 0x00, 0xb3, 0x43, 0x9a, 0xc3, 0x19, 0x88,
-	0x35, 0xe9, 0xbe, 0x1c, 0x05, 0x69, 0xe2, 0x2e, 0xf1, 0x29, 0x48, 0xec, 0xe9, 0xad, 0x2e, 0x95,
-	0x0d, 0x9d, 0x26, 0xde, 0xe6, 0x42, 0xf4, 0x5d, 0x74, 0x21, 0x7e, 0xff, 0xfb, 0x05, 0x94, 0x7f,
-	0x0f, 0x52, 0x9e, 0x7e, 0x1d, 0x7c, 0x06, 0x52, 0xde, 0xc4, 0x76, 0x67, 0x89, 0x2b, 0xb4, 0x97,
-	0xc7, 0x2b, 0x9d, 0x04, 0xb0, 0xfc, 0x0f, 0x08, 0x32, 0x97, 0xa9, 0xf0, 0x8f, 0xe9, 0x17, 0x5d,
-	0xea, 0x08, 0x4c, 0x00, 0x3c, 0xbb, 0x76, 0xcc, 0xa9, 0x94, 0xae, 0xfb, 0x20, 0x07, 0x9f, 0x07,
-	0xe8, 0x0f, 0xeb, 0xa7, 0xce, 0xa6, 0x4b, 0x2e, 0xe4, 0xaa, 0xee, 0x34, 0x49, 0xba, 0x11, 0x2c,
-	0xf3, 0xbf, 0x46, 0x01, 0x7f, 0xc4, 0x1c, 0x9f, 0xa4, 0x13, 0xb0, 0xfc, 0xc4, 0x6d, 0xad, 0x56,
-	0x4b, 0xdf, 0xb1, 0xb9, 0x2e, 0x6c, 0xee, 0xf3, 0x2c, 0x0e, 0xf3, 0xac, 0x71, 0x53, 0xb7, 0x7c,
-	0x31, 0xd4, 0xf8, 0xb6, 0x43, 0x79, 0x88, 0x33, 0x19, 0x08, 0x71, 0x0c, 0x92, 0xf8, 0x1a, 0x24,
-	0x6c, 0x6e, 0x50, 0x2e, 0x27, 0x66, 0x5a, 0x5d, 0xed, 0xa9, 0x55, 0xbe, 0x4c, 0x22, 0x41, 0x09,
-	0x34, 0x66, 0x10, 0x28, 0xf6, 0xd7, 0x72, 0x90, 0x91, 0x44, 0x51, 0xfe, 0x84, 0xa6, 0x36, 0x99,
-	0x2c, 0x86, 0x36, 0x5e, 0x48, 0x9c, 0x85, 0x44, 0x8b, 0xb5, 0x99, 0x90, 0xd3, 0x70, 0x5a, 0x36,
-	0xc7, 0x52, 0x4c, 0x79, 0x92, 0x22, 0xde, 0x31, 0xc6, 0x10, 0xef, 0xe8, 0x26, 0x95, 0x83, 0x70,
-	0x9a, 0xc8, 0x35, 0x56, 0x20, 0xe5, 0x4f, 0x53, 0x25, 0x29, 0x55, 0x1f, 0x6c, 0xf3, 0xf7, 0x11,
-	0x9c, 0x5c, 0x91, 0x77, 0x0c, 0xbe, 0xfa, 0x45, 0x48, 0x7a, 0xfc, 0xfc, 0x4a, 0x3e, 0x45, 0x3b,
-	0x63, 0x9e, 0xd9, 0xf7, 0xc3, 0xda, 0xd0, 0x8b, 0x44, 0xff, 0xc3, 0x8b, 0xa8, 0x53, 0xe1, 0xf0,
-	0x83, 0xef, 0x93, 0x3f, 0x40, 0x70, 0x72, 0x5b, 0x7e, 0x64, 0x9e, 0x37, 0xf5, 0x63, 0xc8, 0xf3,
-	0x1e, 0x82, 0x6c, 0x5f, 0x9e, 0x2b, 0x21, 0xbe, 0xce, 0x8b, 0x6c, 0xa8, 0x23, 0x51, 0x44, 0x9f,
-	0x2d, 0x8a, 0x58, 0x5f, 0x14, 0xf9, 0xdf, 0x10, 0xcc, 0x1f, 0x75, 0x7b, 0x98, 0xe9, 0x8b, 0x24,
-	0x5a, 0x7f, 0x1e, 0xaa, 0x18, 0xbd, 0x61, 0x50, 0x19, 0x3f, 0x23, 0x98, 0xdf, 0xfc, 0xbf, 0x33,
-	0xdb, 0x18, 0x9b, 0xd9, 0xfc, 0xe8, 0xc7, 0xbd, 0x8f, 0x79, 0x96, 0xbc, 0x97, 0x3e, 0x83, 0xf4,
-	0xd1, 0x07, 0x07, 0xcf, 0x83, 0x72, 0x99, 0x54, 0x37, 0xb6, 0xb4, 0xea, 0xf6, 0xd6, 0x95, 0x1a,
-	0x59, 0xbf, 0x56, 0xdd, 0x5a, 0xaf, 0x6d, 0x68, 0x2b, 0xb5, 0xd5, 0xb5, 0x4c, 0x04, 0x63, 0x98,
-	0xf1, 0xac, 0x1f, 0x57, 0x37, 0x37, 0x3f, 0xad, 0x91, 0xd5, 0x0c, 0xc2, 0xaf, 0xc0, 0x49, 0xef,
-	0x8c, 0xac, 0x5d, 0x22, 0x6b, 0x9b, 0x57, 0xb4, 0xad, 0xda, 0x87, 0x6b, 0x1b, 0x99, 0xe8, 0x5c,
-	0xfc, 0x9b, 0x1f, 0xb3, 0x11, 0xf5, 0xea, 0xef, 0x7f, 0x66, 0x23, 0x77, 0x0e, 0xb3, 0xe8, 0xde,
-	0x61, 0x16, 0x3d, 0x39, 0xcc, 0x46, 0xfe, 0x3a, 0xcc, 0xa2, 0xbb, 0x8f, 0xb3, 0x91, 0x9f, 0x1e,
-	0x67, 0xd1, 0xb5, 0xb2, 0x69, 0x97, 0xc4, 0x2e, 0x15, 0xbb, 0xcc, 0x32, 0x9d, 0x92, 0x45, 0xc5,
-	0x4d, 0x9b, 0x37, 0xcb, 0x83, 0x7f, 0x61, 0xf7, 0xce, 0x96, 0x3b, 0x4d, 0xb3, 0x2c, 0x84, 0xd5,
-	0xd9, 0xd9, 0x49, 0xca, 0xae, 0x38, 0xfb, 0x77, 0x00, 0x00, 0x00, 0xff, 0xff, 0xd6, 0xb9, 0x8b,
-	0x4e, 0x36, 0x0c, 0x00, 0x00,
-}
-
-func (x GrantType) String() string {
-	s, ok := GrantType_name[int32(x)]
-	if ok {
-		return s
-	}
-	return strconv.Itoa(int(x))
-}
-func (this *Client) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*Client)
-	if !ok {
-		that2, ok := that.(Client)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.ClientIdentifiers.Equal(&that1.ClientIdentifiers) {
-		return false
-	}
-	if !this.CreatedAt.Equal(that1.CreatedAt) {
-		return false
-	}
-	if !this.UpdatedAt.Equal(that1.UpdatedAt) {
-		return false
-	}
-	if that1.DeletedAt == nil {
-		if this.DeletedAt != nil {
-			return false
-		}
-	} else if !this.DeletedAt.Equal(*that1.DeletedAt) {
-		return false
-	}
-	if this.Name != that1.Name {
-		return false
-	}
-	if this.Description != that1.Description {
-		return false
-	}
-	if len(this.Attributes) != len(that1.Attributes) {
-		return false
-	}
-	for i := range this.Attributes {
-		if this.Attributes[i] != that1.Attributes[i] {
-			return false
-		}
-	}
-	if len(this.ContactInfo) != len(that1.ContactInfo) {
-		return false
-	}
-	for i := range this.ContactInfo {
-		if !this.ContactInfo[i].Equal(that1.ContactInfo[i]) {
-			return false
-		}
-	}
-	if this.Secret != that1.Secret {
-		return false
-	}
-	if len(this.RedirectUris) != len(that1.RedirectUris) {
-		return false
-	}
-	for i := range this.RedirectUris {
-		if this.RedirectUris[i] != that1.RedirectUris[i] {
-			return false
-		}
-	}
-	if len(this.LogoutRedirectUris) != len(that1.LogoutRedirectUris) {
-		return false
-	}
-	for i := range this.LogoutRedirectUris {
-		if this.LogoutRedirectUris[i] != that1.LogoutRedirectUris[i] {
-			return false
-		}
-	}
-	if this.State != that1.State {
-		return false
-	}
-	if this.StateDescription != that1.StateDescription {
-		return false
-	}
-	if this.SkipAuthorization != that1.SkipAuthorization {
-		return false
-	}
-	if this.Endorsed != that1.Endorsed {
-		return false
-	}
-	if len(this.Grants) != len(that1.Grants) {
-		return false
-	}
-	for i := range this.Grants {
-		if this.Grants[i] != that1.Grants[i] {
-			return false
-		}
-	}
-	if len(this.Rights) != len(that1.Rights) {
-		return false
-	}
-	for i := range this.Rights {
-		if this.Rights[i] != that1.Rights[i] {
-			return false
-		}
-	}
-	return true
-}
-func (this *Clients) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*Clients)
-	if !ok {
-		that2, ok := that.(Clients)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if len(this.Clients) != len(that1.Clients) {
-		return false
-	}
-	for i := range this.Clients {
-		if !this.Clients[i].Equal(that1.Clients[i]) {
-			return false
-		}
-	}
-	return true
-}
-func (this *GetClientRequest) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*GetClientRequest)
-	if !ok {
-		that2, ok := that.(GetClientRequest)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.ClientIdentifiers.Equal(&that1.ClientIdentifiers) {
-		return false
-	}
-	if !this.FieldMask.Equal(that1.FieldMask) {
-		return false
-	}
-	return true
-}
-func (this *ListClientsRequest) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ListClientsRequest)
-	if !ok {
-		that2, ok := that.(ListClientsRequest)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.Collaborator.Equal(that1.Collaborator) {
-		return false
-	}
-	if !this.FieldMask.Equal(that1.FieldMask) {
-		return false
-	}
-	if this.Order != that1.Order {
-		return false
-	}
-	if this.Limit != that1.Limit {
-		return false
-	}
-	if this.Page != that1.Page {
-		return false
-	}
-	if this.Deleted != that1.Deleted {
-		return false
-	}
-	return true
-}
-func (this *CreateClientRequest) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*CreateClientRequest)
-	if !ok {
-		that2, ok := that.(CreateClientRequest)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.Client.Equal(&that1.Client) {
-		return false
-	}
-	if !this.Collaborator.Equal(&that1.Collaborator) {
-		return false
-	}
-	return true
-}
-func (this *UpdateClientRequest) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*UpdateClientRequest)
-	if !ok {
-		that2, ok := that.(UpdateClientRequest)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.Client.Equal(&that1.Client) {
-		return false
-	}
-	if !this.FieldMask.Equal(that1.FieldMask) {
-		return false
-	}
-	return true
-}
-func (this *ListClientCollaboratorsRequest) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ListClientCollaboratorsRequest)
-	if !ok {
-		that2, ok := that.(ListClientCollaboratorsRequest)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.ClientIdentifiers.Equal(&that1.ClientIdentifiers) {
-		return false
-	}
-	if this.Limit != that1.Limit {
-		return false
-	}
-	if this.Page != that1.Page {
-		return false
-	}
-	return true
-}
-func (this *GetClientCollaboratorRequest) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*GetClientCollaboratorRequest)
-	if !ok {
-		that2, ok := that.(GetClientCollaboratorRequest)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.ClientIdentifiers.Equal(&that1.ClientIdentifiers) {
-		return false
-	}
-	if !this.OrganizationOrUserIdentifiers.Equal(&that1.OrganizationOrUserIdentifiers) {
-		return false
-	}
-	return true
-}
-func (this *SetClientCollaboratorRequest) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*SetClientCollaboratorRequest)
-	if !ok {
-		that2, ok := that.(SetClientCollaboratorRequest)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.ClientIdentifiers.Equal(&that1.ClientIdentifiers) {
-		return false
-	}
-	if !this.Collaborator.Equal(&that1.Collaborator) {
-		return false
-	}
-	return true
-}
-func NewPopulatedClient(r randyClient, easy bool) *Client {
-	this := &Client{}
-	v1 := NewPopulatedClientIdentifiers(r, easy)
-	this.ClientIdentifiers = *v1
-	v2 := github_com_gogo_protobuf_types.NewPopulatedStdTime(r, easy)
-	this.CreatedAt = *v2
-	v3 := github_com_gogo_protobuf_types.NewPopulatedStdTime(r, easy)
-	this.UpdatedAt = *v3
-	if r.Intn(5) != 0 {
-		this.DeletedAt = github_com_gogo_protobuf_types.NewPopulatedStdTime(r, easy)
-	}
-	this.Name = string(randStringClient(r))
-	this.Description = string(randStringClient(r))
-	if r.Intn(5) != 0 {
-		v4 := r.Intn(10)
-		this.Attributes = make(map[string]string)
-		for i := 0; i < v4; i++ {
-			this.Attributes[randStringClient(r)] = randStringClient(r)
-		}
-	}
-	if r.Intn(5) != 0 {
-		v5 := r.Intn(5)
-		this.ContactInfo = make([]*ContactInfo, v5)
-		for i := 0; i < v5; i++ {
-			this.ContactInfo[i] = NewPopulatedContactInfo(r, easy)
-		}
-	}
-	this.Secret = string(randStringClient(r))
-	v6 := r.Intn(10)
-	this.RedirectUris = make([]string, v6)
-	for i := 0; i < v6; i++ {
-		this.RedirectUris[i] = string(randStringClient(r))
-	}
-	v7 := r.Intn(10)
-	this.LogoutRedirectUris = make([]string, v7)
-	for i := 0; i < v7; i++ {
-		this.LogoutRedirectUris[i] = string(randStringClient(r))
-	}
-	this.State = State([]int32{0, 1, 2, 3, 4}[r.Intn(5)])
-	this.StateDescription = string(randStringClient(r))
-	this.SkipAuthorization = bool(bool(r.Intn(2) == 0))
-	this.Endorsed = bool(bool(r.Intn(2) == 0))
-	v8 := r.Intn(10)
-	this.Grants = make([]GrantType, v8)
-	for i := 0; i < v8; i++ {
-		this.Grants[i] = GrantType([]int32{0, 1, 2}[r.Intn(3)])
-	}
-	v9 := r.Intn(10)
-	this.Rights = make([]Right, v9)
-	for i := 0; i < v9; i++ {
-		this.Rights[i] = Right([]int32{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 56, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 57, 58, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55}[r.Intn(59)])
-	}
-	if !easy && r.Intn(10) != 0 {
-	}
-	return this
-}
-
-type randyClient interface {
-	Float32() float32
-	Float64() float64
-	Int63() int64
-	Int31() int32
-	Uint32() uint32
-	Intn(n int) int
-}
-
-func randUTF8RuneClient(r randyClient) rune {
-	ru := r.Intn(62)
-	if ru < 10 {
-		return rune(ru + 48)
-	} else if ru < 36 {
-		return rune(ru + 55)
-	}
-	return rune(ru + 61)
-}
-func randStringClient(r randyClient) string {
-	v10 := r.Intn(100)
-	tmps := make([]rune, v10)
-	for i := 0; i < v10; i++ {
-		tmps[i] = randUTF8RuneClient(r)
-	}
-	return string(tmps)
-}
-func randUnrecognizedClient(r randyClient, maxFieldNumber int) (dAtA []byte) {
-	l := r.Intn(5)
-	for i := 0; i < l; i++ {
-		wire := r.Intn(4)
-		if wire == 3 {
-			wire = 5
-		}
-		fieldNumber := maxFieldNumber + r.Intn(100)
-		dAtA = randFieldClient(dAtA, r, fieldNumber, wire)
-	}
-	return dAtA
-}
-func randFieldClient(dAtA []byte, r randyClient, fieldNumber int, wire int) []byte {
-	key := uint32(fieldNumber)<<3 | uint32(wire)
-	switch wire {
-	case 0:
-		dAtA = encodeVarintPopulateClient(dAtA, uint64(key))
-		v11 := r.Int63()
-		if r.Intn(2) == 0 {
-			v11 *= -1
-		}
-		dAtA = encodeVarintPopulateClient(dAtA, uint64(v11))
-	case 1:
-		dAtA = encodeVarintPopulateClient(dAtA, uint64(key))
-		dAtA = append(dAtA, byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)))
-	case 2:
-		dAtA = encodeVarintPopulateClient(dAtA, uint64(key))
-		ll := r.Intn(100)
-		dAtA = encodeVarintPopulateClient(dAtA, uint64(ll))
-		for j := 0; j < ll; j++ {
-			dAtA = append(dAtA, byte(r.Intn(256)))
-		}
-	default:
-		dAtA = encodeVarintPopulateClient(dAtA, uint64(key))
-		dAtA = append(dAtA, byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)))
-	}
-	return dAtA
-}
-func encodeVarintPopulateClient(dAtA []byte, v uint64) []byte {
-	for v >= 1<<7 {
-		dAtA = append(dAtA, uint8(uint64(v)&0x7f|0x80))
-		v >>= 7
-	}
-	dAtA = append(dAtA, uint8(v))
-	return dAtA
-}
-func (this *Client) String() string {
-	if this == nil {
-		return "nil"
-	}
-	repeatedStringForContactInfo := "[]*ContactInfo{"
-	for _, f := range this.ContactInfo {
-		repeatedStringForContactInfo += strings.Replace(fmt.Sprintf("%v", f), "ContactInfo", "ContactInfo", 1) + ","
-	}
-	repeatedStringForContactInfo += "}"
-	keysForAttributes := make([]string, 0, len(this.Attributes))
-	for k := range this.Attributes {
-		keysForAttributes = append(keysForAttributes, k)
-	}
-	github_com_gogo_protobuf_sortkeys.Strings(keysForAttributes)
-	mapStringForAttributes := "map[string]string{"
-	for _, k := range keysForAttributes {
-		mapStringForAttributes += fmt.Sprintf("%v: %v,", k, this.Attributes[k])
-	}
-	mapStringForAttributes += "}"
-	s := strings.Join([]string{`&Client{`,
-		`ClientIdentifiers:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.ClientIdentifiers), "ClientIdentifiers", "ClientIdentifiers", 1), `&`, ``, 1) + `,`,
-		`CreatedAt:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.CreatedAt), "Timestamp", "types.Timestamp", 1), `&`, ``, 1) + `,`,
-		`UpdatedAt:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.UpdatedAt), "Timestamp", "types.Timestamp", 1), `&`, ``, 1) + `,`,
-		`DeletedAt:` + strings.Replace(fmt.Sprintf("%v", this.DeletedAt), "Timestamp", "types.Timestamp", 1) + `,`,
-		`Name:` + fmt.Sprintf("%v", this.Name) + `,`,
-		`Description:` + fmt.Sprintf("%v", this.Description) + `,`,
-		`Attributes:` + mapStringForAttributes + `,`,
-		`ContactInfo:` + repeatedStringForContactInfo + `,`,
-		`Secret:` + fmt.Sprintf("%v", this.Secret) + `,`,
-		`RedirectUris:` + fmt.Sprintf("%v", this.RedirectUris) + `,`,
-		`LogoutRedirectUris:` + fmt.Sprintf("%v", this.LogoutRedirectUris) + `,`,
-		`State:` + fmt.Sprintf("%v", this.State) + `,`,
-		`StateDescription:` + fmt.Sprintf("%v", this.StateDescription) + `,`,
-		`SkipAuthorization:` + fmt.Sprintf("%v", this.SkipAuthorization) + `,`,
-		`Endorsed:` + fmt.Sprintf("%v", this.Endorsed) + `,`,
-		`Grants:` + fmt.Sprintf("%v", this.Grants) + `,`,
-		`Rights:` + fmt.Sprintf("%v", this.Rights) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *Clients) String() string {
-	if this == nil {
-		return "nil"
-	}
-	repeatedStringForClients := "[]*Client{"
-	for _, f := range this.Clients {
-		repeatedStringForClients += strings.Replace(f.String(), "Client", "Client", 1) + ","
-	}
-	repeatedStringForClients += "}"
-	s := strings.Join([]string{`&Clients{`,
-		`Clients:` + repeatedStringForClients + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *GetClientRequest) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&GetClientRequest{`,
-		`ClientIdentifiers:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.ClientIdentifiers), "ClientIdentifiers", "ClientIdentifiers", 1), `&`, ``, 1) + `,`,
-		`FieldMask:` + strings.Replace(fmt.Sprintf("%v", this.FieldMask), "FieldMask", "types.FieldMask", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *ListClientsRequest) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&ListClientsRequest{`,
-		`Collaborator:` + strings.Replace(fmt.Sprintf("%v", this.Collaborator), "OrganizationOrUserIdentifiers", "OrganizationOrUserIdentifiers", 1) + `,`,
-		`FieldMask:` + strings.Replace(fmt.Sprintf("%v", this.FieldMask), "FieldMask", "types.FieldMask", 1) + `,`,
-		`Order:` + fmt.Sprintf("%v", this.Order) + `,`,
-		`Limit:` + fmt.Sprintf("%v", this.Limit) + `,`,
-		`Page:` + fmt.Sprintf("%v", this.Page) + `,`,
-		`Deleted:` + fmt.Sprintf("%v", this.Deleted) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *CreateClientRequest) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&CreateClientRequest{`,
-		`Client:` + strings.Replace(strings.Replace(this.Client.String(), "Client", "Client", 1), `&`, ``, 1) + `,`,
-		`Collaborator:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.Collaborator), "OrganizationOrUserIdentifiers", "OrganizationOrUserIdentifiers", 1), `&`, ``, 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *UpdateClientRequest) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&UpdateClientRequest{`,
-		`Client:` + strings.Replace(strings.Replace(this.Client.String(), "Client", "Client", 1), `&`, ``, 1) + `,`,
-		`FieldMask:` + strings.Replace(fmt.Sprintf("%v", this.FieldMask), "FieldMask", "types.FieldMask", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *ListClientCollaboratorsRequest) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&ListClientCollaboratorsRequest{`,
-		`ClientIdentifiers:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.ClientIdentifiers), "ClientIdentifiers", "ClientIdentifiers", 1), `&`, ``, 1) + `,`,
-		`Limit:` + fmt.Sprintf("%v", this.Limit) + `,`,
-		`Page:` + fmt.Sprintf("%v", this.Page) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *GetClientCollaboratorRequest) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&GetClientCollaboratorRequest{`,
-		`ClientIdentifiers:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.ClientIdentifiers), "ClientIdentifiers", "ClientIdentifiers", 1), `&`, ``, 1) + `,`,
-		`OrganizationOrUserIdentifiers:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.OrganizationOrUserIdentifiers), "OrganizationOrUserIdentifiers", "OrganizationOrUserIdentifiers", 1), `&`, ``, 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *SetClientCollaboratorRequest) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&SetClientCollaboratorRequest{`,
-		`ClientIdentifiers:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.ClientIdentifiers), "ClientIdentifiers", "ClientIdentifiers", 1), `&`, ``, 1) + `,`,
-		`Collaborator:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.Collaborator), "Collaborator", "Collaborator", 1), `&`, ``, 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func valueToStringClient(v interface{}) string {
-	rv := reflect.ValueOf(v)
-	if rv.IsNil() {
-		return "nil"
-	}
-	pv := reflect.Indirect(rv).Interface()
-	return fmt.Sprintf("*%v", pv)
+	// 1323 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xbc, 0x57, 0xcf, 0x6f, 0x1b, 0xc5,
+	0x17, 0xcf, 0xd8, 0xb1, 0x1d, 0x4f, 0x7e, 0x6d, 0x26, 0x6d, 0xbf, 0x9b, 0x34, 0xdf, 0xe0, 0x9a,
+	0x08, 0x99, 0x88, 0xb5, 0x2b, 0x97, 0x88, 0x36, 0x80, 0x8a, 0x37, 0x49, 0xdb, 0x14, 0xa8, 0xd1,
+	0xc4, 0x11, 0x22, 0x55, 0xb1, 0x26, 0xde, 0xf1, 0x7a, 0xb0, 0xbd, 0x6b, 0x66, 0xc6, 0x29, 0x29,
+	0xaa, 0x84, 0x38, 0xf6, 0x46, 0x6f, 0xf0, 0x27, 0x54, 0x9c, 0x39, 0x73, 0x83, 0x23, 0x57, 0x2e,
+	0x5c, 0xb8, 0x20, 0x8e, 0x3d, 0xfa, 0x84, 0x76, 0x76, 0xd7, 0x5e, 0xff, 0x28, 0x22, 0x2d, 0xe5,
+	0xe4, 0x99, 0x79, 0x9f, 0xf7, 0x99, 0xcf, 0xbc, 0x79, 0xef, 0xcd, 0x1a, 0xae, 0xb7, 0x5c, 0x4e,
+	0xee, 0x13, 0xc7, 0x10, 0x92, 0xd4, 0x9a, 0x05, 0xd2, 0x61, 0x85, 0x5a, 0x8b, 0x51, 0x47, 0xe6,
+	0x3b, 0xdc, 0x95, 0x2e, 0x5a, 0x90, 0xd2, 0xc9, 0x07, 0x98, 0xfc, 0xc9, 0x95, 0xd5, 0x5d, 0x9b,
+	0xc9, 0x46, 0xf7, 0x38, 0x5f, 0x73, 0xdb, 0x85, 0x4a, 0x83, 0x56, 0x1a, 0xcc, 0xb1, 0xc5, 0xbe,
+	0x63, 0x75, 0x85, 0xe4, 0x8c, 0x8a, 0x82, 0xf2, 0xaa, 0x19, 0x36, 0x75, 0x0c, 0xdb, 0x35, 0xea,
+	0x2d, 0x62, 0x8b, 0x02, 0x71, 0x1c, 0x57, 0x12, 0xc9, 0x5c, 0x47, 0xf8, 0xac, 0xab, 0xa5, 0x08,
+	0x0b, 0x75, 0x4e, 0xdc, 0xd3, 0x0e, 0x77, 0xbf, 0x38, 0x8d, 0x3a, 0x9f, 0x90, 0x16, 0xb3, 0x88,
+	0xa4, 0x85, 0xb1, 0x41, 0x40, 0x61, 0x44, 0x28, 0x6c, 0xd7, 0x76, 0x7d, 0xe7, 0xe3, 0x6e, 0x5d,
+	0xcd, 0xd4, 0x44, 0x8d, 0x02, 0xf8, 0xce, 0x99, 0x74, 0x7f, 0x26, 0x5c, 0x67, 0x82, 0xec, 0x8c,
+	0xed, 0xba, 0x76, 0x8b, 0x0e, 0xb6, 0xaa, 0x33, 0xda, 0xb2, 0xaa, 0x6d, 0x22, 0x9a, 0x01, 0xe2,
+	0x95, 0x51, 0x84, 0x64, 0x6d, 0x2a, 0x24, 0x69, 0x77, 0x02, 0xc0, 0xc6, 0x84, 0x78, 0xbb, 0x8e,
+	0x24, 0x35, 0x59, 0x65, 0x4e, 0x3d, 0x54, 0xfb, 0xff, 0x71, 0x14, 0x75, 0xba, 0xed, 0x50, 0xc7,
+	0xab, 0xe3, 0x66, 0x66, 0x51, 0x47, 0xb2, 0x3a, 0xa3, 0x3c, 0x04, 0x4d, 0xb8, 0x59, 0xce, 0xec,
+	0x86, 0x0c, 0xec, 0xd9, 0x6f, 0x20, 0x4c, 0xee, 0xa8, 0xab, 0x46, 0x7b, 0x30, 0xce, 0x2c, 0xa1,
+	0x83, 0x0c, 0xc8, 0xcd, 0x16, 0x2f, 0xe5, 0x87, 0xaf, 0x3c, 0xef, 0x83, 0xf6, 0x07, 0x1b, 0x98,
+	0x5a, 0xcf, 0x4c, 0x3c, 0x02, 0x31, 0x0d, 0x3c, 0x7d, 0xb2, 0x32, 0x3d, 0x33, 0x95, 0x03, 0xd8,
+	0xf3, 0x47, 0x3b, 0x10, 0xd6, 0x38, 0x25, 0x92, 0x5a, 0x55, 0x22, 0xf5, 0x98, 0x62, 0x5b, 0xcd,
+	0xfb, 0x11, 0xc9, 0x87, 0x11, 0xc9, 0x57, 0xc2, 0x88, 0x98, 0x33, 0xbe, 0xbb, 0x36, 0x85, 0xd3,
+	0x81, 0x5f, 0x49, 0x7a, 0x24, 0xdd, 0x8e, 0x15, 0x92, 0xc4, 0xcf, 0x42, 0x12, 0xf8, 0xf9, 0x24,
+	0x16, 0x6d, 0xd1, 0x80, 0x44, 0xfb, 0x87, 0x24, 0xc0, 0x23, 0x09, 0xfc, 0x4a, 0x12, 0x5d, 0x84,
+	0xd3, 0x0e, 0x69, 0x53, 0x7d, 0x3a, 0x03, 0x72, 0x69, 0x33, 0xd5, 0x33, 0xa7, 0x79, 0x4c, 0x2f,
+	0x62, 0xb5, 0x88, 0x36, 0xe1, 0xac, 0x45, 0x45, 0x8d, 0xb3, 0x8e, 0x97, 0x20, 0x7a, 0x42, 0x61,
+	0x66, 0x7a, 0x66, 0x82, 0xc7, 0xf5, 0x5f, 0x16, 0x71, 0xd4, 0x88, 0x1e, 0x42, 0x48, 0xa4, 0xe4,
+	0xec, 0xb8, 0x2b, 0xa9, 0xd0, 0x93, 0x99, 0x78, 0x6e, 0xb6, 0xf8, 0xda, 0xe4, 0x28, 0xe7, 0x4b,
+	0x7d, 0xe0, 0x9e, 0x23, 0xf9, 0xa9, 0xb9, 0xd5, 0x33, 0x8b, 0xdf, 0x81, 0x82, 0x06, 0xb3, 0x1b,
+	0x3c, 0xab, 0x6f, 0x14, 0xd7, 0x3f, 0xbd, 0x4b, 0x8c, 0x07, 0x97, 0x8d, 0x6b, 0xf7, 0x72, 0xd7,
+	0xb7, 0xef, 0x1a, 0xf7, 0xae, 0x87, 0xd3, 0xd7, 0xbf, 0x2c, 0xbe, 0xf1, 0x70, 0x63, 0xd3, 0xdb,
+	0xff, 0x67, 0x80, 0x23, 0x1b, 0xa2, 0xdb, 0x70, 0x2e, 0x9a, 0x62, 0x7a, 0x4a, 0x09, 0xb8, 0x38,
+	0x26, 0xc0, 0xc7, 0xec, 0x3b, 0x75, 0xd7, 0x84, 0x3d, 0x33, 0xf1, 0x18, 0xc4, 0x34, 0xa8, 0x03,
+	0x3c, 0x5b, 0x1b, 0x18, 0x90, 0x05, 0x2f, 0x10, 0xab, 0xcd, 0x1c, 0x26, 0x24, 0x27, 0x92, 0x9d,
+	0xd0, 0x6a, 0x60, 0xd5, 0x91, 0x0a, 0xb2, 0x31, 0xca, 0x5a, 0xe6, 0x36, 0x71, 0xd8, 0x03, 0x55,
+	0x46, 0x65, 0x7e, 0x28, 0x28, 0x8f, 0x24, 0x12, 0x3e, 0x3f, 0x4c, 0x16, 0x48, 0x40, 0x47, 0x70,
+	0x49, 0xd2, 0x5a, 0xc3, 0x61, 0x35, 0xd2, 0xea, 0x6f, 0xb0, 0xfc, 0x3c, 0x1b, 0x68, 0x7d, 0x9e,
+	0x90, 0x3b, 0x03, 0x93, 0x82, 0xd6, 0x38, 0x95, 0xfa, 0x4c, 0xf4, 0xce, 0xbe, 0x02, 0x38, 0x58,
+	0x47, 0x6f, 0xc2, 0x79, 0x4e, 0x2d, 0xc6, 0x69, 0x4d, 0x56, 0xbb, 0x9c, 0x09, 0x3d, 0x9d, 0x89,
+	0xe7, 0xd2, 0xe6, 0x62, 0xcf, 0x9c, 0x7b, 0x0c, 0xd2, 0x1a, 0xcc, 0x06, 0xf8, 0xb9, 0x10, 0x75,
+	0xc8, 0x99, 0x40, 0x25, 0x78, 0xae, 0xe5, 0xda, 0x6e, 0x57, 0x56, 0x87, 0x9d, 0x17, 0x27, 0x3b,
+	0x23, 0x1f, 0x8c, 0xa3, 0x14, 0x5b, 0x30, 0x21, 0x24, 0x91, 0x54, 0x87, 0x19, 0x90, 0x5b, 0x28,
+	0x9e, 0x1f, 0x3d, 0xea, 0x81, 0x67, 0x54, 0x82, 0xbf, 0xf6, 0x8a, 0x0f, 0xfb, 0x68, 0xb4, 0x05,
+	0x97, 0xd4, 0xa0, 0x1a, 0x4d, 0xc8, 0xa5, 0x91, 0xc3, 0x69, 0x0a, 0xb2, 0x1b, 0xc9, 0x4a, 0x03,
+	0x22, 0xd1, 0x64, 0x9d, 0x2a, 0xe9, 0xca, 0x86, 0xcb, 0x83, 0x08, 0xea, 0xb3, 0x19, 0x90, 0x9b,
+	0xc1, 0x4b, 0x9e, 0xa5, 0x14, 0x35, 0xa0, 0x55, 0x38, 0x43, 0x1d, 0xcb, 0xe5, 0x82, 0x5a, 0xfa,
+	0x9c, 0x02, 0xf5, 0xe7, 0xe8, 0x3d, 0x98, 0xb4, 0x39, 0x71, 0xa4, 0xd0, 0xe7, 0x33, 0xf1, 0xdc,
+	0x42, 0x71, 0x65, 0x54, 0xf9, 0x4d, 0xcf, 0x5a, 0x39, 0xed, 0x50, 0x73, 0xbe, 0x67, 0xc2, 0xc7,
+	0x20, 0x95, 0x0d, 0x8e, 0x10, 0xf8, 0xa1, 0x77, 0x60, 0xd2, 0x6f, 0x4e, 0xfa, 0x82, 0x62, 0x18,
+	0x3b, 0x3b, 0xf6, 0xac, 0x63, 0xde, 0xbe, 0xcf, 0xea, 0xbb, 0x70, 0x71, 0xa4, 0x6e, 0x90, 0x06,
+	0xe3, 0x4d, 0x7a, 0xaa, 0x5a, 0x5a, 0x1a, 0x7b, 0x43, 0x74, 0x0e, 0x26, 0x4e, 0x48, 0xab, 0x4b,
+	0x55, 0x63, 0x4a, 0x63, 0x7f, 0xb2, 0x1d, 0xbb, 0x0a, 0xb6, 0xc3, 0xea, 0x07, 0xd9, 0xb7, 0x61,
+	0xca, 0xaf, 0x43, 0x81, 0x2e, 0xc3, 0x94, 0xff, 0x10, 0x7a, 0x7d, 0xd1, 0x2b, 0x98, 0x0b, 0x93,
+	0x2b, 0x16, 0x87, 0xb0, 0xec, 0xb7, 0x00, 0x6a, 0x37, 0xa9, 0x0c, 0x96, 0xe9, 0xe7, 0x5d, 0x2a,
+	0x24, 0xba, 0x0d, 0xa1, 0x6f, 0xaf, 0x9e, 0xa9, 0xc3, 0xce, 0x84, 0x1d, 0x16, 0xa7, 0x6b, 0x81,
+	0x51, 0xa0, 0x6b, 0x10, 0x0e, 0x1e, 0x9c, 0x67, 0xf6, 0xd7, 0x1b, 0x1e, 0xe4, 0x43, 0x22, 0x9a,
+	0x38, 0x5d, 0x0f, 0x87, 0xd9, 0xdf, 0x62, 0x10, 0x7d, 0xc0, 0x44, 0x20, 0x4e, 0x84, 0xea, 0x3e,
+	0xf1, 0x5a, 0x43, 0xab, 0x45, 0x8e, 0x5d, 0x4e, 0xa4, 0xcb, 0x03, 0x7d, 0x67, 0xab, 0x31, 0x33,
+	0xf9, 0xf4, 0xc9, 0x4a, 0x2c, 0x07, 0xf0, 0x10, 0xd5, 0x0b, 0x88, 0x45, 0x47, 0x30, 0xe1, 0x72,
+	0x8b, 0x72, 0xd5, 0xfd, 0xd3, 0xe6, 0x6e, 0xcf, 0x2c, 0xf1, 0xeb, 0x78, 0x2a, 0x0c, 0x45, 0x95,
+	0x59, 0x18, 0x1a, 0x83, 0xb1, 0x6a, 0xc8, 0x38, 0x61, 0xa8, 0x9f, 0xc8, 0x0b, 0x84, 0x67, 0x8d,
+	0xc8, 0xc4, 0xa7, 0x44, 0xeb, 0x30, 0xd1, 0x62, 0x6d, 0x26, 0x55, 0x57, 0x9f, 0x57, 0x71, 0xde,
+	0x8c, 0xeb, 0x7f, 0xa4, 0xb0, 0xbf, 0x8c, 0x10, 0x9c, 0xee, 0x10, 0x9b, 0xaa, 0x86, 0x3e, 0x8f,
+	0xd5, 0x18, 0xe9, 0x30, 0x15, 0xbc, 0x0a, 0x7a, 0x52, 0x65, 0x7e, 0x38, 0xdd, 0x0e, 0x1f, 0x1f,
+	0x90, 0xfd, 0x1e, 0xc0, 0xe5, 0x1d, 0xb5, 0xdb, 0xf0, 0xfd, 0x5f, 0x85, 0x49, 0x5f, 0x69, 0x10,
+	0xdb, 0x67, 0x64, 0x51, 0xe4, 0xc2, 0x03, 0x3c, 0xba, 0x3b, 0x72, 0x37, 0xb1, 0xe7, 0xb9, 0x9b,
+	0x01, 0xed, 0x10, 0x59, 0xf6, 0x11, 0x80, 0xcb, 0x87, 0xea, 0xb9, 0xfc, 0xb7, 0xe4, 0xbe, 0x40,
+	0x72, 0xfe, 0x0a, 0xe0, 0xfa, 0x20, 0x39, 0x77, 0x22, 0x3a, 0xc5, 0xcb, 0x28, 0xa3, 0x7e, 0x0a,
+	0xc4, 0xfe, 0x3e, 0x05, 0xe2, 0x91, 0x14, 0x78, 0x2b, 0x4c, 0x49, 0xff, 0x63, 0xe0, 0x52, 0xcf,
+	0x5c, 0xe7, 0x6b, 0x78, 0x0a, 0xc7, 0x98, 0x85, 0xe3, 0x06, 0xb3, 0x70, 0xca, 0xf0, 0x7b, 0x51,
+	0xd8, 0x93, 0x82, 0x7c, 0xcb, 0xfe, 0x04, 0xe0, 0x5a, 0xbf, 0x29, 0x44, 0x8f, 0xf6, 0x32, 0x4e,
+	0xf6, 0x52, 0x53, 0xe6, 0x07, 0x00, 0xd7, 0x0e, 0xfe, 0xab, 0x93, 0xdc, 0x9e, 0x78, 0x92, 0xb5,
+	0xf1, 0x6f, 0x96, 0x01, 0xe6, 0x59, 0xc2, 0x37, 0x29, 0x4c, 0xf7, 0xdf, 0x1f, 0xb4, 0x06, 0xf5,
+	0x9b, 0xb8, 0x74, 0xa7, 0x52, 0x2d, 0x1d, 0x56, 0x6e, 0x95, 0xf1, 0xfe, 0x51, 0xa9, 0xb2, 0x5f,
+	0xbe, 0x53, 0xdd, 0x29, 0xef, 0xee, 0x69, 0x53, 0x08, 0xc1, 0x05, 0xdf, 0xfa, 0x51, 0xe9, 0xe0,
+	0xe0, 0xe3, 0x32, 0xde, 0xd5, 0x00, 0xfa, 0x1f, 0x5c, 0xf6, 0xd7, 0xf0, 0xde, 0x0d, 0xbc, 0x77,
+	0x70, 0xab, 0x5a, 0x29, 0xbf, 0xbf, 0x77, 0x47, 0x8b, 0xad, 0xce, 0xff, 0xf9, 0x64, 0x25, 0xad,
+	0x83, 0xcd, 0x84, 0x32, 0x9b, 0x5b, 0x3f, 0xfe, 0xbe, 0x0e, 0x8e, 0x0a, 0xb6, 0x9b, 0x97, 0x0d,
+	0x2a, 0xd5, 0xff, 0x8b, 0xbc, 0x43, 0xe5, 0x7d, 0x97, 0x37, 0x0b, 0xc3, 0x9f, 0xe2, 0x27, 0x57,
+	0x0a, 0x9d, 0xa6, 0x5d, 0x90, 0xd2, 0xe9, 0x1c, 0x1f, 0x27, 0x55, 0x6d, 0x5c, 0xf9, 0x2b, 0x00,
+	0x00, 0xff, 0xff, 0xc8, 0xbe, 0x39, 0x8e, 0x89, 0x0d, 0x00, 0x00,
 }

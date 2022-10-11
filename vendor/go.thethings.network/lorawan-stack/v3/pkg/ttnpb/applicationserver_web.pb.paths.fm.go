@@ -53,6 +53,7 @@ var ApplicationWebhookTemplateFieldPathsNested = []string{
 	"downlink_queued.path",
 	"downlink_sent",
 	"downlink_sent.path",
+	"field_mask",
 	"fields",
 	"format",
 	"headers",
@@ -69,6 +70,8 @@ var ApplicationWebhookTemplateFieldPathsNested = []string{
 	"service_data.path",
 	"uplink_message",
 	"uplink_message.path",
+	"uplink_normalized",
+	"uplink_normalized.path",
 }
 
 var ApplicationWebhookTemplateFieldPathsTopLevel = []string{
@@ -82,6 +85,7 @@ var ApplicationWebhookTemplateFieldPathsTopLevel = []string{
 	"downlink_queue_invalidated",
 	"downlink_queued",
 	"downlink_sent",
+	"field_mask",
 	"fields",
 	"format",
 	"headers",
@@ -93,6 +97,7 @@ var ApplicationWebhookTemplateFieldPathsTopLevel = []string{
 	"name",
 	"service_data",
 	"uplink_message",
+	"uplink_normalized",
 }
 var ApplicationWebhookTemplatesFieldPathsNested = []string{
 	"templates",
@@ -100,6 +105,31 @@ var ApplicationWebhookTemplatesFieldPathsNested = []string{
 
 var ApplicationWebhookTemplatesFieldPathsTopLevel = []string{
 	"templates",
+}
+var ApplicationWebhookHealthFieldPathsNested = []string{
+	"status",
+	"status.healthy",
+	"status.unhealthy",
+	"status.unhealthy.failed_attempts",
+	"status.unhealthy.last_failed_attempt_at",
+	"status.unhealthy.last_failed_attempt_details",
+	"status.unhealthy.last_failed_attempt_details.attributes",
+	"status.unhealthy.last_failed_attempt_details.cause",
+	"status.unhealthy.last_failed_attempt_details.cause.attributes",
+	"status.unhealthy.last_failed_attempt_details.cause.correlation_id",
+	"status.unhealthy.last_failed_attempt_details.cause.message_format",
+	"status.unhealthy.last_failed_attempt_details.cause.name",
+	"status.unhealthy.last_failed_attempt_details.cause.namespace",
+	"status.unhealthy.last_failed_attempt_details.code",
+	"status.unhealthy.last_failed_attempt_details.correlation_id",
+	"status.unhealthy.last_failed_attempt_details.details",
+	"status.unhealthy.last_failed_attempt_details.message_format",
+	"status.unhealthy.last_failed_attempt_details.name",
+	"status.unhealthy.last_failed_attempt_details.namespace",
+}
+
+var ApplicationWebhookHealthFieldPathsTopLevel = []string{
+	"status",
 }
 var ApplicationWebhookFieldPathsNested = []string{
 	"base_url",
@@ -117,8 +147,29 @@ var ApplicationWebhookFieldPathsNested = []string{
 	"downlink_queued.path",
 	"downlink_sent",
 	"downlink_sent.path",
+	"field_mask",
 	"format",
 	"headers",
+	"health_status",
+	"health_status.status",
+	"health_status.status.healthy",
+	"health_status.status.unhealthy",
+	"health_status.status.unhealthy.failed_attempts",
+	"health_status.status.unhealthy.last_failed_attempt_at",
+	"health_status.status.unhealthy.last_failed_attempt_details",
+	"health_status.status.unhealthy.last_failed_attempt_details.attributes",
+	"health_status.status.unhealthy.last_failed_attempt_details.cause",
+	"health_status.status.unhealthy.last_failed_attempt_details.cause.attributes",
+	"health_status.status.unhealthy.last_failed_attempt_details.cause.correlation_id",
+	"health_status.status.unhealthy.last_failed_attempt_details.cause.message_format",
+	"health_status.status.unhealthy.last_failed_attempt_details.cause.name",
+	"health_status.status.unhealthy.last_failed_attempt_details.cause.namespace",
+	"health_status.status.unhealthy.last_failed_attempt_details.code",
+	"health_status.status.unhealthy.last_failed_attempt_details.correlation_id",
+	"health_status.status.unhealthy.last_failed_attempt_details.details",
+	"health_status.status.unhealthy.last_failed_attempt_details.message_format",
+	"health_status.status.unhealthy.last_failed_attempt_details.name",
+	"health_status.status.unhealthy.last_failed_attempt_details.namespace",
 	"ids",
 	"ids.application_ids",
 	"ids.application_ids.application_id",
@@ -135,6 +186,8 @@ var ApplicationWebhookFieldPathsNested = []string{
 	"updated_at",
 	"uplink_message",
 	"uplink_message.path",
+	"uplink_normalized",
+	"uplink_normalized.path",
 }
 
 var ApplicationWebhookFieldPathsTopLevel = []string{
@@ -147,8 +200,10 @@ var ApplicationWebhookFieldPathsTopLevel = []string{
 	"downlink_queue_invalidated",
 	"downlink_queued",
 	"downlink_sent",
+	"field_mask",
 	"format",
 	"headers",
+	"health_status",
 	"ids",
 	"join_accept",
 	"location_solved",
@@ -157,6 +212,7 @@ var ApplicationWebhookFieldPathsTopLevel = []string{
 	"template_ids",
 	"updated_at",
 	"uplink_message",
+	"uplink_normalized",
 }
 var ApplicationWebhooksFieldPathsNested = []string{
 	"webhooks",
@@ -212,8 +268,29 @@ var SetApplicationWebhookRequestFieldPathsNested = []string{
 	"webhook.downlink_queued.path",
 	"webhook.downlink_sent",
 	"webhook.downlink_sent.path",
+	"webhook.field_mask",
 	"webhook.format",
 	"webhook.headers",
+	"webhook.health_status",
+	"webhook.health_status.status",
+	"webhook.health_status.status.healthy",
+	"webhook.health_status.status.unhealthy",
+	"webhook.health_status.status.unhealthy.failed_attempts",
+	"webhook.health_status.status.unhealthy.last_failed_attempt_at",
+	"webhook.health_status.status.unhealthy.last_failed_attempt_details",
+	"webhook.health_status.status.unhealthy.last_failed_attempt_details.attributes",
+	"webhook.health_status.status.unhealthy.last_failed_attempt_details.cause",
+	"webhook.health_status.status.unhealthy.last_failed_attempt_details.cause.attributes",
+	"webhook.health_status.status.unhealthy.last_failed_attempt_details.cause.correlation_id",
+	"webhook.health_status.status.unhealthy.last_failed_attempt_details.cause.message_format",
+	"webhook.health_status.status.unhealthy.last_failed_attempt_details.cause.name",
+	"webhook.health_status.status.unhealthy.last_failed_attempt_details.cause.namespace",
+	"webhook.health_status.status.unhealthy.last_failed_attempt_details.code",
+	"webhook.health_status.status.unhealthy.last_failed_attempt_details.correlation_id",
+	"webhook.health_status.status.unhealthy.last_failed_attempt_details.details",
+	"webhook.health_status.status.unhealthy.last_failed_attempt_details.message_format",
+	"webhook.health_status.status.unhealthy.last_failed_attempt_details.name",
+	"webhook.health_status.status.unhealthy.last_failed_attempt_details.namespace",
 	"webhook.ids",
 	"webhook.ids.application_ids",
 	"webhook.ids.application_ids.application_id",
@@ -230,6 +307,8 @@ var SetApplicationWebhookRequestFieldPathsNested = []string{
 	"webhook.updated_at",
 	"webhook.uplink_message",
 	"webhook.uplink_message.path",
+	"webhook.uplink_normalized",
+	"webhook.uplink_normalized.path",
 }
 
 var SetApplicationWebhookRequestFieldPathsTopLevel = []string{
@@ -259,6 +338,32 @@ var ApplicationWebhookTemplate_MessageFieldPathsNested = []string{
 
 var ApplicationWebhookTemplate_MessageFieldPathsTopLevel = []string{
 	"path",
+}
+var ApplicationWebhookHealth_WebhookHealthStatusHealthyFieldPathsNested []string
+var ApplicationWebhookHealth_WebhookHealthStatusHealthyFieldPathsTopLevel []string
+var ApplicationWebhookHealth_WebhookHealthStatusUnhealthyFieldPathsNested = []string{
+	"failed_attempts",
+	"last_failed_attempt_at",
+	"last_failed_attempt_details",
+	"last_failed_attempt_details.attributes",
+	"last_failed_attempt_details.cause",
+	"last_failed_attempt_details.cause.attributes",
+	"last_failed_attempt_details.cause.correlation_id",
+	"last_failed_attempt_details.cause.message_format",
+	"last_failed_attempt_details.cause.name",
+	"last_failed_attempt_details.cause.namespace",
+	"last_failed_attempt_details.code",
+	"last_failed_attempt_details.correlation_id",
+	"last_failed_attempt_details.details",
+	"last_failed_attempt_details.message_format",
+	"last_failed_attempt_details.name",
+	"last_failed_attempt_details.namespace",
+}
+
+var ApplicationWebhookHealth_WebhookHealthStatusUnhealthyFieldPathsTopLevel = []string{
+	"failed_attempts",
+	"last_failed_attempt_at",
+	"last_failed_attempt_details",
 }
 var ApplicationWebhook_MessageFieldPathsNested = []string{
 	"path",

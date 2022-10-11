@@ -12,6 +12,7 @@ var SearchApplicationsRequestFieldPathsNested = []string{
 	"name_contains",
 	"order",
 	"page",
+	"query",
 }
 
 var SearchApplicationsRequestFieldPathsTopLevel = []string{
@@ -24,6 +25,7 @@ var SearchApplicationsRequestFieldPathsTopLevel = []string{
 	"name_contains",
 	"order",
 	"page",
+	"query",
 }
 var SearchClientsRequestFieldPathsNested = []string{
 	"attributes_contain",
@@ -35,6 +37,7 @@ var SearchClientsRequestFieldPathsNested = []string{
 	"name_contains",
 	"order",
 	"page",
+	"query",
 	"state",
 }
 
@@ -48,6 +51,7 @@ var SearchClientsRequestFieldPathsTopLevel = []string{
 	"name_contains",
 	"order",
 	"page",
+	"query",
 	"state",
 }
 var SearchGatewaysRequestFieldPathsNested = []string{
@@ -61,6 +65,7 @@ var SearchGatewaysRequestFieldPathsNested = []string{
 	"name_contains",
 	"order",
 	"page",
+	"query",
 }
 
 var SearchGatewaysRequestFieldPathsTopLevel = []string{
@@ -74,6 +79,7 @@ var SearchGatewaysRequestFieldPathsTopLevel = []string{
 	"name_contains",
 	"order",
 	"page",
+	"query",
 }
 var SearchOrganizationsRequestFieldPathsNested = []string{
 	"attributes_contain",
@@ -85,6 +91,7 @@ var SearchOrganizationsRequestFieldPathsNested = []string{
 	"name_contains",
 	"order",
 	"page",
+	"query",
 }
 
 var SearchOrganizationsRequestFieldPathsTopLevel = []string{
@@ -97,6 +104,7 @@ var SearchOrganizationsRequestFieldPathsTopLevel = []string{
 	"name_contains",
 	"order",
 	"page",
+	"query",
 }
 var SearchUsersRequestFieldPathsNested = []string{
 	"attributes_contain",
@@ -108,6 +116,7 @@ var SearchUsersRequestFieldPathsNested = []string{
 	"name_contains",
 	"order",
 	"page",
+	"query",
 	"state",
 }
 
@@ -121,7 +130,35 @@ var SearchUsersRequestFieldPathsTopLevel = []string{
 	"name_contains",
 	"order",
 	"page",
+	"query",
 	"state",
+}
+var SearchAccountsRequestFieldPathsNested = []string{
+	"collaborator_of",
+	"collaborator_of.application_ids",
+	"collaborator_of.application_ids.application_id",
+	"collaborator_of.client_ids",
+	"collaborator_of.client_ids.client_id",
+	"collaborator_of.gateway_ids",
+	"collaborator_of.gateway_ids.eui",
+	"collaborator_of.gateway_ids.gateway_id",
+	"collaborator_of.organization_ids",
+	"collaborator_of.organization_ids.organization_id",
+	"only_users",
+	"query",
+}
+
+var SearchAccountsRequestFieldPathsTopLevel = []string{
+	"collaborator_of",
+	"only_users",
+	"query",
+}
+var SearchAccountsResponseFieldPathsNested = []string{
+	"account_ids",
+}
+
+var SearchAccountsResponseFieldPathsTopLevel = []string{
+	"account_ids",
 }
 var SearchEndDevicesRequestFieldPathsNested = []string{
 	"application_ids",
@@ -137,6 +174,7 @@ var SearchEndDevicesRequestFieldPathsNested = []string{
 	"name_contains",
 	"order",
 	"page",
+	"query",
 }
 
 var SearchEndDevicesRequestFieldPathsTopLevel = []string{
@@ -152,4 +190,5 @@ var SearchEndDevicesRequestFieldPathsTopLevel = []string{
 	"name_contains",
 	"order",
 	"page",
+	"query",
 }

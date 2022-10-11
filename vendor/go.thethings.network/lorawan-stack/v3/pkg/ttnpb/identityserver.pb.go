@@ -16,9 +16,6 @@ import (
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
 	math "math"
-	reflect "reflect"
-	strings "strings"
-	time "time"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -26,7 +23,6 @@ var _ = proto.Marshal
 var _ = golang_proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
-var _ = time.Kitchen
 
 // This is a compile-time assertion to ensure that this generated file
 // is compatible with the proto package it is being compiled against.
@@ -39,15 +35,18 @@ type AuthInfoResponse struct {
 	//	*AuthInfoResponse_ApiKey
 	//	*AuthInfoResponse_OauthAccessToken
 	//	*AuthInfoResponse_UserSession
+	//	*AuthInfoResponse_GatewayToken_
 	AccessMethod         isAuthInfoResponse_AccessMethod `protobuf_oneof:"access_method"`
 	UniversalRights      *Rights                         `protobuf:"bytes,3,opt,name=universal_rights,json=universalRights,proto3" json:"universal_rights,omitempty"`
 	IsAdmin              bool                            `protobuf:"varint,4,opt,name=is_admin,json=isAdmin,proto3" json:"is_admin,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}                        `json:"-"`
+	XXX_unrecognized     []byte                          `json:"-"`
 	XXX_sizecache        int32                           `json:"-"`
 }
 
-func (m *AuthInfoResponse) Reset()      { *m = AuthInfoResponse{} }
-func (*AuthInfoResponse) ProtoMessage() {}
+func (m *AuthInfoResponse) Reset()         { *m = AuthInfoResponse{} }
+func (m *AuthInfoResponse) String() string { return proto.CompactTextString(m) }
+func (*AuthInfoResponse) ProtoMessage()    {}
 func (*AuthInfoResponse) Descriptor() ([]byte, []int) {
 	return fileDescriptor_a1c7e02f6181562c, []int{0}
 }
@@ -71,7 +70,6 @@ var xxx_messageInfo_AuthInfoResponse proto.InternalMessageInfo
 
 type isAuthInfoResponse_AccessMethod interface {
 	isAuthInfoResponse_AccessMethod()
-	Equal(interface{}) bool
 }
 
 type AuthInfoResponse_ApiKey struct {
@@ -83,10 +81,14 @@ type AuthInfoResponse_OauthAccessToken struct {
 type AuthInfoResponse_UserSession struct {
 	UserSession *UserSession `protobuf:"bytes,5,opt,name=user_session,json=userSession,proto3,oneof" json:"user_session,omitempty"`
 }
+type AuthInfoResponse_GatewayToken_ struct {
+	GatewayToken *AuthInfoResponse_GatewayToken `protobuf:"bytes,6,opt,name=gateway_token,json=gatewayToken,proto3,oneof" json:"gateway_token,omitempty"`
+}
 
 func (*AuthInfoResponse_ApiKey) isAuthInfoResponse_AccessMethod()           {}
 func (*AuthInfoResponse_OauthAccessToken) isAuthInfoResponse_AccessMethod() {}
 func (*AuthInfoResponse_UserSession) isAuthInfoResponse_AccessMethod()      {}
+func (*AuthInfoResponse_GatewayToken_) isAuthInfoResponse_AccessMethod()    {}
 
 func (m *AuthInfoResponse) GetAccessMethod() isAuthInfoResponse_AccessMethod {
 	if m != nil {
@@ -116,6 +118,13 @@ func (m *AuthInfoResponse) GetUserSession() *UserSession {
 	return nil
 }
 
+func (m *AuthInfoResponse) GetGatewayToken() *AuthInfoResponse_GatewayToken {
+	if x, ok := m.GetAccessMethod().(*AuthInfoResponse_GatewayToken_); ok {
+		return x.GatewayToken
+	}
+	return nil
+}
+
 func (m *AuthInfoResponse) GetUniversalRights() *Rights {
 	if m != nil {
 		return m.UniversalRights
@@ -136,18 +145,21 @@ func (*AuthInfoResponse) XXX_OneofWrappers() []interface{} {
 		(*AuthInfoResponse_ApiKey)(nil),
 		(*AuthInfoResponse_OauthAccessToken)(nil),
 		(*AuthInfoResponse_UserSession)(nil),
+		(*AuthInfoResponse_GatewayToken_)(nil),
 	}
 }
 
 type AuthInfoResponse_APIKeyAccess struct {
-	APIKey               `protobuf:"bytes,1,opt,name=api_key,json=apiKey,proto3,embedded=api_key" json:"api_key"`
-	EntityIds            EntityIdentifiers `protobuf:"bytes,2,opt,name=entity_ids,json=entityIds,proto3" json:"entity_ids"`
-	XXX_NoUnkeyedLiteral struct{}          `json:"-"`
-	XXX_sizecache        int32             `json:"-"`
+	ApiKey               *APIKey            `protobuf:"bytes,1,opt,name=api_key,json=apiKey,proto3" json:"api_key,omitempty"`
+	EntityIds            *EntityIdentifiers `protobuf:"bytes,2,opt,name=entity_ids,json=entityIds,proto3" json:"entity_ids,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}           `json:"-"`
+	XXX_unrecognized     []byte             `json:"-"`
+	XXX_sizecache        int32              `json:"-"`
 }
 
-func (m *AuthInfoResponse_APIKeyAccess) Reset()      { *m = AuthInfoResponse_APIKeyAccess{} }
-func (*AuthInfoResponse_APIKeyAccess) ProtoMessage() {}
+func (m *AuthInfoResponse_APIKeyAccess) Reset()         { *m = AuthInfoResponse_APIKeyAccess{} }
+func (m *AuthInfoResponse_APIKeyAccess) String() string { return proto.CompactTextString(m) }
+func (*AuthInfoResponse_APIKeyAccess) ProtoMessage()    {}
 func (*AuthInfoResponse_APIKeyAccess) Descriptor() ([]byte, []int) {
 	return fileDescriptor_a1c7e02f6181562c, []int{0, 0}
 }
@@ -169,20 +181,75 @@ func (m *AuthInfoResponse_APIKeyAccess) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_AuthInfoResponse_APIKeyAccess proto.InternalMessageInfo
 
-func (m *AuthInfoResponse_APIKeyAccess) GetEntityIds() EntityIdentifiers {
+func (m *AuthInfoResponse_APIKeyAccess) GetApiKey() *APIKey {
+	if m != nil {
+		return m.ApiKey
+	}
+	return nil
+}
+
+func (m *AuthInfoResponse_APIKeyAccess) GetEntityIds() *EntityIdentifiers {
 	if m != nil {
 		return m.EntityIds
 	}
-	return EntityIdentifiers{}
+	return nil
+}
+
+type AuthInfoResponse_GatewayToken struct {
+	GatewayIds           *GatewayIdentifiers `protobuf:"bytes,1,opt,name=gateway_ids,json=gatewayIds,proto3" json:"gateway_ids,omitempty"`
+	Rights               []Right             `protobuf:"varint,6,rep,packed,name=rights,proto3,enum=ttn.lorawan.v3.Right" json:"rights,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}            `json:"-"`
+	XXX_unrecognized     []byte              `json:"-"`
+	XXX_sizecache        int32               `json:"-"`
+}
+
+func (m *AuthInfoResponse_GatewayToken) Reset()         { *m = AuthInfoResponse_GatewayToken{} }
+func (m *AuthInfoResponse_GatewayToken) String() string { return proto.CompactTextString(m) }
+func (*AuthInfoResponse_GatewayToken) ProtoMessage()    {}
+func (*AuthInfoResponse_GatewayToken) Descriptor() ([]byte, []int) {
+	return fileDescriptor_a1c7e02f6181562c, []int{0, 1}
+}
+func (m *AuthInfoResponse_GatewayToken) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_AuthInfoResponse_GatewayToken.Unmarshal(m, b)
+}
+func (m *AuthInfoResponse_GatewayToken) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_AuthInfoResponse_GatewayToken.Marshal(b, m, deterministic)
+}
+func (m *AuthInfoResponse_GatewayToken) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AuthInfoResponse_GatewayToken.Merge(m, src)
+}
+func (m *AuthInfoResponse_GatewayToken) XXX_Size() int {
+	return xxx_messageInfo_AuthInfoResponse_GatewayToken.Size(m)
+}
+func (m *AuthInfoResponse_GatewayToken) XXX_DiscardUnknown() {
+	xxx_messageInfo_AuthInfoResponse_GatewayToken.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_AuthInfoResponse_GatewayToken proto.InternalMessageInfo
+
+func (m *AuthInfoResponse_GatewayToken) GetGatewayIds() *GatewayIdentifiers {
+	if m != nil {
+		return m.GatewayIds
+	}
+	return nil
+}
+
+func (m *AuthInfoResponse_GatewayToken) GetRights() []Right {
+	if m != nil {
+		return m.Rights
+	}
+	return nil
 }
 
 type GetIsConfigurationRequest struct {
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *GetIsConfigurationRequest) Reset()      { *m = GetIsConfigurationRequest{} }
-func (*GetIsConfigurationRequest) ProtoMessage() {}
+func (m *GetIsConfigurationRequest) Reset()         { *m = GetIsConfigurationRequest{} }
+func (m *GetIsConfigurationRequest) String() string { return proto.CompactTextString(m) }
+func (*GetIsConfigurationRequest) ProtoMessage()    {}
 func (*GetIsConfigurationRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_a1c7e02f6181562c, []int{1}
 }
@@ -209,12 +276,16 @@ type IsConfiguration struct {
 	ProfilePicture       *IsConfiguration_ProfilePicture   `protobuf:"bytes,4,opt,name=profile_picture,json=profilePicture,proto3" json:"profile_picture,omitempty"`
 	EndDevicePicture     *IsConfiguration_EndDevicePicture `protobuf:"bytes,5,opt,name=end_device_picture,json=endDevicePicture,proto3" json:"end_device_picture,omitempty"`
 	UserRights           *IsConfiguration_UserRights       `protobuf:"bytes,6,opt,name=user_rights,json=userRights,proto3" json:"user_rights,omitempty"`
+	UserLogin            *IsConfiguration_UserLogin        `protobuf:"bytes,7,opt,name=user_login,json=userLogin,proto3" json:"user_login,omitempty"`
+	AdminRights          *IsConfiguration_AdminRights      `protobuf:"bytes,8,opt,name=admin_rights,json=adminRights,proto3" json:"admin_rights,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}                          `json:"-"`
+	XXX_unrecognized     []byte                            `json:"-"`
 	XXX_sizecache        int32                             `json:"-"`
 }
 
-func (m *IsConfiguration) Reset()      { *m = IsConfiguration{} }
-func (*IsConfiguration) ProtoMessage() {}
+func (m *IsConfiguration) Reset()         { *m = IsConfiguration{} }
+func (m *IsConfiguration) String() string { return proto.CompactTextString(m) }
+func (*IsConfiguration) ProtoMessage()    {}
 func (*IsConfiguration) Descriptor() ([]byte, []int) {
 	return fileDescriptor_a1c7e02f6181562c, []int{2}
 }
@@ -264,6 +335,20 @@ func (m *IsConfiguration) GetUserRights() *IsConfiguration_UserRights {
 	return nil
 }
 
+func (m *IsConfiguration) GetUserLogin() *IsConfiguration_UserLogin {
+	if m != nil {
+		return m.UserLogin
+	}
+	return nil
+}
+
+func (m *IsConfiguration) GetAdminRights() *IsConfiguration_AdminRights {
+	if m != nil {
+		return m.AdminRights
+	}
+	return nil
+}
+
 type IsConfiguration_UserRegistration struct {
 	Invitation            *IsConfiguration_UserRegistration_Invitation            `protobuf:"bytes,1,opt,name=invitation,proto3" json:"invitation,omitempty"`
 	ContactInfoValidation *IsConfiguration_UserRegistration_ContactInfoValidation `protobuf:"bytes,2,opt,name=contact_info_validation,json=contactInfoValidation,proto3" json:"contact_info_validation,omitempty"`
@@ -271,11 +356,13 @@ type IsConfiguration_UserRegistration struct {
 	PasswordRequirements  *IsConfiguration_UserRegistration_PasswordRequirements  `protobuf:"bytes,4,opt,name=password_requirements,json=passwordRequirements,proto3" json:"password_requirements,omitempty"`
 	Enabled               bool                                                    `protobuf:"varint,5,opt,name=enabled,proto3" json:"enabled,omitempty"`
 	XXX_NoUnkeyedLiteral  struct{}                                                `json:"-"`
+	XXX_unrecognized      []byte                                                  `json:"-"`
 	XXX_sizecache         int32                                                   `json:"-"`
 }
 
-func (m *IsConfiguration_UserRegistration) Reset()      { *m = IsConfiguration_UserRegistration{} }
-func (*IsConfiguration_UserRegistration) ProtoMessage() {}
+func (m *IsConfiguration_UserRegistration) Reset()         { *m = IsConfiguration_UserRegistration{} }
+func (m *IsConfiguration_UserRegistration) String() string { return proto.CompactTextString(m) }
+func (*IsConfiguration_UserRegistration) ProtoMessage()    {}
 func (*IsConfiguration_UserRegistration) Descriptor() ([]byte, []int) {
 	return fileDescriptor_a1c7e02f6181562c, []int{2, 0}
 }
@@ -334,13 +421,17 @@ func (m *IsConfiguration_UserRegistration) GetEnabled() bool {
 
 type IsConfiguration_UserRegistration_Invitation struct {
 	Required             *types.BoolValue `protobuf:"bytes,1,opt,name=required,proto3" json:"required,omitempty"`
-	TokenTtl             *time.Duration   `protobuf:"bytes,2,opt,name=token_ttl,json=tokenTtl,proto3,stdduration" json:"token_ttl,omitempty"`
+	TokenTtl             *types.Duration  `protobuf:"bytes,2,opt,name=token_ttl,json=tokenTtl,proto3" json:"token_ttl,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}         `json:"-"`
+	XXX_unrecognized     []byte           `json:"-"`
 	XXX_sizecache        int32            `json:"-"`
 }
 
 func (m *IsConfiguration_UserRegistration_Invitation) Reset() {
 	*m = IsConfiguration_UserRegistration_Invitation{}
+}
+func (m *IsConfiguration_UserRegistration_Invitation) String() string {
+	return proto.CompactTextString(m)
 }
 func (*IsConfiguration_UserRegistration_Invitation) ProtoMessage() {}
 func (*IsConfiguration_UserRegistration_Invitation) Descriptor() ([]byte, []int) {
@@ -371,7 +462,7 @@ func (m *IsConfiguration_UserRegistration_Invitation) GetRequired() *types.BoolV
 	return nil
 }
 
-func (m *IsConfiguration_UserRegistration_Invitation) GetTokenTtl() *time.Duration {
+func (m *IsConfiguration_UserRegistration_Invitation) GetTokenTtl() *types.Duration {
 	if m != nil {
 		return m.TokenTtl
 	}
@@ -381,11 +472,15 @@ func (m *IsConfiguration_UserRegistration_Invitation) GetTokenTtl() *time.Durati
 type IsConfiguration_UserRegistration_ContactInfoValidation struct {
 	Required             *types.BoolValue `protobuf:"bytes,1,opt,name=required,proto3" json:"required,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}         `json:"-"`
+	XXX_unrecognized     []byte           `json:"-"`
 	XXX_sizecache        int32            `json:"-"`
 }
 
 func (m *IsConfiguration_UserRegistration_ContactInfoValidation) Reset() {
 	*m = IsConfiguration_UserRegistration_ContactInfoValidation{}
+}
+func (m *IsConfiguration_UserRegistration_ContactInfoValidation) String() string {
+	return proto.CompactTextString(m)
 }
 func (*IsConfiguration_UserRegistration_ContactInfoValidation) ProtoMessage() {}
 func (*IsConfiguration_UserRegistration_ContactInfoValidation) Descriptor() ([]byte, []int) {
@@ -419,11 +514,15 @@ func (m *IsConfiguration_UserRegistration_ContactInfoValidation) GetRequired() *
 type IsConfiguration_UserRegistration_AdminApproval struct {
 	Required             *types.BoolValue `protobuf:"bytes,1,opt,name=required,proto3" json:"required,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}         `json:"-"`
+	XXX_unrecognized     []byte           `json:"-"`
 	XXX_sizecache        int32            `json:"-"`
 }
 
 func (m *IsConfiguration_UserRegistration_AdminApproval) Reset() {
 	*m = IsConfiguration_UserRegistration_AdminApproval{}
+}
+func (m *IsConfiguration_UserRegistration_AdminApproval) String() string {
+	return proto.CompactTextString(m)
 }
 func (*IsConfiguration_UserRegistration_AdminApproval) ProtoMessage() {}
 func (*IsConfiguration_UserRegistration_AdminApproval) Descriptor() ([]byte, []int) {
@@ -461,11 +560,15 @@ type IsConfiguration_UserRegistration_PasswordRequirements struct {
 	MinDigits            *types.UInt32Value `protobuf:"bytes,4,opt,name=min_digits,json=minDigits,proto3" json:"min_digits,omitempty"`
 	MinSpecial           *types.UInt32Value `protobuf:"bytes,5,opt,name=min_special,json=minSpecial,proto3" json:"min_special,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}           `json:"-"`
+	XXX_unrecognized     []byte             `json:"-"`
 	XXX_sizecache        int32              `json:"-"`
 }
 
 func (m *IsConfiguration_UserRegistration_PasswordRequirements) Reset() {
 	*m = IsConfiguration_UserRegistration_PasswordRequirements{}
+}
+func (m *IsConfiguration_UserRegistration_PasswordRequirements) String() string {
+	return proto.CompactTextString(m)
 }
 func (*IsConfiguration_UserRegistration_PasswordRequirements) ProtoMessage() {}
 func (*IsConfiguration_UserRegistration_PasswordRequirements) Descriptor() ([]byte, []int) {
@@ -528,11 +631,13 @@ type IsConfiguration_ProfilePicture struct {
 	DisableUpload        *types.BoolValue `protobuf:"bytes,1,opt,name=disable_upload,json=disableUpload,proto3" json:"disable_upload,omitempty"`
 	UseGravatar          *types.BoolValue `protobuf:"bytes,2,opt,name=use_gravatar,json=useGravatar,proto3" json:"use_gravatar,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}         `json:"-"`
+	XXX_unrecognized     []byte           `json:"-"`
 	XXX_sizecache        int32            `json:"-"`
 }
 
-func (m *IsConfiguration_ProfilePicture) Reset()      { *m = IsConfiguration_ProfilePicture{} }
-func (*IsConfiguration_ProfilePicture) ProtoMessage() {}
+func (m *IsConfiguration_ProfilePicture) Reset()         { *m = IsConfiguration_ProfilePicture{} }
+func (m *IsConfiguration_ProfilePicture) String() string { return proto.CompactTextString(m) }
+func (*IsConfiguration_ProfilePicture) ProtoMessage()    {}
 func (*IsConfiguration_ProfilePicture) Descriptor() ([]byte, []int) {
 	return fileDescriptor_a1c7e02f6181562c, []int{2, 1}
 }
@@ -571,11 +676,13 @@ func (m *IsConfiguration_ProfilePicture) GetUseGravatar() *types.BoolValue {
 type IsConfiguration_EndDevicePicture struct {
 	DisableUpload        *types.BoolValue `protobuf:"bytes,1,opt,name=disable_upload,json=disableUpload,proto3" json:"disable_upload,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}         `json:"-"`
+	XXX_unrecognized     []byte           `json:"-"`
 	XXX_sizecache        int32            `json:"-"`
 }
 
-func (m *IsConfiguration_EndDevicePicture) Reset()      { *m = IsConfiguration_EndDevicePicture{} }
-func (*IsConfiguration_EndDevicePicture) ProtoMessage() {}
+func (m *IsConfiguration_EndDevicePicture) Reset()         { *m = IsConfiguration_EndDevicePicture{} }
+func (m *IsConfiguration_EndDevicePicture) String() string { return proto.CompactTextString(m) }
+func (*IsConfiguration_EndDevicePicture) ProtoMessage()    {}
 func (*IsConfiguration_EndDevicePicture) Descriptor() ([]byte, []int) {
 	return fileDescriptor_a1c7e02f6181562c, []int{2, 2}
 }
@@ -610,11 +717,13 @@ type IsConfiguration_UserRights struct {
 	CreateGateways       *types.BoolValue `protobuf:"bytes,3,opt,name=create_gateways,json=createGateways,proto3" json:"create_gateways,omitempty"`
 	CreateOrganizations  *types.BoolValue `protobuf:"bytes,4,opt,name=create_organizations,json=createOrganizations,proto3" json:"create_organizations,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}         `json:"-"`
+	XXX_unrecognized     []byte           `json:"-"`
 	XXX_sizecache        int32            `json:"-"`
 }
 
-func (m *IsConfiguration_UserRights) Reset()      { *m = IsConfiguration_UserRights{} }
-func (*IsConfiguration_UserRights) ProtoMessage() {}
+func (m *IsConfiguration_UserRights) Reset()         { *m = IsConfiguration_UserRights{} }
+func (m *IsConfiguration_UserRights) String() string { return proto.CompactTextString(m) }
+func (*IsConfiguration_UserRights) ProtoMessage()    {}
 func (*IsConfiguration_UserRights) Descriptor() ([]byte, []int) {
 	return fileDescriptor_a1c7e02f6181562c, []int{2, 3}
 }
@@ -664,14 +773,92 @@ func (m *IsConfiguration_UserRights) GetCreateOrganizations() *types.BoolValue {
 	return nil
 }
 
-type GetIsConfigurationResponse struct {
-	Configuration        *IsConfiguration `protobuf:"bytes,1,opt,name=configuration,proto3" json:"configuration,omitempty"`
+type IsConfiguration_UserLogin struct {
+	DisableCredentialsLogin *types.BoolValue `protobuf:"bytes,1,opt,name=disable_credentials_login,json=disableCredentialsLogin,proto3" json:"disable_credentials_login,omitempty"`
+	XXX_NoUnkeyedLiteral    struct{}         `json:"-"`
+	XXX_unrecognized        []byte           `json:"-"`
+	XXX_sizecache           int32            `json:"-"`
+}
+
+func (m *IsConfiguration_UserLogin) Reset()         { *m = IsConfiguration_UserLogin{} }
+func (m *IsConfiguration_UserLogin) String() string { return proto.CompactTextString(m) }
+func (*IsConfiguration_UserLogin) ProtoMessage()    {}
+func (*IsConfiguration_UserLogin) Descriptor() ([]byte, []int) {
+	return fileDescriptor_a1c7e02f6181562c, []int{2, 4}
+}
+func (m *IsConfiguration_UserLogin) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_IsConfiguration_UserLogin.Unmarshal(m, b)
+}
+func (m *IsConfiguration_UserLogin) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_IsConfiguration_UserLogin.Marshal(b, m, deterministic)
+}
+func (m *IsConfiguration_UserLogin) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_IsConfiguration_UserLogin.Merge(m, src)
+}
+func (m *IsConfiguration_UserLogin) XXX_Size() int {
+	return xxx_messageInfo_IsConfiguration_UserLogin.Size(m)
+}
+func (m *IsConfiguration_UserLogin) XXX_DiscardUnknown() {
+	xxx_messageInfo_IsConfiguration_UserLogin.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_IsConfiguration_UserLogin proto.InternalMessageInfo
+
+func (m *IsConfiguration_UserLogin) GetDisableCredentialsLogin() *types.BoolValue {
+	if m != nil {
+		return m.DisableCredentialsLogin
+	}
+	return nil
+}
+
+type IsConfiguration_AdminRights struct {
+	All                  *types.BoolValue `protobuf:"bytes,1,opt,name=all,proto3" json:"all,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}         `json:"-"`
+	XXX_unrecognized     []byte           `json:"-"`
 	XXX_sizecache        int32            `json:"-"`
 }
 
-func (m *GetIsConfigurationResponse) Reset()      { *m = GetIsConfigurationResponse{} }
-func (*GetIsConfigurationResponse) ProtoMessage() {}
+func (m *IsConfiguration_AdminRights) Reset()         { *m = IsConfiguration_AdminRights{} }
+func (m *IsConfiguration_AdminRights) String() string { return proto.CompactTextString(m) }
+func (*IsConfiguration_AdminRights) ProtoMessage()    {}
+func (*IsConfiguration_AdminRights) Descriptor() ([]byte, []int) {
+	return fileDescriptor_a1c7e02f6181562c, []int{2, 5}
+}
+func (m *IsConfiguration_AdminRights) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_IsConfiguration_AdminRights.Unmarshal(m, b)
+}
+func (m *IsConfiguration_AdminRights) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_IsConfiguration_AdminRights.Marshal(b, m, deterministic)
+}
+func (m *IsConfiguration_AdminRights) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_IsConfiguration_AdminRights.Merge(m, src)
+}
+func (m *IsConfiguration_AdminRights) XXX_Size() int {
+	return xxx_messageInfo_IsConfiguration_AdminRights.Size(m)
+}
+func (m *IsConfiguration_AdminRights) XXX_DiscardUnknown() {
+	xxx_messageInfo_IsConfiguration_AdminRights.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_IsConfiguration_AdminRights proto.InternalMessageInfo
+
+func (m *IsConfiguration_AdminRights) GetAll() *types.BoolValue {
+	if m != nil {
+		return m.All
+	}
+	return nil
+}
+
+type GetIsConfigurationResponse struct {
+	Configuration        *IsConfiguration `protobuf:"bytes,1,opt,name=configuration,proto3" json:"configuration,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}         `json:"-"`
+	XXX_unrecognized     []byte           `json:"-"`
+	XXX_sizecache        int32            `json:"-"`
+}
+
+func (m *GetIsConfigurationResponse) Reset()         { *m = GetIsConfigurationResponse{} }
+func (m *GetIsConfigurationResponse) String() string { return proto.CompactTextString(m) }
+func (*GetIsConfigurationResponse) ProtoMessage()    {}
 func (*GetIsConfigurationResponse) Descriptor() ([]byte, []int) {
 	return fileDescriptor_a1c7e02f6181562c, []int{3}
 }
@@ -705,6 +892,8 @@ func init() {
 	golang_proto.RegisterType((*AuthInfoResponse)(nil), "ttn.lorawan.v3.AuthInfoResponse")
 	proto.RegisterType((*AuthInfoResponse_APIKeyAccess)(nil), "ttn.lorawan.v3.AuthInfoResponse.APIKeyAccess")
 	golang_proto.RegisterType((*AuthInfoResponse_APIKeyAccess)(nil), "ttn.lorawan.v3.AuthInfoResponse.APIKeyAccess")
+	proto.RegisterType((*AuthInfoResponse_GatewayToken)(nil), "ttn.lorawan.v3.AuthInfoResponse.GatewayToken")
+	golang_proto.RegisterType((*AuthInfoResponse_GatewayToken)(nil), "ttn.lorawan.v3.AuthInfoResponse.GatewayToken")
 	proto.RegisterType((*GetIsConfigurationRequest)(nil), "ttn.lorawan.v3.GetIsConfigurationRequest")
 	golang_proto.RegisterType((*GetIsConfigurationRequest)(nil), "ttn.lorawan.v3.GetIsConfigurationRequest")
 	proto.RegisterType((*IsConfiguration)(nil), "ttn.lorawan.v3.IsConfiguration")
@@ -725,6 +914,10 @@ func init() {
 	golang_proto.RegisterType((*IsConfiguration_EndDevicePicture)(nil), "ttn.lorawan.v3.IsConfiguration.EndDevicePicture")
 	proto.RegisterType((*IsConfiguration_UserRights)(nil), "ttn.lorawan.v3.IsConfiguration.UserRights")
 	golang_proto.RegisterType((*IsConfiguration_UserRights)(nil), "ttn.lorawan.v3.IsConfiguration.UserRights")
+	proto.RegisterType((*IsConfiguration_UserLogin)(nil), "ttn.lorawan.v3.IsConfiguration.UserLogin")
+	golang_proto.RegisterType((*IsConfiguration_UserLogin)(nil), "ttn.lorawan.v3.IsConfiguration.UserLogin")
+	proto.RegisterType((*IsConfiguration_AdminRights)(nil), "ttn.lorawan.v3.IsConfiguration.AdminRights")
+	golang_proto.RegisterType((*IsConfiguration_AdminRights)(nil), "ttn.lorawan.v3.IsConfiguration.AdminRights")
 	proto.RegisterType((*GetIsConfigurationResponse)(nil), "ttn.lorawan.v3.GetIsConfigurationResponse")
 	golang_proto.RegisterType((*GetIsConfigurationResponse)(nil), "ttn.lorawan.v3.GetIsConfigurationResponse")
 }
@@ -737,537 +930,95 @@ func init() {
 }
 
 var fileDescriptor_a1c7e02f6181562c = []byte{
-	// 1260 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xac, 0x96, 0xcf, 0x6f, 0x1b, 0x45,
-	0x14, 0xc7, 0xbd, 0x26, 0x6d, 0xdd, 0x97, 0x38, 0x71, 0xa7, 0x3f, 0x48, 0xb6, 0xc5, 0x09, 0x41,
-	0x42, 0xa5, 0x52, 0xd6, 0x28, 0x91, 0xb8, 0x94, 0x22, 0xec, 0x34, 0x24, 0x56, 0x28, 0x8d, 0xb6,
-	0x4d, 0x41, 0x20, 0x58, 0x4d, 0x76, 0x27, 0xeb, 0x51, 0xd6, 0x33, 0xdb, 0x9d, 0x59, 0xa7, 0xee,
-	0x01, 0xa1, 0xc2, 0x09, 0x2e, 0x08, 0x2e, 0x5c, 0xb9, 0x71, 0xe4, 0x4f, 0xe0, 0xc8, 0x0d, 0x24,
-	0x2e, 0x5c, 0x28, 0x22, 0xe5, 0xc0, 0x91, 0x0b, 0x17, 0x4e, 0x68, 0x67, 0xc6, 0x8e, 0xbd, 0x4e,
-	0xf3, 0xa3, 0xe2, 0xb6, 0x33, 0xf3, 0xbe, 0x9f, 0x79, 0xfb, 0xde, 0xdb, 0xb7, 0x0f, 0x5e, 0x8e,
-	0x78, 0x82, 0x77, 0x31, 0x5b, 0x10, 0x12, 0xfb, 0x3b, 0x35, 0x1c, 0xd3, 0x1a, 0x0d, 0x08, 0x93,
-	0x54, 0x76, 0x05, 0x49, 0x3a, 0x24, 0x71, 0xe2, 0x84, 0x4b, 0x8e, 0x26, 0xa5, 0x64, 0x8e, 0xb1,
-	0x75, 0x3a, 0x4b, 0x76, 0x3d, 0xa4, 0xb2, 0x95, 0x6e, 0x39, 0x3e, 0x6f, 0xd7, 0x08, 0xeb, 0xf0,
-	0x6e, 0x9c, 0xf0, 0x07, 0xdd, 0x9a, 0x32, 0xf6, 0x17, 0x42, 0xc2, 0x16, 0x3a, 0x38, 0xa2, 0x01,
-	0x96, 0xa4, 0x36, 0xf2, 0xa0, 0x91, 0xf6, 0xc2, 0x00, 0x22, 0xe4, 0x21, 0xd7, 0xe2, 0xad, 0x74,
-	0x5b, 0xad, 0xd4, 0x42, 0x3d, 0x19, 0xf3, 0x2b, 0x21, 0xe7, 0x61, 0x44, 0x94, 0x8b, 0x98, 0x31,
-	0x2e, 0xb1, 0xa4, 0x9c, 0x09, 0x73, 0x5a, 0x35, 0xa7, 0x7d, 0x46, 0x90, 0x26, 0xca, 0xc0, 0x9c,
-	0x5f, 0xce, 0x9f, 0x93, 0x76, 0x2c, 0xbb, 0x4f, 0x13, 0xef, 0x26, 0x38, 0x8e, 0x49, 0xd2, 0x83,
-	0xbf, 0xf4, 0xb4, 0x20, 0x6d, 0xd3, 0x7d, 0xa3, 0x2b, 0xa3, 0x46, 0xa9, 0xe8, 0xc5, 0xcf, 0x7e,
-	0x61, 0xf4, 0x94, 0xe3, 0x54, 0xb6, 0x7a, 0x1e, 0x8c, 0x1e, 0x27, 0x34, 0x6c, 0x49, 0x03, 0x9f,
-	0xff, 0x74, 0x0c, 0x2a, 0xf5, 0x54, 0xb6, 0x9a, 0x6c, 0x9b, 0xbb, 0x44, 0xc4, 0x9c, 0x09, 0x82,
-	0xd6, 0xe0, 0x0c, 0x8e, 0xa9, 0xb7, 0x43, 0xba, 0xd3, 0xd6, 0x9c, 0x75, 0x75, 0x7c, 0x71, 0xc1,
-	0x19, 0xce, 0x92, 0x93, 0x97, 0x38, 0xf5, 0x8d, 0xe6, 0x3a, 0xe9, 0xd6, 0x7d, 0x9f, 0x08, 0xb1,
-	0x56, 0x70, 0x4f, 0xe3, 0x98, 0xae, 0x93, 0x2e, 0xda, 0x00, 0xa4, 0xbc, 0xf1, 0xb0, 0x3a, 0xf1,
-	0x24, 0xdf, 0x21, 0x6c, 0xba, 0xa8, 0xa0, 0x73, 0x79, 0xe8, 0xed, 0x8c, 0xaa, 0x11, 0x77, 0x33,
-	0xbb, 0xb5, 0x82, 0x5b, 0x51, 0xea, 0x81, 0x3d, 0xf4, 0x26, 0x4c, 0x64, 0x6f, 0xef, 0x09, 0x22,
-	0x04, 0xe5, 0x6c, 0xfa, 0x94, 0x62, 0x5d, 0xce, 0xb3, 0x36, 0x05, 0x49, 0xee, 0x68, 0x93, 0xb5,
-	0x82, 0x3b, 0x9e, 0xee, 0x2f, 0x51, 0x1d, 0x2a, 0x29, 0xa3, 0x1d, 0x92, 0x08, 0x1c, 0x79, 0x3a,
-	0x18, 0xd3, 0xcf, 0x29, 0xca, 0xa5, 0x3c, 0xc5, 0x55, 0xa7, 0xee, 0x54, 0xdf, 0x5e, 0x6f, 0xa0,
-	0x19, 0x28, 0x51, 0xe1, 0xe1, 0xa0, 0x4d, 0xd9, 0xf4, 0xd8, 0x9c, 0x75, 0xb5, 0xe4, 0x9e, 0xa1,
-	0xa2, 0x9e, 0x2d, 0xed, 0x6f, 0x2d, 0x98, 0x18, 0x0c, 0x06, 0xaa, 0xe7, 0x83, 0x39, 0x72, 0x8b,
-	0x36, 0x6f, 0x54, 0xfe, 0x6d, 0x9c, 0xfa, 0xdc, 0x2a, 0x56, 0xac, 0x1f, 0x1f, 0xcf, 0x16, 0x7e,
-	0x7e, 0x3c, 0x6b, 0xf5, 0xa3, 0xf8, 0x0e, 0x80, 0xfe, 0x72, 0x3c, 0x1a, 0x08, 0x13, 0xbd, 0x17,
-	0xf3, 0x94, 0x15, 0x65, 0xd1, 0xdc, 0x2f, 0x9f, 0xc6, 0xc4, 0x20, 0xd0, 0x3d, 0x4b, 0x8c, 0x81,
-	0x68, 0x4c, 0x41, 0xd9, 0xe4, 0xa3, 0x4d, 0x64, 0x8b, 0x07, 0xf3, 0x97, 0x61, 0x66, 0x95, 0xc8,
-	0xa6, 0x58, 0xe6, 0x6c, 0x9b, 0x86, 0xa6, 0xc0, 0x5d, 0x72, 0x3f, 0x25, 0x42, 0xce, 0xff, 0x33,
-	0x05, 0x53, 0xb9, 0x23, 0xf4, 0x21, 0x9c, 0x53, 0x59, 0x48, 0x48, 0x48, 0x85, 0xd4, 0x9b, 0x26,
-	0x88, 0xaf, 0xe6, 0x1d, 0xcb, 0x69, 0x55, 0x6a, 0xdc, 0x01, 0x9d, 0x5b, 0x49, 0x73, 0x3b, 0xe8,
-	0x5d, 0x98, 0x8a, 0x13, 0xbe, 0x4d, 0x23, 0xe2, 0xc5, 0xd4, 0x97, 0x69, 0x42, 0x54, 0x98, 0xc7,
-	0x17, 0x9d, 0xa3, 0xe0, 0x1b, 0x5a, 0xb6, 0xa1, 0x55, 0xee, 0x64, 0x3c, 0xb4, 0x46, 0x1f, 0x01,
-	0x22, 0x2c, 0xf0, 0x02, 0xd2, 0xa1, 0xfe, 0x3e, 0xfb, 0xd4, 0xf1, 0x1c, 0x5f, 0x61, 0xc1, 0x4d,
-	0x25, 0xec, 0xd1, 0x2b, 0x24, 0xb7, 0x83, 0xd6, 0x61, 0x5c, 0xc7, 0x45, 0x97, 0xd5, 0x69, 0x05,
-	0xbe, 0x76, 0xac, 0x88, 0xe8, 0x52, 0x83, 0xb4, 0xff, 0x6c, 0xff, 0x56, 0x82, 0x4a, 0x3e, 0x58,
-	0xe8, 0x03, 0x00, 0xca, 0x3a, 0x54, 0x37, 0x29, 0x53, 0x51, 0xd7, 0x4f, 0x1a, 0x72, 0xa7, 0xd9,
-	0x47, 0xb8, 0x03, 0x38, 0xf4, 0x31, 0x3c, 0xef, 0x73, 0x26, 0xb1, 0x2f, 0x3d, 0xca, 0xb6, 0xb9,
-	0x67, 0x1a, 0x6b, 0x76, 0x93, 0xae, 0xba, 0xb7, 0x4e, 0x7c, 0xd3, 0xb2, 0xe6, 0x65, 0xcd, 0xe2,
-	0x5e, 0x9f, 0xe6, 0x5e, 0xf4, 0x0f, 0xda, 0x46, 0x04, 0x26, 0xd5, 0x47, 0xe5, 0xe1, 0x38, 0x4e,
-	0x78, 0x07, 0x47, 0xa6, 0xa6, 0xde, 0x38, 0xf1, 0xb5, 0xea, 0x63, 0xac, 0x1b, 0x8a, 0x5b, 0xc6,
-	0x83, 0x4b, 0xf4, 0x10, 0x2e, 0xc6, 0x58, 0x88, 0x5d, 0x9e, 0x04, 0x5e, 0x42, 0xee, 0xa7, 0x34,
-	0x21, 0x6d, 0xc2, 0xa4, 0x30, 0x45, 0xb6, 0x72, 0xe2, 0xdb, 0x36, 0x0c, 0xcd, 0x1d, 0x80, 0xb9,
-	0x17, 0xe2, 0x03, 0x76, 0xd1, 0x34, 0x9c, 0x21, 0x0c, 0x6f, 0x45, 0x24, 0x50, 0x65, 0x57, 0x72,
-	0x7b, 0x4b, 0xfb, 0x91, 0x05, 0xb0, 0x9f, 0x17, 0xf4, 0x1a, 0x94, 0x8c, 0x6f, 0x81, 0x49, 0xb3,
-	0xed, 0xe8, 0xdf, 0x89, 0xd3, 0xfb, 0x9d, 0x38, 0x0d, 0xce, 0xa3, 0x7b, 0x38, 0x4a, 0x89, 0xdb,
-	0xb7, 0x45, 0xaf, 0xc3, 0x59, 0xd5, 0x65, 0x3d, 0x29, 0x23, 0x93, 0xb5, 0x99, 0x11, 0xe1, 0x4d,
-	0xf3, 0x2a, 0x8d, 0xb1, 0x6f, 0x7e, 0x9f, 0xb5, 0xdc, 0x92, 0x52, 0xdc, 0x95, 0x91, 0x7d, 0x1b,
-	0x2e, 0x1e, 0x98, 0xb1, 0x67, 0x75, 0xc7, 0x5e, 0x85, 0xf2, 0x50, 0x2e, 0x9e, 0x19, 0xf4, 0x53,
-	0x11, 0x2e, 0x1c, 0x14, 0x67, 0x74, 0x1d, 0x20, 0x2b, 0x99, 0x88, 0xb0, 0x50, 0xb6, 0x0c, 0xf2,
-	0xca, 0x08, 0x72, 0xb3, 0xc9, 0xe4, 0xd2, 0xa2, 0x86, 0x9e, 0x6d, 0x53, 0xf6, 0xb6, 0x32, 0x57,
-	0x62, 0xfc, 0xa0, 0x27, 0x2e, 0x1e, 0x4b, 0x8c, 0x1f, 0x18, 0x71, 0x1d, 0xca, 0xd9, 0xcd, 0x69,
-	0xf6, 0x4b, 0xf7, 0xb1, 0x20, 0xa6, 0x5a, 0x0f, 0xd7, 0x4f, 0xb4, 0x29, 0xdb, 0xec, 0x29, 0x7a,
-	0xce, 0x07, 0x34, 0xa4, 0xfd, 0xfa, 0x3b, 0xda, 0xf9, 0x9b, 0xca, 0x1c, 0xdd, 0x80, 0xf1, 0x4c,
-	0x2c, 0x62, 0xe2, 0x53, 0x1c, 0x99, 0x36, 0x76, 0xb8, 0x3a, 0xbb, 0xed, 0x8e, 0xb6, 0xb7, 0xbf,
-	0xb2, 0x60, 0x72, 0xb8, 0x5f, 0xa2, 0x3a, 0x4c, 0x06, 0x54, 0x64, 0xf5, 0xe8, 0xa5, 0x71, 0xc4,
-	0xf1, 0x71, 0x52, 0x54, 0x36, 0x8a, 0x4d, 0x25, 0x40, 0x37, 0xd4, 0x0f, 0xda, 0x0b, 0x13, 0xdc,
-	0xc1, 0x12, 0x27, 0x26, 0xa6, 0x87, 0x01, 0xb2, 0x96, 0xb9, 0x6a, 0xcc, 0xed, 0x4d, 0xa8, 0xe4,
-	0xfb, 0xec, 0xff, 0xe0, 0x95, 0xfd, 0x7d, 0x11, 0x60, 0xbf, 0xcd, 0xa2, 0x75, 0x38, 0xef, 0x27,
-	0x04, 0x4b, 0x92, 0x75, 0x9a, 0x88, 0xfa, 0x7a, 0xe4, 0x3b, 0x06, 0x16, 0x69, 0x59, 0x7d, 0x40,
-	0x95, 0xb9, 0x67, 0x60, 0x7e, 0x44, 0x55, 0x1f, 0x39, 0xfa, 0x9d, 0xcb, 0x5a, 0xb1, 0xac, 0x05,
-	0x68, 0x19, 0xa6, 0x0c, 0x22, 0xc4, 0x92, 0xec, 0xe2, 0x6e, 0x6f, 0x24, 0x39, 0x8c, 0x61, 0x6e,
-	0x5d, 0x35, 0x0a, 0x74, 0x0b, 0x2e, 0x18, 0x08, 0x4f, 0x42, 0xcc, 0xe8, 0x43, 0xf3, 0x56, 0x63,
-	0x47, 0x92, 0x4c, 0x30, 0x6e, 0x0f, 0xca, 0xe6, 0x7d, 0xb0, 0x0f, 0x1a, 0x0a, 0xcc, 0x8c, 0xb8,
-	0x02, 0x65, 0x7f, 0xf0, 0xc0, 0xc4, 0x6e, 0xf6, 0x88, 0xde, 0xe9, 0x0e, 0xab, 0x16, 0x5b, 0x30,
-	0xa1, 0x07, 0x17, 0x33, 0x2d, 0xbd, 0x07, 0xa5, 0xde, 0x6c, 0x89, 0x2e, 0x8d, 0x78, 0xbc, 0x92,
-	0xcd, 0xd6, 0xf6, 0xdc, 0x51, 0xd3, 0xe8, 0x3c, 0x7a, 0xf4, 0xcb, 0x9f, 0x5f, 0x17, 0x27, 0x10,
-	0xd4, 0xd4, 0xf0, 0x99, 0xfd, 0xcb, 0x16, 0xbf, 0xb0, 0xa0, 0xd8, 0x14, 0xe8, 0x33, 0x0b, 0x2a,
-	0xab, 0x44, 0x0e, 0x8f, 0x33, 0xaf, 0xe4, 0x89, 0x4f, 0x9d, 0x86, 0xec, 0x6b, 0xc7, 0x31, 0x35,
-	0x6e, 0xcc, 0x28, 0x37, 0xce, 0xa3, 0x73, 0x35, 0x2a, 0x6a, 0x43, 0xef, 0xdd, 0xb8, 0xf5, 0xeb,
-	0x1f, 0xd5, 0xc2, 0x27, 0x7b, 0x55, 0xeb, 0xbb, 0xbd, 0xaa, 0xf5, 0xd7, 0x5e, 0xb5, 0xf0, 0xf7,
-	0x5e, 0xd5, 0xfa, 0xf2, 0x49, 0xb5, 0xf0, 0xc3, 0x93, 0xaa, 0xf5, 0x7e, 0x2d, 0xe4, 0x8e, 0x6c,
-	0x11, 0xd9, 0xa2, 0x2c, 0x14, 0x0e, 0x23, 0x72, 0x97, 0x27, 0x3b, 0xb5, 0xe1, 0x51, 0xbe, 0xb3,
-	0x54, 0x8b, 0x77, 0xc2, 0x9a, 0x94, 0x2c, 0xde, 0xda, 0x3a, 0xad, 0x42, 0xb4, 0xf4, 0x5f, 0x00,
-	0x00, 0x00, 0xff, 0xff, 0xc3, 0x25, 0x77, 0xc9, 0x76, 0x0d, 0x00, 0x00,
-}
-
-func (this *AuthInfoResponse) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*AuthInfoResponse)
-	if !ok {
-		that2, ok := that.(AuthInfoResponse)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if that1.AccessMethod == nil {
-		if this.AccessMethod != nil {
-			return false
-		}
-	} else if this.AccessMethod == nil {
-		return false
-	} else if !this.AccessMethod.Equal(that1.AccessMethod) {
-		return false
-	}
-	if !this.UniversalRights.Equal(that1.UniversalRights) {
-		return false
-	}
-	if this.IsAdmin != that1.IsAdmin {
-		return false
-	}
-	return true
-}
-func (this *AuthInfoResponse_ApiKey) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*AuthInfoResponse_ApiKey)
-	if !ok {
-		that2, ok := that.(AuthInfoResponse_ApiKey)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.ApiKey.Equal(that1.ApiKey) {
-		return false
-	}
-	return true
-}
-func (this *AuthInfoResponse_OauthAccessToken) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*AuthInfoResponse_OauthAccessToken)
-	if !ok {
-		that2, ok := that.(AuthInfoResponse_OauthAccessToken)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.OauthAccessToken.Equal(that1.OauthAccessToken) {
-		return false
-	}
-	return true
-}
-func (this *AuthInfoResponse_UserSession) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*AuthInfoResponse_UserSession)
-	if !ok {
-		that2, ok := that.(AuthInfoResponse_UserSession)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.UserSession.Equal(that1.UserSession) {
-		return false
-	}
-	return true
-}
-func (this *AuthInfoResponse_APIKeyAccess) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*AuthInfoResponse_APIKeyAccess)
-	if !ok {
-		that2, ok := that.(AuthInfoResponse_APIKeyAccess)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.APIKey.Equal(&that1.APIKey) {
-		return false
-	}
-	if !this.EntityIds.Equal(&that1.EntityIds) {
-		return false
-	}
-	return true
-}
-func (this *GetIsConfigurationRequest) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*GetIsConfigurationRequest)
-	if !ok {
-		that2, ok := that.(GetIsConfigurationRequest)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	return true
-}
-func (this *IsConfiguration) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*IsConfiguration)
-	if !ok {
-		that2, ok := that.(IsConfiguration)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.UserRegistration.Equal(that1.UserRegistration) {
-		return false
-	}
-	if !this.ProfilePicture.Equal(that1.ProfilePicture) {
-		return false
-	}
-	if !this.EndDevicePicture.Equal(that1.EndDevicePicture) {
-		return false
-	}
-	if !this.UserRights.Equal(that1.UserRights) {
-		return false
-	}
-	return true
-}
-func (this *IsConfiguration_UserRegistration) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*IsConfiguration_UserRegistration)
-	if !ok {
-		that2, ok := that.(IsConfiguration_UserRegistration)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.Invitation.Equal(that1.Invitation) {
-		return false
-	}
-	if !this.ContactInfoValidation.Equal(that1.ContactInfoValidation) {
-		return false
-	}
-	if !this.AdminApproval.Equal(that1.AdminApproval) {
-		return false
-	}
-	if !this.PasswordRequirements.Equal(that1.PasswordRequirements) {
-		return false
-	}
-	if this.Enabled != that1.Enabled {
-		return false
-	}
-	return true
-}
-func (this *IsConfiguration_UserRegistration_Invitation) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*IsConfiguration_UserRegistration_Invitation)
-	if !ok {
-		that2, ok := that.(IsConfiguration_UserRegistration_Invitation)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.Required.Equal(that1.Required) {
-		return false
-	}
-	if this.TokenTtl != nil && that1.TokenTtl != nil {
-		if *this.TokenTtl != *that1.TokenTtl {
-			return false
-		}
-	} else if this.TokenTtl != nil {
-		return false
-	} else if that1.TokenTtl != nil {
-		return false
-	}
-	return true
-}
-func (this *IsConfiguration_UserRegistration_ContactInfoValidation) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*IsConfiguration_UserRegistration_ContactInfoValidation)
-	if !ok {
-		that2, ok := that.(IsConfiguration_UserRegistration_ContactInfoValidation)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.Required.Equal(that1.Required) {
-		return false
-	}
-	return true
-}
-func (this *IsConfiguration_UserRegistration_AdminApproval) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*IsConfiguration_UserRegistration_AdminApproval)
-	if !ok {
-		that2, ok := that.(IsConfiguration_UserRegistration_AdminApproval)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.Required.Equal(that1.Required) {
-		return false
-	}
-	return true
-}
-func (this *IsConfiguration_UserRegistration_PasswordRequirements) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*IsConfiguration_UserRegistration_PasswordRequirements)
-	if !ok {
-		that2, ok := that.(IsConfiguration_UserRegistration_PasswordRequirements)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.MinLength.Equal(that1.MinLength) {
-		return false
-	}
-	if !this.MaxLength.Equal(that1.MaxLength) {
-		return false
-	}
-	if !this.MinUppercase.Equal(that1.MinUppercase) {
-		return false
-	}
-	if !this.MinDigits.Equal(that1.MinDigits) {
-		return false
-	}
-	if !this.MinSpecial.Equal(that1.MinSpecial) {
-		return false
-	}
-	return true
-}
-func (this *IsConfiguration_ProfilePicture) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*IsConfiguration_ProfilePicture)
-	if !ok {
-		that2, ok := that.(IsConfiguration_ProfilePicture)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.DisableUpload.Equal(that1.DisableUpload) {
-		return false
-	}
-	if !this.UseGravatar.Equal(that1.UseGravatar) {
-		return false
-	}
-	return true
-}
-func (this *IsConfiguration_EndDevicePicture) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*IsConfiguration_EndDevicePicture)
-	if !ok {
-		that2, ok := that.(IsConfiguration_EndDevicePicture)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.DisableUpload.Equal(that1.DisableUpload) {
-		return false
-	}
-	return true
-}
-func (this *IsConfiguration_UserRights) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*IsConfiguration_UserRights)
-	if !ok {
-		that2, ok := that.(IsConfiguration_UserRights)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.CreateApplications.Equal(that1.CreateApplications) {
-		return false
-	}
-	if !this.CreateClients.Equal(that1.CreateClients) {
-		return false
-	}
-	if !this.CreateGateways.Equal(that1.CreateGateways) {
-		return false
-	}
-	if !this.CreateOrganizations.Equal(that1.CreateOrganizations) {
-		return false
-	}
-	return true
-}
-func (this *GetIsConfigurationResponse) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*GetIsConfigurationResponse)
-	if !ok {
-		that2, ok := that.(GetIsConfigurationResponse)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.Configuration.Equal(that1.Configuration) {
-		return false
-	}
-	return true
+	// 1408 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xac, 0x97, 0xdf, 0x6f, 0x1b, 0xc5,
+	0x16, 0xc7, 0xeb, 0x34, 0x3f, 0x9c, 0x63, 0x3b, 0x71, 0x27, 0x4d, 0x9b, 0x6c, 0x7b, 0x7b, 0x73,
+	0x73, 0xa5, 0xab, 0xde, 0x42, 0x6c, 0x94, 0x88, 0x4a, 0xa8, 0x2a, 0xc2, 0x49, 0x43, 0x7e, 0xb5,
+	0x34, 0xda, 0x36, 0x05, 0x81, 0x60, 0x35, 0xd9, 0x9d, 0xac, 0x47, 0x59, 0xcf, 0x6c, 0x77, 0x66,
+	0x9d, 0xba, 0x42, 0x3c, 0x20, 0x1e, 0x10, 0xf0, 0x04, 0xe2, 0xff, 0xe0, 0x4f, 0xe0, 0x3f, 0xe0,
+	0x01, 0x89, 0x27, 0xde, 0xe0, 0xaf, 0xe0, 0x09, 0xed, 0xcc, 0xac, 0xbd, 0x5e, 0xbb, 0xb1, 0x53,
+	0xf1, 0xb6, 0x33, 0x73, 0xbe, 0x9f, 0x39, 0x7b, 0xce, 0xd9, 0x99, 0xb3, 0xf0, 0xbf, 0x80, 0x47,
+	0xf8, 0x0c, 0xb3, 0x35, 0x21, 0xb1, 0x7b, 0x5a, 0xc7, 0x21, 0xad, 0x53, 0x8f, 0x30, 0x49, 0x65,
+	0x47, 0x90, 0xa8, 0x4d, 0xa2, 0x5a, 0x18, 0x71, 0xc9, 0xd1, 0x9c, 0x94, 0xac, 0x66, 0x6c, 0x6b,
+	0xed, 0x0d, 0xab, 0xe1, 0x53, 0xd9, 0x8c, 0x8f, 0x6b, 0x2e, 0x6f, 0xd5, 0x09, 0x6b, 0xf3, 0x4e,
+	0x18, 0xf1, 0x17, 0x9d, 0xba, 0x32, 0x76, 0xd7, 0x7c, 0xc2, 0xd6, 0xda, 0x38, 0xa0, 0x1e, 0x96,
+	0xa4, 0x3e, 0xf0, 0xa0, 0x91, 0xd6, 0x5a, 0x06, 0xe1, 0x73, 0x9f, 0x6b, 0xf1, 0x71, 0x7c, 0xa2,
+	0x46, 0x6a, 0xa0, 0x9e, 0x8c, 0xf9, 0x4d, 0x9f, 0x73, 0x3f, 0x20, 0xca, 0x45, 0xcc, 0x18, 0x97,
+	0x58, 0x52, 0xce, 0x84, 0x59, 0xbd, 0x65, 0x56, 0xbb, 0x0c, 0x2f, 0x8e, 0x94, 0x81, 0x59, 0xbf,
+	0x91, 0x5f, 0x27, 0xad, 0x50, 0x76, 0x5e, 0x25, 0x3e, 0x8b, 0x70, 0x18, 0x92, 0x28, 0x85, 0xff,
+	0xf7, 0x55, 0x41, 0x3a, 0xa1, 0x3d, 0xa3, 0x9b, 0x83, 0x46, 0xb1, 0x48, 0xe3, 0x67, 0xfd, 0x6b,
+	0x70, 0x95, 0xe3, 0x58, 0x36, 0x53, 0x0f, 0x06, 0x97, 0x23, 0xea, 0x37, 0xa5, 0x81, 0xaf, 0xfe,
+	0x3e, 0x05, 0xd5, 0x46, 0x2c, 0x9b, 0x7b, 0xec, 0x84, 0xdb, 0x44, 0x84, 0x9c, 0x09, 0x82, 0x76,
+	0x61, 0x06, 0x87, 0xd4, 0x39, 0x25, 0x9d, 0xa5, 0xc2, 0x4a, 0xe1, 0x76, 0x69, 0x7d, 0xad, 0xd6,
+	0x9f, 0xa5, 0x5a, 0x5e, 0x52, 0x6b, 0x1c, 0xee, 0x1d, 0x90, 0x4e, 0xc3, 0x75, 0x89, 0x10, 0xbb,
+	0x97, 0xec, 0x69, 0x1c, 0xd2, 0x03, 0xd2, 0x41, 0x87, 0x80, 0x94, 0x37, 0x0e, 0x56, 0x2b, 0x8e,
+	0xe4, 0xa7, 0x84, 0x2d, 0x4d, 0x28, 0xe8, 0x4a, 0x1e, 0xfa, 0x38, 0xa1, 0x6a, 0xc4, 0xd3, 0xc4,
+	0x6e, 0xf7, 0x92, 0x5d, 0x55, 0xea, 0xcc, 0x1c, 0x7a, 0x0f, 0xca, 0xc9, 0xdb, 0x3b, 0x82, 0x08,
+	0x41, 0x39, 0x5b, 0x9a, 0x52, 0xac, 0x1b, 0x79, 0xd6, 0x91, 0x20, 0xd1, 0x13, 0x6d, 0xb2, 0x7b,
+	0xc9, 0x2e, 0xc5, 0xbd, 0x21, 0x7a, 0x0a, 0x15, 0x1f, 0x4b, 0x72, 0x86, 0x3b, 0xc6, 0x9d, 0xe9,
+	0x31, 0xdf, 0x71, 0x47, 0xab, 0x52, 0xdf, 0xca, 0x7e, 0x66, 0x8c, 0x1a, 0x50, 0x8d, 0x19, 0x6d,
+	0x93, 0x48, 0xe0, 0xc0, 0xd1, 0x21, 0x5e, 0xba, 0xac, 0xc0, 0xd7, 0xf2, 0x60, 0x5b, 0xad, 0xda,
+	0xf3, 0x5d, 0x7b, 0x3d, 0x81, 0x96, 0xa1, 0x48, 0x85, 0x83, 0xbd, 0x16, 0x65, 0x4b, 0x93, 0x2b,
+	0x85, 0xdb, 0x45, 0x7b, 0x86, 0x8a, 0x46, 0x32, 0xb4, 0x7e, 0x2c, 0x40, 0x39, 0x1b, 0x62, 0xf4,
+	0x4e, 0x3e, 0x45, 0x03, 0xbb, 0x68, 0xf3, 0xcd, 0xe2, 0x5f, 0x9b, 0x53, 0xdf, 0x14, 0x26, 0xaa,
+	0x85, 0x6e, 0x4e, 0xf6, 0x01, 0xf4, 0x77, 0xe8, 0x50, 0x4f, 0x98, 0x5c, 0xfc, 0x27, 0xaf, 0xde,
+	0x56, 0x16, 0x7b, 0xbd, 0x62, 0xcc, 0x80, 0x66, 0x89, 0x59, 0x14, 0xd6, 0x77, 0x05, 0x28, 0x67,
+	0xc3, 0x82, 0x1e, 0x41, 0x29, 0x0d, 0x6e, 0x42, 0xd7, 0xbe, 0xad, 0xe6, 0xe9, 0x46, 0x32, 0x1c,
+	0x0f, 0x7e, 0xba, 0x2a, 0xd0, 0x1a, 0x4c, 0x9b, 0x58, 0x4e, 0xaf, 0x5c, 0xbe, 0x3d, 0xb7, 0xbe,
+	0x38, 0x34, 0x96, 0xb6, 0x31, 0xda, 0x9c, 0x87, 0x8a, 0x29, 0xb4, 0x16, 0x91, 0x4d, 0xee, 0xad,
+	0xde, 0x80, 0xe5, 0x1d, 0x22, 0xf7, 0xc4, 0x16, 0x67, 0x27, 0xd4, 0x37, 0x5f, 0xae, 0x4d, 0x9e,
+	0xc7, 0x44, 0xc8, 0xd5, 0xaf, 0x17, 0x60, 0x3e, 0xb7, 0x84, 0x3e, 0x85, 0x2b, 0xaa, 0xbc, 0x22,
+	0xe2, 0x53, 0x21, 0xf5, 0xa4, 0xc9, 0xe3, 0x5b, 0xf9, 0xbd, 0x73, 0x5a, 0x55, 0x73, 0x76, 0x46,
+	0x67, 0x57, 0xe3, 0xdc, 0x0c, 0xfa, 0x10, 0xe6, 0xc3, 0x88, 0x9f, 0xd0, 0x80, 0x38, 0x21, 0x75,
+	0x65, 0x1c, 0x11, 0x95, 0xe9, 0xd2, 0x7a, 0x6d, 0x14, 0xfc, 0x50, 0xcb, 0x0e, 0xb5, 0xca, 0x9e,
+	0x0b, 0xfb, 0xc6, 0xe8, 0x33, 0x40, 0x84, 0x79, 0x8e, 0x47, 0xda, 0xd4, 0xed, 0xb1, 0xa7, 0xc6,
+	0x73, 0x7c, 0x9b, 0x79, 0x0f, 0x94, 0x30, 0xa5, 0x57, 0x49, 0x6e, 0x06, 0x1d, 0x40, 0x49, 0xc7,
+	0x25, 0xcd, 0x46, 0x02, 0xbe, 0x33, 0x56, 0x44, 0x74, 0xb5, 0x43, 0xdc, 0x7d, 0x46, 0xbb, 0xa0,
+	0x46, 0x4e, 0xc0, 0x7d, 0xca, 0x96, 0x66, 0x14, 0xeb, 0xff, 0xe3, 0xb0, 0x1e, 0x26, 0x02, 0x7b,
+	0x36, 0x4e, 0x1f, 0xd1, 0x07, 0x50, 0x56, 0xdf, 0x4b, 0xea, 0x57, 0x51, 0xb1, 0xde, 0x18, 0xc5,
+	0x52, 0x1f, 0x95, 0x71, 0xac, 0x84, 0x7b, 0x03, 0xeb, 0xb7, 0x22, 0x54, 0xf3, 0x69, 0x44, 0x9f,
+	0x00, 0x50, 0xd6, 0xa6, 0xfa, 0x5e, 0x30, 0x25, 0x7d, 0xef, 0xa2, 0xc5, 0x50, 0xdb, 0xeb, 0x22,
+	0xec, 0x0c, 0x0e, 0x7d, 0x01, 0xd7, 0x5d, 0xce, 0x24, 0x76, 0xa5, 0x43, 0xd9, 0x09, 0x77, 0xcc,
+	0x5d, 0x96, 0xec, 0xa4, 0x3f, 0xcd, 0xf7, 0x2f, 0xbc, 0xd3, 0x96, 0xe6, 0x25, 0x67, 0xd7, 0xb3,
+	0x2e, 0xcd, 0x5e, 0x74, 0x87, 0x4d, 0x23, 0x02, 0x73, 0x3a, 0x82, 0x38, 0x0c, 0x23, 0xde, 0xc6,
+	0x81, 0xa9, 0xf6, 0x77, 0x2f, 0xbc, 0xad, 0x0a, 0x6a, 0xc3, 0x50, 0xec, 0x0a, 0xce, 0x0e, 0xd1,
+	0x4b, 0x58, 0x0c, 0xb1, 0x10, 0x67, 0x3c, 0xf2, 0x9c, 0x88, 0x3c, 0x8f, 0x69, 0x44, 0x5a, 0x84,
+	0x49, 0x61, 0xca, 0x7f, 0xfb, 0xc2, 0xbb, 0x1d, 0x1a, 0x9a, 0x9d, 0x81, 0xd9, 0x57, 0xc3, 0x21,
+	0xb3, 0x68, 0x09, 0x66, 0x08, 0xc3, 0xc7, 0x01, 0xf1, 0xd4, 0x07, 0x51, 0xb4, 0xd3, 0xa1, 0xf5,
+	0x39, 0x40, 0x2f, 0x2d, 0xe8, 0x2e, 0x14, 0x8d, 0x6b, 0x9e, 0xc9, 0xb2, 0x55, 0xd3, 0x17, 0x78,
+	0x2d, 0xbd, 0xc0, 0x6b, 0x9b, 0x9c, 0x07, 0xcf, 0x70, 0x10, 0x13, 0xbb, 0x6b, 0x8b, 0xee, 0xc2,
+	0xac, 0xba, 0x48, 0x1c, 0x29, 0x03, 0x93, 0xb4, 0xe5, 0x01, 0xe1, 0x83, 0xf4, 0xf0, 0x29, 0x2a,
+	0xdb, 0xa7, 0x32, 0xb0, 0x1e, 0xc3, 0xe2, 0xd0, 0x54, 0xbd, 0xae, 0x23, 0xd6, 0x0e, 0x54, 0xfa,
+	0x92, 0xf0, 0xda, 0xa0, 0x5f, 0x26, 0xe0, 0xea, 0xb0, 0x00, 0xa3, 0x7b, 0x00, 0x49, 0xad, 0x04,
+	0x84, 0xf9, 0xb2, 0x69, 0x90, 0x37, 0x07, 0x90, 0x47, 0x7b, 0x4c, 0x6e, 0xac, 0x6b, 0xe8, 0x6c,
+	0x8b, 0xb2, 0x87, 0xca, 0x5c, 0x89, 0xf1, 0x8b, 0x54, 0x3c, 0x31, 0x96, 0x18, 0xbf, 0x30, 0xe2,
+	0x06, 0x54, 0x92, 0x9d, 0xe3, 0xa4, 0x7d, 0x72, 0xb1, 0x20, 0xa6, 0x4c, 0xcf, 0xd7, 0x97, 0x5b,
+	0x94, 0x1d, 0xa5, 0x8a, 0xd4, 0x79, 0x8f, 0xfa, 0xb4, 0x5b, 0x78, 0xa3, 0x9d, 0x7f, 0xa0, 0xcc,
+	0xd1, 0x7d, 0x28, 0x25, 0x62, 0x11, 0x12, 0x97, 0xe2, 0xc0, 0x9c, 0xac, 0xe7, 0xab, 0x93, 0xdd,
+	0x9e, 0x68, 0x7b, 0xeb, 0xfb, 0x02, 0xcc, 0xf5, 0x1f, 0xe1, 0xa8, 0x01, 0x73, 0x1e, 0x15, 0x49,
+	0x21, 0x3a, 0x71, 0x18, 0x70, 0x3c, 0x4e, 0x8a, 0x2a, 0x46, 0x71, 0xa4, 0x04, 0xe8, 0xbe, 0x6a,
+	0x86, 0x1c, 0x3f, 0xc2, 0x6d, 0x2c, 0x71, 0x64, 0x62, 0x7a, 0x1e, 0x20, 0x39, 0xc5, 0x77, 0x8c,
+	0xb9, 0x75, 0x04, 0xd5, 0xfc, 0xd1, 0xff, 0x0f, 0x78, 0x65, 0xfd, 0x34, 0x01, 0xd0, 0x3b, 0xf9,
+	0xd1, 0x01, 0x2c, 0xb8, 0x11, 0xc1, 0x92, 0x24, 0x47, 0x4c, 0x40, 0x5d, 0xdd, 0x5e, 0x8f, 0x81,
+	0x45, 0x5a, 0xd6, 0xc8, 0xa8, 0x12, 0xf7, 0x0c, 0xcc, 0x0d, 0xa8, 0x3a, 0x40, 0x46, 0xbf, 0x73,
+	0x45, 0x2b, 0xb6, 0xb4, 0x00, 0x6d, 0xc1, 0xbc, 0x41, 0x98, 0x46, 0x23, 0x6d, 0xd4, 0xce, 0x63,
+	0x98, 0x5d, 0x4d, 0xe3, 0x22, 0xd0, 0x23, 0xb8, 0x6a, 0x20, 0x3c, 0xf2, 0x31, 0xa3, 0x2f, 0xcd,
+	0x5b, 0x4d, 0x8e, 0x24, 0x99, 0x60, 0x3c, 0xce, 0xca, 0x2c, 0x17, 0x66, 0xbb, 0xf7, 0x1b, 0x7a,
+	0x06, 0xcb, 0x69, 0x0a, 0xdc, 0x88, 0xa8, 0x1e, 0x09, 0x07, 0xc2, 0xdc, 0x96, 0xa3, 0xc3, 0x76,
+	0xdd, 0x88, 0xb7, 0x7a, 0x5a, 0xc5, 0xb5, 0xee, 0x41, 0x29, 0x73, 0xf1, 0xa1, 0x37, 0xe1, 0x32,
+	0x0e, 0x82, 0x31, 0x80, 0x89, 0xd9, 0xfe, 0x64, 0x71, 0xb6, 0x0a, 0xfb, 0x93, 0x45, 0xa8, 0x96,
+	0xf6, 0x27, 0x8b, 0xa5, 0x6a, 0x79, 0x7f, 0xb2, 0x58, 0xae, 0x56, 0xec, 0x39, 0x46, 0xe4, 0x19,
+	0x8f, 0x4e, 0x9d, 0x80, 0xb6, 0xa8, 0x14, 0x36, 0xca, 0x24, 0x39, 0x9d, 0x5b, 0xc8, 0xc6, 0x28,
+	0x9d, 0xd4, 0xfd, 0x84, 0x1e, 0xac, 0xba, 0x60, 0x0d, 0xeb, 0xd3, 0xcc, 0xff, 0xc8, 0x36, 0x54,
+	0xdc, 0xec, 0x82, 0xf1, 0xf9, 0xdf, 0x23, 0x2e, 0x0d, 0xbb, 0x5f, 0xb5, 0xde, 0x84, 0xb2, 0x6e,
+	0x6b, 0x4d, 0x0f, 0xfd, 0x11, 0x14, 0xd3, 0x1e, 0x1f, 0x5d, 0x1b, 0x78, 0xff, 0xed, 0xe4, 0x3f,
+	0xce, 0x5a, 0x19, 0xf5, 0x57, 0xb0, 0x8a, 0xbe, 0xfc, 0xf5, 0xcf, 0x1f, 0x26, 0xca, 0x08, 0xea,
+	0xea, 0x47, 0x27, 0xb9, 0xc4, 0xd7, 0xbf, 0x2d, 0xc0, 0xc4, 0x9e, 0x40, 0x5f, 0x15, 0xa0, 0xba,
+	0x43, 0x64, 0x7f, 0x87, 0x39, 0xd0, 0xe8, 0xbc, 0xb2, 0x41, 0xb5, 0xee, 0x8c, 0x63, 0x6a, 0xdc,
+	0x58, 0x56, 0x6e, 0x2c, 0xa0, 0x2b, 0x75, 0x2a, 0xea, 0x7d, 0xef, 0xbd, 0xf9, 0xf6, 0xcf, 0x7f,
+	0xdc, 0x2a, 0x7c, 0x5c, 0xf7, 0x79, 0x4d, 0x36, 0x89, 0x6c, 0x52, 0xe6, 0x8b, 0x9a, 0xc9, 0x5a,
+	0xbd, 0xff, 0xf7, 0xb0, 0xbd, 0x51, 0x0f, 0x4f, 0xfd, 0xba, 0x94, 0x2c, 0x3c, 0x3e, 0x9e, 0x56,
+	0xa1, 0xd8, 0xf8, 0x3b, 0x00, 0x00, 0xff, 0xff, 0x8c, 0x04, 0x70, 0x5e, 0xca, 0x0f, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -1426,191 +1177,4 @@ var _Is_serviceDesc = grpc.ServiceDesc{
 	},
 	Streams:  []grpc.StreamDesc{},
 	Metadata: "lorawan-stack/api/identityserver.proto",
-}
-
-func (this *AuthInfoResponse) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&AuthInfoResponse{`,
-		`AccessMethod:` + fmt.Sprintf("%v", this.AccessMethod) + `,`,
-		`UniversalRights:` + strings.Replace(fmt.Sprintf("%v", this.UniversalRights), "Rights", "Rights", 1) + `,`,
-		`IsAdmin:` + fmt.Sprintf("%v", this.IsAdmin) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *AuthInfoResponse_ApiKey) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&AuthInfoResponse_ApiKey{`,
-		`ApiKey:` + strings.Replace(fmt.Sprintf("%v", this.ApiKey), "AuthInfoResponse_APIKeyAccess", "AuthInfoResponse_APIKeyAccess", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *AuthInfoResponse_OauthAccessToken) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&AuthInfoResponse_OauthAccessToken{`,
-		`OauthAccessToken:` + strings.Replace(fmt.Sprintf("%v", this.OauthAccessToken), "OAuthAccessToken", "OAuthAccessToken", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *AuthInfoResponse_UserSession) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&AuthInfoResponse_UserSession{`,
-		`UserSession:` + strings.Replace(fmt.Sprintf("%v", this.UserSession), "UserSession", "UserSession", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *AuthInfoResponse_APIKeyAccess) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&AuthInfoResponse_APIKeyAccess{`,
-		`APIKey:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.APIKey), "APIKey", "APIKey", 1), `&`, ``, 1) + `,`,
-		`EntityIds:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.EntityIds), "EntityIdentifiers", "EntityIdentifiers", 1), `&`, ``, 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *GetIsConfigurationRequest) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&GetIsConfigurationRequest{`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *IsConfiguration) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&IsConfiguration{`,
-		`UserRegistration:` + strings.Replace(fmt.Sprintf("%v", this.UserRegistration), "IsConfiguration_UserRegistration", "IsConfiguration_UserRegistration", 1) + `,`,
-		`ProfilePicture:` + strings.Replace(fmt.Sprintf("%v", this.ProfilePicture), "IsConfiguration_ProfilePicture", "IsConfiguration_ProfilePicture", 1) + `,`,
-		`EndDevicePicture:` + strings.Replace(fmt.Sprintf("%v", this.EndDevicePicture), "IsConfiguration_EndDevicePicture", "IsConfiguration_EndDevicePicture", 1) + `,`,
-		`UserRights:` + strings.Replace(fmt.Sprintf("%v", this.UserRights), "IsConfiguration_UserRights", "IsConfiguration_UserRights", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *IsConfiguration_UserRegistration) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&IsConfiguration_UserRegistration{`,
-		`Invitation:` + strings.Replace(fmt.Sprintf("%v", this.Invitation), "IsConfiguration_UserRegistration_Invitation", "IsConfiguration_UserRegistration_Invitation", 1) + `,`,
-		`ContactInfoValidation:` + strings.Replace(fmt.Sprintf("%v", this.ContactInfoValidation), "IsConfiguration_UserRegistration_ContactInfoValidation", "IsConfiguration_UserRegistration_ContactInfoValidation", 1) + `,`,
-		`AdminApproval:` + strings.Replace(fmt.Sprintf("%v", this.AdminApproval), "IsConfiguration_UserRegistration_AdminApproval", "IsConfiguration_UserRegistration_AdminApproval", 1) + `,`,
-		`PasswordRequirements:` + strings.Replace(fmt.Sprintf("%v", this.PasswordRequirements), "IsConfiguration_UserRegistration_PasswordRequirements", "IsConfiguration_UserRegistration_PasswordRequirements", 1) + `,`,
-		`Enabled:` + fmt.Sprintf("%v", this.Enabled) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *IsConfiguration_UserRegistration_Invitation) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&IsConfiguration_UserRegistration_Invitation{`,
-		`Required:` + strings.Replace(fmt.Sprintf("%v", this.Required), "BoolValue", "types.BoolValue", 1) + `,`,
-		`TokenTtl:` + strings.Replace(fmt.Sprintf("%v", this.TokenTtl), "Duration", "types.Duration", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *IsConfiguration_UserRegistration_ContactInfoValidation) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&IsConfiguration_UserRegistration_ContactInfoValidation{`,
-		`Required:` + strings.Replace(fmt.Sprintf("%v", this.Required), "BoolValue", "types.BoolValue", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *IsConfiguration_UserRegistration_AdminApproval) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&IsConfiguration_UserRegistration_AdminApproval{`,
-		`Required:` + strings.Replace(fmt.Sprintf("%v", this.Required), "BoolValue", "types.BoolValue", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *IsConfiguration_UserRegistration_PasswordRequirements) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&IsConfiguration_UserRegistration_PasswordRequirements{`,
-		`MinLength:` + strings.Replace(fmt.Sprintf("%v", this.MinLength), "UInt32Value", "types.UInt32Value", 1) + `,`,
-		`MaxLength:` + strings.Replace(fmt.Sprintf("%v", this.MaxLength), "UInt32Value", "types.UInt32Value", 1) + `,`,
-		`MinUppercase:` + strings.Replace(fmt.Sprintf("%v", this.MinUppercase), "UInt32Value", "types.UInt32Value", 1) + `,`,
-		`MinDigits:` + strings.Replace(fmt.Sprintf("%v", this.MinDigits), "UInt32Value", "types.UInt32Value", 1) + `,`,
-		`MinSpecial:` + strings.Replace(fmt.Sprintf("%v", this.MinSpecial), "UInt32Value", "types.UInt32Value", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *IsConfiguration_ProfilePicture) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&IsConfiguration_ProfilePicture{`,
-		`DisableUpload:` + strings.Replace(fmt.Sprintf("%v", this.DisableUpload), "BoolValue", "types.BoolValue", 1) + `,`,
-		`UseGravatar:` + strings.Replace(fmt.Sprintf("%v", this.UseGravatar), "BoolValue", "types.BoolValue", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *IsConfiguration_EndDevicePicture) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&IsConfiguration_EndDevicePicture{`,
-		`DisableUpload:` + strings.Replace(fmt.Sprintf("%v", this.DisableUpload), "BoolValue", "types.BoolValue", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *IsConfiguration_UserRights) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&IsConfiguration_UserRights{`,
-		`CreateApplications:` + strings.Replace(fmt.Sprintf("%v", this.CreateApplications), "BoolValue", "types.BoolValue", 1) + `,`,
-		`CreateClients:` + strings.Replace(fmt.Sprintf("%v", this.CreateClients), "BoolValue", "types.BoolValue", 1) + `,`,
-		`CreateGateways:` + strings.Replace(fmt.Sprintf("%v", this.CreateGateways), "BoolValue", "types.BoolValue", 1) + `,`,
-		`CreateOrganizations:` + strings.Replace(fmt.Sprintf("%v", this.CreateOrganizations), "BoolValue", "types.BoolValue", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *GetIsConfigurationResponse) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&GetIsConfigurationResponse{`,
-		`Configuration:` + strings.Replace(this.Configuration.String(), "IsConfiguration", "IsConfiguration", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func valueToStringIdentityserver(v interface{}) string {
-	rv := reflect.ValueOf(v)
-	if rv.IsNil() {
-		return "nil"
-	}
-	pv := reflect.Indirect(rv).Interface()
-	return fmt.Sprintf("*%v", pv)
 }

@@ -17,126 +17,168 @@ package errors
 import (
 	"context"
 	"crypto/x509"
+	"errors"
 	"net"
 	"net/url"
+	"os"
 
 	"github.com/golang/protobuf/proto"
 	"google.golang.org/grpc/status"
 )
 
 var (
-	errContextDeadlineExceeded = DefineDeadlineExceeded("context_deadline_exceeded", "context deadline exceeded")
-	errContextCanceled         = DefineCanceled("context_canceled", "context canceled")
+	errNetInvalidAddr = DefineInvalidArgument(
+		"net_invalid_addr", "{message}", "timeout",
+	)
+	errNetAddr = DefineUnavailable(
+		"net_addr", "{message}", "timeout",
+	)
+	errNetDNS = DefineUnavailable(
+		"net_dns", "{message}", "timeout", "not_found",
+	)
+	errNetUnknownNetwork = DefineNotFound(
+		"net_unknown_network", "{message}", "timeout",
+	)
+	errNetOperation = DefineUnavailable(
+		"net_operation", "net operation failed", "op", "net", "source", "address", "timeout",
+	)
+	errNetTimeout = DefineUnavailable("net_timeout", "operation timed out")
 
-	errNetInvalidAddr    = DefineInvalidArgument("net_invalid_addr", "{message}", "message", "temporary", "timeout")
-	errNetAddr           = DefineUnavailable("net_addr", "{message}", "message", "temporary", "timeout")
-	errNetDNS            = DefineUnavailable("net_dns", "{message}", "message", "temporary", "timeout", "not_found")
-	errNetUnknownNetwork = DefineNotFound("net_unknown_network", "{message}", "message", "temporary", "timeout")
-	errNetOperation      = DefineUnavailable("net_operation", "{message}", "message", "op", "net", "source", "address", "timeout", "temporary")
+	errRequest = Define("request", "request to `{url}` failed", "op")
+	errURL     = DefineInvalidArgument("url", "invalid url `{url}`", "op")
 
-	errRequest = Define("request", "request to `{url}` failed")
+	errX509UnknownAuthority = DefineUnavailable(
+		"x509_unknown_authority", "unknown certificate authority",
+	)
+	errX509Hostname = DefineUnavailable(
+		"x509_hostname", "certificate authorized names do not match the requested name", "host",
+	)
+	errX509CertificateInvalid = DefineUnavailable(
+		"x509_certificate_invalid", "certificate invalid", "detail", "reason",
+	)
 
-	errX509UnknownAuthority = DefineUnavailable("x509_unknown_authority", "unknown certificate authority")
+	errContextCancelled = DefineCanceled(
+		"context_canceled", "context canceled",
+	)
+	errContextDeadlineExceeded = DefineDeadlineExceeded(
+		"context_deadline_exceeded", "context deadline exceeded",
+	)
 )
 
 // From returns an *Error if it can be derived from the given input.
 // For a nil error, false will be returned.
-func From(err error) (out *Error, ok bool) {
+func From(err error) (out *Error, ok bool) { //nolint:gocyclo
 	if err == nil {
 		return nil, false
 	}
 	defer func() {
 		if out != nil {
-			var copy = *out
-			out = &copy
+			clone := *out
+			out = &clone
 		}
 	}()
-	if err == context.Canceled {
-		e := build(errContextCanceled, 0)
-		return &e, true
-	} else if err == context.DeadlineExceeded {
-		e := build(errContextDeadlineExceeded, 0)
+	if errors.Is(err, context.Canceled) {
+		return build(errContextCancelled, 0), true
+	}
+	if errors.Is(err, context.DeadlineExceeded) || errors.Is(err, os.ErrDeadlineExceeded) {
+		return build(errContextDeadlineExceeded, 0), true
+	}
+	if matched := (*Error)(nil); errors.As(err, &matched) {
+		if matched == nil {
+			return nil, false
+		}
+		return matched, true
+	}
+	if matched := (*Definition)(nil); errors.As(err, &matched) {
+		if matched == nil {
+			return nil, false
+		}
+		return build(matched, 0), true
+	}
+	if matched := (ErrorDetails)(nil); errors.As(err, &matched) {
+		var e Error
+		setErrorDetails(&e, matched)
 		return &e, true
 	}
-	switch err := err.(type) {
-	case Error:
-		return &err, true
-	case *Error:
-		if err == nil {
-			return nil, false // This is invalid.
-		}
-		return err, true
-	case Definition:
-		e := build(err, 0)
-		return &e, true
-	case *Definition:
-		if err == nil {
-			return nil, false // This is invalid.
-		}
-		e := build(*err, 0)
-		return &e, true
-	case ErrorDetails: // Received over an API.
-		var e Error
-		setErrorDetails(&e, err)
-		return &e, true
-	case interface{ GRPCStatus() *status.Status }:
-		e := FromGRPCStatus(err.GRPCStatus())
-		return &e, true
-	case validationError:
+	if matched := (interface{ GRPCStatus() *status.Status })(nil); errors.As(err, &matched) {
+		return FromGRPCStatus(matched.GRPCStatus()), true
+	}
+	if matched := (validationError)(nil); errors.As(err, &matched) {
 		e := build(errValidation, 0).WithAttributes(
-			"field", err.Field(),
-			"reason", err.Reason(),
-			"name", err.ErrorName(),
+			"field", matched.Field(),
+			"reason", matched.Reason(),
+			"name", matched.ErrorName(),
 		)
-		if cause := err.Cause(); cause != nil {
+		if cause := matched.Cause(); cause != nil {
 			e = e.WithCause(cause)
 		}
-		return &e, true
-	case *net.DNSError:
+		return e, true
+	}
+	if matched := (*net.DNSError)(nil); errors.As(err, &matched) {
 		e := build(errNetDNS, 0).WithAttributes(
-			"not_found", err.IsNotFound,
+			"not_found", matched.IsNotFound,
 		).WithAttributes(
-			netErrorDetails(err)...,
+			netErrorDetails(matched)...,
 		)
-		return &e, true
-	case *net.AddrError:
-		e := build(errNetAddr, 0).WithAttributes(netErrorDetails(err)...)
-		return &e, true
-	case net.InvalidAddrError:
-		e := build(errNetInvalidAddr, 0).WithAttributes(netErrorDetails(err)...)
-		return &e, true
-	case net.UnknownNetworkError:
-		e := build(errNetUnknownNetwork, 0).WithAttributes(netErrorDetails(err)...)
-		return &e, true
-	case *net.OpError:
+		return e, true
+	}
+	if matched := (*net.AddrError)(nil); errors.As(err, &matched) {
+		return build(errNetAddr, 0).WithAttributes(netErrorDetails(matched)...), true
+	}
+	if matched := (net.InvalidAddrError)(""); errors.As(err, &matched) {
+		return build(errNetInvalidAddr, 0).WithAttributes(netErrorDetails(matched)...), true
+	}
+	if matched := (net.UnknownNetworkError)(""); errors.As(err, &matched) {
+		return build(errNetUnknownNetwork, 0).WithAttributes(netErrorDetails(matched)...), true
+	}
+	if matched := (*net.OpError)(nil); errors.As(err, &matched) {
 		// Do not use netErrorDetails(err) as err.Error() will panic if err.Err is nil.
 		e := build(errNetOperation, 0).WithAttributes(
-			"op", err.Op,
-			"net", err.Net,
-			"timeout", err.Timeout(),
-			"temporary", err.Temporary(),
+			"op", matched.Op,
+			"net", matched.Net,
+			"timeout", matched.Timeout(),
 		)
-		if err.Addr != nil {
-			e = e.WithAttributes("address", err.Addr.String())
+		if matched.Addr != nil {
+			e = e.WithAttributes("address", matched.Addr.String())
 		}
-		if err.Source != nil {
-			e = e.WithAttributes("source", err.Source.String())
+		if matched.Source != nil {
+			e = e.WithAttributes("source", matched.Source.String())
 		}
-		if err.Err != nil {
-			e = e.WithAttributes("message", err.Error())
+		if matched.Err != nil {
+			e = e.WithCause(matched.Err)
 		}
-		return &e, true
-	case *url.Error:
-		e := build(errRequest, 0).WithAttributes(
-			"url", err.URL,
+		return e, true
+	}
+	if matched := (*url.Error)(nil); errors.As(err, &matched) {
+		definition := errRequest
+		if matched.Op == "parse" {
+			definition = errURL
+		}
+		e := build(definition, 0).WithAttributes(
+			"url", matched.URL,
+			"op", matched.Op,
 		)
-		if err.Err != nil {
-			e = e.WithCause(err.Err)
+		if matched.Err != nil {
+			e = e.WithCause(matched.Err)
 		}
-		return &e, true
-	case x509.UnknownAuthorityError, *x509.UnknownAuthorityError:
-		e := build(errX509UnknownAuthority, 0)
-		return &e, true
+		return e, true
+	}
+	if matched := (net.Error)(nil); errors.As(err, &matched) && matched.Timeout() {
+		return build(errNetTimeout, 0), true
+	}
+	if matched := (x509.CertificateInvalidError{}); errors.As(err, &matched) {
+		return build(errX509CertificateInvalid, 0).WithAttributes(
+			"detail", matched.Detail,
+			"reason", matched.Reason,
+		), true
+	}
+	if matched := (x509.UnknownAuthorityError{}); errors.As(err, &matched) {
+		return build(errX509UnknownAuthority, 0), true
+	}
+	if matched := (x509.HostnameError{}); errors.As(err, &matched) {
+		return build(errX509Hostname, 0).WithAttributes(
+			"host", matched.Host,
+		), true
 	}
 	return nil, false
 }
@@ -155,6 +197,9 @@ type ErrorDetails interface {
 }
 
 func setErrorDetails(err *Error, details ErrorDetails) {
+	if err.Definition == nil {
+		err.Definition = &Definition{}
+	}
 	if namespace := details.Namespace(); namespace != "" {
 		err.namespace = namespace
 	}
@@ -187,7 +232,6 @@ func setErrorDetails(err *Error, details ErrorDetails) {
 func netErrorDetails(err net.Error) []interface{} {
 	return []interface{}{
 		"message", err.Error(),
-		"temporary", err.Temporary(),
 		"timeout", err.Timeout(),
 	}
 }

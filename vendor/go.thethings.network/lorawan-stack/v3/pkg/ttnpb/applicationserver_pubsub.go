@@ -14,32 +14,73 @@
 
 package ttnpb
 
-import (
-	"strconv"
-)
-
 // ApplicationPubSub_Provider is an alias to the interface identifying the PubSub provider types.
 // This enables provider.RegisterProvider and provider.GetProvider to offer type safety guarantees.
 // The underscore is maintained for consistency with the generated code.
 type ApplicationPubSub_Provider = isApplicationPubSub_Provider
 
-// MarshalText implements encoding.TextMarshaler interface.
-func (q ApplicationPubSub_MQTTProvider_QoS) MarshalText() ([]byte, error) {
-	return []byte(q.String()), nil
+// All EntityType methods implement the IDStringer interface.
+
+func (m *ApplicationPubSubIdentifiers) EntityType() string {
+	return m.GetApplicationIds().EntityType()
 }
 
-// UnmarshalText implements encoding.TextUnmarshaler interface.
-func (q *ApplicationPubSub_MQTTProvider_QoS) UnmarshalText(b []byte) error {
-	s := string(b)
-	if i, ok := ApplicationPubSub_MQTTProvider_QoS_value[s]; ok {
-		*q = ApplicationPubSub_MQTTProvider_QoS(i)
-		return nil
-	}
-	if i, err := strconv.Atoi(s); err == nil {
-		if _, ok := ApplicationPubSub_MQTTProvider_QoS_name[int32(i)]; ok {
-			*q = ApplicationPubSub_MQTTProvider_QoS(int32(i))
-			return nil
-		}
-	}
-	return errCouldNotParse("ApplicationPubSub_MQTTProvider_QoS")(string(b))
+func (m *ApplicationPubSub) EntityType() string {
+	return m.GetIds().EntityType()
+}
+
+func (m *GetApplicationPubSubRequest) EntityType() string {
+	return m.GetIds().EntityType()
+}
+
+func (m *ListApplicationPubSubsRequest) EntityType() string {
+	return m.GetApplicationIds().EntityType()
+}
+
+func (m *SetApplicationPubSubRequest) EntityType() string {
+	return m.GetPubsub().EntityType()
+}
+
+// All IDString methods implement the IDStringer interface.
+
+func (m *ApplicationPubSubIdentifiers) IDString() string {
+	return m.GetApplicationIds().IDString()
+}
+
+func (m *ApplicationPubSub) IDString() string {
+	return m.GetIds().IDString()
+}
+
+func (m *GetApplicationPubSubRequest) IDString() string {
+	return m.GetIds().IDString()
+}
+
+func (m *ListApplicationPubSubsRequest) IDString() string {
+	return m.GetApplicationIds().IDString()
+}
+
+func (m *SetApplicationPubSubRequest) IDString() string {
+	return m.GetPubsub().IDString()
+}
+
+// All ExtractRequestFields methods are used by github.com/grpc-ecosystem/go-grpc-middleware/tags.
+
+func (m *ApplicationPubSubIdentifiers) ExtractRequestFields(dst map[string]interface{}) {
+	m.GetApplicationIds().ExtractRequestFields(dst)
+}
+
+func (m *ApplicationPubSub) ExtractRequestFields(dst map[string]interface{}) {
+	m.GetIds().ExtractRequestFields(dst)
+}
+
+func (m *GetApplicationPubSubRequest) ExtractRequestFields(dst map[string]interface{}) {
+	m.GetIds().ExtractRequestFields(dst)
+}
+
+func (m *ListApplicationPubSubsRequest) ExtractRequestFields(dst map[string]interface{}) {
+	m.GetApplicationIds().ExtractRequestFields(dst)
+}
+
+func (m *SetApplicationPubSubRequest) ExtractRequestFields(dst map[string]interface{}) {
+	m.GetPubsub().ExtractRequestFields(dst)
 }

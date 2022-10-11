@@ -14,6 +14,8 @@
 
 package errors
 
+import "errors"
+
 type causer interface {
 	Cause() error
 }
@@ -36,31 +38,42 @@ func (e *Error) setCause(cause error) {
 
 // WithCause returns the error with the given cause set.
 // Overwriting an existing cause in the Error will cause a panic.
-func (e Error) WithCause(cause error) Error {
-	e.setCause(cause)
-	return e
+func (e *Error) WithCause(cause error) *Error {
+	if e == nil {
+		return nil
+	}
+	dup := *e
+	dup.setCause(cause)
+	return &dup
 }
 
 // WithCause returns a new error from the definition, and sets the cause of the error.
-func (d Definition) WithCause(cause error) Error {
+func (d *Definition) WithCause(cause error) *Error {
+	if d == nil {
+		return nil
+	}
 	e := build(d, 0) // Don't refactor this to build(...).WithCause(...)
 	e.setCause(cause)
 	return e
 }
 
 // Cause returns the cause of the error.
-func (e Error) Cause() error { return e.cause }
+func (e *Error) Cause() error {
+	if e == nil {
+		return nil
+	}
+	return e.cause
+}
 
 // Cause returns ret root cause of the error, in this case the descriptor itself.
-func (d Definition) Cause() error { return nil }
+func (*Definition) Cause() error { return nil }
 
 // Cause returns the cause of the given error, if any.
 func Cause(err error) error {
-	c, ok := err.(causer)
-	if !ok {
-		return nil
+	if causeErr := (causer)(nil); errors.As(err, &causeErr) {
+		return causeErr.Cause()
 	}
-	return c.Cause()
+	return nil
 }
 
 // RootCause walks up the "error chain" until it finds the root cause of an error.
