@@ -479,7 +479,7 @@ func (s *MarshalState) WriteArrayStart() {
 	s.inner.WriteArrayStart()
 }
 
-// WriteArrayEnd writes the enting ] of an array.
+// WriteArrayEnd writes the ending ] of an array.
 func (s *MarshalState) WriteArrayEnd() {
 	if s.Err() != nil {
 		return
@@ -580,4 +580,22 @@ func (s *MarshalState) WriteFieldMask(x FieldMask) {
 	}
 	paths := x.GetPaths()
 	s.inner.WriteString(strings.Join(paths, ","))
+}
+
+func (s *MarshalState) WriteLegacyFieldMask(x FieldMask) {
+	if s.Err() != nil {
+		return
+	}
+	paths := x.GetPaths()
+	s.inner.WriteObjectStart()
+	s.inner.WriteObjectField("paths")
+	s.inner.WriteArrayStart()
+	for i, path := range paths {
+		if i != 0 {
+			s.inner.WriteMore()
+		}
+		s.inner.WriteString(path)
+	}
+	s.inner.WriteArrayEnd()
+	s.inner.WriteObjectEnd()
 }

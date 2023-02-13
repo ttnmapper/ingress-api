@@ -16,9 +16,15 @@ type enumWithStringValue struct {
 
 type sortedEnumsWithStringValue []enumWithStringValue
 
-func (a sortedEnumsWithStringValue) Len() int           { return len(a) }
-func (a sortedEnumsWithStringValue) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
-func (a sortedEnumsWithStringValue) Less(i, j int) bool { return a[i].number < a[j].number }
+func (a sortedEnumsWithStringValue) Len() int      { return len(a) }
+func (a sortedEnumsWithStringValue) Swap(i, j int) { a[i], a[j] = a[j], a[i] }
+func (a sortedEnumsWithStringValue) Less(i, j int) bool {
+	if a[i].number == a[j].number {
+		return a[i].name < a[j].name
+	}
+
+	return a[i].number < a[j].number
+}
 
 // EnumValueDesc returns a string with possible values for enum.
 func EnumValueDesc(valueMaps ...map[string]int32) string {
@@ -28,6 +34,7 @@ func EnumValueDesc(valueMaps ...map[string]int32) string {
 			all = append(all, enumWithStringValue{number: number, name: name})
 		}
 	}
+
 	sort.Stable(all)
 	stringValues := make([]string, len(all))
 	for i, v := range all {

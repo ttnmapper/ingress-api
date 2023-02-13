@@ -12,7 +12,7 @@ type pluralExpr struct {
 }
 
 func parsePlural(varname string, ptr_compiler *Parser, char rune, start, end int, ptr_input *[]rune) (Expression, int, error) {
-	if PartChar != char {
+	if char != PartChar {
 		return nil, start, fmt.Errorf("MalformedOption")
 	}
 
@@ -25,19 +25,19 @@ func parsePlural(varname string, ptr_compiler *Parser, char rune, start, end int
 	pos := start + 1
 
 	for pos < end {
-		key, char, i, err := readKey(char, pos, end, ptr_input)
+		key, char, i, err := readKey(pos, end, ptr_input)
 
-		if nil != err {
+		if err != nil {
 			return nil, i, err
 		}
 
-		if ':' == char {
-			if "offset" != key {
+		if char == ':' {
+			if key != "offset" {
 				return nil, i, fmt.Errorf("UnsupportedExtension: `%s`", key)
 			}
 
 			offset, c, j, err := readOffset(i+1, end, ptr_input)
-			if nil != err {
+			if err != nil {
 				return nil, j, err
 			}
 
@@ -47,28 +47,30 @@ func parsePlural(varname string, ptr_compiler *Parser, char rune, start, end int
 				j++
 			}
 
-			k, c, j, err := readKey(c, j, end, ptr_input)
+			k, c, j, err := readKey(j, end, ptr_input)
 
-			if "" == k {
+			if err != nil {
+				return nil, j, err
+			} else if k == "" {
 				return nil, j, fmt.Errorf("MissingChoiceName")
 			}
 
 			key, char, i = k, c, j
 		}
 
-		if "other" == key {
+		if key == "other" {
 			hasOtherChoice = true
 		}
 
 		choice, c, i, err := readChoice(ptr_compiler, char, i, end, ptr_input)
-		if nil != err {
+		if err != nil {
 			return nil, i, err
 		}
 
 		result.choices[key] = choice
 		pos, char = i, c
 
-		if CloseChar == char {
+		if char == CloseChar {
 			break
 		}
 	}
@@ -94,51 +96,51 @@ func formatPlural(expr Expression, ptr_output *bytes.Buffer, data *map[string]in
 	offset := o.offset
 
 	value, err := toString(*data, key)
-	if nil != err {
+	if err != nil {
 		return err
 	}
 
 	var choice *node
 
 	if v, ok := (*data)[key]; ok {
-		switch v.(type) {
+		switch t := v.(type) {
 		default:
 			return fmt.Errorf("Plural: Unsupported type for named key: %T", v)
 
 		case int:
-			key = fmt.Sprintf("=%d", v.(int))
+			key = fmt.Sprintf("=%d", t)
 
 		case float64:
-			key = "=" + strconv.FormatFloat(v.(float64), 'f', -1, 64)
+			key = "=" + strconv.FormatFloat(t, 'f', -1, 64)
 
 		case string:
-			key = "=" + v.(string)
+			key = "=" + t
 		}
 
-		if choice = o.choices[key]; nil == choice {
-			switch v.(type) {
+		if choice = o.choices[key]; choice == nil {
+			switch t := v.(type) {
 			case int:
-				if 0 != offset {
-					offset_value := v.(int) - offset
+				if offset != 0 {
+					offset_value := t - offset
 					value = fmt.Sprintf("%d", offset_value)
 					key, err = ptr_mf.getNamedKey(offset_value, false)
 				} else {
-					key, err = ptr_mf.getNamedKey(v.(int), false)
+					key, err = ptr_mf.getNamedKey(t, false)
 				}
 
 			case float64:
-				if 0 != offset {
-					offset_value := v.(float64) - float64(offset)
+				if offset != 0 {
+					offset_value := t - float64(offset)
 					value = strconv.FormatFloat(offset_value, 'f', -1, 64)
 					key, err = ptr_mf.getNamedKey(offset_value, false)
 				} else {
-					key, err = ptr_mf.getNamedKey(v.(float64), false)
+					key, err = ptr_mf.getNamedKey(t, false)
 				}
 
 			case string:
-				if 0 != offset {
+				if offset != 0 {
 					offset_value, fError := strconv.ParseFloat(value, 64)
-					if nil != fError {
+					if fError != nil {
 						return fError
 					}
 					offset_value -= float64(offset)
@@ -149,14 +151,14 @@ func formatPlural(expr Expression, ptr_output *bytes.Buffer, data *map[string]in
 				}
 			}
 
-			if nil != err {
+			if err != nil {
 				return err
 			}
 			choice = o.choices[key]
 		}
 	}
 
-	if nil == choice {
+	if choice == nil {
 		choice = o.choices["other"]
 	}
 	return choice.format(ptr_output, data, ptr_mf, value)
@@ -179,9 +181,9 @@ func readOffset(start, end int, ptr_input *[]rune) (int, rune, int, error) {
 			}
 
 		case ' ', '\r', '\n', '\t', OpenChar, CloseChar:
-			if 0 != buf.Len() {
+			if buf.Len() != 0 {
 				result, err := strconv.Atoi(buf.String())
-				if nil != err {
+				if err != nil {
 					return 0, char, pos, fmt.Errorf("BadCast")
 				} else if result < 0 {
 					return 0, char, pos, fmt.Errorf("InvalidOffsetValue")

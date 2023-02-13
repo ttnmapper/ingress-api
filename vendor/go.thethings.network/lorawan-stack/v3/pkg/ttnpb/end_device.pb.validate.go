@@ -14,7 +14,7 @@ import (
 	"time"
 	"unicode/utf8"
 
-	"github.com/gogo/protobuf/types"
+	"google.golang.org/protobuf/types/known/anypb"
 )
 
 // ensure the imports are used
@@ -29,11 +29,8 @@ var (
 	_ = time.Duration(0)
 	_ = (*url.URL)(nil)
 	_ = (*mail.Address)(nil)
-	_ = types.DynamicAny{}
+	_ = anypb.Any{}
 )
-
-// define the regex for a UUID once up-front
-var _end_device_uuidPattern = regexp.MustCompile("^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$")
 
 // ValidateFields checks the field values on Session with the rules defined in
 // the proto definition for this message. If any rules are violated, an error
@@ -2337,6 +2334,38 @@ func (m *EndDevice) ValidateFields(paths ...string) error {
 				}
 			}
 
+		case "serial_number":
+
+			if m.GetSerialNumber() != "" {
+
+				if utf8.RuneCountInString(m.GetSerialNumber()) > 36 {
+					return EndDeviceValidationError{
+						field:  "serial_number",
+						reason: "value length must be at most 36 runes",
+					}
+				}
+
+				if !_EndDevice_SerialNumber_Pattern.MatchString(m.GetSerialNumber()) {
+					return EndDeviceValidationError{
+						field:  "serial_number",
+						reason: "value does not match regex pattern \"^[a-z0-9](?:[-]?[a-z0-9]){2,}$\"",
+					}
+				}
+
+			}
+
+		case "lora_alliance_profile_ids":
+
+			if v, ok := interface{}(m.GetLoraAllianceProfileIds()).(interface{ ValidateFields(...string) error }); ok {
+				if err := v.ValidateFields(subs...); err != nil {
+					return EndDeviceValidationError{
+						field:  "lora_alliance_profile_ids",
+						reason: "embedded message failed validation",
+						cause:  err,
+					}
+				}
+			}
+
 		default:
 			return EndDeviceValidationError{
 				field:  name,
@@ -2412,6 +2441,8 @@ var _EndDevice_JoinServerAddress_Pattern = regexp.MustCompile("^(?:(?:[a-zA-Z0-9
 var _EndDevice_Locations_Pattern = regexp.MustCompile("^[a-z0-9](?:[-]?[a-z0-9]){2,}$")
 
 var _EndDevice_ProvisionerId_Pattern = regexp.MustCompile("^[a-z0-9](?:[-]?[a-z0-9]){2,}$|^$")
+
+var _EndDevice_SerialNumber_Pattern = regexp.MustCompile("^[a-z0-9](?:[-]?[a-z0-9]){2,}$")
 
 // ValidateFields checks the field values on EndDevices with the rules defined
 // in the proto definition for this message. If any rules are violated, an
@@ -3178,7 +3209,7 @@ func (m *ListEndDevicesRequest) ValidateFields(paths ...string) error {
 			if _, ok := _ListEndDevicesRequest_Order_InLookup[m.GetOrder()]; !ok {
 				return ListEndDevicesRequestValidationError{
 					field:  "order",
-					reason: "value must be in list [ device_id -device_id join_eui -join_eui dev_eui -dev_eui name -name description -description created_at -created_at]",
+					reason: "value must be in list [ device_id -device_id join_eui -join_eui dev_eui -dev_eui name -name description -description created_at -created_at last_seen_at -last_seen_at]",
 				}
 			}
 
@@ -3260,19 +3291,21 @@ var _ interface {
 } = ListEndDevicesRequestValidationError{}
 
 var _ListEndDevicesRequest_Order_InLookup = map[string]struct{}{
-	"":             {},
-	"device_id":    {},
-	"-device_id":   {},
-	"join_eui":     {},
-	"-join_eui":    {},
-	"dev_eui":      {},
-	"-dev_eui":     {},
-	"name":         {},
-	"-name":        {},
-	"description":  {},
-	"-description": {},
-	"created_at":   {},
-	"-created_at":  {},
+	"":              {},
+	"device_id":     {},
+	"-device_id":    {},
+	"join_eui":      {},
+	"-join_eui":     {},
+	"dev_eui":       {},
+	"-dev_eui":      {},
+	"name":          {},
+	"-name":         {},
+	"description":   {},
+	"-description":  {},
+	"created_at":    {},
+	"-created_at":   {},
+	"last_seen_at":  {},
+	"-last_seen_at": {},
 }
 
 // ValidateFields checks the field values on SetEndDeviceRequest with the rules

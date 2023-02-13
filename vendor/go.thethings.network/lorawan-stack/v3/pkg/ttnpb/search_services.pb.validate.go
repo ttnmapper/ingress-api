@@ -14,7 +14,7 @@ import (
 	"time"
 	"unicode/utf8"
 
-	"github.com/gogo/protobuf/types"
+	"google.golang.org/protobuf/types/known/anypb"
 )
 
 // ensure the imports are used
@@ -29,11 +29,8 @@ var (
 	_ = time.Duration(0)
 	_ = (*url.URL)(nil)
 	_ = (*mail.Address)(nil)
-	_ = types.DynamicAny{}
+	_ = anypb.Any{}
 )
-
-// define the regex for a UUID once up-front
-var _search_services_uuidPattern = regexp.MustCompile("^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$")
 
 // ValidateFields checks the field values on SearchApplicationsRequest with the
 // rules defined in the proto definition for this message. If any rules are
@@ -1508,7 +1505,7 @@ func (m *SearchEndDevicesRequest) ValidateFields(paths ...string) error {
 			if _, ok := _SearchEndDevicesRequest_Order_InLookup[m.GetOrder()]; !ok {
 				return SearchEndDevicesRequestValidationError{
 					field:  "order",
-					reason: "value must be in list [ device_id -device_id join_eui -join_eui dev_eui -dev_eui name -name description -description created_at -created_at]",
+					reason: "value must be in list [ device_id -device_id join_eui -join_eui dev_eui -dev_eui name -name description -description created_at -created_at last_seen_at -last_seen_at]",
 				}
 			}
 
@@ -1592,17 +1589,19 @@ var _ interface {
 var _SearchEndDevicesRequest_AttributesContain_Pattern = regexp.MustCompile("^[a-z0-9](?:[-]?[a-z0-9]){2,}$")
 
 var _SearchEndDevicesRequest_Order_InLookup = map[string]struct{}{
-	"":             {},
-	"device_id":    {},
-	"-device_id":   {},
-	"join_eui":     {},
-	"-join_eui":    {},
-	"dev_eui":      {},
-	"-dev_eui":     {},
-	"name":         {},
-	"-name":        {},
-	"description":  {},
-	"-description": {},
-	"created_at":   {},
-	"-created_at":  {},
+	"":              {},
+	"device_id":     {},
+	"-device_id":    {},
+	"join_eui":      {},
+	"-join_eui":     {},
+	"dev_eui":       {},
+	"-dev_eui":      {},
+	"name":          {},
+	"-name":         {},
+	"description":   {},
+	"-description":  {},
+	"created_at":    {},
+	"-created_at":   {},
+	"last_seen_at":  {},
+	"-last_seen_at": {},
 }

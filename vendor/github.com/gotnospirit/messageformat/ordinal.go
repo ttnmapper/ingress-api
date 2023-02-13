@@ -19,34 +19,34 @@ func formatOrdinal(expr Expression, ptr_output *bytes.Buffer, data *map[string]i
 	o := expr.(*selectExpr)
 
 	value, err := toString(*data, o.key)
-	if nil != err {
+	if err != nil {
 		return err
 	}
 
 	var choice *node
 
 	if v, ok := (*data)[o.key]; ok {
-		switch v.(type) {
+		switch t := v.(type) {
 		default:
 			return fmt.Errorf("Ordinal: Unsupported type for named key: %T", v)
 
 		case int, float64:
 
 		case string:
-			_, err := strconv.ParseFloat(v.(string), 64)
-			if nil != err {
+			_, err := strconv.ParseFloat(t, 64)
+			if err != nil {
 				return err
 			}
 		}
 
 		key, err := ptr_mf.getNamedKey(v, true)
-		if nil != err {
+		if err != nil {
 			return err
 		}
 		choice = o.choices[key]
 	}
 
-	if nil == choice {
+	if choice == nil {
 		choice = o.choices["other"]
 	}
 	return choice.format(ptr_output, data, ptr_mf, value)
