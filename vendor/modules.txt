@@ -112,7 +112,7 @@ github.com/vmihailenco/msgpack/v5/msgpcode
 github.com/vmihailenco/tagparser/v2
 github.com/vmihailenco/tagparser/v2/internal
 github.com/vmihailenco/tagparser/v2/internal/parser
-# go.thethings.network/lorawan-stack/v3 v3.24.1-0.20230208113804-02d6710663ac
+# go.thethings.network/lorawan-stack/v3 v3.24.2-0.20230303154842-4ac6c7ddca34
 ## explicit; go 1.19
 go.thethings.network/lorawan-stack/v3/cmd/ttn-lw-cli/customflags
 go.thethings.network/lorawan-stack/v3/pkg/errors
@@ -122,7 +122,7 @@ go.thethings.network/lorawan-stack/v3/pkg/jsonpb
 go.thethings.network/lorawan-stack/v3/pkg/ttnpb
 go.thethings.network/lorawan-stack/v3/pkg/types
 go.thethings.network/lorawan-stack/v3/pkg/util/byteutil
-# golang.org/x/exp v0.0.0-20230124195608-d38c7dcee874
+# golang.org/x/exp v0.0.0-20230224173230-c95f2b4c22f2
 ## explicit; go 1.18
 golang.org/x/exp/maps
 # golang.org/x/net v0.7.0

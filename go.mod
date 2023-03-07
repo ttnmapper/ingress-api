@@ -2,11 +2,6 @@ module ttnmapper-ingress-api
 
 go 1.18
 
-//replace gopkg.in/DATA-DOG/go-sqlmock.v1 => gopkg.in/DATA-DOG/go-sqlmock.v1 v1.3.0
-
-// But the original grpc-gateway v2.
-//replace github.com/grpc-ecosystem/grpc-gateway/v2 => github.com/grpc-ecosystem/grpc-gateway/v2 v2.10.3
-
 // TTN's fork of throttled/throttled/v2.
 replace github.com/throttled/throttled/v2 => github.com/TheThingsIndustries/throttled/v2 v2.7.1-noredis
 
@@ -21,7 +16,7 @@ require (
 	github.com/streadway/amqp v1.0.0
 	github.com/tkanos/gonfig v0.0.0-20210106201359-53e13348de2f
 	github.com/ulule/deepcopier v0.0.0-20200430083143-45decc6639b6
-	go.thethings.network/lorawan-stack/v3 v3.24.1-0.20230208113804-02d6710663ac
+	go.thethings.network/lorawan-stack/v3 v3.24.2-0.20230303154842-4ac6c7ddca34
 	golang.org/x/net v0.7.0
 )
 
@@ -46,7 +41,7 @@ require (
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/vmihailenco/msgpack/v5 v5.3.5 // indirect
 	github.com/vmihailenco/tagparser/v2 v2.0.0 // indirect
-	golang.org/x/exp v0.0.0-20230124195608-d38c7dcee874 // indirect
+	golang.org/x/exp v0.0.0-20230224173230-c95f2b4c22f2 // indirect
 	golang.org/x/sys v0.5.0 // indirect
 	golang.org/x/text v0.7.0 // indirect
 	google.golang.org/genproto v0.0.0-20230124163310-31e0e69b6fc2 // indirect
