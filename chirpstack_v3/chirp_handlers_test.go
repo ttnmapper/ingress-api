@@ -1,4 +1,4 @@
-package chirpstack
+package chirpstack_v3
 
 import (
 	"log"
@@ -27,7 +27,7 @@ func TestHandlerJson(t *testing.T) {
 		req.RemoteAddr = "localhost"
 
 		// Set request headers
-		req.Header.Set("Host", "private.chirpstack.org")
+		req.Header.Set("Host", "private.chirpstack_v3.org")
 		req.Header.Set("User-Agent", "http-ttn/2.6.0")
 		req.Header.Set("Ttnmapperorg-user", "test@jpmeijers.com")
 		req.Header.Set("Content-Type", "application/json")
