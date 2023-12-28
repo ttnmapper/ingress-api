@@ -12,6 +12,7 @@ import (
 	"math/rand"
 	"net/http"
 	"strconv"
+	"ttnmapper-ingress-api/types"
 	"ttnmapper-ingress-api/utils"
 
 	"github.com/chirpstack/chirpstack/api/go/v4/integration"
@@ -36,9 +37,11 @@ func (handlerContext *Context) PostChirpV4Event(w http.ResponseWriter, r *http.R
 
 	switch event {
 	case "up":
-		err = handlerContext.up(r, body)
+		err = handlerContext.up(w, r, body)
 	case "join":
-		err = handlerContext.join(r, body)
+		err = handlerContext.join(w, r, body)
+	case "status":
+		err = handlerContext.status(w, r, body)
 	default:
 		response["success"] = false
 		response["message"] = fmt.Sprintf("handler for event %s is not implemented", event)
@@ -54,26 +57,71 @@ func (handlerContext *Context) PostChirpV4Event(w http.ResponseWriter, r *http.R
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
+
+	w.WriteHeader(http.StatusAccepted)
+	response["success"] = true
+	response["message"] = "packet accepted"
 }
 
-func (handlerContext *Context) up(r *http.Request, body []byte) error {
-	var up integration.UplinkEvent
-	if err := handlerContext.unmarshal(r, body, &up); err != nil {
+func (handlerContext *Context) up(w http.ResponseWriter, r *http.Request, body []byte) error {
+	var packetIn integration.UplinkEvent
+	if err := handlerContext.unmarshal(r, body, &packetIn); err != nil {
 		return err
 	}
-	log.Printf("Uplink received from %s with payload: %s", up.GetDeviceInfo().DevEui, hex.EncodeToString(up.Data))
-	for _, gateway := range up.RxInfo {
-		log.Print(utils.PrettyPrint(gateway))
+
+	log.Printf("Device %s with EUI %s - up payload %s", packetIn.DeviceInfo.DeviceName, packetIn.GetDeviceInfo().DevEui, hex.EncodeToString(packetIn.Data))
+
+	var packetOut types.TtnMapperUplinkMessage
+
+	// TODO ChirpStack should also provide us some unique identifier, along with the NetID, then we can do UUID@NetID to provide as a unique networkid
+	networkAddress := r.Header.Get("TTNMAPPERORG-NETWORK")
+	if err := utils.ValidateChirpNetworkAddress(networkAddress); err != nil {
+		return errors.New("header TTNMAPPERORG-NETWORK is empty")
 	}
+	packetOut.NetworkId = types.NS_CHIRP + "://" + networkAddress // NS_CHIRP://my.network.name
+
+	if err := CopyChirpV4Fields(packetIn, &packetOut); err != nil {
+		return err
+	}
+
+	if err := ParseChirpV4Payload(packetIn, &packetOut); err != nil {
+		return err
+	}
+
+	// If the experiment header is set, mark this packetOut as experiment
+	experiment := r.Header.Get("TTNMAPPERORG-EXPERIMENT")
+	packetOut.Experiment = experiment // Default header is empty
+	// If the user header is set, add it to packetOut. For ChirpStack we do not authenticate users.
+	user := r.Header.Get("TTNMAPPERORG-USER")
+	packetOut.UserId = user // Default header is empty
+
+	log.Print("Network: ", packetOut.NetworkId)
+	log.Print("Device: ", packetOut.AppID, " - ", packetOut.DevID)
+
+	// Push this new packet into the stack
+	handlerContext.PublishChannel <- packetOut
+	//log.Println(utils.PrettyPrint(packetOut))
+
 	return nil
 }
 
-func (handlerContext *Context) join(r *http.Request, body []byte) error {
+func (handlerContext *Context) join(w http.ResponseWriter, r *http.Request, body []byte) error {
 	var join integration.JoinEvent
 	if err := handlerContext.unmarshal(r, body, &join); err != nil {
 		return err
 	}
-	log.Printf("Device %s joined with DevAddr %s", join.GetDeviceInfo().DevEui, join.DevAddr)
+	log.Printf("Device %s with EUI %s - join", join.DeviceInfo.DeviceName, join.GetDeviceInfo().DevEui)
+	// Not using this yet
+	return nil
+}
+
+func (handlerContext *Context) status(w http.ResponseWriter, r *http.Request, body []byte) error {
+	var status integration.StatusEvent
+	if err := handlerContext.unmarshal(r, body, &status); err != nil {
+		return err
+	}
+	log.Printf("Device %s with EUI %s - status", status.DeviceInfo.DeviceName, status.GetDeviceInfo().DevEui)
+	// Nothing we can do with this
 	return nil
 }
 
