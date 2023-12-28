@@ -108,22 +108,20 @@ func CopyV3Fields(packetIn ttnpb.ApplicationUp, packetOut *types.TtnMapperUplink
 	packetOut.Frequency = utils.SanitizeFrequency(float64(packetIn.GetUplinkMessage().Settings.Frequency))
 
 	if packetIn.GetUplinkMessage().Settings.DataRate.GetLora() != nil {
-		//log.Println("Is LORA")
-		packetOut.Modulation = "LORA"
+		packetOut.Modulation = types.MOD_LORA
 		packetOut.SpreadingFactor = uint8(packetIn.GetUplinkMessage().Settings.DataRate.GetLora().SpreadingFactor)
 		packetOut.Bandwidth = uint64(packetIn.GetUplinkMessage().Settings.DataRate.GetLora().Bandwidth)
 		packetOut.CodingRate = packetIn.GetUplinkMessage().Settings.DataRate.GetLora().CodingRate
 	}
 	if packetIn.GetUplinkMessage().Settings.DataRate.GetFsk() != nil {
-		//log.Println("Is FSK")
-		packetOut.Modulation = "FSK"
+		packetOut.Modulation = types.MOD_FSK
 		packetOut.Bitrate = uint64(packetIn.GetUplinkMessage().Settings.DataRate.GetFsk().BitRate)
 	}
 	if packetIn.GetUplinkMessage().Settings.DataRate.GetLrfhss() != nil {
-		packetOut.Modulation = "LR_FHSS"
+		packetOut.Modulation = types.MOD_LRFHSS
+		//TODO packetOut.SpreadingFactor = packetIn.GetUplinkMessage().Settings.DataRate.GetLrfhss().Steps
 		packetOut.Bandwidth = uint64(packetIn.GetUplinkMessage().Settings.DataRate.GetLrfhss().GetOperatingChannelWidth())
 		packetOut.CodingRate = packetIn.GetUplinkMessage().Settings.DataRate.GetLrfhss().CodingRate
-		// TODO: grid steps, code rate
 	}
 
 	/*

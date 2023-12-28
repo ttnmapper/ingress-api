@@ -1,4 +1,4 @@
-package chirpstack
+package chirpstack_v3
 
 import (
 	"encoding/hex"

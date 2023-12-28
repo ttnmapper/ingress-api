@@ -1,8 +1,7 @@
-package chirpstack
+package chirpstack_v4
 
 import (
 	"github.com/go-chi/chi"
-	_ "time"
 	"ttnmapper-ingress-api/types"
 )
 
@@ -15,6 +14,6 @@ func ChirpRoutes(publishChannel chan types.TtnMapperUplinkMessage) *chi.Mux {
 
 	router := chi.NewRouter()
 
-	router.Post("/v3/events", context.PostChirpV3Event)
+	router.Post("/events", context.PostChirpV4Event)
 	return router
 }
