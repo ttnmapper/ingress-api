@@ -15,6 +15,6 @@ func ChirpRoutes(publishChannel chan types.TtnMapperUplinkMessage) *chi.Mux {
 
 	router := chi.NewRouter()
 
-	router.Post("/v3/events", context.PostChirpV3Event)
+	router.Post("/events", context.PostChirpV3Event)
 	return router
 }
